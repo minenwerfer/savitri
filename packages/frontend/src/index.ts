@@ -9,8 +9,8 @@ import { instance as createRouter } from './router'
 import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
 
-import 'frontend/assets/tailwind.css'
-import 'frontend/assets/main.css'
+import 'frontend/../assets/tailwind.css'
+import 'frontend/../assets/main.css'
 
 export * from 'vue'
 
@@ -49,8 +49,8 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   const app = createApp(component)
 
-  app.use(router)
-  app.use(store)
+  app.use(router as any)
+  app.use(store as any)
   app.use(useI18n(i18n))
 
   app.provide('menuSchema', menuSchema)

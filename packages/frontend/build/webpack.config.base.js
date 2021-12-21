@@ -56,6 +56,10 @@ exports.baseWebpackConfig = {
           'postcss-loader'
         ]
       },
+      {
+        test: /\.png$/,
+        use: 'file-loader'
+      }
     ]
   },
 

@@ -16,7 +16,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       inject: true,
       template: path.resolve(__dirname, '../public/index.html')
-    })
+    }),
   ]
 })
 

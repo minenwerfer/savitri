@@ -23,7 +23,7 @@
       <c-button @clicked="authenticate" :disabled="store.state.user.isLoading">Entrar</c-button>
 
       <div class="font-semibold opacity-40 mt-10">
-        v{{ productVersion }} running on Omega v{{ baseVersion }}
+        v{{ productVersion }} running on Savitri v{{ baseVersion }}
       </div>
     </div>
     <div class="flex-grow bg-gradient-to-tr from-blue-500 to-green-800"></div>

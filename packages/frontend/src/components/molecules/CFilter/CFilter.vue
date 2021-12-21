@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-6">
+  <div class="mb-6 md:w-1/2">
     <strong>Filtrar por</strong>
     <c-form
       :form="availableFilters"

@@ -34,5 +34,8 @@
   "exclude": [
     "packages/**/node_modules/*",
     "dist/**/*"
-  ]
+  ],
+  "ts-node": {
+    "module": "commonjs"
+  }
 }

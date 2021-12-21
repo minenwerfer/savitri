@@ -57,12 +57,6 @@ export default {
 
     const isFeedbackVisible = ref(false)
 
-    setTimeout(() => {
-      isFeedbackVisible.value = true
-
-    }, 25000)
-
-
     return {
       menuSchema,
       menu: computed(() => store.state.meta.menu),

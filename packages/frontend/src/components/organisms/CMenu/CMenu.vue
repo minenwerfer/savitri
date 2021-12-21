@@ -13,12 +13,19 @@
     overflow-y-scroll
   `">
 
-    <c-bare-button
-      class="text-center font-semibold text-2xl pt-6 mb-10 hidden md:block"
-      @click="$router.push({ name: 'dashboard-home' })"
-    >
-      {{ productName }}
-    </c-bare-button>
+    <div @click="$router.push({ name: 'dashboard-home' })">
+      <c-bare-button
+        v-if="!productLogo"
+        class="text-center font-semibold text-2xl pt-6 mb-10 hidden md:block"
+      >
+        {{ productName }}
+      </c-bare-button>
+      <img
+        v-else
+        :src="require('@/../assets/logo.png').default"
+        class="cursor-pointer mx-auto mt-4 mb-10"
+      />
+    </div>
 
     <!-- menu entries -->
     <div class="grid pl-2 leading-8 md:leading-7">
@@ -152,7 +159,8 @@ export default {
       store,
       tick: ref(0),
       routes,
-      productName: inject('productName')
+      productName: inject('productName'),
+      productLogo: inject('productLogo')
     }
   },
 }
