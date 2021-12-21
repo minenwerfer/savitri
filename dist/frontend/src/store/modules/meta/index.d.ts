@@ -1,0 +1,83 @@
+import { Module, ActionProps } from 'frontend/store/module';
+/**
+ * @exports @interface
+ * Prompt actions.
+ */
+export interface PromptAction {
+    title: string;
+}
+/**
+ * @exports @interface
+ * Meta interface.
+ */
+export interface Meta {
+    globalIsLoading: boolean;
+    globalDescriptions: any[];
+    viewTitle: string;
+    menu: {
+        isVisible: boolean;
+        isMobileVisible: boolean;
+    };
+    modal: {
+        isVisible: boolean;
+        title: string;
+        body: string;
+        component: string;
+        details: {};
+    };
+    prompt: {
+        isVisible: boolean;
+        title: string;
+        body: string;
+        actions: PromptAction[];
+    };
+    crud: {
+        isInsertVisible: boolean;
+        isInsertReadonly: boolean;
+    };
+}
+/**
+ * @exports @class
+ * Meta module.
+ */
+export declare class MetaModule extends Module<Meta, {}> {
+    constructor();
+    getters(): {
+        isInsertVisible: (state: any) => any;
+        isInsertReadonly: (state: any) => any;
+    };
+    actions(this: MetaModule): {
+        /**
+         * @function
+         * Fetchs all modules metadata from backend.
+         * It may be accessed through _description.
+         */
+        describeAll: ({ commit }: ActionProps) => Promise<any>;
+        setViewTitle: ({ commit }: ActionProps, value: string) => void;
+        swapMenu: ({ commit }: ActionProps, value?: any) => void;
+        spawnModal: ({ commit }: ActionProps, payload: any) => Promise<void>;
+        closeModal: ({ commit }: ActionProps) => void;
+        spawnPrompt: ({ commit }: ActionProps, payload: any) => Promise<string>;
+        closePrompt: ({ commit }: ActionProps) => void;
+        fulfillPrompt: ({ commit }: ActionProps, option: string) => void;
+        closeCrud: ({ commit }: ActionProps) => void;
+    };
+    mutations(): {
+        GLOBAL_LOADING_SWAP: (state: any, value: boolean) => void;
+        VIEW_TITLE_SET: (state: any, value: string) => void;
+        DESCRIPTIONS_ADD: (state: any, module: any) => void;
+        DESCRIPTIONS_CLEAR: (state: any) => void;
+        MENU_SWAP: (state: any, { desktop, mobile }: {
+            desktop?: boolean | undefined;
+            mobile?: boolean | undefined;
+        }) => void;
+        MODAL_SPAWN: (state: any, payload: any) => void;
+        MODAL_CLOSE: (state: any) => void;
+        PROMPT_SPAWN: (state: any, payload: any) => void;
+        PROMPT_CLOSE: (state: any) => void;
+        PROMPT_FULFILL: (state: any, option: string) => void;
+        CRUD_CLOSE: (state: any) => void;
+        CRUD_EDIT: (state: any) => void;
+        CRUD_OPEN: (state: any) => void;
+    };
+}

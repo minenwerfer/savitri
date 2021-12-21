@@ -1,0 +1,11 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.px-auto {
+  @apply px-2 md:px-6;
+}
+
+.py-auto {
+  @apply py-2 md:py-4;
+}

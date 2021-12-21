@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "outDir": "./dist",
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
+    "jsx": "preserve",
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "common/*": ["./packages/common/src/*"],
+      "data/*": ["./packages/data/*"],
+      "backend/*": ["./packages/backend/src/*"],
+      "frontend/*": ["./packages/frontend/src/*"]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "packages/frontend/**/*.ts",
+    "packages/frontend/**/*.vue",
+    "packages/common/**/*.ts"
+  ],
+  "exclude": [
+    "packages/**/node_modules/*",
+    "dist/**/*"
+  ]
+}

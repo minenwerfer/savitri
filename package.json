@@ -1,0 +1,41 @@
+{
+  "name": "savitri",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/hapi__hapi": "^20.0.10",
+    "@types/node": "^17.0.1",
+    "@types/webpack-env": "^1.16.3",
+    "ts-node": "^10.4.0",
+    "webpack": "^5.65.0",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^20.2.1",
+    "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.2",
+    "mongoose-autopopulate": "^0.16.0"
+  },
+  "exports": {
+    "./dist/frontend": "./dist/frontend/index.js",
+    "./models": "./models.ts",
+    "./backend": "./backend.ts",
+    "./server": "./server.ts",
+    "./common": "./common.ts",
+    "./models": "./models.ts"
+  },
+  "bin": {
+    "savitri-bundle": "./frontend/build/compile.js"
+  }
+}

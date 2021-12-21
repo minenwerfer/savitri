@@ -1,0 +1,49 @@
+{
+  "module": "user",
+  "route": true,
+  "actions": {
+    "spawnAdd": {
+      "name": "Adicionar"
+    }
+  },
+  "individualActions": {
+    "spawnEdit": {
+      "name": "Editar"
+    },
+    "remove": {
+      "name": "Remover",
+      "ask": true
+    }
+  },
+  "fields": {
+    "email": {
+      "label": "Email",
+      "type": "text"
+    },
+    "password": {
+      "label": "Senha",
+      "type": "password",
+      "hidden": true
+    },
+    "active": {
+      "label": "Ativo",
+      "type": "boolean",
+      "default": true
+    },
+    "phone": {
+      "label": "Telefone",
+      "type": "text"
+    },
+    "access": {
+      "module": "access",
+      "label": "Preset de acesso",
+      "index": "name"
+    },
+    "updated_at": {
+      "label": "Atualizado em",
+      "type": "datetime",
+      "meta": true
+    }
+  }
+}
+
