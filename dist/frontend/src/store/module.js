@@ -1,13 +1,16 @@
-import { RequestProvider } from 'common/http';
-import { fromEntries } from 'common/helpers';
-export const PZ_API_URL = process.env.NODE_ENV === 'development'
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Module = exports.PZ_API_URL = void 0;
+const http_1 = require("common/http");
+const helpers_1 = require("common/helpers");
+exports.PZ_API_URL = process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/api'
     : '/api';
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
  */
-export class Module {
+class Module {
     _moduleInstance;
     _route;
     _http;
@@ -58,8 +61,8 @@ export class Module {
             }
         });
         this._route = route;
-        this._http = new RequestProvider({
-            baseURL: PZ_API_URL,
+        this._http = new http_1.RequestProvider({
+            baseURL: exports.PZ_API_URL,
         });
         /**
          * @function
@@ -157,7 +160,7 @@ export class Module {
                 return state.items
                     .map((item) => ({
                     ...item,
-                    ...(fromEntries(modules.map((m) => [m, item[m] || {}])))
+                    ...((0, helpers_1.fromEntries)(modules.map((m) => [m, item[m] || {}])))
                 }));
             },
             expandedSubmodules: (state) => {
@@ -462,3 +465,4 @@ export class Module {
         };
     }
 }
+exports.Module = Module;

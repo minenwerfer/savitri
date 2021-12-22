@@ -1,26 +1,48 @@
-import { createRouter, createWebHistory } from 'vue-router';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extendRouter = exports.instance = exports.routes = exports.makeRoutes = exports.privateRoutes = exports.publicRoutes = exports.BareTemplate = void 0;
+const vue_router_1 = require("vue-router");
 /**
  * @exports
  * Just a bare template for nested children.
  */
-export const BareTemplate = {
+exports.BareTemplate = {
     template: `<router-view />`
 };
 /**
  * @exports
  * Non authenticated routes.
  */
-export const publicRoutes = [
+exports.publicRoutes = [
     {
         path: '/',
         name: 'landing',
-        component: () => import('frontend/components/views/CLanding/CLanding.vue'),
+        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CLanding/CLanding.vue'))),
         meta: { title: 'Página inicial', hidden: true, }
     },
     {
         path: '/signin',
         name: 'signin',
-        component: () => import('frontend/components/views/CSignIn/CSignIn.vue'),
+        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CSignIn/CSignIn.vue'))),
         meta: { title: 'Autenticação', hidden: true, }
     }
 ];
@@ -28,24 +50,24 @@ export const publicRoutes = [
  * @exports
  * Authenticated routes.
  */
-export const privateRoutes = [
+exports.privateRoutes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: () => import('frontend/components/templates/CDashboard/CDashboard.vue'),
+        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/templates/CDashboard/CDashboard.vue'))),
         redirect: { name: 'dashboard-home' },
         meta: { title: 'Dashboard' },
         children: [
             {
                 path: 'c/:module?',
                 name: 'dashboard-crud',
-                component: () => import('frontend/components/views/CDashboard/CCrudView/CCrudView.vue'),
+                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CDashboard/CCrudView/CCrudView.vue'))),
                 meta: { title: '%viewTitle%', hidden: true, }
             },
             {
                 path: 'access-edit',
                 name: 'dashboard-access-edit',
-                component: () => import('frontend/components/views/CDashboard/CAccess/CAccessEdit.vue'),
+                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CDashboard/CAccess/CAccessEdit.vue'))),
                 meta: { title: 'Editar preset de acesso', hidden: true }
             }
         ]
@@ -66,25 +88,26 @@ const labelRoute = (target, meta) => {
 /**
  * @exports
  */
-export const makeRoutes = (publicRoutes, privateRoutes) => {
+const makeRoutes = (publicRoutes, privateRoutes) => {
     return [
         ...publicRoutes.map((route) => labelRoute(route, { isPrivate: false })),
         ...privateRoutes.map((route) => labelRoute(route, { isPrivate: true })),
     ];
 };
+exports.makeRoutes = makeRoutes;
 /**
  * @exports
  * All routes. You may import it for using in whatever component.
  */
-export const routes = makeRoutes(publicRoutes, privateRoutes);
+exports.routes = (0, exports.makeRoutes)(exports.publicRoutes, exports.privateRoutes);
 /**
  * @exports
  * The router instance.
  */
-export const instance = (store) => {
-    const router = createRouter({
-        history: createWebHistory(),
-        routes
+const instance = (store) => {
+    const router = (0, vue_router_1.createRouter)({
+        history: (0, vue_router_1.createWebHistory)(),
+        routes: exports.routes
     });
     // eslint-disable-next-line
     router.beforeEach(async (to, from, next) => {
@@ -117,9 +140,11 @@ export const instance = (store) => {
     });
     return router;
 };
-export const extendRouter = (router, routerExtension) => {
+exports.instance = instance;
+const extendRouter = (router, routerExtension) => {
     Object.entries(routerExtension)
         .forEach(([parentName, routes]) => {
         routes.forEach((route) => router.addRoute(parentName, route));
     });
 };
+exports.extendRouter = extendRouter;

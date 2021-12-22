@@ -1,9 +1,12 @@
-import { Module } from 'frontend/store/module';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MetaModule = void 0;
+const module_1 = require("frontend/store/module");
 /**
  * @exports @class
  * Meta module.
  */
-export class MetaModule extends Module {
+class MetaModule extends module_1.Module {
     constructor() {
         super('meta', {
             globalIsLoading: false,
@@ -162,3 +165,4 @@ export class MetaModule extends Module {
         };
     }
 }
+exports.MetaModule = MetaModule;

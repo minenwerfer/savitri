@@ -1,12 +1,28 @@
-import axios from 'axios';
-export * from 'axios';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RequestProvider = void 0;
+const axios_1 = __importDefault(require("axios"));
+__exportStar(require("axios"), exports);
 /**
  * @exports
  * @class
  *
  * A wrapper for sending HTTP requests.
  */
-export class RequestProvider {
+class RequestProvider {
     _instance;
     _proxiedInstance;
     _defaultConfig = {
@@ -17,7 +33,7 @@ export class RequestProvider {
      * @param {AxiosRequestConfig} config - pass this config to axios along with the default one
      */
     constructor(config) {
-        this._instance = axios.create({
+        this._instance = axios_1.default.create({
             ...this._defaultConfig,
             ...config,
         });
@@ -79,3 +95,4 @@ export class RequestProvider {
         return this.instance.post(uri, data);
     }
 }
+exports.RequestProvider = RequestProvider;

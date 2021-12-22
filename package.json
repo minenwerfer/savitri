@@ -1,6 +1,6 @@
 {
   "name": "savitri",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,16 +13,16 @@
   "license": "ISC",
   "exports": {
     "./dist/frontend": "./dist/frontend/index.js",
-    "./models": "./models.ts",
-    "./backend": "./backend.ts",
-    "./server": "./server.ts",
-    "./common": "./common.ts"
+    "./dist/backend": "./dist/backend/index.js",
+    "./dist/backend/server": "./dist/backend/server/index.js",
+    "./dist/backend/src/models": "./dist/backend/src/models/index.js",
+    "./dist/common": "./dist/common/index.js"
   },
   "bin": {
     "savitri-bundle": "./frontend/build/compile.js"
   },
   "dependencies": {
-    "beta-backend": "file:packages/backend",
+    "backend-core": "file:packages/backend",
     "frontend-core": "file:packages/frontend"
   },
   "devDependencies": {

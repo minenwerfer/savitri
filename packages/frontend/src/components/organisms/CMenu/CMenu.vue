@@ -22,8 +22,8 @@
       </c-bare-button>
       <img
         v-else
-        :src="require('@/../assets/logo.png').default"
-        class="cursor-pointer mx-auto mt-4 mb-10"
+        :src="require(`@/../assets/${productLogo}`).default"
+        class="cursor-pointer mx-auto mt-6 mb-14 w-3/4"
       />
     </div>
 

@@ -1,5 +1,8 @@
-import { Module } from 'frontend/store/module';
-export class AccessModule extends Module {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AccessModule = void 0;
+const module_1 = require("frontend/store/module");
+class AccessModule extends module_1.Module {
     constructor() {
         super('access', {}, {});
     }
@@ -16,3 +19,4 @@ export class AccessModule extends Module {
         };
     }
 }
+exports.AccessModule = AccessModule;

@@ -1,5 +1,7 @@
-import { computed } from 'vue';
-import { fromEntries } from 'common/helpers';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const vue_1 = require("vue");
+const helpers_1 = require("common/helpers");
 const getters = [
     'item',
     'condensedItem',
@@ -18,9 +20,9 @@ const props = [
     'isLoading',
     'selected'
 ];
-export default (name, store) => {
+exports.default = (name, store) => {
     const useFields = (fields, except = false) => {
-        return fromEntries(Object.entries(store.getters[`${name}/fields`])
+        return (0, helpers_1.fromEntries)(Object.entries(store.getters[`${name}/fields`])
             .filter(([key]) => except ? !fields.includes(key) : fields.includes(key)));
     };
     const useFieldsExcept = (fields) => useFields(fields, true);
@@ -70,9 +72,9 @@ export default (name, store) => {
         getFirstField,
         getFirstValue,
         formatValue,
-        resumedItem: computed(() => resumedItem(store.getters[`${name}/item`])),
-        resumedItems: computed(() => store.getters[`${name}/items`].map((i) => resumedItem(i))),
-        ...getters.reduce((a, k) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
-        ...props.reduce((a, k) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {})
+        resumedItem: (0, vue_1.computed)(() => resumedItem(store.getters[`${name}/item`])),
+        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`].map((i) => resumedItem(i))),
+        ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
+        ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {})
     };
 };

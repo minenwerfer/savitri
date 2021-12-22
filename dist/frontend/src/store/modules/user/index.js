@@ -1,9 +1,12 @@
-import { Module } from 'frontend/store/module';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserModule = exports.initialItemState = exports.initialState = void 0;
+const module_1 = require("frontend/store/module");
 /**
  * @exports @const
  * Initial state.
  */
-export const initialState = {
+exports.initialState = {
     current: {
         email: '',
         password: '',
@@ -15,7 +18,7 @@ export const initialState = {
  * @exports @const
  * Initial item state.
  */
-export const initialItemState = {
+exports.initialItemState = {
     email: '',
     password: ''
 };
@@ -23,9 +26,9 @@ export const initialItemState = {
  * @exports @class
  * User module.
  */
-export class UserModule extends Module {
+class UserModule extends module_1.Module {
     constructor() {
-        super('user', initialState, initialItemState);
+        super('user', exports.initialState, exports.initialItemState);
     }
     actions() {
         return {
@@ -62,3 +65,4 @@ export class UserModule extends Module {
         };
     }
 }
+exports.UserModule = UserModule;

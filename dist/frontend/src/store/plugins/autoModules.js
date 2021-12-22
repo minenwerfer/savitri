@@ -1,9 +1,12 @@
-import { Module } from 'frontend/store/module';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.autoModules = void 0;
+const module_1 = require("frontend/store/module");
 /**
  * @exports @const
  * Automatically registers modules.
  */
-export const autoModules = (store) => {
+const autoModules = (store) => {
     store.subscribe(async (mutation, state) => {
         const { type, payload } = mutation;
         if (type === 'meta/DESCRIPTIONS_ADD') {
@@ -11,7 +14,7 @@ export const autoModules = (store) => {
                 store.commit(`${payload.module}/DESCRIPTION_SET`, payload, { root: true });
                 return;
             }
-            const Impl = class extends Module {
+            const Impl = class extends module_1.Module {
                 constructor(route, meta, item) {
                     super(route, meta, item);
                 }
@@ -21,3 +24,4 @@ export const autoModules = (store) => {
         }
     });
 };
+exports.autoModules = autoModules;

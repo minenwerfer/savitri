@@ -1,8 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fromEntries = exports.flatten = void 0;
 /**
  * @exports @function
  * Takes a multi depth object and flattens it.
  */
-export function flatten(obj = {}, acc, res = {}) {
+function flatten(obj = {}, acc, res = {}) {
     if (Array.isArray(obj)) {
         return obj.map((e) => flatten(e));
     }
@@ -15,11 +18,13 @@ export function flatten(obj = {}, acc, res = {}) {
     });
     return res;
 }
+exports.flatten = flatten;
 /**
  * @exports @function
  * Transforms Object.entries() return value back into an object.
  */
-export function fromEntries(entries) {
+function fromEntries(entries) {
     return entries
         .reduce((a, [key, value]) => ({ ...a, [key]: value }), {});
 }
+exports.fromEntries = fromEntries;

@@ -1,32 +1,32 @@
 <template>
   <div class="grid gap-y-4">
     <div class="overflow-hidden rounded-md">
-      <table class="w-full table-fixed sm:text-center border-collapse">
+      <table class="w-full table-fixed md:text-center border-collapse">
         <tr class="leading-8 bg-gray-100">
-          <th class="hidden sm:table-cell w-10 border" v-if="module">
+          <th class="hidden md:table-cell w-10 border" v-if="module">
             <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
           </th>
           <th
             v-for="(header, index) in columns"
             :key="`header-${index}`"
-            class="hidden sm:table-cell truncate px-1 border"
+            class="hidden md:table-cell truncate px-1 border"
           >
             {{ header.label }}
           </th>
         </tr>
 
-        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 sm:table-row leading-8 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
-          <td class="hidden sm:table-cell border" v-if="module">
+        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 md:table-row leading-8 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
+          <td class="hidden md:table-cell border" v-if="module">
             <input type="checkbox" v-model="selected" :value="{ _id: row._id }"/>
           </td>
           <td
             v-for="([column, field], cindex) in Object.entries(columns)"
             :key="`column-${rindex}-${cindex}`"
-            class="block sm:table-cell truncate text-sm px-1 cursor-pointer border"
+            class="block md:table-cell truncate md:text-sm px-1 cursor-pointer md:border"
             @click="store.dispatch(`${module}/spawnOpen`, { payload: { filter: row } })"
           >
           <div class="grid grid-cols-2 md:inline-block justify-between">
-            <div class="font-semibold sm:hidden text-ellipsis truncate">{{ field.label }}</div>
+            <div class="font-semibold md:hidden text-ellipsis truncate">{{ field.label }}</div>
 
             <div v-if="column !== '__custom'" class="opacity-80">
               {{ formatValue(field.translate ? $t(row[column]) : row[column], column) }}

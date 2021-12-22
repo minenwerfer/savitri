@@ -1,8 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.crud = void 0;
 /**
  * @exports @const
  * Crud UI operations (close modal, etc) via global action props.
  */
-export const crud = (store) => {
+const crud = (store) => {
     store.subscribe((mutation) => {
         const payload = mutation.payload?.props || {};
         if (payload.__crudClose) {
@@ -10,3 +13,4 @@ export const crud = (store) => {
         }
     });
 };
+exports.crud = crud;

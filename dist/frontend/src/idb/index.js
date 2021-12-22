@@ -1,8 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OfflineStorage = void 0;
 /**
  * @exports @class
  * IndexedDB frontend.
  */
-export class OfflineStorage {
+class OfflineStorage {
     _name;
     _version;
     _objectStores;
@@ -97,3 +100,4 @@ export class OfflineStorage {
         });
     }
 }
+exports.OfflineStorage = OfflineStorage;
