@@ -1,14 +1,15 @@
 <template>
-  <div class="overflow-hidden">
-    <div v-if="titles && titles.length > 0" class="flex mb-8">
+  <div :class="`overflow-hidden ${vertical ? 'flex gap-x-4' : '' }`">
+    <div
+      v-if="titles && titles.length > 0"
+      :class="`flex bg-white rounded-lg shadow-md mb-4 ${vertical ? 'flex-col border-r py-4' : 'pt-2'}`"
+    >
       <c-bare-button
         :class="`
         ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
-        flex-grow
+        ${vertical ? 'border-b-2 mb-4 px-4' : 'text-center py-2 border-b-4 flex-1'}
         text-blue-500
         transition-all
-        text-center
-        py-2 border-b-4
         `"
         v-for="(title, index) in titles"
         :key="`tabtitle-${index}`"
@@ -18,7 +19,8 @@
         {{ title }}
       </c-bare-button>
     </div>
-    <div>
+
+    <div :class="vertical ? 'flex-1' : ''">
       <div
         v-for="tab in tabs"
         :key="`tab-${tab}`"
@@ -66,6 +68,10 @@ export default {
     finishButton: {
       type: Boolean,
       default: true,
+    },
+    vertical: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {

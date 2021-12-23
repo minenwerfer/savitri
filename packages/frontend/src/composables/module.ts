@@ -75,12 +75,16 @@ export default (name: string, store: any) => {
     }), {})
   }
 
+  const get = (payload: any) => store.dispatch(`${name}/get`, payload)
   const insert = (payload: any) => store.dispatch(`${name}/insert`, payload)
   const deepInsert = (payload: any) => store.dispatch(`${name}/deepInsert`, payload)
+  const clear = () => store.dispatch(`${name}/clear`)
 
   return {
+    get,
     insert,
     deepInsert,
+    clear,
 
     useFields,
     useFieldsExcept,

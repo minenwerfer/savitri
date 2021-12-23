@@ -4,7 +4,7 @@ exports.Module = exports.PZ_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
 exports.PZ_API_URL = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/api'
+    ? 'http://172.16.0.91:3000/api'
     : '/api';
 /**
  * @exports @abstract @class

@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div v-if="isReadonly" class="grid gap-y-2 text-md">
+    <div v-if="isReadonly" class="grid gap-y-4 text-md">
       <div
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
@@ -133,7 +133,7 @@ export default {
 
     const filterFields = (condition) => 
       Object.entries(props.form)
-        .filter(([, field]) => !field.meta && !field.noform)
+        .filter(([, field]) => field && !field.meta && !field.noform)
         .filter(([, field]) => condition(field))
 
     const fields = filterFields((f) => typeof f.module !== 'string')

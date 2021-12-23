@@ -1,6 +1,8 @@
 declare const _default: (name: string, store: any) => {
+    get: (payload: any) => any;
     insert: (payload: any) => any;
     deepInsert: (payload: any) => any;
+    clear: () => any;
     useFields: (fields: string[], except?: boolean) => any;
     useFieldsExcept: (fields: string[]) => any;
     getFirstField: (value: any, key: string, form?: boolean) => any;
