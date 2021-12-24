@@ -59,9 +59,15 @@ export abstract class Mutable<T> extends Controller<T> {
    * Gets a collection of documents from database.
    */
   public getAll(props: { filter?: object, offset?: number, sort?: any }): MultipleQuery<T> | Promise<MultipleQuery<T>> {
+    const defaultSort = {
+      updated_at: -1,
+      created_at: -1,
+      date_updated: -1,
+      date_created: -1,
+    }
 
     return this._model.find(props.filter||{})
-      .sort({ updated_at: -1, created_at: -1, date_updated: -1, date_created: -1, ...(props.sort||{}) })
+      .sort(props.sort || defaultSort)
       .skip(props.offset || 0)
       .limit(+(PAGINATION_LIMIT||0))
   }

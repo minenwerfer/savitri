@@ -48,9 +48,13 @@ export default (name: string, store: any) => {
     }
 
     const firstField = getFirstField(value, key, form)
+    const extract = (value: any) => typeof value === 'object'
+      ? value[firstField]
+      : value
+
     const firstValue = Array.isArray(value)
-      ? value.map((v: any) => v[firstField]).join(', ')
-      : value[firstField]
+      ? value.map((v: any) => extract(v)).join(', ')
+      : extract(value)
 
     return firstValue && typeof firstValue === 'object'
       ? getFirstValue(firstValue, firstField)
@@ -62,7 +66,9 @@ export default (name: string, store: any) => {
       ? getFirstValue(value, key, form)
       : value
 
-    return firstValue || '-'
+    return firstValue !== undefined
+      ? firstValue
+      : '-'
   }
 
   const resumedItem = (item: any) => {
@@ -76,12 +82,14 @@ export default (name: string, store: any) => {
   }
 
   const get = (payload: any) => store.dispatch(`${name}/get`, payload)
+  const getAll = (payload: any) => store.dispatch(`${name}/getAll`, payload)
   const insert = (payload: any) => store.dispatch(`${name}/insert`, payload)
   const deepInsert = (payload: any) => store.dispatch(`${name}/deepInsert`, payload)
   const clear = () => store.dispatch(`${name}/clear`)
 
   return {
     get,
+    getAll,
     insert,
     deepInsert,
     clear,

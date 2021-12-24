@@ -1,13 +1,14 @@
 <template>
-  <div :class="`overflow-hidden ${vertical ? 'flex gap-x-4' : '' }`">
+  <div :class="vertical ? 'md:flex md:gap-x-4' : ''">
     <div
       v-if="titles && titles.length > 0"
-      :class="`flex bg-white rounded-lg shadow-md mb-4 ${vertical ? 'flex-col border-r py-4' : 'pt-2'}`"
+      :class="`flex bg-white rounded-lg shadow-md mb-4 pt-2 ${vertical ? 'md:flex-col md:border-r md:py-4' : ''}`"
     >
       <c-bare-button
         :class="`
+        text-center py-2 border-b-4 flex-1
         ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
-        ${vertical ? 'border-b-2 mb-4 px-4' : 'text-center py-2 border-b-4 flex-1'}
+        ${vertical ? 'md:border-b-2 md:mb-4 md:px-4 md:text-left md:flex-none md:py-0' : ''}
         text-blue-500
         transition-all
         `"
@@ -20,7 +21,7 @@
       </c-bare-button>
     </div>
 
-    <div :class="vertical ? 'flex-1' : ''">
+    <div :class="vertical ? 'md:flex-1' : ''">
       <div
         v-for="tab in tabs"
         :key="`tab-${tab}`"

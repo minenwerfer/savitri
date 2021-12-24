@@ -40,9 +40,12 @@ exports.default = (name, store) => {
             return '-';
         }
         const firstField = getFirstField(value, key, form);
+        const extract = (value) => typeof value === 'object'
+            ? value[firstField]
+            : value;
         const firstValue = Array.isArray(value)
-            ? value.map((v) => v[firstField]).join(', ')
-            : value[firstField];
+            ? value.map((v) => extract(v)).join(', ')
+            : extract(value);
         return firstValue && typeof firstValue === 'object'
             ? getFirstValue(firstValue, firstField)
             : firstValue;
@@ -51,7 +54,9 @@ exports.default = (name, store) => {
         const firstValue = value && typeof value === 'object'
             ? getFirstValue(value, key, form)
             : value;
-        return firstValue || '-';
+        return firstValue !== undefined
+            ? firstValue
+            : '-';
     };
     const resumedItem = (item) => {
         return Object.entries(item)
@@ -63,11 +68,13 @@ exports.default = (name, store) => {
         }), {});
     };
     const get = (payload) => store.dispatch(`${name}/get`, payload);
+    const getAll = (payload) => store.dispatch(`${name}/getAll`, payload);
     const insert = (payload) => store.dispatch(`${name}/insert`, payload);
     const deepInsert = (payload) => store.dispatch(`${name}/deepInsert`, payload);
     const clear = () => store.dispatch(`${name}/clear`);
     return {
         get,
+        getAll,
         insert,
         deepInsert,
         clear,

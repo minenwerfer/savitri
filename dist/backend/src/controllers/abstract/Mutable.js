@@ -47,8 +47,14 @@ class Mutable extends Controller_1.Controller {
      * Gets a collection of documents from database.
      */
     getAll(props) {
+        const defaultSort = {
+            updated_at: -1,
+            created_at: -1,
+            date_updated: -1,
+            date_created: -1,
+        };
         return this._model.find(props.filter || {})
-            .sort({ updated_at: -1, created_at: -1, date_updated: -1, date_created: -1, ...(props.sort || {}) })
+            .sort(props.sort || defaultSort)
             .skip(props.offset || 0)
             .limit(+(exports.PAGINATION_LIMIT || 0));
     }

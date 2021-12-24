@@ -1,5 +1,9 @@
 <template>
-  <a class="border rounded-xl shadow-md overflow-hidden hover:shadow-none transition-all transform hover:translate-y-0.5 bg-white">
+  <a :class="`
+    block overflow-hidden bg-white
+    border rounded-xl shadow-md
+    ${ disabled ? 'filter grayscale' : 'transition-all transform hover:translate-y-0.5 hover:shadow-none' }
+  `">
     <div class="overflow-hidden">
       <slot name="content"></slot>
     </div>
@@ -13,3 +17,14 @@
     </div>
   </a>
 </template>
+
+<script>
+export default {
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
+</script>

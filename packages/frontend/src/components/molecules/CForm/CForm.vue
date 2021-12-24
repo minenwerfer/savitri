@@ -71,7 +71,7 @@
         class="grid grid-cols-2"
         >
         <strong>{{ field.label }}</strong>
-        <div>{{ field.formValue || field.value }}</div>
+        <div class="text-right sm:text-left">{{ field.formValue || field.value }}</div>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 declare const _default: (name: string, store: any) => {
     get: (payload: any) => any;
+    getAll: (payload: any) => any;
     insert: (payload: any) => any;
     deepInsert: (payload: any) => any;
     clear: () => any;
