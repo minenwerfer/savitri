@@ -20,6 +20,14 @@ const props = [
     'isLoading',
     'selected'
 ];
+const actions = [
+    'get',
+    'getAll',
+    'insert',
+    'deepInsert',
+    'remove',
+    'clear'
+];
 exports.default = (name, store) => {
     const useFields = (fields, except = false) => {
         return (0, helpers_1.fromEntries)(Object.entries(store.getters[`${name}/fields`])
@@ -27,9 +35,14 @@ exports.default = (name, store) => {
     };
     const useFieldsExcept = (fields) => useFields(fields, true);
     const getFirstField = (value, key, form = false) => {
-        const reference = Object.entries(store.getters[`${name}/fields`] || {})
+        const reference = Object.entries(store.state[name].__description.fields || {})
             .find(([k]) => key === k) || [,];
-        const { module, index, formIndex } = reference[1] || {};
+        const query = {};
+        // retrieves index if dynamic querying is used
+        if (reference[1]?.values) {
+            Object.assign(query, reference[1].values.find((e) => Object.keys(e)[0] === '__query').__query);
+        }
+        const { module, index, formIndex } = query || (reference[1] || {});
         if (!module) {
             return;
         }
@@ -67,17 +80,7 @@ exports.default = (name, store) => {
                 : value
         }), {});
     };
-    const get = (payload) => store.dispatch(`${name}/get`, payload);
-    const getAll = (payload) => store.dispatch(`${name}/getAll`, payload);
-    const insert = (payload) => store.dispatch(`${name}/insert`, payload);
-    const deepInsert = (payload) => store.dispatch(`${name}/deepInsert`, payload);
-    const clear = () => store.dispatch(`${name}/clear`);
     return {
-        get,
-        getAll,
-        insert,
-        deepInsert,
-        clear,
         useFields,
         useFieldsExcept,
         getFirstField,
@@ -86,6 +89,7 @@ exports.default = (name, store) => {
         resumedItem: (0, vue_1.computed)(() => resumedItem(store.getters[`${name}/item`])),
         resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`].map((i) => resumedItem(i))),
         ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
-        ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {})
+        ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),
+        ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})
     };
 };

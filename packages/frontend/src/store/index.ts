@@ -6,7 +6,7 @@ import { UserModule } from './modules/user'
 import { AccessModule } from './modules/access'
 
 export const instance = (): Store<any> => {
-  return createStore<any>({
+  const store = createStore<any>({
     modules: {
       meta: (new MetaModule() as any).module,
       user: (new UserModule() as any).module,
@@ -19,6 +19,15 @@ export const instance = (): Store<any> => {
     ],
     strict: process.env.NODE_ENV === 'production'
   })
+
+  const evt = window.addEventListener('__updateQueryCache', ({ detail }: any) => {
+    store.commit(`${detail.parentModule}/CACHE_QUERY`, {
+      module: detail.module,
+      result: detail.result
+    })
+  })
+
+  return store
 }
 
 export type StoreExtension = any;

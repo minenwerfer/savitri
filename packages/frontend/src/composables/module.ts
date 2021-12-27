@@ -21,6 +21,15 @@ const props = [
   'selected'
 ]
 
+const actions = [
+  'get',
+  'getAll',
+  'insert',
+  'deepInsert',
+  'remove',
+  'clear'
+]
+
 export default (name: string, store: any) => {
 
   const useFields = (fields: string[], except = false) => {
@@ -31,10 +40,17 @@ export default (name: string, store: any) => {
   const useFieldsExcept = (fields: string[]) => useFields(fields, true)
 
   const getFirstField = (value: any, key: string, form: boolean = false) => {
-    const reference: any = Object.entries(store.getters[`${name}/fields`]||{})
+    const reference: any = Object.entries(store.state[name].__description.fields||{})
       .find(([k]: [string, unknown]) => key === k)||[,]
 
-    const { module, index, formIndex } = reference[1]||{}
+    const query = {}
+
+    // retrieves index if dynamic querying is used
+    if( reference[1]?.values ) {
+      Object.assign(query, reference[1].values.find((e: any) => Object.keys(e)[0] === '__query').__query)
+    }
+
+    const { module, index, formIndex } = query||(reference[1]||{})
     if( !module ) {
       return
     }
@@ -43,6 +59,7 @@ export default (name: string, store: any) => {
   }
 
   const getFirstValue = (value: any, key: string, form: boolean = false): any => {
+
     if( !value ) {
       return '-'
     }
@@ -81,19 +98,7 @@ export default (name: string, store: any) => {
     }), {})
   }
 
-  const get = (payload: any) => store.dispatch(`${name}/get`, payload)
-  const getAll = (payload: any) => store.dispatch(`${name}/getAll`, payload)
-  const insert = (payload: any) => store.dispatch(`${name}/insert`, payload)
-  const deepInsert = (payload: any) => store.dispatch(`${name}/deepInsert`, payload)
-  const clear = () => store.dispatch(`${name}/clear`)
-
   return {
-    get,
-    getAll,
-    insert,
-    deepInsert,
-    clear,
-
     useFields,
     useFieldsExcept,
     getFirstField,
@@ -103,6 +108,7 @@ export default (name: string, store: any) => {
     resumedItems: computed(() => store.getters[`${name}/items`].map((i: any) => resumedItem(i))),
 
     ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
-    ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {})
+    ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),
+    ...actions.reduce((a, k: string) => ({ ...a, [k]: (payload: any) => store.dispatch(`${name}/${k}`, payload) }), {})
   }
 }

@@ -6,4 +6,4 @@
   exit
 }
 
-find . -name \*\.ts | entr -p -s 'npm run build'
+find . -name \*\.ts -o -name \*\.json | entr -p -s 'npm run build'

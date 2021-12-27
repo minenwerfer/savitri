@@ -56,7 +56,8 @@ export declare abstract class Module<T = any, Item = any> {
     get module(): Module<T, Item>;
     get http(): ProxiedRequestProvider;
     protected route(verb: string): string;
-    protected _actionHelper<T_>(verb: string, mutation: string, transform?: (what: any) => any): ({ commit, dispatch, state }: ActionProps, value?: any) => Promise<T_>;
+    protected _actionHelper<T_>(verb: string, mutation?: string, transform?: (what: any) => any): ({ commit, dispatch, state }: ActionProps, value?: any) => Promise<T_>;
+    protected _parseQuery(obj: any, array?: boolean): Promise<any>;
     state(): any;
     private _getters;
     private _actions;

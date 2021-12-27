@@ -12,7 +12,7 @@
 
     <div v-else class="flex">
       <c-input class="flex-1 pr-4" @input="lazySearch" v-model="inputValue">{{ label }}</c-input>
-      <c-bare-button class="self-end" v-if="array" @clicked="expanded = true">Adicionar</c-bare-button>
+      <c-bare-button class="self-end" v-if="array" @clicked="addItem">Adicionar</c-bare-button>
     </div>
 
     <div v-if="!isExpanded">
@@ -89,7 +89,9 @@ export default {
       this.store.commit(`${this.parentModule}/ITEM_GET`, {
         result: {
           ...this.store.state[this.parentModule].item,
-          [this.propName]: result
+          [this.propName]: this.array
+            ? [ ...this.rawItem.slice(0, -1), result ]
+            : result
         }
       })
 
@@ -120,6 +122,11 @@ export default {
           ? this.modelValue.filter((option) => option._id !== item._id)
           : undefined
       )
+    },
+
+    addItem() {
+      this.rawItem.push({})
+      this.expanded = true
     },
 
     search(value) {
@@ -164,7 +171,14 @@ export default {
       expanded,
       isExpanded: computed(() => expanded.value || props.expand),
       fields: computed(() => store.getters[`${props.module}/fields`]),
-      item: computed(() => store.state[module._value].item[props.propName]),
+      rawItem: computed(() => store.state[module._value].item[props.propName]),
+      item: computed(() => {
+        const item = store.state[module._value].item[props.propName]
+
+        return Array.isArray(item)
+          ? item[item.length - 1]
+          : item
+      }),
       items: computed(() => store.state[props.module].items),
       isLoading: computed(() => store.state[props.module].isLoading),
 

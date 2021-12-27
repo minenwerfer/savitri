@@ -96,8 +96,8 @@ export class MetaModule extends Module<Meta, {}> {
         commit('DESCRIPTIONS_CLEAR')
 
         this._http.get(this.route('describeAll')).then(({ data }: AxiosResponse) => {
-          Object.entries(data?.result).forEach(([, module]) => {
-            commit('DESCRIPTIONS_ADD', module)
+          Object.entries(data?.result).forEach(([, result]) => {
+            commit('DESCRIPTIONS_ADD', result)
           })
 
           resolve(data?.result)

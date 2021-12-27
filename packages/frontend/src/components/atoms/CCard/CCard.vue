@@ -7,13 +7,8 @@
     <div class="overflow-hidden">
       <slot name="content"></slot>
     </div>
-    <div class="pl-3 py-4" v-if="$slots.title || $slots.description">
-      <div class="font-bold">
-        <slot name="title"></slot>
-      </div>
-      <div class="text-sm text-blue-500 py-1" v-if="$slots.description">
-        <slot name="description"></slot>
-      </div>
+    <div class="relative px-3 pt-4 pb-2" v-if="$slots.bottom">
+      <slot name="bottom"></slot>
     </div>
   </a>
 </template>

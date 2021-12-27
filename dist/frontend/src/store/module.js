@@ -28,11 +28,13 @@ class Module {
         _limit: 0,
         _halt: false,
         _filters: {},
+        _queryCache: {},
+        __description: {},
         _description: {
             actions: {},
             fields: {}
         },
-        selected: []
+        selected: [],
     };
     namespaced = true;
     /**
@@ -117,7 +119,9 @@ class Module {
                     return reject('operation halted');
                 }
                 const result = data.result || data;
-                commit(mutation, { result, payload, props });
+                if (mutation) {
+                    commit(mutation, { result, payload, props });
+                }
                 if (data.recordsCount || data.recordsTotal) {
                     commit('COUNT_UPDATE', {
                         recordsCount: data.recordsCount,
@@ -131,6 +135,50 @@ class Module {
                 .catch((error) => reject(error))
                 .finally(() => dispatch('swapLoading', false));
         });
+    }
+    async _parseQuery(obj, array = false) {
+        const parse = async ([key, value]) => {
+            if (key !== '__query') {
+                return {
+                    [key]: typeof value === 'object'
+                        ? await this._parseQuery(value, Array.isArray(value))
+                        : value
+                };
+            }
+            if (!value.module) {
+                throw 'dynamic query but no module is specified';
+            }
+            const route = `${value.module}/getAll`;
+            const filter = value.filter || {};
+            const { data } = await this._http.post(route, filter);
+            const result = data.result
+                .reduce((a, item) => ({
+                ...a,
+                [item._id]: item[value.index]
+            }), {});
+            window.dispatchEvent(new CustomEvent('__updateQueryCache', {
+                detail: {
+                    parentModule: this._route,
+                    module: value.module,
+                    result: data.result
+                }
+            }));
+            return result;
+        };
+        const type = array ? [] : {};
+        const entries = Array.isArray(obj)
+            ? obj.map((i) => Object.entries(i)[0])
+            : Object.entries(obj);
+        const result = type;
+        for (const pair of entries) {
+            const parsed = await parse(pair);
+            array
+                ? result.push(parsed)
+                : Object.assign(result, parsed);
+        }
+        return array
+            ? result[0]
+            : result;
     }
     state() {
         return {
@@ -370,8 +418,12 @@ class Module {
     }
     _mutations() {
         return {
-            DESCRIPTION_SET(state, value) {
-                state._description = value;
+            DESCRIPTION_SET: async (state, value) => {
+                state._description = {
+                    ...value,
+                    fields: await this._parseQuery(value.fields)
+                };
+                state.__description = value;
                 state.item = Object.entries(value.fields || {})
                     .filter(([, value]) => typeof value.module === 'string' || value.type === 'object')
                     .reduce((a, [key, value]) => ({
@@ -384,6 +436,9 @@ class Module {
                     state.item[key] = value.type === 'radio' ? '' : [];
                 });
                 state._clearItem = Object.assign({}, state.item);
+            },
+            CACHE_QUERY: (state, { module, result }) => {
+                state._queryCache[module] = result;
             },
             LOADING_SWAP(state, value) {
                 state.isLoading = typeof value === 'boolean' ? value : !state.isLoading;

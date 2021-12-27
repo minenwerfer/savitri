@@ -1,6 +1,4 @@
 <template>
-  <!-- <c-box :title="$tc(module, 2).capitalize()" :margin-bottom="0"> -->
-  <!-- </c-box> -->
   <c-box v-if="description.actions">
     <template #body>
       <div class="flex gap-2">
@@ -17,7 +15,7 @@
     </template>
   </c-box>
 
-  <c-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')">
+  <c-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" classes="md:w-4/12 lg:w-5/12">
     <template #body>
       <c-form
         :form-data="item"

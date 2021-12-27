@@ -51,8 +51,8 @@ class MetaModule extends module_1.Module {
             describeAll: ({ commit }) => new Promise((resolve) => {
                 commit('DESCRIPTIONS_CLEAR');
                 this._http.get(this.route('describeAll')).then(({ data }) => {
-                    Object.entries(data?.result).forEach(([, module]) => {
-                        commit('DESCRIPTIONS_ADD', module);
+                    Object.entries(data?.result).forEach(([, result]) => {
+                        commit('DESCRIPTIONS_ADD', result);
                     });
                     resolve(data?.result);
                 });

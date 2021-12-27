@@ -64,11 +64,13 @@ export abstract class Module<T=any, Item=any> {
     _limit: 0,
     _halt: false,
     _filters: {},
+    _queryCache: {},
+    __description: {},
     _description: {
       actions: {},
       fields: {}
     },
-    selected: []
+    selected: [],
   }
 
   public namespaced = true
@@ -153,7 +155,7 @@ export abstract class Module<T=any, Item=any> {
     return `${this._route}/${verb}`
   }
 
-  protected _actionHelper<T_>(verb: string, mutation: string, transform: (what: any) => any = (what) => what) {
+  protected _actionHelper<T_>(verb: string, mutation?: string, transform: (what: any) => any = (what) => what) {
     const route = this.route(verb)
     return ({ commit, dispatch, state }: ActionProps, value?: any): Promise<T_> => new Promise((resolve, reject) => {
       state._halt = false
@@ -172,7 +174,9 @@ export abstract class Module<T=any, Item=any> {
           }
 
           const result = data.result || data
-          commit(mutation, { result, payload, props })
+          if( mutation ) {
+            commit(mutation, { result, payload, props })
+          }
 
           if( data.recordsCount || data.recordsTotal ) {
             commit('COUNT_UPDATE', {
@@ -188,6 +192,63 @@ export abstract class Module<T=any, Item=any> {
         .catch((error) => reject(error))
         .finally(() => dispatch('swapLoading', false))
     })
+  }
+
+  protected async _parseQuery(obj: any, array: boolean = false): Promise<any> {
+
+    const parse = async ([key, value]: [string, any]) => {
+      if( key !== '__query' ) {
+        return {
+          [key]: typeof value === 'object'
+            ? await this._parseQuery(value, Array.isArray(value))
+            : value
+        }
+      }
+
+      if( !value.module ) {
+        throw 'dynamic query but no module is specified'
+      }
+
+      const route = `${value.module}/getAll`
+      const filter = value.filter || {}
+
+      const { data } = await this._http.post(route, filter)
+      const result = data.result
+        .reduce((a: any, item: any) => ({
+          ...a,
+          [item._id]: item[value.index]
+        }), {})
+
+      window.dispatchEvent(new CustomEvent('__updateQueryCache', {
+        detail: {
+          parentModule: this._route,
+          module: value.module,
+          result: data.result
+        }
+      }))
+
+      return result
+    }
+
+    const type = array ? [] : {}
+
+    const entries = Array.isArray(obj)
+      ? obj.map((i) => Object.entries(i)[0])
+      : Object.entries(obj)
+
+
+    const result: any = type
+    for (const pair of entries) {
+      const parsed = await parse(pair)
+
+      array
+        ? result.push(parsed)
+        : Object.assign(result, parsed)
+    }
+
+    return array
+      ? result[0]
+      : result
   }
 
   public state() {
@@ -471,8 +532,13 @@ export abstract class Module<T=any, Item=any> {
 
 private _mutations() {
   return {
-    DESCRIPTION_SET(state: any, value: any) {
-      state._description = value
+    DESCRIPTION_SET: async (state: any, value: any) => {
+      state._description = {
+        ...value,
+        fields: await this._parseQuery(value.fields)
+      }
+
+      state.__description = value
 
       state.item = Object.entries(value.fields||{})
         .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
@@ -490,6 +556,10 @@ private _mutations() {
 
       state._clearItem = Object.assign({}, state.item)
     },
+
+      CACHE_QUERY: (state: any, { module, result }: { module: string, result: any }) => {
+        state._queryCache[module] = result
+      },
 
     LOADING_SWAP(state: any, value: boolean) {
       state.isLoading = typeof value === 'boolean' ? value : !state.isLoading;
