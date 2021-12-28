@@ -94,7 +94,7 @@ export default {
             ? [ ...this.modelValue||[], this.value ]
             : this.modelValue.filter((v) => v !== this.value))
         } else {
-          this.$emit('update:modelValue', !(this.modelValue === 'true'))
+          this.$emit('update:modelValue', !(this.modelValue === true))
         }
       }
     }

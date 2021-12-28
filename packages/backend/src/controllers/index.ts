@@ -5,5 +5,6 @@
 export const commonControllers = [
   'access',
   'user',
-  'feedback'
+  'feedback',
+  'file'
 ]

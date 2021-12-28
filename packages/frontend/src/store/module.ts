@@ -198,6 +198,10 @@ export abstract class Module<T=any, Item=any> {
 
     const parse = async ([key, value]: [string, any]) => {
       if( key !== '__query' ) {
+        if( array ) {
+          return obj
+        }
+
         return {
           [key]: typeof value === 'object'
             ? await this._parseQuery(value, Array.isArray(value))
@@ -592,19 +596,20 @@ private _mutations() {
         }))
         return
       }
-
+      
+      state.item = result
       state.items = [
         result,
         ...state.items,
       ]
     },
 
-    ITEM_MODIFY(state: any, { props }: MutationProps) {
-      state.item = {
-        ...state.item,
-        ...props
-      }
-    },
+    // ITEM_MODIFY(state: any, { props }: MutationProps) {
+    //   state.item = {
+    //     ...state.item,
+    //     ...props
+    //   }
+    // },
 
     ITEMS_MODIFY(state: any, { props: { what }, payload }: MutationProps) {
       const satisfiesFilter = (item: Item & any) =>

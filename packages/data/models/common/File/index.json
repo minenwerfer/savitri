@@ -1,0 +1,32 @@
+{
+  "module": "feedback",
+  "route": true,
+  "actions": {
+    "removeAll": {
+      "name": "Remover",
+      "ask": true,
+      "selection": true
+    }
+  },
+  "individualActions": {
+    "remove": {
+      "name": "Remover",
+      "ask": true
+    }
+  },
+  "fields": {
+    "user_id": {
+      "module": "user",
+      "label": "Proprietário",
+      "index": "email"
+    },
+    "absolute_path": {
+      "label": "Caminho absoluto",
+      "type": "text"
+    },
+    "relative_path": {
+      "label": "Caminho relativo",
+      "type": "text"
+    }
+  }
+}

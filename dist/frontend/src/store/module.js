@@ -139,6 +139,9 @@ class Module {
     async _parseQuery(obj, array = false) {
         const parse = async ([key, value]) => {
             if (key !== '__query') {
+                if (array) {
+                    return obj;
+                }
                 return {
                     [key]: typeof value === 'object'
                         ? await this._parseQuery(value, Array.isArray(value))
@@ -470,17 +473,18 @@ class Module {
                     }));
                     return;
                 }
+                state.item = result;
                 state.items = [
                     result,
                     ...state.items,
                 ];
             },
-            ITEM_MODIFY(state, { props }) {
-                state.item = {
-                    ...state.item,
-                    ...props
-                };
-            },
+            // ITEM_MODIFY(state: any, { props }: MutationProps) {
+            //   state.item = {
+            //     ...state.item,
+            //     ...props
+            //   }
+            // },
             ITEMS_MODIFY(state, { props: { what }, payload }) {
                 const satisfiesFilter = (item) => Object.entries(payload.filter)
                     .every(([key, value]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key]);

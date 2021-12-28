@@ -94,6 +94,14 @@ export abstract class Mutable<T> extends Controller<T> {
     return this._model.deleteMany(props.filter as FilterQuery<T>, { strict: 'throw' })
   }
 
+  // /**
+  //  * @method
+  //  * Modify a single document.
+  //  */
+  // public modify(props: { filter: any[], what: any }) {
+  //   return this._model.findOneAndUpdate(props.filter as FilterQuery<T>, props.what, { new: true, runValidators: true })
+  // }
+
   /**
    * @method
    * Modify documents matching criteria.

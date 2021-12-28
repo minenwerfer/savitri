@@ -19,12 +19,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Access = exports.Feedback = exports.User = exports.commonModels = void 0;
+exports.File = exports.Access = exports.Feedback = exports.User = exports.commonModels = void 0;
 exports.commonModels = [
     'access',
     'user',
-    'feedback'
+    'feedback',
+    'file'
 ];
 exports.User = __importStar(require("./User"));
 exports.Feedback = __importStar(require("./Feedback"));
 exports.Access = __importStar(require("./Access"));
+exports.File = __importStar(require("./File"));

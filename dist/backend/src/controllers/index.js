@@ -8,5 +8,6 @@ exports.commonControllers = void 0;
 exports.commonControllers = [
     'access',
     'user',
-    'feedback'
+    'feedback',
+    'file'
 ];

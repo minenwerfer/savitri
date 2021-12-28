@@ -6,7 +6,7 @@
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
       >
-
+      <!-- text -->
       <c-input v-if="['text', 'password', 'number'].includes(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]">
         <template #label>{{ field.label }}</template>
         <template #description v-if="field.description">{{ field.description }}</template>
@@ -14,7 +14,7 @@
 
       <!-- textbox, checkbox, radio, boolean, select -->
       <div v-else-if="['textbox', 'checkbox', 'radio', 'boolean', 'select'].includes(field.type)">
-        <header>{{ field.label }}</header>
+        <header v-if="field.type !== 'boolean'">{{ field.label }}</header>
         <div class="text-sm opacity-50">
           {{ field.description }}
         </div>
@@ -32,6 +32,7 @@
           </c-checkbox>
         </div>
 
+
         <c-select v-else v-model="formData[key]">
           <option value="">
             {{ $t('none') }}
@@ -42,6 +43,10 @@
         </c-select>
       </div>
 
+      <div v-else-if="['file'].includes(field.type)">
+        <header>{{ field.label }}</header>
+        <c-file></c-file>
+      </div>
       </div>
     </div>
 
@@ -50,15 +55,9 @@
         <c-search
           v-if="!isReadonly"
           v-model="formData[childModule]"
-
+          :field="field"
+          :field-name="getFirstField(field, childModule)"
           :prop-name="childModule" 
-          :module="field.module" :module-name="field.label?.capitalize()"
-
-          :expand="field.expand === true"
-          :field="getFirstField(field, childModule)"
-          :label="Object.values(field.fields)[0]?.label"
-          :array="field.array"
-          :active-only="'active' in field.fields"
           >
         </c-search>
       </div>
@@ -81,7 +80,7 @@
 import { defineAsyncComponent, inject, ref, reactive, watch, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
-import { CInput, CTextbox, CCheckbox, CSelect } from 'frontend/components'
+import { CInput, CTextbox, CCheckbox, CSelect, } from 'frontend/components'
 
 export default {
   components: {
@@ -90,6 +89,7 @@ export default {
     CCheckbox,
     CSelect,
     CSearch: defineAsyncComponent(() => import('frontend/components/molecules/CSearch/CSearch.vue')),
+    CFile: defineAsyncComponent(() => import('frontend/components/molecules/CFile/CFile.vue')),
   },
 
   props: {
@@ -139,9 +139,7 @@ export default {
     const fields = filterFields((f) => typeof f.module !== 'string')
     const moduleFields = filterFields((f) => typeof f.module === 'string')
     .map(([key, value]) => [key, {
-      array: !!value.array,
-      expand: !!value.expand,
-      label: value.label,
+      ...value,
       ...store.getters[`${value.module}/description`]
     }])
 

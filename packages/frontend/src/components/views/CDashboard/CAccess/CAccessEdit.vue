@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { CBox, CForm, CButton } from 'frontend/components'
 
@@ -45,6 +45,8 @@ export default {
   setup() {
     const store = useStore()
     const { capabilities, ...fields } = store.getters['access/fields']
+
+    provide('module', 'access')
 
     const defaultMethods = [
       'get',

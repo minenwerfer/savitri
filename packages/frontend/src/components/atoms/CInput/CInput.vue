@@ -14,6 +14,7 @@
         border border-gray-400
         bg-white
         px-3 py-1
+        text-gray-600
       "
       ref="input"
       :type="type"
