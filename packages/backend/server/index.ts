@@ -5,6 +5,8 @@ import { TokenService } from '../src/services/tokenService'
 import { HandlerRequest } from '../src/controllers/abstract/Controller'
 import '../../common/src/polyfill'
 
+import { FileController } from '../src/controllers/FileController'
+
 interface Environment {
   PAGINATION_LIMIT?: number;
 }
@@ -59,7 +61,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
     return {
       message,
       _error: error
-    }
+   }
 
   } finally {
     //
@@ -91,6 +93,35 @@ export const init = async (port: number = 3000): Promise<Server> => {
     method: ['GET', 'POST'],
     path: '/api/{controller}/{verb}',
     handler
+  })
+
+  server.route({
+    method: ['GET'],
+    path: '/api/download/{hash}/{options?}',
+    handler: async (request, h) => {
+      try {
+        const instance = new FileController
+
+        const { hash, options } = request.params
+        const { filename, content, mime } = await instance.download(hash)
+
+        const parsedOptions = (options||'').split(',')
+        const has = (opt: string) => parsedOptions.includes(opt)
+
+        return h.response(content)
+          .header('Content-Type', mime)
+          .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+
+      } catch( error: any ) {
+        console.trace(error)
+
+        const { message } = error
+        return {
+          message,
+          _error: error
+       }
+      }
+    }
   })
 
   return server

@@ -4,13 +4,15 @@ import { autoModules, crud } from './plugins'
 import { MetaModule } from './modules/meta'
 import { UserModule } from './modules/user'
 import { AccessModule } from './modules/access'
+import { FileModule } from './modules/file'
 
 export const instance = (): Store<any> => {
   const store = createStore<any>({
     modules: {
       meta: (new MetaModule() as any).module,
       user: (new UserModule() as any).module,
-      access: (new AccessModule() as any).module
+      access: (new AccessModule() as any).module,
+      file: (new FileModule()  as any).module
     },
     plugins: [
       autoModules,

@@ -37,6 +37,10 @@ export abstract class Mutable<T> extends Controller<T> {
       $unset: {}
     }) : rest
 
+    Object.keys(what)
+      .filter(k => typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
+      .forEach(k => delete what[k])
+
     return typeof _id !== 'string'
       ? this._model.create(what)
       : this._model.findOneAndUpdate({ _id } as FilterQuery<T>, what as UpdateQuery<T>, { new: true, runValidators: true })
@@ -76,7 +80,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Removes a document from database.
    */
-  public remove(props: { filter: any }) {
+  public remove(props: { filter: any }): any | Promise<any> {
     if( !props.filter ) {
       throw 'no criteria specified'
     }

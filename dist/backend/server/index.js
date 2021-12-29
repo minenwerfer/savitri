@@ -24,6 +24,7 @@ const Hapi = __importStar(require("@hapi/hapi"));
 const controllers_1 = require("../src/controllers");
 const tokenService_1 = require("../src/services/tokenService");
 require("../../common/src/polyfill");
+const FileController_1 = require("../src/controllers/FileController");
 async function handler(request, h) {
     try {
         const { params: { controller, verb } } = request;
@@ -94,6 +95,30 @@ const init = async (port = 3000) => {
         method: ['GET', 'POST'],
         path: '/api/{controller}/{verb}',
         handler
+    });
+    server.route({
+        method: ['GET'],
+        path: '/api/download/{hash}/{options?}',
+        handler: async (request, h) => {
+            try {
+                const instance = new FileController_1.FileController;
+                const { hash, options } = request.params;
+                const { filename, content, mime } = await instance.download(hash);
+                const parsedOptions = (options || '').split(',');
+                const has = (opt) => parsedOptions.includes(opt);
+                return h.response(content)
+                    .header('Content-Type', mime)
+                    .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`);
+            }
+            catch (error) {
+                console.trace(error);
+                const { message } = error;
+                return {
+                    message,
+                    _error: error
+                };
+            }
+        }
     });
     return server;
 };

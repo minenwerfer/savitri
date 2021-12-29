@@ -52,7 +52,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
      */
     remove(props: {
         filter: any;
-    }): Query<import("mongoose").HydratedDocument<T, {}, {}> | null, import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;
+    }): any | Promise<any>;
     /**
      * @method
      * Removing all documents from database matching the criteria.

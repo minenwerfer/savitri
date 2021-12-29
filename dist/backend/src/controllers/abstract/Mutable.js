@@ -28,6 +28,9 @@ class Mutable extends Controller_1.Controller {
             $set: {},
             $unset: {}
         }) : rest;
+        Object.keys(what)
+            .filter(k => typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
+            .forEach(k => delete what[k]);
         return typeof _id !== 'string'
             ? this._model.create(what)
             : this._model.findOneAndUpdate({ _id }, what, { new: true, runValidators: true });
