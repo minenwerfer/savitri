@@ -15,28 +15,21 @@
   </a>
 </template>
 
-<script>
-export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    type: {
-      type: String,
-      default: 'success',
-    }
-  },
+<script setup lang="ts">
+const props = defineProps<{
+  disabled?: boolean
+}>()
 
-  methods: {
-    onClick(event) {
-      event.stopPropagation()
-      event.preventDefault()
+const emit = defineEmits<{
+  (e: 'clicked', event: any): void
+}>()
 
-      if( !this.disabled ) {
-        this.$emit('clicked', event)
-      }
-    }
-  },
-};
+const onClick = (event: any) => {
+  event.stopPropagation()
+  event.preventDefault()
+
+  if( !props.disabled ) {
+    emit('clicked', event)
+  }
+}
 </script>

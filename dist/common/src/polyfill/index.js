@@ -8,3 +8,4 @@ Object.assign(String.prototype, {
         return new Date(this).toLocaleDateString(locale, { timeZone: 'UTC' });
     }
 });
+//# sourceMappingURL=index.js.map

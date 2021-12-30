@@ -18,19 +18,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    direction: {
-      type: String,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    return {
-      props,
-    };
-  },
-};
+<script setup lang="ts">
+const props = defineProps<{
+  direction: string
+}>()
 </script>

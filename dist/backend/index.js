@@ -37,3 +37,4 @@ __exportStar(require("./src/models/_Util"), exports);
 exports.mongoose = __importStar(require("./src/database"));
 var database_1 = require("./src/database");
 Object.defineProperty(exports, "options", { enumerable: true, get: function () { return database_1.options; } });
+//# sourceMappingURL=index.js.map

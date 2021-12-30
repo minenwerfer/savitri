@@ -8,3 +8,4 @@ class FileModule extends module_1.Module {
     }
 }
 exports.FileModule = FileModule;
+//# sourceMappingURL=index.js.map

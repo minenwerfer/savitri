@@ -14,3 +14,4 @@ const crud = (store) => {
     });
 };
 exports.crud = crud;
+//# sourceMappingURL=crud.js.map

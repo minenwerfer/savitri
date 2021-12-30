@@ -12,14 +12,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref } from 'vue'
 
-export default {
-  setup() {
-    return {
-      visible: ref(false)
-    }
-  }
-}
+const visible = ref(false)
 </script>

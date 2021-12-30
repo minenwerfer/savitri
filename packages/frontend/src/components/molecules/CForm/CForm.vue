@@ -77,88 +77,74 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { defineAsyncComponent, inject, ref, reactive, watch, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
 import { CInput, CTextbox, CCheckbox, CSelect, } from 'frontend/components'
 
-export default {
-  components: {
-    CInput,
-    CTextbox,
-    CCheckbox,
-    CSelect,
-    CSearch: defineAsyncComponent(() => import('frontend/components/molecules/CSearch/CSearch.vue')),
-    CFile: defineAsyncComponent(() => import('frontend/components/molecules/CFile/CFile.vue')),
+const CSearch = defineAsyncComponent(() => import('frontend/components/molecules/CSearch/CSearch.vue'))
+const CFile = defineAsyncComponent(() => import('frontend/components/molecules/CFile/CFile.vue'))
+
+const props = defineProps({
+  form: {
+    type: Object,
+    required: true,
+    validator: (v) => Object.values(v).every((v) => !!v.label)
   },
-
-  props: {
-    form: {
-      type: Object,
-      required: true,
-      validator: (v) => Object.values(v).every((v) => !!v.label)
-    },
-    formData: {
-      type: Object,
-      required: true,
-    },
-
-    // HTML5 has a DOM property with the same name
-    isReadonly: {
-      type: Boolean,
-      default: false,
-    },
-
-    gapY: {
-      type: Number,
-      default: 4
-    },
-    paddingTop: {
-      type: Number,
-      default: 2
-    },
-    paddingBottom: {
-      type: Number,
-      default: 2
-    }
+  formData: {
+    type: Object,
+    required: true,
   },
-
-  setup(props) {
-
-    const store = useStore()
-    const module = ref(inject('module', ''))
-
-    const moduleRefs = reactive({})
-    watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
-
-    const filterFields = (condition) => 
-      Object.entries(props.form)
-        .filter(([, field]) => field && !field.meta && !field.noform)
-        .filter(([, field]) => condition(field))
-
-    const fields = filterFields((f) => typeof f.module !== 'string' || f.module === 'file')
-    const moduleFields = filterFields((f) => typeof f.module === 'string' && f.module !== 'file')
-    .map(([key, value]) => [key, {
-      ...value,
-      ...store.getters[`${value.module}/description`]
-    }])
-
-    return {
-      module,
-      fields,
-      moduleFields,
-      allInOne: Object.entries(props.form)
-      .sort((a, b) => typeof a.module === typeof b.module ? 1 : -1)
-      .map(([key, field]) => {
-        return [key, {
-        label: field.label,
-        value: moduleRefs.formatValue(props.formData[key], key, true),
-      }]
-      }),
-
-      getFirstField: ref(moduleRefs.getFirstField)
-    }
+  // HTML5 has a DOM property with the same name
+  isReadonly: {
+    type: Boolean,
+    default: false,
+  },
+  gapY: {
+    type: Number,
+    default: 4
+  },
+  paddingTop: {
+    type: Number,
+    default: 2
+  },
+  paddingBottom: {
+    type: Number,
+    default: 2
   }
-}
+})
+
+const store = useStore()
+const module = ref(inject('module', ''))
+
+const moduleRefs = reactive<any>({})
+watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
+
+const filterFields = (condition: (f: any) => boolean) => 
+  Object.entries(props.form)
+    .filter(([, field]: [unknown, any]) => field && !field.meta && !field.noform)
+    .filter(([, field]) => condition(field))
+
+const fields = filterFields((f: any) => typeof f.module !== 'string' || f.module === 'file')
+const moduleFields = filterFields((f: any) => typeof f.module === 'string' && f.module !== 'file')
+  .map(([key, value]: [string, any]) => [key, {
+    ...value,
+    ...store.getters[`${value.module}/description`]
+  }])
+
+
+const allInOne = Object.entries(props.form)
+  .sort((a: any, b: any) => typeof a.module === typeof b.module ? 1 : -1)
+  .map(([key, field]: [string, any]) => {
+    return [key, {
+    label: field.label,
+    value: moduleRefs.formatValue(props.formData[key], key, true),
+  }]
+})
+
+const getFirstField = ref(moduleRefs.getFirstField)
+defineExpose({
+  //
+})
 </script>

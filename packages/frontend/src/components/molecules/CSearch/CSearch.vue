@@ -37,208 +37,186 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { inject, computed, ref, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { CInput, CButton, CBareButton } from 'frontend/components'
 
-export default {
-  components: {
-    CInput,
-    CButton,
-    CBareButton,
-    CForm: defineAsyncComponent(() => import('frontend/components/molecules/CForm/CForm.vue')),
-  },
+const CForm = defineAsyncComponent(() => import('frontend/components/molecules/CForm/CForm.vue'))
 
-  props: {
-    modelValue: {
-      type: Object,
-      required: true,
-    },
-    propName: {
-      type: String,
-      required: true,
-    },
-    field: {
-      type: Object,
-      required: true,
-    },
-    fieldName: {
-      type: String,
-      required: true
+const props = defineProps<{
+  modelValue: any
+  propName: string
+  field: any
+  fieldName: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', event: any): void
+}>()
+
+const store = useStore()
+const parentModule = inject('module')
+const expanded = ref(false)
+
+const field = props.field
+
+onMounted(() => store.dispatch(`${field.module}/clearAll`))
+
+const module = computed(() => field.module)
+const expand = computed(() => field.expand === true)
+const array = computed(() => field.array)
+const activeOnly = computed(() => 'active' in field.fields)
+const moduleName = computed(() => (field.label||'').capitalize())
+const label = computed(() => Object.values(field.fields)[0]?.label)
+
+const isExpanded = computed(() => expanded.value || field.expand)
+const fields = computed(() => store.getters[`${field.module}/fields`])
+const rawItem = computed(() => {
+  const item = store.state[parentModule.value].item[props.propName]
+  const items = field.array
+    ? (Array.isArray(item) ? item : [item])
+    : item
+
+  return items
+})
+
+const item = computed(() => {
+  const _item = store.state[parentModule.value].item[props.propName]
+
+  return Array.isArray(_item)
+    ? _item[_item.length > 0 ? _item.length - 1 : 0]||{}
+    : _item
+})
+
+const items = computed(() => store.state[field.module].items)
+const parent = computed(() => store.state[parentModule.value].item)
+const isLoading = computed(() => store.state[field.module].isLoading)
+
+const inputValue = ref('')
+const selected = computed(() => {
+  const options = props.modelValue
+  const selected = field.array
+    ? Array.isArray(options) ? options : [options]
+    : (Object.keys(options||{}).length > 0 ? [options] : [])
+
+  return selected
+    .filter(({ _id }) => !!_id)
+})
+
+const insert = async () => {
+  const result: any = await store.dispatch(`${module.value}/insert`, { what: item.value })
+
+  const value = (() => {
+    if( !array.value ) {
+      return result
     }
-  },
 
-  methods: {
-    async insert() {
-      const result = await this.store.dispatch(`${this.module}/insert`, { what: this.item })
+    const selected = rawItem.value
+      .filter(({ _id }: { _id: string }) => !!_id && result._id !== _id)
 
-      const item = (() => {
-        if( !this.array ) {
-          return result
-        }
+    return [
+      ...selected,
+      result
+    ]
+  })()
 
-        const selected = this.rawItem
-          .filter(({ _id }) => !!_id && result._id !== _id)
-
-        return [
-          ...selected,
-          result
-        ]
-
-      })()
-
-      const parent = await this.store.dispatch(`${this.parentModule}/insert`, {
-        what: {
-          _id: this.parent._id,
-          // [this.array ? '$addToSet' : '$set']: {
-            //[this.propName]: result._id
-          // }
-
-          [this.propName]: item
-        }
-      })
-
-      this.$emit('update:modelValue', parent[this.propName])
-
-      this.store.dispatch(`${this.field.module}/clearAll`)
-      this.expanded = false
-    },
-
-    edit(item) {
-      const itemsCount = this.rawItem.length
-
-      if( itemsCount > 0 ) {
-        const swap = this.rawItem[itemsCount - 1]
-        const itemIndex = this.rawItem.findIndex(({ _id }) => item._id === _id)
-        this.rawItem[itemsCount - 1] = item
-        this.rawItem[itemIndex] = swap
-      }
-
-      this.expanded = true
-    },
-
-    clear() {
-      this.expanded = false
-      this.store.dispatch(`${this.module}/clear`)
-      if( this.array ) {
-        this.rawItem = this.rawItem.slice(0, -1)
-      }
-    },
-
-    select(item) {
-      const filterEmpties = (array) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
-      const modelValue = this.array
-        ? filterEmpties(Array.isArray(this.modelValue) ? this.modelValue : [this.modelValue])
-        : this.modelValue
-
-      this.inputValue = ''
-      this.store.dispatch(`${this.module}/clearAll`)
-      this.$emit('update:modelValue', this.array
-        ? [ ...modelValue, item ]
-        : item
-      )
-    },
-
-    async unselect(item) {
-      if( this.field.purge ) {
-        const { _id } = item
-        await this.store.dispatch(`${this.field.module}/remove`, { payload: { filter: { _id } }})
-      }
-
-      this.$emit('update:modelValue', this.array
-          ? this.modelValue.filter((option) => option._id !== item._id)
-          : undefined
-      )
-    },
-
-    addItem() {
-      this.rawItem.push({})
-      this.expanded = true
-    },
-
-    search(value) {
-      if( value.length === 0 ) {
-        this.store.dispatch(`${this.module}/clearAll`)
-        return
-      }
-
-      if( this.store.state[this.module].isLoading ) {
-        return
-      }
-
-      this.store.dispatch(`${this.module}/getAll`, {
-        filter: {
-          ...(this.activeOnly ? { active: true } : {}),
-          [this.field]: {
-            $regex: value.trim(),
-            $options: 'i'
-          }
-        }
-      })
-    },
-
-    lazySearch({ target: { value } }) {
-      window.clearTimeout(window.__lazySearchTimeout)
-      window.__lazySearchTimeout = setTimeout(() => {
-        this.search(value)
-      }, 800)
+  const parentResult = await store.dispatch(`${parentModule}/insert`, {
+    what: {
+      _id: parent.value._id,
+      [props.propName]: value
     }
-  },
+  })
 
-  setup(props) {
-    const store = useStore()
-    const module = inject('module')
-    const expanded = ref(false)
+  emit('update:modelValue', parentResult[props.propName])
+  store.dispatch(`${props.field.module}/clearAll`)
+  expanded.value = false
+}
 
-    const field = props.field
+const edit = (item: any) => {
+  const itemsCount = rawItem.value.length
 
-    onMounted(() => store.dispatch(`${field.module}/clearAll`))
-
-    return {
-      store,
-      parentModule: module,
-      
-      module: computed(() => field.module),
-      expand: computed(() => field.expand === true),
-      array: computed(() => field.array),
-      activeOnly: computed(() => 'active' in field.fields),
-      moduleName: computed(() => (field.label||'').capitalize()),
-      label: computed(() => Object.values(field.fields)[0]?.label),
-
-      expanded,
-      isExpanded: computed(() => expanded.value || field.expand),
-      fields: computed(() => store.getters[`${field.module}/fields`]),
-      rawItem: computed(() => {
-        const item = store.state[module._value].item[props.propName]
-        const items = field.array
-          ? (Array.isArray(item) ? item : [item])
-          : item
-
-        return items
-      }),
-      item: computed(() => {
-        const item = store.state[module._value].item[props.propName]
-
-        return Array.isArray(item)
-          ? item[item.length > 0 ? item.length - 1 : 0]||{}
-          : item
-      }),
-      items: computed(() => store.state[field.module].items),
-      parent: computed(() => store.state[module._value].item),
-      isLoading: computed(() => store.state[field.module].isLoading),
-
-      inputValue: ref(''),
-      selected: computed(() => {
-        const options = props.modelValue
-        const selected = field.array
-          ? Array.isArray(options) ? options : [options]
-          : (Object.keys(options||{}).length > 0 ? [options] : [])
-
-        return selected
-          .filter(({ _id }) => !!_id)
-      })
-    }
+  if( itemsCount > 0 ) {
+    const swap = rawItem.value[itemsCount - 1]
+    const itemIndex = rawItem.value.findIndex(({ _id }: { _id: string }) => item._id === _id)
+    rawItem.value[itemsCount - 1] = item
+    rawItem.value[itemIndex] = swap
   }
+
+  expanded.value = true
+}
+
+const clear = () => {
+  expanded.value = false
+  store.dispatch(`${module.value}/clear`)
+  if( array.value ) {
+    // rawItem.value = rawItem.value.slice(0, -1)
+  }
+}
+
+const select = (item: any) => {
+  const filterEmpties = (array: any[]) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
+  const modelValue = array.value
+    ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
+    : props.modelValue
+
+  inputValue.value = ''
+  store.dispatch(`${module.value}/clearAll`)
+  emit('update:modelValue', array.value
+    ? [ ...modelValue, item ]
+    : item
+  )
+}
+
+const unselect = async (item: any) => {
+  if( props.field.purge ) {
+    const { _id } = item
+    await store.dispatch(`${props.field.module}/remove`, { payload: { filter: { _id } }})
+  }
+
+  emit('update:modelValue', array.value
+      ? props.modelValue.filter((option: any) => option._id !== item._id)
+      : undefined
+  )
+}
+
+const addItem = () => {
+  // refatorar
+//  rawItem.value.push({})
+  expanded.value = true
+}
+
+const search = (value: string) => {
+  if( value.length === 0 ) {
+    store.dispatch(`${module.value}/clearAll`)
+    return
+  }
+
+  if( store.state[module.value].isLoading ) {
+    return
+  }
+
+  store.dispatch(`${module.value}/getAll`, {
+    filter: {
+      ...(activeOnly.value ? { active: true } : {}),
+      [props.field]: {
+        $regex: value.trim(),
+        $options: 'i'
+      }
+    }
+  })
+}
+
+declare global {
+  interface Window {
+    __lazySearchTimeout: any
+  }
+}
+
+const lazySearch = ({ target: { value } }: { target: { value: string } }) => {
+  window.clearTimeout(window.__lazySearchTimeout)
+  window.__lazySearchTimeout = setTimeout(() => {
+      search(value)
+    }, 800)
 }
 </script>

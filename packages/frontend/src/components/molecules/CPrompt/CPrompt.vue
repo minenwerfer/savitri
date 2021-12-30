@@ -24,35 +24,19 @@
   </c-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 import { useStore } from 'vuex'
 import { CButton } from 'frontend/components'
 
-export default {
-  components: {
-    CModal: defineAsyncComponent(() => import('frontend/components/organisms/CModal/CModal.vue')),
-    CButton,
-  },
+const CModal = defineAsyncComponent(() => import('frontend/components/organisms/CModal/CModal.vue'))
+const store = useStore()
 
-  props: {
-    actions: {
-      type: Array,
-      required: true,
-    }
-  },
+const props = defineProps<{
+  actions: any[]
+}>()
 
-  methods: {
-    onClick(action) {
-      this.store.dispatch('meta/fulfillPrompt', action.name)
-    }
-  },
-
-  setup() {
-    const store = useStore()
-    return {
-      store
-    }
-  }
+const onClick = (action: any) => {
+  store.dispatch('meta/fulfillPrompt', action.name)
 }
 </script>

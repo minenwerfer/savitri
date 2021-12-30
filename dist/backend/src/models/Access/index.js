@@ -10,3 +10,4 @@ const index_json_1 = __importDefault(require("../../../../data/models/common/Acc
 Object.defineProperty(exports, "Description", { enumerable: true, get: function () { return index_json_1.default; } });
 exports.AccessSchema = (0, _Util_1.descriptionToSchema)(index_json_1.default);
 exports.Access = (0, database_1.model)('Access', exports.AccessSchema);
+//# sourceMappingURL=index.js.map

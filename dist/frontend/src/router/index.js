@@ -148,3 +148,4 @@ const extendRouter = (router, routerExtension) => {
     });
 };
 exports.extendRouter = extendRouter;
+//# sourceMappingURL=index.js.map

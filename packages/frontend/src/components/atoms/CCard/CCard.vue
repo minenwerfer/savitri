@@ -13,13 +13,8 @@
   </a>
 </template>
 
-<script>
-export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false
-    }
-  }
-}
+<script setup lang="ts">
+const props = defineProps<{
+  disabled?: boolean
+}>()
 </script>

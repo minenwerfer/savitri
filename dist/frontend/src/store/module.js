@@ -525,3 +525,4 @@ class Module {
     }
 }
 exports.Module = Module;
+//# sourceMappingURL=module.js.map

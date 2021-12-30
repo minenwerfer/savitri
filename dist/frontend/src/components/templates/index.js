@@ -10,3 +10,4 @@ var CTabbed_vue_1 = require("frontend/components/templates/CTabbed/CTabbed.vue")
 Object.defineProperty(exports, "CTabbed", { enumerable: true, get: function () { return __importDefault(CTabbed_vue_1).default; } });
 var CGrid_vue_1 = require("frontend/components/templates/CGrid/CGrid.vue");
 Object.defineProperty(exports, "CGrid", { enumerable: true, get: function () { return __importDefault(CGrid_vue_1).default; } });
+//# sourceMappingURL=index.js.map

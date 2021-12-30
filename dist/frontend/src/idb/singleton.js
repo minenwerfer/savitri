@@ -18,3 +18,4 @@ class PersistentStorage extends index_1.OfflineStorage {
     }
 }
 exports.PersistentStorage = PersistentStorage;
+//# sourceMappingURL=singleton.js.map

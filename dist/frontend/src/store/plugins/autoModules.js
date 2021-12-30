@@ -25,3 +25,4 @@ const autoModules = (store) => {
     });
 };
 exports.autoModules = autoModules;
+//# sourceMappingURL=autoModules.js.map

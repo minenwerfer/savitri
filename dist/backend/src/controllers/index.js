@@ -11,3 +11,4 @@ exports.commonControllers = [
     'feedback',
     'file'
 ];
+//# sourceMappingURL=index.js.map

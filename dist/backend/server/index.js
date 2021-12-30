@@ -123,3 +123,4 @@ const init = async (port = 3000) => {
     return server;
 };
 exports.init = init;
+//# sourceMappingURL=index.js.map

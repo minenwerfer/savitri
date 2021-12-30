@@ -20,3 +20,4 @@ class AccessModule extends module_1.Module {
     }
 }
 exports.AccessModule = AccessModule;
+//# sourceMappingURL=index.js.map

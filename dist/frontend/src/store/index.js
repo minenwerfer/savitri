@@ -36,3 +36,4 @@ const extendStore = (store, storeExtension) => {
         .forEach(([name, module]) => store.registerModule(name, module));
 };
 exports.extendStore = extendStore;
+//# sourceMappingURL=index.js.map

@@ -23,45 +23,33 @@
       @input="onInput"
       @change="onChange"
 
-      v-maska="$props.mask"
+      v-maska="mask"
     />
   </label>
 </template>
 
-<script>
-import { maska } from "maska";
+<script setup lang="ts">
+import { ref } from 'vue'
+import { maska as vMaska } from 'maska'
 
-export default {
-  directives: {
-    maska
-  },
+const props = defineProps<{
+  modelValue: string
+  type: string
+  placeholder: string
+  mask: string
+}>()
 
-  props: {
-    modelValue: {
-      default: ''
-    },
-    type: {
-      type: String,
-      default: "text",
-    },
-    placeholder: {
-      type: String,
-      required: false,
-    },
-    mask: {
-      type: String,
-      required: false,
-    },
-  },
+const emit = defineEmits<{
+  (e: 'update:modelValue', event: any): void
+}>()
 
-  methods: {
-    onInput(event) {
-      this.$emit("update:modelValue", event.target.value);
-    },
+const input = ref<any>(null)
 
-    onChange(event) {
-      this.$refs.input.value = event.target.value;
-    },
-  },
-};
+const onInput = (event: { target: { value: string } }) => {
+  emit('update:modelValue', event.target.value)
+}
+
+const onChange = (event: { target: { value: string } }) => {
+  input.value.value = event.target.value
+}
 </script>

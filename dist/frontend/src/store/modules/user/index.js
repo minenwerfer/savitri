@@ -66,3 +66,4 @@ class UserModule extends module_1.Module {
     }
 }
 exports.UserModule = UserModule;
+//# sourceMappingURL=index.js.map

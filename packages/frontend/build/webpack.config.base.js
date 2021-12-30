@@ -73,5 +73,9 @@ exports.baseWebpackConfig = {
     splitChunks: {
       chunks: 'all'
     }
+  },
+
+  stats: {
+    errorDetails: true
   }
 }

@@ -21,37 +21,28 @@
   </c-box>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import { Route } from 'frontend/router'
 
-export default {
-  components: {
-    CBox: defineAsyncComponent(() => import('frontend/components/molecules/CBox/CBox.vue')),
-    CBareButton: defineAsyncComponent(() => import('frontend/components/atoms/CBareButton/CBareButton.vue'))
-  },
+const CBox = defineAsyncComponent(() => import('frontend/components/molecules/CBox/CBox.vue'))
+const CBareButton = defineAsyncComponent(() => import('frontend/components/atoms/CBareButton/CBareButton.vue'))
 
-  setup() {
+const store = useStore()
+const getRoute = () => {
+  const route = useRoute()
+  return route.matched || [route]
+}
 
-    const store = useStore()
-    const getRoute = () => {
-      const route = useRoute()
-      return route.matched || [route]
-    }
+const viewTitle = computed(() => store.state.meta.viewTitle)
+const routes = computed(getRoute)
 
-    const viewTitle = computed(() => store.state.meta.viewTitle)
-
-    return {
-      routes: computed(getRoute),
-
-      getTitle: route => {
-        return route.meta.title === '%viewTitle%'
-          ? viewTitle.value
-          : route.meta.title
-      }
-    }
-  }
+const getTitle = (route: Route) => {
+  return route.meta?.title === '%viewTitle%'
+    ? viewTitle.value
+    : route.meta?.title||''
 }
 </script>
 

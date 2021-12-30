@@ -41,69 +41,35 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { CBareButton } from 'frontend/components'
 
-export default {
-  props: {
-    title: {
-      type: String,
-      required: false
-    },
-    closeHint: {
-      type: Boolean,
-      default: true,
-    },
-    float: {
-      type: Boolean,
-      default: false,
-    },
-    floating: {
-      type: Boolean,
-      default: false
-    },
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
-    visible: {
-      type: Boolean,
-      default: true,
-    },
-    collapsable: {
-      type: Boolean,
-      default: false,
-    },
-    animate: {
-      type: Boolean,
-      default: true,
-    },
-    marginBottom: {
-      type: Number,
-      required: false
-    },
-    fullWidth: {
-      type: Boolean,
-      default: false
-    },
-    classes: {
-      type: String,
-      default: ''
-    }
+const props = defineProps({
+  closeHint: {
+    type: Boolean,
+    default: true
   },
+  visible: {
+    type: Boolean,
+    default: true
+  },
+  animate: {
+    type: Boolean,
+    default: true
+  },
+  title: String,
+  float: Boolean,
+  floating: Boolean,
+  collapsed: Boolean,
+  collapsable: Boolean,
+  marginBottom: Boolean,
+  fullWidth: Boolean,
+  classes: String,
+})
 
-  components: {
-    CBareButton,
-  },
-
-  setup(props) {
-    return {
-      isFloating: computed(() => props.floating || props.float),
-      isCollapsed: ref(props.collapsed)
-    }
-  },
-}
+const isFloating = computed(() => props.floating || props.float)
+const isCollapsed = ref(props.collapsed)
 </script>
 
 <style scoped>

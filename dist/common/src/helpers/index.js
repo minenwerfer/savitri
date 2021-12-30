@@ -28,3 +28,4 @@ function fromEntries(entries) {
         .reduce((a, [key, value]) => ({ ...a, [key]: value }), {});
 }
 exports.fromEntries = fromEntries;
+//# sourceMappingURL=index.js.map

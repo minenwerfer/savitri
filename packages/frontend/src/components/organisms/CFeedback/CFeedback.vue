@@ -29,36 +29,24 @@
   </c-box>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, inject, defineAsyncComponent } from 'vue'
 import { useStore } from 'vuex'
 import { CForm, CButton } from 'frontend/components'
 import useModule from 'frontend/composables/module'
 
-export default {
-  components: {
-    CBox: defineAsyncComponent(() => import('frontend/components/molecules/CBox/CBox.vue')),
-    CForm,
-    CButton
-  },
+const CBox = defineAsyncComponent(() => import('frontend/components/molecules/CBox/CBox.vue'))
 
-  props: {
-    visible: {
-      type: Boolean,
-      required: true
-    }
-  },
+const props = defineProps<{
+  visible: boolean
+}>()
 
-  setup() {
-    const store = useStore()
-    const module = useModule('feedback', store)
+const store = useStore()
+const module = useModule('feedback', store)
 
-    return {
-      ...module,
-      inserted: ref(false),
-      productVersion: inject('productVersion'),
-      baseVersion: inject('baseVersion'),
-    }
-  }
-}
+const inserted = ref(false)
+const productVersion = inject('productVersion')
+const baseVersion = inject('baseVersion')
+
+defineExpose({ ...module })
 </script>

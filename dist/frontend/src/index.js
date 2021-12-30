@@ -82,3 +82,4 @@ const useApp = (config) => new Promise((resolve) => {
     });
 });
 exports.useApp = useApp;
+//# sourceMappingURL=index.js.map

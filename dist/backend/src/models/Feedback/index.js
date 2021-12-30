@@ -12,3 +12,4 @@ require("../User");
 exports.FeedbackSchema = (0, _Util_1.descriptionToSchema)(index_json_1.default, database_1.options);
 exports.FeedbackSchema.plugin(require('mongoose-autopopulate'));
 exports.Feedback = (0, database_1.model)('Feedback', exports.FeedbackSchema);
+//# sourceMappingURL=index.js.map

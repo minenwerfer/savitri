@@ -24,3 +24,4 @@ const useI18n = (options) => {
     });
 };
 exports.useI18n = useI18n;
+//# sourceMappingURL=index.js.map

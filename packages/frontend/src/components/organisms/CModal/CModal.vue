@@ -14,12 +14,8 @@
   </c-box>
 </template>
 
-<script>
+<script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 
-export default {
-  components: {
-    CBox: defineAsyncComponent(() => import('frontend/components/molecules/CBox/CBox.vue'))
-  }
-}
+const CBox = defineAsyncComponent(() => import('frontend/components/molecules/CBox/CBox.vue'))
 </script>

@@ -30,7 +30,7 @@ const actions = [
   'clear'
 ]
 
-export default (name: string, store: any) => {
+export default (name: string, store: any): any => {
 
   const useFields = (fields: string[], except = false) => {
     return fromEntries(Object.entries(store.getters[`${name}/fields`])

@@ -1,0 +1,1 @@
+{"version":3,"file":"AccessController.js","sourceRoot":"","sources":["../../../../packages/backend/src/controllers/AccessController.ts"],"names":[],"mappings":";;;AAAA,6CAAsE;AACtE,gDAA4C;AAE5C,MAAa,gBAAiB,SAAQ,iBAAuB;IAC3D;QACE,KAAK,CAAC,eAAM,EAAE,oBAAW,EAAE;YACzB,aAAa,EAAE,CAAC,QAAQ,CAAC;SAC1B,CAAC,CAAA;IACJ,CAAC;CACF;AAND,4CAMC"}

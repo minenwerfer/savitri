@@ -14,46 +14,28 @@
   </div>
 </template>
 
-<script>
-import { reactive, toRefs, inject } from 'vue'
+<script setup lang="ts">
+import { reactive, inject, } from 'vue'
 import { useStore } from 'vuex'
 import { CForm } from '../index'
 import { CButton } from 'frontend/components'
 
 import useModule from 'frontend/composables/module'
 
-export default {
-  components: {
-    CForm,
-    CButton
-  },
+const props = defineProps<{
+  module: string
+}>()
 
-  props: {
-    module: {
-      type: String,
-      required: true
-    }
-  },
+const store = useStore()
+const module = reactive(useModule(props.module, store))
 
-  methods: {
-    clear() {
-      this.store.commit(`${this.module}/FILTERS_CLEAR`)
-    },
-    filter() {
-      this.store.dispatch(`${this.module}/getAll`, {
-        payload: { filter: this.filters }
-      })
-    }
-  },
+const clear = () => {
+  store.commit(`${props.module}/FILTERS_CLEAR`)
+}
 
-  setup(props) {
-    const store = useStore()
-    const module = reactive(useModule(props.module, store))
-
-    return {
-      store,
-      ...toRefs(module)
-    }
-  }
+const filter = () => {
+  store.dispatch(`${props.module}/getAll`, {
+    payload: { filter: module.filters }
+  })
 }
 </script>

@@ -58,112 +58,88 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, watch, inject } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { CBareButton } from 'frontend/components'
+import { Route } from 'frontend/router'
 
-export default {
-  components: {
-    CBareButton,
-  },
+const props = defineProps<{
+  entrypoint?: string
+  visible: boolean
+  mobileVisible: boolean
+  schema?: any
+}>()
 
-  props: {
-    entrypoint: {
-      type: String,
-      required: false,
-    },
-    visible: {
-      type: Boolean,
-      required: true,
-    },
-    mobileVisible: {
-      type: Boolean,
-      required: true,
-    },
-    schema: {
-      type: Object,
-      required: false,
-    }
-  },
+const store = useStore()
+const router = useRouter()
 
-  methods: {
-    closeMobile() {
-      this.store.dispatch('meta/swapMenu', { desktop: true, mobile: false })
-    },
-    onEntryClick(route) {
-      if( route.name ) {
-        this.$router.push({ name: route.name })
+const tick = ref(0)
+const productName = inject('productName')
+const productLogo = inject('productLogo')
+
+const closeMobile = () => {
+  store.dispatch('meta/swapMenu', { desktop: true, mobile: false })
+}
+
+const onEntryClick = (route: Route & { meta: any }) => {
+  if( route.name ) {
+    router.push({ name: route.name })
+  }
+  if( route.meta?.action ) {
+    route.meta.action()
+  }
+
+  closeMobile()
+}
+
+const getSchema = (schema: any, routes: Route[]) => {
+  if( !Array.isArray(schema) ) {
+    return schema
+  }
+
+  return schema.map((s) => {
+    return typeof s === 'string'
+      ? routes.find((route) => route.name === s)
+      : s
+  })
+}
+
+const getRoutes = (children, subschema) => {
+  const routes = children || typeof props.entrypoint === 'string'
+    ? router.getRoutes().filter((route) => route.name.startsWith(`${props.entrypoint}-`))
+    : router.getRoutes()
+
+  const schema = getSchema(subschema || props.schema, routes)
+  const entries = {}
+
+  Object.entries(schema)
+    .filter(([, value]) => !!value)
+    .map(([key, value]) => [key, { ...value, subschema: value.children }])
+    .forEach(([key, value]) => {
+      const { children, subschema, ...route } = value
+      entries[key] = route
+      entries[key].meta = route.meta || {
+        title: key
       }
-      if( route.meta?.action ) {
-        route.meta.action()
+
+      if( children ) {
+        entries[key].children = getRoutes(children, subschema)
       }
-
-      this.closeMobile()
-    }
-  },
-
-  setup(props) {
-    const store = useStore()
-    const router = useRouter()
-
-    const getSchema = (schema, routes) => {
-      if( !Array.isArray(schema) ) {
-        return schema
-      }
-
-      return schema.map((s) => {
-        return typeof s === 'string'
-          ? routes.find((route) => route.name === s)
-          : s
-      })
-    }
-
-    const getRoutes = (children, subschema) => {
-      const routes = children || typeof props.entrypoint === 'string'
-        ? router.getRoutes().filter((route) => route.name.startsWith(`${props.entrypoint}-`))
-        : router.getRoutes()
-
-      const schema = getSchema(subschema || props.schema, routes)
-      const entries = {}
-
-      Object.entries(schema)
-        .filter(([, value]) => !!value)
-        .map(([key, value]) => [key, { ...value, subschema: value.children }])
-        .forEach(([key, value]) => {
-          const { children, subschema, ...route } = value
-          entries[key] = route
-          entries[key].meta = route.meta || {
-            title: key
-          }
-
-          if( children ) {
-            entries[key].children = getRoutes(children, subschema)
-          }
-        })
-
-      return [
-        ...Object.values(entries)
-      ]
-    }
-
-    const routes = ref(getRoutes())
-
-    watch(() => store.state.meta?.globalDescriptions, () => {
-      routes.value = getRoutes()
-        .sort((a, b) => (a.order||0) < (b.order||0) ? -1 : 1)
     })
 
-    return {
-      store,
-      tick: ref(0),
-      routes,
-      productName: inject('productName'),
-      productLogo: inject('productLogo')
-    }
-  },
+  return [
+    ...Object.values(entries)
+  ]
 }
+
+const routes = ref(getRoutes())
+
+watch(() => store.state.meta?.globalDescriptions, () => {
+  routes.value = getRoutes()
+    .sort((a, b) => (a.order||0) < (b.order||0) ? -1 : 1)
+})
 </script>
 
 <style>

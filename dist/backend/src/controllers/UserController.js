@@ -48,3 +48,4 @@ class UserController extends Mutable_1.Mutable {
     }
 }
 exports.UserController = UserController;
+//# sourceMappingURL=UserController.js.map

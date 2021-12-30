@@ -63,77 +63,57 @@
 
 </template>
 
-<script>
+<script setup lang="ts">
 import { provide, watch, computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
 import { CBox, CTable, CForm, CButton, CPagination, CFilter } from 'frontend/components'
 
-export default {
-  props: {
-    module: {
-      type: String,
-      required: true,
-    }
-  },
+const props = defineProps<{
+  module: string
+}>()
 
-  components: {
-    CBox,
-    CTable,
-    CForm,
-    CButton,
-    CPagination,
-    CFilter
-  },
+const store = useStore()
+const module = reactive({})
 
-  setup(props) {
-    // eslint-disable-next-line
-    const store = useStore()
-    const module = reactive({})
+provide('module', computed(() => props.module))
 
-    provide('module', computed(() => props.module))
-
-    watch(() => props.module, async () => {
-      if( !store.getters[`${props.module}/fields`] ) {
-        await store.dispatch(`${props.module}/describe`)
-      }
-
-      Object.assign(module, useModule(props.module, store))
-      store.dispatch('meta/setViewTitle', props.module)
-      store.dispatch(`${props.module}/getAll`)
-
-    }, { immediate: true })
-
-    const buttonAction = (action, actionProps, filter) => {
-      return actionProps.ask
-        ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filter }}})
-        : store.dispatch(`${props.module}/${action}`, { payload: { filter  }})
-    }
-
-    const individualActions = computed(() => {
-      return store.getters[`${props.module}/individualActions`]
-        .map((action) => ({
-          name: action.name,
-          click: filter => buttonAction(action.action, action, filter)
-        }))
-    })
-
-    return {
-      store,
-      ...toRefs(module),
-      isInsertVisible: computed(() => store.getters['meta/isInsertVisible']),
-      isInsertReadonly: computed(() => store.getters['meta/isInsertReadonly']),
-      buttonAction,
-      individualActions,
-    }
-  },
-
-  watch: {
-    isInsertVisible(value) {
-      if( value === false ) {
-        this.store.dispatch(`${this.module}/clear`)
-      }
-    },
+watch(() => props.module, async () => {
+  if( !store.getters[`${props.module}/fields`] ) {
+    await store.dispatch(`${props.module}/describe`)
   }
+
+  Object.assign(module, useModule(props.module, store))
+  store.dispatch('meta/setViewTitle', props.module)
+  store.dispatch(`${props.module}/getAll`)
+
+}, { immediate: true })
+
+
+watch(() => isInsertVisible.value, (value: boolean) => {
+  if( value === false ) {
+    store.dispatch(`${props.module}/clear`)
+  }
+})
+
+const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
+const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
+
+const buttonAction = (action: string, actionProps: any, filter: any) => {
+  return actionProps.ask
+    ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filter }}})
+    : store.dispatch(`${props.module}/${action}`, { payload: { filter  }})
 }
+
+const individualActions = computed(() => {
+  return store.getters[`${props.module}/individualActions`]
+    .map((action: any) => ({
+      name: action.name,
+      click: (filter: any) => buttonAction(action.action, action, filter)
+    }))
+})
+
+defineExpose({
+  ...module
+})
 </script>

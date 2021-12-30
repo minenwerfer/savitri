@@ -166,3 +166,4 @@ class MetaModule extends module_1.Module {
     }
 }
 exports.MetaModule = MetaModule;
+//# sourceMappingURL=index.js.map

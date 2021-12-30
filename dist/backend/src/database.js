@@ -30,3 +30,4 @@ exports.options = {
         updatedAt: 'updated_at'
     }
 };
+//# sourceMappingURL=database.js.map

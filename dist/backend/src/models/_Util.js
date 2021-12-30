@@ -46,3 +46,4 @@ const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
     return new mongoose_1.Schema(Object.entries(fields).filter(([, field]) => !field.meta).reduce(convert, extra), options);
 };
 exports.descriptionToSchema = descriptionToSchema;
+//# sourceMappingURL=_Util.js.map

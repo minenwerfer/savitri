@@ -50,3 +50,4 @@ exports.UserSchema.methods.testPassword = async function (candidate) {
  * User model.
  */
 exports.User = (0, database_1.model)('User', exports.UserSchema);
+//# sourceMappingURL=index.js.map

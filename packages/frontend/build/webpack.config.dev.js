@@ -12,7 +12,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       inject: true,
       template: path.resolve(__dirname, '../public/index.html')
     })
-  ]
+  ],
 })
 
 module.exports = webpackConfig

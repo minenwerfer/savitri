@@ -72,3 +72,4 @@ class FileController extends Mutable_1.Mutable {
     }
 }
 exports.FileController = FileController;
+//# sourceMappingURL=FileController.js.map

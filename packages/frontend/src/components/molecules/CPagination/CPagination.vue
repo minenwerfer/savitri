@@ -16,38 +16,22 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue'
 import { useStore } from 'vuex'
 import { CSelect } from 'frontend/components'
 
-export default {
-  props: {
-    module: {
-      type: String,
-      required: true,
-    }
-  },
+const CBareButton = defineAsyncComponent(() => import('frontend/components/atoms/CBareButton/CBareButton.vue'))
 
-  components: {
-    CSelect,
-    CBareButton: defineAsyncComponent(() => import('frontend/components/atoms/CBareButton/CBareButton.vue')),
-  },
+const props = defineProps<{
+  module: string
+}>()
 
-  methods: {
-    paginate(page) {
-      console.log({ page })
-      this.store.dispatch(`${this.module}/paginate`, page)
-    }
-  },
-
-  setup(props) {
-    const store = useStore()
-    return {
-      store,
-      pageCount: computed(() => store.getters[`${props.module}/pageCount`]),
-      currentPage: computed(() => store.getters[`${props.module}/currentPage`]),
-    }
-  }
+const paginate = (page: number|string) => {
+  store.dispatch(`${props.module}/paginate`, page)
 }
+
+const store = useStore()
+const pageCount = computed(() => store.getters[`${props.module}/pageCount`])
+const currentPage = computed(() => store.getters[`${props.module}/currentPage`])
 </script>

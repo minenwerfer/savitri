@@ -114,3 +114,4 @@ exports.default = (name, store) => {
         ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})
     };
 };
+//# sourceMappingURL=module.js.map

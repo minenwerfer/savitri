@@ -33,71 +33,59 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      required: true,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    value: {
-      type: [String, Boolean],
-      required: false,
-    },
-    array: {
-      type: Boolean,
-      default: false,
-    },
-    isRadio: {
-      type: Boolean,
-      default: false,
+<script setup lang="ts">
+import { onMounted, computed, ref } from 'vue'
+
+const props = defineProps<{
+  modelValue?: any
+  required: boolean
+  value: string|boolean
+  array: boolean
+  isRadio: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', event: string|string[]|boolean): void
+}>()
+
+const checkbox = ref<any>(null)
+
+const onClick = () => {
+  if( !props.required ) {
+    checkbox.value.click()
+  }
+}
+
+onMounted(() => {
+  if( !props.modelValue ) {
+    emit('update:modelValue', props.array ? [] : false)
+  }
+})
+
+const bindVal = computed({
+  get: () => {
+    if( props.isRadio ) {
+      return props.modelValue === props.value
     }
+
+    return Array.isArray(props.modelValue)
+      ? (props.modelValue as (string|boolean)[]).includes(props.value)
+      : !!props.value
   },
 
-  methods: {
-    onClick() {
-      if (!this.required) {
-        this.$refs.checkbox.click();
-      }
-    },
-  },
-
-  mounted() {
-    if( !this.modelValue ) {
-      this.$emit('update:modelValue', this.array ? [] : false)
+  set: () => {
+    if( props.isRadio ) {
+      emit('update:modelValue', props.value)
+      return
     }
-  },
 
-  computed: {
-    bindVal: {
-      get() {
-        if( this.isRadio ) {
-          return this.modelValue === this.value
-        }
-
-        return Array.isArray(this.modelValue)
-          ? this.modelValue.includes(this.value)
-          : !!this.value
-      },
-
-      set() {
-        if( this.isRadio ) {
-          this.$emit('update:modelValue', this.value)
-          return
-        }
-
-        if( this.array || Array.isArray(this.modelValue) ) {
-          this.$emit('update:modelValue', !this.modelValue.includes(this.value)
-            ? [ ...this.modelValue||[], this.value ]
-            : this.modelValue.filter((v) => v !== this.value))
-        } else {
-          this.$emit('update:modelValue', !(this.modelValue === true))
-        }
-      }
+    if( props.array || Array.isArray(props.modelValue) ) {
+      emit('update:modelValue', !props.modelValue.includes(props.value)
+        ? [ ...props.modelValue||[], props.value ]
+        : props.modelValue.filter((v: any) => v !== props.value))
+    } else {
+      emit('update:modelValue', !(props.modelValue === true))
     }
-  },
-};
+  }
+})
 </script>

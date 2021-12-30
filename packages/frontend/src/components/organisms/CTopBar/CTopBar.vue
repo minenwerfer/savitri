@@ -26,19 +26,9 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { inject } from 'vue'
 import { CBareButton } from 'frontend/components'
 
-export default {
-  components: {
-    CBareButton
-  },
-
-  setup() {
-    return {
-      productName: inject('productName'),
-    }
-  }
-}
+const productName = inject('productName')
 </script>

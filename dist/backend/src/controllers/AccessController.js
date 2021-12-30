@@ -11,3 +11,4 @@ class AccessController extends Mutable_1.Mutable {
     }
 }
 exports.AccessController = AccessController;
+//# sourceMappingURL=AccessController.js.map

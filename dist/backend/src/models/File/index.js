@@ -11,3 +11,4 @@ Object.defineProperty(exports, "Description", { enumerable: true, get: function 
 require("../User");
 exports.FileSchema = (0, _Util_1.descriptionToSchema)(index_json_1.default, database_1.options);
 exports.File = (0, database_1.model)('File', exports.FileSchema);
+//# sourceMappingURL=index.js.map

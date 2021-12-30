@@ -49,60 +49,40 @@
   </div>
 </template>
 
-<script>
-import { inject, ref, reactive, watch, toRefs } from 'vue'
+<script setup lang="ts">
+import { inject, ref, watch, reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
 import { CBareButton } from 'frontend/components'
 
-export default {
-  components: {
-    CBareButton,
+const props = defineProps({
+  columns: {
+    type: Object,
+    required: true,
   },
-
-  props: {
-    columns: {
-      type: Object,
-      required: true,
-    },
-    rows: {
-      type: Object,
-      required: true,
-      validator: (v) => Array.isArray(v)
-    },
-    recordsCount: {
-      type: Number,
-      required: false,
-    },
-    recordsTotal: {
-      type: Number,
-      required: false,
-    }
+  rows: {
+    type: Object,
+    required: true,
+    validator: (v) => Array.isArray(v)
   },
-
-  computed: {
-    selected: {
-      get() {
-        return this.store.state[this.module].selected
-      },
-      set(items) {
-        this.store.dispatch(`${this.module}/selectMany`, { items, value: true })
-      }
-    }
+  recordsCount: {
+    type: Number,
+    required: false,
   },
-
-  setup() {
-    const store = useStore()
-    const module = ref(inject('module'))
-
-    const moduleRefs = reactive({})
-    watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
-
-    return {
-      store,
-      module,
-      ...toRefs(moduleRefs)
-    }
+  recordsTotal: {
+    type: Number,
+    required: false,
   }
-}
+})
+
+const store = useStore()
+const module = ref<string>(inject('module', ''))
+
+const moduleRefs = reactive({})
+watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
+
+const selected = computed({
+  get: () => store.state[module.value].selected,
+  set: (items: any[]) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
+})
 </script>
