@@ -10,10 +10,10 @@ export const BareTemplate = {
 
 export interface RouteMeta {
   meta?: {
-    title: string;
-    hidden?: boolean;
-    isPrivate?: boolean;
-    order?: number;
+    title: string
+    hidden?: boolean
+    isPrivate?: boolean
+    order?: number
   }
 }
 

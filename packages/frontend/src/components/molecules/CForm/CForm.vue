@@ -86,11 +86,19 @@ import { CInput, CTextbox, CCheckbox, CSelect, } from 'frontend/components'
 const CSearch = defineAsyncComponent(() => import('frontend/components/molecules/CSearch/CSearch.vue'))
 const CFile = defineAsyncComponent(() => import('frontend/components/molecules/CFile/CFile.vue'))
 
-const props = defineProps({
+const props: {
+  form: any
+  formData: any
+  isReadonly?: boolean
+  gapY?: number
+  paddingTop?: number
+  paddingBottom?: number
+
+} & any = defineProps({
   form: {
     type: Object,
     required: true,
-    validator: (v) => Object.values(v).every((v) => !!v.label)
+    validator: (v: any) => Object.values(v).every((v: any) => !!v.label)
   },
   formData: {
     type: Object,
@@ -116,10 +124,10 @@ const props = defineProps({
 })
 
 const store = useStore()
-const module = ref(inject('module', ''))
+const module = ref<string>(inject('module', ''))
 
 const moduleRefs = reactive<any>({})
-watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
+watch(module, () => Object.assign(moduleRefs as any, useModule(module.value, store)), { immediate: true })
 
 const filterFields = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
@@ -144,7 +152,4 @@ const allInOne = Object.entries(props.form)
 })
 
 const getFirstField = ref(moduleRefs.getFirstField)
-defineExpose({
-  //
-})
 </script>

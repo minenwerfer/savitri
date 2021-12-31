@@ -37,34 +37,16 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { useStore } from 'vuex'
 import { CMenu, CBreadcumb, CTopBar, CBareButton, CFeedback } from 'frontend/components'
 
-export default {
-  components: {
-    CMenu,
-    CBreadcumb,
-    CTopBar,
-    CBareButton,
-    CFeedback
-  },
+const store = useStore()
+const menuSchema = inject('menuSchema', {})
 
-  setup() {
-    const store = useStore()
-    const menuSchema = inject('menuSchema', {})
-
-    const isFeedbackVisible = ref(false)
-
-    return {
-      menuSchema,
-      menu: computed(() => store.state.meta.menu),
-      isMenuVisible: computed(() => store.state.meta.menu.isVisible),
-      isMenuMobileVisible: computed(() => store.state.meta.menu.isMobileVisible),
-
-      isFeedbackVisible
-    }
-  }
-}
+const isFeedbackVisible = ref(false)
+const menu = computed(() => store.state.meta.menu)
+const isMenuVisible = computed(() => store.state.meta.menu.isVisible)
+const isMenuMobileVisible = computed(() => store.state.meta.menu.isMobileVisible)
 </script>

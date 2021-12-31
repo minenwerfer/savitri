@@ -34,9 +34,9 @@ import { maska as vMaska } from 'maska'
 
 const props = defineProps<{
   modelValue: string
-  type: string
-  placeholder: string
-  mask: string
+  type?: string
+  placeholder?: string
+  mask?: string
 }>()
 
 const emit = defineEmits<{

@@ -40,50 +40,48 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { CBareButton, CButton } from 'frontend/components'
 
-export default {
-  components: {
-    CBareButton,
-    CButton,
+const props: any = defineProps({
+  tabs: {
+    type: Number,
+    required: true,
   },
-  props: {
-    tabs: {
-      type: Number,
-      required: true,
-    },
-    titles: {
-      type: Array,
-      required: false,
-      validator: value => value.every(v => typeof v === 'string')
-    },
-    currentTab: {
-      type: Number,
-      required: true,
-    },
-    bottomHelpers: {
-      type: Boolean,
-      default: true,
-    },
-    finishButton: {
-      type: Boolean,
-      default: true,
-    },
-    vertical: {
-      type: Boolean,
-      default: false
-    }
+  titles: {
+    type: Array,
+    required: false,
+    validator: (value: any) => value.every((v: any) => typeof v === 'string')
   },
-  methods: {
-    previous() {
-      const previousTab = this.currentTab === 1 ? this.tabs : this.currentTab - 1;
-      this.$emit('update:currentTab', previousTab)
-    },
-    next() {
-      const nextTab = this.currentTab === this.tabs ? 1 : this.currentTab + 1
-      this.$emit('update:currentTab', nextTab)
-    },
+  currentTab: {
+    type: Number,
+    required: true,
   },
+  bottomHelpers: {
+    type: Boolean,
+    default: true,
+  },
+  finishButton: {
+    type: Boolean,
+    default: true,
+  },
+  vertical: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits<{
+  (e: 'update:currentTab', event: number): void
+}>()
+
+const previous = () => {
+  const previousTab = props.currentTab === 1 ? props.tabs : props.currentTab - 1;
+  emit('update:currentTab', previousTab)
+}
+
+const next = () => {
+  const nextTab = props.currentTab === props.tabs ? 1 : props.currentTab + 1
+  emit('update:currentTab', nextTab)
 }
 </script>

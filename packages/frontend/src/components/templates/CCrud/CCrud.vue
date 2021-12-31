@@ -78,6 +78,9 @@ const module = reactive({})
 
 provide('module', computed(() => props.module))
 
+const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
+const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
+
 watch(() => props.module, async () => {
   if( !store.getters[`${props.module}/fields`] ) {
     await store.dispatch(`${props.module}/describe`)
@@ -96,9 +99,6 @@ watch(() => isInsertVisible.value, (value: boolean) => {
   }
 })
 
-const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
-const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
-
 const buttonAction = (action: string, actionProps: any, filter: any) => {
   return actionProps.ask
     ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filter }}})
@@ -111,9 +111,5 @@ const individualActions = computed(() => {
       name: action.name,
       click: (filter: any) => buttonAction(action.action, action, filter)
     }))
-})
-
-defineExpose({
-  ...module
 })
 </script>

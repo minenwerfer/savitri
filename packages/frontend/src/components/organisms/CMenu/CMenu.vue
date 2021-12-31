@@ -101,22 +101,22 @@ const getSchema = (schema: any, routes: Route[]) => {
 
   return schema.map((s) => {
     return typeof s === 'string'
-      ? routes.find((route) => route.name === s)
+      ? routes.find((route: Route) => route.name === s)
       : s
   })
 }
 
-const getRoutes = (children, subschema) => {
-  const routes = children || typeof props.entrypoint === 'string'
-    ? router.getRoutes().filter((route) => route.name.startsWith(`${props.entrypoint}-`))
+const getRoutes = (children?: Route, subschema?: any) => {
+  const routes: unknown = children || typeof props.entrypoint === 'string'
+    ? router.getRoutes().filter((route) => (route.name as string).startsWith(`${props.entrypoint}-`))
     : router.getRoutes()
 
-  const schema = getSchema(subschema || props.schema, routes)
-  const entries = {}
+  const schema = getSchema(subschema || props.schema, routes as Route[])
+  const entries: { [key: string]: Route } = {}
 
   Object.entries(schema)
     .filter(([, value]) => !!value)
-    .map(([key, value]) => [key, { ...value, subschema: value.children }])
+    .map(([key, value]: [string, any]) => [key, { ...value, subschema: value.children }])
     .forEach(([key, value]) => {
       const { children, subschema, ...route } = value
       entries[key] = route
@@ -130,7 +130,7 @@ const getRoutes = (children, subschema) => {
     })
 
   return [
-    ...Object.values(entries)
+    ...Object.values(entries) as Route[]
   ]
 }
 
@@ -138,7 +138,7 @@ const routes = ref(getRoutes())
 
 watch(() => store.state.meta?.globalDescriptions, () => {
   routes.value = getRoutes()
-    .sort((a, b) => (a.order||0) < (b.order||0) ? -1 : 1)
+    .sort((a, b) => (a.meta?.order||0) < (b.meta?.order||0) ? -1 : 1)
 })
 </script>
 

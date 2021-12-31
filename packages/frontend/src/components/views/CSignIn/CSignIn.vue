@@ -30,34 +30,22 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed, inject } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { CForm, CButton } from 'frontend/components'
 
-export default {
-  components: {
-    CForm,
-    CButton,
-  },
+const store = useStore()
+const router = useRouter()
 
-  methods: {
-    authenticate() {
-      this.store.dispatch('user/authenticate')
-        .then(() => this.$router.push({ name: 'dashboard-home'}))
-    }
-  },
-
-  setup() {
-    const store = useStore()
-
-    return {
-      store,
-      user: computed(() => store.state.user.current),
-      productName: inject('productName'),
-      productVersion: inject('productVersion'),
-      baseVersion: inject('baseVersion')
-    }
-  }
+const authenticate = () => {
+  store.dispatch('user/authenticate')
+    .then(() => router.push({ name: 'dashboard-home'}))
 }
+
+const user = computed(() => store.state.user.current)
+const productName = inject('productName')
+const productVersion = inject('productVersion')
+const baseVersion = inject('baseVersion')
 </script>

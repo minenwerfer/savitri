@@ -56,8 +56,8 @@ const emit = defineEmits<{
 }>()
 
 const store = useStore()
-const parentModule = inject('module')
-const expanded = ref(false)
+const parentModule = inject<{ value: string }>('module', { value: '' })
+const expanded = ref<boolean>(false)
 
 const field = props.field
 
@@ -68,7 +68,7 @@ const expand = computed(() => field.expand === true)
 const array = computed(() => field.array)
 const activeOnly = computed(() => 'active' in field.fields)
 const moduleName = computed(() => (field.label||'').capitalize())
-const label = computed(() => Object.values(field.fields)[0]?.label)
+const label = computed(() => (Object.values(field.fields)[0]||{} as any).label)
 
 const isExpanded = computed(() => expanded.value || field.expand)
 const fields = computed(() => store.getters[`${field.module}/fields`])
@@ -90,7 +90,7 @@ const item = computed(() => {
 })
 
 const items = computed(() => store.state[field.module].items)
-const parent = computed(() => store.state[parentModule.value].item)
+const parent = computed<{ _id: string }>(() => store.state[parentModule.value].item)
 const isLoading = computed(() => store.state[field.module].isLoading)
 
 const inputValue = ref('')
@@ -121,7 +121,7 @@ const insert = async () => {
     ]
   })()
 
-  const parentResult = await store.dispatch(`${parentModule}/insert`, {
+  const parentResult = await store.dispatch(`${parentModule.value}/insert`, {
     what: {
       _id: parent.value._id,
       [props.propName]: value

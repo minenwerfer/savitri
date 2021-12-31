@@ -3,12 +3,6 @@
   </c-crud>
 </template>
 
-<script>
+<script setup lang="ts">
 import CCrud from 'frontend/components/templates/CCrud/CCrud.vue'
-
-export default {
-  components: {
-    CCrud
-  },
-}
 </script>

@@ -14,55 +14,43 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { CModal, CPrompt } from 'frontend/components'
 
-export default {
-  components: {
-    CModal,
-    CPrompt,
-  },
+const store = useStore()
+const router = useRouter()
 
-  setup() {
-    const store = useStore()
-    const router = useRouter()
+const modal = computed(() => store.state.meta.modal)
+const prompt = computed(() => store.state.meta.prompt)
 
-    /**
-      Updates routes based on global descriptions.
-      @see @/components/reusable/organisms/CMenu/CMenu.vue
-    */
-    watch(() => store.state.meta.globalDescriptions, descriptions => {
-      if( descriptions?.length === 0 ) return;
+/**
+  Updates routes based on global descriptions.
+  @see @/components/reusable/organisms/CMenu/CMenu.vue
+*/
+watch(() => store.state.meta.globalDescriptions, descriptions => {
+  if( descriptions?.length === 0 ) return;
 
-      descriptions.forEach((description) => {
-        if( description.route ) {
+  descriptions.forEach((description: any) => {
+    if( description.route ) {
 
-          const name = `dashboard-${description.module}`
-          if( router.hasRoute(name) ) {
-            return
-          }
+      const name = `dashboard-${description.module}`
+      if( router.hasRoute(name) ) {
+        return
+      }
 
-          const route = {
-            name,
-            path: description.module,
-            redirect: `/dashboard/c/${description.module}`,
-            meta: { title: description.module }
-          }
+      const route = {
+        name,
+        path: description.module,
+        redirect: `/dashboard/c/${description.module}`,
+        meta: { title: description.module }
+      }
 
-          router.addRoute('dashboard', route)
-        }
-      })
-
-    }, { immediate: true })
-
-    return {
-      store,
-      modal: computed(() => store.state.meta.modal),
-      prompt: computed(() => store.state.meta.prompt),
+      router.addRoute('dashboard', route)
     }
-  },
-}
+  })
+
+}, { immediate: true })
 </script>
