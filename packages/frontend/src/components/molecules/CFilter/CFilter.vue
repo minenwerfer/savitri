@@ -27,7 +27,7 @@ const props = defineProps<{
 }>()
 
 const store = useStore()
-const module = reactive(useModule(props.module, store))
+const moduleRefs = reactive(useModule(props.module, store))
 
 const clear = () => {
   store.commit(`${props.module}/FILTERS_CLEAR`)
@@ -35,7 +35,13 @@ const clear = () => {
 
 const filter = () => {
   store.dispatch(`${props.module}/getAll`, {
-    payload: { filter: module.filters }
+    payload: { filter: moduleRefs.filters }
   })
 }
+
+const {
+  availableFilters,
+  filters
+
+} = moduleRefs
 </script>

@@ -2,7 +2,7 @@
   <div class="mt-6" :key="parent">
     <header class="font-semibold mb-1">{{ moduleName }}</header>
     <div v-if="isExpanded" class="mb-2">
-      <c-form :form="fields" :form-data="item" :padding-bottom="0">
+      <c-form :form="fields" :form-data="item" :padding-bottom="0" :field-index="fieldIndex">
       </c-form>
       <div v-if="!expand" class="text-sm">
         <c-button @clicked="insert" class="justify-self-end mr-2">Salvar</c-button>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, computed, ref, defineAsyncComponent, onMounted } from 'vue'
+import { provide, inject, computed, ref, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { CInput, CButton, CBareButton } from 'frontend/components'
 
@@ -60,6 +60,7 @@ const parentModule = inject<{ value: string }>('module', { value: '' })
 const expanded = ref<boolean>(false)
 
 const field = props.field
+provide('module', field.module)
 
 onMounted(() => store.dispatch(`${field.module}/clearAll`))
 
@@ -104,6 +105,8 @@ const selected = computed(() => {
     .filter(({ _id }) => !!_id)
 })
 
+const fieldIndex = ref(0)
+
 const insert = async () => {
   const result: any = await store.dispatch(`${module.value}/insert`, { what: item.value })
 
@@ -133,8 +136,18 @@ const insert = async () => {
   expanded.value = false
 }
 
+const getFieldIndex = (_id: string) => {
+  if( !field.array ) {
+    return 0
+  }
+
+  return selected.value
+    .findIndex((i: any) => i._id === _id) || 0
+}
+
 const edit = (item: any) => {
   const itemsCount = rawItem.value.length
+  fieldIndex.value = getFieldIndex(item._id)
 
   if( itemsCount > 0 ) {
     const swap = rawItem.value[itemsCount - 1]
@@ -150,7 +163,7 @@ const clear = () => {
   expanded.value = false
   store.dispatch(`${module.value}/clear`)
   if( array.value ) {
-    // rawItem.value = rawItem.value.slice(0, -1)
+    rawItem.value = rawItem.value.slice(0, -1)
   }
 }
 
@@ -182,7 +195,7 @@ const unselect = async (item: any) => {
 
 const addItem = () => {
   // refatorar
-//  rawItem.value.push({})
+  rawItem.value.push({})
   expanded.value = true
 }
 
@@ -199,7 +212,7 @@ const search = (value: string) => {
   store.dispatch(`${module.value}/getAll`, {
     filter: {
       ...(activeOnly.value ? { active: true } : {}),
-      [props.field]: {
+      [props.fieldName]: {
         $regex: value.trim(),
         $options: 'i'
       }

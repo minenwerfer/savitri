@@ -45,7 +45,7 @@
 
         <div v-if="field.module === 'file'">
           <header>{{ field.label }}</header>
-          <c-file v-model="formData[key]" :context="`${module}.${key}`"></c-file>
+          <c-file v-model="formData[key]" :context="`${module}.${key}.${fieldIndex}`"></c-file>
         </div>
       </div>
     </div>
@@ -78,23 +78,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, inject, ref, reactive, watch, toRefs } from 'vue'
+import { defineAsyncComponent, inject, ref, reactive, watch, } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
-import { CInput, CTextbox, CCheckbox, CSelect, } from 'frontend/components'
+import { CInput, CTextbox, CCheckbox, CSelect } from 'frontend/components'
 
 const CSearch = defineAsyncComponent(() => import('frontend/components/molecules/CSearch/CSearch.vue'))
 const CFile = defineAsyncComponent(() => import('frontend/components/molecules/CFile/CFile.vue'))
 
-const props: {
-  form: any
-  formData: any
-  isReadonly?: boolean
-  gapY?: number
-  paddingTop?: number
-  paddingBottom?: number
-
-} & any = defineProps({
+const props = defineProps({
   form: {
     type: Object,
     required: true,
@@ -120,6 +112,9 @@ const props: {
   paddingBottom: {
     type: Number,
     default: 2
+  },
+  fieldIndex: {
+    type: Number
   }
 })
 
@@ -147,7 +142,7 @@ const allInOne = Object.entries(props.form)
   .map(([key, field]: [string, any]) => {
     return [key, {
     label: field.label,
-    value: moduleRefs.formatValue(props.formData[key], key, true),
+    value: moduleRefs.formatValue((props.formData||{})[key], key, true),
   }]
 })
 

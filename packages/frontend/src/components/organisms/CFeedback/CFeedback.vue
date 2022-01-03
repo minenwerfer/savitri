@@ -42,11 +42,17 @@ const props = defineProps<{
 }>()
 
 const store = useStore()
-const module = useModule('feedback', store)
+const moduleRefs = useModule('feedback', store)
 
 const inserted = ref(false)
 const productVersion = inject('productVersion')
 const baseVersion = inject('baseVersion')
 
-defineExpose({ ...module })
+const {
+  item,
+  insert,
+  isLoading,
+  useFieldsExcept
+
+} = moduleRefs
 </script>

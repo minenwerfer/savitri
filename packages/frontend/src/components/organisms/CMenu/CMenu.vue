@@ -134,7 +134,7 @@ const getRoutes = (children?: Route, subschema?: any) => {
   ]
 }
 
-const routes = ref(getRoutes())
+const routes = ref<Route[]>(getRoutes())
 
 watch(() => store.state.meta?.globalDescriptions, () => {
   routes.value = getRoutes()

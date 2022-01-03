@@ -45,7 +45,7 @@ exports.baseWebpackConfig = {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          appendTsSuffixTo: [/\.vue$/]
+          appendTsSuffixTo: [/\.vue$/],
         }
       },
       {

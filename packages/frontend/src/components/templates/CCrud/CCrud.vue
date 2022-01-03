@@ -1,5 +1,5 @@
 <template>
-  <c-box v-if="description.actions">
+  <c-box v-if="description.actions" :key="module">
     <template #body>
       <div class="flex gap-2">
         <c-button
@@ -7,6 +7,7 @@
           :key="`action-${index}`"
           :disabled="isLoading || selectedIds.length === 0 && props.selection"
           type="neutral"
+
           @clicked="buttonAction(action, props, { _id: selectedIds })"
         >
           {{ props.name }}
@@ -18,8 +19,8 @@
   <c-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" classes="md:w-8/12 lg:w-6/12">
     <template #body>
       <c-form
-        :form-data="item"
         :form="fields"
+        :form-data="item"
         @add="$e.preventDefault()"
 
         :is-readonly="isInsertReadonly"
@@ -42,6 +43,7 @@
     <template #body>
       <c-pagination :module="module" class="mb-2"></c-pagination>
       <c-table
+        :key="module"
         v-if="tableDescription"
         :columns="{
           ...tableDescription,
@@ -74,21 +76,22 @@ const props = defineProps<{
 }>()
 
 const store = useStore()
-const module = reactive({})
+const moduleRefs = reactive({})
 
 provide('module', computed(() => props.module))
 
 const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
 const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
 
-watch(() => props.module, async () => {
-  if( !store.getters[`${props.module}/fields`] ) {
-    await store.dispatch(`${props.module}/describe`)
+watch(() => props.module, async (module: string) => {
+
+  if( !store.getters[`${module}/fields`] ) {
+    await store.dispatch(`${module}/describe`)
   }
 
-  Object.assign(module, useModule(props.module, store))
-  store.dispatch('meta/setViewTitle', props.module)
-  store.dispatch(`${props.module}/getAll`)
+  Object.assign(moduleRefs, useModule(module, store))
+  store.dispatch('meta/setViewTitle', module)
+  store.dispatch(`${module}/getAll`)
 
 }, { immediate: true })
 
@@ -112,4 +115,18 @@ const individualActions = computed(() => {
       click: (filter: any) => buttonAction(action.action, action, filter)
     }))
 })
+
+const {
+  description,
+  tableDescription,
+  availableFilters,
+  item,
+  items,
+  recordsCount,
+  recordsTotal,
+  selectedIds,
+  isLoading,
+  fields
+
+} = toRefs(moduleRefs)
 </script>

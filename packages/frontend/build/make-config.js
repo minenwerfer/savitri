@@ -17,12 +17,25 @@ module.exports = (params) => {
     productVersion: require(`${oldCwd}/package.json`).version
   }
 
-  return merge(webpackConfig, {
+  const config = merge(webpackConfig, {
     externals: Object.entries(params.externals||{})
     .reduce((a, [key, value]) => ({ ...a, [key]: JSON.stringify(value) }), {}),
 
     output: {
-      path: `/var/www/html/${params.name}`
+      ...(params.mode === 'prod' ? { path: `/var/www/html/${params.name}` } : {})
     }
   })
+
+  if( params.mode === 'prod' || true ) {
+    config.module.rules = config.module.rules
+      .map((r) => r.loader !== 'ts-loader' ? r : {
+        ...r,
+        options: {
+          ...r.options,
+          transpileOnly: true
+        }
+      })
+  }
+
+  return config
 }

@@ -31,13 +31,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed, inject, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { CForm, CButton } from 'frontend/components'
 
 const store = useStore()
 const router = useRouter()
+
+provide('module', 'user')
 
 const authenticate = () => {
   store.dispatch('user/authenticate')

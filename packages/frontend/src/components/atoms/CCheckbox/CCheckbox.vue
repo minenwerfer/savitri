@@ -38,10 +38,10 @@ import { onMounted, computed, ref } from 'vue'
 
 const props = defineProps<{
   modelValue?: any
-  required: boolean
+  required?: boolean
   value: string|boolean
-  array: boolean
-  isRadio: boolean
+  array?: boolean
+  isRadio?: boolean
 }>()
 
 const emit = defineEmits<{

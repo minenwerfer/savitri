@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch, reactive, computed } from 'vue'
+import { inject, ref, watch, reactive, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
 import { CBareButton } from 'frontend/components'
@@ -63,7 +63,7 @@ const props = defineProps({
   rows: {
     type: Object,
     required: true,
-    validator: (v) => Array.isArray(v)
+    validator: (v: any) => Array.isArray(v)
   },
   recordsCount: {
     type: Number,
@@ -85,4 +85,11 @@ const selected = computed({
   get: () => store.state[module.value].selected,
   set: (items: any[]) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
 })
+
+const {
+  formatValue,
+  recordsCount,
+  recordsTotal
+
+} = toRefs(moduleRefs)
 </script>

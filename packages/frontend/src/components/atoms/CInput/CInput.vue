@@ -33,7 +33,7 @@ import { ref } from 'vue'
 import { maska as vMaska } from 'maska'
 
 const props = defineProps<{
-  modelValue: string
+  modelValue?: string
   type?: string
   placeholder?: string
   mask?: string
