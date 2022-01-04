@@ -125,6 +125,15 @@ export default (name: string, store: any): any => {
     }), {})
   }
 
+  const getItemIndex = (item: any) => {
+    const _id = typeof item === 'object'
+      ? item._id
+      : item
+
+    return store.getters[`${name}/items`]
+      .findIndex((i: any) => i._id === _id)
+  }
+
   return {
     useFields,
     useFieldsExcept,
@@ -133,6 +142,7 @@ export default (name: string, store: any): any => {
     formatValue,
     resumedItem: computed(() => resumedItem(store.getters[`${name}/item`])),
     resumedItems: computed(() => store.getters[`${name}/items`].map((i: any) => resumedItem(i))),
+    getItemIndex,
 
     ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
     ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),

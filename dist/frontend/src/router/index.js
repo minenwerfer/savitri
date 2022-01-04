@@ -36,13 +36,13 @@ exports.publicRoutes = [
     {
         path: '/',
         name: 'landing',
-        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CLanding/CLanding.vue'))),
+        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvLanding/SvLanding.vue'))),
         meta: { title: 'Página inicial', hidden: true, }
     },
     {
         path: '/signin',
         name: 'signin',
-        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CSignIn/CSignIn.vue'))),
+        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvSignIn/SvSignIn.vue'))),
         meta: { title: 'Autenticação', hidden: true, }
     }
 ];
@@ -54,20 +54,20 @@ exports.privateRoutes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/templates/CDashboard/CDashboard.vue'))),
+        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/templates/SvDashboard/SvDashboard.vue'))),
         redirect: { name: 'dashboard-home' },
         meta: { title: 'Dashboard' },
         children: [
             {
                 path: 'c/:module?',
                 name: 'dashboard-crud',
-                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CDashboard/CCrudView/CCrudView.vue'))),
+                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvDashboard/SvCrudView/SvCrudView.vue'))),
                 meta: { title: '%viewTitle%', hidden: true, }
             },
             {
                 path: 'access-edit',
                 name: 'dashboard-access-edit',
-                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/CDashboard/CAccess/CAccessEdit.vue'))),
+                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvDashboard/SvAccess/SvAccessEdit.vue'))),
                 meta: { title: 'Editar preset de acesso', hidden: true }
             }
         ]

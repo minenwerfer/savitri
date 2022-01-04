@@ -1,4 +1,4 @@
-export { default as CMenu } from 'frontend/components/organisms/CMenu/CMenu.vue'
-export { default as CModal } from 'frontend/components/organisms/CModal/CModal.vue'
-export { default as CTopBar } from 'frontend/components/organisms/CTopBar/CTopBar.vue'
-export { default as CFeedback } from 'frontend/components/organisms/CFeedback/CFeedback.vue'
+export { default as SvMenu } from 'frontend/components/organisms/SvMenu/SvMenu.vue'
+export { default as SvModal } from 'frontend/components/organisms/SvModal/SvModal.vue'
+export { default as SvTopBar } from 'frontend/components/organisms/SvTopBar/SvTopBar.vue'
+export { default as SvFeedback } from 'frontend/components/organisms/SvFeedback/SvFeedback.vue'

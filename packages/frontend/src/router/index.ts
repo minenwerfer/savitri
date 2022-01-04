@@ -32,13 +32,13 @@ export const publicRoutes: Route[] = [
   {
     path: '/',
     name: 'landing',
-    component: () => import('frontend/components/views/CLanding/CLanding.vue'),
+    component: () => import('frontend/components/views/SvLanding/SvLanding.vue'),
     meta: { title: 'Página inicial', hidden: true, }
   },
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('frontend/components/views/CSignIn/CSignIn.vue'),
+    component: () => import('frontend/components/views/SvSignIn/SvSignIn.vue'),
     meta: { title: 'Autenticação', hidden: true, }
   }
 ]
@@ -51,20 +51,20 @@ export const privateRoutes: Route[] = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('frontend/components/templates/CDashboard/CDashboard.vue'),
+    component: () => import('frontend/components/templates/SvDashboard/SvDashboard.vue'),
     redirect: { name: 'dashboard-home' },
     meta: { title: 'Dashboard' },
     children: [
       {
         path: 'c/:module?',
         name: 'dashboard-crud',
-        component: () => import('frontend/components/views/CDashboard/CCrudView/CCrudView.vue'),
+        component: () => import('frontend/components/views/SvDashboard/SvCrudView/SvCrudView.vue'),
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: () => import('frontend/components/views/CDashboard/CAccess/CAccessEdit.vue'),
+        component: () => import('frontend/components/views/SvDashboard/SvAccess/SvAccessEdit.vue'),
         meta: { title: 'Editar preset de acesso', hidden: true }
       }
     ]

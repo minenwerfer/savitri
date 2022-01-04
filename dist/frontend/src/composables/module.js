@@ -101,6 +101,13 @@ exports.default = (name, store) => {
                 : value
         }), {});
     };
+    const getItemIndex = (item) => {
+        const _id = typeof item === 'object'
+            ? item._id
+            : item;
+        return store.getters[`${name}/items`]
+            .findIndex((i) => i._id === _id);
+    };
     return {
         useFields,
         useFieldsExcept,
@@ -109,6 +116,7 @@ exports.default = (name, store) => {
         formatValue,
         resumedItem: (0, vue_1.computed)(() => resumedItem(store.getters[`${name}/item`])),
         resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`].map((i) => resumedItem(i))),
+        getItemIndex,
         ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
         ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),
         ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})

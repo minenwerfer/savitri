@@ -7,4 +7,4 @@
 }
 
 find . -not -path \*node_modules\* -and \( -name \*\.ts -o -name \*\.json \)\
-  | entr -p -s 'npm run build'
+  | entr -p -s './scripts/build.sh'
