@@ -1,4 +1,4 @@
-import { Module, ActionProps } from 'frontend/store/module';
+import { Module, CommonState, ActionProps } from 'frontend/store/module';
 /**
  * @exports @interface
  * User metadata.
@@ -47,13 +47,19 @@ export declare const initialItemState: {
 export declare class UserModule extends Module<User, UserItem> {
     constructor();
     actions(this: UserModule): {
-        authenticate: ({ commit, dispatch, state: { current } }: ActionProps) => Promise<void>;
+        authenticate: ({ commit, dispatch, state: { current } }: ActionProps & {
+            state: CommonState & {
+                current: any;
+            };
+        }) => Promise<void>;
     };
     getters(): {
         token: (state: any) => any;
     };
     mutations(): {
-        USER_AUTH(state: any, value: {
+        USER_AUTH(state: CommonState & {
+            current: any;
+        }, value: {
             token: string;
         }): void;
     };

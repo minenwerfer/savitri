@@ -38,6 +38,9 @@ const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
         if (['checkbox', 'radio', 'select'].includes(value.type)) {
             result.validator = (v) => value.values.include(v);
         }
+        if (['text'].includes(value.type) && value.required) {
+            result.validator = (v) => !!v && v.length > 0;
+        }
         return {
             ...a,
             [key]: result

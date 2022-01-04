@@ -11,7 +11,8 @@ const getters = [
   'description',
   'tableDescription',
   'selectedIds',
-  'individualActions'
+  'individualActions',
+  'queryCache'
 ]
 
 const props = [
@@ -115,7 +116,7 @@ export default (name: string, store: any): any => {
       : '-'
   }
 
-  const resumedItem = (item: any) => {
+  const resumeItem = (item: any) => {
     return Object.entries(item)
     .reduce((a: object, [key, value]: [string, any]) => ({
       ...a,
@@ -140,8 +141,9 @@ export default (name: string, store: any): any => {
     getFirstField,
     getFirstValue,
     formatValue,
-    resumedItem: computed(() => resumedItem(store.getters[`${name}/item`])),
-    resumedItems: computed(() => store.getters[`${name}/items`].map((i: any) => resumedItem(i))),
+    resumeItem,
+    resumedItem: computed(() => resumeItem(store.getters[`${name}/item`])),
+    resumedItems: computed(() => store.getters[`${name}/items`].map((i: any) => resumeItem(i))),
     getItemIndex,
 
     ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),

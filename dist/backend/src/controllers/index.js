@@ -9,6 +9,7 @@ exports.commonControllers = [
     'access',
     'user',
     'feedback',
-    'file'
+    'file',
+    'notification'
 ];
 //# sourceMappingURL=index.js.map

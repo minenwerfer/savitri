@@ -1,23 +1,29 @@
 import { RequestProvider, AxiosResponse } from 'common/http'
 import { fromEntries } from 'common/helpers'
 
-export const PZ_API_URL = process.env.NODE_ENV === 'development'
-  ? 'http://172.16.0.91:3000/api'
-  : '/api';
+import { default as webpackVariables } from 'variables'
 
-export type DispatchFunction = (action: string, payload?: any, options?: any) => Promise<any> | any;
-export type CommitFunction = DispatchFunction;
+export const PZ_API_URL = process.env.NODE_ENV === 'development'
+  ? 'http://0.0.0.0:3000/api'
+  : '/api'
+
+export const PZ_API_URL_2 = (webpackVariables as any).domain ? (process.env.NODE_ENV === 'development'
+  ? 'http://0.0.0.0:3001/api'
+  : '/api2') : PZ_API_URL
+
+export type DispatchFunction = (action: string, payload?: any, options?: any) => Promise<any> | any
+export type CommitFunction = DispatchFunction
 
 /**
  * @exports @interface
  * Action properties.
  */
 export interface ActionProps {
-  state: any;
-  getters: any;
-  rootGetters: any;
-  commit: CommitFunction;
-  dispatch: DispatchFunction;
+  state: CommonState
+  getters: any
+  rootGetters: any
+  commit: CommitFunction
+  dispatch: DispatchFunction
 }
 
 /**
@@ -25,10 +31,10 @@ export interface ActionProps {
  * Object passed to commit() when _actionHelper succeeds.
  */
 export interface MutationProps {
-  result?: any;
-  props?: any;
+  result?: any
+  props?: any
   payload: {
-    filter?: any|any[];
+    filter?: any|any[]
   }
 }
 
@@ -39,6 +45,29 @@ export interface MutationProps {
 export interface ProxiedRequestProvider {
   post: (commit: CommitFunction, route: string, payload: any) => Promise<AxiosResponse>
   get: (commit: CommitFunction, route: string) => Promise<AxiosResponse>
+}
+
+export interface CommonState {
+  isLoading: boolean
+  item: any
+  items: any[]
+  recordsCount: number
+  recordsTotal: number
+  _clearItem: any
+  _offset: number
+  _limit: number
+  _halt: boolean
+  _filters: any
+  _queryCache: any
+  __description: any
+  _description: {
+    actions?: any
+    individualActions?: any
+    fields?: any
+    table?: string[]
+    filters?: any
+  }
+  selected: any[]
 }
 
 /**
@@ -53,7 +82,7 @@ export abstract class Module<T=any, Item=any> {
 
   private _initialState: T
   private _initialItemState: Item
-  private _commonState: any = {
+  private _commonState: CommonState = {
     isLoading: false,
     item: {},
     items: [],
@@ -79,10 +108,12 @@ export abstract class Module<T=any, Item=any> {
    * @constructor
    * Creates a proxy whose function is to merge common props with the child's ones.
    *
-   * @param {object} initialState - initial state
    * @param {string} route - API route
+   * @param {object} initialState - initial state
+   * @param {object} initialItemState - initial item state
+   * @param {string} apiUrl - URL to be used in place of PZ_API_URL
    */
-  constructor(route: string, initialState: T, initialItemState: Item) {
+  constructor(route: string, initialState: T, initialItemState: Item, apiUrl?: string) {
     this._initialState = initialState;
     this._initialItemState = initialItemState
 
@@ -105,7 +136,7 @@ export abstract class Module<T=any, Item=any> {
 
     this._route = route
     this._http = new RequestProvider({
-      baseURL: PZ_API_URL,
+      baseURL: apiUrl || PZ_API_URL,
     })
 
     /**
@@ -210,7 +241,7 @@ export abstract class Module<T=any, Item=any> {
       }
 
       if( !value.module ) {
-        throw 'dynamic query but no module is specified'
+        throw new Error('dynamic query but no module is specified')
       }
 
       const route = `${value.module}/getAll`
@@ -268,9 +299,11 @@ export abstract class Module<T=any, Item=any> {
   private _getters()  {
     return {
 
-      item: (state: any) => state.item,
+      queryCache: (state: CommonState) => state._queryCache,
 
-      condensedItem: (state: any) => {
+      item: (state: CommonState) => state.item,
+
+      condensedItem: (state: CommonState) => {
         return Object.entries(state.item||{})
         .reduce((a:any, [key, value]: [string, any]) => ({
           ...a,
@@ -278,7 +311,7 @@ export abstract class Module<T=any, Item=any> {
         }), {})
       },
 
-      items: (state: any) => {
+      items: (state: CommonState) => {
         if( !Array.isArray(state.items) ) return []
 
         const modules = Object.entries(state._description?.fields||{})
@@ -292,7 +325,7 @@ export abstract class Module<T=any, Item=any> {
           }))
       },
 
-      expandedSubmodules: (state: any) => {
+      expandedSubmodules: (state: CommonState) => {
         return Object.entries(state._description.fields)
           .filter(([, value]: [unknown, any]) => typeof value.module === 'string' && value.expand === true)
       },
@@ -301,14 +334,14 @@ export abstract class Module<T=any, Item=any> {
        * @function
        * @see components/reusable/CTable/CTable.vue
        */
-      selectedIds: (state: any) => state.selected.map((s:any) => s._id),
+      selectedIds: (state: CommonState) => state.selected.map((s:any) => s._id),
 
       /**
        * @function
        * @see components/reusable/CTable/CTable.vue
        * Returns individual actions in array format.
        */
-      individualActions: (state: any) => {
+      individualActions: (state: CommonState) => {
         return Object.entries(state._description.individualActions||{})
           .reduce((a: object[], [key, value]: [string, any]) => [
             ...a,
@@ -319,9 +352,9 @@ export abstract class Module<T=any, Item=any> {
           ], [])
       },
 
-      filters: (state: any) => state._filters,
+      filters: (state: CommonState) => state._filters,
 
-      availableFilters: (state: any) => {
+      availableFilters: (state: CommonState) => {
         if( !state._description?.filters ) {
           return {}
         }
@@ -344,7 +377,7 @@ export abstract class Module<T=any, Item=any> {
        * @function
        * Raw description.
        */
-      description: (state: any) => {
+      description: (state: CommonState) => {
         return state._description
       },
 
@@ -352,7 +385,7 @@ export abstract class Module<T=any, Item=any> {
        * @function
        * For pagination.
        */
-      currentPage: (state: any) => {
+      currentPage: (state: CommonState) => {
         return Math.floor(state._offset / state._limit);
       },
 
@@ -360,7 +393,7 @@ export abstract class Module<T=any, Item=any> {
        * @function
        * Records total / limit.
        */
-      pageCount: (state: any) => {
+      pageCount: (state: CommonState) => {
         return Math.ceil(state.recordsTotal / state._limit||1);
       },
 
@@ -368,7 +401,7 @@ export abstract class Module<T=any, Item=any> {
        * @function
        * For using within CTable.
        */
-      tableDescription: (state: any) => {
+      tableDescription: (state: CommonState) => {
         if( !state._description?.fields ) {
           return {}
         }
@@ -394,11 +427,11 @@ export abstract class Module<T=any, Item=any> {
         .slice(0, 8)
         .reduce((a: object, [key, value]: [string, any]) => ({
           ...a,
-          [key]: prepare(value)          
+          [key]: prepare(value)
         }), {})
       },
 
-      fields: (state: any) => {
+      fields: (state: CommonState) => {
 
         const normalizeValues = (values: any|any[]) => {
           if( Array.isArray(values) ) {
@@ -471,7 +504,7 @@ export abstract class Module<T=any, Item=any> {
       deactivate: ({ dispatch }: ActionProps, payload: any) => dispatch('insert', { ...payload, what: { active: false } }),
       deactivateAll: ({ dispatch }: ActionProps, payload: any) => dispatch('modifyAll', { ...payload, what: { active: false } }),
 
-      ask: ({ dispatch }: ActionProps, { action, params }: { action: string, params: any }): Promise<void> => new Promise((resolve, reject) => 
+      ask: ({ dispatch }: ActionProps, { action, params }: { action: string, params: any }): Promise<void> => new Promise((resolve, reject) =>
         dispatch('meta/spawnPrompt', {
           title: 'Diálogo de confirmação',
           body: `Confirmar ação?`,
@@ -536,7 +569,7 @@ export abstract class Module<T=any, Item=any> {
 
 private _mutations() {
   return {
-    DESCRIPTION_SET: async (state: any, value: any) => {
+    DESCRIPTION_SET: async (state: CommonState, value: any) => {
       state._description = {
         ...value,
         fields: await this._parseQuery(value.fields)
@@ -561,34 +594,34 @@ private _mutations() {
       state._clearItem = Object.assign({}, state.item)
     },
 
-      CACHE_QUERY: (state: any, { module, result }: { module: string, result: any }) => {
-        state._queryCache[module] = result
-      },
+    CACHE_QUERY: (state: CommonState, { module, result }: { module: string, result: any }) => {
+      state._queryCache[module] = result
+    },
 
-    LOADING_SWAP(state: any, value: boolean) {
+    LOADING_SWAP(state: CommonState, value: boolean) {
       state.isLoading = typeof value === 'boolean' ? value : !state.isLoading;
     },
 
-    OFFSET_UPDATE(state: any, offset: number) {
+    OFFSET_UPDATE(state: CommonState, offset: number) {
       state._offset = offset;
     },
 
-    COUNT_UPDATE(state: any, { recordsCount, recordsTotal, offset, limit }: any) {
+    COUNT_UPDATE(state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) {
       if( recordsCount ) state.recordsCount = recordsCount
       if( recordsTotal ) state.recordsTotal = recordsTotal
       if( offset ) state._offset = offset;
       if( limit ) state._limit = limit;
     },
 
-    ITEM_GET(state: any, { result }: MutationProps) {
+    ITEM_GET(state: CommonState, { result }: MutationProps) {
       state.item = result
     },
 
-    ITEMS_GET(state: any, { result }: MutationProps) {
+    ITEMS_GET(state: CommonState, { result }: MutationProps) {
       state.items = result;
     },
 
-    ITEM_INSERT(state: any, { result }: MutationProps) {
+    ITEM_INSERT(state: CommonState, { result }: MutationProps) {
       const found = state.items.filter(({ _id }: any) => result._id === _id).length > 0
       if( found ) {
         state.items = state.items.map((item: T & { _id: string }) => ({
@@ -596,7 +629,7 @@ private _mutations() {
         }))
         return
       }
-      
+
       state.item = result
       state.items = [
         result,
@@ -604,14 +637,14 @@ private _mutations() {
       ]
     },
 
-    // ITEM_MODIFY(state: any, { props }: MutationProps) {
+    // ITEM_MODIFY(state: CommonState, { props }: MutationProps) {
     //   state.item = {
     //     ...state.item,
     //     ...props
     //   }
     // },
 
-    ITEMS_MODIFY(state: any, { props: { what }, payload }: MutationProps) {
+    ITEMS_MODIFY(state: CommonState, { props: { what }, payload }: MutationProps) {
       const satisfiesFilter = (item: Item & any) =>
         Object.entries(payload.filter)
           .every(([key, value]: [string, any]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key])
@@ -623,24 +656,24 @@ private _mutations() {
         }))
     },
 
-    ITEM_REMOVE(state: any, { result }: MutationProps) {
+    ITEM_REMOVE(state: CommonState, { result }: MutationProps) {
       state.items = state.items.filter(({ _id }: any) => result._id !== _id)
     },
 
-    ITEMS_REMOVE(state: any, { payload }: MutationProps) {
+    ITEMS_REMOVE(state: CommonState, { payload }: MutationProps) {
       state.items = state.items.filter(({ _id }: any) => !payload.filter?._id?.includes(_id))
     },
 
-    ITEM_CLEAR(state: any) {
+    ITEM_CLEAR(state: CommonState) {
       state.item = Object.assign({}, state._clearItem)
     },
 
-    ITEMS_CLEAR(state: any) {
+    ITEMS_CLEAR(state: CommonState) {
       state._halt = true
       state.items = []
     },
 
-    ITEM_SELECT(state: any, { item, value }: { item: any, value?: boolean }) {
+    ITEM_SELECT(state: CommonState, { item, value }: { item: any, value?: boolean }) {
       const select = (item: any) => [ ...state.selected, Object.assign({}, item) ]
       const unselect = (item: any) => state.selected.filter(({ _id }: any) => _id !== item._id)
 
@@ -650,14 +683,13 @@ private _mutations() {
           ? unselect(item) : select(item))
     },
 
-    ITEMS_SELECT(state: any, { items, value }: { items: any[], value: boolean }) {
+    ITEMS_SELECT(state: CommonState, { items, value }: { items: any[], value: boolean }) {
       state.selected = value ? items.map(({ _id }: { _id: string }) => ({ _id })) ||[] : []
     },
 
-    FILTERS_CLEAR(state: any) {
+    FILTERS_CLEAR(state: CommonState) {
       state._filters = {}
     }
   }
 }
-  
 }

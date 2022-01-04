@@ -1,4 +1,4 @@
-import { Module, ActionProps } from 'frontend/store/module'
+import { Module, CommonState, ActionProps, PZ_API_URL_2 } from 'frontend/store/module'
 import { AxiosResponse } from 'axios'
 
 /**
@@ -53,12 +53,13 @@ export const initialItemState = {
 export class UserModule extends Module<User, UserItem> {
 
   constructor() {
-    super('user', initialState, initialItemState)
+    console.log({ AAAAAAAAAAAAAAAAAAAAAAAAAAaa: PZ_API_URL_2 })
+    super('user', initialState, initialItemState, PZ_API_URL_2)
   }
 
   actions(this: UserModule) {
     return {
-      authenticate: ({ commit, dispatch, state: { current } }: ActionProps): Promise<void> => new Promise((resolve) => {
+      authenticate: ({ commit, dispatch, state: { current } }: ActionProps & { state: CommonState & { current: any } }): Promise<void> => new Promise((resolve) => {
         const payload = {
           email: current.email,
           password: current.password,
@@ -87,7 +88,7 @@ export class UserModule extends Module<User, UserItem> {
 
   mutations() {
     return {
-      USER_AUTH(state: any, value: { token: string }) {
+      USER_AUTH(state: CommonState & { current: any }, value: { token: string }) {
         Object.assign(state.current, { email: '', password: '' })
         Object.assign(state.current, value)
         sessionStorage.setItem('auth:token', value.token)

@@ -6,14 +6,14 @@ const plugins_1 = require("./plugins");
 const meta_1 = require("./modules/meta");
 const user_1 = require("./modules/user");
 const access_1 = require("./modules/access");
-const file_1 = require("./modules/file");
+const notification_1 = require("./modules/notification");
 const instance = () => {
     const store = (0, vuex_1.createStore)({
         modules: {
             meta: new meta_1.MetaModule().module,
             user: new user_1.UserModule().module,
             access: new access_1.AccessModule().module,
-            file: new file_1.FileModule().module
+            notification: new notification_1.NotificationModule().module
         },
         plugins: [
             plugins_1.autoModules,

@@ -44,13 +44,15 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
       result.validator = (v: string) => value.values.include(v)
     }
 
+    if( ['text'].includes(value.type) && value.required ) {
+      result.validator = (v: string) => !!v && v.length > 0
+    }
+
     return {
       ...a,
       [key]: result
     }
   }
 
-
   return new Schema<T>(Object.entries(fields).filter(([, field]: [unknown, any]) => !field.meta).reduce(convert, extra), options)
-
 }

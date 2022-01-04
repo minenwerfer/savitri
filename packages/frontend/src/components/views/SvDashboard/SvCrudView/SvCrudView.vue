@@ -4,5 +4,5 @@
 </template>
 
 <script setup lang="ts">
-import SvSvrud from 'frontend/components/templates/SvSvrud/SvCrud.vue'
+import SvCrud from 'frontend/components/templates/SvCrud/SvCrud.vue'
 </script>

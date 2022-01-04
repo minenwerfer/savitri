@@ -85,7 +85,6 @@ export class MetaModule extends Module<Meta, {}> {
 
   actions(this: MetaModule) {
     return {
-      
       /**
        * @function
        * Fetchs all modules metadata from backend.
@@ -192,7 +191,7 @@ export class MetaModule extends Module<Meta, {}> {
           component: '',
           details: {}
         })
-        
+
         window.dispatchEvent(new CustomEvent('__modal'))
       },
 

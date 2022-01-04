@@ -12,7 +12,8 @@ const getters = [
     'description',
     'tableDescription',
     'selectedIds',
-    'individualActions'
+    'individualActions',
+    'queryCache'
 ];
 const props = [
     'recordsCount',
@@ -92,7 +93,7 @@ exports.default = (name, store) => {
             ? firstValue
             : '-';
     };
-    const resumedItem = (item) => {
+    const resumeItem = (item) => {
         return Object.entries(item)
             .reduce((a, [key, value]) => ({
             ...a,
@@ -114,8 +115,9 @@ exports.default = (name, store) => {
         getFirstField,
         getFirstValue,
         formatValue,
-        resumedItem: (0, vue_1.computed)(() => resumedItem(store.getters[`${name}/item`])),
-        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`].map((i) => resumedItem(i))),
+        resumeItem,
+        resumedItem: (0, vue_1.computed)(() => resumeItem(store.getters[`${name}/item`])),
+        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`].map((i) => resumeItem(i))),
         getItemIndex,
         ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
         ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),

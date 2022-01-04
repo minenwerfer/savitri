@@ -1,0 +1,42 @@
+{
+  "module": "notification",
+  "route": true,
+  "actions": {
+    "spawnAdd": {
+      "name": "Adicionar"
+    }
+  },
+  "individualActions": {
+    "spawnEdit": {
+      "name": "Editar"
+    },
+    "remove": {
+      "name": "Remover",
+      "ask": true
+    }
+  },
+  "fields": {
+    "user_id": {
+      "module": "user",
+      "label": "Destinatário",
+      "index": "email"
+    },
+    "title": {
+      "label": "Título",
+      "type": "text",
+      "required": true
+    },
+    "content": {
+      "label": "Conteúdo",
+      "type": "text"
+    },
+    "action": {
+      "label": "Ação",
+      "type": "text"
+    },
+    "subject": {
+      "label": "Sujeito",
+      "type": "text"
+    }
+  }
+}

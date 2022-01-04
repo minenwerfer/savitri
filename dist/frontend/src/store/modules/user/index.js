@@ -28,7 +28,8 @@ exports.initialItemState = {
  */
 class UserModule extends module_1.Module {
     constructor() {
-        super('user', exports.initialState, exports.initialItemState);
+        console.log({ AAAAAAAAAAAAAAAAAAAAAAAAAAaa: module_1.PZ_API_URL_2 });
+        super('user', exports.initialState, exports.initialItemState, module_1.PZ_API_URL_2);
     }
     actions() {
         return {

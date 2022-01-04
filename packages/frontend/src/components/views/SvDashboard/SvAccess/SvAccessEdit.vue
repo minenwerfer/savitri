@@ -57,7 +57,7 @@ const capabilitiesFields = modules.reduce((a: any, { module, methods, extraMetho
   }
 }), {})
 
-const accessItem = store.getters['access/accessItem']
+const accessItem = store.getters['access/item']
 if( !accessItem.capabilities ) {
   accessItem.capabilities = {}
 }

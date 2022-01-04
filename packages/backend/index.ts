@@ -5,6 +5,7 @@ export { Description as UserDescription } from './src/models/User'
 export { Description as AccessDescription } from './src/models/Access'
 export { Description as FeedbackDescription } from './src/models/Feedback'
 export { Description as FileDescription } from './src/models/File'
+export { Description as NotificationDescription } from './src/models/Notification'
 
 export * from './src/models/_Util'
 export * as mongoose from './src/database'

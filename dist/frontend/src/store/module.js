@@ -1,11 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Module = exports.PZ_API_URL = void 0;
+exports.Module = exports.PZ_API_URL_2 = exports.PZ_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
+const variables_1 = __importDefault(require("variables"));
 exports.PZ_API_URL = process.env.NODE_ENV === 'development'
-    ? 'http://172.16.0.91:3000/api'
+    ? 'http://0.0.0.0:3000/api'
     : '/api';
+exports.PZ_API_URL_2 = variables_1.default.domain ? (process.env.NODE_ENV === 'development'
+    ? 'http://0.0.0.0:3001/api'
+    : '/api2') : exports.PZ_API_URL;
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -41,10 +48,12 @@ class Module {
      * @constructor
      * Creates a proxy whose function is to merge common props with the child's ones.
      *
-     * @param {object} initialState - initial state
      * @param {string} route - API route
+     * @param {object} initialState - initial state
+     * @param {object} initialItemState - initial item state
+     * @param {string} apiUrl - URL to be used in place of PZ_API_URL
      */
-    constructor(route, initialState, initialItemState) {
+    constructor(route, initialState, initialItemState, apiUrl) {
         this._initialState = initialState;
         this._initialItemState = initialItemState;
         this._moduleInstance = new Proxy(this, {
@@ -64,7 +73,7 @@ class Module {
         });
         this._route = route;
         this._http = new http_1.RequestProvider({
-            baseURL: exports.PZ_API_URL,
+            baseURL: apiUrl || exports.PZ_API_URL,
         });
         /**
          * @function
@@ -149,7 +158,7 @@ class Module {
                 };
             }
             if (!value.module) {
-                throw 'dynamic query but no module is specified';
+                throw new Error('dynamic query but no module is specified');
             }
             const route = `${value.module}/getAll`;
             const filter = value.filter || {};
@@ -194,6 +203,7 @@ class Module {
     }
     _getters() {
         return {
+            queryCache: (state) => state._queryCache,
             item: (state) => state.item,
             condensedItem: (state) => {
                 return Object.entries(state.item || {})
@@ -479,7 +489,7 @@ class Module {
                     ...state.items,
                 ];
             },
-            // ITEM_MODIFY(state: any, { props }: MutationProps) {
+            // ITEM_MODIFY(state: CommonState, { props }: MutationProps) {
             //   state.item = {
             //     ...state.item,
             //     ...props
