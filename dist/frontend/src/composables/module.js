@@ -102,11 +102,12 @@ exports.default = (name, store) => {
                 : value
         }), {});
     };
-    const getItemIndex = (item) => {
+    const getItemIndex = (item, items) => {
         const _id = typeof item === 'object'
             ? item._id
             : item;
-        return store.getters[`${name}/items`]
+        return (items || store.getters[`${name}/items`])
+            .sort((a, b) => a._id > b._id ? -1 : 1)
             .findIndex((i) => i._id === _id);
     };
     return {

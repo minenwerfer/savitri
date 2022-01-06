@@ -1,5 +1,9 @@
 {
   "user": "usuário | usuários",
   "access": "acesso | acessos",
-  "notification": "notificação | notificações"
+  "notification": "notificação | notificações",
+
+  "useronly": "apenas usuário | apenas usuário",
+  "none": "nenhum",
+  "everything": "tudo"
 }

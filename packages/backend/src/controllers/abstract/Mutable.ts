@@ -4,7 +4,6 @@ import { Controller } from './Controller'
 export const { PAGINATION_LIMIT } = process.env
 
 export type SingleQuery<T> = Query<(T & { _id: any; }), T & { _id: any; }, {}, T>;
-
 export type MultipleQuery<T> = Query<(T & { _id: any; })[], T & { _id: any; }, {}, T>;
 
 export abstract class Mutable<T> extends Controller<T> {
@@ -26,7 +25,7 @@ export abstract class Mutable<T> extends Controller<T> {
     const what = typeof _id === 'string' ? Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
 
       const result = a
-      const append = typeof value === 'object' && Object.keys(value).length === 0
+      const append = value && typeof value === 'object' && Object.keys(value).length === 0
         ? '$unset' : '$set'
 
       a[append][key] = value
@@ -64,7 +63,6 @@ export abstract class Mutable<T> extends Controller<T> {
    */
   public getAll(props: { filter?: object, offset?: number, sort?: any }): MultipleQuery<T> | Promise<MultipleQuery<T>> {
     const defaultSort = {
-      updated_at: -1,
       created_at: -1,
       date_updated: -1,
       date_created: -1,

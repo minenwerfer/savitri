@@ -16,13 +16,19 @@
     }
   },
   "fields": {
+    "name": {
+      "label": "Nome",
+      "type": "text"
+    },
     "email": {
       "label": "Email",
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "password": {
       "label": "Senha",
       "type": "password",
+      "required": true,
       "hidden": true
     },
     "active": {

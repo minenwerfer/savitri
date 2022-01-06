@@ -126,12 +126,13 @@ export default (name: string, store: any): any => {
     }), {})
   }
 
-  const getItemIndex = (item: any) => {
+  const getItemIndex = (item: any, items?: any[]) => {
     const _id = typeof item === 'object'
       ? item._id
       : item
 
-    return store.getters[`${name}/items`]
+    return (items||store.getters[`${name}/items`])
+      .sort((a: any, b: any) => a._id > b._id ? -1 : 1)
       .findIndex((i: any) => i._id === _id)
   }
 

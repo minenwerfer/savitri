@@ -2,7 +2,7 @@
   <div class="mt-6" :key="parent">
     <header class="font-semibold mb-1">{{ moduleName }}</header>
     <div v-if="isExpanded" class="mb-2">
-      <sv-form :form="fields" :form-data="item" :padding-bottom="0" :item-index="itemIndex" :field-index="fieldIndex">
+      <sv-form :form="fields" :form-data="edited" :padding-bottom="0" :item-index="itemIndex" :field-index="fieldIndex">
       </sv-form>
       <div v-if="!expand" class="text-sm">
         <sv-button @clicked="insert" class="justify-self-end mr-2">Salvar</sv-button>
@@ -41,6 +41,7 @@
 import { provide, inject, computed, ref, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { SvInput, SvButton, SvBareButton } from 'frontend/components'
+import useModule from 'frontend/composables/module'
 
 const SvForm = defineAsyncComponent(() => import('frontend/components/molecules/SvForm/SvForm.vue'))
 
@@ -58,12 +59,16 @@ const emit = defineEmits<{
 
 const store = useStore()
 const parentModule = inject<{ value: string }>('module', { value: '' })
-const expanded = ref<boolean>(false)
+
+const moduleRefs = useModule(parentModule.value, store)
 
 const field = props.field
 provide('module', field.module)
 
 onMounted(() => store.dispatch(`${field.module}/clearAll`))
+
+const expanded = ref<boolean>(false)
+const edited = ref<any>({})
 
 const module = computed(() => field.module)
 const expand = computed(() => field.expand === true)
@@ -81,14 +86,6 @@ const rawItem = computed(() => {
     : item
 
   return items
-})
-
-const item = computed(() => {
-  const _item = store.state[parentModule.value].item[props.propName]
-
-  return Array.isArray(_item)
-    ? _item[_item.length > 0 ? _item.length - 1 : 0]||{}
-    : _item
 })
 
 const items = computed(() => store.state[field.module].items)
@@ -109,7 +106,7 @@ const selected = computed(() => {
 const fieldIndex = ref(0)
 
 const insert = async () => {
-  const result: any = await store.dispatch(`${module.value}/insert`, { what: item.value })
+  const result: any = await store.dispatch(`${module.value}/insert`, { what: edited.value })
 
   const value = (() => {
     if( !array.value ) {
@@ -137,26 +134,11 @@ const insert = async () => {
   expanded.value = false
 }
 
-const getFieldIndex = (_id: string) => {
-  if( !field.array ) {
-    return 0
-  }
-
-  return selected.value
-    .findIndex((i: any) => i._id === _id) || 0
-}
-
 const edit = (item: any) => {
   const itemsCount = rawItem.value.length
-  fieldIndex.value = getFieldIndex(item._id)
+  fieldIndex.value = moduleRefs.getItemIndex(item._id, selected.value)
 
-  if( itemsCount > 0 ) {
-    const swap = rawItem.value[itemsCount - 1]
-    const itemIndex = rawItem.value.findIndex(({ _id }: { _id: string }) => item._id === _id)
-    rawItem.value[itemsCount - 1] = item
-    rawItem.value[itemIndex] = swap
-  }
-
+  edited.value = item
   expanded.value = true
 }
 
@@ -195,10 +177,9 @@ const unselect = async (item: any) => {
 }
 
 const addItem = () => {
-  // refatorar
-  rawItem.value.push({})
   fieldIndex.value = selected.value.length
 
+  edited.value = {}
   expanded.value = true
 }
 

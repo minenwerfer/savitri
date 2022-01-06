@@ -20,7 +20,7 @@ class Mutable extends Controller_1.Controller {
         const { _id, ...rest } = props.what;
         const what = typeof _id === 'string' ? Object.entries(rest).reduce((a, [key, value]) => {
             const result = a;
-            const append = typeof value === 'object' && Object.keys(value).length === 0
+            const append = value && typeof value === 'object' && Object.keys(value).length === 0
                 ? '$unset' : '$set';
             a[append][key] = value;
             return a;
@@ -51,7 +51,6 @@ class Mutable extends Controller_1.Controller {
      */
     getAll(props) {
         const defaultSort = {
-            updated_at: -1,
             created_at: -1,
             date_updated: -1,
             date_created: -1,

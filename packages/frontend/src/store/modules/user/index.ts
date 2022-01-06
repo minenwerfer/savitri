@@ -53,7 +53,6 @@ export const initialItemState = {
 export class UserModule extends Module<User, UserItem> {
 
   constructor() {
-    console.log({ AAAAAAAAAAAAAAAAAAAAAAAAAAaa: PZ_API_URL_2 })
     super('user', initialState, initialItemState, PZ_API_URL_2)
   }
 

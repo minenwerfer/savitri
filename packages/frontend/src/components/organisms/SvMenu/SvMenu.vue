@@ -77,7 +77,7 @@ const router = useRouter()
 
 const tick = ref(0)
 const productName = inject('productName')
-const productLogo = inject('productLogo')
+const productLogo = inject('productLogo', undefined)
 
 const closeMobile = () => {
   store.dispatch('meta/swapMenu', { desktop: true, mobile: false })
