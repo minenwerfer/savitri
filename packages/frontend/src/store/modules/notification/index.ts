@@ -1,8 +1,8 @@
-import { Module, CommonState, MutationProps, PZ_API_URL_2 } from 'frontend/store/module'
+import { Module, CommonState, MutationProps, SV_API_URL_2 } from 'frontend/store/module'
 
 export class NotificationModule extends Module<{}, {}> {
   constructor() {
-    super('notification', {}, {}, PZ_API_URL_2)
+    super('notification', {}, {}, SV_API_URL_2)
   }
 
   actions(this: NotificationModule) {

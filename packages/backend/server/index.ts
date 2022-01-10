@@ -42,6 +42,12 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
       throw 'item not found'
     }
 
+    const mime = instance.rawType(verb)
+    if( mime ) {
+      return h.response(result)
+        .header('Content-Type', mime)
+    }
+
     return {
       result,
       ...(Array.isArray(result) ? {

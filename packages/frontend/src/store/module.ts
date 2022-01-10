@@ -3,13 +3,13 @@ import { fromEntries } from 'common/helpers'
 
 import { default as webpackVariables } from 'variables'
 
-export const PZ_API_URL = process.env.NODE_ENV === 'development'
+export const SV_API_URL = process.env.NODE_ENV === 'development'
   ? 'http://0.0.0.0:3000/api'
   : '/api'
 
-export const PZ_API_URL_2 = (webpackVariables as any).domain ? (process.env.NODE_ENV === 'development'
+export const SV_API_URL_2 = (webpackVariables as any).domain ? (process.env.NODE_ENV === 'development'
   ? 'http://0.0.0.0:3001/api'
-  : '/api2') : PZ_API_URL
+  : '/api2') : SV_API_URL
 
 export type DispatchFunction = (action: string, payload?: any, options?: any) => Promise<any> | any
 export type CommitFunction = DispatchFunction
@@ -111,7 +111,7 @@ export abstract class Module<T=any, Item=any> {
    * @param {string} route - API route
    * @param {object} initialState - initial state
    * @param {object} initialItemState - initial item state
-   * @param {string} apiUrl - URL to be used in place of PZ_API_URL
+   * @param {string} apiUrl - URL to be used in place of SV_API_URL
    */
   constructor(route: string, initialState: T, initialItemState: Item, apiUrl?: string) {
     this._initialState = initialState;
@@ -136,7 +136,7 @@ export abstract class Module<T=any, Item=any> {
 
     this._route = route
     this._http = new RequestProvider({
-      baseURL: apiUrl || PZ_API_URL,
+      baseURL: apiUrl || SV_API_URL,
     })
 
     /**

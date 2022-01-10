@@ -1,4 +1,4 @@
-import { Module, CommonState, ActionProps, PZ_API_URL_2 } from 'frontend/store/module'
+import { Module, CommonState, ActionProps, SV_API_URL_2 } from 'frontend/store/module'
 import { AxiosResponse } from 'axios'
 
 /**
@@ -53,7 +53,7 @@ export const initialItemState = {
 export class UserModule extends Module<User, UserItem> {
 
   constructor() {
-    super('user', initialState, initialItemState, PZ_API_URL_2)
+    super('user', initialState, initialItemState, SV_API_URL_2)
   }
 
   actions(this: UserModule) {

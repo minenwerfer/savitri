@@ -7,5 +7,6 @@ export const commonControllers = [
   'user',
   'feedback',
   'file',
-  'notification'
+  'notification',
+  'application'
 ]

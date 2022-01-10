@@ -59,7 +59,7 @@
           :field="field"
           :field-name="getFirstField(field, childModule)"
           :prop-name="childModule" 
-          :item-index="itemIndex"
+          :item-index="itemIndex != -1 ? itemIndex : 0"
           >
         </sv-search>
       </div>

@@ -11,10 +11,13 @@ module.exports = (params) => {
   // dev, prod or lib
   const webpackConfig = require(`./webpack.config.${params.mode||'dev'}`)
 
-  params.externals.variables = {
-    ...(params.externals.variables||{}),
-    bundleName: params.name,
-    productVersion: require(`${oldCwd}/package.json`).version
+  params.externals = {
+    ...(params.externals||{}),
+    variables: {
+      ...(params.externals.variables||{}),
+      bundleName: params.name,
+      productVersion: require(`${oldCwd}/package.json`).version
+    }
   }
 
   const config = merge(webpackConfig, {

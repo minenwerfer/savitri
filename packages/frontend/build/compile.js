@@ -1,28 +1,27 @@
 #!/usr/bin/env node
 
 const { readFileSync } = require('fs')
+
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 
 const makeConfig = require('./make-config')
 
-const filename = process.argv[2]
-const mode = process.argv[3]
-
-if( !filename ) {
-  throw 'Target not specified'
-}
+const filename = 'build.json'
+const mode = process.argv[2]
 
 try {
   const content = JSON.parse( readFileSync(filename) )
-  if( mode ) {
-    content.mode = mode
-  }
+  
+  const buildConfig = Object.assign(content, {
+    mode,
+    name: process.cwd().split('/').pop(),
+  })
 
   global.appDir = process.cwd()
   process.chdir(__dirname)
 
-  const config = makeConfig(content)
+  const config = makeConfig(buildConfig)
   const compiler = webpack(config)
 
   if( ['prod', 'lib'].includes(mode) ) {
@@ -32,6 +31,7 @@ try {
 
   const options = {
     compress: true,
+    allowedHosts: 'all',
     historyApiFallback: {
       index: '/'
     }

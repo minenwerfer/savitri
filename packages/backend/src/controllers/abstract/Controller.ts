@@ -20,7 +20,8 @@ export abstract class Controller<T> {
    * Supposed to contain method names as strings.
    */
   protected readonly _internal: string[] = []
-  protected _public: string[] = []
+  protected _publicMethods: string[] = []
+  protected _rawMethods: { [key: string]: string } = {}
 
   /**
    * @constructor
@@ -28,9 +29,10 @@ export abstract class Controller<T> {
    * req.payload instead of req as first parameter and forbiddens call if
    * user hasn't the capability set.
    */
-  constructor(props: { description?: any, publicMethods?: string[] }) {
+  constructor(props: { description?: any, publicMethods?: string[], rawMethods?: { [key: string]: string } }) {
     this._description = props?.description
-    this._public = props?.publicMethods || []
+    this._publicMethods = props?.publicMethods || []
+    this._rawMethods = props?.rawMethods || {}
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
@@ -47,7 +49,7 @@ export abstract class Controller<T> {
             throw 'module is undefined'
           }
 
-          if( !target._public?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
+          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
             throw 'forbidden method'
           }
 
@@ -68,6 +70,10 @@ export abstract class Controller<T> {
       }
 
     })
+  }
+
+  public rawType(verb: string): string|undefined {
+    return this._rawMethods[verb]
   }
 
   get webInterface(): Controller<T> {

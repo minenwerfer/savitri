@@ -136,6 +136,10 @@ export default (name: string, store: any): any => {
       .findIndex((i: any) => i._id === _id)
   }
 
+  const setItem = (item: any) => {
+    store.commit(`${name}/ITEM_GET`, { result: item })
+  }
+
   return {
     useFields,
     useFieldsExcept,
@@ -146,6 +150,7 @@ export default (name: string, store: any): any => {
     resumedItem: computed(() => resumeItem(store.getters[`${name}/item`])),
     resumedItems: computed(() => store.getters[`${name}/items`].map((i: any) => resumeItem(i))),
     getItemIndex,
+    setItem,
 
     ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
     ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),

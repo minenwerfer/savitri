@@ -124,7 +124,7 @@ const insert = async () => {
 
   const parentResult = await store.dispatch(`${parentModule.value}/insert`, {
     what: {
-      _id: parent.value._id,
+      ...(parent.value._id ? { _id: parent.value._id } : parent.value),
       [props.propName]: value
     }
   })

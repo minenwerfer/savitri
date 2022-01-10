@@ -75,7 +75,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
   })
 
   // initializes storage singleton
-  new PersistentStorage
+  const persistentStorage = new PersistentStorage()
   PersistentStorage.instance.switchObjectStore('application')
 
   store.dispatch('meta/describeAll').then(() => {
