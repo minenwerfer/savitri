@@ -53,7 +53,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Gets a document from database.
    */
-  public get(props: { filter?: object }) {
+  public get(props: { filter?: object }): any | Promise<any> {
     return this._model.findOne(props.filter)
   }
 
@@ -96,13 +96,13 @@ export abstract class Mutable<T> extends Controller<T> {
     return this._model.deleteMany(props.filter as FilterQuery<T>, { strict: 'throw' })
   }
 
-  // /**
-  //  * @method
-  //  * Modify a single document.
-  //  */
-  // public modify(props: { filter: any[], what: any }) {
-  //   return this._model.findOneAndUpdate(props.filter as FilterQuery<T>, props.what, { new: true, runValidators: true })
-  // }
+  /**
+   * @method
+   * Modify a single document.
+ */
+  public modify(props: { filter: any, what: any }): any | Promise<any> {
+    return this._model.findOneAndUpdate(props.filter as FilterQuery<T>, props.what, { new: true, runValidators: true })
+  }
 
   /**
    * @method

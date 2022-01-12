@@ -31,6 +31,10 @@ export function fromEntries(entries: any[]): any {
  * @see https://www.w3resource.com/javascript-exercises/javascript-math-exercise-21.php
  */
 export function integerToRoman(num: number) {
+  if( !num || num < 0 ) {
+    return
+  }
+
   const digits = String(num).split('')
   const key = [
     '', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',

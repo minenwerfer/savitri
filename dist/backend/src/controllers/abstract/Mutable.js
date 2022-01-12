@@ -80,13 +80,13 @@ class Mutable extends Controller_1.Controller {
         }
         return this._model.deleteMany(props.filter, { strict: 'throw' });
     }
-    // /**
-    //  * @method
-    //  * Modify a single document.
-    //  */
-    // public modify(props: { filter: any[], what: any }) {
-    //   return this._model.findOneAndUpdate(props.filter as FilterQuery<T>, props.what, { new: true, runValidators: true })
-    // }
+    /**
+     * @method
+     * Modify a single document.
+   */
+    modify(props) {
+        return this._model.findOneAndUpdate(props.filter, props.what, { new: true, runValidators: true });
+    }
     /**
      * @method
      * Modify documents matching criteria.

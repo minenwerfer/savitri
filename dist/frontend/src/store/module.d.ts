@@ -1,6 +1,6 @@
 import { RequestProvider, AxiosResponse } from 'common/http';
-export declare const PZ_API_URL: string;
-export declare const PZ_API_URL_2: string;
+export declare const SV_API_URL: string;
+export declare const SV_API_URL_2: string;
 export declare type DispatchFunction = (action: string, payload?: any, options?: any) => Promise<any> | any;
 export declare type CommitFunction = DispatchFunction;
 /**
@@ -75,7 +75,7 @@ export declare abstract class Module<T = any, Item = any> {
      * @param {string} route - API route
      * @param {object} initialState - initial state
      * @param {object} initialItemState - initial item state
-     * @param {string} apiUrl - URL to be used in place of PZ_API_URL
+     * @param {string} apiUrl - URL to be used in place of SV_API_URL
      */
     constructor(route: string, initialState: T, initialItemState: Item, apiUrl?: string);
     get module(): Module<T, Item>;

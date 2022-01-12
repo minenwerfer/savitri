@@ -17,21 +17,23 @@ const typeMapping = [
  */
 const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
     const convert = (a, [key, value]) => {
+        const query = (value.values || [{}])[0]?.__query;
+        const moduleName = query?.module || value.module;
         const result = {
             type: String,
             select: value.hidden !== true,
             unique: value.unique === true,
             default: value.default,
             required: value.required || false,
-            autopopulate: (typeof value.module === 'string' && !value.preventPopulate) || false,
+            autopopulate: (typeof moduleName === 'string' && !value.preventPopulate) || false,
         };
         const typeMatch = typeMapping.find(([keys, _]) => keys.includes(value.type));
         if (typeMatch) {
             result.type = typeMatch[1];
         }
-        if (typeof value.module === 'string') {
-            result.ref = value.module.capitalize();
-            result.type = value.array
+        if (typeof moduleName === 'string') {
+            result.ref = moduleName.capitalize();
+            result.type = value.array || value.values
                 ? [ObjectId]
                 : ObjectId;
         }

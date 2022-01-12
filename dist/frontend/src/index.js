@@ -70,7 +70,7 @@ const useApp = (config) => new Promise((resolve) => {
         _store: store,
     });
     // initializes storage singleton
-    new singleton_1.PersistentStorage;
+    const persistentStorage = new singleton_1.PersistentStorage();
     singleton_1.PersistentStorage.instance.switchObjectStore('application');
     store.dispatch('meta/describeAll').then(() => {
         window.dispatchEvent(new CustomEvent('__storeCreated'));

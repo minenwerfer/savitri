@@ -1,16 +1,17 @@
 <template>
-  <div :class="vertical ? 'md:flex md:gap-x-4' : ''">
+  <div :class="vertical ? 'lg:flex lg:gap-x-5' : ''">
     <div
       v-if="titles && titles.length > 0"
-      :class="`flex bg-white rounded-lg shadow-md mb-4 pt-2 ${vertical ? 'md:flex-col md:border-r md:py-4' : ''}`"
+      :class="`flex bg-white rounded-lg shadow-md mb-4 pt-2 ${vertical ? 'lg:flex-col lg:border-r lg:py-4' : ''} ${vertical ? menuClasses : ''}`"
     >
+      <slot name="menu" v-if="$slots.menu && vertical"></slot>
       <sv-bare-button
         :class="`
-        text-center py-2 border-b-4 flex-1
-        ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
-        ${vertical ? 'md:border-b-2 md:mb-4 md:px-4 md:text-left md:flex-none md:py-0' : ''}
-        text-blue-500
-        transition-all
+          text-center py-2 border-b-4 flex-1
+          ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
+          ${vertical ? 'lg:border-b-2 lg:mb-4 lg:px-4 lg:text-left lg:flex-none lg:py-0' : ''}
+          text-blue-500
+          transition-all
         `"
         v-for="(title, index) in titles"
         :key="`tabtitle-${index}`"
@@ -21,7 +22,7 @@
       </sv-bare-button>
     </div>
 
-    <div :class="vertical ? 'md:flex-1' : ''">
+    <div :class="vertical ? 'lg:flex-1' : ''">
       <div
         v-for="tab in tabs"
         :key="`tab-${tab}`"
@@ -68,6 +69,10 @@ const props: any = defineProps({
   vertical: {
     type: Boolean,
     default: false
+  },
+  menuClasses: {
+    type: String,
+    default: ''
   }
 })
 

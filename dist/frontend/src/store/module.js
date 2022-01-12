@@ -3,16 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Module = exports.PZ_API_URL_2 = exports.PZ_API_URL = void 0;
+exports.Module = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
 const variables_1 = __importDefault(require("variables"));
-exports.PZ_API_URL = process.env.NODE_ENV === 'development'
+exports.SV_API_URL = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3000/api'
     : '/api';
-exports.PZ_API_URL_2 = variables_1.default.domain ? (process.env.NODE_ENV === 'development'
+exports.SV_API_URL_2 = variables_1.default.domain ? (process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3001/api'
-    : '/api2') : exports.PZ_API_URL;
+    : '/api2') : exports.SV_API_URL;
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -51,7 +51,7 @@ class Module {
      * @param {string} route - API route
      * @param {object} initialState - initial state
      * @param {object} initialItemState - initial item state
-     * @param {string} apiUrl - URL to be used in place of PZ_API_URL
+     * @param {string} apiUrl - URL to be used in place of SV_API_URL
      */
     constructor(route, initialState, initialItemState, apiUrl) {
         this._initialState = initialState;
@@ -73,7 +73,7 @@ class Module {
         });
         this._route = route;
         this._http = new http_1.RequestProvider({
-            baseURL: apiUrl || exports.PZ_API_URL,
+            baseURL: apiUrl || exports.SV_API_URL,
         });
         /**
          * @function
@@ -364,6 +364,7 @@ class Module {
             insert: this._actionHelper('insert', 'ITEM_INSERT'),
             remove: this._actionHelper('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filter._id } })),
             removeAll: this._actionHelper('removeAll', 'ITEMS_REMOVE'),
+            modify: this._actionHelper('modify', 'ITEM_MODIFY'),
             modifyAll: this._actionHelper('modifyAll', 'ITEMS_MODIFY'),
             deepInsert: ({ dispatch, getters, rootGetters }, payload) => new Promise(async (resolve) => {
                 const { expandedSubmodules } = getters;
@@ -489,12 +490,12 @@ class Module {
                     ...state.items,
                 ];
             },
-            // ITEM_MODIFY(state: CommonState, { props }: MutationProps) {
-            //   state.item = {
-            //     ...state.item,
-            //     ...props
-            //   }
-            // },
+            ITEM_MODIFY(state, { props }) {
+                state.item = {
+                    ...state.item,
+                    ...props
+                };
+            },
             ITEMS_MODIFY(state, { props: { what }, payload }) {
                 const satisfiesFilter = (item) => Object.entries(payload.filter)
                     .every(([key, value]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key]);

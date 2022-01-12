@@ -27,6 +27,7 @@ const actions = [
   'getAll',
   'insert',
   'deepInsert',
+  'modify',
   'remove',
   'clear'
 ]
@@ -47,23 +48,23 @@ export default (name: string, store: any): any => {
    */
   const getFirstField = (value: any, key: string, form: boolean = false) => {
 
-    const reference: any = Object.entries(store.state[name].__description.fields||{})
+    const [_, reference]: any = Object.entries(store.state[name].__description.fields||{})
       .find(([k]: [string, unknown]) => key === k)||[,]
 
     const query:any = {}
 
     // retrieves index if dynamic querying is used
-    if( reference[1]?.values ) {
+    if( reference?.values ) {
 
       // values can be either arrays or objects
-      const prop = Array.isArray(reference[1].values)
-        ? reference[1].values.find((e: any) => Object.keys(e)[0] === '__query')?.__query
-        : reference[1].values.__query
+      const prop = Array.isArray(reference.values)
+        ? reference.values.find((e: any) => Object.keys(e)[0] === '__query')?.__query
+        : reference.values.__query
 
       Object.assign(query, prop||{})
     }
 
-    const { module, index, formIndex } = query.module ? query : (reference[1]||{})
+    const { module, index, formIndex } = query.module ? query : (reference||{})
     if( !module ) {
       return
     }
@@ -89,13 +90,13 @@ export default (name: string, store: any): any => {
 
     const firstField = getFirstField(value, key, form)
 
-    const source = query.module
+    const source = query.module && !(Array.isArray(value) ? value[0]?._id : value._id)
       ? store.state[name]._queryCache[query.module].filter(({ _id }: any) => Array.isArray(value) ? value.includes(_id) : value._id === _id)
       : value
 
-    const extract = (value: any) => typeof value === 'object' || firstField
-      ? value[firstField]
-      : value
+    const extract = (v: any) => typeof v === 'object' || firstField
+      ? v[firstField]
+      : v
 
     const firstValue = Array.isArray(source)
       ? source.map((v: any) => extract(v)).join(', ')

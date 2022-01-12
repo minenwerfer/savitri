@@ -25,8 +25,8 @@
       </sv-menu>
 
       <div class="flex flex-col">
-        <div class="px-auto py-auto relative">
-          <sv-breadcumb class="hidden md:block"></sv-breadcumb>
+        <div :class="`relative ${$route.meta?.noMargin ? '' : 'px-auto py-auto'}`">
+          <sv-breadcumb class="hidden md:block" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)"></sv-breadcumb>
           <router-view />
         </div>
       </div>

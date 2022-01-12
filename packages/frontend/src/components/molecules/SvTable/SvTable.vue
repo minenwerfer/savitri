@@ -2,7 +2,7 @@
   <div class="grid gap-y-4">
     <div class="overflow-hidden rounded-md">
       <table class="w-full table-fixed md:text-center border-collapse">
-        <tr class="leading-8 bg-gray-100">
+        <tr class="leading-9 bg-gray-100">
           <th class="hidden md:table-cell w-10 border" v-if="module">
             <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
           </th>
@@ -11,11 +11,11 @@
             :key="`header-${index}`"
             class="hidden md:table-cell truncate px-1 border"
           >
-            {{ header.label }}
+            {{ header.label || header.placeholder }}
           </th>
         </tr>
 
-        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 md:table-row leading-8 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
+        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 md:table-row leading-9 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
           <td class="hidden md:table-cell border" v-if="module">
             <input type="checkbox" v-model="selected" :value="{ _id: row._id }"/>
           </td>

@@ -48,6 +48,11 @@ async function handler(request, h) {
         if (/_?get/i.test(verb) && !result) {
             throw 'item not found';
         }
+        const mime = instance.rawType(verb);
+        if (mime) {
+            return h.response(result)
+                .header('Content-Type', mime);
+        }
         return {
             result,
             ...(Array.isArray(result) ? {

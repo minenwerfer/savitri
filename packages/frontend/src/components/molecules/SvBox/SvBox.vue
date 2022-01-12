@@ -84,8 +84,7 @@ const isCollapsed = ref(props.collapsed)
 }
 
 .centered-fullwidth {
-  position: absolute;
-  top: 0;
+  position: relative;
   left: 0;
 }
 </style>

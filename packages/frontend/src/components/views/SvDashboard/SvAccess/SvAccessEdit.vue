@@ -41,6 +41,7 @@ const defaultMethods = [
   'remove',
   'removeAll',
   'insert',
+  'modify',
   'modifyAll'
 ]
 

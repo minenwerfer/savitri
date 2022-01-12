@@ -68,8 +68,12 @@ const bindVal = computed({
       return props.modelValue === props.value
     }
 
+    const selectedValues = (values: any[]): (string|boolean)[] => {
+      return values.map((v: any) => v._id || v)
+    }
+
     return Array.isArray(props.modelValue)
-      ? (props.modelValue as (string|boolean)[]).includes(props.value)
+      ? selectedValues(props.modelValue).includes(props.value)
       : !!props.value
   },
 

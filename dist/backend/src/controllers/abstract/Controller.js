@@ -10,7 +10,8 @@ class Controller {
      * Supposed to contain method names as strings.
      */
     _internal = [];
-    _public = [];
+    _publicMethods = [];
+    _rawMethods = {};
     /**
      * @constructor
      * Sets controller metadata and creates a proxy that passes
@@ -19,7 +20,8 @@ class Controller {
      */
     constructor(props) {
         this._description = props?.description;
-        this._public = props?.publicMethods || [];
+        this._publicMethods = props?.publicMethods || [];
+        this._rawMethods = props?.rawMethods || {};
         this._webInterface = new Proxy(this, {
             get: (target, key) => {
                 if (this._internal.includes(key)) {
@@ -31,7 +33,7 @@ class Controller {
                     if (!module) {
                         throw 'module is undefined';
                     }
-                    if (!target._public?.includes(key) && (!decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key))) {
+                    if (!target._publicMethods?.includes(key) && (!decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key))) {
                         throw 'forbidden method';
                     }
                     const payload = Object.keys(req.payload || {}).length === 0
@@ -49,6 +51,9 @@ class Controller {
                 };
             }
         });
+    }
+    rawType(verb) {
+        return this._rawMethods[verb];
     }
     get webInterface() {
         return this._webInterface;

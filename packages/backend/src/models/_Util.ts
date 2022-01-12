@@ -18,13 +18,16 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
 
   const convert = (a: any, [key, value]: [string, any]) => {
 
+    const query = (value.values||[{}])[0]?.__query
+    const moduleName = query?.module || value.module
+
     const result: any = {
       type: String,
       select: value.hidden !== true,
       unique: value.unique === true,
       default: value.default,
       required: value.required || false,
-      autopopulate: (typeof value.module === 'string' && !value.preventPopulate) || false,
+      autopopulate: (typeof moduleName === 'string' && !value.preventPopulate) || false,
     }
 
     const typeMatch = typeMapping.find( ([keys, _]: [string[], any]) => keys.includes(value.type) )
@@ -33,9 +36,9 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
       result.type = typeMatch[1]
     }
 
-    if( typeof value.module === 'string' ) {
-      result.ref = value.module.capitalize()
-      result.type = value.array
+    if( typeof moduleName === 'string' ) {
+      result.ref = (moduleName as any).capitalize()
+      result.type = value.array || value.values
         ? [ObjectId]
         : ObjectId
     }

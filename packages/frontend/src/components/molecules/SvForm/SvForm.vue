@@ -1,10 +1,12 @@
 <template>
-  <div v-if="formData">
-    <div :class="`grid gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom}`" v-if="!isReadonly">
+  <div v-if="formData" class="w-full">
+    <div :class="`grid ${flex ? 'md:flex' : ''} gap-x-${gapX} gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom} w-full`" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
+
+        :class="`${field.flexGrow ? 'flex-grow' : ''}`"
       >
         <!-- text -->
         <sv-input v-if="['text', 'password', 'number'].includes(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]">
@@ -38,7 +40,7 @@
               {{ $t('none') }}
             </option>
             <option v-for="(option, oindex) in field.values" :value="option.value">
-              {{ $t(option.label) }}
+              {{ field.translate ? $t(option.label) : option.label }}
             </option>
           </sv-select>
         </div>
@@ -91,7 +93,7 @@ const props = defineProps({
   form: {
     type: Object,
     required: true,
-    validator: (v: any) => Object.values(v).every((v: any) => !!v.label)
+    validator: (v: any) => Object.values(v).every((v: any) => !!v.type || !!v.module)
   },
   formData: {
     type: Object,
@@ -101,6 +103,14 @@ const props = defineProps({
   isReadonly: {
     type: Boolean,
     default: false,
+  },
+  flex: {
+    type: Boolean,
+    default: false
+  },
+  gapX: {
+    type: Number,
+    default: 2
   },
   gapY: {
     type: Number,

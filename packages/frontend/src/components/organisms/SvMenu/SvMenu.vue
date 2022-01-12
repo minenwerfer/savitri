@@ -28,7 +28,7 @@
     </div>
 
     <!-- menu entries -->
-    <div class="grid pl-2 leading-8 md:leading-7">
+    <div class="grid md:pl-2 leading-8 md:leading-7">
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"

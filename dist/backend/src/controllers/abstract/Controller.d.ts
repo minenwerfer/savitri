@@ -15,7 +15,10 @@ export declare abstract class Controller<T> {
      * Supposed to contain method names as strings.
      */
     protected readonly _internal: string[];
-    protected _public: string[];
+    protected _publicMethods: string[];
+    protected _rawMethods: {
+        [key: string]: string;
+    };
     /**
      * @constructor
      * Sets controller metadata and creates a proxy that passes
@@ -25,7 +28,11 @@ export declare abstract class Controller<T> {
     constructor(props: {
         description?: any;
         publicMethods?: string[];
+        rawMethods?: {
+            [key: string]: string;
+        };
     });
+    rawType(verb: string): string | undefined;
     get webInterface(): Controller<T>;
     /**
      * @virtual @method

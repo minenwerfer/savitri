@@ -486,6 +486,7 @@ export abstract class Module<T=any, Item=any> {
       insert: this._actionHelper<Item>('insert', 'ITEM_INSERT'),
       remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filter._id } })),
       removeAll: this._actionHelper<Item>('removeAll', 'ITEMS_REMOVE'),
+      modify: this._actionHelper<Item>('modify', 'ITEM_MODIFY'),
       modifyAll: this._actionHelper<Item>('modifyAll', 'ITEMS_MODIFY'),
 
       deepInsert: ({ dispatch, getters, rootGetters }: ActionProps, payload: any) => new Promise(async (resolve) => {
@@ -637,12 +638,12 @@ private _mutations() {
       ]
     },
 
-    // ITEM_MODIFY(state: CommonState, { props }: MutationProps) {
-    //   state.item = {
-    //     ...state.item,
-    //     ...props
-    //   }
-    // },
+    ITEM_MODIFY(state: CommonState, { props }: MutationProps) {
+      state.item = {
+        ...state.item,
+        ...props
+      }
+    },
 
     ITEMS_MODIFY(state: CommonState, { props: { what }, payload }: MutationProps) {
       const satisfiesFilter = (item: Item & any) =>

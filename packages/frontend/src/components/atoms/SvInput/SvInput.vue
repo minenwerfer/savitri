@@ -11,10 +11,10 @@
       class="
         w-full
         border-box rounded
-        border border-gray-400
+        border-2 border-gray-300 focus:border-purple-500
         bg-white
         px-3 py-1
-        text-gray-600
+        text-gray-600 outline-none
       "
       ref="input"
       :type="type"
