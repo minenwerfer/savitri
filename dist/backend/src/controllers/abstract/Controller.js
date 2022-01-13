@@ -25,16 +25,16 @@ class Controller {
         this._webInterface = new Proxy(this, {
             get: (target, key) => {
                 if (this._internal.includes(key)) {
-                    throw 'forbidden method (cannot be called externally)';
+                    throw new Error('forbidden method (cannot be called externally)');
                 }
                 const method = target[key];
                 return function (req, res, decodedToken) {
                     const { module } = target._description || {};
                     if (!module) {
-                        throw 'module is undefined';
+                        throw new Error('module is undefined');
                     }
                     if (!target._publicMethods?.includes(key) && (!decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key))) {
-                        throw 'forbidden method';
+                        throw new Error('forbidden method');
                     }
                     const payload = Object.keys(req.payload || {}).length === 0
                         ? { filter: {} }

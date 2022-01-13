@@ -17,7 +17,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
     const { params: { controller, verb } } = request
 
     if( /^_/.test(verb) ) {
-      throw 'cannot call private method'
+      throw new Error('cannot call private method')
     }
 
     const controllerPath = commonControllers.includes(controller)
@@ -29,7 +29,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
     const instance = new Controller;
 
     if( !(verb in instance) ) {
-      throw 'invalid verb'
+      throw new Error('invalid verb')
     }
 
     const token = request.headers.authorization
@@ -39,7 +39,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
     // use webinterface whenever it's available
     const result = await (instance.webInterface || instance)[verb](request, h, token)
     if( /_?get/i.test(verb) && !result ) {
-      throw 'item not found'
+      throw new Error('item not found')
     }
 
     const mime = instance.rawType(verb)

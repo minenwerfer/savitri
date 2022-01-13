@@ -1,11 +1,12 @@
 /// <reference types="mongoose" />
 import { Document } from '../../database';
-import { default as Description } from '../../../../data/models/common/Notification/index.json';
+import { default as Description } from '../../../../data/entities/common/Notification/index.json';
 export { Description };
 import { UserDocument } from '../User';
 import '../User';
 export interface NotificationDocument extends Document {
-    user_id: UserDocument;
+    user_id: UserDocument | string;
+    destination: UserDocument | string;
     title: string;
     content: string;
     action: string;

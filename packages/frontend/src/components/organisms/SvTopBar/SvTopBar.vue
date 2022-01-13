@@ -1,28 +1,36 @@
 <template>
   <div class="
-    flex items-center
-    sticky
-    inset-0
+    flex items-center justify-between px-4 md:px-6
+    sticky inset-0
     md:grid
     md:grid-cols-menu
     h-16 z-30
-    text-white
-    bg-blue-600
+    bg-white shadow-md
     select-none
   ">
     <div
-      class="flex cursor-pointer font-semibold text-xl px-auto box-border truncate"
+      class="cursor-pointer box-border w-1/4"
       @click="$router.push({ name: 'dashboard-home' })"
     >
-      {{ $t(productName) }}
+      <div class="font-semibold text-xl truncate" v-if="!productLogo">
+        {{ $t(productName) }}
+      </div>
+
+      <img
+        v-else
+        :src="require(`@/../assets/${productLogo}`).default"
+        class="cursor-pointer"
+      />
     </div>
 
-    <sv-bare-button
-      @clicked="$store.dispatch('meta/swapMenu')"
-      class="block md:hidden"
-    >
-      Menu
-    </sv-bare-button>
+    <div>
+      <sv-bare-button
+        @clicked="$store.dispatch('meta/swapMenu')"
+        class="block md:hidden"
+      >
+        <unicon name="bars" fill="black" class="w-8 h-8"></unicon>
+      </sv-bare-button>
+    </div>
   </div>
 </template>
 
@@ -31,4 +39,5 @@ import { inject } from 'vue'
 import { SvBareButton } from 'frontend/components'
 
 const productName = inject('productName')
+const productLogo = inject('productLogo')
 </script>

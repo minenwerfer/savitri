@@ -26,7 +26,7 @@ exports.User = exports.UserSchema = exports.Description = void 0;
 const bcrypt = __importStar(require("bcrypt"));
 const database_1 = require("../../database");
 const _Util_1 = require("../_Util");
-const index_json_1 = __importDefault(require("../../../../data/models/common/User/index.json"));
+const index_json_1 = __importDefault(require("../../../../data/entities/common/User/index.json"));
 Object.defineProperty(exports, "Description", { enumerable: true, get: function () { return index_json_1.default; } });
 require("../Access");
 exports.UserSchema = (0, _Util_1.descriptionToSchema)(index_json_1.default, database_1.options);

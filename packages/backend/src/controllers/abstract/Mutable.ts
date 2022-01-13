@@ -20,7 +20,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Inserts a single document in the database.
    */
-  public insert(props: { what: T & { _id?: string } }, response: unknown, token: any): any | Promise<any> {
+  public insert(props: { what: T & { _id?: string } }, response?: unknown, token?: any): any | Promise<any> {
     const { _id, ...rest } = props.what
     const what = typeof _id === 'string' ? Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
 
@@ -80,7 +80,7 @@ export abstract class Mutable<T> extends Controller<T> {
    */
   public remove(props: { filter: any }): any | Promise<any> {
     if( !props.filter ) {
-      throw 'no criteria specified'
+      throw new Error('no criteria specified')
     }
     return this._model.findOneAndDelete(props.filter, { strict: 'throw' })
   }
@@ -91,7 +91,7 @@ export abstract class Mutable<T> extends Controller<T> {
    */
   public removeAll(props: { filter: any }) {
     if( !Array.isArray(props.filter?._id) || props.filter?._id?.length === 0 ) {
-      throw 'no criteria specified'
+      throw new Error('no criteria specified')
     }
     return this._model.deleteMany(props.filter as FilterQuery<T>, { strict: 'throw' })
   }

@@ -1,6 +1,6 @@
 /// <reference types="mongoose" />
 import { Document } from '../../database';
-import { default as Description } from '../../../../data/models/common/User/index.json';
+import { default as Description } from '../../../../data/entities/common/User/index.json';
 export { Description };
 import { AccessDocument } from '../Access';
 import '../Access';

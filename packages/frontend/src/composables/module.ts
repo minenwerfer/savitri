@@ -107,13 +107,13 @@ export default (name: string, store: any): any => {
       : firstValue
   }
 
-  const formatValue = (value: any, key: string, form: boolean = false) => {
+  const formatValue = (value: any, key: string, form: boolean = false, field: any) => {
     const firstValue = value && typeof value === 'object'
       ? getFirstValue(value, key, form)
       : value
 
     return firstValue !== undefined
-      ? firstValue
+      ? ( field?.type === 'datetime' ? firstValue.formatDateTime() : firstValue )
       : '-'
   }
 

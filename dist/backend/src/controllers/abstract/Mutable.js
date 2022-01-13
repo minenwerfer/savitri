@@ -66,7 +66,7 @@ class Mutable extends Controller_1.Controller {
      */
     remove(props) {
         if (!props.filter) {
-            throw 'no criteria specified';
+            throw new Error('no criteria specified');
         }
         return this._model.findOneAndDelete(props.filter, { strict: 'throw' });
     }
@@ -76,7 +76,7 @@ class Mutable extends Controller_1.Controller {
      */
     removeAll(props) {
         if (!Array.isArray(props.filter?._id) || props.filter?._id?.length === 0) {
-            throw 'no criteria specified';
+            throw new Error('no criteria specified');
         }
         return this._model.deleteMany(props.filter, { strict: 'throw' });
     }

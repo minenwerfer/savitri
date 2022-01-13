@@ -29,7 +29,7 @@ async function handler(request, h) {
     try {
         const { params: { controller, verb } } = request;
         if (/^_/.test(verb)) {
-            throw 'cannot call private method';
+            throw new Error('cannot call private method');
         }
         const controllerPath = controllers_1.commonControllers.includes(controller)
             ? '../src/controllers'
@@ -38,7 +38,7 @@ async function handler(request, h) {
         const Controller = require(`${controllerPath}/${controllerName}`)[controllerName];
         const instance = new Controller;
         if (!(verb in instance)) {
-            throw 'invalid verb';
+            throw new Error('invalid verb');
         }
         const token = request.headers.authorization
             ? await tokenService_1.TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
@@ -46,7 +46,7 @@ async function handler(request, h) {
         // use webinterface whenever it's available
         const result = await (instance.webInterface || instance)[verb](request, h, token);
         if (/_?get/i.test(verb) && !result) {
-            throw 'item not found';
+            throw new Error('item not found');
         }
         const mime = instance.rawType(verb);
         if (mime) {

@@ -1,6 +1,6 @@
 /// <reference types="mongoose" />
 import { Document } from '../../database';
-import { default as Description } from '../../../../data/models/common/File/index.json';
+import { default as Description } from '../../../../data/entities/common/File/index.json';
 export { Description };
 import '../User';
 export interface FileDocument extends Document {

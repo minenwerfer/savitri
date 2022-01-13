@@ -14,11 +14,11 @@ export class FileController extends Mutable<FileDocument> {
   public override async insert(props: { what: any }, res:unknown, decodedToken: any) {
 
     if( !STORAGE_PATH ) {
-      throw 'STORAGE_PATH is not set in the environment'
+      throw new Error('STORAGE_PATH is not set in the environment')
     }
 
     if( !props.what.context ) {
-      throw 'context is not set'
+      throw new Error('context is not set')
     }
 
     const what = Object.assign({}, props.what)
@@ -26,11 +26,11 @@ export class FileController extends Mutable<FileDocument> {
 
     const extension = what.filename.split('.').pop()
     if( !extension ) {
-      throw 'filename lacks extension'
+      throw new Error('filename lacks extension')
     }
 
     if( ['shtml', 'html', 'html', 'php', 'php5', 'exe', 'msi', 'vbs'].includes(extension) ) {
-      throw 'hoje não, joãozinho defacer'
+      throw new Error('hoje não, joãozinho defacer')
     }
 
     const oldFile = await File.findOne({
@@ -42,7 +42,7 @@ export class FileController extends Mutable<FileDocument> {
 
     if( oldFile ) {
       if( oldFile.immutable === true ) {
-        throw 'você não pode mais editar esse arquivo'
+        throw new Error('você não pode mais editar esse arquivo')
       }
 
       try {
@@ -77,7 +77,7 @@ export class FileController extends Mutable<FileDocument> {
   public async download(_id: string) {
     const file = await File.findOne({ _id }).lean()
     if( !file ) {
-      throw 'file not found'
+      throw new Error('file not found')
     }
 
     const content = await readFile(file.absolute_path)

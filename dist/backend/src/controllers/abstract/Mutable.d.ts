@@ -26,7 +26,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
         what: T & {
             _id?: string;
         };
-    }, response: unknown, token: any): any | Promise<any>;
+    }, response?: unknown, token?: any): any | Promise<any>;
     count(props: {
         filter?: object;
     }): Query<number, import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;

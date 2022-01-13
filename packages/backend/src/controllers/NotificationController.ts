@@ -10,18 +10,29 @@ export class NotificationController extends Mutable<NotificationDocument> {
     })
   }
 
-  ping(props: { last_id: string }, res: unknown, decodedToken: any) {
-    return decodedToken
+  public notify(props: { destination: string, title: string, content: string, action?: string, subject?: string }, res: unknown, decodedToken: any) {
+    const { destination, ...payload } = props
 
-    // if( !decodedToken?._id ) {
-    //   return {}
-    // }
+    return super.insert.call(this, {
+      what: {
+        user_id: decodedToken._id,
+        destination,
+        ...payload
+      }
 
-    // return super.get.call(this, {
-    //   filter: {
-    //     user_id: decodedToken._id,
-    //     _id: { $gt: props.last_id }
-    //   }
-    // })
+    } as any)
+  }
+
+  public ping(props: { last_id: string }, res: unknown, decodedToken: any) {
+    if( !decodedToken?._id ) {
+      return {}
+    }
+
+    return super.get.call(this, {
+      filter: {
+        user_id: decodedToken._id,
+        _id: { $gt: props.last_id }
+      }
+    })
   }
 }

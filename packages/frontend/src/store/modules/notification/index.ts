@@ -8,6 +8,7 @@ export class NotificationModule extends Module<{}, {}> {
   actions(this: NotificationModule) {
     return {
       ping: this._actionHelper('ping', 'NOTIFICATION_PING'),
+      notify: this._actionHelper('notify'),
     }
   }
 

@@ -35,7 +35,7 @@ const AsyncJwt = {
  */
 exports.TOKEN_SECRET = process.env.TOKEN_SECRET;
 if (!exports.TOKEN_SECRET) {
-    throw 'TOKEN_SECRET is undefined';
+    throw new Error('TOKEN_SECRET is undefined');
 }
 /**
  * @exports @const

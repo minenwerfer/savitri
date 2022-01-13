@@ -9,6 +9,7 @@ class NotificationModule extends module_1.Module {
     actions() {
         return {
             ping: this._actionHelper('ping', 'NOTIFICATION_PING'),
+            notify: this._actionHelper('notify'),
         };
     }
     mutations() {

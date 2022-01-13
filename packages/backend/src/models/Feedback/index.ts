@@ -1,6 +1,6 @@
 import { Document, model, options } from '../../database'
 import { descriptionToSchema } from '../_Util'
-import { default as Description } from '../../../../data/models/common/Feedback/index.json'
+import { default as Description } from '../../../../data/entities/common/Feedback/index.json'
 export { Description }
 
 import { UserDocument } from '../User'

@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt'
 import { Document, model, options } from '../../database'
 import { descriptionToSchema } from '../_Util'
-import { default as Description } from '../../../../data/models/common/User/index.json'
+import { default as Description } from '../../../../data/entities/common/User/index.json'
 export { Description }
 
 import { AccessDocument } from '../Access'

@@ -1,6 +1,6 @@
 import { Document, model } from '../../database'
 import { descriptionToSchema } from '../_Util'
-import { default as Description } from '../../../../data/models/common/Access/index.json'
+import { default as Description } from '../../../../data/entities/common/Access/index.json'
 export { Description }
 
 export type AccessDocument = any & Document;

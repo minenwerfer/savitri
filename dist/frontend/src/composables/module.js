@@ -86,12 +86,12 @@ exports.default = (name, store) => {
             ? getFirstValue(firstValue, firstField)
             : firstValue;
     };
-    const formatValue = (value, key, form = false) => {
+    const formatValue = (value, key, form = false, field) => {
         const firstValue = value && typeof value === 'object'
             ? getFirstValue(value, key, form)
             : value;
         return firstValue !== undefined
-            ? firstValue
+            ? (field?.type === 'datetime' ? firstValue.formatDateTime() : firstValue)
             : '-';
     };
     const resumeItem = (item) => {

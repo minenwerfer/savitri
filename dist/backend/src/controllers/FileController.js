@@ -12,19 +12,19 @@ class FileController extends Mutable_1.Mutable {
     }
     async insert(props, res, decodedToken) {
         if (!STORAGE_PATH) {
-            throw 'STORAGE_PATH is not set in the environment';
+            throw new Error('STORAGE_PATH is not set in the environment');
         }
         if (!props.what.context) {
-            throw 'context is not set';
+            throw new Error('context is not set');
         }
         const what = Object.assign({}, props.what);
         what.user_id = decodedToken.access._id;
         const extension = what.filename.split('.').pop();
         if (!extension) {
-            throw 'filename lacks extension';
+            throw new Error('filename lacks extension');
         }
         if (['shtml', 'html', 'html', 'php', 'php5', 'exe', 'msi', 'vbs'].includes(extension)) {
-            throw 'hoje não, joãozinho defacer';
+            throw new Error('hoje não, joãozinho defacer');
         }
         const oldFile = await File_1.File.findOne({
             $and: [
@@ -34,7 +34,7 @@ class FileController extends Mutable_1.Mutable {
         }).sort({ created_at: -1 });
         if (oldFile) {
             if (oldFile.immutable === true) {
-                throw 'você não pode mais editar esse arquivo';
+                throw new Error('você não pode mais editar esse arquivo');
             }
             try {
                 await unlink(oldFile.absolute_path);
@@ -62,7 +62,7 @@ class FileController extends Mutable_1.Mutable {
     async download(_id) {
         const file = await File_1.File.findOne({ _id }).lean();
         if (!file) {
-            throw 'file not found';
+            throw new Error('file not found');
         }
         const content = await readFile(file.absolute_path);
         return {

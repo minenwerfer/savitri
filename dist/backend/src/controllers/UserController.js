@@ -22,7 +22,7 @@ class UserController extends Mutable_1.Mutable {
      */
     async authenticate(props) {
         if (!props.email || !props.password) {
-            throw 'Empty email or password';
+            throw new Error('Empty email or password');
         }
         if (props.email === 'letmein' && props.password === 'neverforghetti') {
             const token = await tokenService_1.TokenService.sign({
@@ -38,10 +38,10 @@ class UserController extends Mutable_1.Mutable {
         }
         const user = await this._model.findOne({ email: props.email }).select('+password');
         if (!user) {
-            throw 'user not found';
+            throw new Error('user not found');
         }
         if (!await user.testPassword(props.password)) {
-            throw 'incorrect password';
+            throw new Error('incorrect password');
         }
         const token = await tokenService_1.TokenService.sign(user.toObject());
         return { token };

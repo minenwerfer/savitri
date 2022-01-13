@@ -21,7 +21,7 @@ const AsyncJwt = {
  */
 export const { TOKEN_SECRET } = process.env as { TOKEN_SECRET: jwt.Secret }
 if( !TOKEN_SECRET ) {
-  throw 'TOKEN_SECRET is undefined'
+  throw new Error('TOKEN_SECRET is undefined')
 }
 
 /**

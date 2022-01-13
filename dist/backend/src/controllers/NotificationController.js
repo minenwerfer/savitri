@@ -11,17 +11,26 @@ class NotificationController extends Mutable_1.Mutable {
             ]
         });
     }
+    notify(props, res, decodedToken) {
+        const { destination, ...payload } = props;
+        return super.insert.call(this, {
+            what: {
+                user_id: decodedToken._id,
+                destination,
+                ...payload
+            }
+        });
+    }
     ping(props, res, decodedToken) {
-        return decodedToken;
-        // if( !decodedToken?._id ) {
-        //   return {}
-        // }
-        // return super.get.call(this, {
-        //   filter: {
-        //     user_id: decodedToken._id,
-        //     _id: { $gt: props.last_id }
-        //   }
-        // })
+        if (!decodedToken?._id) {
+            return {};
+        }
+        return super.get.call(this, {
+            filter: {
+                user_id: decodedToken._id,
+                _id: { $gt: props.last_id }
+            }
+        });
     }
 }
 exports.NotificationController = NotificationController;

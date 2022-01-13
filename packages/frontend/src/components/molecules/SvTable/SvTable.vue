@@ -22,14 +22,15 @@
           <td
             v-for="([column, field], cindex) in Object.entries(columns)"
             :key="`column-${rindex}-${cindex}`"
-            class="block md:table-cell truncate md:text-sm px-1 cursor-pointer md:border"
             @click="store.dispatch(`${module}/spawnOpen`, { payload: { filter: row } })"
+
+            class="block md:table-cell truncate md:text-sm px-1 cursor-pointer border"
           >
           <div class="grid grid-cols-2 md:inline-block justify-between">
             <div class="font-semibold md:hidden text-ellipsis truncate">{{ field.label }}</div>
 
             <div v-if="column !== '__custom'" class="opacity-80">
-              {{ formatValue(field.translate ? $t(row[column]) : row[column], column) }}
+              {{ formatValue(field.translate ? $t(row[column]) : row[column], column, false, field) }}
             </div>
 
             <div v-else class="flex gap-x-1">
@@ -72,11 +73,15 @@ const props = defineProps({
   recordsTotal: {
     type: Number,
     required: false,
+  },
+  module: {
+    type: String,
+    required: false
   }
 })
 
 const store = useStore()
-const module = ref<string>(inject('module', ''))
+const module = ref<string>(props.module || inject('module', ''))
 
 const moduleRefs = reactive({})
 watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
