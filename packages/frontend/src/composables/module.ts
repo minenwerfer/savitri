@@ -134,7 +134,7 @@ export default (name: string, store: any): any => {
 
     return (items||store.getters[`${name}/items`])
       .sort((a: any, b: any) => a._id > b._id ? -1 : 1)
-      .findIndex((i: any) => i._id === _id)
+      .findIndex((i: any) => i._id === _id) + 1
   }
 
   const setItem = (item: any) => {

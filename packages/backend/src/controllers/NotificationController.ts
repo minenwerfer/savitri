@@ -10,29 +10,22 @@ export class NotificationController extends Mutable<NotificationDocument> {
     })
   }
 
-  public notify(props: { destination: string, title: string, content: string, action?: string, subject?: string }, res: unknown, decodedToken: any) {
-    const { destination, ...payload } = props
-
-    return super.insert.call(this, {
-      what: {
-        user_id: decodedToken._id,
-        destination,
-        ...payload
-      }
-
-    } as any)
+  public override async insert(props: { what: any }, res: unknown, decodedToken: any) {
+    props.what.user_id = decodedToken._id
+    return super.insert.call(this, props)
   }
 
-  public ping(props: { last_id: string }, res: unknown, decodedToken: any) {
+  public async ping(props: { last_id: string }, res: unknown, decodedToken: any) {
     if( !decodedToken?._id ) {
       return {}
     }
 
-    return super.get.call(this, {
+    return (super.getAll.call(this, {
       filter: {
-        user_id: decodedToken._id,
-        _id: { $gt: props.last_id }
+        destination: decodedToken._id,
+        // _id: { $gt: props.last_id }
       }
-    })
+
+    }) as any).select({ destination: 0 })
   }
 }

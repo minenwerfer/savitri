@@ -109,7 +109,7 @@ exports.default = (name, store) => {
             : item;
         return (items || store.getters[`${name}/items`])
             .sort((a, b) => a._id > b._id ? -1 : 1)
-            .findIndex((i) => i._id === _id);
+            .findIndex((i) => i._id === _id) + 1;
     };
     const setItem = (item) => {
         store.commit(`${name}/ITEM_GET`, { result: item });

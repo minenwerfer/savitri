@@ -28,7 +28,7 @@ exports.initialItemState = {
  */
 class UserModule extends module_1.Module {
     constructor() {
-        super('user', exports.initialState, exports.initialItemState, module_1.SV_API_URL_2);
+        super('user', exports.initialState, exports.initialItemState);
     }
     actions() {
         return {

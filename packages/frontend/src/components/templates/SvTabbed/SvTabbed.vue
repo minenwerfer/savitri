@@ -1,26 +1,24 @@
 <template>
   <div :class="vertical ? 'lg:flex lg:gap-x-5' : ''">
-    <div
-      v-if="titles && titles.length > 0"
-      :class="`flex bg-white rounded-lg shadow-md mb-4 pt-2 ${vertical ? 'lg:flex-col lg:border-r lg:py-4' : ''} ${vertical ? menuClasses : ''}`"
-    >
-      <slot name="menu" v-if="$slots.menu && vertical"></slot>
-      <sv-bare-button
-        :class="`
-          text-center py-2 border-b-4 flex-1
-          ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
-          ${vertical ? 'lg:border-b-2 lg:mb-4 lg:px-4 lg:text-left lg:flex-none lg:py-0' : ''}
-          text-blue-500
-          transition-all
-        `"
-        v-for="(title, index) in titles"
-        :key="`tabtitle-${index}`"
+    <sv-box :classes="`pb-0 md:pb-0 ${vertical ? 'lg:pb-5' : ''}`" v-if="titles && titles.length > 0">
+      <div :class="`flex ${vertical ? 'lg:flex-col lg:gap-y-4' : ''}`">
+        <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden lg:block ${vertical ? menuClasses : ''}`"></slot>
+        <sv-bare-button
+          :class="`
+            text-center py-2 border-b-4 flex-1
+            ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
+            ${vertical ? 'lg:border-b-2 lg:text-left lg:flex-none lg:py-0' : ''}
+            text-blue-500 transition-all
+          `"
+          v-for="(title, index) in titles"
+          :key="`tabtitle-${index}`"
 
-        @clicked="$emit('update:currentTab', index+1)"
-      >
-        {{ title }}
-      </sv-bare-button>
-    </div>
+          @clicked="$emit('update:currentTab', index+1)"
+        >
+          {{ title }}
+        </sv-bare-button>
+      </div>
+    </sv-box>
 
     <div :class="vertical ? 'lg:flex-1' : ''">
       <div
@@ -42,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { SvBareButton, SvButton } from 'frontend/components'
+import { SvBareButton, SvButton, SvBox } from 'frontend/components'
 
 const props: any = defineProps({
   tabs: {

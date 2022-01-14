@@ -12,7 +12,7 @@
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
           ${ isFloating ? 'px-4 md:px-6' : ( fullWidth ? '' : 'px-auto' ) }
-          ${ fullWidth ? 'w-screen md:w-view centered-fullwidth' : 'rounded-lg shadow-md py-4 md:py-5' }
+          ${ fullWidth ? 'w-screen md:w-view centered-fullwidth' : 'rounded-lg shadow py-4 md:py-5' }
           flex flex-col bg-white py-0
           ${ classes }
         `"

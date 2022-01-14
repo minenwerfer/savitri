@@ -1,15 +1,13 @@
 import { RequestProvider, AxiosResponse } from 'common/http'
 import { fromEntries } from 'common/helpers'
 
-import { default as webpackVariables } from 'variables'
-
 export const SV_API_URL = process.env.NODE_ENV === 'development'
   ? 'http://0.0.0.0:3000/api'
   : '/api'
 
-export const SV_API_URL_2 = (webpackVariables as any).domain ? (process.env.NODE_ENV === 'development'
+export const SV_API_URL_2 = process.env.NODE_ENV === 'development'
   ? 'http://0.0.0.0:3001/api'
-  : '/api2') : SV_API_URL
+  : '/api2'
 
 export type DispatchFunction = (action: string, payload?: any, options?: any) => Promise<any> | any
 export type CommitFunction = DispatchFunction
@@ -505,10 +503,10 @@ export abstract class Module<T=any, Item=any> {
       deactivate: ({ dispatch }: ActionProps, payload: any) => dispatch('insert', { ...payload, what: { active: false } }),
       deactivateAll: ({ dispatch }: ActionProps, payload: any) => dispatch('modifyAll', { ...payload, what: { active: false } }),
 
-      ask: ({ dispatch }: ActionProps, { action, params }: { action: string, params: any }): Promise<void> => new Promise((resolve, reject) =>
+      ask: ({ dispatch }: ActionProps, { action, params, title, body }: { action: string, params: any, title?: string, body?: string}): Promise<void> => new Promise((resolve, reject) =>
         dispatch('meta/spawnPrompt', {
-          title: 'Diálogo de confirmação',
-          body: `Confirmar ação?`,
+          title: title || 'Diálogo de confirmação',
+          body: body || `Confirmar ação?`,
           actions: [
             { name: 'cancel', title: 'Cancelar' },
             { name: 'confirm', title: 'Confirmar', type: 'critical' }

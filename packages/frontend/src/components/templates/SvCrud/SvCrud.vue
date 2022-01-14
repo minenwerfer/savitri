@@ -30,7 +30,7 @@
       </sv-form>
     </template>
     <template #footer v-if="!isInsertReadonly">
-      <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })">
+      <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: condensedItem, __crudClose: true })">
         Salvar
       </sv-button>
     </template>
@@ -123,6 +123,7 @@ const {
   availableFilters,
   item,
   items,
+  condensedItem,
   recordsCount,
   recordsTotal,
   selectedIds,

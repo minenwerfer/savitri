@@ -53,7 +53,7 @@ export const initialItemState = {
 export class UserModule extends Module<User, UserItem> {
 
   constructor() {
-    super('user', initialState, initialItemState, SV_API_URL_2)
+    super('user', initialState, initialItemState)
   }
 
   actions(this: UserModule) {

@@ -18,17 +18,20 @@
     "fields": {
         "user_id": {
             "module": "user",
+            "label": "Remetente",
+            "index": "email",
+            "noform": true
+        },
+        "destination": {
+            "module": "user",
             "label": "Destinatário",
-            "index": "email"
+            "index": "email",
+            "array": true
         },
         "title": {
             "label": "Título",
             "type": "text",
             "required": true
-        },
-        "content": {
-            "label": "Conteúdo",
-            "type": "text"
         },
         "action": {
             "label": "Ação",
@@ -37,6 +40,10 @@
         "subject": {
             "label": "Sujeito",
             "type": "text"
+        },
+        "content": {
+            "label": "Conteúdo",
+            "type": "textbox"
         }
     }
 }

@@ -4,7 +4,7 @@ exports.NotificationModule = void 0;
 const module_1 = require("frontend/store/module");
 class NotificationModule extends module_1.Module {
     constructor() {
-        super('notification', {}, {}, module_1.SV_API_URL_2);
+        super('notification', {}, {});
     }
     actions() {
         return {

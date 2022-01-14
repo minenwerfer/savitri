@@ -1,18 +1,14 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Module = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
-const variables_1 = __importDefault(require("variables"));
 exports.SV_API_URL = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3000/api'
     : '/api';
-exports.SV_API_URL_2 = variables_1.default.domain ? (process.env.NODE_ENV === 'development'
+exports.SV_API_URL_2 = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3001/api'
-    : '/api2') : exports.SV_API_URL;
+    : '/api2';
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -378,9 +374,9 @@ class Module {
             activateAll: ({ dispatch }, payload) => dispatch('modifyAll', { ...payload, what: { active: true } }),
             deactivate: ({ dispatch }, payload) => dispatch('insert', { ...payload, what: { active: false } }),
             deactivateAll: ({ dispatch }, payload) => dispatch('modifyAll', { ...payload, what: { active: false } }),
-            ask: ({ dispatch }, { action, params }) => new Promise((resolve, reject) => dispatch('meta/spawnPrompt', {
-                title: 'Diálogo de confirmação',
-                body: `Confirmar ação?`,
+            ask: ({ dispatch }, { action, params, title, body }) => new Promise((resolve, reject) => dispatch('meta/spawnPrompt', {
+                title: title || 'Diálogo de confirmação',
+                body: body || `Confirmar ação?`,
                 actions: [
                     { name: 'cancel', title: 'Cancelar' },
                     { name: 'confirm', title: 'Confirmar', type: 'critical' }

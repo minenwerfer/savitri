@@ -2,7 +2,7 @@ import { Module, CommonState, MutationProps, SV_API_URL_2 } from 'frontend/store
 
 export class NotificationModule extends Module<{}, {}> {
   constructor() {
-    super('notification', {}, {}, SV_API_URL_2)
+    super('notification', {}, {})
   }
 
   actions(this: NotificationModule) {
