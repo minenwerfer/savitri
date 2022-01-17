@@ -65,7 +65,7 @@ export class UserModule extends Module<User, UserItem> {
         }
 
         dispatch('swapLoading', true)
-        this.http.post(commit, this.route('authenticate'), payload)
+        this.http.post({ commit, dispatch }, this.route('authenticate'), payload)
           .then(async ({ data: { result } }: AxiosResponse) => {
             commit('USER_AUTH', result)
             commit('ITEM_CLEAR')
@@ -75,6 +75,11 @@ export class UserModule extends Module<User, UserItem> {
             resolve()
           })
           .finally(() => dispatch('swapLoading', false))
+      }),
+
+      signout: ({ commit }: ActionProps): Promise<void> => new Promise((resolve) => {
+        commit('USER_SIGNOUT')
+        resolve()
       })
     }
   }
@@ -91,6 +96,11 @@ export class UserModule extends Module<User, UserItem> {
         Object.assign(state.current, { email: '', password: '' })
         Object.assign(state.current, value)
         sessionStorage.setItem('auth:token', value.token)
+      },
+
+      USER_SIGNOUT(state: CommonState & { current: any }) {
+        state.current = {}
+        sessionStorage.removeItem('auth:token')
       }
     }
   }

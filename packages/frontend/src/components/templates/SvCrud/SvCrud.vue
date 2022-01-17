@@ -1,7 +1,7 @@
 <template>
   <sv-box v-if="description.actions" :key="module">
     <template #body>
-      <div class="flex gap-2">
+      <div class="flex gap-2 md:w-screen overflow-x-scroll">
         <sv-button
           v-for="([action, props], index) in Object.entries(description.actions)"
           :key="`action-${index}`"

@@ -2,7 +2,7 @@ import { RequestProvider, AxiosResponse } from 'common/http'
 import { fromEntries } from 'common/helpers'
 
 export const SV_API_URL = process.env.NODE_ENV === 'development'
-  ? 'http://0.0.0.0:3000/api'
+  ? 'http://172.16.0.84:3000/api'
   : '/api'
 
 export const SV_API_URL_2 = process.env.NODE_ENV === 'development'
@@ -14,14 +14,21 @@ export type CommitFunction = DispatchFunction
 
 /**
  * @exports @interface
- * Action properties.
+ * Dispatch and commit functions.
  */
-export interface ActionProps {
-  state: CommonState
-  getters: any
-  rootGetters: any
+export interface ContextFunctions {
   commit: CommitFunction
   dispatch: DispatchFunction
+}
+
+/**
+ * @exports @interface
+ * Action properties.
+ */
+export type ActionProps = ContextFunctions & {
+  state: CommonState
+  getters?: any
+  rootGetters?: any
 }
 
 /**
@@ -41,8 +48,8 @@ export interface MutationProps {
  * Will add the dispatcher function as the first argument for spawning errors.
  */
 export interface ProxiedRequestProvider {
-  post: (commit: CommitFunction, route: string, payload: any) => Promise<AxiosResponse>
-  get: (commit: CommitFunction, route: string) => Promise<AxiosResponse>
+  post: (ctx: ContextFunctions, route: string, payload: any) => Promise<AxiosResponse>
+  get: (ctx: ContextFunctions, route: string) => Promise<AxiosResponse>
 }
 
 export interface CommonState {
@@ -141,7 +148,7 @@ export abstract class Module<T=any, Item=any> {
      * @function
      * Catchs errors then spawns a modal.
      */
-    const _httpMethodWrapper = (target: RequestProvider, method: any, commit: CommitFunction, ...args: any) => new Promise((resolve, reject) => {
+    const _httpMethodWrapper = (target: RequestProvider, method: any, ctx: ContextFunctions, ...args: any) => new Promise((resolve, reject) => {
       const call = method.apply(target, ...args)
       if( !(call instanceof Promise) ) {
         return call
@@ -150,11 +157,17 @@ export abstract class Module<T=any, Item=any> {
       return call
         .then(resolve)
         .catch((error: string) => {
-          commit('meta/MODAL_SPAWN', {
-            title: 'Erro',
-            body: error
+          if( error === 'signed out' ) {
+            ctx.dispatch('user/signout')
 
-          }, { root: true })
+          } else {
+            ctx.commit('meta/MODAL_SPAWN', {
+              title: 'Erro',
+              body: error
+
+            }, { root: true })
+
+          }
 
           console.trace(error)
           reject(error)
@@ -166,7 +179,7 @@ export abstract class Module<T=any, Item=any> {
         const method = target[key]
 
         return ['request', 'get', 'post'].includes(key)
-          ? (commit: CommitFunction, ...args: any) => _httpMethodWrapper(target, method, commit, [...args])
+          ? (ctx: ContextFunctions, ...args: any) => _httpMethodWrapper(target, method, ctx, [...args])
           : (typeof method === 'function' ? (...args: any) => method.apply(target, args) : method)
       }
     })
@@ -186,7 +199,7 @@ export abstract class Module<T=any, Item=any> {
 
   protected _actionHelper<T_>(verb: string, mutation?: string, transform: (what: any) => any = (what) => what) {
     const route = this.route(verb)
-    return ({ commit, dispatch, state }: ActionProps, value?: any): Promise<T_> => new Promise((resolve, reject) => {
+    return ({ commit, dispatch, state }: ContextFunctions & { state: any }, value?: any): Promise<T_> => new Promise((resolve, reject) => {
       state._halt = false
       dispatch('swapLoading', true)
 
@@ -194,7 +207,7 @@ export abstract class Module<T=any, Item=any> {
         ? { ...value, payload: transform(value.payload) }
         : { payload: undefined }
 
-      this.http.post(commit, route, { ...payload, ...props })
+      this.http.post({ commit, dispatch }, route, { ...payload, ...props })
         .then((response: AxiosResponse) => {
 
           const data = response?.data || {}

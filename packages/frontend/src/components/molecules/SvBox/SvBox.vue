@@ -11,9 +11,9 @@
               : ''
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
-          ${ isFloating ? 'px-4 md:px-6' : ( fullWidth ? '' : 'px-auto' ) }
-          ${ fullWidth ? 'w-screen md:w-view centered-fullwidth' : 'rounded-lg shadow py-4 md:py-5' }
-          flex flex-col bg-white py-0
+          ${ isFloating ? 'px-2 md:px-6' : ( fullWidth ? '' : 'px-auto' ) }
+          ${ fullWidth ? 'w-screen md:w-view centered-fullwidth' : `rounded shadow ${paddingY}` }
+          flex flex-col bg-white py-0 overscroll-none
           ${ classes }
         `"
       >
@@ -24,7 +24,7 @@
           </div>
           <sv-bare-button v-if="closeHint || collapsable">
             <i v-if="collapsable" @click="isCollapsed = !isCollapsed">[A]</i>
-            <unicon v-else-if="closeHint && isFloating" @click="$emit('close')" name="multiply" />
+            <unicon v-else-if="closeHint" @click="$emit('close')" name="multiply" />
           </sv-bare-button>
         </div>
 
@@ -66,6 +66,10 @@ const props = defineProps({
   marginBottom: Boolean,
   fullWidth: Boolean,
   classes: String,
+  paddingY: {
+    type: String,
+    default: 'py-4 md:py-5'
+  }
 })
 
 const isFloating = computed(() => props.floating || props.float)

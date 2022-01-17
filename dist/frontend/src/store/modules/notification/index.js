@@ -1,10 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationModule = void 0;
+exports.NotificationModule = exports.initialState = void 0;
 const module_1 = require("frontend/store/module");
+exports.initialState = {
+    messages: []
+};
 class NotificationModule extends module_1.Module {
     constructor() {
-        super('notification', {}, {});
+        super('notification', exports.initialState, {});
+    }
+    getters() {
+        return {
+            unread: (state) => {
+                return state.messages;
+            }
+        };
     }
     actions() {
         return {
@@ -15,7 +25,7 @@ class NotificationModule extends module_1.Module {
     mutations() {
         return {
             NOTIFICATION_PING: (state, { result }) => {
-                console.log(result);
+                state.messages = result;
             }
         };
     }

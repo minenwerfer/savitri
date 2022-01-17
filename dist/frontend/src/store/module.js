@@ -4,7 +4,7 @@ exports.Module = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
 exports.SV_API_URL = process.env.NODE_ENV === 'development'
-    ? 'http://0.0.0.0:3000/api'
+    ? 'http://172.16.0.84:3000/api'
     : '/api';
 exports.SV_API_URL_2 = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3001/api'
@@ -75,7 +75,7 @@ class Module {
          * @function
          * Catchs errors then spawns a modal.
          */
-        const _httpMethodWrapper = (target, method, commit, ...args) => new Promise((resolve, reject) => {
+        const _httpMethodWrapper = (target, method, ctx, ...args) => new Promise((resolve, reject) => {
             const call = method.apply(target, ...args);
             if (!(call instanceof Promise)) {
                 return call;
@@ -83,10 +83,15 @@ class Module {
             return call
                 .then(resolve)
                 .catch((error) => {
-                commit('meta/MODAL_SPAWN', {
-                    title: 'Erro',
-                    body: error
-                }, { root: true });
+                if (error === 'signed out') {
+                    ctx.dispatch('user/signout');
+                }
+                else {
+                    ctx.commit('meta/MODAL_SPAWN', {
+                        title: 'Erro',
+                        body: error
+                    }, { root: true });
+                }
                 console.trace(error);
                 reject(error);
             });
@@ -95,7 +100,7 @@ class Module {
             get: (target, key) => {
                 const method = target[key];
                 return ['request', 'get', 'post'].includes(key)
-                    ? (commit, ...args) => _httpMethodWrapper(target, method, commit, [...args])
+                    ? (ctx, ...args) => _httpMethodWrapper(target, method, ctx, [...args])
                     : (typeof method === 'function' ? (...args) => method.apply(target, args) : method);
             }
         });
@@ -117,7 +122,7 @@ class Module {
             const { payload, ...props } = value
                 ? { ...value, payload: transform(value.payload) }
                 : { payload: undefined };
-            this.http.post(commit, route, { ...payload, ...props })
+            this.http.post({ commit, dispatch }, route, { ...payload, ...props })
                 .then((response) => {
                 const data = response?.data || {};
                 if (state._halt) {

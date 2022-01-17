@@ -1,8 +1,20 @@
-import { Module, CommonState, MutationProps, SV_API_URL_2 } from 'frontend/store/module'
+import { Module, CommonState, MutationProps } from 'frontend/store/module'
+
+export const initialState = {
+  messages: []
+}
 
 export class NotificationModule extends Module<{}, {}> {
   constructor() {
-    super('notification', {}, {})
+    super('notification', initialState, {})
+  }
+
+  getters() {
+    return {
+      unread: (state: any) => {
+        return state.messages
+      }
+    }
   }
 
   actions(this: NotificationModule) {
@@ -14,8 +26,8 @@ export class NotificationModule extends Module<{}, {}> {
 
   mutations(this: NotificationModule) {
     return {
-      NOTIFICATION_PING: (state: CommonState, { result }: MutationProps) => {
-        console.log(result)
+      NOTIFICATION_PING: (state: CommonState & { messages: [] }, { result }: MutationProps) => {
+        state.messages = result
       }
     }
   }

@@ -50,7 +50,11 @@ export abstract class Controller<T> {
           }
 
           if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
-            throw new Error('forbidden method')
+            if( decodedToken?.access ) {
+              throw new Error('forbidden method')
+            }
+
+            throw new Error('signed out')
           }
 
           const payload = Object.keys(req.payload||{}).length === 0

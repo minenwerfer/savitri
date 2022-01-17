@@ -30,6 +30,7 @@
     "visibility": {
       "label": "Visibilidade",
       "type": "select",
+      "translate": true,
       "values": [
         "useronly",
         "everything"

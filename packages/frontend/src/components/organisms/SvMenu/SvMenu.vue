@@ -10,7 +10,7 @@
     animate-slip md:animate-slowfade transition-all
     ${ visible ? '' : 'block md:hidden' } 
     ${ mobileVisible ? '' : 'hidden md:block' }
-    overflow-y-scroll
+    overflow-y-scroll overscroll-none
   `">
 
     <div @click="$router.push({ name: 'dashboard-home' })">
@@ -23,7 +23,7 @@
       <img
         v-else
         :src="require(`@/../assets/${productLogo}`).default"
-        class="cursor-pointer mx-auto mt-6 mb-14 w-3/4"
+        class="cursor-pointer mx-auto mt-6 mb-14 w-3/4 h-20 object-contain"
       />
     </div>
 

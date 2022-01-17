@@ -1,14 +1,15 @@
 <template>
   <div :class="vertical ? 'lg:flex lg:gap-x-5' : ''">
-    <sv-box :classes="`pb-0 md:pb-0 ${vertical ? 'lg:pb-5' : ''}`" v-if="titles && titles.length > 0">
-      <div :class="`flex ${vertical ? 'lg:flex-col lg:gap-y-4' : ''}`">
+    <sv-box classes="w-screen md:w-auto" v-if="titles && titles.length > 0" :padding-y="`pt-2 md:pt-2 ${vertical ? 'lg:py-5' : ''}`">
+      <div :class="`flex gap-x-4 w-full whitespace-nowrap overflow-scroll ${vertical ? 'lg:flex-col lg:gap-y-4' : ''}`">
         <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden lg:block ${vertical ? menuClasses : ''}`"></slot>
         <sv-bare-button
           :class="`
-            text-center py-2 border-b-4 flex-1
-            ${currentTab === index+1 ? 'border-purple-600' : 'border-grey-400'}
+            text-center text-blue-500
+            py-2 flex-1
+            ${currentTab === index+1 ? 'font-semibold' : ''}
             ${vertical ? 'lg:border-b-2 lg:text-left lg:flex-none lg:py-0' : ''}
-            text-blue-500 transition-all
+            transition-all whitespace-nowrap
           `"
           v-for="(title, index) in titles"
           :key="`tabtitle-${index}`"

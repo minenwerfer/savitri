@@ -1,10 +1,10 @@
 <template>
-  <sv-box>
-    <div class="flex items-center">
+  <sv-box classes="relative">
+    <div class="flex items-center relative">
       <div class="text-xl font-bold border-r-2 pr-4">
         {{ $tc(getTitle(routes[routes.length-1]), 2).capitalize() }}
       </div>
-      <div class="flex py-2 px-auto items-center">
+      <div class="flex px-auto items-center">
         <sv-bare-button @clicked="$router.push({ name: 'dashboard-home' })">
           <unicon name="home" fill="purple" class="mr-2" />
         </sv-bare-button>
@@ -16,6 +16,13 @@
         >
           {{ $t(getTitle(route)).capitalize() }}
         </router-link>
+      </div>
+
+    </div>
+
+    <div class="absolute top-6 right-4">
+      <div class="flex gap-x-4">
+        <slot></slot>
       </div>
     </div>
   </sv-box>

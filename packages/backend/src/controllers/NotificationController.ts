@@ -22,8 +22,12 @@ export class NotificationController extends Mutable<NotificationDocument> {
 
     return (super.getAll.call(this, {
       filter: {
-        destination: decodedToken._id,
-        // _id: { $gt: props.last_id }
+        $or: [
+          { destination: decodedToken._id },
+          { destination: null }
+        ],
+
+        ...(props.last_id ? { _id: { $gt: props.last_id } } : {})
       }
 
     }) as any).select({ destination: 0 })

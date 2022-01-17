@@ -5,5 +5,13 @@
 
   "useronly": "apenas usuário | apenas usuário",
   "none": "nenhum",
-  "everything": "tudo"
+  "everything": "tudo",
+
+  "get": "ler",
+  "getAll": "listar",
+  "insert": "inserir",
+  "remove": "remover",
+  "removeAll": "remover vários",
+  "modify": "modificar",
+  "modifyAll": "modificar vários"
 }

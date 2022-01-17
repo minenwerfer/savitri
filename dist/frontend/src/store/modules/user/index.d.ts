@@ -47,11 +47,16 @@ export declare const initialItemState: {
 export declare class UserModule extends Module<User, UserItem> {
     constructor();
     actions(this: UserModule): {
-        authenticate: ({ commit, dispatch, state: { current } }: ActionProps & {
+        authenticate: ({ commit, dispatch, state: { current } }: import("frontend/store/module").ContextFunctions & {
+            state: CommonState;
+            getters?: any;
+            rootGetters?: any;
+        } & {
             state: CommonState & {
                 current: any;
             };
         }) => Promise<void>;
+        signout: ({ commit }: ActionProps) => Promise<void>;
     };
     getters(): {
         token: (state: any) => any;
@@ -61,6 +66,9 @@ export declare class UserModule extends Module<User, UserItem> {
             current: any;
         }, value: {
             token: string;
+        }): void;
+        USER_SIGNOUT(state: CommonState & {
+            current: any;
         }): void;
     };
 }

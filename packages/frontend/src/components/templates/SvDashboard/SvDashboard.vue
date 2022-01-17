@@ -9,12 +9,16 @@
         bg-purple-400 text-white font-semibold items-center flex gap-x-2 hover:opacity-50
       "
       @clicked="isFeedbackVisible = true"
+      v-if="webpackVariables.feedback"
     >
         <unicon name="comment-dots" fill="white"></unicon>
         <div>Feedback</div>
     </sv-bare-button>
 
-    <sv-top-bar class="md:hidden"></sv-top-bar>
+    <sv-top-bar class="md:hidden">
+      <sv-profile-thumb></sv-profile-thumb>
+      <sv-notifications v-if="webpackVariables.notification"></sv-notifications>
+    </sv-top-bar>
 
     <div :class="`grid md:grid-cols-${isMenuVisible ? 'menu' : 1}`">
       <sv-menu
@@ -24,11 +28,16 @@
         :schema="menuSchema">
       </sv-menu>
 
-      <div class="flex flex-col">
-        <div :class="`relative ${$route.meta?.noMargin ? '' : 'px-auto py-auto'}`">
-          <sv-breadcumb class="hidden md:block" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)"></sv-breadcumb>
+      <div :class="`relative flex flex-col ${$route.meta?.noMargin ? '' : 'px-0 md:px-6 py-auto'}`">
+        <div class="order-2">
           <router-view />
         </div>
+
+        <sv-breadcumb class="hidden md:block order-1" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)">
+          <sv-profile-thumb></sv-profile-thumb>
+          <sv-notifications v-if="webpackVariables.notification"></sv-notifications>
+        </sv-breadcumb>
+
       </div>
     </div>
 
@@ -40,7 +49,8 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { useStore } from 'vuex'
-import { SvMenu, SvBreadcumb, SvTopBar, SvBareButton, SvFeedback } from 'frontend/components'
+import { default as webpackVariables } from 'variables'
+import { SvMenu, SvBreadcumb, SvTopBar, SvBareButton, SvFeedback, SvProfileThumb, SvNotifications } from 'frontend/components'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})

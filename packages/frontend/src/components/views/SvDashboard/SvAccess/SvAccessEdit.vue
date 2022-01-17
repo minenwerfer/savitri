@@ -51,6 +51,7 @@ const capabilitiesFields = modules.reduce((a: any, { module, methods, extraMetho
   [module]: {
     label: module,
     type: 'checkbox',
+    translate: true,
     values: [...(methods || defaultMethods), ...(extraMethods||[])].map((method: any) => ({
       label: method,
       value: method

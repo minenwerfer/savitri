@@ -19,14 +19,16 @@
       <img
         v-else
         :src="require(`@/../assets/${productLogo}`).default"
-        class="cursor-pointer"
+        class="cursor-pointer h-12 object-contain"
       />
     </div>
 
-    <div>
+    <div class="flex gap-x-1 md:gap-x-4 items-center">
+      <slot></slot>
+
       <sv-bare-button
         @clicked="$store.dispatch('meta/swapMenu')"
-        class="block md:hidden"
+        class="block md:hidden ml-2"
       >
         <unicon name="bars" fill="black" class="w-8 h-8"></unicon>
       </sv-bare-button>

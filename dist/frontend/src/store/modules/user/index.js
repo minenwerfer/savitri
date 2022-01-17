@@ -38,7 +38,7 @@ class UserModule extends module_1.Module {
                     password: current.password,
                 };
                 dispatch('swapLoading', true);
-                this.http.post(commit, this.route('authenticate'), payload)
+                this.http.post({ commit, dispatch }, this.route('authenticate'), payload)
                     .then(async ({ data: { result } }) => {
                     commit('USER_AUTH', result);
                     commit('ITEM_CLEAR');
@@ -47,6 +47,10 @@ class UserModule extends module_1.Module {
                     resolve();
                 })
                     .finally(() => dispatch('swapLoading', false));
+            }),
+            signout: ({ commit }) => new Promise((resolve) => {
+                commit('USER_SIGNOUT');
+                resolve();
             })
         };
     }
@@ -61,6 +65,10 @@ class UserModule extends module_1.Module {
                 Object.assign(state.current, { email: '', password: '' });
                 Object.assign(state.current, value);
                 sessionStorage.setItem('auth:token', value.token);
+            },
+            USER_SIGNOUT(state) {
+                state.current = {};
+                sessionStorage.removeItem('auth:token');
             }
         };
     }

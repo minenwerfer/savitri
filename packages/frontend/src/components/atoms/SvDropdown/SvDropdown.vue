@@ -2,7 +2,7 @@
   <div class="relative">
     <div
       @click="visible = !visible"
-      class="absolute top-0 right-0 cursor-pointer z-40"
+      class="cursor-pointer z-40"
     >
       <slot name="trigger"></slot>
     </div>
@@ -16,4 +16,7 @@
 import { ref } from 'vue'
 
 const visible = ref(false)
+defineExpose({
+  visible
+})
 </script>

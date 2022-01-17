@@ -1,5 +1,4 @@
 export { default as SvArrow } from 'frontend/components/atoms/SvArrow/SvArrow.vue'
-export { default as SvBreadcumb } from 'frontend/components/atoms/SvBreadcumb/SvBreadcumb.vue'
 export { default as SvBareButton } from 'frontend/components/atoms/SvBareButton/SvBareButton.vue'
 export { default as SvButton } from 'frontend/components/atoms/SvButton/SvButton.vue'
 export { default as SvCheckbox } from 'frontend/components/atoms/SvCheckbox/SvCheckbox.vue'

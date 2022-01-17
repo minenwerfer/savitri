@@ -16,14 +16,14 @@
 
         <!-- textbox, checkbox, radio, boolean, select -->
         <div v-else-if="['textbox', 'checkbox', 'radio', 'boolean', 'select'].includes(field.type)">
-          <header v-if="field.type !== 'boolean'">{{ field.label }}</header>
+          <header v-if="field.type !== 'boolean'">{{ field.translate ? $t(field.label) : field.label }}</header>
           <div class="text-sm opacity-50">
             {{ field.description }}
           </div>
 
           <sv-textbox v-if="field.type === 'textbox'" v-model="formData[key]"></sv-textbox>
 
-          <div v-else-if="field.type !== 'select'" class="grid grid-cols-2 gap-1">
+          <div v-else-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-1">
             <sv-checkbox v-if="['checkbox', 'radio'].includes(field.type)" v-for="(value, vindex) in field.values" :key="`value-${vindex}`" v-model="formData[key]" :array="true" :value="value.value" :is-radio="field.type === 'radio'">
               <template #label>{{ field.translate ? $t(value.label) : value.label }}</template>
               <template #description>{{ value.description }}</template>

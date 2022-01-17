@@ -5,15 +5,21 @@ export declare type DispatchFunction = (action: string, payload?: any, options?:
 export declare type CommitFunction = DispatchFunction;
 /**
  * @exports @interface
- * Action properties.
+ * Dispatch and commit functions.
  */
-export interface ActionProps {
-    state: CommonState;
-    getters: any;
-    rootGetters: any;
+export interface ContextFunctions {
     commit: CommitFunction;
     dispatch: DispatchFunction;
 }
+/**
+ * @exports @interface
+ * Action properties.
+ */
+export declare type ActionProps = ContextFunctions & {
+    state: CommonState;
+    getters?: any;
+    rootGetters?: any;
+};
 /**
  * @exports @interface
  * Object passed to commit() when _actionHelper succeeds.
@@ -30,8 +36,8 @@ export interface MutationProps {
  * Will add the dispatcher function as the first argument for spawning errors.
  */
 export interface ProxiedRequestProvider {
-    post: (commit: CommitFunction, route: string, payload: any) => Promise<AxiosResponse>;
-    get: (commit: CommitFunction, route: string) => Promise<AxiosResponse>;
+    post: (ctx: ContextFunctions, route: string, payload: any) => Promise<AxiosResponse>;
+    get: (ctx: ContextFunctions, route: string) => Promise<AxiosResponse>;
 }
 export interface CommonState {
     isLoading: boolean;
@@ -81,7 +87,9 @@ export declare abstract class Module<T = any, Item = any> {
     get module(): Module<T, Item>;
     get http(): ProxiedRequestProvider;
     protected route(verb: string): string;
-    protected _actionHelper<T_>(verb: string, mutation?: string, transform?: (what: any) => any): ({ commit, dispatch, state }: ActionProps, value?: any) => Promise<T_>;
+    protected _actionHelper<T_>(verb: string, mutation?: string, transform?: (what: any) => any): ({ commit, dispatch, state }: ContextFunctions & {
+        state: any;
+    }, value?: any) => Promise<T_>;
     protected _parseQuery(obj: any, array?: boolean): Promise<any>;
     state(): {
         isLoading: boolean;

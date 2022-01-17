@@ -3,11 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SvWrapper = exports.SvDropdown = exports.SvHeader = exports.SvTextbox = exports.SvSelect = exports.SvCard = exports.SvInput = exports.SvCheckbox = exports.SvButton = exports.SvBareButton = exports.SvBreadcumb = exports.SvArrow = void 0;
+exports.SvWrapper = exports.SvDropdown = exports.SvHeader = exports.SvTextbox = exports.SvSelect = exports.SvCard = exports.SvInput = exports.SvCheckbox = exports.SvButton = exports.SvBareButton = exports.SvArrow = void 0;
 var SvArrow_vue_1 = require("frontend/components/atoms/SvArrow/SvArrow.vue");
 Object.defineProperty(exports, "SvArrow", { enumerable: true, get: function () { return __importDefault(SvArrow_vue_1).default; } });
-var SvBreadcumb_vue_1 = require("frontend/components/atoms/SvBreadcumb/SvBreadcumb.vue");
-Object.defineProperty(exports, "SvBreadcumb", { enumerable: true, get: function () { return __importDefault(SvBreadcumb_vue_1).default; } });
 var SvBareButton_vue_1 = require("frontend/components/atoms/SvBareButton/SvBareButton.vue");
 Object.defineProperty(exports, "SvBareButton", { enumerable: true, get: function () { return __importDefault(SvBareButton_vue_1).default; } });
 var SvButton_vue_1 = require("frontend/components/atoms/SvButton/SvButton.vue");
