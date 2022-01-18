@@ -118,9 +118,13 @@ export abstract class Module<T=any, Item=any> {
    * @param {object} initialItemState - initial item state
    * @param {string} apiUrl - URL to be used in place of SV_API_URL
    */
-  constructor(route: string, initialState: T, initialItemState: Item, apiUrl?: string) {
+  constructor(route: string, initialState: T, initialItemState: Item, description?: any, apiUrl?: string) {
     this._initialState = initialState;
     this._initialItemState = initialItemState
+
+    if( description?.filters ) {
+      this._commonState._filters = description.filters.reduce((a: any, k: string) => ({ ...a, [k]: '' }), {})
+    }
 
     this._moduleInstance = new Proxy(this, {
       get: (target: any, key: string) => {
@@ -581,15 +585,15 @@ export abstract class Module<T=any, Item=any> {
 
 private _mutations() {
   return {
-    DESCRIPTION_SET: async (state: CommonState, value: any) => {
+    DESCRIPTION_SET: async (state: CommonState, payload: any) => {
       state._description = {
-        ...value,
-        fields: await this._parseQuery(value.fields)
+        ...payload,
+        fields: await this._parseQuery(payload.fields)
       }
 
-      state.__description = value
+      state.__description = payload
 
-      state.item = Object.entries(value.fields||{})
+      state.item = Object.entries(payload.fields||{})
         .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
         .reduce((a, [key, value]: [string, any]) => ({
           ...a,
@@ -597,7 +601,7 @@ private _mutations() {
         }), {})
 
 
-      Object.entries(value.fields||{})
+      Object.entries(payload.fields||{})
         .filter(([, value]: [unknown, any]) => ['checkbox', 'radio'].includes(value.type))
         .forEach(([key, value] : [string, any]) => {
           state.item[key] = value.type === 'radio' ? '' : []

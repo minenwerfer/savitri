@@ -16,7 +16,7 @@ const autoModules = (store) => {
             }
             const Impl = class extends module_1.Module {
                 constructor(route, meta, item) {
-                    super(route, meta, item);
+                    super(route, meta, item, payload);
                 }
             };
             store.registerModule(payload.module, new Impl(payload.module, {}, {}).module);

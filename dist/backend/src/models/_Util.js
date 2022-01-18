@@ -17,7 +17,9 @@ const typeMapping = [
  */
 const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
     const convert = (a, [key, value]) => {
-        const query = (value.values || [{}])[0]?.__query;
+        const query = Array.isArray(value.values || [])
+            ? (value.values || [{}])[0]?.__query
+            : value.values?.__query;
         const moduleName = query?.module || value.module;
         const result = {
             type: String,
@@ -33,7 +35,7 @@ const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
         }
         if (typeof moduleName === 'string') {
             result.ref = moduleName.capitalize();
-            result.type = value.array || value.values
+            result.type = value.array || Array.isArray(value.values)
                 ? [ObjectId]
                 : ObjectId;
         }

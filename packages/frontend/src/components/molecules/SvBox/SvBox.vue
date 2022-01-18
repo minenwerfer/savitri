@@ -12,7 +12,7 @@
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
           ${ isFloating ? 'px-2 md:px-6' : ( fullWidth ? '' : 'px-auto' ) }
-          ${ fullWidth ? 'w-screen md:w-view centered-fullwidth' : `rounded shadow ${paddingY}` }
+          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow ${paddingY}` }
           flex flex-col bg-white py-0 overscroll-none
           ${ classes }
         `"
@@ -28,7 +28,7 @@
           </sv-bare-button>
         </div>
 
-        <div v-if="!isCollapsed" :class="`overflow-auto flex-grow ${$slots.footer ? 'border-b pb-5' : ''}`">
+        <div v-if="!isCollapsed" :class="`overflow-x-hidden overflow-y-auto flex-grow ${$slots.footer ? 'pb-5' : ''}`">
           <slot v-if="$slots.default"></slot>
           <slot v-else name="body"></slot>
         </div>

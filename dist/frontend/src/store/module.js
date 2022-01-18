@@ -49,9 +49,12 @@ class Module {
      * @param {object} initialItemState - initial item state
      * @param {string} apiUrl - URL to be used in place of SV_API_URL
      */
-    constructor(route, initialState, initialItemState, apiUrl) {
+    constructor(route, initialState, initialItemState, description, apiUrl) {
         this._initialState = initialState;
         this._initialItemState = initialItemState;
+        if (description?.filters) {
+            this._commonState._filters = description.filters.reduce((a, k) => ({ ...a, [k]: '' }), {});
+        }
         this._moduleInstance = new Proxy(this, {
             get: (target, key) => {
                 const method = target[key];
@@ -433,19 +436,19 @@ class Module {
     }
     _mutations() {
         return {
-            DESCRIPTION_SET: async (state, value) => {
+            DESCRIPTION_SET: async (state, payload) => {
                 state._description = {
-                    ...value,
-                    fields: await this._parseQuery(value.fields)
+                    ...payload,
+                    fields: await this._parseQuery(payload.fields)
                 };
-                state.__description = value;
-                state.item = Object.entries(value.fields || {})
+                state.__description = payload;
+                state.item = Object.entries(payload.fields || {})
                     .filter(([, value]) => typeof value.module === 'string' || value.type === 'object')
                     .reduce((a, [key, value]) => ({
                     ...a,
                     [key]: value.array ? [] : {}
                 }), {});
-                Object.entries(value.fields || {})
+                Object.entries(payload.fields || {})
                     .filter(([, value]) => ['checkbox', 'radio'].includes(value.type))
                     .forEach(([key, value]) => {
                     state.item[key] = value.type === 'radio' ? '' : [];

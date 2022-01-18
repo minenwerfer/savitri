@@ -83,7 +83,7 @@ export declare abstract class Module<T = any, Item = any> {
      * @param {object} initialItemState - initial item state
      * @param {string} apiUrl - URL to be used in place of SV_API_URL
      */
-    constructor(route: string, initialState: T, initialItemState: Item, apiUrl?: string);
+    constructor(route: string, initialState: T, initialItemState: Item, description?: any, apiUrl?: string);
     get module(): Module<T, Item>;
     get http(): ProxiedRequestProvider;
     protected route(verb: string): string;

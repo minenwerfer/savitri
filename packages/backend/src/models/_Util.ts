@@ -18,7 +18,10 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
 
   const convert = (a: any, [key, value]: [string, any]) => {
 
-    const query = (value.values||[{}])[0]?.__query
+    const query = Array.isArray(value.values||[])
+      ? (value.values||[{}])[0]?.__query
+      : value.values?.__query
+
     const moduleName = query?.module || value.module
 
     const result: any = {
@@ -38,7 +41,7 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
 
     if( typeof moduleName === 'string' ) {
       result.ref = (moduleName as any).capitalize()
-      result.type = value.array || value.values
+      result.type = value.array || Array.isArray(value.values)
         ? [ObjectId]
         : ObjectId
     }

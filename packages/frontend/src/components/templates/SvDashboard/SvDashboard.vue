@@ -28,7 +28,7 @@
         :schema="menuSchema">
       </sv-menu>
 
-      <div :class="`relative flex flex-col ${$route.meta?.noMargin ? '' : 'px-0 md:px-6 py-auto'}`">
+      <div :class="`relative flex flex-col md:w-view ${$route.meta?.noMargin ? '' : 'px-0 md:px-4 py-auto'}`">
         <div class="order-2">
           <router-view />
         </div>

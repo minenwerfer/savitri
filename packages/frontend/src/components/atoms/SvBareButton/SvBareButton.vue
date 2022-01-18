@@ -1,7 +1,7 @@
 <template>
   <a
     :class="`
-      hover:underline
+      active:underline
       inline-block select-none
       ${
         !disabled

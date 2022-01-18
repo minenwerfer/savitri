@@ -4,14 +4,14 @@
       <div class="relative pl-2 select-none">
         <unicon name="bell" fill="black" class="w-6 h-6"></unicon>
         <div
-          class="absolute bottom-0 left-0 bg-red-500 border border-red-900 text-white w-5 h-5 text-center text-sm rounded-full"
+          class="fixed bottom-0 left-0 bg-red-500 border border-red-900 text-white w-5 h-5 text-center text-sm rounded-full"
           v-if="unread.length > 0"
           >{{ unread.length }}</div>
       </div>
     </template>
     <template #content>
-      <teleport to="body">
-        <div class="absolute inset-0 bg-gray-600 opacity-40 z-40" @click="dropdown.visible = false"></div>
+      <teleport to="body" v-if="unread.length > 0">
+        <div class="fixed inset-0 bg-gray-600 opacity-40 z-40" @click="dropdown.visible = false"></div>
         <sv-box class="absolute top-4 right-6 shadow-xl w-90 z-50">
           <div class="flex flex-col gap-y-8">
             <div

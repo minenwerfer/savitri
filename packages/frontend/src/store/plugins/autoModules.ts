@@ -17,7 +17,7 @@ export const autoModules = (store: any) => {
 
       const Impl = class extends Module<{}, {}> {
         constructor(route: string, meta: any, item: any) {
-          super(route, meta, item)
+          super(route, meta, item, payload)
         }
       }
 
