@@ -37,7 +37,7 @@
             "label": "Ação",
             "type": "text"
         },
-        "group": {
+        "groups": {
             "label": "Grupos",
             "type": "text",
             "placeholder": "Ex.: logistic,producer",

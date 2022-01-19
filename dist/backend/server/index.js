@@ -57,7 +57,7 @@ async function handler(request, h) {
             result,
             ...(Array.isArray(result) ? {
                 recordsCount: result.length,
-                recordsTotal: await instance.count({ filter: request.payload?.filter || {} }),
+                recordsTotal: typeof instance.count === 'function' ? await instance.count({ filter: request.payload?.filter || {} }) : result.length,
                 offset: request.payload?.offset || 0,
                 // 35 is a fallback
                 limit: +(process.env.PAGINATION_LIMIT || 35),

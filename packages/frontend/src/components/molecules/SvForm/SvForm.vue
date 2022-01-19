@@ -67,15 +67,17 @@
       </div>
     </div>
 
-    <div v-if="isReadonly" class="grid gap-y-4 text-md">
-      <div
+    <div v-if="isReadonly" class="flex flex-wrap gap-x-4 gap-y-8 text-md">
+      <sv-input
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
-        class="grid grid-cols-2"
+
+        class="flex flex-col flex-grow"
+        :value="field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)"
+        :readonly="true"
         >
-        <strong>{{ field.label }}</strong>
-        <div class="text-right sm:text-left">{{ field.formValue || field.value }}</div>
-      </div>
+        {{ field.label }}
+      </sv-input>
     </div>
   </div>
 </template>

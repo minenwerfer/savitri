@@ -1,24 +1,25 @@
 <template>
   <label class="outline-none select-none">
-    <div class="opacity-80">
+    <strong class="text-xs uppercase">
       <slot v-if="$slots.default"></slot>
       <slot v-else name="label"></slot>
-    </div>
+    </strong>
     <div class="text-sm opacity-50" v-if="$slots.description">
       <slot name="description"></slot>
     </div>
     <input
-      class="
+      :class="`
         w-full
         border-box rounded
         border-2 border-gray-300 focus:border-purple-500
         bg-white
         px-3 py-1
         text-gray-600 outline-none
-      "
+        ${readonly ? 'bg-gray-100' : ''}
+      `"
       ref="input"
       :type="type"
-      :value="modelValue"
+      :value="modelValue || value"
       :placeholder="placeholder"
       @input="onInput"
       @change="onChange"
@@ -35,6 +36,7 @@ import { maska as vMaska } from 'maska'
 
 const props = defineProps<{
   modelValue?: string
+  value?: string
   type?: string
   placeholder?: string
   mask?: string

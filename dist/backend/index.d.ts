@@ -8,3 +8,4 @@ export { Description as NotificationDescription } from './src/models/Notificatio
 export * from './src/models/_Util';
 export * as mongoose from './src/database';
 export { options } from './src/database';
+export * from './src/services';

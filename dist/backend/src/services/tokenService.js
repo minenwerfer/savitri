@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TokenService = exports.EXPIRES_IN = exports.TOKEN_SECRET = void 0;
+exports.TokenService = exports.EXPIRES_IN = exports.APPLICATION_SECRET = void 0;
 const util_1 = require("util");
 const jwt = __importStar(require("jsonwebtoken"));
 if (process.env.MODE !== 'PRODUCTION') {
@@ -33,9 +33,9 @@ const AsyncJwt = {
  * @exports @const
  * Random alphanumeric sequence for salting JWT.
  */
-exports.TOKEN_SECRET = process.env.TOKEN_SECRET;
-if (!exports.TOKEN_SECRET) {
-    throw new Error('TOKEN_SECRET is undefined');
+exports.APPLICATION_SECRET = process.env.APPLICATION_SECRET;
+if (!exports.APPLICATION_SECRET) {
+    throw new Error('APPLICATION_SECRET is undefined');
 }
 /**
  * @exports @const
@@ -51,8 +51,8 @@ class TokenService {
      * @static @method
      * Creates a token from a object.
      */
-    static sign(payload) {
-        return jwt.sign(payload, exports.TOKEN_SECRET, {
+    static sign(payload, secret) {
+        return jwt.sign(payload, secret || exports.APPLICATION_SECRET, {
             expiresIn: exports.EXPIRES_IN
         });
     }
@@ -60,15 +60,15 @@ class TokenService {
      * @static @method
      * Verifies token authenticity.
      */
-    static verify(token) {
-        return jwt.verify(token, exports.TOKEN_SECRET);
+    static verify(token, secret) {
+        return jwt.verify(token, secret || exports.APPLICATION_SECRET);
     }
     /**
      * @static @method
      * Decodes token to object.
      */
-    static decode(token) {
-        return jwt.verify(token, exports.TOKEN_SECRET, (err, decoded) => !err && decoded);
+    static decode(token, secret) {
+        return jwt.verify(token, secret || exports.APPLICATION_SECRET, (err, decoded) => !err && decoded);
     }
 }
 exports.TokenService = TokenService;

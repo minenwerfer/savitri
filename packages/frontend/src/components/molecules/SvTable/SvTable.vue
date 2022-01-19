@@ -15,7 +15,7 @@
           </th>
         </tr>
 
-        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 md:table-row leading-9 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
+        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 md:table-row leading-9 hover:bg-gray-200 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
           <td class="hidden md:table-cell border" v-if="module">
             <input type="checkbox" v-model="selected" :value="{ _id: row._id }"/>
           </td>

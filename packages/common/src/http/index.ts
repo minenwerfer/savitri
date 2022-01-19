@@ -98,7 +98,7 @@ export class RequestProvider {
     return this.instance.get(uri)
   }
 
-  public post(uri: string, data: object): Promise<AxiosResponse> {
-    return this.instance.post(uri, data)
+  public post(uri: string, data: any, options = {}): Promise<AxiosResponse> {
+    return this.instance.post(uri, data, options)
   }
 }

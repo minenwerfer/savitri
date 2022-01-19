@@ -19,9 +19,9 @@ const AsyncJwt = {
  * @exports @const
  * Random alphanumeric sequence for salting JWT.
  */
-export const { TOKEN_SECRET } = process.env as { TOKEN_SECRET: jwt.Secret }
-if( !TOKEN_SECRET ) {
-  throw new Error('TOKEN_SECRET is undefined')
+export const { APPLICATION_SECRET } = process.env as { APPLICATION_SECRET: jwt.Secret }
+if( !APPLICATION_SECRET ) {
+  throw new Error('APPLICATION_SECRET is undefined')
 }
 
 /**
@@ -40,8 +40,8 @@ export class TokenService {
    * @static @method
    * Creates a token from a object.
    */
-  static sign(payload: object) {
-    return jwt.sign(payload, TOKEN_SECRET, {
+  static sign(payload: object, secret?: string) {
+    return jwt.sign(payload, secret || APPLICATION_SECRET, {
       expiresIn: EXPIRES_IN
     })
   }
@@ -50,15 +50,15 @@ export class TokenService {
    * @static @method
    * Verifies token authenticity.
    */
-  static verify(token: string) {
-    return jwt.verify(token, TOKEN_SECRET)
+  static verify(token: string, secret?: string) {
+    return jwt.verify(token, secret || APPLICATION_SECRET)
   }
 
   /**
    * @static @method
    * Decodes token to object.
    */
-  static decode(token: string) {
-    return jwt.verify(token, TOKEN_SECRET, (err: any, decoded: any) => !err && decoded)
+  static decode(token: string, secret?: string) {
+    return jwt.verify(token, secret || APPLICATION_SECRET, (err: any, decoded: any) => !err && decoded)
   }
 }

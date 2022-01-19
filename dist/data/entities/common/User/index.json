@@ -20,6 +20,16 @@
             "label": "Nome",
             "type": "text"
         },
+        "access": {
+            "label": "Preset de acesso",
+            "type": "select",
+            "values": {
+                "__query": {
+                    "module": "access",
+                    "index": "name"
+                }
+            }
+        },
         "email": {
             "label": "Email",
             "type": "text",
@@ -39,11 +49,6 @@
         "phone": {
             "label": "Telefone",
             "type": "text"
-        },
-        "access": {
-            "module": "access",
-            "label": "Preset de acesso",
-            "index": "name"
         },
         "group": {
             "label": "Grupo",

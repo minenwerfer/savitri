@@ -14,7 +14,7 @@ class NotificationController extends Mutable_1.Mutable {
                 'ping'
             ]
         });
-        this.http = new http_1.RequestProvider({ baseURL: process.env.DOMAIN_URL });
+        this.http = new http_1.RequestProvider({ baseURL: process.env.DOMAIN_API_URL });
     }
     async insert(props, res, decodedToken) {
         props.what.user_id = decodedToken._id;
@@ -25,14 +25,14 @@ class NotificationController extends Mutable_1.Mutable {
             return {};
         }
         const result = {
-            local: []
+            local: [],
+            domain: []
         };
-        console.log({ decodedToken });
         if (!props.localOnly && buildConfig.domain && buildConfig.domainNotifications) {
             if (!this.http.token) {
                 delete decodedToken.iat;
                 delete decodedToken.exp;
-                this.http.token = tokenService_1.TokenService.sign(decodedToken);
+                this.http.token = tokenService_1.TokenService.sign(decodedToken, process.env.DOMAIN_SECRET);
             }
             const { data: { result: { local } } } = await this.http.post('/notification/ping', { localOnly: true });
             result.domain = local;

@@ -6,7 +6,7 @@
         fixed bottom-0 right-0 z-30
         border border-purple-400
         py-2 px-6 rounded-tl-lg
-        bg-purple-400 text-white font-semibold items-center flex gap-x-2 hover:opacity-50
+        bg-purple-900 text-white font-semibold items-center flex gap-x-2 hover:opacity-60
       "
       @clicked="isFeedbackVisible = true"
       v-if="webpackVariables.feedback"

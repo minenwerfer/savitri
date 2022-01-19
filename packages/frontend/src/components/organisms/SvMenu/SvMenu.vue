@@ -10,7 +10,7 @@
     animate-slip md:animate-slowfade transition-all
     ${ visible ? '' : 'block md:hidden' } 
     ${ mobileVisible ? '' : 'hidden md:block' }
-    overflow-y-scroll overscroll-none
+    overflow-y-scroll overscroll-none lg:text-md
   `">
 
     <div @click="$router.push({ name: 'dashboard-home' })">
