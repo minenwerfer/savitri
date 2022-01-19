@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationController = void 0;
 const Mutable_1 = require("./abstract/Mutable");
 const Notification_1 = require("../models/Notification");
+const http_1 = require("../../../common/src/http");
+const tokenService_1 = require("../services/tokenService");
+const path = require('path');
+const buildConfig = require(path.join(process.cwd(), 'build.json'));
 class NotificationController extends Mutable_1.Mutable {
     constructor() {
         super(Notification_1.Notification, Notification_1.Description, {
@@ -10,6 +14,7 @@ class NotificationController extends Mutable_1.Mutable {
                 'ping'
             ]
         });
+        this.http = new http_1.RequestProvider({ baseURL: process.env.DOMAIN_URL });
     }
     async insert(props, res, decodedToken) {
         props.what.user_id = decodedToken._id;
@@ -19,7 +24,20 @@ class NotificationController extends Mutable_1.Mutable {
         if (!decodedToken?._id) {
             return {};
         }
-        return super.getAll.call(this, {
+        const result = {
+            local: []
+        };
+        console.log({ decodedToken });
+        if (!props.localOnly && buildConfig.domain && buildConfig.domainNotifications) {
+            if (!this.http.token) {
+                delete decodedToken.iat;
+                delete decodedToken.exp;
+                this.http.token = tokenService_1.TokenService.sign(decodedToken);
+            }
+            const { data: { result: { local } } } = await this.http.post('/notification/ping', { localOnly: true });
+            result.domain = local;
+        }
+        result.local = await super.getAll.call(this, {
             filter: {
                 $or: [
                     { destination: decodedToken._id },
@@ -28,6 +46,7 @@ class NotificationController extends Mutable_1.Mutable {
                 ...(props.last_id ? { _id: { $gt: props.last_id } } : {})
             }
         }).select({ destination: 0 });
+        return result;
     }
 }
 exports.NotificationController = NotificationController;

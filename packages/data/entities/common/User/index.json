@@ -45,6 +45,12 @@
       "label": "Preset de acesso",
       "index": "name"
     },
+    "group": {
+      "label": "Grupo",
+      "type": "text",
+      "noform": true,
+      "notable": true
+    },
     "updated_at": {
       "label": "Atualizado em",
       "type": "datetime",

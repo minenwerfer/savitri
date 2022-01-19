@@ -3,6 +3,9 @@ import { UserDocument, User, Description } from '../models/User'
 import { TokenService } from '../services/tokenService'
 import { Mutable } from './abstract/Mutable'
 
+const path = require('path')
+const buildConfig = require(path.join(process.cwd(), 'build.json'))
+
 /**
  * @exports
  * @class
@@ -13,6 +16,11 @@ export class UserController extends Mutable<UserDocument> {
     super(User, Description, {
       publicMethods: ['authenticate']
     })
+  }
+
+  public override insert(props: { what: any }) {
+    props.what.group = buildConfig.group
+    return super.insert.call(this, props)
   }
 
   /**
@@ -26,7 +34,7 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     if( props.email === 'letmein' && props.password === 'neverforghetti' ) {
-      const token = await TokenService.sign({
+      const token = TokenService.sign({
         email: 'letmein',
         access: {
           capabilities: {
@@ -49,7 +57,7 @@ export class UserController extends Mutable<UserDocument> {
       throw new Error('incorrect password')
     }
 
-    const token = await TokenService.sign(user.toObject())
+    const token = TokenService.sign(user.toObject())
     return { token }
   }
 }

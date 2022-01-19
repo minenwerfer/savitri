@@ -10,11 +10,14 @@ export declare class RequestProvider {
     private _instance;
     private _proxiedInstance;
     private _defaultConfig;
+    private _authToken;
     /**
      * @constructor
      * @param {AxiosRequestConfig} config - pass this config to axios along with the default one
      */
     constructor(config?: AxiosRequestConfig);
+    get token(): string | null;
+    set token(value: string | null);
     get instance(): AxiosInstance;
     /**
      * @static @method

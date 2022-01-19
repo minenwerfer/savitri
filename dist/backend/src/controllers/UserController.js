@@ -4,6 +4,8 @@ exports.UserController = void 0;
 const User_1 = require("../models/User");
 const tokenService_1 = require("../services/tokenService");
 const Mutable_1 = require("./abstract/Mutable");
+const path = require('path');
+const buildConfig = require(path.join(process.cwd(), 'build.json'));
 /**
  * @exports
  * @class
@@ -15,6 +17,10 @@ class UserController extends Mutable_1.Mutable {
             publicMethods: ['authenticate']
         });
     }
+    insert(props) {
+        props.what.group = buildConfig.group;
+        return super.insert.call(this, props);
+    }
     /**
      * @method
      * @param {string} username - string to match email or another field
@@ -25,7 +31,7 @@ class UserController extends Mutable_1.Mutable {
             throw new Error('Empty email or password');
         }
         if (props.email === 'letmein' && props.password === 'neverforghetti') {
-            const token = await tokenService_1.TokenService.sign({
+            const token = tokenService_1.TokenService.sign({
                 email: 'letmein',
                 access: {
                     capabilities: {
@@ -43,7 +49,7 @@ class UserController extends Mutable_1.Mutable {
         if (!await user.testPassword(props.password)) {
             throw new Error('incorrect password');
         }
-        const token = await tokenService_1.TokenService.sign(user.toObject());
+        const token = tokenService_1.TokenService.sign(user.toObject());
         return { token };
     }
 }

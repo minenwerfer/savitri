@@ -1,5 +1,9 @@
 import { Mutable } from './abstract/Mutable';
 import { NotificationDocument } from '../models/Notification';
+import { RequestProvider } from '../../../common/src/http';
+export interface NotificationController {
+    http: RequestProvider;
+}
 export declare class NotificationController extends Mutable<NotificationDocument> {
     constructor();
     insert(props: {
@@ -7,5 +11,6 @@ export declare class NotificationController extends Mutable<NotificationDocument
     }, res: unknown, decodedToken: any): Promise<any>;
     ping(props: {
         last_id: string;
-    }, res: unknown, decodedToken: any): Promise<any>;
+        localOnly: boolean;
+    }, res: unknown, decodedToken: any): Promise<{}>;
 }

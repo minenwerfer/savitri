@@ -7,6 +7,9 @@ import { Mutable } from './abstract/Mutable';
  */
 export declare class UserController extends Mutable<UserDocument> {
     constructor();
+    insert(props: {
+        what: any;
+    }): any;
     /**
      * @method
      * @param {string} username - string to match email or another field

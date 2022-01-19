@@ -24,6 +24,7 @@
       @change="onChange"
 
       v-maska="mask"
+      :readonly="readonly"
     />
   </label>
 </template>
@@ -37,6 +38,7 @@ const props = defineProps<{
   type?: string
   placeholder?: string
   mask?: string
+  readonly?: boolean
 }>()
 
 const emit = defineEmits<{

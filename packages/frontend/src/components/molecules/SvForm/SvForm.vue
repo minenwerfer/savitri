@@ -9,14 +9,14 @@
         :class="`${field.flexGrow ? 'flex-grow' : ''}`"
       >
         <!-- text -->
-        <sv-input v-if="['text', 'password', 'number'].includes(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]">
+        <sv-input v-if="['text', 'password', 'number'].includes(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]" :readonly="field.readonly">
           <template #label>{{ field.label }}</template>
           <template #description v-if="field.description">{{ field.description }}</template>
         </sv-input>
 
         <!-- textbox, checkbox, radio, boolean, select -->
         <div v-else-if="['textbox', 'checkbox', 'radio', 'boolean', 'select'].includes(field.type)">
-          <header v-if="field.type !== 'boolean'">{{ field.translate ? $t(field.label) : field.label }}</header>
+          <header>{{ field.translate ? $t(field.label) : field.label }}</header>
           <div class="text-sm opacity-50">
             {{ field.description }}
           </div>

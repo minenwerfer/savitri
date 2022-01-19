@@ -37,6 +37,12 @@
       "label": "Ação",
       "type": "text"
     },
+    "groups": {
+      "label": "Grupos",
+      "type": "text",
+      "placeholder": "Ex.: logistic,producer",
+      "description": "Separados por vírgula, ou vazio"
+    },
     "subject": {
       "label": "Sujeito",
       "type": "text"

@@ -28,6 +28,7 @@ class RequestProvider {
     _defaultConfig = {
     //
     };
+    _authToken = null;
     /**
      * @constructor
      * @param {AxiosRequestConfig} config - pass this config to axios along with the default one
@@ -39,15 +40,12 @@ class RequestProvider {
         });
         this._instance.interceptors.request.use((config) => {
             const newConfig = { ...config };
-            if ('sessionStorage' in global) {
-                const authToken = sessionStorage.getItem('auth:token');
-                if (authToken) {
-                    Object.assign(newConfig, {
-                        headers: {
-                            authorization: `Bearer ${authToken}`
-                        }
-                    });
-                }
+            if (this.token) {
+                Object.assign(newConfig, {
+                    headers: {
+                        authorization: `Bearer ${this.token}`
+                    }
+                });
             }
             return newConfig;
         });
@@ -71,6 +69,14 @@ class RequestProvider {
                 };
             }
         });
+    }
+    get token() {
+        return 'sessionStorage' in global
+            ? sessionStorage.getItem('auth:token')
+            : this._authToken;
+    }
+    set token(value) {
+        this._authToken = value;
     }
     get instance() {
         return this._proxiedInstance;
