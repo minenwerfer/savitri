@@ -20,7 +20,7 @@
         }"
         >
       </sv-form>
-      <sv-button @clicked="authenticate" :disabled="store.state.user.isLoading">Entrar</sv-button>
+      <sv-button @clicked="authenticate" :disabled="store.state.user.isLoading" class="py-2">Entrar</sv-button>
 
       <div class="font-semibold opacity-40 mt-10">
         v{{ productVersion }} running on Savitri v{{ baseVersion }}

@@ -1,30 +1,46 @@
 <template>
-  <div class="mt-6" :key="parent">
+  <div :key="parent" @change.prevent.stop="">
     <header class="font-semibold mb-1">{{ moduleName }}</header>
     <div v-if="isExpanded" class="mb-2">
-      <sv-form :form="fields" :form-data="edited" :padding-bottom="0" :item-index="itemIndex" :field-index="fieldIndex">
-      </sv-form>
+      <sv-form
+        :form="moduleRefs.fields"
+        :form-data="edited"
+        :padding-bottom="0"
+        :item-index="itemIndex"
+        :field-index="fieldIndex"
+      ></sv-form>
       <div v-if="!expand" class="text-sm">
         <sv-button @clicked="insert" class="justify-self-end mr-2">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
     </div>
 
-    <div v-else class="flex">
-      <sv-input class="flex-1 pr-4" @input="lazySearch" v-model="inputValue" v-if="!field.purge">{{ label }}</sv-input>
-      <sv-button class="self-end text-sm" v-if="array" @clicked="addItem">Adicionar</sv-button>
+    <div v-else class="flex flex-wrap gap-x-4">
+      <div
+        v-for="([indexName, searchField], index) in indexes.map((i) => [i, field.fields[i]])"
+        :key="`searchField-${index}`"
+      >
+        <sv-input
+          @input="lazySearch(indexName, inputValue[indexName])"
+          v-model="inputValue[indexName]"
+          v-if="!field.purge"
+        >
+            {{ searchField.label }}
+        </sv-input>
+        <sv-button class="self-end text-sm" v-if="array" @clicked="addItem">Adicionar</sv-button>
+      </div>
     </div>
 
-    <div v-if="!isExpanded || array">
+    <div v-if="!isExpanded || array" :key="inputValue">
       <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`">
         <div v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)">
-          <div class="cursor-pointer p-2 border">{{ item[fieldName] }}</div>
+          <div class="cursor-pointer p-2 border">{{ item[indexes[0]] }}</div>
         </div>
       </div>
 
         <div v-if="selected.length > 0" class="mt-4">
         <div v-for="(item, index) in selected" :key="`item-${index}`" class="flex gap-x-2 px-2 py-1 border">
-          <div class="flex-1">{{ item[fieldName] }}</div>
+          <div class="flex-1">{{ item[indexes[0]] }}</div>
           <sv-bare-button @clicked="edit(item)">
             <unicon name="edit" fill="black"></unicon>
           </sv-bare-button>
@@ -38,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, inject, computed, ref, defineAsyncComponent, onMounted } from 'vue'
+import { provide, inject, computed, ref, reactive, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { SvInput, SvButton, SvBareButton } from 'frontend/components'
 import useModule from 'frontend/composables/module'
@@ -49,18 +65,21 @@ const props = defineProps<{
   modelValue: any
   propName: string
   field: any
-  fieldName: string,
   itemIndex?: number
+  indexes: any
+  activeOnly: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
+  (e: 'changed'): void
 }>()
 
 const store = useStore()
 const parentModule = inject<{ value: string }>('module', { value: '' })
 
-const moduleRefs = useModule(parentModule.value, store)
+const parentRefs = useModule(parentModule.value, store)
+const moduleRefs = reactive(useModule(props.field.module, store))
 
 const field = props.field
 provide('module', field.module)
@@ -68,17 +87,16 @@ provide('module', field.module)
 onMounted(() => store.dispatch(`${field.module}/clearAll`))
 
 const expanded = ref<boolean>(false)
-const edited = ref<any>({})
+
+const edited = ref<any>(parentRefs.item.value[props.propName])
 
 const module = computed(() => field.module)
 const expand = computed(() => field.expand === true)
 const array = computed(() => field.array)
-const activeOnly = computed(() => 'active' in field.fields)
-const moduleName = computed(() => (field.label||'').capitalize())
-const label = computed(() => (Object.values(field.fields)[0]||{} as any).label)
 
+const moduleName = computed(() => (field.label||'').capitalize())
 const isExpanded = computed(() => expanded.value || field.expand)
-const fields = computed(() => store.getters[`${field.module}/fields`])
+
 const rawItem = computed(() => {
   const item = store.state[parentModule.value].item[props.propName]
   const items = field.array
@@ -92,7 +110,8 @@ const items = computed(() => store.state[field.module].items)
 const parent = computed<{ _id: string }>(() => store.state[parentModule.value].item)
 const isLoading = computed(() => store.state[field.module].isLoading)
 
-const inputValue = ref('')
+const inputValue = reactive({})
+
 const selected = computed(() => {
   const options = props.modelValue
   const selected = field.array
@@ -136,7 +155,7 @@ const insert = async () => {
 
 const edit = (item: any) => {
   const itemsCount = rawItem.value.length
-  fieldIndex.value = moduleRefs.getItemIndex(item._id, selected.value)
+  fieldIndex.value = parentRefs.getItemIndex(item._id, selected.value)
 
   edited.value = item
   expanded.value = true
@@ -156,12 +175,13 @@ const select = (item: any) => {
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
-  inputValue.value = ''
   store.dispatch(`${module.value}/clearAll`)
   emit('update:modelValue', array.value
     ? [ ...modelValue, item ]
     : item
   )
+
+  emit('changed')
 }
 
 const unselect = async (item: any) => {
@@ -183,8 +203,8 @@ const addItem = () => {
   expanded.value = true
 }
 
-const search = (value: string) => {
-  if( value.length === 0 ) {
+const search = () => {
+  if( Object.values(inputValue).some((v: string) => v.length === 0) ) {
     store.dispatch(`${module.value}/clearAll`)
     return
   }
@@ -194,12 +214,17 @@ const search = (value: string) => {
   }
 
   store.dispatch(`${module.value}/getAll`, {
+    limit: 5,
     filter: {
-      ...(activeOnly.value ? { active: true } : {}),
-      [props.fieldName]: {
-        $regex: value.trim(),
-        $options: 'i'
-      }
+      ...(props.activeOnly ? { active: true } : {}),
+      $or: props.indexes
+      .filter((i: string) => inputValue[i]?.length > 0)
+      .map((i: string) => ({
+        [i]: {
+          $regex: inputValue[i].trim(),
+          $options: 'i'
+        }
+      }))
     }
   })
 }
@@ -210,10 +235,10 @@ declare global {
   }
 }
 
-const lazySearch = ({ target: { value } }: { target: { value: string } }) => {
+const lazySearch = (searchField: string, value: string) => {
   window.clearTimeout(window.__lazySearchTimeout)
   window.__lazySearchTimeout = setTimeout(() => {
-      search(value)
-    }, 800)
+    search()
+  }, 800)
 }
 </script>

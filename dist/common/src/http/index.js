@@ -97,8 +97,8 @@ class RequestProvider {
     get(uri) {
         return this.instance.get(uri);
     }
-    post(uri, data, headers) {
-        return this.instance.post(uri, data, { headers });
+    post(uri, data, options = {}) {
+        return this.instance.post(uri, data, options);
     }
 }
 exports.RequestProvider = RequestProvider;

@@ -30,13 +30,13 @@
       </sv-form>
     </template>
     <template #footer v-if="!isInsertReadonly">
-      <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: condensedItem, __crudClose: true })">
+      <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })">
         Salvar
       </sv-button>
     </template>
   </sv-box>
 
-  <sv-box v-if="Object.keys(availableFilters).length > 0">
+  <sv-box title="Filtrar por" v-if="Object.keys(availableFilters).length > 0" :collapsable="true" :collapsed="true">
     <sv-filter :module="module" :key="module"></sv-filter>
   </sv-box>
 

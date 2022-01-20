@@ -16,7 +16,7 @@
 
         <!-- textbox, checkbox, radio, boolean, select -->
         <div v-else-if="['textbox', 'checkbox', 'radio', 'boolean', 'select'].includes(field.type)">
-          <header>{{ field.translate ? $t(field.label) : field.label }}</header>
+          <strong class="text-sm">{{ field.translate ? $t(field.label) : field.label }}</strong>
           <div class="text-sm opacity-50">
             {{ field.description }}
           </div>
@@ -52,19 +52,21 @@
       </div>
     </div>
 
-    <div class="grid gap-y-2 mt-4" v-if="!isReadonly">
-      <div v-for="([childModule, field], index) in moduleFields" :key="`modulefield-${index}`">
+    <div :class="`grid ${flex ? 'md:flex' : ''} gap-x-${gapX} gap-y-${gapY} mt-8`" v-if="!isReadonly">
+      <sv-search
+        v-for="([childModule, field], index) in moduleFields"
+        :key="`modulefield-${index}`"
 
-        <sv-search
-          v-if="!isReadonly"
-          v-model="formData[childModule]"
-          :field="field"
-          :field-name="getFirstField(field, childModule)"
-          :prop-name="childModule" 
-          :item-index="itemIndex != -1 ? itemIndex : 0"
-          >
-        </sv-search>
-      </div>
+        v-model="formData[childModule]"
+        :field="field"
+        :indexes="getIndexes(field, childModule)"
+        :prop-name="childModule" 
+        :item-index="itemIndex != -1 ? itemIndex : 0"
+        :active-only="'active' in field.fields"
+
+        @changed="$emit('change')"
+        >
+      </sv-search>
     </div>
 
     <div v-if="isReadonly" class="flex flex-wrap gap-x-4 gap-y-8 text-md">
@@ -83,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, inject, ref, reactive, watch, } from 'vue'
+import { defineAsyncComponent, inject, ref, toRefs, reactive, watch, } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
 import { SvInput, SvTextbox, SvCheckbox, SvSelect } from 'frontend/components'
@@ -159,10 +161,14 @@ const allInOne = Object.entries(props.form)
   .sort((a: any, b: any) => typeof a.module === typeof b.module ? 1 : -1)
   .map(([key, field]: [string, any]) => {
     return [key, {
-    label: field.label,
+    label: field?.label,
     value: moduleRefs.formatValue((props.formData||{})[key], key, true),
   }]
 })
 
-const getFirstField = ref(moduleRefs.getFirstField)
+const {
+  getIndexes,
+  getFirstIndex,
+
+} = toRefs(moduleRefs)
 </script>

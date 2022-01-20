@@ -2,7 +2,7 @@ import { RequestProvider, AxiosResponse } from 'common/http'
 import { fromEntries } from 'common/helpers'
 
 export const SV_API_URL = process.env.NODE_ENV === 'development'
-  ? 'http://172.16.0.84:3000/api'
+  ? 'http://0.0.0.0:3000/api'
   : '/api'
 
 export const SV_API_URL_2 = process.env.NODE_ENV === 'development'
@@ -301,6 +301,15 @@ export abstract class Module<T=any, Item=any> {
       : result
   }
 
+  private _condenseItem(item: any) {
+    return Object.entries(item||{})
+    .reduce((a:any, [key, value]: [string, any]) => ({
+      ...a,
+      [key]: typeof value === 'object' && '_id' in value ? value._id : value
+    }), {})
+  }
+
+
   public state() {
     return {
       ...this._commonState,
@@ -318,13 +327,7 @@ export abstract class Module<T=any, Item=any> {
 
       item: (state: CommonState) => state.item,
 
-      condensedItem: (state: CommonState) => {
-        return Object.entries(state.item||{})
-        .reduce((a:any, [key, value]: [string, any]) => ({
-          ...a,
-          [key]: typeof value === 'object' && '_id' in value ? value._id : value
-        }), {})
-      },
+      condensedItem: (state: CommonState) => this._condenseItem(state.item),
 
       items: (state: CommonState) => {
         if( !Array.isArray(state.items) ) return []
@@ -367,7 +370,9 @@ export abstract class Module<T=any, Item=any> {
           ], [])
       },
 
-      filters: (state: CommonState) => state._filters,
+      filters: (state: CommonState) => {
+        return this._condenseItem(state._filters)
+      },
 
       availableFilters: (state: CommonState) => {
         if( !state._description?.filters ) {
@@ -690,8 +695,8 @@ private _mutations() {
     },
 
     ITEM_SELECT(state: CommonState, { item, value }: { item: any, value?: boolean }) {
-      const select = (item: any) => [ ...state.selected, Object.assign({}, item) ]
-      const unselect = (item: any) => state.selected.filter(({ _id }: any) => _id !== item._id)
+      const select = (i: any) => [ ...state.selected, Object.assign({}, i) ]
+      const unselect = (i: any) => state.selected.filter(({ _id }: any) => _id !== i._id)
 
       state.selected = value === false
         ? unselect(item)

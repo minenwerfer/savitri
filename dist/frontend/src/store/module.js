@@ -4,7 +4,7 @@ exports.Module = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
 exports.SV_API_URL = process.env.NODE_ENV === 'development'
-    ? 'http://172.16.0.84:3000/api'
+    ? 'http://0.0.0.0:3000/api'
     : '/api';
 exports.SV_API_URL_2 = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3001/api'
@@ -196,6 +196,13 @@ class Module {
             ? result[0]
             : result;
     }
+    _condenseItem(item) {
+        return Object.entries(item || {})
+            .reduce((a, [key, value]) => ({
+            ...a,
+            [key]: typeof value === 'object' && '_id' in value ? value._id : value
+        }), {});
+    }
     state() {
         return {
             ...this._commonState,
@@ -209,13 +216,7 @@ class Module {
         return {
             queryCache: (state) => state._queryCache,
             item: (state) => state.item,
-            condensedItem: (state) => {
-                return Object.entries(state.item || {})
-                    .reduce((a, [key, value]) => ({
-                    ...a,
-                    [key]: typeof value === 'object' && '_id' in value ? value._id : value
-                }), {});
-            },
+            condensedItem: (state) => this._condenseItem(state.item),
             items: (state) => {
                 if (!Array.isArray(state.items))
                     return [];
@@ -252,7 +253,9 @@ class Module {
                     }
                 ], []);
             },
-            filters: (state) => state._filters,
+            filters: (state) => {
+                return this._condenseItem(state._filters);
+            },
             availableFilters: (state) => {
                 if (!state._description?.filters) {
                     return {};
@@ -523,8 +526,8 @@ class Module {
                 state.items = [];
             },
             ITEM_SELECT(state, { item, value }) {
-                const select = (item) => [...state.selected, Object.assign({}, item)];
-                const unselect = (item) => state.selected.filter(({ _id }) => _id !== item._id);
+                const select = (i) => [...state.selected, Object.assign({}, i)];
+                const unselect = (i) => state.selected.filter(({ _id }) => _id !== i._id);
                 state.selected = value === false
                     ? unselect(item)
                     : (state.selected.some(({ _id }) => _id === item._id)

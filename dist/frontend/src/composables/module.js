@@ -41,7 +41,7 @@ exports.default = (name, store) => {
      * @param {string} key
      * @param {boolean} form - tells whether or not the value is being used in a form
      */
-    const getFirstField = (value, key, form = false) => {
+    const getIndexes = (value, key, form = false) => {
         const [_, reference] = Object.entries(store.state[name].__description.fields || {})
             .find(([k]) => key === k) || [,];
         const query = {};
@@ -57,7 +57,12 @@ exports.default = (name, store) => {
         if (!module) {
             return;
         }
-        return (form ? (formIndex || index) : index) || Object.keys(store.getters[`${module}/description`].fields)[0];
+        const field = (form ? (formIndex || index) : index) || Object.keys(store.getters[`${module}/description`].fields)[0];
+        return Array.isArray(field) ? field : [field];
+    };
+    const getFirstIndex = (value, key, form = false) => {
+        const fields = getIndexes(value, key, form);
+        return (fields || [])[0];
     };
     /**
      * @param {string} value
@@ -72,7 +77,7 @@ exports.default = (name, store) => {
         const query = (Array.isArray(values)
             ? values[0]
             : values)?.__query || {};
-        const firstField = getFirstField(value, key, form);
+        const firstField = getFirstIndex(value, key, form);
         const source = query.module && !(Array.isArray(value) ? value[0]?._id : value._id)
             ? store.state[name]._queryCache[query.module].filter(({ _id }) => Array.isArray(value) ? value.includes(_id) : value._id === _id)
             : value;
@@ -95,7 +100,7 @@ exports.default = (name, store) => {
             : '-';
     };
     const resumeItem = (item) => {
-        return Object.entries(item)
+        return Object.entries(item || {})
             .reduce((a, [key, value]) => ({
             ...a,
             [key]: typeof value === 'object'
@@ -117,7 +122,8 @@ exports.default = (name, store) => {
     return {
         useFields,
         useFieldsExcept,
-        getFirstField,
+        getIndexes,
+        getFirstIndex,
         getFirstValue,
         formatValue,
         resumeItem,

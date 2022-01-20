@@ -44,6 +44,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
     getAll(props: {
         filter?: object;
         offset?: number;
+        limit?: number;
         sort?: any;
     }): MultipleQuery<T> | Promise<MultipleQuery<T>>;
     /**

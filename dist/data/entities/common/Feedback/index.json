@@ -34,6 +34,17 @@
             "label": "Seção",
             "type": "text"
         },
+        "type": {
+            "label": "Tipo",
+            "type": "select",
+            "values": [
+                "Dúvida",
+                "Sugestão",
+                "Elogio",
+                "Bug report",
+                "Outra coisa"
+            ]
+        },
         "comment": {
             "label": "Comentário",
             "type": "textbox"

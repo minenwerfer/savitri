@@ -5,8 +5,8 @@
       class="
         fixed bottom-0 right-0 z-30
         border border-purple-400
-        py-2 px-6 rounded-tl-lg
-        bg-purple-900 text-white font-semibold items-center flex gap-x-2 hover:opacity-60
+        py-2 px-4 rounded-tl-lg
+        bg-purple-600 text-white font-semibold items-center flex gap-x-2 hover:opacity-60 text-sm
       "
       @clicked="isFeedbackVisible = true"
       v-if="webpackVariables.feedback"

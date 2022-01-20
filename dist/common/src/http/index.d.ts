@@ -26,5 +26,5 @@ export declare class RequestProvider {
     static throwOnError({ data }: AxiosResponse): void;
     request(config: AxiosRequestConfig): Promise<AxiosResponse>;
     get(uri: string): Promise<AxiosResponse>;
-    post(uri: string, data: any, headers?: any): Promise<AxiosResponse>;
+    post(uri: string, data: any, options?: {}): Promise<AxiosResponse>;
 }

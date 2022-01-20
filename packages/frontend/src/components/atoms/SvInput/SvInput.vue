@@ -50,6 +50,11 @@ const emit = defineEmits<{
 const input = ref<any>(null)
 
 const onInput = (event: { target: { value: string } }) => {
+
+  const formatDate = (value: string) => {
+    return value
+  }
+
   emit('update:modelValue', event.target.value)
 }
 

@@ -55,10 +55,13 @@ class Mutable extends Controller_1.Controller {
             date_updated: -1,
             date_created: -1,
         };
+        if (typeof props.limit !== 'number') {
+            props.limit = +(exports.PAGINATION_LIMIT || 30);
+        }
         return this._model.find(props.filter || {})
             .sort(props.sort || defaultSort)
             .skip(props.offset || 0)
-            .limit(+(exports.PAGINATION_LIMIT || 0));
+            .limit(props.limit);
     }
     /**
      * @method

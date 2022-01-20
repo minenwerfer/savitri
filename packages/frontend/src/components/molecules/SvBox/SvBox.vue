@@ -11,21 +11,25 @@
               : ''
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
-          ${ isFloating ? 'px-2 md:px-6' : ( fullWidth ? '' : 'px-auto' ) }
+          ${ isFloating ? 'px-2 sm:px-4' : ( fullWidth ? '' : 'px-auto' ) }
           ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow ${paddingY}` }
-          flex flex-col bg-white py-0 overscroll-none
+          flex flex-col bg-white overscroll-none
           ${ classes }
         `"
       >
-        <div :class="`flex ${ typeof marginBottom === 'number' ? `mb-${marginBottom}` : 'mb-8 md:mb-10' }`" v-if="$slots.title || title">
+        <div :class="`flex ${ isCollapsed ? '' : 'mb-8 md:mb-10' }`" v-if="$slots.title || title">
           <div class="flex-1 font-semibold text-xl">
             <slot v-if="$slots.title" name="title"></slot>
             <div v-else-if="title">{{ title }}</div>
           </div>
-          <sv-bare-button v-if="closeHint || collapsable">
-            <i v-if="collapsable" @click="isCollapsed = !isCollapsed">[A]</i>
-            <unicon v-else-if="closeHint" @click="$emit('close')" name="multiply" />
-          </sv-bare-button>
+          <div v-if="closeHint || collapsable">
+            <sv-bare-button v-if="collapsable" @click="isCollapsed = !isCollapsed">
+              <unicon :name="!isCollapsed ? 'minus' : 'plus'" />
+            </sv-bare-button>
+            <sv-bare-button v-else-if="closeHint" @click="$emit('close')">
+              <unicon name="multiply" />
+            </sv-bare-button>
+          </div>
         </div>
 
         <div v-if="!isCollapsed" :class="`overflow-x-hidden overflow-y-auto flex-grow ${$slots.footer ? 'pb-5' : ''}`">
@@ -63,7 +67,6 @@ const props = defineProps({
   floating: Boolean,
   collapsed: Boolean,
   collapsable: Boolean,
-  marginBottom: Boolean,
   fullWidth: Boolean,
   classes: String,
   paddingY: {

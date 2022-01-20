@@ -1,6 +1,6 @@
 <template>
   <select
-    class="p-2 w-full md:w-auto"
+    class="p-2 w-full"
     @change="$emit('update:modelValue', $event.target.value)"
   >
     <slot></slot>

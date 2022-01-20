@@ -46,7 +46,7 @@ export default (name: string, store: any): any => {
    * @param {string} key
    * @param {boolean} form - tells whether or not the value is being used in a form
    */
-  const getFirstField = (value: any, key: string, form: boolean = false) => {
+  const getIndexes = (value: any, key: string, form: boolean = false) => {
 
     const [_, reference]: any = Object.entries(store.state[name].__description.fields||{})
       .find(([k]: [string, unknown]) => key === k)||[,]
@@ -69,7 +69,13 @@ export default (name: string, store: any): any => {
       return
     }
 
-    return (form ? (formIndex || index) : index) || Object.keys(store.getters[`${module}/description`].fields)[0]
+    const field = (form ? (formIndex || index) : index) || Object.keys(store.getters[`${module}/description`].fields)[0]
+    return Array.isArray(field) ? field : [field]
+  }
+
+  const getFirstIndex = (value: any, key: string, form: boolean = false) => {
+    const fields = getIndexes(value, key, form)
+    return (fields||[])[0]
   }
 
   /**
@@ -88,7 +94,7 @@ export default (name: string, store: any): any => {
       ? values[0]
       : values)?.__query||{}
 
-    const firstField = getFirstField(value, key, form)
+    const firstField = getFirstIndex(value, key, form)
 
     const source = query.module && !(Array.isArray(value) ? value[0]?._id : value._id)
       ? store.state[name]._queryCache[query.module].filter(({ _id }: any) => Array.isArray(value) ? value.includes(_id) : value._id === _id)
@@ -118,7 +124,7 @@ export default (name: string, store: any): any => {
   }
 
   const resumeItem = (item: any) => {
-    return Object.entries(item)
+    return Object.entries(item||{})
     .reduce((a: object, [key, value]: [string, any]) => ({
       ...a,
       [key]: typeof value === 'object'
@@ -144,7 +150,8 @@ export default (name: string, store: any): any => {
   return {
     useFields,
     useFieldsExcept,
-    getFirstField,
+    getIndexes,
+    getFirstIndex,
     getFirstValue,
     formatValue,
     resumeItem,
