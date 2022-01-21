@@ -27,6 +27,23 @@
       "type": "text",
       "notable": true,
       "noform": true
+    },
+    "format": {
+      "label": "Formato",
+      "type": "select",
+      "values": {
+        "csv": "CSV",
+        "pdf": "PDF"
+      }
+    },
+    "type": {
+      "label": "Tipo",
+      "type": "radio",
+      "description": "Relatórios de todo o período são custosos em termos de processamento, portanto utilize essa opção com comedimento. Verifique antes se já não há um relatório pronto na seção 'Relatórios' antes de prosseguir.",
+      "values": {
+        "filtered_only": "Apenas resultados filtrados",
+        "everyting": "Todo o período"
+      }
     }
   }
 }

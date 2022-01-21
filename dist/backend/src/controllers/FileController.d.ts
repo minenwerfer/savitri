@@ -7,7 +7,7 @@ export declare class FileController extends Mutable<FileDocument> {
         what: any;
     }, res: unknown, decodedToken: any): Promise<any>;
     remove(props: {
-        filter: any;
+        filters: any;
     }): Promise<SingleQuery<FileDocument> | void>;
     download(_id: string): Promise<{
         content: Buffer;

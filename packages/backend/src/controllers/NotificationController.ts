@@ -48,7 +48,7 @@ export class NotificationController extends Mutable<NotificationDocument> {
     }
 
     result.local = await (super.getAll.call(this, {
-      filter: {
+      filters: {
         $or: [
           { destination: decodedToken._id },
           { destination: null }

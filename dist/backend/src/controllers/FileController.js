@@ -52,7 +52,7 @@ class FileController extends Mutable_1.Mutable {
         return super.insert.call(this, { what }, res, decodedToken);
     }
     async remove(props) {
-        const file = await File_1.File.findOne(props.filter);
+        const file = await File_1.File.findOne(props.filters);
         if (file) {
             await unlink(file.absolute_path);
             return await super.remove.call(this, props);

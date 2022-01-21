@@ -1,5 +1,5 @@
 <template>
-  <a
+  <button
     :class="`
       active:underline
       inline-block select-none
@@ -12,7 +12,7 @@
     @click="onClick"
   >
     <slot></slot>
-  </a>
+  </button>
 </template>
 
 <script setup lang="ts">

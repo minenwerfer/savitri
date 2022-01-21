@@ -37,7 +37,16 @@
   </sv-box>
 
   <sv-box title="Relatório" :float="true" v-model:visible="isReportVisible" @close="isReportVisible = false">
-    Teste
+    <template #body>
+      <sv-form
+        :form="reportRefs.useFieldsExcept(['module'])"
+        :form-data="reportRefs.item"
+        :gap-y="8"
+      ></sv-form>
+    </template>
+    <template #footer>
+      <sv-button>Solicitar</sv-button>
+    </template>
   </sv-box>
 
   <sv-box title="Filtrar por" v-if="Object.keys(availableFilters).length > 0" :collapsable="true" :collapsed="true">
@@ -48,7 +57,9 @@
     <template #body>
       <div class="flex mb-2">
         <div class="mr-auto">
-          <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm">Solicitar relatório</sv-bare-button>
+          <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm" v-if="description.report">
+            Solicitar relatório
+          </sv-bare-button>
         </div>
         <sv-pagination :module="module"></sv-pagination>
       </div>

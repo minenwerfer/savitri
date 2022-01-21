@@ -309,6 +309,13 @@ export abstract class Module<T=any, Item=any> {
     }), {})
   }
 
+  private _removeEmpty(item: any) {
+    const entries = Object.entries(item)
+    .filter(([_, value]: [unknown, any]) => value && !(typeof value === 'string' && value.length === 0))
+
+    return fromEntries(entries)
+  }
+
 
   public state() {
     return {
@@ -371,7 +378,8 @@ export abstract class Module<T=any, Item=any> {
       },
 
       filters: (state: CommonState) => {
-        return this._condenseItem(state._filters)
+        const filters = this._removeEmpty(state._filters)
+        return this._condenseItem(filters)
       },
 
       availableFilters: (state: CommonState) => {
@@ -549,21 +557,23 @@ export abstract class Module<T=any, Item=any> {
     select: ({ commit }: ActionProps, props: any) => commit('ITEM_SELECT', props),
     selectMany: ({ commit }: ActionProps, { items, value }: { items: any[], value: boolean }) => commit('ITEMS_SELECT', { items, value }),
     selectAll: ({ commit, getters }: any, value:boolean = true) =>
-      commit('ITEMS_SELECT', { items: getters['items'], value }),
+      commit('ITEMS_SELECT', { items: getters.items, value }),
 
     // will getAll starting from the given offset
-    paginate: ({ commit, dispatch, state }: ActionProps, offset?: number|string): Promise<any> => new Promise((resolve) => {
-      const prevOffset = state._offset || 0;
-      const newOffset = ['undefined', 'number'].includes(typeof offset)
-        ? offset || prevOffset
-        : (typeof offset === 'string' && /^(\+|-)[0-9]+$/.test(offset) ? eval(`${prevOffset}${offset}`) : 0)
+    paginate: ({ commit, dispatch, state, getters }: ActionProps, { page, limit }: { page: number|string, limit: number }): Promise<any> => new Promise((resolve) => {
+      const prevOffset = state._offset || 0
+      const newOffset = ['undefined', 'number'].includes(typeof page)
+        ? page || prevOffset
+        : (typeof page === 'string' && /^(\+|-)[0-9]+$/.test(page) ? eval(`${prevOffset}${page}`) : 0)
 
       return dispatch('getAll', {
         offset: (newOffset-1) * state._limit,
-        filter: state._filters,
+        filters: getters.filters,
+        limit
       })
         .then((res: any) => {
-          commit('OFFSET_UPDATE', res.offset || offset)
+          commit('OFFSET_UPDATE', res.page || page)
+          commit('LIMIT_UPDATE', limit)
           resolve(res)
         })
     }),
@@ -619,30 +629,34 @@ private _mutations() {
       state._queryCache[module] = result
     },
 
-    LOADING_SWAP(state: CommonState, value: boolean) {
+    LOADING_SWAP: (state: CommonState, value: boolean) => {
       state.isLoading = typeof value === 'boolean' ? value : !state.isLoading;
     },
 
-    OFFSET_UPDATE(state: CommonState, offset: number) {
+    OFFSET_UPDATE: (state: CommonState, offset: number) => {
       state._offset = offset;
     },
 
-    COUNT_UPDATE(state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) {
+    LIMIT_UPDATE: (state: CommonState, limit: number) => {
+      state._limit = limit
+    },
+
+    COUNT_UPDATE: (state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) => {
       if( recordsCount ) state.recordsCount = recordsCount
       if( recordsTotal ) state.recordsTotal = recordsTotal
       if( offset ) state._offset = offset;
       if( limit ) state._limit = limit;
     },
 
-    ITEM_GET(state: CommonState, { result }: MutationProps) {
+    ITEM_GET: (state: CommonState, { result }: MutationProps) => {
       state.item = result
     },
 
-    ITEMS_GET(state: CommonState, { result }: MutationProps) {
+    ITEMS_GET: (state: CommonState, { result }: MutationProps) => {
       state.items = result;
     },
 
-    ITEM_INSERT(state: CommonState, { result }: MutationProps) {
+    ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {
       const found = state.items.filter(({ _id }: any) => result._id === _id).length > 0
       if( found ) {
         state.items = state.items.map((item: T & { _id: string }) => ({
@@ -658,14 +672,14 @@ private _mutations() {
       ]
     },
 
-    ITEM_MODIFY(state: CommonState, { props }: MutationProps) {
+    ITEM_MODIFY: (state: CommonState, { props }: MutationProps) => {
       state.item = {
         ...state.item,
         ...props
       }
     },
 
-    ITEMS_MODIFY(state: CommonState, { props: { what }, payload }: MutationProps) {
+    ITEMS_MODIFY: (state: CommonState, { props: { what }, payload }: MutationProps) => {
       const satisfiesFilter = (item: Item & any) =>
         Object.entries(payload.filter)
           .every(([key, value]: [string, any]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key])
@@ -677,24 +691,24 @@ private _mutations() {
         }))
     },
 
-    ITEM_REMOVE(state: CommonState, { result }: MutationProps) {
+    ITEM_REMOVE: (state: CommonState, { result }: MutationProps) => {
       state.items = state.items.filter(({ _id }: any) => result._id !== _id)
     },
 
-    ITEMS_REMOVE(state: CommonState, { payload }: MutationProps) {
+    ITEMS_REMOVE: (state: CommonState, { payload }: MutationProps) => {
       state.items = state.items.filter(({ _id }: any) => !payload.filter?._id?.includes(_id))
     },
 
-    ITEM_CLEAR(state: CommonState) {
+    ITEM_CLEAR: (state: CommonState) => {
       state.item = Object.assign({}, state._clearItem)
     },
 
-    ITEMS_CLEAR(state: CommonState) {
+    ITEMS_CLEAR: (state: CommonState) => {
       state._halt = true
       state.items = []
     },
 
-    ITEM_SELECT(state: CommonState, { item, value }: { item: any, value?: boolean }) {
+    ITEM_SELECT: (state: CommonState, { item, value }: { item: any, value?: boolean }) => {
       const select = (i: any) => [ ...state.selected, Object.assign({}, i) ]
       const unselect = (i: any) => state.selected.filter(({ _id }: any) => _id !== i._id)
 
@@ -704,13 +718,13 @@ private _mutations() {
           ? unselect(item) : select(item))
     },
 
-    ITEMS_SELECT(state: CommonState, { items, value }: { items: any[], value: boolean }) {
+    ITEMS_SELECT: (state: CommonState, { items, value }: { items: any[], value: boolean }) => {
       state.selected = value ? items.map(({ _id }: { _id: string }) => ({ _id })) ||[] : []
     },
 
-    FILTERS_CLEAR(state: CommonState) {
+    FILTERS_CLEAR: (state: CommonState) => {
       state._filters = {}
-    }
+    },
   }
 }
 }

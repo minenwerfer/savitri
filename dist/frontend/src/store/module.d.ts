@@ -92,6 +92,7 @@ export declare abstract class Module<T = any, Item = any> {
     }, value?: any) => Promise<T_>;
     protected _parseQuery(obj: any, array?: boolean): Promise<any>;
     private _condenseItem;
+    private _removeEmpty;
     state(): {
         isLoading: boolean;
         item: any;

@@ -49,13 +49,13 @@ const emit = defineEmits<{
 
 const input = ref<any>(null)
 
-const onInput = (event: { target: { value: string } }) => {
+const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {
 
   const formatDate = (value: string) => {
     return value
   }
 
-  emit('update:modelValue', event.target.value)
+  emit('update:modelValue', event.target.dataset?.maskRawValue || event.target.value)
 }
 
 const onChange = (event: { target: { value: string } }) => {

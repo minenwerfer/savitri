@@ -28,21 +28,21 @@ export declare abstract class Mutable<T> extends Controller<T> {
         };
     }, response?: unknown, token?: any): any | Promise<any>;
     count(props: {
-        filter?: object;
+        filters?: object;
     }): Query<number, import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;
     /**
      * @method
      * Gets a document from database.
      */
     get(props: {
-        filter?: object;
+        filters?: object;
     }): any | Promise<any>;
     /**
      * @method
      * Gets a collection of documents from database.
      */
     getAll(props: {
-        filter?: object;
+        filters?: object;
         offset?: number;
         limit?: number;
         sort?: any;
@@ -52,21 +52,21 @@ export declare abstract class Mutable<T> extends Controller<T> {
      * Removes a document from database.
      */
     remove(props: {
-        filter: any;
+        filters: any;
     }): any | Promise<any>;
     /**
      * @method
      * Removing all documents from database matching the criteria.
      */
     removeAll(props: {
-        filter: any;
+        filters: any;
     }): Query<import("mongodb").DeleteResult, import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;
     /**
      * @method
      * Modify a single document.
    */
     modify(props: {
-        filter: any;
+        filters: any;
         what: any;
     }): any | Promise<any>;
     /**
@@ -74,7 +74,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
      * Modify documents matching criteria.
      */
     modifyAll(props: {
-        filter: any[];
+        filters: any[];
         what: any;
     }): Query<import("mongodb").UpdateResult, import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;
 }

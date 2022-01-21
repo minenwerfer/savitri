@@ -64,8 +64,8 @@ export class FileController extends Mutable<FileDocument> {
     return super.insert.call(this, { what }, res, decodedToken)
   }
 
-  public override async remove(props: { filter: any }): Promise<SingleQuery<FileDocument>|void> {
-    const file = await File.findOne(props.filter)
+  public override async remove(props: { filters: any }): Promise<SingleQuery<FileDocument>|void> {
+    const file = await File.findOne(props.filters)
     if( file ) {
       await unlink(file.absolute_path)
       return await super.remove.call(this, props)

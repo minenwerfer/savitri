@@ -37,14 +37,14 @@ class Mutable extends Controller_1.Controller {
             : this._model.findOneAndUpdate({ _id }, what, { new: true, runValidators: true });
     }
     count(props) {
-        return this._model.countDocuments(props?.filter || {});
+        return this._model.countDocuments(props?.filters || {});
     }
     /**
      * @method
      * Gets a document from database.
      */
     get(props) {
-        return this._model.findOne(props.filter);
+        return this._model.findOne(props.filters);
     }
     /**
      * @method
@@ -59,10 +59,13 @@ class Mutable extends Controller_1.Controller {
         if (typeof props.limit !== 'number') {
             props.limit = +(exports.PAGINATION_LIMIT || 30);
         }
-        const entries = Object.entries(props.filter || {})
+        if (props.limit > 150) {
+            props.limit = 150;
+        }
+        const entries = Object.entries(props.filters || {})
             .map(([key, value]) => [key, typeof value === 'object' && 'id' in value ? value._id : value]);
-        props.filter = (0, helpers_1.fromEntries)(entries);
-        return this._model.find(props.filter || {})
+        props.filters = (0, helpers_1.fromEntries)(entries);
+        return this._model.find(props.filters || {})
             .sort(props.sort || defaultSort)
             .skip(props.offset || 0)
             .limit(props.limit);
@@ -72,34 +75,34 @@ class Mutable extends Controller_1.Controller {
      * Removes a document from database.
      */
     remove(props) {
-        if (!props.filter) {
+        if (!props.filters) {
             throw new Error('no criteria specified');
         }
-        return this._model.findOneAndDelete(props.filter, { strict: 'throw' });
+        return this._model.findOneAndDelete(props.filters, { strict: 'throw' });
     }
     /**
      * @method
      * Removing all documents from database matching the criteria.
      */
     removeAll(props) {
-        if (!Array.isArray(props.filter?._id) || props.filter?._id?.length === 0) {
+        if (!Array.isArray(props.filters?._id) || props.filters?._id?.length === 0) {
             throw new Error('no criteria specified');
         }
-        return this._model.deleteMany(props.filter, { strict: 'throw' });
+        return this._model.deleteMany(props.filters, { strict: 'throw' });
     }
     /**
      * @method
      * Modify a single document.
    */
     modify(props) {
-        return this._model.findOneAndUpdate(props.filter, props.what, { new: true, runValidators: true });
+        return this._model.findOneAndUpdate(props.filters, props.what, { new: true, runValidators: true });
     }
     /**
      * @method
      * Modify documents matching criteria.
      */
     modifyAll(props) {
-        return this._model.updateMany(props.filter, props.what);
+        return this._model.updateMany(props.filters, props.what);
     }
 }
 exports.Mutable = Mutable;

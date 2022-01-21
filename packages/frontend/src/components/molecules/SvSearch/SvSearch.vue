@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div v-else class="flex flex-wrap gap-x-4">
+    <div v-else class="flex flex-wrap gap-x-4 gap-y-2">
       <div
         v-for="([indexName, searchField], index) in indexes.map((i) => [i, field.fields[i]])"
         :key="`searchField-${index}`"
@@ -31,14 +31,14 @@
       </div>
     </div>
 
-    <div v-if="!isExpanded || array" :key="inputValue">
+    <div v-if="!isExpanded || array" :key="inputValue" style="max-width: 20em">
       <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`">
         <div v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)">
           <div class="cursor-pointer p-2 border">{{ item[indexes[0]] }}</div>
         </div>
       </div>
 
-        <div v-if="selected.length > 0" class="mt-4">
+      <div v-if="!searchOnly && selected.length > 0" class="mt-4">
         <div v-for="(item, index) in selected" :key="`item-${index}`" class="flex gap-x-2 px-2 py-1 border">
           <div class="flex-1">{{ item[indexes[0]] }}</div>
           <sv-bare-button @clicked="edit(item)">
@@ -77,6 +77,7 @@ const emit = defineEmits<{
 
 const store = useStore()
 const parentModule = inject<{ value: string }>('module', { value: '' })
+const searchOnly = inject<boolean>('searchOnly', false)
 
 const parentRefs = useModule(parentModule.value, store)
 const moduleRefs = reactive(useModule(props.field.module, store))
@@ -215,7 +216,7 @@ const search = () => {
 
   store.dispatch(`${module.value}/getAll`, {
     limit: 5,
-    filter: {
+    filters: {
       ...(props.activeOnly ? { active: true } : {}),
       $or: props.indexes
       .filter((i: string) => inputValue[i]?.length > 0)

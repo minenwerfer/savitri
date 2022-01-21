@@ -1,24 +1,24 @@
 <template>
-  <sv-form
-    :form="availableFilters"
-    :form-data="filters"
-    :padding-bottom="0"
+  <div>
+    <sv-form
+      :form="availableFilters"
+      :form-data="$store.state[module]._filters"
+      :padding-bottom="0"
 
-    :flex="true"
-    :gap-x="4"
+      :flex="true"
+      :gap-x="4"
 
-    @change="filter"
-    class="mb-6"
-    >
-  </sv-form>
-  <div class="flex gap-x-2 opacity-60">
-    <sv-bare-button type="neutral" @clicked="clear">Limpar</sv-bare-button>
-    <!-- <sv-bare-button type="neutral" @clicked="filter">Filtrar</sv-bare-button> -->
+      @change="filter"
+      class="mb-6"
+      >
+    </sv-form>
+
+    <sv-bare-button type="neutral" @clicked="clear" class="opacity-60">Limpar</sv-bare-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, inject, } from 'vue'
+import { onMounted, reactive, provide, inject } from 'vue'
 import { useStore } from 'vuex'
 import { SvForm } from '../index'
 import { SvBareButton } from 'frontend/components'
@@ -32,6 +32,8 @@ const props = defineProps<{
 
 const store = useStore()
 const moduleRefs = reactive(useModule(props.module, store))
+
+provide('searchOnly', true)
 
 const filter = () => {
   const expr = (key: string, value: any) => {
@@ -61,7 +63,7 @@ const filter = () => {
   const filters = fromEntries(entries)
 
   store.dispatch(`${props.module}/getAll`, {
-    payload: { filter: filters }
+    payload: { filters }
   })
 }
 
@@ -70,9 +72,10 @@ const clear = () => {
   filter()
 }
 
+onMounted(() => store.commit(`${props.module}/FILTERS_CLEAR`))
+
 const {
   availableFilters,
-  filters
 
 } = moduleRefs
 </script>
