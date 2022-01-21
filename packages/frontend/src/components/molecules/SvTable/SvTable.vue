@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-y-4">
+  <div class="grid gap-y-4" v-if="Object.keys(columns).length > 0">
     <div class="overflow-hidden rounded-md">
       <table class="w-full table-fixed md:text-center border-collapse">
         <tr class="leading-9 bg-gray-100">

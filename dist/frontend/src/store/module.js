@@ -200,7 +200,7 @@ class Module {
         return Object.entries(item || {})
             .reduce((a, [key, value]) => ({
             ...a,
-            [key]: typeof value === 'object' && '_id' in value ? value._id : value
+            [key]: typeof value === 'object' && '_id' in value ? { _id: value._id } : value
         }), {});
     }
     state() {

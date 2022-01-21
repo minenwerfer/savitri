@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mutable = exports.PAGINATION_LIMIT = void 0;
 const Controller_1 = require("./Controller");
+const helpers_1 = require("../../../../common/src/helpers");
 exports.PAGINATION_LIMIT = process.env.PAGINATION_LIMIT;
 class Mutable extends Controller_1.Controller {
     /**
@@ -58,6 +59,9 @@ class Mutable extends Controller_1.Controller {
         if (typeof props.limit !== 'number') {
             props.limit = +(exports.PAGINATION_LIMIT || 30);
         }
+        const entries = Object.entries(props.filter || {})
+            .map(([key, value]) => [key, typeof value === 'object' && 'id' in value ? value._id : value]);
+        props.filter = (0, helpers_1.fromEntries)(entries);
         return this._model.find(props.filter || {})
             .sort(props.sort || defaultSort)
             .skip(props.offset || 0)

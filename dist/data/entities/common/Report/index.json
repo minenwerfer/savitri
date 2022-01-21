@@ -1,0 +1,32 @@
+{
+    "module": "report",
+    "route": true,
+    "individualActions": {
+        "download": {
+            "name": "Baixar"
+        }
+    },
+    "fields": {
+        "user_id": {
+            "module": "user",
+            "label": "Usuário",
+            "index": "email",
+            "noform": true
+        },
+        "module": {
+            "label": "Módulo",
+            "type": "text"
+        },
+        "created_at": {
+            "label": "Data",
+            "type": "datetime",
+            "meta": true
+        },
+        "file_url": {
+            "label": "Arquivo",
+            "type": "text",
+            "notable": true,
+            "noform": true
+        }
+    }
+}

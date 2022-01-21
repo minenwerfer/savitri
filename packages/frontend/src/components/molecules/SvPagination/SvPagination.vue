@@ -1,6 +1,6 @@
 <template>
   <div class="grid">
-    <div class="flex gap-x-2 justify-self-end">
+    <div class="flex gap-x-2">
       <div class="self-center">
         Página
       </div>

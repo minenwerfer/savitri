@@ -1,6 +1,8 @@
 import { Model, Document, Query, FilterQuery, UpdateQuery } from '../../database'
 import { Controller } from './Controller'
 
+import { fromEntries } from '../../../../common/src/helpers'
+
 export const { PAGINATION_LIMIT } = process.env
 
 export type SingleQuery<T> = Query<(T & { _id: any; }), T & { _id: any; }, {}, T>;
@@ -71,6 +73,11 @@ export abstract class Mutable<T> extends Controller<T> {
     if( typeof props.limit !== 'number' ) {
       props.limit = +(PAGINATION_LIMIT||30)
     }
+
+    const entries = Object.entries(props.filter||{})
+      .map(([key, value]: [string, any]) => [key, typeof value === 'object' && 'id' in value ? value._id : value])
+
+    props.filter = fromEntries(entries)
 
     return this._model.find(props.filter||{})
       .sort(props.sort || defaultSort)

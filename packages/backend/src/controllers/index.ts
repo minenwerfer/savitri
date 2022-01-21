@@ -8,5 +8,6 @@ export const commonControllers = [
   'feedback',
   'file',
   'notification',
-  'application'
+  'application',
+  'report'
 ]

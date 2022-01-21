@@ -36,13 +36,22 @@
     </template>
   </sv-box>
 
+  <sv-box title="Relatório" :float="true" v-model:visible="isReportVisible" @close="isReportVisible = false">
+    Teste
+  </sv-box>
+
   <sv-box title="Filtrar por" v-if="Object.keys(availableFilters).length > 0" :collapsable="true" :collapsed="true">
     <sv-filter :module="module" :key="module"></sv-filter>
   </sv-box>
 
   <sv-box>
     <template #body>
-      <sv-pagination :module="module" class="mb-2"></sv-pagination>
+      <div class="flex mb-2">
+        <div class="mr-auto">
+          <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm">Solicitar relatório</sv-bare-button>
+        </div>
+        <sv-pagination :module="module"></sv-pagination>
+      </div>
       <sv-table
         :key="module"
         v-if="tableDescription"
@@ -57,9 +66,12 @@
             } : {}
           )
         }"
+
         :rows="items"
         :recordsCount="recordsCount"
         :recordsTotal="recordsTotal"
+
+        :class="isLoading ? 'opacity-50' : ''"
         ></sv-table>
     </template>
   </sv-box>
@@ -67,10 +79,10 @@
 </template>
 
 <script setup lang="ts">
-import { provide, watch, computed, reactive, toRefs } from 'vue'
+import { provide, watch, computed, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
-import { SvBox, SvTable, SvForm, SvButton, SvPagination, SvFilter } from 'frontend/components'
+import { SvBox, SvTable, SvForm, SvButton, SvPagination, SvFilter, SvBareButton } from 'frontend/components'
 
 const props = defineProps<{
   module: string
@@ -78,11 +90,13 @@ const props = defineProps<{
 
 const store = useStore()
 const moduleRefs = reactive({})
+const reportRefs = reactive(useModule('report', store))
 
 provide('module', computed(() => props.module))
 
 const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
 const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
+const isReportVisible = ref(false)
 
 watch(() => props.module, async (module: string) => {
 

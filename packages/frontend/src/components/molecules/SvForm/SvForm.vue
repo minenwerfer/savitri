@@ -74,7 +74,7 @@
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
 
-        class="flex flex-col flex-grow"
+        :class="`flex flex-col flex-grow ${ field.flexGrow ? 'w-full' : '' }`"
         :value="field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)"
         :readonly="true"
         >
@@ -162,6 +162,7 @@ const allInOne = Object.entries(props.form)
   .map(([key, field]: [string, any]) => {
     return [key, {
     label: field?.label,
+    flexGrow: field?.flexGrow,
     value: moduleRefs.formatValue((props.formData||{})[key], key, true),
   }]
 })

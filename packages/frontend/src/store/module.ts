@@ -305,7 +305,7 @@ export abstract class Module<T=any, Item=any> {
     return Object.entries(item||{})
     .reduce((a:any, [key, value]: [string, any]) => ({
       ...a,
-      [key]: typeof value === 'object' && '_id' in value ? value._id : value
+      [key]: typeof value === 'object' && '_id' in value ? { _id: value._id } : value
     }), {})
   }
 
