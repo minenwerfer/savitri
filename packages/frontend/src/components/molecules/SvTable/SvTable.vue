@@ -1,39 +1,39 @@
 <template>
   <div class="grid gap-y-4" v-if="Object.keys(columns).length > 0">
     <div class="overflow-hidden rounded-md">
-      <table class="w-full table-fixed md:text-center border-collapse">
+      <table class="w-full table-fixed sm:text-center border-collapse">
         <tr class="leading-9 bg-gray-100">
-          <th class="hidden md:table-cell w-10 border" v-if="module">
+          <th class="hidden sm:table-cell w-10 border" v-if="module">
             <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
           </th>
           <th
             v-for="(header, index) in columns"
             :key="`header-${index}`"
-            class="hidden md:table-cell truncate px-1 border"
+            class="hidden sm:table-cell truncate px-1 border"
           >
             {{ header.label || header.placeholder }}
           </th>
         </tr>
 
-        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block mb-8 md:table-row leading-9 hover:bg-gray-200 ${rindex %2 !== 0 ? 'bg-gray-100' : ''}`">
-          <td class="hidden md:table-cell border" v-if="module">
+        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block shadow mb-4 sm:table-row sm:shadow-none leading-9 hover:bg-gray-100 ${rindex %2 !== 0 ? 'bg-gray-50' : ''}`">
+          <td class="hidden sm:table-cell border" v-if="module">
             <input type="checkbox" v-model="selected" :value="{ _id: row._id }"/>
           </td>
           <td
             v-for="([column, field], cindex) in Object.entries(columns)"
             :key="`column-${rindex}-${cindex}`"
-            @click="store.dispatch(`${module}/spawnOpen`, { payload: { filter: row } })"
+            @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
 
-            class="block md:table-cell truncate md:text-sm px-1 cursor-pointer border"
+            class="block sm:table-cell truncate sm:text-sm px-1 cursor-pointer border"
           >
-          <div class="grid grid-cols-2 md:inline-block justify-between">
-            <div class="font-semibold md:hidden text-ellipsis truncate">{{ field.label }}</div>
+          <div class="grid grid-cols-2 sm:inline-block justify-between">
+            <div class="font-semibold opacity-60 sm:hidden text-ellipsis truncate">{{ field.label }}</div>
 
-            <div v-if="column !== '__custom'" class="opacity-80">
+            <div v-if="column !== '__custom'" class="opacity-80 text-right sm:text-left">
               {{ formatValue(field.translate ? $t(row[column]) : row[column], column, false, field) }}
             </div>
 
-            <div v-else class="flex gap-x-1">
+            <div v-else class="flex gap-x-1 justify-end">
               <sv-bare-button v-for="(action, aindex) in columns.__custom.actions" :key="`action-${rindex}-${aindex}`" @clicked="action.click(row)" class="cursor-pointer">
                 {{ action.name }}
               </sv-bare-button>

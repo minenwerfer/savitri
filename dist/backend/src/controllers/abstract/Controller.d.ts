@@ -2,6 +2,7 @@ import { Model } from '../../database';
 export interface HandlerRequest {
     payload: {
         offset?: number;
+        limit?: number;
         filter?: any;
         what?: any;
     };

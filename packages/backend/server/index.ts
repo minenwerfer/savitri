@@ -1,9 +1,10 @@
 import { Request, ResponseToolkit, Server } from '@hapi/hapi'
 import * as Hapi from '@hapi/hapi'
-import { commonControllers } from '../src/controllers'
+
+import '../../common/src/polyfill'
+import { getController } from '../src/controllers'
 import { TokenService } from '../src/services/tokenService'
 import { HandlerRequest } from '../src/controllers/abstract/Controller'
-import '../../common/src/polyfill'
 
 import { FileController } from '../src/controllers/FileController'
 
@@ -20,20 +21,15 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
       throw new Error('cannot call private method')
     }
 
-    const controllerPath = commonControllers.includes(controller)
-      ? '../src/controllers'
-      : `${process.cwd()}/api-assets/controllers`
-
-    const controllerName = `${controller.replace(/\./g, '').capitalize()}Controller`
-    const Controller = require(`${controllerPath}/${controllerName}`)[controllerName]
-    const instance = new Controller;
+    const Controller = getController(controller)
+    const instance = new Controller
 
     if( !(verb in instance) ) {
       throw new Error('invalid verb')
     }
 
     const token = request.headers.authorization
-      ? await TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
+      ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
       : {}
 
     // use webinterface whenever it's available
@@ -48,6 +44,10 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
         .header('Content-Type', mime)
     }
 
+    const limit = request.payload.limit
+      ? +request.payload.limit
+      : +((process.env as Environment).PAGINATION_LIMIT || 35)
+
     return {
       result,
       ...(Array.isArray(result) ? {
@@ -56,7 +56,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
         offset: request.payload?.offset || 0,
 
         // 35 is a fallback
-        limit: +((process.env as Environment).PAGINATION_LIMIT || 35),
+        limit,
       } : {})
     }
 

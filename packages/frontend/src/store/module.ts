@@ -39,7 +39,7 @@ export interface MutationProps {
   result?: any
   props?: any
   payload: {
-    filter?: any|any[]
+    filters?: any|any[]
   }
 }
 
@@ -162,7 +162,8 @@ export abstract class Module<T=any, Item=any> {
         .then(resolve)
         .catch((error: string) => {
           if( error === 'signed out' ) {
-            ctx.dispatch('user/signout')
+            ctx.dispatch('user/signout', {}, { root: true });
+            (window as any)._router.push({ name: 'signin' })
 
           } else {
             ctx.commit('meta/MODAL_SPAWN', {
@@ -260,9 +261,9 @@ export abstract class Module<T=any, Item=any> {
       }
 
       const route = `${value.module}/getAll`
-      const filter = value.filter || {}
+      const filters = value.filters || {}
 
-      const { data } = await this._http.post(route, filter)
+      const { data } = await this._http.post(route, filters)
       const result = data.result
         .reduce((a: any, item: any) => ({
           ...a,
@@ -305,7 +306,7 @@ export abstract class Module<T=any, Item=any> {
     return Object.entries(item||{})
     .reduce((a:any, [key, value]: [string, any]) => ({
       ...a,
-      [key]: typeof value === 'object' && '_id' in value ? { _id: value._id } : value
+      [key]: value && typeof value === 'object' && '_id' in value ? { _id: value._id } : value
     }), {})
   }
 
@@ -512,7 +513,7 @@ export abstract class Module<T=any, Item=any> {
       get: this._actionHelper<Item>('get', 'ITEM_GET'),
       getAll: this._actionHelper<Item[]>('getAll', 'ITEMS_GET'),
       insert: this._actionHelper<Item>('insert', 'ITEM_INSERT'),
-      remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filter._id } })),
+      remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filters._id } })),
       removeAll: this._actionHelper<Item>('removeAll', 'ITEMS_REMOVE'),
       modify: this._actionHelper<Item>('modify', 'ITEM_MODIFY'),
       modifyAll: this._actionHelper<Item>('modifyAll', 'ITEMS_MODIFY'),
@@ -587,12 +588,12 @@ export abstract class Module<T=any, Item=any> {
     },
 
     spawnEdit({ commit }: ActionProps, { payload }: { payload: any }) {
-      commit('ITEM_GET', { result: payload.filter })
+      commit('ITEM_GET', { result: payload.filters })
       commit('meta/CRUD_EDIT', undefined, { root: true })
     },
 
     spawnOpen({ commit }: ActionProps, { payload }: { payload: any }) {
-      commit('ITEM_GET', { result: payload.filter })
+      commit('ITEM_GET', { result: payload.filters })
       commit('meta/CRUD_OPEN', undefined, { root: true })
     }
   }
@@ -681,7 +682,7 @@ private _mutations() {
 
     ITEMS_MODIFY: (state: CommonState, { props: { what }, payload }: MutationProps) => {
       const satisfiesFilter = (item: Item & any) =>
-        Object.entries(payload.filter)
+        Object.entries(payload.filters)
           .every(([key, value]: [string, any]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key])
 
       state.items = state.items
@@ -696,7 +697,7 @@ private _mutations() {
     },
 
     ITEMS_REMOVE: (state: CommonState, { payload }: MutationProps) => {
-      state.items = state.items.filter(({ _id }: any) => !payload.filter?._id?.includes(_id))
+      state.items = state.items.filter(({ _id }: any) => !payload.filters?._id?.includes(_id))
     },
 
     ITEM_CLEAR: (state: CommonState) => {

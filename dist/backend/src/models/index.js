@@ -21,13 +21,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.File = exports.Access = exports.Feedback = exports.User = exports.commonModels = void 0;
 exports.commonModels = [
-    'access',
+    'accessProfile',
     'user',
     'feedback',
     'file'
 ];
 exports.User = __importStar(require("./User"));
 exports.Feedback = __importStar(require("./Feedback"));
-exports.Access = __importStar(require("./Access"));
+exports.Access = __importStar(require("./AccessProfile"));
 exports.File = __importStar(require("./File"));
 //# sourceMappingURL=index.js.map

@@ -25,7 +25,7 @@
             "type": "select",
             "values": {
                 "__query": {
-                    "module": "access",
+                    "module": "accessProfile",
                     "index": "name"
                 }
             }

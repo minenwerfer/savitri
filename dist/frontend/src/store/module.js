@@ -87,7 +87,8 @@ class Module {
                 .then(resolve)
                 .catch((error) => {
                 if (error === 'signed out') {
-                    ctx.dispatch('user/signout');
+                    ctx.dispatch('user/signout', {}, { root: true });
+                    window._router.push({ name: 'signin' });
                 }
                 else {
                     ctx.commit('meta/MODAL_SPAWN', {
@@ -165,8 +166,8 @@ class Module {
                 throw new Error('dynamic query but no module is specified');
             }
             const route = `${value.module}/getAll`;
-            const filter = value.filter || {};
-            const { data } = await this._http.post(route, filter);
+            const filters = value.filters || {};
+            const { data } = await this._http.post(route, filters);
             const result = data.result
                 .reduce((a, item) => ({
                 ...a,
@@ -200,7 +201,7 @@ class Module {
         return Object.entries(item || {})
             .reduce((a, [key, value]) => ({
             ...a,
-            [key]: typeof value === 'object' && '_id' in value ? { _id: value._id } : value
+            [key]: value && typeof value === 'object' && '_id' in value ? { _id: value._id } : value
         }), {});
     }
     _removeEmpty(item) {
@@ -375,7 +376,7 @@ class Module {
             get: this._actionHelper('get', 'ITEM_GET'),
             getAll: this._actionHelper('getAll', 'ITEMS_GET'),
             insert: this._actionHelper('insert', 'ITEM_INSERT'),
-            remove: this._actionHelper('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filter._id } })),
+            remove: this._actionHelper('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filters._id } })),
             removeAll: this._actionHelper('removeAll', 'ITEMS_REMOVE'),
             modify: this._actionHelper('modify', 'ITEM_MODIFY'),
             modifyAll: this._actionHelper('modifyAll', 'ITEMS_MODIFY'),
@@ -436,11 +437,11 @@ class Module {
                 commit('meta/CRUD_EDIT', undefined, { root: true });
             },
             spawnEdit({ commit }, { payload }) {
-                commit('ITEM_GET', { result: payload.filter });
+                commit('ITEM_GET', { result: payload.filters });
                 commit('meta/CRUD_EDIT', undefined, { root: true });
             },
             spawnOpen({ commit }, { payload }) {
-                commit('ITEM_GET', { result: payload.filter });
+                commit('ITEM_GET', { result: payload.filters });
                 commit('meta/CRUD_OPEN', undefined, { root: true });
             }
         };
@@ -515,7 +516,7 @@ class Module {
                 };
             },
             ITEMS_MODIFY: (state, { props: { what }, payload }) => {
-                const satisfiesFilter = (item) => Object.entries(payload.filter)
+                const satisfiesFilter = (item) => Object.entries(payload.filters)
                     .every(([key, value]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key]);
                 state.items = state.items
                     .map((item) => ({
@@ -527,7 +528,7 @@ class Module {
                 state.items = state.items.filter(({ _id }) => result._id !== _id);
             },
             ITEMS_REMOVE: (state, { payload }) => {
-                state.items = state.items.filter(({ _id }) => !payload.filter?._id?.includes(_id));
+                state.items = state.items.filter(({ _id }) => !payload.filters?._id?.includes(_id));
             },
             ITEM_CLEAR: (state) => {
                 state.item = Object.assign({}, state._clearItem);

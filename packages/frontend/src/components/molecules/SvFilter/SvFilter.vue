@@ -63,7 +63,10 @@ const filter = () => {
   const filters = fromEntries(entries)
 
   store.dispatch(`${props.module}/getAll`, {
-    payload: { filters }
+    payload: { 
+      filters,
+      limit: store.state[props.module]._limit
+    }
   })
 }
 

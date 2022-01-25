@@ -21,9 +21,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 const Hapi = __importStar(require("@hapi/hapi"));
+require("../../common/src/polyfill");
 const controllers_1 = require("../src/controllers");
 const tokenService_1 = require("../src/services/tokenService");
-require("../../common/src/polyfill");
 const FileController_1 = require("../src/controllers/FileController");
 async function handler(request, h) {
     try {
@@ -31,17 +31,13 @@ async function handler(request, h) {
         if (/^_/.test(verb)) {
             throw new Error('cannot call private method');
         }
-        const controllerPath = controllers_1.commonControllers.includes(controller)
-            ? '../src/controllers'
-            : `${process.cwd()}/api-assets/controllers`;
-        const controllerName = `${controller.replace(/\./g, '').capitalize()}Controller`;
-        const Controller = require(`${controllerPath}/${controllerName}`)[controllerName];
+        const Controller = (0, controllers_1.getController)(controller);
         const instance = new Controller;
         if (!(verb in instance)) {
             throw new Error('invalid verb');
         }
         const token = request.headers.authorization
-            ? await tokenService_1.TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
+            ? tokenService_1.TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
             : {};
         // use webinterface whenever it's available
         const result = await (instance.webInterface || instance)[verb](request, h, token);
@@ -53,6 +49,9 @@ async function handler(request, h) {
             return h.response(result)
                 .header('Content-Type', mime);
         }
+        const limit = request.payload.limit
+            ? +request.payload.limit
+            : +(process.env.PAGINATION_LIMIT || 35);
         return {
             result,
             ...(Array.isArray(result) ? {
@@ -60,7 +59,7 @@ async function handler(request, h) {
                 recordsTotal: typeof instance.count === 'function' ? await instance.count({ filter: request.payload?.filter || {} }) : result.length,
                 offset: request.payload?.offset || 0,
                 // 35 is a fallback
-                limit: +(process.env.PAGINATION_LIMIT || 35),
+                limit,
             } : {})
         };
     }

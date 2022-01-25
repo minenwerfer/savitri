@@ -28,7 +28,7 @@ const database_1 = require("../../database");
 const _Util_1 = require("../_Util");
 const index_json_1 = __importDefault(require("../../../../data/entities/common/User/index.json"));
 Object.defineProperty(exports, "Description", { enumerable: true, get: function () { return index_json_1.default; } });
-require("../Access");
+require("../AccessProfile");
 exports.UserSchema = (0, _Util_1.descriptionToSchema)(index_json_1.default, database_1.options);
 exports.UserSchema.plugin(require('mongoose-autopopulate'));
 /**

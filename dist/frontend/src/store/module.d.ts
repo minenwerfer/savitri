@@ -28,7 +28,7 @@ export interface MutationProps {
     result?: any;
     props?: any;
     payload: {
-        filter?: any | any[];
+        filters?: any | any[];
     };
 }
 /**

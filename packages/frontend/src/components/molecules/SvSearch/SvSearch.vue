@@ -19,6 +19,7 @@
       <div
         v-for="([indexName, searchField], index) in indexes.map((i) => [i, field.fields[i]])"
         :key="`searchField-${index}`"
+        class="flex-grow"
       >
         <sv-input
           @input="lazySearch(indexName, inputValue[indexName])"

@@ -1,5 +1,5 @@
 {
-  "module": "access",
+  "module": "accessProfile",
   "route": true,
   "actions": {
     "spawnAdd": {

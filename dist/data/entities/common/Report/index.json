@@ -1,6 +1,13 @@
 {
     "module": "report",
     "route": true,
+    "actions": {
+        "removeAll": {
+            "name": "Remover",
+            "ask": true,
+            "selection": true
+        }
+    },
     "individualActions": {
         "download": {
             "name": "Baixar"
@@ -15,14 +22,15 @@
         },
         "module": {
             "label": "Módulo",
-            "type": "text"
+            "type": "text",
+            "translate": true
         },
         "created_at": {
             "label": "Data",
             "type": "datetime",
             "meta": true
         },
-        "file_url": {
+        "file_stamp": {
             "label": "Arquivo",
             "type": "text",
             "notable": true,
@@ -44,6 +52,10 @@
                 "filtered_only": "Apenas resultados filtrados",
                 "everyting": "Todo o período"
             }
+        },
+        "filters": {
+            "label": "Filtros",
+            "type": "object"
         }
     }
 }

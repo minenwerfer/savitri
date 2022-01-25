@@ -39,7 +39,7 @@ export class UserController extends Mutable<UserDocument> {
         access: {
           capabilities: {
             user: ["getAll", "insert"],
-            access: ["getAll", "insert"]
+            accessProfile: ["getAll", "insert"]
           }
         }
       })

@@ -3,7 +3,7 @@ import { autoModules, crud } from './plugins'
 
 import { MetaModule } from './modules/meta'
 import { UserModule } from './modules/user'
-import { AccessModule } from './modules/access'
+import { AccessProfileModule } from './modules/accessProfile'
 import { NotificationModule } from './modules/notification'
 
 export const instance = (): Store<any> => {
@@ -11,7 +11,7 @@ export const instance = (): Store<any> => {
     modules: {
       meta: (new MetaModule() as any).module,
       user: (new UserModule() as any).module,
-      access: (new AccessModule() as any).module,
+      accessProfile: (new AccessProfileModule() as any).module,
       notification: (new NotificationModule()  as any).module
     },
     plugins: [
@@ -22,7 +22,7 @@ export const instance = (): Store<any> => {
     strict: process.env.NODE_ENV === 'production'
   })
 
-  const evt = window.addEventListener('__updateQueryCache', ({ detail }: any) => {
+  const evtListener = window.addEventListener('__updateQueryCache', ({ detail }: any) => {
     store.commit(`${detail.parentModule}/CACHE_QUERY`, {
       module: detail.module,
       result: detail.result

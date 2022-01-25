@@ -1,11 +1,11 @@
 import { Module, ActionProps } from 'frontend/store/module'
 
-export class AccessModule extends Module<{}, {}> {
+export class AccessProfileModule extends Module<{}, {}> {
   constructor() {
-    super('access', {}, {})
+    super('accessProfile', {}, {})
   }
 
-  actions(this: AccessModule) {
+  actions(this: AccessProfileModule) {
     return {
       spawnAdd: ({ commit }: ActionProps) => {
         commit('ITEM_CLEAR');
@@ -13,7 +13,7 @@ export class AccessModule extends Module<{}, {}> {
       },
 
       spawnEdit: ({ commit }: ActionProps, { payload }: { payload: any }) => {
-        commit('ITEM_GET', { result: payload.filter });
+        commit('ITEM_GET', { result: payload.filters });
         (window as any)._router.push({ name: 'dashboard-access-edit' })
       }
     }

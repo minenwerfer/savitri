@@ -64,7 +64,7 @@ export const privateRoutes: Route[] = [
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: () => import('frontend/components/views/SvDashboard/SvAccess/SvAccessEdit.vue'),
+        component: () => import('frontend/components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'),
         meta: { title: 'Editar preset de acesso', hidden: true }
       }
     ]

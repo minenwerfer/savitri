@@ -8,7 +8,7 @@
         <div class="fixed inset-0 bg-gray-600 opacity-40 z-40" @click="dropdown.visible = false"></div>
 
         <sv-box class="fixed top-4 right-6 shadow-xl w-90 z-50">
-          <div class="flex flex-col gap-y-2">
+          <div class="flex flex-col items-start gap-y-2">
             <sv-bare-button>Meu perfil</sv-bare-button>
             <sv-bare-button @clicked="signout">Sair</sv-bare-button>
           </div>

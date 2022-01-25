@@ -45,7 +45,7 @@
       ></sv-form>
     </template>
     <template #footer>
-      <sv-button>Solicitar</sv-button>
+      <sv-button @clicked="requestReport">Solicitar</sv-button>
     </template>
   </sv-box>
 
@@ -128,19 +128,31 @@ watch(() => isInsertVisible.value, (value: boolean) => {
   }
 })
 
-const buttonAction = (action: string, actionProps: any, filter: any) => {
+const buttonAction = (action: string, actionProps: any, filters: any) => {
   return actionProps.ask
-    ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filter }}})
-    : store.dispatch(`${props.module}/${action}`, { payload: { filter  }})
+    ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filters }}})
+    : store.dispatch(`${props.module}/${action}`, { payload: { filters  }})
 }
 
 const individualActions = computed(() => {
   return store.getters[`${props.module}/individualActions`]
     .map((action: any) => ({
       name: action.name,
-      click: (filter: any) => buttonAction(action.action, action, filter)
+      click: (filters: any) => buttonAction(action.action, action, filters)
     }))
 })
+
+const requestReport = () => {
+  return store.dispatch('report/insert', {
+    payload: {
+      what: {
+        ...reportRefs.item,
+        module: props.module,
+        filters: moduleRefs.filters
+      }
+    }
+  })
+}
 
 const {
   description,

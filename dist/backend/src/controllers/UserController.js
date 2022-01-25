@@ -36,7 +36,7 @@ class UserController extends Mutable_1.Mutable {
                 access: {
                     capabilities: {
                         user: ["getAll", "insert"],
-                        access: ["getAll", "insert"]
+                        accessProfile: ["getAll", "insert"]
                     }
                 }
             });

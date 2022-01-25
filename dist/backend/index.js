@@ -22,13 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.options = exports.mongoose = exports.ReportDescription = exports.NotificationDescription = exports.FileDescription = exports.FeedbackDescription = exports.AccessDescription = exports.UserDescription = void 0;
+exports.options = exports.mongoose = exports.ReportDescription = exports.NotificationDescription = exports.FileDescription = exports.FeedbackDescription = exports.AccessProfileDescription = exports.UserDescription = void 0;
 __exportStar(require("./src/controllers/abstract/Mutable"), exports);
 __exportStar(require("./src/controllers/abstract/Controller"), exports);
 var User_1 = require("./src/models/User");
 Object.defineProperty(exports, "UserDescription", { enumerable: true, get: function () { return User_1.Description; } });
-var Access_1 = require("./src/models/Access");
-Object.defineProperty(exports, "AccessDescription", { enumerable: true, get: function () { return Access_1.Description; } });
+var AccessProfile_1 = require("./src/models/AccessProfile");
+Object.defineProperty(exports, "AccessProfileDescription", { enumerable: true, get: function () { return AccessProfile_1.Description; } });
 var Feedback_1 = require("./src/models/Feedback");
 Object.defineProperty(exports, "FeedbackDescription", { enumerable: true, get: function () { return Feedback_1.Description; } });
 var File_1 = require("./src/models/File");

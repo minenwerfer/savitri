@@ -1,0 +1,52 @@
+{
+    "module": "accessProfile",
+    "route": true,
+    "actions": {
+        "spawnAdd": {
+            "name": "Adicionar"
+        }
+    },
+    "individualActions": {
+        "spawnEdit": {
+            "name": "Editar"
+        },
+        "remove": {
+            "name": "Remover",
+            "ask": true
+        }
+    },
+    "table": [
+        "name",
+        "visibility",
+        "created_at",
+        "updated_at"
+    ],
+    "fields": {
+        "name": {
+            "label": "Nome",
+            "type": "text",
+            "unique": true
+        },
+        "visibility": {
+            "label": "Visibilidade",
+            "type": "select",
+            "translate": true,
+            "values": [
+                "useronly",
+                "everything"
+            ]
+        },
+        "capabilities": {
+            "label": "Capacidades",
+            "type": "object"
+        },
+        "created_at": {
+            "label": "Criado em",
+            "meta": true
+        },
+        "updated_at": {
+            "label": "Modificado em",
+            "meta": true
+        }
+    }
+}

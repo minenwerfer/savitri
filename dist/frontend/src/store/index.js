@@ -5,14 +5,14 @@ const vuex_1 = require("vuex");
 const plugins_1 = require("./plugins");
 const meta_1 = require("./modules/meta");
 const user_1 = require("./modules/user");
-const access_1 = require("./modules/access");
+const accessProfile_1 = require("./modules/accessProfile");
 const notification_1 = require("./modules/notification");
 const instance = () => {
     const store = (0, vuex_1.createStore)({
         modules: {
             meta: new meta_1.MetaModule().module,
             user: new user_1.UserModule().module,
-            access: new access_1.AccessModule().module,
+            accessProfile: new accessProfile_1.AccessProfileModule().module,
             notification: new notification_1.NotificationModule().module
         },
         plugins: [
@@ -22,7 +22,7 @@ const instance = () => {
         ],
         strict: process.env.NODE_ENV === 'production'
     });
-    const evt = window.addEventListener('__updateQueryCache', ({ detail }) => {
+    const evtListener = window.addEventListener('__updateQueryCache', ({ detail }) => {
         store.commit(`${detail.parentModule}/CACHE_QUERY`, {
             module: detail.module,
             result: detail.result

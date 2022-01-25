@@ -31,9 +31,9 @@ import { SvBox, SvForm, SvButton } from 'frontend/components'
   
 const store = useStore()
 const router = useRouter()
-const { capabilities, ...fields } = store.getters['access/fields']
+const { capabilities, ...fields } = store.getters['accessProfile/fields']
 
-provide('module', 'access')
+provide('module', 'accessProfile')
 
 const defaultMethods = [
   'get',
@@ -59,16 +59,16 @@ const capabilitiesFields = modules.reduce((a: any, { module, methods, extraMetho
   }
 }), {})
 
-const accessItem = store.getters['access/item']
+const accessItem = store.getters['accessProfile/item']
 if( !accessItem.capabilities ) {
   accessItem.capabilities = {}
 }
 
 const item = computed(() => accessItem)
-const isLoading = computed(() => store.state.access.isLoading)
+const isLoading = computed(() => store.state.accessProfile.isLoading)
 
 const insert = async () => {
-  await store.dispatch('access/insert', { payload: { what: item.value } })
+  await store.dispatch('accessProfile/insert', { payload: { what: item.value } })
   router.back()
 }
 </script>
