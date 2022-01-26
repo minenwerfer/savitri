@@ -151,6 +151,14 @@ const requestReport = () => {
         filters: moduleRefs.filters
       }
     }
+  }).then(async () => {
+    await store.dispatch('meta/spawnModal', {
+      title: 'Relatório solicitado',
+      body: 'Você pode baixá-lo na seção "Relatórios".'
+    })
+
+    isReportVisible.value = false
+
   })
 }
 

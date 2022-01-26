@@ -7,13 +7,15 @@ const meta_1 = require("./modules/meta");
 const user_1 = require("./modules/user");
 const accessProfile_1 = require("./modules/accessProfile");
 const notification_1 = require("./modules/notification");
+const report_1 = require("./modules/report");
 const instance = () => {
     const store = (0, vuex_1.createStore)({
         modules: {
             meta: new meta_1.MetaModule().module,
             user: new user_1.UserModule().module,
             accessProfile: new accessProfile_1.AccessProfileModule().module,
-            notification: new notification_1.NotificationModule().module
+            notification: new notification_1.NotificationModule().module,
+            report: new report_1.ReportModule().module
         },
         plugins: [
             plugins_1.autoModules,

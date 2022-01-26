@@ -1,9 +1,11 @@
+const { writeFile } = require('fs').promises
+const path = require('path')
+
 import { ReportDocument, Report, Description } from '../models/Report'
 import { Mutable } from './abstract/Mutable'
 import { getController } from './index'
 
-const { writeFile } = require('fs').promises
-const path = require('path')
+import { File } from '../models/File'
 
 export interface ReportController {
   formatMap: any
@@ -34,7 +36,7 @@ export class ReportController extends Mutable<ReportDocument> {
   }
 
   private _formatValue(field: any, value: any) {
-    if( !value || typeof value !== 'object' ) {
+    if(!value || typeof value !== 'object' ) {
       return value ? value : '-'
     }
 
@@ -61,7 +63,7 @@ export class ReportController extends Mutable<ReportDocument> {
       throw new Error('REPORTS_PATH not set')
     }
 
-    return `${Date.now().toString()}.${ext}`
+    return `report_${Date.now().toString()}.${ext}`
   }
 
   private async _saveCSV(columns: string[], rows: any[]) {
@@ -72,11 +74,14 @@ export class ReportController extends Mutable<ReportDocument> {
     ), columns.join(',') + '\n')
 
     await writeFile(path.join(process.env.REPORTS_PATH, filename), buffer)
-    return filename
+    return {
+      filename,
+      mime: 'text/csv'
+    }
   }
 
   private async _savePDF(columns: string[], rows: any[]) {
-    const filename = this._filename('pdf')
+    throw new Error('not implemented')
   }
 
   public override async insert(props: { what: any }, req: unknown, decodedToken: any) {
@@ -99,13 +104,20 @@ export class ReportController extends Mutable<ReportDocument> {
 
     const description = instance.describe()
 
+    if( !description.report ) {
+      throw new Error('você não pode gerar um relatório desse módulo')
+    }
+
     const fields = this._getFields(description)
     const columns = this._getColumns(fields)
+
+    const fieldsNames = Object.keys(fields)
 
     const result = await instance.getAll({ filters: props.what.filters })
     
     const rows = result
       .map((r: any) => r._doc)
+      .map((r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}))
       .map((r: any) => {
       return Object.entries(r)
         .filter(([key]: [string, any]) => key in fields)
@@ -115,9 +127,17 @@ export class ReportController extends Mutable<ReportDocument> {
         }), {})
     })
 
-
     const func = this.formatMap[props.what.format]
-    props.what.file_stamp = await func.call(this, columns, rows)
+    const { filename, mime } = await func.call(this, columns, rows)
+
+    props.what.file = await File.create({
+      user_id: decodedToken._id,
+      context: 'report',
+      filename,
+      mime,
+      absolute_path: path.join(process.env.REPORTS_PATH, filename),
+      immutable: true
+    })
 
     return super.insert.call(this, props)
   }
@@ -129,3 +149,4 @@ export class ReportController extends Mutable<ReportDocument> {
     }
   }
 }
+ 

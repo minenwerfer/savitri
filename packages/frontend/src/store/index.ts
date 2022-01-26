@@ -5,6 +5,7 @@ import { MetaModule } from './modules/meta'
 import { UserModule } from './modules/user'
 import { AccessProfileModule } from './modules/accessProfile'
 import { NotificationModule } from './modules/notification'
+import { ReportModule } from './modules/report'
 
 export const instance = (): Store<any> => {
   const store = createStore<any>({
@@ -12,7 +13,8 @@ export const instance = (): Store<any> => {
       meta: (new MetaModule() as any).module,
       user: (new UserModule() as any).module,
       accessProfile: (new AccessProfileModule() as any).module,
-      notification: (new NotificationModule()  as any).module
+      notification: (new NotificationModule()  as any).module,
+      report: (new ReportModule()  as any).module
     },
     plugins: [
       autoModules,
