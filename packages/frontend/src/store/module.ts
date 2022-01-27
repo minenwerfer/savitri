@@ -1,6 +1,8 @@
 import { RequestProvider, AxiosResponse } from 'common/http'
 import { fromEntries } from 'common/helpers'
 
+import { default as webpackVariables } from 'variables'
+
 export const SV_API_URL = process.env.NODE_ENV === 'development'
   ? 'http://0.0.0.0:3000/api'
   : '/api'
@@ -160,9 +162,19 @@ export abstract class Module<T=any, Item=any> {
 
       return call
         .then(resolve)
-        .catch((error: string) => {
+        .catch(async (error: string) => {
           if( error === 'signed out' ) {
-            ctx.dispatch('user/signout', {}, { root: true });
+            ctx.dispatch('user/signout', {}, { root: true })
+
+            await ctx.dispatch('meta/spawnModal', {
+              title: 'Sua sessão expirou',
+              body: 'Você será redirecionado para a página de login.',
+              image: !webpackVariables.strict
+                ? 'http://3.bp.blogspot.com/-vu0LFEac67Y/TbIWEtl9VgI/AAAAAAAAADg/WnBZ_bVkXJs/s1600/foreveralone.gif'
+                : undefined
+
+            }, { root: true });
+
             (window as any)._router.push({ name: 'signin' })
 
           } else {
@@ -380,7 +392,33 @@ export abstract class Module<T=any, Item=any> {
 
       filters: (state: CommonState) => {
         const filters = this._removeEmpty(state._filters)
-        return this._condenseItem(filters)
+
+        const expr = (key: string, value: any) => {
+          const field = state.__description.fields[key]
+
+          if( field.type === 'text' ) {
+            return {
+              $regex: value,
+              $options: 'i'
+            }
+          }
+
+          const values = Array.isArray(field.values) ? field.values[0] : field.values
+          const query = values?.__query
+
+          if( query?.module ) {
+            return { _id: value }
+          }
+
+          return value
+        }
+
+      const entries = Object.entries(filters)
+        .filter(([key, value]: [string, any]) => value && !(typeof value === 'string' &&  value.length === 0))
+        .map(([key, value]) => [key, expr(key, value)])
+
+
+        return this._condenseItem(fromEntries(entries))
       },
 
       availableFilters: (state: CommonState) => {

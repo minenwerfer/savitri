@@ -57,10 +57,7 @@ class Mutable extends Controller_1.Controller {
             date_created: -1,
         };
         if (typeof props.limit !== 'number') {
-            props.limit = +(exports.PAGINATION_LIMIT || 30);
-        }
-        if (props.limit > 150) {
-            props.limit = 150;
+            props.limit = +(exports.PAGINATION_LIMIT || 35);
         }
         const entries = Object.entries(props.filters || {})
             .map(([key, value]) => [key, typeof value === 'object' && 'id' in value ? value._id : value]);

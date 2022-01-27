@@ -9,7 +9,7 @@
 
         <sv-box class="fixed top-4 right-6 shadow-xl w-90 z-50">
           <div class="flex flex-col items-start gap-y-2">
-            <sv-bare-button>Meu perfil</sv-bare-button>
+            <!-- <sv-bare-button>Meu perfil</sv-bare-button> -->
             <sv-bare-button @clicked="signout">Sair</sv-bare-button>
           </div>
         </sv-box>

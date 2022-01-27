@@ -153,10 +153,11 @@ const requestReport = () => {
     }
   }).then(async () => {
     await store.dispatch('meta/spawnModal', {
-      title: 'Relatório solicitado',
+      title: 'Relatório pronto',
       body: 'Você pode baixá-lo na seção "Relatórios".'
     })
 
+    reportRefs.setItem({})
     isReportVisible.value = false
 
   })

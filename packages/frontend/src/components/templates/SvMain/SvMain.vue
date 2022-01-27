@@ -4,7 +4,12 @@
 
     <sv-modal v-model:visible="modal.isVisible">
       <template #title>{{ modal.title }}</template>
-      <template #body>{{ modal.body }}</template>
+      <template #body>
+        <div class="flex flex-col sm:flex-row justify-between">
+          <p>{{ modal.body }}</p>
+          <img v-if="modal.image" :src="modal.image" class="w-52 object-contain" />
+        </div>
+      </template>
     </sv-modal>
 
     <sv-prompt :actions="prompt.actions" v-if="prompt.isVisible">

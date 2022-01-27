@@ -5,7 +5,7 @@
     md:grid
     md:grid-cols-menu
     h-16 z-30
-    bg-white shadow-md
+    bg-white shadow
     select-none
   ">
     <div

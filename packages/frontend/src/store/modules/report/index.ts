@@ -8,7 +8,7 @@ export class ReportModule extends Module<{}, {}> {
   actions() {
     return {
       download: ({}, { payload }: any) => {
-        window.open(SV_API_URL + `/download/${payload.filters.file}/download`)
+        window.open(SV_API_URL + `/download/${payload.filters.file._id}/download`)
       }
     }
   }

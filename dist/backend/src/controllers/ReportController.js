@@ -83,9 +83,12 @@ class ReportController extends Mutable_1.Mutable {
         const fields = this._getFields(description);
         const columns = this._getColumns(fields);
         const fieldsNames = Object.keys(fields);
-        const result = await instance.getAll({ filters: props.what.filters });
+        const result = await instance.getAll({
+            filters: props.what.filters,
+            ...(props.what.type === 'everything' ? { limit: 999999 } : {})
+        });
         const rows = result
-            .map((r) => r._doc)
+            .map((r) => r._doc || r)
             .map((r) => fieldsNames.reduce((a, b) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}))
             .map((r) => {
             return Object.entries(r)

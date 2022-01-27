@@ -71,11 +71,7 @@ export abstract class Mutable<T> extends Controller<T> {
     }
 
     if( typeof props.limit !== 'number' ) {
-      props.limit = +(PAGINATION_LIMIT||30)
-    }
-
-    if( props.limit > 150 ) {
-      props.limit = 150
+      props.limit = +(PAGINATION_LIMIT||35)
     }
 
     const entries = Object.entries(props.filters||{})

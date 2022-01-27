@@ -20,6 +20,7 @@ class MetaModule extends module_1.Module {
                 isVisible: false,
                 title: 'Teste',
                 body: 'Lorem ipsum dolor sit amet',
+                image: '',
                 component: '',
                 details: {}
             },
@@ -127,6 +128,7 @@ class MetaModule extends module_1.Module {
                     isVisible: false,
                     title: '',
                     body: '',
+                    image: '',
                     component: '',
                     details: {}
                 });

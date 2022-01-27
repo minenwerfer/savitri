@@ -113,10 +113,13 @@ export class ReportController extends Mutable<ReportDocument> {
 
     const fieldsNames = Object.keys(fields)
 
-    const result = await instance.getAll({ filters: props.what.filters })
-    
+    const result = await instance.getAll({
+      filters: props.what.filters,
+      ...(props.what.type === 'everything' ? { limit: 999999 } : {})
+    })
+
     const rows = result
-      .map((r: any) => r._doc)
+      .map((r: any) => r._doc || r)
       .map((r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}))
       .map((r: any) => {
       return Object.entries(r)

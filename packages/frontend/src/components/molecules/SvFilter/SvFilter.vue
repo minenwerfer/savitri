@@ -36,31 +36,7 @@ const moduleRefs = reactive(useModule(props.module, store))
 provide('searchOnly', true)
 
 const filter = () => {
-  const expr = (key: string, value: any) => {
-    const field = store.state[props.module].__description.fields[key]
-
-    if( field.type === 'text' ) {
-      return {
-        $regex: value,
-        $options: 'i'
-      }
-    }
-
-    const values = Array.isArray(field.values) ? field.values[0] : field.values
-    const query = values?.__query
-
-    if( query?.module ) {
-      return { _id: value }
-    }
-
-    return value
-  }
-
-  const entries = Object.entries(moduleRefs.filters)
-    .filter(([key, value]: [string, any]) => value && !(typeof value === 'string' &&  value.length === 0))
-    .map(([key, value]) => [key, expr(key, value)])
-
-  const filters = fromEntries(entries)
+  const filters = moduleRefs.filters
 
   store.dispatch(`${props.module}/getAll`, {
     payload: { 

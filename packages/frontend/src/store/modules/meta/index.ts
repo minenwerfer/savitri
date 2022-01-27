@@ -26,7 +26,8 @@ export interface Meta {
     isVisible: boolean
     title: string
     body: string,
-    component: string
+    image?: string
+    component?: string
     details: {}
   },
   prompt: {
@@ -60,6 +61,7 @@ export class MetaModule extends Module<Meta, {}> {
         isVisible: false,
         title: 'Teste',
         body: 'Lorem ipsum dolor sit amet',
+        image: '',
         component: '',
         details: {}
       },
@@ -188,6 +190,7 @@ export class MetaModule extends Module<Meta, {}> {
           isVisible: false,
           title: '',
           body: '',
+          image: '',
           component: '',
           details: {}
         })

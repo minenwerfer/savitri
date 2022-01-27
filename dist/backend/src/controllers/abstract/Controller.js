@@ -43,6 +43,9 @@ class Controller {
                     const payload = Object.keys(req.payload || {}).length === 0
                         ? { filter: {} }
                         : req.payload;
+                    if (typeof req.payload?.limit === 'number' && (req.payload.limit > 150 || req.payload.limit <= 0)) {
+                        req.payload.limit = 150;
+                    }
                     if (decodedToken.access?.visibility !== 'everything') {
                         if (payload.what)
                             payload.what.user_id = decodedToken._id;

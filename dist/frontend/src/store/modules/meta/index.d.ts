@@ -22,7 +22,8 @@ export interface Meta {
         isVisible: boolean;
         title: string;
         body: string;
-        component: string;
+        image?: string;
+        component?: string;
         details: {};
     };
     prompt: {

@@ -9,7 +9,7 @@ class ReportModule extends module_1.Module {
     actions() {
         return {
             download: ({}, { payload }) => {
-                window.open(module_1.SV_API_URL + `/download/${payload.filters.file}/download`);
+                window.open(module_1.SV_API_URL + `/download/${payload.filters.file._id}/download`);
             }
         };
     }

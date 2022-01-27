@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Module = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
+const variables_1 = __importDefault(require("variables"));
 exports.SV_API_URL = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3000/api'
     : '/api';
@@ -85,9 +89,16 @@ class Module {
             }
             return call
                 .then(resolve)
-                .catch((error) => {
+                .catch(async (error) => {
                 if (error === 'signed out') {
                     ctx.dispatch('user/signout', {}, { root: true });
+                    await ctx.dispatch('meta/spawnModal', {
+                        title: 'Sua sessão expirou',
+                        body: 'Você será redirecionado para a página de login.',
+                        image: !variables_1.default.strict
+                            ? 'http://3.bp.blogspot.com/-vu0LFEac67Y/TbIWEtl9VgI/AAAAAAAAADg/WnBZ_bVkXJs/s1600/foreveralone.gif'
+                            : undefined
+                    }, { root: true });
                     window._router.push({ name: 'signin' });
                 }
                 else {
@@ -261,7 +272,25 @@ class Module {
             },
             filters: (state) => {
                 const filters = this._removeEmpty(state._filters);
-                return this._condenseItem(filters);
+                const expr = (key, value) => {
+                    const field = state.__description.fields[key];
+                    if (field.type === 'text') {
+                        return {
+                            $regex: value,
+                            $options: 'i'
+                        };
+                    }
+                    const values = Array.isArray(field.values) ? field.values[0] : field.values;
+                    const query = values?.__query;
+                    if (query?.module) {
+                        return { _id: value };
+                    }
+                    return value;
+                };
+                const entries = Object.entries(filters)
+                    .filter(([key, value]) => value && !(typeof value === 'string' && value.length === 0))
+                    .map(([key, value]) => [key, expr(key, value)]);
+                return this._condenseItem((0, helpers_1.fromEntries)(entries));
             },
             availableFilters: (state) => {
                 if (!state._description?.filters) {
