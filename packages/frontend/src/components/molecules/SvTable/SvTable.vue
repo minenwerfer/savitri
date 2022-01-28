@@ -30,7 +30,7 @@
             <div class="font-semibold opacity-60 sm:hidden text-ellipsis truncate">{{ field.label }}</div>
 
             <div v-if="column !== '__custom'" class="opacity-80 text-right sm:text-left">
-              {{ formatValue(field.translate ? $t(row[column]) : row[column], column, false, field) }}
+              {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
             </div>
 
             <div v-else class="flex gap-x-1 justify-end">

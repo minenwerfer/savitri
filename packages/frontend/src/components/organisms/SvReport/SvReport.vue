@@ -1,0 +1,70 @@
+<template>
+  <teleport to="body">
+    <sv-box title="Relatório" :float="true" v-model:visible="visible" @close="onClose">
+      <template #body>
+        <sv-form
+          v-if="!item._id"
+          :form="useFieldsExcept(['module'])"
+          :form-data="item"
+          :gap-y="8"
+        ></sv-form>
+
+        <div v-else>
+          <p>
+            Seu relatório foi gerado e retornou {{ item.entries_count }} registros.
+            Clique <sv-bare-button class="font-semibold" @clicked="download">aqui</sv-bare-button> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
+          </p>
+        </div>
+      </template>
+      <template #footer v-if="!item._id">
+        <sv-button @clicked="requestReport">Solicitar</sv-button>
+      </template>
+    </sv-box>
+  </teleport>
+</template>
+
+<script setup lang="ts">
+import { reactive, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import useModule from 'frontend/composables/module'
+import { SvBox, SvForm, SvButton, SvBareButton } from 'frontend/components'
+
+const props = defineProps<{
+  module: string
+  visible: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:visible', value: boolean): void
+}>()
+
+const store = useStore()
+const moduleRefs = reactive(useModule('report', store))
+
+const requestReport = () => {
+  return store.dispatch('report/insert', {
+    payload: {
+      what: {
+        ...moduleRefs.item,
+        module: props.module,
+        filters: moduleRefs.filters
+      }
+    }
+  })
+}
+
+const download = () => {
+  store.dispatch('report/download', { payload: { filters: moduleRefs.item } })
+}
+
+const onClose = () => {
+  moduleRefs.setItem({})
+  emit('update:visible', false)
+}
+
+const {
+  item,
+  useFieldsExcept
+
+} = toRefs(moduleRefs)
+</script>

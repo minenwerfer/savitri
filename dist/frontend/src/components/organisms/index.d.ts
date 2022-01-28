@@ -5,3 +5,4 @@ export { default as SvFeedback } from 'frontend/components/organisms/SvFeedback/
 export { default as SvBreadcumb } from 'frontend/components/organisms/SvBreadcumb/SvBreadcumb.vue';
 export { default as SvNotifications } from 'frontend/components/organisms/SvNotifications/SvNotifications.vue';
 export { default as SvProfileThumb } from 'frontend/components/organisms/SvProfileThumb/SvProfileThumb.vue';
+export { default as SvReport } from 'frontend/components/organisms/SvReport/SvReport.vue';

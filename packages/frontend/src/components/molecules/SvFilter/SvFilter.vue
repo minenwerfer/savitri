@@ -9,7 +9,6 @@
       :gap-x="4"
 
       @change="filter"
-      class="mb-6"
       >
     </sv-form>
 

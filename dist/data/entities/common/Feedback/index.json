@@ -30,6 +30,13 @@
             "type": "text",
             "noform": true
         },
+        "user_agent": {
+            "label": "User-Agent",
+            "type": "text",
+            "notable": true,
+            "noform": true,
+            "flexGrow": true
+        },
         "section": {
             "label": "Seção",
             "type": "text"

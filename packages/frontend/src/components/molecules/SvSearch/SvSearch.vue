@@ -1,5 +1,5 @@
 <template>
-  <div :key="parent" @change.prevent.stop="">
+  <div :key="parent" @change.prevent.stop="" class="w-full mb-4">
     <header class="font-semibold mb-1">{{ moduleName }}</header>
     <div v-if="isExpanded" class="mb-2">
       <sv-form

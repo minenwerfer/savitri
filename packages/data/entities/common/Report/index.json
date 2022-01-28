@@ -57,7 +57,14 @@
     },
     "filters": {
       "label": "Filtros",
-      "type": "object"
+      "type": "object",
+      "notable": true,
+      "noform": true
+    },
+    "entries_count": {
+      "label": "Entradas",
+      "type": "text",
+      "noform": true
     }
   }
 }

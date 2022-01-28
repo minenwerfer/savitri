@@ -3,8 +3,7 @@
     <template #body>
       <div v-if="!inserted">
         <p class="opacity-60 mb-8">
-          Não perca a chance de depositar a sua dúvida, sugestão ou crítica na caixinha.
-          Ela será lida pela equipe responsável em tempo exíguo e resolvida de acordo com a prioridade.
+          Envie qualquer coisa, ninguém ficará ofendido.
         </p>
 
         <sv-form
@@ -23,7 +22,7 @@
 
     <template #footer v-if="!inserted">
       <sv-button
-        @clicked="insert({ what: { ...item, base_version: baseVersion, product_version: productVersion } }).then(() => { inserted = true })"
+        @clicked="insert"
         :is-loading="isLoading"
       >
         Enviar
@@ -57,9 +56,22 @@ const derpImage = 'https://listman.redhat.com/archives/avocado-devel/2015-Novemb
 const img = new Image()
 img.src = derpImage
 
+const insert = async () => {
+  await moduleRefs.insert({
+    what: {
+      ...moduleRefs.item.value,
+      base_version: baseVersion,
+      product_version: productVersion,
+      user_agent: navigator.userAgent
+    }
+
+  })
+
+  inserted.value = true
+}
+
 const {
   item,
-  insert,
   isLoading,
   useFieldsExcept
 

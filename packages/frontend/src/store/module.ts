@@ -528,7 +528,7 @@ export abstract class Module<T=any, Item=any> {
           ...a,
           [key]: {
             ...value,
-            type: ![undefined, 'datetime'].includes(value.type)
+            type: ![undefined].includes(value.type)
               ? value.type : typeof value.module === 'string'
               ? 'module' : 'text',
 

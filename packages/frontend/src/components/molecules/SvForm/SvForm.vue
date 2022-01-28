@@ -1,29 +1,28 @@
 <template>
   <div v-if="formData" class="w-full">
-    <div :class="`grid ${flex ? 'md:flex' : ''} gap-x-${gapX} gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom} w-full`" v-if="!isReadonly">
+    <div :class="`grid ${flex ? 'md:flex md:flex-wrap' : ''} gap-x-${gapX} gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom} w-full`" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
 
-        :class="`${field.flexGrow ? 'flex-grow' : ''}`"
+        class="flex-grow"
+        style="min-width: 30%"
       >
         <!-- text -->
-        <sv-input v-if="['text', 'password', 'number'].includes(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]" :readonly="field.readonly">
+        <sv-input v-if="isTextType(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]" :readonly="field.readonly">
           <template #label>{{ field.label }}</template>
           <template #description v-if="field.description">{{ field.description }}</template>
         </sv-input>
 
-        <!-- textbox, checkbox, radio, boolean, select -->
-        <div v-else-if="['textbox', 'checkbox', 'radio', 'boolean', 'select'].includes(field.type)">
-          <strong class="text-sm">{{ field.translate ? $t(field.label) : field.label }}</strong>
+        <!-- checkbox, radio, boolean, select -->
+        <div v-else-if="['checkbox', 'radio', 'boolean', 'select'].includes(field.type)">
+          <strong class="text-xs uppercase">{{ field.translate ? $t(field.label) : field.label }}</strong>
           <div class="text-sm opacity-50">
             {{ field.description }}
           </div>
 
-          <sv-textbox v-if="field.type === 'textbox'" v-model="formData[key]"></sv-textbox>
-
-          <div v-else-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-1">
+          <div v-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-1">
             <sv-checkbox v-if="['checkbox', 'radio'].includes(field.type)" v-for="(value, vindex) in field.values" :key="`value-${vindex}`" v-model="formData[key]" :array="true" :value="value.value" :is-radio="field.type === 'radio'">
               <template #label>{{ field.translate ? $t(value.label) : value.label }}</template>
               <template #description>{{ value.description }}</template>
@@ -46,7 +45,7 @@
         </div>
 
         <div v-if="field.module === 'file'">
-          <header>{{ field.label }}</header>
+          <strong class="text-xs uppercase">{{ field.label }}</strong>
           <sv-file v-model="formData[key]" :context="`${module}.${itemIndex}.${key}.${fieldIndex}`"></sv-file>
         </div>
       </div>
@@ -73,11 +72,12 @@
       <sv-input
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
-
-        :class="`flex flex-col flex-grow ${ field.flexGrow ? 'w-full' : '' }`"
         :value="field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)"
         :readonly="true"
-        >
+        :type="isTextType(field.type) ? field.type : 'text'"
+
+        :class="`flex flex-col flex-grow ${ field.flexGrow || field.type === 'textbox' ? 'w-full' : '' }`"
+      >
         {{ field.label }}
       </sv-input>
     </div>
@@ -88,7 +88,7 @@
 import { defineAsyncComponent, inject, ref, toRefs, reactive, watch, } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
-import { SvInput, SvTextbox, SvCheckbox, SvSelect } from 'frontend/components'
+import { SvInput, SvCheckbox, SvSelect } from 'frontend/components'
 
 const SvSearch = defineAsyncComponent(() => import('frontend/components/molecules/SvSearch/SvSearch.vue'))
 const SvFile = defineAsyncComponent(() => import('frontend/components/molecules/SvFile/SvFile.vue'))
@@ -161,11 +161,14 @@ const allInOne = Object.entries(props.form)
   .sort((a: any, b: any) => typeof a.module === typeof b.module ? 1 : -1)
   .map(([key, field]: [string, any]) => {
     return [key, {
-    label: field?.label,
-    flexGrow: field?.flexGrow,
+    ...field,
     value: moduleRefs.formatValue((props.formData||{})[key], key, true),
   }]
 })
+
+const isTextType = (type: string) => {
+  return ['text', 'textbox', 'password', 'number', 'datetime'].includes(type)
+}
 
 const {
   getIndexes,

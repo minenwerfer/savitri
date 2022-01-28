@@ -52,8 +52,6 @@ export abstract class Controller<T> {
 
           if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
 
-            console.log(decodedToken)
-
             if( decodedToken?.access ) {
               throw new Error('forbidden method')
             }

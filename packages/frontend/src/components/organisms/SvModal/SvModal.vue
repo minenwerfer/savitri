@@ -1,5 +1,5 @@
 <template>
-  <sv-box :float="true" :close-hint="true" @close="$store.dispatch('meta/closeModal')">
+  <sv-box :float="true" :close-hint="true" @close="$store.dispatch('meta/closeModal')" classes="lg:w-1/3 xl:w-1/3">
     <template #title>
       <slot name="title"></slot>
     </template>

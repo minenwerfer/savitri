@@ -133,6 +133,7 @@ export class ReportController extends Mutable<ReportDocument> {
     const func = this.formatMap[props.what.format]
     const { filename, mime } = await func.call(this, columns, rows)
 
+    props.what.entries_count = rows.length
     props.what.file = await File.create({
       user_id: decodedToken._id,
       context: 'report',

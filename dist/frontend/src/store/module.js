@@ -386,7 +386,7 @@ class Module {
                     ...a,
                     [key]: {
                         ...value,
-                        type: ![undefined, 'datetime'].includes(value.type)
+                        type: ![undefined].includes(value.type)
                             ? value.type : typeof value.module === 'string'
                             ? 'module' : 'text',
                         ...(!!value.values ? { values: normalizeValues(value.values) } : {})

@@ -100,6 +100,7 @@ class ReportController extends Mutable_1.Mutable {
         });
         const func = this.formatMap[props.what.format];
         const { filename, mime } = await func.call(this, columns, rows);
+        props.what.entries_count = rows.length;
         props.what.file = await File_1.File.create({
             user_id: decodedToken._id,
             context: 'report',
