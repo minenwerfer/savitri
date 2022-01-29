@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReportController = void 0;
 const { writeFile } = require('fs').promises;
 const path = require('path');
+const helpers_1 = require("../../../common/src/helpers");
 const Report_1 = require("../models/Report");
 const Mutable_1 = require("./abstract/Mutable");
 const index_1 = require("./index");
@@ -18,11 +19,14 @@ class ReportController extends Mutable_1.Mutable {
         };
     }
     _getFields(description) {
-        return !description.table
-            ? description.fields
+        const filter = (entries) => {
+            return (0, helpers_1.fromEntries)(entries.filter(([_, value]) => !value.noreport));
+        };
+        const entries = !description.table
+            ? Object.entries(description.fields)
             : Object.entries(description.fields)
-                .filter(([key, _]) => description.table.includes(key))
-                .reduce((a, [key, value]) => ({ ...a, [key]: value }), {});
+                .filter(([key, _]) => description.table.includes(key));
+        return filter(entries);
     }
     _getColumns(fields) {
         return Object.values(fields).map((f) => f.label);

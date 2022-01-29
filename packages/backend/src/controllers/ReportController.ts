@@ -1,6 +1,8 @@
 const { writeFile } = require('fs').promises
 const path = require('path')
 
+import { fromEntries } from '../../../common/src/helpers'
+
 import { ReportDocument, Report, Description } from '../models/Report'
 import { Mutable } from './abstract/Mutable'
 import { getController } from './index'
@@ -24,11 +26,17 @@ export class ReportController extends Mutable<ReportDocument> {
   }
 
   private _getFields(description: any) {
-    return !description.table
-      ? description.fields
+
+    const filter = (entries: any): any => {
+      return fromEntries(entries.filter(([_, value]: [unknown, any]) => !value.noreport))
+    }
+
+    const entries = !description.table
+      ? Object.entries(description.fields)
       : Object.entries(description.fields)
         .filter(([key, _]: [string, unknown]) => description.table.includes(key))
-        .reduce((a: any, [key, value]: [string, any]) => ({ ...a, [key]: value }), {})
+
+    return filter(entries)
   }
 
   private _getColumns(fields: any[]) {
