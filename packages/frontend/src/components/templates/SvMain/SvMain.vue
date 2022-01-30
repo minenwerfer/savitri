@@ -2,7 +2,7 @@
   <div class="grid min-h-screen">
     <router-view></router-view>
 
-    <sv-modal v-model:visible="modal.isVisible">
+    <sv-modal v-model:visible="modal.isVisible" class="z-50">
       <template #title>{{ modal.title }}</template>
       <template #body>
         <div class="flex flex-col sm:flex-row justify-between">

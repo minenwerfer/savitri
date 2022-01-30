@@ -46,13 +46,13 @@ const defaultMethods = [
 ]
 
 const modules = store.state.meta.globalDescriptions
-const capabilitiesFields = modules.reduce((a: any, { module, methods, extraMethods }: { module: string, methods: string[], extraMethods: string[] }) => ({
+const capabilitiesFields = modules.reduce((a: any, { module, report, methods, extraMethods }: { module: string, methods: string[], extraMethods: string[] }) => ({
   ...a,
   [module]: {
     label: module,
     type: 'checkbox',
     translate: true,
-    values: [...(methods || defaultMethods), ...(extraMethods||[])].map((method: any) => ({
+    values: [...(methods || defaultMethods), ...(extraMethods||[]), ...(report ? ['report'] : [])].map((method: any) => ({
       label: method,
       value: method
     }))

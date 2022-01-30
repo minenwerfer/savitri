@@ -9,6 +9,10 @@
         }
     },
     "individualActions": {
+        "remove": {
+            "name": "Remover",
+            "ask": true
+        },
         "download": {
             "name": "Baixar"
         }
@@ -54,6 +58,18 @@
                 "everything": "Todo o período"
             },
             "translate": "true"
+        },
+        "limit": {
+            "label": "Limite",
+            "description": "Deixe vazio para retornar todos",
+            "type": "number",
+            "notable": true
+        },
+        "offset": {
+            "label": "Offset",
+            "description": "Deixe vazio para retornar do princípio",
+            "type": "number",
+            "notable": true
         },
         "filters": {
             "label": "Filtros",

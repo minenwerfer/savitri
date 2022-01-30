@@ -102,6 +102,14 @@ export class ReportController extends Mutable<ReportDocument> {
       throw new Error('formato inválido')
     }
 
+    if( props.what?.limit <= 0 ) {
+      throw new Error('limite inválido')
+    }
+
+    if( !decodedToken.access?.capabilities[props.what?.module].includes('report') ) {
+      throw new Error('forbidden method')
+    }
+
     props.what.user_id = decodedToken._id
     props.what.filters = props.what.type !== 'everything'
       ? (props.what.filters || {})
@@ -123,7 +131,8 @@ export class ReportController extends Mutable<ReportDocument> {
 
     const result = await instance.getAll({
       filters: props.what.filters,
-      ...(props.what.type === 'everything' ? { limit: 999999 } : {})
+      limit: +(props.what.limit || 99999999),
+      offset: +(props.what.offset || 0)
     })
 
     const rows = result

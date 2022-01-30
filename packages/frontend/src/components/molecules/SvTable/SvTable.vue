@@ -15,7 +15,7 @@
           </th>
         </tr>
 
-        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block shadow mb-4 sm:table-row sm:shadow-none leading-9 hover:bg-gray-100 ${rindex %2 !== 0 ? 'bg-gray-50' : ''}`">
+        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block shadow mb-4 sm:table-row sm:shadow-none leading-9 hover:bg-gray-50 ${computedRowColor(row, rindex)}`">
           <td class="hidden sm:table-cell border" v-if="module">
             <input type="checkbox" v-model="selected" :value="{ _id: row._id }"/>
           </td>
@@ -24,7 +24,7 @@
             :key="`column-${rindex}-${cindex}`"
             @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
 
-            class="block sm:table-cell truncate sm:text-sm px-1 cursor-pointer border"
+            class="block sm:table-cell truncate sm:text-sm px-1 cursor-pointer border-b sm:border"
           >
           <div class="grid grid-cols-2 sm:inline-block justify-between">
             <div class="font-semibold opacity-60 sm:hidden text-ellipsis truncate">{{ field.label }}</div>
@@ -77,6 +77,10 @@ const props = defineProps({
   module: {
     type: String,
     required: false
+  },
+  rowColor: {
+    type: Object,
+    required: false
   }
 })
 
@@ -90,6 +94,32 @@ const selected = computed({
   get: () => store.state[module.value].selected,
   set: (items: any[]) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
 })
+
+const rowCtx = {
+  date: (() => {
+    const date = new Date()
+    date.setHours(0, 0, 0, 0)
+    return date
+  })()
+}
+
+const bgColorClasses = {
+  yellow: 'bg-yellow-100',
+  red: 'bg-red-100',
+}
+
+const computedRowColor = (row: any, rindex: number) => {
+  if( !props.rowColor ) {
+    return rindex % 2 !== 0
+      ? 'bg-gray-50'
+      : ''
+  }
+
+  const color = (Object.entries(props.rowColor)
+    .find(([key, value]: [string, any]) => eval(value)(row, rowCtx))||[])[0]
+
+  return bgColorClasses[color]||'bg-white'
+}
 
 const {
   formatValue,

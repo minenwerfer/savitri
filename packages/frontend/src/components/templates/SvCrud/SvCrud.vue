@@ -71,6 +71,8 @@
         :recordsCount="recordsCount"
         :recordsTotal="recordsTotal"
 
+        :row-color="description.rowColor"
+
         :class="isLoading ? 'opacity-50' : ''"
         ></sv-table>
     </template>

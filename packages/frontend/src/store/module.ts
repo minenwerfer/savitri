@@ -551,7 +551,7 @@ export abstract class Module<T=any, Item=any> {
       get: this._actionHelper<Item>('get', 'ITEM_GET'),
       getAll: this._actionHelper<Item[]>('getAll', 'ITEMS_GET'),
       insert: this._actionHelper<Item>('insert', 'ITEM_INSERT'),
-      remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filters._id } })),
+      remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
       removeAll: this._actionHelper<Item>('removeAll', 'ITEMS_REMOVE'),
       modify: this._actionHelper<Item>('modify', 'ITEM_MODIFY'),
       modifyAll: this._actionHelper<Item>('modifyAll', 'ITEMS_MODIFY'),

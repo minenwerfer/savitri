@@ -405,7 +405,7 @@ class Module {
             get: this._actionHelper('get', 'ITEM_GET'),
             getAll: this._actionHelper('getAll', 'ITEMS_GET'),
             insert: this._actionHelper('insert', 'ITEM_INSERT'),
-            remove: this._actionHelper('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filter: { _id: payload.filters._id } })),
+            remove: this._actionHelper('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
             removeAll: this._actionHelper('removeAll', 'ITEMS_REMOVE'),
             modify: this._actionHelper('modify', 'ITEM_MODIFY'),
             modifyAll: this._actionHelper('modifyAll', 'ITEMS_MODIFY'),

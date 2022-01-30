@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" :class="`${ isFloating ? 'absolute z-50' : 'mb-3' } ${ animate ? 'animate-fade' : '' }`" @click="$emit('close')">
+  <div v-if="visible" :class="`${ isFloating ? 'absolute z-40' : 'mb-3' } ${ animate ? 'animate-fade' : '' }`" @click="$emit('close')">
     <div v-if="isFloating" class="fixed inset-0 bg-gray-900 opacity-60"></div>
     <div :class="`${ isFloating ? 'fixed inset-0 flex justify-center items-center' : ''}`">
       <div

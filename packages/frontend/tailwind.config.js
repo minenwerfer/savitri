@@ -1,3 +1,4 @@
+const path = require('path')
 const colors = require('tailwindcss/colors')
 
 const style = {
@@ -6,7 +7,11 @@ const style = {
 }
 
 module.exports = {
-  purge: { content: ['./public/**/*.html', './src/**/*.vue'] },
+  content: [
+    '../public/**/*.html',
+    '../src/**/*.vue',
+    path.join(global.appDir, './src/**/*.vue')
+  ],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     extend: {
@@ -59,9 +64,6 @@ module.exports = {
         neutral: colors.blue,
       }
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [],
 }
