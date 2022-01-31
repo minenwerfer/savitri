@@ -43,39 +43,37 @@
   </sv-box>
 
   <sv-box>
-    <template #body>
-      <div class="flex mb-2">
-        <div class="mr-auto">
-          <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm" v-if="description.report">
-            Solicitar relatório
-          </sv-bare-button>
-        </div>
-        <sv-pagination :module="module"></sv-pagination>
+    <div class="flex mb-2">
+      <div class="mr-auto">
+        <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm" v-if="description.report">
+          Solicitar relatório
+        </sv-bare-button>
       </div>
-      <sv-table
-        :key="module"
-        v-if="tableDescription"
-        :columns="{
-          ...tableDescription,
-          ...(individualActions.length > 0
-            ? {
-              __custom: {
-                label: 'Ações',
-                actions: individualActions
-              }
-            } : {}
-          )
-        }"
+      <sv-pagination :module="module"></sv-pagination>
+    </div>
+    <sv-table
+      :key="module"
+      v-if="tableDescription"
+      :columns="{
+        ...tableDescription,
+        ...(individualActions.length > 0
+          ? {
+            __custom: {
+              label: 'Ações',
+              actions: individualActions
+            }
+          } : {}
+        )
+      }"
 
-        :rows="items"
-        :recordsCount="recordsCount"
-        :recordsTotal="recordsTotal"
+      :rows="items"
+      :recordsCount="recordsCount"
+      :recordsTotal="recordsTotal"
 
-        :row-color="description.rowColor"
+      :row-color="description.rowColor"
 
-        :class="isLoading ? 'opacity-50' : ''"
-        ></sv-table>
-    </template>
+      :class="isLoading ? 'opacity-50' : ''"
+      ></sv-table>
   </sv-box>
 
 </template>

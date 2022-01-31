@@ -17,7 +17,7 @@ class Mutable extends Controller_1.Controller {
      * @method
      * Inserts a single document in the database.
      */
-    insert(props, response, token) {
+    insert(props, response, decodedToken) {
         const { _id, ...rest } = props.what;
         const what = typeof _id === 'string' ? Object.entries(rest).reduce((a, [key, value]) => {
             const result = a;
@@ -43,7 +43,7 @@ class Mutable extends Controller_1.Controller {
      * @method
      * Gets a document from database.
      */
-    get(props) {
+    get(props, response, decodedToken) {
         return this._model.findOne(props.filters);
     }
     /**

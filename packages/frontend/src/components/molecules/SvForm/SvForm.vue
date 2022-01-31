@@ -22,7 +22,7 @@
             {{ field.description }}
           </div>
 
-          <div v-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-1">
+          <div v-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-2">
             <sv-checkbox v-if="['checkbox', 'radio'].includes(field.type)" v-for="(value, vindex) in field.values" :key="`value-${vindex}`" v-model="formData[key]" :array="true" :value="value.value" :is-radio="field.type === 'radio'">
               <template #label>{{ field.translate ? $t(value.label) : value.label }}</template>
               <template #description>{{ value.description }}</template>
@@ -68,7 +68,7 @@
       </sv-search>
     </div>
 
-    <div v-if="isReadonly" class="flex flex-wrap gap-x-4 gap-y-8 text-md">
+    <div v-if="isReadonly" class="flex flex-wrap gap-x-4 gap-y-6 text-md">
       <sv-input
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"

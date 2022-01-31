@@ -62,14 +62,18 @@ onMounted(() => {
   }
 })
 
+const value = typeof props.value === 'object'
+  ? (props.value?._id || props.value)
+  : props.value
+
+const selectedValues = (values: any[]): (string|boolean)[] => {
+  return values.map((v: any) => v._id || v)
+}
+
 const bindVal = computed({
   get: () => {
     if( props.isRadio ) {
       return props.modelValue === props.value
-    }
-
-    const selectedValues = (values: any[]): (string|boolean)[] => {
-      return values.map((v: any) => v._id || v)
     }
 
     return Array.isArray(props.modelValue)
@@ -79,14 +83,14 @@ const bindVal = computed({
 
   set: () => {
     if( props.isRadio ) {
-      emit('update:modelValue', props.value)
+      emit('update:modelValue', value)
       return
     }
 
     if( props.array || Array.isArray(props.modelValue) ) {
-      emit('update:modelValue', !props.modelValue.includes(props.value)
-        ? [ ...props.modelValue||[], props.value ]
-        : props.modelValue.filter((v: any) => v !== props.value))
+      emit('update:modelValue', !selectedValues(props.modelValue||[]).includes(value)
+        ? [ ...props.modelValue||[], value ]
+        : selectedValues(props.modelValue).filter((v: any) => v !== value))
     } else {
       emit('update:modelValue', !(props.modelValue === true))
     }

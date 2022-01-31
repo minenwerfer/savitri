@@ -22,7 +22,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Inserts a single document in the database.
    */
-  public insert(props: { what: T & { _id?: string } }, response?: unknown, token?: any): any | Promise<any> {
+  public insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): any | Promise<any> {
     const { _id, ...rest } = props.what
     const what = typeof _id === 'string' ? Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
 
@@ -55,7 +55,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Gets a document from database.
    */
-  public get(props: { filters?: object }): any | Promise<any> {
+  public get(props: { filters?: object }, response?: unknown, decodedToken?: any): any | Promise<any> {
     return this._model.findOne(props.filters)
   }
 

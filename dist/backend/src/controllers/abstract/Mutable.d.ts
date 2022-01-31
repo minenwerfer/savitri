@@ -26,7 +26,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
         what: T & {
             _id?: string;
         };
-    }, response?: unknown, token?: any): any | Promise<any>;
+    }, response?: unknown, decodedToken?: any): any | Promise<any>;
     count(props: {
         filters?: object;
     }): Query<number, import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;
@@ -36,7 +36,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
      */
     get(props: {
         filters?: object;
-    }): any | Promise<any>;
+    }, response?: unknown, decodedToken?: any): any | Promise<any>;
     /**
      * @method
      * Gets a collection of documents from database.
