@@ -3,7 +3,7 @@
     <template #body>
       <div v-if="!inserted">
         <p class="opacity-60 mb-8">
-          Envie qualquer coisa, ninguém ficará ofendido.
+          Envie absolutamente qualquer coisa.
         </p>
 
         <sv-form

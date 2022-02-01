@@ -61,6 +61,7 @@ export interface CommonState {
     };
     selected: any[];
 }
+export declare const normalizeFilters: (filters: any[]) => any;
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -73,6 +74,7 @@ export declare abstract class Module<T = any, Item = any> {
     private _initialState;
     private _initialItemState;
     private _commonState;
+    private _description;
     namespaced: boolean;
     /**
      * @constructor

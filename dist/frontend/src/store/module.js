@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Module = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
+exports.Module = exports.normalizeFilters = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
 const variables_1 = __importDefault(require("variables"));
@@ -13,6 +13,19 @@ exports.SV_API_URL = process.env.NODE_ENV === 'development'
 exports.SV_API_URL_2 = process.env.NODE_ENV === 'development'
     ? 'http://0.0.0.0:3001/api'
     : '/api2';
+const normalizeFilters = (filters) => {
+    return filters
+        .reduce((a, b) => {
+        const filter = typeof b !== 'string'
+            ? { [b.field]: b.default || '' }
+            : { [b]: '' };
+        return {
+            ...a,
+            ...filter
+        };
+    }, {});
+};
+exports.normalizeFilters = normalizeFilters;
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -43,6 +56,7 @@ class Module {
         },
         selected: [],
     };
+    _description;
     namespaced = true;
     /**
      * @constructor
@@ -56,8 +70,9 @@ class Module {
     constructor(route, initialState, initialItemState, description, apiUrl) {
         this._initialState = initialState;
         this._initialItemState = initialItemState;
+        this._description = description;
         if (description?.filters) {
-            this._commonState._filters = description.filters.reduce((a, k) => ({ ...a, [k]: '' }), {});
+            this._commonState._filters = (0, exports.normalizeFilters)(description.filters);
         }
         this._moduleInstance = new Proxy(this, {
             get: (target, key) => {
@@ -273,7 +288,7 @@ class Module {
             filters: (state) => {
                 const filters = this._removeEmpty(state._filters);
                 const expr = (key, value) => {
-                    const field = state.__description.fields[key];
+                    const field = this._description.fields[key];
                     if (field.type === 'text') {
                         return {
                             $regex: value,
@@ -288,7 +303,7 @@ class Module {
                     return value;
                 };
                 const entries = Object.entries(filters)
-                    .filter(([key, value]) => value && !(typeof value === 'string' && value.length === 0))
+                    .filter(([_, value]) => value && !(typeof value === 'string' && value.length === 0))
                     .map(([key, value]) => [key, expr(key, value)]);
                 return this._condenseItem((0, helpers_1.fromEntries)(entries));
             },
@@ -297,7 +312,7 @@ class Module {
                     return {};
                 }
                 const fields = this._getters().fields(state);
-                return state._description.filters
+                return Object.keys((0, exports.normalizeFilters)(state._description.filters))
                     .reduce((a, k) => {
                     const field = Object.entries(fields)
                         .find(([key]) => key === k);
@@ -578,7 +593,7 @@ class Module {
                 state.selected = value ? items.map(({ _id }) => ({ _id })) || [] : [];
             },
             FILTERS_CLEAR: (state) => {
-                state._filters = {};
+                state._filters = this._commonState._filters;
             },
         };
     }

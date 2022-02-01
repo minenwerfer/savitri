@@ -105,7 +105,9 @@ watch(() => props.module, async (module: string) => {
 
   Object.assign(moduleRefs, useModule(module, store))
   store.dispatch('meta/setViewTitle', module)
-  store.dispatch(`${module}/getAll`)
+  store.dispatch(`${module}/getAll`, {
+    filters: moduleRefs.filters
+  })
 
 }, { immediate: true })
 

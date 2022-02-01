@@ -77,6 +77,20 @@ export interface CommonState {
   selected: any[]
 }
 
+export const normalizeFilters = (filters: any[]) => {
+  return filters
+    .reduce((a: any, b: any) => {
+      const filter = typeof b !== 'string'
+        ? { [b.field]: b.default||'' }
+        : { [b]: '' }
+
+      return {
+        ...a,
+        ...filter
+      }
+    }, {})
+}
+
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -109,6 +123,8 @@ export abstract class Module<T=any, Item=any> {
     selected: [],
   }
 
+  private _description: { fields: any }
+
   public namespaced = true
 
   /**
@@ -124,8 +140,10 @@ export abstract class Module<T=any, Item=any> {
     this._initialState = initialState;
     this._initialItemState = initialItemState
 
+    this._description = description
+
     if( description?.filters ) {
-      this._commonState._filters = description.filters.reduce((a: any, k: string) => ({ ...a, [k]: '' }), {})
+      this._commonState._filters = normalizeFilters(description.filters)
     }
 
     this._moduleInstance = new Proxy(this, {
@@ -394,7 +412,7 @@ export abstract class Module<T=any, Item=any> {
         const filters = this._removeEmpty(state._filters)
 
         const expr = (key: string, value: any) => {
-          const field = state.__description.fields[key]
+          const field = this._description.fields[key]
 
           if( field.type === 'text' ) {
             return {
@@ -414,7 +432,7 @@ export abstract class Module<T=any, Item=any> {
         }
 
       const entries = Object.entries(filters)
-        .filter(([key, value]: [string, any]) => value && !(typeof value === 'string' &&  value.length === 0))
+        .filter(([_, value]: [unknown, any]) => value && !(typeof value === 'string' &&  value.length === 0))
         .map(([key, value]) => [key, expr(key, value)])
 
 
@@ -428,16 +446,16 @@ export abstract class Module<T=any, Item=any> {
 
         const fields = this._getters().fields(state)
 
-        return state._description.filters
-        .reduce((a: object, k: string) => {
-          const field = Object.entries(fields)
-            .find(([key]: [string, unknown]) => key === k)
+        return Object.keys(normalizeFilters(state._description.filters))
+          .reduce((a: object, k: string) => {
+            const field = Object.entries(fields)
+              .find(([key]: [string, unknown]) => key === k)
 
-          return {
-            ...a,
-            ...(field ? { [k]: field[1] } : {})
-          }
-        }, {})
+            return {
+              ...a,
+              ...(field ? { [k]: field[1] } : {})
+            }
+          }, {})
       },
 
       /**
@@ -762,7 +780,7 @@ private _mutations() {
     },
 
     FILTERS_CLEAR: (state: CommonState) => {
-      state._filters = {}
+      state._filters = this._commonState._filters
     },
   }
 }
