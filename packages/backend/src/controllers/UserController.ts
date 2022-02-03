@@ -1,4 +1,5 @@
-import * as jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcrypt'
+
 import { UserDocument, User, Description } from '../models/User'
 import { TokenService } from '../services/tokenService'
 import { Mutable } from './abstract/Mutable'
@@ -18,8 +19,13 @@ export class UserController extends Mutable<UserDocument> {
     })
   }
 
-  public override insert(props: { what: any }) {
+  public override async insert(props: { what: any }) {
     props.what.group = buildConfig.group
+
+    if( props.what.password ) {
+      props.what.password = await bcrypt.hash(props.what.password, 10)
+    }
+
     return super.insert.call(this, props)
   }
 

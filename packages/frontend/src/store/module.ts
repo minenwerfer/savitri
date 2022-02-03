@@ -103,6 +103,7 @@ export abstract class Module<T=any, Item=any> {
 
   private _initialState: T
   private _initialItemState: Item
+
   private _commonState: CommonState = {
     isLoading: false,
     item: {},
@@ -123,7 +124,7 @@ export abstract class Module<T=any, Item=any> {
     selected: [],
   }
 
-  private _description: { fields: any }
+  private _description: { fields: any, filters: any }
 
   public namespaced = true
 
@@ -590,6 +591,23 @@ export abstract class Module<T=any, Item=any> {
       deactivate: ({ dispatch }: ActionProps, payload: any) => dispatch('insert', { ...payload, what: { active: false } }),
       deactivateAll: ({ dispatch }: ActionProps, payload: any) => dispatch('modifyAll', { ...payload, what: { active: false } }),
 
+      update: (...args:any) => {
+        const func = this._actionHelper<string>('update')
+        const [{ commit, dispatch }]: [ActionProps, unknown] = args
+
+        return func.apply(this, args)
+          .then((response: string) => {
+            commit('ITEMS_CLEAR')
+            dispatch('getAll')
+
+            dispatch('meta/spawnModal', {
+              title: 'Registros atualizados',
+              body: `Resposta do servidor: ${response}`
+
+            }, { root: true })
+          })
+      },
+
       ask: ({ dispatch }: ActionProps, { action, params, title, body }: { action: string, params: any, title?: string, body?: string}): Promise<void> => new Promise((resolve, reject) =>
         dispatch('meta/spawnPrompt', {
           title: title || 'Diálogo de confirmação',
@@ -780,7 +798,7 @@ private _mutations() {
     },
 
     FILTERS_CLEAR: (state: CommonState) => {
-      state._filters = this._commonState._filters
+      state._filters = normalizeFilters(this._description.filters)
     },
   }
 }

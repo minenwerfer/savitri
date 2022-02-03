@@ -26,6 +26,7 @@
         :is-readonly="isInsertReadonly"
         :key="`${item._id ? item._id : 'form'}`"
         :item-index="getItemIndex(item)"
+        :flex="description.flex"
         >
       </sv-form>
     </template>

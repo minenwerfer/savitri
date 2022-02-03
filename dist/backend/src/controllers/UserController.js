@@ -1,6 +1,26 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
+const bcrypt = __importStar(require("bcrypt"));
 const User_1 = require("../models/User");
 const tokenService_1 = require("../services/tokenService");
 const Mutable_1 = require("./abstract/Mutable");
@@ -17,8 +37,11 @@ class UserController extends Mutable_1.Mutable {
             publicMethods: ['authenticate']
         });
     }
-    insert(props) {
+    async insert(props) {
         props.what.group = buildConfig.group;
+        if (props.what.password) {
+            props.what.password = await bcrypt.hash(props.what.password, 10);
+        }
         return super.insert.call(this, props);
     }
     /**

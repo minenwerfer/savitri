@@ -20,6 +20,7 @@ export declare abstract class Controller<T> {
     protected _rawMethods: {
         [key: string]: string;
     };
+    protected _forbiddenMethods: string[];
     /**
      * @constructor
      * Sets controller metadata and creates a proxy that passes
@@ -28,6 +29,7 @@ export declare abstract class Controller<T> {
      */
     constructor(props: {
         description?: any;
+        forbiddenMethods?: string[];
         publicMethods?: string[];
         rawMethods?: {
             [key: string]: string;

@@ -23,18 +23,18 @@
           </div>
 
           <div v-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-2">
-            <sv-checkbox v-if="['checkbox', 'radio'].includes(field.type)" v-for="(value, vindex) in field.values" :key="`value-${vindex}`" v-model="formData[key]" :array="true" :value="value.value" :is-radio="field.type === 'radio'">
+            <sv-checkbox v-if="['checkbox', 'radio'].includes(field.type)" v-for="(value, vindex) in field.values" :key="`value-${vindex}`" v-model="formData[key]" :array="true" :value="value.value" :is-radio="field.type === 'radio'" :readonly="field.readonly">
               <template #label>{{ field.translate ? $t(value.label) : value.label }}</template>
               <template #description>{{ value.description }}</template>
             </sv-checkbox>
 
-            <sv-checkbox v-else-if="field.type === 'boolean'" v-model="formData[key]" :value="formData[key] === true">
+            <sv-checkbox v-else-if="field.type === 'boolean'" v-model="formData[key]" :value="formData[key] === true" :readonly="field.readonly">
               <template #label>{{ field.label }}</template>
             </sv-checkbox>
           </div>
 
 
-          <sv-select v-else v-model="formData[key]">
+          <sv-select v-else v-model="formData[key]" :values="field.values">
             <option value="">
               {{ $t('none') }}
             </option>

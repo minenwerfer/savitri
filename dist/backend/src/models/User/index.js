@@ -33,13 +33,6 @@ exports.UserSchema = (0, _Util_1.descriptionToSchema)(index_json_1.default, data
 exports.UserSchema.plugin(require('mongoose-autopopulate'));
 /**
  * @function
- * Will hash password before it's saved.
- */
-exports.UserSchema.pre('save', async function () {
-    this.password = await bcrypt.hash(this.password, 10);
-});
-/**
- * @function
  * Will return true if password matches.
  */
 exports.UserSchema.methods.testPassword = async function (candidate) {

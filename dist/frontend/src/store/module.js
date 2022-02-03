@@ -436,6 +436,19 @@ class Module {
             activateAll: ({ dispatch }, payload) => dispatch('modifyAll', { ...payload, what: { active: true } }),
             deactivate: ({ dispatch }, payload) => dispatch('insert', { ...payload, what: { active: false } }),
             deactivateAll: ({ dispatch }, payload) => dispatch('modifyAll', { ...payload, what: { active: false } }),
+            update: (...args) => {
+                const func = this._actionHelper('update');
+                const [{ commit, dispatch }] = args;
+                return func.apply(this, args)
+                    .then((response) => {
+                    commit('ITEMS_CLEAR');
+                    dispatch('getAll');
+                    dispatch('meta/spawnModal', {
+                        title: 'Registros atualizados',
+                        body: `Resposta do servidor: ${response}`
+                    }, { root: true });
+                });
+            },
             ask: ({ dispatch }, { action, params, title, body }) => new Promise((resolve, reject) => dispatch('meta/spawnPrompt', {
                 title: title || 'Diálogo de confirmação',
                 body: body || `Confirmar ação?`,
@@ -593,7 +606,7 @@ class Module {
                 state.selected = value ? items.map(({ _id }) => ({ _id })) || [] : [];
             },
             FILTERS_CLEAR: (state) => {
-                state._filters = this._commonState._filters;
+                state._filters = (0, exports.normalizeFilters)(this._description.filters);
             },
         };
     }

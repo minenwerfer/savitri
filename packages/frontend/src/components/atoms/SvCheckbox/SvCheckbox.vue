@@ -1,15 +1,13 @@
 <template>
   <div
-    class="
-    checkbox
+    :class="`
     rounded
     bg-white
     py-2
-    border
-    flex
-    items-center
-    select-none
-    "
+    flex items-center
+    select-none border
+    ${readonly ? 'bg-gray-100' : ''}
+    `"
     >
     <div class="px-2 w-8">
       <input
@@ -42,6 +40,7 @@ const props = defineProps<{
   value: string|boolean
   array?: boolean
   isRadio?: boolean
+  readonly?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -51,7 +50,7 @@ const emit = defineEmits<{
 const checkbox = ref<any>(null)
 
 const onClick = () => {
-  if( !props.required ) {
+  if( !props.required && !props.readonly ) {
     checkbox.value.click()
   }
 }
@@ -82,6 +81,10 @@ const bindVal = computed({
   },
 
   set: () => {
+    if( props.readonly ) {
+      return
+    }
+
     if( props.isRadio ) {
       emit('update:modelValue', value)
       return

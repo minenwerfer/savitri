@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt'
+
 import { Document, model, options } from '../../database'
 import { descriptionToSchema } from '../_Util'
 import { default as Description } from '../../../../data/entities/common/User/index.json'
@@ -17,14 +18,6 @@ export interface UserDocument extends Document {
 
 export const UserSchema = descriptionToSchema<UserDocument>(Description, options)
 UserSchema.plugin(require('mongoose-autopopulate'))
-
-/**
- * @function
- * Will hash password before it's saved.
- */
-UserSchema.pre('save', async function() {
-  this.password = await bcrypt.hash(this.password, 10) 
-})
 
 /**
  * @function

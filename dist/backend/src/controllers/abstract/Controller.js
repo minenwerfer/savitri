@@ -12,6 +12,7 @@ class Controller {
     _internal = [];
     _publicMethods = [];
     _rawMethods = {};
+    _forbiddenMethods = [];
     /**
      * @constructor
      * Sets controller metadata and creates a proxy that passes
@@ -21,11 +22,15 @@ class Controller {
     constructor(props) {
         this._description = props?.description;
         this._publicMethods = props?.publicMethods || [];
+        this._forbiddenMethods = props?.forbiddenMethods || [];
         this._rawMethods = props?.rawMethods || {};
         this._webInterface = new Proxy(this, {
             get: (target, key) => {
                 if (this._internal.includes(key)) {
                     throw new Error('forbidden method (cannot be called externally)');
+                }
+                if (this._forbiddenMethods.includes(key)) {
+                    throw new Error('forbidden method (explicitly forbidden)');
                 }
                 const method = target[key];
                 return function (req, res, decodedToken) {
@@ -35,7 +40,7 @@ class Controller {
                     }
                     if (!target._publicMethods?.includes(key) && (!decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key))) {
                         if (decodedToken?.access) {
-                            throw new Error('forbidden method');
+                            throw new Error('forbidden method (access denied)');
                         }
                         throw new Error('signed out');
                     }

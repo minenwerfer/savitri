@@ -21,8 +21,10 @@ export abstract class Controller<T> {
    * Supposed to contain method names as strings.
    */
   protected readonly _internal: string[] = []
+
   protected _publicMethods: string[] = []
   protected _rawMethods: { [key: string]: string } = {}
+  protected _forbiddenMethods: string[] = []
 
   /**
    * @constructor
@@ -30,9 +32,10 @@ export abstract class Controller<T> {
    * req.payload instead of req as first parameter and forbiddens call if
    * user hasn't the capability set.
    */
-  constructor(props: { description?: any, publicMethods?: string[], rawMethods?: { [key: string]: string } }) {
+  constructor(props: { description?: any, forbiddenMethods?: string[], publicMethods?: string[], rawMethods?: { [key: string]: string } }) {
     this._description = props?.description
     this._publicMethods = props?.publicMethods || []
+    this._forbiddenMethods = props?.forbiddenMethods || []
     this._rawMethods = props?.rawMethods || {}
 
     this._webInterface = new Proxy(this, {
@@ -40,6 +43,10 @@ export abstract class Controller<T> {
 
         if( this._internal.includes(key) ) {
           throw new Error('forbidden method (cannot be called externally)')
+        }
+
+        if( this._forbiddenMethods.includes(key) ) {
+          throw new Error('forbidden method (explicitly forbidden)')
         }
 
         const method = (target as { [key: string]: any })[key]
@@ -53,7 +60,7 @@ export abstract class Controller<T> {
           if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
 
             if( decodedToken?.access ) {
-              throw new Error('forbidden method')
+              throw new Error('forbidden method (access denied)')
             }
 
             throw new Error('signed out')
