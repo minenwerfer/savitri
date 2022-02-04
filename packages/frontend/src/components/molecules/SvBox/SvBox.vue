@@ -1,6 +1,6 @@
 <template>
   <div v-if="visible" :class="`${ isFloating ? 'absolute z-40' : 'mb-3' } ${ animate ? 'animate-fade' : '' }`" @click="$emit('close')">
-    <div v-if="isFloating" class="fixed inset-0 bg-gray-900 opacity-60"></div>
+    <sv-overlay v-if="isFloating" class="z-0"></sv-overlay>
     <div :class="`${ isFloating ? 'fixed inset-0 flex justify-center items-center' : ''}`">
       <div
         @click="$event.stopPropagation()"
@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { SvBareButton } from 'frontend/components'
+import { SvBareButton, SvOverlay } from 'frontend/components'
 
 const props = defineProps({
   closeHint: {

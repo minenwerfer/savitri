@@ -8,3 +8,5 @@ export { default as SvSelect } from 'frontend/components/atoms/SvSelect/SvSelect
 export { default as SvHeader } from 'frontend/components/atoms/SvHeader/SvHeader.vue'
 export { default as SvDropdown } from 'frontend/components/atoms/SvDropdown/SvDropdown.vue'
 export { default as SvWrapper } from 'frontend/components/atoms/SvWrapper/SvWrapper.vue'
+export { default as SvPanel } from 'frontend/components/atoms/SvPanel/SvPanel.vue'
+export { default as SvOverlay } from 'frontend/components/atoms/SvOverlay/SvOverlay.vue'

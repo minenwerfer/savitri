@@ -1,36 +1,50 @@
 <template>
   <div class="grid gap-y-4" v-if="Object.keys(columns).length > 0">
     <div class="overflow-hidden rounded-md">
-      <table class="w-full table-fixed sm:text-center border-collapse">
-        <tr class="leading-9 bg-gray-100">
-          <th class="hidden sm:table-cell w-10 border" v-if="module">
+      <table class="w-full">
+        <tr class="leading-9 text-xs uppercase text-left">
+          <th class="hidden lg:table-cell w-10 px-2" v-if="module">
             <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
           </th>
           <th
             v-for="(header, index) in columns"
             :key="`header-${index}`"
-            class="hidden sm:table-cell truncate px-1 border"
+            class="hidden lg:table-cell truncate"
           >
             {{ header.label || header.placeholder }}
           </th>
         </tr>
 
-        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block shadow mb-4 sm:table-row sm:shadow-none leading-9 hover:bg-gray-50 ${computedRowColor(row, rindex)}`">
-          <td class="hidden sm:table-cell border" v-if="module">
-            <input type="checkbox" v-model="selected" :value="{ _id: row._id }"/>
+        <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block shadow mb-4 lg:table-row lg:shadow-none leading-10 hover:bg-gray-50 ${computedRowColor(row, rindex)}`">
+          <td class="hidden lg:table-cell px-2" v-if="module">
+            <input type="checkbox" v-model="selected" :value="{ _id: row._id }" />
           </td>
           <td
             v-for="([column, field], cindex) in Object.entries(columns)"
             :key="`column-${rindex}-${cindex}`"
             @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
 
-            class="block sm:table-cell truncate sm:text-sm px-1 cursor-pointer border-b sm:border"
+            class="block lg:table-cell truncate cursor-pointer border-b lg:border-none"
           >
-          <div class="grid grid-cols-2 sm:inline-block justify-between">
-            <div class="font-semibold opacity-60 sm:hidden text-ellipsis truncate">{{ field.label }}</div>
+          <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm">
+            <div class="font-semibold opacity-60 lg:hidden text-ellipsis truncate">{{ field.label }}</div>
 
-            <div v-if="column !== '__custom'" class="opacity-80 text-right sm:text-left">
-              {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
+            <div
+              v-if="column !== '__custom'"
+              class="grid gap-y-1 opacity-80 text-right"
+            >
+              <div :class="cindex === 0 ? 'font-semibold opacity-80' : ''">
+                {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
+              </div>
+              <div v-if="getIndexes(row[column], column)?.length > 1" class="hidden lg:flex gap-x-2">
+                <div
+                  v-for="(subvalue, index) in getIndexes(row[column], column).slice(1, 2)"
+                  :key="`subvalue-${index}`"
+                  class="text-sm text-blue-500"
+                >
+                  {{ row[column][subvalue] }}
+                </div>
+              </div>
             </div>
 
             <div v-else class="flex gap-x-1 justify-end">
@@ -122,6 +136,7 @@ const computedRowColor = (row: any, rindex: number) => {
 }
 
 const {
+  getIndexes,
   formatValue,
   recordsCount,
   recordsTotal

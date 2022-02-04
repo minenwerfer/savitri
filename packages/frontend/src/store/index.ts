@@ -6,6 +6,7 @@ import { UserModule } from './modules/user'
 import { AccessProfileModule } from './modules/accessProfile'
 import { NotificationModule } from './modules/notification'
 import { ReportModule } from './modules/report'
+import { ReleaseModule } from './modules/release'
 
 export const instance = (): Store<any> => {
   const store = createStore<any>({
@@ -14,7 +15,8 @@ export const instance = (): Store<any> => {
       user: (new UserModule() as any).module,
       accessProfile: (new AccessProfileModule() as any).module,
       notification: (new NotificationModule()  as any).module,
-      report: (new ReportModule()  as any).module
+      report: (new ReportModule()  as any).module,
+      release: (new ReleaseModule()  as any).module
     },
     plugins: [
       autoModules,

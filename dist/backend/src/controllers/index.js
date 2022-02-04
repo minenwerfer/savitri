@@ -6,13 +6,14 @@ exports.getController = exports.commonControllers = void 0;
  * Array of lowercased controller names.
 */
 exports.commonControllers = [
-    'user',
     'accessProfile',
+    'application',
     'feedback',
     'file',
     'notification',
-    'application',
-    'report'
+    'release',
+    'report',
+    'user',
 ];
 /**
  * @exports @const

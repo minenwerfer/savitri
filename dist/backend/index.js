@@ -21,8 +21,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.options = exports.mongoose = exports.ReportDescription = exports.NotificationDescription = exports.FileDescription = exports.FeedbackDescription = exports.AccessProfileDescription = exports.UserDescription = void 0;
+exports.options = exports.mongoose = exports.ReleaseDescription = exports.ReportDescription = exports.NotificationDescription = exports.FileDescription = exports.FeedbackDescription = exports.AccessProfileDescription = exports.UserDescription = void 0;
 __exportStar(require("./src/controllers/abstract/Mutable"), exports);
 __exportStar(require("./src/controllers/abstract/Controller"), exports);
 var User_1 = require("./src/models/User");
@@ -37,6 +40,8 @@ var Notification_1 = require("./src/models/Notification");
 Object.defineProperty(exports, "NotificationDescription", { enumerable: true, get: function () { return Notification_1.Description; } });
 var Report_1 = require("./src/models/Report");
 Object.defineProperty(exports, "ReportDescription", { enumerable: true, get: function () { return Report_1.Description; } });
+var index_json_1 = require("../data/entities/common/Release/index.json");
+Object.defineProperty(exports, "ReleaseDescription", { enumerable: true, get: function () { return __importDefault(index_json_1).default; } });
 __exportStar(require("./src/models/_Util"), exports);
 exports.mongoose = __importStar(require("./src/database"));
 var database_1 = require("./src/database");

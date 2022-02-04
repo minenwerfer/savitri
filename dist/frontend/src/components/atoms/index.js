@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SvWrapper = exports.SvDropdown = exports.SvHeader = exports.SvSelect = exports.SvCard = exports.SvInput = exports.SvCheckbox = exports.SvButton = exports.SvBareButton = exports.SvArrow = void 0;
+exports.SvOverlay = exports.SvPanel = exports.SvWrapper = exports.SvDropdown = exports.SvHeader = exports.SvSelect = exports.SvCard = exports.SvInput = exports.SvCheckbox = exports.SvButton = exports.SvBareButton = exports.SvArrow = void 0;
 var SvArrow_vue_1 = require("frontend/components/atoms/SvArrow/SvArrow.vue");
 Object.defineProperty(exports, "SvArrow", { enumerable: true, get: function () { return __importDefault(SvArrow_vue_1).default; } });
 var SvBareButton_vue_1 = require("frontend/components/atoms/SvBareButton/SvBareButton.vue");
@@ -24,4 +24,8 @@ var SvDropdown_vue_1 = require("frontend/components/atoms/SvDropdown/SvDropdown.
 Object.defineProperty(exports, "SvDropdown", { enumerable: true, get: function () { return __importDefault(SvDropdown_vue_1).default; } });
 var SvWrapper_vue_1 = require("frontend/components/atoms/SvWrapper/SvWrapper.vue");
 Object.defineProperty(exports, "SvWrapper", { enumerable: true, get: function () { return __importDefault(SvWrapper_vue_1).default; } });
+var SvPanel_vue_1 = require("frontend/components/atoms/SvPanel/SvPanel.vue");
+Object.defineProperty(exports, "SvPanel", { enumerable: true, get: function () { return __importDefault(SvPanel_vue_1).default; } });
+var SvOverlay_vue_1 = require("frontend/components/atoms/SvOverlay/SvOverlay.vue");
+Object.defineProperty(exports, "SvOverlay", { enumerable: true, get: function () { return __importDefault(SvOverlay_vue_1).default; } });
 //# sourceMappingURL=index.js.map

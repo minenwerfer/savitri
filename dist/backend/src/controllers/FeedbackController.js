@@ -9,7 +9,7 @@ class FeedbackController extends Mutable_1.Mutable {
     }
     insert(props, response, decodedToken) {
         props.what.user_id = decodedToken._id;
-        super.insert.call(this, props, response, decodedToken);
+        return super.insert.call(this, props, response, decodedToken);
     }
 }
 exports.FeedbackController = FeedbackController;

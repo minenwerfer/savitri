@@ -138,7 +138,7 @@ export abstract class Module<T=any, Item=any> {
    * @param {string} apiUrl - URL to be used in place of SV_API_URL
    */
   constructor(route: string, initialState: T, initialItemState: Item, description?: any, apiUrl?: string) {
-    this._initialState = initialState;
+    this._initialState = initialState
     this._initialItemState = initialItemState
 
     this._description = description

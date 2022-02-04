@@ -6,6 +6,7 @@ export { Description as FeedbackDescription } from './src/models/Feedback';
 export { Description as FileDescription } from './src/models/File';
 export { Description as NotificationDescription } from './src/models/Notification';
 export { Description as ReportDescription } from './src/models/Report';
+export { default as ReleaseDescription } from '../data/entities/common/Release/index.json';
 export * from './src/models/_Util';
 export * as mongoose from './src/database';
 export { options } from './src/database';

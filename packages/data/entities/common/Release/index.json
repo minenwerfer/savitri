@@ -1,0 +1,33 @@
+{
+  "module": "release",
+  "route": true,
+  "actions": {
+    "spawnAdd": {
+      "name": "Adicionar"
+    },
+    "removeAll": {
+      "name": "Remover",
+      "ask": true,
+      "selection": true
+    }
+  },
+  "individualActions": {
+    "spawnEdit": {
+      "name": "Editar"
+    },
+    "remove": {
+      "name": "Remover",
+      "ask": true
+    }
+  },
+  "fields": {
+    "base": {
+      "label": "Base",
+      "type": "object"
+    },
+    "product": {
+      "label": "Product",
+      "type": "object"
+    }
+  }
+}

@@ -1,11 +1,11 @@
 export const commonModels = [
   'accessProfile',
-  'user',
   'feedback',
-  'file'
+  'file',
+  'user',
 ]
 
-export * as User from './User'
-export * as Feedback from './Feedback'
 export * as Access from './AccessProfile'
+export * as Feedback from './Feedback'
 export * as File from './File'
+export * as User from './User'

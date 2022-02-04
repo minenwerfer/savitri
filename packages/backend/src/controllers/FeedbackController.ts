@@ -8,6 +8,6 @@ export class FeedbackController extends Mutable<FeedbackDocument> {
 
   public override insert(props: { what: FeedbackDocument }, response: unknown, decodedToken: any) {
     props.what.user_id = decodedToken._id
-    super.insert.call(this, props, response, decodedToken)
+    return super.insert.call(this, props, response, decodedToken)
   }
 }

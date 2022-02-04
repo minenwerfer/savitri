@@ -8,6 +8,7 @@ const user_1 = require("./modules/user");
 const accessProfile_1 = require("./modules/accessProfile");
 const notification_1 = require("./modules/notification");
 const report_1 = require("./modules/report");
+const release_1 = require("./modules/release");
 const instance = () => {
     const store = (0, vuex_1.createStore)({
         modules: {
@@ -15,7 +16,8 @@ const instance = () => {
             user: new user_1.UserModule().module,
             accessProfile: new accessProfile_1.AccessProfileModule().module,
             notification: new notification_1.NotificationModule().module,
-            report: new report_1.ReportModule().module
+            report: new report_1.ReportModule().module,
+            release: new release_1.ReleaseModule().module
         },
         plugins: [
             plugins_1.autoModules,

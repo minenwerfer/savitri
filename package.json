@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "backend-core": "file:packages/backend",
-    "frontend-core": "file:packages/frontend"
+    "frontend-core": "file:packages/frontend",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^10.2.0"

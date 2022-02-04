@@ -2,7 +2,7 @@
   <button
     :class="`
       active:underline
-      inline-block select-none
+      inline-block select-none outline-none
       ${
         !disabled
           ? 'cursor-pointer'

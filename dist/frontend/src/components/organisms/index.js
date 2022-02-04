@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SvReport = exports.SvProfileThumb = exports.SvNotifications = exports.SvBreadcumb = exports.SvFeedback = exports.SvTopBar = exports.SvModal = exports.SvMenu = void 0;
+exports.SvReleases = exports.SvReport = exports.SvProfileThumb = exports.SvNotifications = exports.SvBreadcumb = exports.SvFeedback = exports.SvTopBar = exports.SvModal = exports.SvMenu = void 0;
 var SvMenu_vue_1 = require("frontend/components/organisms/SvMenu/SvMenu.vue");
 Object.defineProperty(exports, "SvMenu", { enumerable: true, get: function () { return __importDefault(SvMenu_vue_1).default; } });
 var SvModal_vue_1 = require("frontend/components/organisms/SvModal/SvModal.vue");
@@ -20,4 +20,6 @@ var SvProfileThumb_vue_1 = require("frontend/components/organisms/SvProfileThumb
 Object.defineProperty(exports, "SvProfileThumb", { enumerable: true, get: function () { return __importDefault(SvProfileThumb_vue_1).default; } });
 var SvReport_vue_1 = require("frontend/components/organisms/SvReport/SvReport.vue");
 Object.defineProperty(exports, "SvReport", { enumerable: true, get: function () { return __importDefault(SvReport_vue_1).default; } });
+var SvReleases_vue_1 = require("frontend/components/organisms/SvReleases/SvReleases.vue");
+Object.defineProperty(exports, "SvReleases", { enumerable: true, get: function () { return __importDefault(SvReleases_vue_1).default; } });
 //# sourceMappingURL=index.js.map

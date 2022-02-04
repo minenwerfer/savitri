@@ -31,7 +31,7 @@
       @input="$emit('update:modelValue', $event.target.value)"
       :readonly="readonly"
 
-    >{{ value }}</textarea>
+    >{{ inputValue || value }}</textarea>
     </label>
 </template>
 

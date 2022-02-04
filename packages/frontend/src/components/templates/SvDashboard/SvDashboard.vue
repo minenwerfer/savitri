@@ -1,6 +1,5 @@
 <template>
   <div class="bg-gray-100">
-
     <sv-bare-button
       class="
         fixed bottom-0 right-0 z-30
@@ -34,6 +33,9 @@
         </div>
 
         <sv-breadcumb class="hidden md:block order-1" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)">
+          <sv-bare-button v-if="webpackVariables.releases" @clicked="isReleasesVisible = true">
+            <unicon name="newspaper" fill="black"></unicon>
+          </sv-bare-button>
           <sv-profile-thumb></sv-profile-thumb>
           <sv-notifications v-if="webpackVariables.notification"></sv-notifications>
         </sv-breadcumb>
@@ -41,8 +43,8 @@
       </div>
     </div>
 
-    <sv-feedback v-model:visible="isFeedbackVisible">
-    </sv-feedback>
+    <sv-feedback v-model:visible="isFeedbackVisible"></sv-feedback>
+    <sv-releases v-if="isReleasesVisible" @close="isReleasesVisible = false"></sv-releases>
   </div>
 </template>
 
@@ -50,13 +52,26 @@
 import { computed, inject, ref } from 'vue'
 import { useStore } from 'vuex'
 import { default as webpackVariables } from 'variables'
-import { SvMenu, SvBreadcumb, SvTopBar, SvBareButton, SvFeedback, SvProfileThumb, SvNotifications } from 'frontend/components'
+
+import {
+  SvMenu,
+  SvBreadcumb,
+  SvTopBar,
+  SvBareButton,
+  SvFeedback,
+  SvProfileThumb,
+  SvNotifications,
+  SvReleases
+
+} from 'frontend/components'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
 
-const isFeedbackVisible = ref(false)
 const menu = computed(() => store.state.meta.menu)
+
+const isFeedbackVisible = ref(false)
+const isReleasesVisible = ref(false)
 const isMenuVisible = computed(() => store.state.meta.menu.isVisible)
 const isMenuMobileVisible = computed(() => store.state.meta.menu.isMobileVisible)
 </script>

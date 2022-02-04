@@ -3,13 +3,14 @@
  * Array of lowercased controller names.
 */
 export const commonControllers = [
-  'user',
   'accessProfile',
+  'application',
   'feedback',
   'file',
   'notification',
-  'application',
-  'report'
+  'release',
+  'report',
+  'user',
 ]
 
 /**

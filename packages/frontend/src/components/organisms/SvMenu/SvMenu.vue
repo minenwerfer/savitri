@@ -6,7 +6,7 @@
 
   <div :class="`
     fixed md:sticky top-0 right-0 w-10/12 md:w-auto h-screen z-40
-    bg-white shadow-lg pt-4 border-l
+    bg-white shadow-lg pt-4 md:border-l
     animate-slip md:animate-slowfade transition-all
     ${ visible ? '' : 'block md:hidden' } 
     ${ mobileVisible ? '' : 'hidden md:block' }
