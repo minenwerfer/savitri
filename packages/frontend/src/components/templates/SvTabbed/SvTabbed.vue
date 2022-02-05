@@ -1,7 +1,7 @@
 <template>
   <div :class="vertical ? 'lg:flex lg:gap-x-4' : ''">
     <sv-box :class="vertical ? 'lg:w-1/6' : ''" classes="w-screen md:w-auto lg:w-full" v-if="titles && titles.length > 0" :padding-y="`pt-2 lg:pt-2 ${vertical ? 'lg:py-5' : ''}`">
-      <div :class="`flex gap-x-4 w-full whitespace-nowrap overflow-scroll ${vertical ? 'lg:flex-col lg:gap-y-4' : ''}`">
+      <div :class="`flex gap-x-4 w-full whitespace-nowrap overflow-auto ${vertical ? 'lg:flex-col lg:gap-y-4' : ''}`">
         <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden lg:block ${vertical ? menuClasses : ''}`"></slot>
         <sv-bare-button
           :class="`

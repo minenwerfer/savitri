@@ -1,9 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mutable = exports.PAGINATION_LIMIT = void 0;
+exports.Mutable = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
 const Controller_1 = require("./Controller");
 const helpers_1 = require("../../../../common/src/helpers");
 exports.PAGINATION_LIMIT = process.env.PAGINATION_LIMIT;
+const depopulateChildren = (item) => {
+    const depopulate = (i) => {
+        if (!i || typeof i !== 'object' || !('_id' in i)) {
+            return i;
+        }
+        return (0, helpers_1.fromEntries)(Object.entries(i._doc || i)
+            .map(([key, value]) => [key, value?._id ? value._id : value]));
+    };
+    const entries = Object.entries(item._doc || item)
+        .map(([key, value]) => [key, !Array.isArray(value) ? depopulate(value) : value.map((v) => depopulate(v))]);
+    return (0, helpers_1.fromEntries)(entries);
+};
+exports.depopulateChildren = depopulateChildren;
 class Mutable extends Controller_1.Controller {
     /**
      * @constructor
@@ -50,7 +63,7 @@ class Mutable extends Controller_1.Controller {
      * @method
      * Gets a collection of documents from database.
      */
-    getAll(props) {
+    async getAll(props) {
         const defaultSort = {
             created_at: -1,
             date_updated: -1,
@@ -62,10 +75,12 @@ class Mutable extends Controller_1.Controller {
         const entries = Object.entries(props.filters || {})
             .map(([key, value]) => [key, typeof value === 'object' && 'id' in value ? value._id : value]);
         props.filters = (0, helpers_1.fromEntries)(entries);
-        return this._model.find(props.filters || {})
+        const result = await this._model.find(props.filters || {})
             .sort(props.sort || defaultSort)
             .skip(props.offset || 0)
             .limit(props.limit);
+        return result
+            .map((item) => (0, exports.depopulateChildren)(item));
     }
     /**
      * @method

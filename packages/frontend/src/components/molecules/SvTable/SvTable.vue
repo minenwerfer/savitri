@@ -31,7 +31,7 @@
 
             <div
               v-if="column !== '__custom'"
-              class="grid gap-y-1 opacity-80 text-right"
+              :class="`grid gap-y-1 opacity-80 text-right ${field.maxWidth ? maxWidth(field.maxWidth) : ''}`"
             >
               <div :class="cindex === 0 ? 'font-semibold opacity-80' : ''">
                 {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
@@ -42,7 +42,7 @@
                   :key="`subvalue-${index}`"
                   class="text-sm text-blue-500"
                 >
-                  {{ row[column][subvalue] }}
+                  {{ row[column]?.[subvalue] }}
                 </div>
               </div>
             </div>
@@ -133,6 +133,14 @@ const computedRowColor = (row: any, rindex: number) => {
     .find(([key, value]: [string, any]) => eval(value)(row, rowCtx))||[])[0]
 
   return bgColorClasses[color]||'bg-white'
+}
+
+const maxWidth = (width: string) => {
+  const widthClasses = {
+    '5': 'max-width-[5em]'
+  }
+
+  return widthClasses[width]
 }
 
 const {

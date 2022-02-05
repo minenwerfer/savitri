@@ -8,6 +8,22 @@ export const { PAGINATION_LIMIT } = process.env
 export type SingleQuery<T> = Query<(T & { _id: any; }), T & { _id: any; }, {}, T>;
 export type MultipleQuery<T> = Query<(T & { _id: any; })[], T & { _id: any; }, {}, T>;
 
+export const depopulateChildren = (item: any) => {
+  const depopulate = (i: any) => {
+    if( !i || typeof i !== 'object' || !('_id' in i) ) {
+      return i
+    }
+
+    return fromEntries(Object.entries(i._doc || i)
+      .map(([key, value]: [string, any]) => [key, value?._id ? value._id : value]))
+  }
+
+  const entries = Object.entries(item._doc || item)
+    .map(([key, value]: [string, any]) => [key, !Array.isArray(value) ? depopulate(value) : value.map((v: any) => depopulate(v))])
+
+  return fromEntries(entries)
+}
+
 export abstract class Mutable<T> extends Controller<T> {
   /**
    * @constructor
@@ -63,7 +79,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Gets a collection of documents from database.
    */
-  public getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }): MultipleQuery<T> | Promise<MultipleQuery<T>> {
+  public async getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }): Promise<MultipleQuery<T>> {
     const defaultSort = {
       created_at: -1,
       date_updated: -1,
@@ -79,10 +95,13 @@ export abstract class Mutable<T> extends Controller<T> {
 
     props.filters = fromEntries(entries)
 
-    return this._model.find(props.filters||{})
+    const result = await this._model.find(props.filters||{})
       .sort(props.sort || defaultSort)
       .skip(props.offset || 0)
       .limit(props.limit)
+
+    return result
+      .map((item: any) => depopulateChildren(item))
   }
 
   /**

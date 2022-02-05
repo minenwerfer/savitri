@@ -78,6 +78,12 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
   const persistentStorage = new PersistentStorage()
   PersistentStorage.instance.switchObjectStore('application')
 
+  // precaches assets
+  if( (webpackVariables as any).productLogo ) {
+    const productLogo = new Image()
+    productLogo.src = require(`@/../assets/${(webpackVariables as any).productLogo}`).default
+  }
+
   store.dispatch('meta/describeAll').then(() => {
     window.dispatchEvent(new CustomEvent('__storeCreated'))
     resolve({

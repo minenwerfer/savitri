@@ -42,7 +42,9 @@ const moduleRefs = reactive(useModule('release', store))
 const currentTab = ref(1)
 
 onMounted(() => {
-  moduleRefs.getAll()
+  if( moduleRefs.items.length === 0 ) {
+    moduleRefs.getAll()
+  }
 })
 
 const {

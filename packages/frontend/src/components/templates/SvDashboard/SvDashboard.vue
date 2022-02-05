@@ -36,8 +36,14 @@
           <sv-bare-button v-if="webpackVariables.releases" @clicked="isReleasesVisible = true">
             <unicon name="newspaper" fill="black"></unicon>
           </sv-bare-button>
-          <sv-profile-thumb></sv-profile-thumb>
-          <sv-notifications v-if="webpackVariables.notification"></sv-notifications>
+          <sv-bare-button @clicked="isReleasesVisible = true">
+            <unicon name="user" fill="black"></unicon>
+          </sv-bare-button>
+          <sv-bare-button v-if="webpackVariables.notification" @clicked="isReleasesVisible = true">
+            <unicon name="bell" fill="black"></unicon>
+          </sv-bare-button>
+          <!-- <sv-profile-thumb></sv-profile-thumb> -->
+          <!-- <sv-notifications v-if="webpackVariables.notification"></sv-notifications> -->
         </sv-breadcumb>
 
       </div>

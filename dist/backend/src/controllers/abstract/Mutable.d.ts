@@ -12,6 +12,7 @@ export declare type MultipleQuery<T> = Query<(T & {
 })[], T & {
     _id: any;
 }, {}, T>;
+export declare const depopulateChildren: (item: any) => any;
 export declare abstract class Mutable<T> extends Controller<T> {
     /**
      * @constructor
@@ -46,7 +47,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
         offset?: number;
         limit?: number;
         sort?: any;
-    }): MultipleQuery<T> | Promise<MultipleQuery<T>>;
+    }): Promise<MultipleQuery<T>>;
     /**
      * @method
      * Removes a document from database.

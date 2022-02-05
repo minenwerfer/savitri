@@ -44,7 +44,7 @@
   </sv-box>
 
   <sv-box>
-    <div class="flex mb-2">
+    <div class="flex mb-6">
       <div class="mr-auto">
         <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm" v-if="description.report">
           Solicitar relatório

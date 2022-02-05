@@ -72,6 +72,11 @@ const useApp = (config) => new Promise((resolve) => {
     // initializes storage singleton
     const persistentStorage = new singleton_1.PersistentStorage();
     singleton_1.PersistentStorage.instance.switchObjectStore('application');
+    // precaches assets
+    if (variables_1.default.productLogo) {
+        const productLogo = new Image();
+        productLogo.src = require(`@/../assets/${variables_1.default.productLogo}`).default;
+    }
     store.dispatch('meta/describeAll').then(() => {
         window.dispatchEvent(new CustomEvent('__storeCreated'));
         resolve({

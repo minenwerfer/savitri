@@ -91,7 +91,7 @@ const inputValue = ref(props.type === 'datetime'
 const classes = computed(() => `
     w-full
     border-box rounded
-    border-2 border-gray-300 focus:border-purple-500
+    border border-gray-300 focus:border-purple-500
     bg-white
     px-3 py-1
     text-gray-600 outline-none
