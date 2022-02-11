@@ -119,7 +119,7 @@ export default (name: string, store: any): any => {
       : value
 
     return firstValue !== undefined
-      ? ( field?.type === 'datetime' ? firstValue.formatDateTime() : firstValue )
+      ? ( field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue )
       : '-'
   }
 

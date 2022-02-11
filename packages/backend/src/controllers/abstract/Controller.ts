@@ -5,7 +5,7 @@ export interface HandlerRequest {
   payload: {
     offset?: number
     limit?: number
-    filter?: any
+    filters?: any
     what?: any
   }
 }
@@ -22,7 +22,10 @@ export abstract class Controller<T> {
    */
   protected readonly _internal: string[] = []
 
-  protected _publicMethods: string[] = []
+  protected _publicMethods: string[] = [
+    'describe'
+  ]
+
   protected _rawMethods: { [key: string]: string } = {}
   protected _forbiddenMethods: string[] = []
 
@@ -34,7 +37,7 @@ export abstract class Controller<T> {
    */
   constructor(props: { description?: any, forbiddenMethods?: string[], publicMethods?: string[], rawMethods?: { [key: string]: string } }) {
     this._description = props?.description
-    this._publicMethods = props?.publicMethods || []
+    this._publicMethods = props?.publicMethods || this._publicMethods
     this._forbiddenMethods = props?.forbiddenMethods || []
     this._rawMethods = props?.rawMethods || {}
 
@@ -67,7 +70,7 @@ export abstract class Controller<T> {
           }
 
           const payload = Object.keys(req.payload||{}).length === 0
-            ? { filter: {} }
+            ? { filters: {} }
             : req.payload
 
           if( typeof req.payload?.limit === 'number' && (req.payload.limit > 150 || req.payload.limit <= 0) ) {
@@ -76,7 +79,7 @@ export abstract class Controller<T> {
 
           if( decodedToken.access?.visibility !== 'everything' ) {
             if( payload.what ) payload.what.user_id = decodedToken._id;
-            if( payload.filter ) payload.filter.user_id = decodedToken._id;
+            if( payload.filters ) payload.filters.user_id = decodedToken._id;
           }
 
           (req as { -readonly [P in keyof Request]: Request[P] }).payload = payload

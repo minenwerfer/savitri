@@ -14,18 +14,18 @@ export interface PromptAction {
  * Meta interface.
  */
 export interface Meta {
-  globalIsLoading: boolean,
-  globalDescriptions: any[],
-  viewTitle: string,
+  globalIsLoading: boolean
+  globalDescriptions: any[]
+  viewTitle: string
 
   menu: {
-    isVisible: boolean;
-    isMobileVisible: boolean;
+    isVisible: boolean
+    isMobileVisible: boolean
   },
   modal: {
     isVisible: boolean
     title: string
-    body: string,
+    body: string
     image?: string
     component?: string
     details: {}
@@ -36,9 +36,17 @@ export interface Meta {
     body: string
     actions: PromptAction[]
   },
+  sidebar: {
+    isVisible: boolean
+    title: string
+    component: string
+  },
+  report: {
+    isVisible: boolean
+  },
   crud: {
-    isInsertVisible: boolean;
-    isInsertReadonly: boolean;
+    isInsertVisible: boolean
+    isInsertReadonly: boolean
   }
 }
 
@@ -59,17 +67,25 @@ export class MetaModule extends Module<Meta, {}> {
       },
       modal: {
         isVisible: false,
-        title: 'Teste',
-        body: 'Lorem ipsum dolor sit amet',
+        title: '',
+        body: '',
         image: '',
         component: '',
         details: {}
       },
       prompt: {
         isVisible: false,
-        title: 'Teste',
-        body: 'Lorem ipsum dolor sit amet',
+        title: '',
+        body: '',
         actions: [],
+      },
+      sidebar: {
+        isVisible: false,
+        title: '',
+        component: ''
+      },
+      report: {
+        isVisible: false
       },
       crud: {
         isInsertVisible: false,
@@ -103,6 +119,16 @@ export class MetaModule extends Module<Meta, {}> {
 
           resolve(data?.result)
         })
+      }),
+
+      describe: ({ commit }: ActionProps, modules: string[]): Promise<void> => new Promise(async (resolve) => {
+        for (const module of modules) {
+          await this._http.get(`/${module}/describe`).then(({ data }: AxiosResponse) => {
+            commit('DESCRIPTIONS_ADD', data?.result)
+          })
+        }
+
+        resolve()
       }),
 
       setViewTitle: ({ commit }: ActionProps, value: string): void => {
@@ -148,7 +174,23 @@ export class MetaModule extends Module<Meta, {}> {
 
       closeCrud: ({ commit }: ActionProps) => {
         commit('CRUD_CLOSE')
-      }
+      },
+
+      spawnSidebar: ({ commit }: ActionProps, payload: any) => {
+        commit('SIDEBAR_SPAWN', payload)
+      },
+
+      closeSidebar: ({ commit }: ActionProps) => {
+        commit('SIDEBAR_CLOSE')
+      },
+
+      spawnReport: ({ commit }: ActionProps) => {
+        commit('REPORT_SPAWN')
+      },
+
+      closeReport: ({ commit }: ActionProps) => {
+        commit('REPORT_CLOSE')
+      },
     }
   }
 
@@ -214,10 +256,31 @@ export class MetaModule extends Module<Meta, {}> {
         })
       },
 
-      PROMPT_FULFILL: (state: any, option: string) => {
+      PROMPT_FULFILL: (_: unknown, option: string) => {
         window.dispatchEvent(new CustomEvent('__prompt', {
           detail: { option }
         }))
+      },
+
+      SIDEBAR_SPAWN: (state: any, payload: any) => {
+        Object.assign(state.sidebar, {
+          isVisible: true,
+          ...payload
+        })
+      },
+
+      SIDEBAR_CLOSE: (state: any) => {
+        Object.assign(state.sidebar, {
+          isVisible: false,
+        })
+      },
+
+      REPORT_SPAWN: (state: any) => {
+        state.report.isVisible = true
+      },
+
+      REPORT_CLOSE: (state: any) => {
+        state.report.isVisible = false
       },
 
       CRUD_CLOSE: (state: any) => {
@@ -232,7 +295,7 @@ export class MetaModule extends Module<Meta, {}> {
       CRUD_OPEN: (state: any) => {
         state.crud.isInsertVisible = true
         state.crud.isInsertReadonly = true
-      }
+      },
     }
   }
 }

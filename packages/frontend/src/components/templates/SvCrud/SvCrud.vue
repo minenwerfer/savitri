@@ -1,9 +1,9 @@
 <template>
   <sv-box v-if="description.actions" :key="module">
     <template #body>
-      <div class="flex gap-2 md:w-screen overflow-x-auto">
+      <div class="flex gap-2 w-screen overflow-x-auto">
         <sv-button
-          v-for="([action, props], index) in Object.entries(description.actions)"
+          v-for="([action, props], index) in Object.entries(description.actions||{})"
           :key="`action-${index}`"
           :disabled="isLoading || selectedIds.length === 0 && props.selection"
           type="neutral"
@@ -16,7 +16,7 @@
     </template>
   </sv-box>
 
-  <sv-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" classes="md:w-8/12 lg:w-6/12">
+  <sv-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" classes="min-w-[40vw] md:mx-[10vw] md:w-8/12 lg:w-auto">
     <template #body>
       <sv-form
         :form="fields"
@@ -43,15 +43,27 @@
     <sv-filter :module="module" :key="module"></sv-filter>
   </sv-box>
 
-  <sv-box>
-    <div class="flex mb-6">
+  <sv-box class="flex-grow">
+    <div class="flex">
       <div class="mr-auto">
-        <sv-bare-button @clicked="isReportVisible = true" class="opacity-80 text-sm" v-if="description.report">
-          Solicitar relatório
+        <sv-bare-button @clicked="store.dispatch('meta/spawnReport')" class="opacity-80 text-sm" v-if="description.report">
+          <div class="flex items-center gap-x-1">
+            <unicon name="clipboard" fill="black" class="w-5 h-5"></unicon>
+            <div>Solicitar relatório</div>
+          </div>
         </sv-bare-button>
       </div>
-      <sv-pagination :module="module"></sv-pagination>
+      <div class="flex items-center gap-2 lg:gap-4">
+        <sv-records-summary
+          :records-count="recordsCount"
+          :records-total="recordsTotal"
+        ></sv-records-summary>
+        <sv-pagination :module="module"></sv-pagination>
+      </div>
     </div>
+  </sv-box>
+
+  <sv-box :fill="true" :transparent="true">
     <sv-table
       :key="module"
       v-if="tableDescription"
@@ -80,10 +92,22 @@
 </template>
 
 <script setup lang="ts">
-import { provide, watch, computed, reactive, ref, toRefs } from 'vue'
+import { provide, watch, computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
-import { SvBox, SvTable, SvForm, SvButton, SvPagination, SvFilter, SvBareButton, SvReport } from 'frontend/components'
+import {
+  SvBox,
+  SvTable,
+  SvForm,
+  SvButton,
+  SvPagination,
+  SvFilter,
+  SvBareButton,
+  SvReport
+
+} from 'frontend/components'
+
+import SvRecordsSummary from './_internals/components/SvRecordsSummary/SvRecordsSummary.vue'
 
 const props = defineProps<{
   module: string
@@ -96,7 +120,11 @@ provide('module', computed(() => props.module))
 
 const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
 const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
-const isReportVisible = ref(false)
+
+const isReportVisible = computed({
+  get: () => store.state.meta.report.isVisible,
+  set: (value: boolean) => store.dispatch(`meta/${value ? 'spawn' : 'close'}Report`)
+})
 
 watch(() => props.module, async (module: string) => {
 
@@ -119,6 +147,10 @@ watch(() => isInsertVisible.value, (value: boolean) => {
   }
 })
 
+const actionColors = {
+  'remove': 'red',
+}
+
 const buttonAction = (action: string, actionProps: any, filters: any) => {
   return actionProps.ask
     ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filters }}})
@@ -128,8 +160,9 @@ const buttonAction = (action: string, actionProps: any, filters: any) => {
 const individualActions = computed(() => {
   return store.getters[`${props.module}/individualActions`]
     .map((action: any) => ({
-      name: action.name,
-      click: (filters: any) => buttonAction(action.action, action, filters)
+      color: actionColors[action.action] || 'blue',
+      click: (filters: any) => buttonAction(action.action, action, filters),
+      ...action
     }))
 })
 

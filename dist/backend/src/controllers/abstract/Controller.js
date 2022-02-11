@@ -10,7 +10,9 @@ class Controller {
      * Supposed to contain method names as strings.
      */
     _internal = [];
-    _publicMethods = [];
+    _publicMethods = [
+        'describe'
+    ];
     _rawMethods = {};
     _forbiddenMethods = [];
     /**
@@ -21,7 +23,7 @@ class Controller {
      */
     constructor(props) {
         this._description = props?.description;
-        this._publicMethods = props?.publicMethods || [];
+        this._publicMethods = props?.publicMethods || this._publicMethods;
         this._forbiddenMethods = props?.forbiddenMethods || [];
         this._rawMethods = props?.rawMethods || {};
         this._webInterface = new Proxy(this, {
@@ -45,7 +47,7 @@ class Controller {
                         throw new Error('signed out');
                     }
                     const payload = Object.keys(req.payload || {}).length === 0
-                        ? { filter: {} }
+                        ? { filters: {} }
                         : req.payload;
                     if (typeof req.payload?.limit === 'number' && (req.payload.limit > 150 || req.payload.limit <= 0)) {
                         req.payload.limit = 150;
@@ -53,8 +55,8 @@ class Controller {
                     if (decodedToken.access?.visibility !== 'everything') {
                         if (payload.what)
                             payload.what.user_id = decodedToken._id;
-                        if (payload.filter)
-                            payload.filter.user_id = decodedToken._id;
+                        if (payload.filters)
+                            payload.filters.user_id = decodedToken._id;
                     }
                     req.payload = payload;
                     const result = method.call(target, payload, res, decodedToken);

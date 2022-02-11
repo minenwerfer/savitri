@@ -4,13 +4,16 @@ import { default as Description } from '../../../../data/entities/common/User/in
 export { Description };
 import { AccessProfileDocument } from '../AccessProfile';
 import '../AccessProfile';
-export interface UserDocument extends Document {
+export interface User {
+    name: string;
     email: string;
-    password: string;
+    password?: string;
     active: boolean;
-    access: AccessProfileDocument[];
-    testPassword: (password: string) => boolean;
+    access?: AccessProfileDocument[];
 }
+export declare type UserDocument = User & Document & {
+    testPassword: (password: string) => boolean;
+};
 export declare const UserSchema: import("mongoose").Schema<UserDocument, import("mongoose").Model<UserDocument, any, any, any>, any>;
 /**
  * @exports

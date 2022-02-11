@@ -62,8 +62,10 @@ class UserModule extends module_1.Module {
     mutations() {
         return {
             USER_AUTH(state, value) {
-                Object.assign(state.current, { email: '', password: '' });
-                Object.assign(state.current, value);
+                Object.assign(state.current, {
+                    ...value,
+                    password: ''
+                });
                 sessionStorage.setItem('auth:token', value.token);
             },
             USER_SIGNOUT(state) {

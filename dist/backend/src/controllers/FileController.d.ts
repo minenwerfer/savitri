@@ -13,8 +13,8 @@ export declare class FileController extends Mutable<FileDocument> {
         content: Buffer;
         mime: string;
         _id: any;
-        id?: any;
         __v?: any;
+        id?: any;
         immutable: boolean;
         filename: string;
         size: number;

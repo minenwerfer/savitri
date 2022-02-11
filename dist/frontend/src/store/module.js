@@ -162,7 +162,7 @@ class Module {
                 if (mutation) {
                     commit(mutation, { result, payload, props });
                 }
-                if (data.recordsCount || data.recordsTotal) {
+                if (typeof data.recordsCount === 'number' || typeof data.recordsTotal === 'number') {
                     commit('COUNT_UPDATE', {
                         recordsCount: data.recordsCount,
                         recordsTotal: data.recordsTotal,
@@ -177,6 +177,11 @@ class Module {
         });
     }
     async _parseQuery(obj, array = false) {
+        const normalize = (data, value) => data
+            .reduce((a, item) => ({
+            ...a,
+            [item._id]: item[value.index]
+        }), {});
         const parse = async ([key, value]) => {
             if (key !== '__query') {
                 if (array) {
@@ -191,14 +196,21 @@ class Module {
             if (!value.module) {
                 throw new Error('dynamic query but no module is specified');
             }
+            const stored = (window._queryCache || {})[value.module];
+            if (stored && Object.keys(stored).length > 0) {
+                return normalize(stored, value);
+            }
+            /**
+             * This empty entry will prevent duplicate requests.
+             */
+            window._queryCache = {
+                ...(window._queryCache || {}),
+                [value.module]: {}
+            };
             const route = `${value.module}/getAll`;
             const filters = value.filters || {};
             const { data } = await this._http.post(route, filters);
-            const result = data.result
-                .reduce((a, item) => ({
-                ...a,
-                [item._id]: item[value.index]
-            }), {});
+            const result = normalize(data.result, value);
             window.dispatchEvent(new CustomEvent('__updateQueryCache', {
                 detail: {
                     parentModule: this._route,
@@ -288,7 +300,11 @@ class Module {
             filters: (state) => {
                 const filters = this._removeEmpty(state._filters);
                 const expr = (key, value) => {
-                    const field = this._description.fields[key];
+                    const field = (this._description || state._description).fields[key];
+                    // TODO: debug this
+                    if (!field) {
+                        return;
+                    }
                     if (field.type === 'text') {
                         return {
                             $regex: value,
@@ -494,7 +510,7 @@ class Module {
                 commit('meta/CRUD_EDIT', undefined, { root: true });
             },
             spawnEdit({ commit }, { payload }) {
-                commit('ITEM_GET', { result: payload.filters });
+                commit('ITEM_GET', { result: Object.assign({}, payload.filters) });
                 commit('meta/CRUD_EDIT', undefined, { root: true });
             },
             spawnOpen({ commit }, { payload }) {
@@ -508,7 +524,7 @@ class Module {
             DESCRIPTION_SET: async (state, payload) => {
                 state._description = {
                     ...payload,
-                    fields: await this._parseQuery(payload.fields)
+                    fields: await this._parseQuery(payload.fields, false)
                 };
                 state.__description = payload;
                 state.item = Object.entries(payload.fields || {})
@@ -526,6 +542,10 @@ class Module {
             },
             CACHE_QUERY: (state, { module, result }) => {
                 state._queryCache[module] = result;
+                window._queryCache = {
+                    ...(window._queryCache || {}),
+                    [module]: result
+                };
             },
             LOADING_SWAP: (state, value) => {
                 state.isLoading = typeof value === 'boolean' ? value : !state.isLoading;
@@ -606,7 +626,7 @@ class Module {
                 state.selected = value ? items.map(({ _id }) => ({ _id })) || [] : [];
             },
             FILTERS_CLEAR: (state) => {
-                state._filters = (0, exports.normalizeFilters)(this._description.filters);
+                state._filters = (0, exports.normalizeFilters)(this._description?.filters || []);
             },
         };
     }

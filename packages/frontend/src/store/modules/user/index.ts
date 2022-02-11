@@ -93,8 +93,11 @@ export class UserModule extends Module<User, UserItem> {
   mutations() {
     return {
       USER_AUTH(state: CommonState & { current: any }, value: { token: string }) {
-        Object.assign(state.current, { email: '', password: '' })
-        Object.assign(state.current, value)
+        Object.assign(state.current, {
+          ...value,
+          password: ''
+        })
+
         sessionStorage.setItem('auth:token', value.token)
       },
 

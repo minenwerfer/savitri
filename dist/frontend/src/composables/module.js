@@ -96,7 +96,7 @@ exports.default = (name, store) => {
             ? getFirstValue(value, key, form)
             : value;
         return firstValue !== undefined
-            ? (field?.type === 'datetime' ? firstValue.formatDateTime() : firstValue)
+            ? (field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue)
             : '-';
     };
     const resumeItem = (item) => {

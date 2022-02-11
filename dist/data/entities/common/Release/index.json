@@ -1,6 +1,9 @@
 {
     "module": "release",
     "route": true,
+    "methods": [
+        "getAll"
+    ],
     "actions": {
         "spawnAdd": {
             "name": "Adicionar"

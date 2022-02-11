@@ -6,7 +6,7 @@ Object.assign(String.prototype, {
     },
     formatDateTime: function (hours = false, locale = 'pt-BR') {
         return hours
-            ? new Date(this).toLocaleString(locale, { timeZone: 'UTC' })
+            ? new Date(this).toLocaleString(locale, { timeZone: 'UTC' }).split(':').slice(0, -1).join(':')
             : new Date(this).toLocaleDateString(locale, { timeZone: 'UTC' });
     }
 });

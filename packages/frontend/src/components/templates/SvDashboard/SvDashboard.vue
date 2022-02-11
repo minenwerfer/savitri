@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-stone-100">
     <sv-bare-button
       class="
         fixed bottom-0 right-0 z-30
@@ -15,8 +15,7 @@
     </sv-bare-button>
 
     <sv-top-bar class="md:hidden">
-      <sv-profile-thumb></sv-profile-thumb>
-      <sv-notifications v-if="webpackVariables.notification"></sv-notifications>
+      <sv-utilities></sv-utilities>
     </sv-top-bar>
 
     <div :class="`grid md:grid-cols-${isMenuVisible ? 'menu' : 1}`">
@@ -33,24 +32,14 @@
         </div>
 
         <sv-breadcumb class="hidden md:block order-1" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)">
-          <sv-bare-button v-if="webpackVariables.releases" @clicked="isReleasesVisible = true">
-            <unicon name="newspaper" fill="black"></unicon>
-          </sv-bare-button>
-          <sv-bare-button @clicked="isReleasesVisible = true">
-            <unicon name="user" fill="black"></unicon>
-          </sv-bare-button>
-          <sv-bare-button v-if="webpackVariables.notification" @clicked="isReleasesVisible = true">
-            <unicon name="bell" fill="black"></unicon>
-          </sv-bare-button>
-          <!-- <sv-profile-thumb></sv-profile-thumb> -->
-          <!-- <sv-notifications v-if="webpackVariables.notification"></sv-notifications> -->
+          <sv-utilities></sv-utilities>
         </sv-breadcumb>
 
       </div>
     </div>
 
     <sv-feedback v-model:visible="isFeedbackVisible"></sv-feedback>
-    <sv-releases v-if="isReleasesVisible" @close="isReleasesVisible = false"></sv-releases>
+    <sv-sidebar v-model:visible="isSidebarVisible"></sv-sidebar>
   </div>
 </template>
 
@@ -65,11 +54,11 @@ import {
   SvTopBar,
   SvBareButton,
   SvFeedback,
-  SvProfileThumb,
-  SvNotifications,
-  SvReleases
+  SvSidebar
 
 } from 'frontend/components'
+
+import SvUtilities from './_internals/components/SvUtilities/SvUtilities.vue'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
@@ -78,6 +67,8 @@ const menu = computed(() => store.state.meta.menu)
 
 const isFeedbackVisible = ref(false)
 const isReleasesVisible = ref(false)
+
 const isMenuVisible = computed(() => store.state.meta.menu.isVisible)
 const isMenuMobileVisible = computed(() => store.state.meta.menu.isMobileVisible)
+const isSidebarVisible = computed(() => store.state.meta.sidebar.isVisible)
 </script>

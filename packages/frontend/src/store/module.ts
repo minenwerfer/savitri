@@ -256,7 +256,7 @@ export abstract class Module<T=any, Item=any> {
             commit(mutation, { result, payload, props })
           }
 
-          if( data.recordsCount || data.recordsTotal ) {
+          if( typeof data.recordsCount === 'number' || typeof data.recordsTotal === 'number' ) {
             commit('COUNT_UPDATE', {
               recordsCount: data.recordsCount,
               recordsTotal: data.recordsTotal,
@@ -273,6 +273,11 @@ export abstract class Module<T=any, Item=any> {
   }
 
   protected async _parseQuery(obj: any, array: boolean = false): Promise<any> {
+    const normalize = (data: any, value: any) => data
+      .reduce((a: any, item: any) => ({
+        ...a,
+        [item._id]: item[value.index]
+      }), {})
 
     const parse = async ([key, value]: [string, any]) => {
       if( key !== '__query' ) {
@@ -291,15 +296,24 @@ export abstract class Module<T=any, Item=any> {
         throw new Error('dynamic query but no module is specified')
       }
 
+      const stored = ((window as any)._queryCache||{})[value.module]
+      if( stored && Object.keys(stored).length > 0 ) {
+        return normalize(stored, value)
+      }
+
+      /**
+       * This empty entry will prevent duplicate requests.
+       */
+      (window as any)._queryCache = {
+        ...((window as any)._queryCache || {}),
+        [value.module]: {}
+      }
+
       const route = `${value.module}/getAll`
       const filters = value.filters || {}
 
       const { data } = await this._http.post(route, filters)
-      const result = data.result
-        .reduce((a: any, item: any) => ({
-          ...a,
-          [item._id]: item[value.index]
-        }), {})
+      const result = normalize(data.result, value)
 
       window.dispatchEvent(new CustomEvent('__updateQueryCache', {
         detail: {
@@ -413,7 +427,12 @@ export abstract class Module<T=any, Item=any> {
         const filters = this._removeEmpty(state._filters)
 
         const expr = (key: string, value: any) => {
-          const field = this._description.fields[key]
+          const field = (this._description||state._description).fields[key]
+
+          // TODO: debug this
+          if( !field ) {
+            return
+          }
 
           if( field.type === 'text' ) {
             return {
@@ -662,7 +681,7 @@ export abstract class Module<T=any, Item=any> {
     },
 
     spawnEdit({ commit }: ActionProps, { payload }: { payload: any }) {
-      commit('ITEM_GET', { result: payload.filters })
+      commit('ITEM_GET', { result: Object.assign({}, payload.filters) })
       commit('meta/CRUD_EDIT', undefined, { root: true })
     },
 
@@ -678,7 +697,7 @@ private _mutations() {
     DESCRIPTION_SET: async (state: CommonState, payload: any) => {
       state._description = {
         ...payload,
-        fields: await this._parseQuery(payload.fields)
+        fields: await this._parseQuery(payload.fields, false)
       }
 
       state.__description = payload
@@ -701,7 +720,11 @@ private _mutations() {
     },
 
     CACHE_QUERY: (state: CommonState, { module, result }: { module: string, result: any }) => {
-      state._queryCache[module] = result
+      state._queryCache[module] = result;
+      (window as any)._queryCache = {
+        ...((window as any)._queryCache||{}),
+        [module]: result
+      }
     },
 
     LOADING_SWAP: (state: CommonState, value: boolean) => {
@@ -798,7 +821,7 @@ private _mutations() {
     },
 
     FILTERS_CLEAR: (state: CommonState) => {
-      state._filters = normalizeFilters(this._description.filters)
+      state._filters = normalizeFilters(this._description?.filters || [])
     },
   }
 }

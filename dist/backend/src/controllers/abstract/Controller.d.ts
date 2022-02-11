@@ -3,7 +3,7 @@ export interface HandlerRequest {
     payload: {
         offset?: number;
         limit?: number;
-        filter?: any;
+        filters?: any;
         what?: any;
     };
 }

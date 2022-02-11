@@ -16,8 +16,9 @@
           </p>
         </div>
       </template>
-      <template #footer v-if="!item._id">
-        <sv-button @clicked="requestReport">Solicitar</sv-button>
+      <template #footer>
+        <sv-button v-if="!item._id" @clicked="requestReport">Solicitar</sv-button>
+        <sv-button v-else @clicked="download">Baixar</sv-button>
       </template>
     </sv-box>
   </teleport>

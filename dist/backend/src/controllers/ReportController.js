@@ -22,10 +22,11 @@ class ReportController extends Mutable_1.Mutable {
         const filter = (entries) => {
             return (0, helpers_1.fromEntries)(entries.filter(([_, value]) => !value.noreport));
         };
-        const entries = !description.table
+        const table = description.reportFields || description.table;
+        const entries = !table
             ? Object.entries(description.fields)
             : Object.entries(description.fields)
-                .filter(([key, _]) => description.table.includes(key));
+                .filter(([key, _]) => table.includes(key));
         return filter(entries);
     }
     _getColumns(fields) {
@@ -33,7 +34,7 @@ class ReportController extends Mutable_1.Mutable {
     }
     _formatValue(field, value) {
         if (!value || typeof value !== 'object') {
-            return value ? value : '-';
+            return value;
         }
         const getFirstValue = (v, index) => {
             const entry = Array.isArray(field.values)
@@ -73,6 +74,9 @@ class ReportController extends Mutable_1.Mutable {
         }
         if (!(props.what?.format in this.formatMap)) {
             throw new Error('formato inválido');
+        }
+        if (!props.what?.type) {
+            throw new Error('especifique um tipo');
         }
         if (props.what?.limit <= 0) {
             throw new Error('limite inválido');

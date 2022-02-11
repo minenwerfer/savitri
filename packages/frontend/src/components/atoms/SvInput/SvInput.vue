@@ -91,11 +91,11 @@ const inputValue = ref(props.type === 'datetime'
 const classes = computed(() => `
     w-full
     border-box rounded
-    border border-gray-300 focus:border-purple-500
+    border border-gray-400 focus:border-purple-500
     bg-white
     px-3 py-1
     text-gray-600 outline-none
-    ${props.readonly ? 'bg-gray-100' : ''}
+    ${props.readonly ? 'bg-gray-50' : ''}
 `)
 
 const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {

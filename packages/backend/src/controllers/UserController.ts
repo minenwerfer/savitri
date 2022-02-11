@@ -34,7 +34,7 @@ export class UserController extends Mutable<UserDocument> {
    * @param {string} username - string to match email or another field
    * @param {string} password - plain text password
    */
-  public async authenticate(props: { email: string, password: string }): Promise<{ token: string }> {
+  public async authenticate(props: { email: string, password: string }): Promise<User & { token: string }> {
     if( !props.email || !props.password ) {
       throw new Error('Empty email or password')
     }
@@ -50,11 +50,15 @@ export class UserController extends Mutable<UserDocument> {
         }
       })
 
-      return { token }
+      return {
+        name: '',
+        email: '',
+        active: true,
+        token
+      }
     }
 
     const user = await this._model.findOne({ email: props.email }).select('+password')
-
     if( !user ) {
       throw new Error('user not found')
     }
@@ -64,6 +68,10 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     const token = TokenService.sign(user.toObject())
-    return { token }
+    return {
+      ...(user as any)._doc,
+      password: undefined,
+      token
+    }
   }
 }

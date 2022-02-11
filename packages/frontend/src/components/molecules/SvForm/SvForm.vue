@@ -1,16 +1,22 @@
 <template>
   <div v-if="formData" class="w-full">
-    <div :class="`grid ${flex ? 'md:flex md:flex-wrap' : ''} gap-x-${gapX} gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom} w-full`" v-if="!isReadonly">
+    <div :class="`grid ${flex && 'md:flex md:flex-wrap items-end'} gap-x-${gapX} gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom} w-full`" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
 
-        class="flex-grow"
+        :class="`flex-grow ${(field.type === 'textbox' || field.flexGrow) && 'w-full'}`"
         style="min-width: 30%"
       >
         <!-- text -->
-        <sv-input v-if="isTextType(field.type)" :type="field.type" :placeholder="field.placeholder" :mask="field.mask" v-model="formData[key]" :readonly="field.readonly">
+        <sv-input
+          v-if="isTextType(field.type)"
+          v-model="formData[key]"
+          v-bind="{
+            ...field
+          }"
+        >
           <template #label>{{ field.label }}</template>
           <template #description v-if="field.description">{{ field.description }}</template>
         </sv-input>
@@ -22,8 +28,20 @@
             {{ field.description }}
           </div>
 
-          <div v-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-2">
-            <sv-checkbox v-if="['checkbox', 'radio'].includes(field.type)" v-for="(value, vindex) in field.values" :key="`value-${vindex}`" v-model="formData[key]" :array="true" :value="value.value" :is-radio="field.type === 'radio'" :readonly="field.readonly">
+          <div v-if="field.type !== 'select'" :class="flex || 'grid md:grid-cols-2 gap-2'">
+            <sv-checkbox
+              v-if="['checkbox', 'radio'].includes(field.type)"
+              v-for="(value, vindex) in field.values"
+              :key="`value-${vindex}`"
+
+              v-model="formData[key]"
+              v-bind="{
+                array: true,
+                value: value.value,
+                isRadio: field.type === 'radio',
+                readonly: field.readonly
+              }"
+            >
               <template #label>{{ field.translate ? $t(value.label) : value.label }}</template>
               <template #description>{{ value.description }}</template>
             </sv-checkbox>
@@ -34,7 +52,7 @@
           </div>
 
 
-          <sv-select v-else v-model="formData[key]" :values="field.values">
+          <sv-select v-else v-model="formData[key]" :values="field.values" class="py-2">
             <option value="">
               {{ $t('none') }}
             </option>
@@ -51,17 +69,19 @@
       </div>
     </div>
 
-    <div :class="`grid ${flex ? 'md:flex' : ''} gap-x-${gapX} gap-y-${gapY} mt-8`" v-if="!isReadonly">
+    <div :class="`grid ${flex && 'md:flex'} gap-x-${gapX} gap-y-${gapY} mt-8`" v-if="!isReadonly">
       <sv-search
         v-for="([childModule, field], index) in moduleFields"
         :key="`modulefield-${index}`"
 
         v-model="formData[childModule]"
-        :field="field"
-        :indexes="getIndexes(field, childModule)"
-        :prop-name="childModule" 
-        :item-index="itemIndex != -1 ? itemIndex : 0"
-        :active-only="'active' in field.fields"
+        v-bind="{
+          field,
+          indexes: getIndexes(field, childModule),
+          propName: childModule,
+          itemIndex: itemIndex != -1 ? itemIndex: 0,
+          activeOnly: 'active' in field.fields
+        }"
 
         @changed="$emit('change')"
         >
@@ -72,11 +92,15 @@
       <sv-input
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
-        :value="field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)"
-        :readonly="true"
-        :type="isTextType(field.type) ? field.type : 'text'"
 
-        :class="`flex flex-col flex-grow ${ field.flexGrow || field.type === 'textbox' ? 'w-full' : '' }`"
+        v-bind="{
+          ...field,
+          readonly: true,
+          type: isTextType(field.type) ? field.type : 'text',
+          value: field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)
+        }"
+
+        :class="`flex-grow ${ field.flexGrow || field.type === 'textbox' && 'w-full'}`"
       >
         {{ field.label }}
       </sv-input>

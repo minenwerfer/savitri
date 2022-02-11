@@ -18,10 +18,14 @@ export const depopulateChildren = (item: any) => {
       .map(([key, value]: [string, any]) => [key, value?._id ? value._id : value]))
   }
 
-  const entries = Object.entries(item._doc || item)
+  const { _id, ...doc } = item._doc || item
+  const entries = Object.entries(doc)
     .map(([key, value]: [string, any]) => [key, !Array.isArray(value) ? depopulate(value) : value.map((v: any) => depopulate(v))])
 
-  return fromEntries(entries)
+  return {
+    _id,
+    ...fromEntries(entries)
+  }
 }
 
 export abstract class Mutable<T> extends Controller<T> {
@@ -38,7 +42,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Inserts a single document in the database.
    */
-  public insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): any | Promise<any> {
+  public async insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): Promise<any> {
     const { _id, ...rest } = props.what
     const what = typeof _id === 'string' ? Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
 
@@ -58,9 +62,12 @@ export abstract class Mutable<T> extends Controller<T> {
       .filter(k => typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
       .forEach(k => delete what[k])
 
-    return typeof _id !== 'string'
-      ? this._model.create(what)
-      : this._model.findOneAndUpdate({ _id } as FilterQuery<T>, what as UpdateQuery<T>, { new: true, runValidators: true })
+    if( typeof _id !== 'string' ) {
+      const newDoc = await this._model.create(what)
+      return this._model.findOne({ _id: newDoc._id })
+    }
+
+    return this._model.findOneAndUpdate({ _id } as FilterQuery<T>, what as UpdateQuery<T>, { new: true, runValidators: true })
   }
 
   public count(props: { filters?: object }) {
@@ -72,7 +79,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * Gets a document from database.
    */
   public get(props: { filters?: object }, response?: unknown, decodedToken?: any): any | Promise<any> {
-    return this._model.findOne(props.filters)
+    return this._model.findOne(props?.filters)
   }
 
   /**

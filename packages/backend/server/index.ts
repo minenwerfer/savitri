@@ -52,7 +52,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
       result,
       ...(Array.isArray(result) ? {
         recordsCount: result.length,
-        recordsTotal: typeof instance.count === 'function' ? await instance.count({ filter: request.payload?.filter || {}  }) : result.length,
+        recordsTotal: typeof instance.count === 'function' ? await instance.count({ filters: request.payload?.filters || {}  }) : result.length,
         offset: request.payload?.offset || 0,
 
         // 35 is a fallback

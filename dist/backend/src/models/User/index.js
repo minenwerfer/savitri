@@ -36,7 +36,7 @@ exports.UserSchema.plugin(require('mongoose-autopopulate'));
  * Will return true if password matches.
  */
 exports.UserSchema.methods.testPassword = async function (candidate) {
-    return bcrypt.compare(candidate, this.password);
+    return bcrypt.compare(candidate, this.password || '');
 };
 /**
  * @exports

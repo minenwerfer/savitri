@@ -12,9 +12,13 @@ const depopulateChildren = (item) => {
         return (0, helpers_1.fromEntries)(Object.entries(i._doc || i)
             .map(([key, value]) => [key, value?._id ? value._id : value]));
     };
-    const entries = Object.entries(item._doc || item)
+    const { _id, ...doc } = item._doc || item;
+    const entries = Object.entries(doc)
         .map(([key, value]) => [key, !Array.isArray(value) ? depopulate(value) : value.map((v) => depopulate(v))]);
-    return (0, helpers_1.fromEntries)(entries);
+    return {
+        _id,
+        ...(0, helpers_1.fromEntries)(entries)
+    };
 };
 exports.depopulateChildren = depopulateChildren;
 class Mutable extends Controller_1.Controller {
@@ -30,7 +34,7 @@ class Mutable extends Controller_1.Controller {
      * @method
      * Inserts a single document in the database.
      */
-    insert(props, response, decodedToken) {
+    async insert(props, response, decodedToken) {
         const { _id, ...rest } = props.what;
         const what = typeof _id === 'string' ? Object.entries(rest).reduce((a, [key, value]) => {
             const result = a;
@@ -45,9 +49,11 @@ class Mutable extends Controller_1.Controller {
         Object.keys(what)
             .filter(k => typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
             .forEach(k => delete what[k]);
-        return typeof _id !== 'string'
-            ? this._model.create(what)
-            : this._model.findOneAndUpdate({ _id }, what, { new: true, runValidators: true });
+        if (typeof _id !== 'string') {
+            const newDoc = await this._model.create(what);
+            return this._model.findOne({ _id: newDoc._id });
+        }
+        return this._model.findOneAndUpdate({ _id }, what, { new: true, runValidators: true });
     }
     count(props) {
         return this._model.countDocuments(props?.filters || {});
@@ -57,7 +63,7 @@ class Mutable extends Controller_1.Controller {
      * Gets a document from database.
      */
     get(props, response, decodedToken) {
-        return this._model.findOne(props.filters);
+        return this._model.findOne(props?.filters);
     }
     /**
      * @method

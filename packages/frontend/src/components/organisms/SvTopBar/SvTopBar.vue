@@ -23,7 +23,7 @@
       />
     </div>
 
-    <div class="flex gap-x-1 md:gap-x-4 items-center">
+    <div class="flex gap-x-2 items-center">
       <slot></slot>
 
       <sv-bare-button

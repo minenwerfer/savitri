@@ -32,6 +32,14 @@ export interface Meta {
         body: string;
         actions: PromptAction[];
     };
+    sidebar: {
+        isVisible: boolean;
+        title: string;
+        component: string;
+    };
+    report: {
+        isVisible: boolean;
+    };
     crud: {
         isInsertVisible: boolean;
         isInsertReadonly: boolean;
@@ -54,6 +62,7 @@ export declare class MetaModule extends Module<Meta, {}> {
          * It may be accessed through _description.
          */
         describeAll: ({ commit }: ActionProps) => Promise<any>;
+        describe: ({ commit }: ActionProps, modules: string[]) => Promise<void>;
         setViewTitle: ({ commit }: ActionProps, value: string) => void;
         swapMenu: ({ commit }: ActionProps, value?: any) => void;
         spawnModal: ({ commit }: ActionProps, payload: any) => Promise<void>;
@@ -62,6 +71,10 @@ export declare class MetaModule extends Module<Meta, {}> {
         closePrompt: ({ commit }: ActionProps) => void;
         fulfillPrompt: ({ commit }: ActionProps, option: string) => void;
         closeCrud: ({ commit }: ActionProps) => void;
+        spawnSidebar: ({ commit }: ActionProps, payload: any) => void;
+        closeSidebar: ({ commit }: ActionProps) => void;
+        spawnReport: ({ commit }: ActionProps) => void;
+        closeReport: ({ commit }: ActionProps) => void;
     };
     mutations(): {
         GLOBAL_LOADING_SWAP: (state: any, value: boolean) => void;
@@ -76,7 +89,11 @@ export declare class MetaModule extends Module<Meta, {}> {
         MODAL_CLOSE: (state: any) => void;
         PROMPT_SPAWN: (state: any, payload: any) => void;
         PROMPT_CLOSE: (state: any) => void;
-        PROMPT_FULFILL: (state: any, option: string) => void;
+        PROMPT_FULFILL: (_: unknown, option: string) => void;
+        SIDEBAR_SPAWN: (state: any, payload: any) => void;
+        SIDEBAR_CLOSE: (state: any) => void;
+        REPORT_SPAWN: (state: any) => void;
+        REPORT_CLOSE: (state: any) => void;
         CRUD_CLOSE: (state: any) => void;
         CRUD_EDIT: (state: any) => void;
         CRUD_OPEN: (state: any) => void;

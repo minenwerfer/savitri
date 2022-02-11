@@ -18,7 +18,8 @@
     "fields": {
         "name": {
             "label": "Nome",
-            "type": "text"
+            "type": "text",
+            "required": true
         },
         "access": {
             "label": "Preset de acesso",
@@ -28,7 +29,8 @@
                     "module": "accessProfile",
                     "index": "name"
                 }
-            }
+            },
+            "required": true
         },
         "email": {
             "label": "Email",

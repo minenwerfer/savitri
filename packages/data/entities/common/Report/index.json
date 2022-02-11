@@ -9,12 +9,12 @@
     }
   },
   "individualActions": {
+    "download": {
+      "name": "Baixar"
+    },
     "remove": {
       "name": "Remover",
       "ask": true
-    },
-    "download": {
-      "name": "Baixar"
     }
   },
   "fields": {

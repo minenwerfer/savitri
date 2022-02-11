@@ -4,5 +4,5 @@ export declare class FeedbackController extends Mutable<FeedbackDocument> {
     constructor();
     insert(props: {
         what: FeedbackDocument;
-    }, response: unknown, decodedToken: any): any;
+    }, response: unknown, decodedToken: any): Promise<any>;
 }

@@ -63,7 +63,12 @@ class UserController extends Mutable_1.Mutable {
                     }
                 }
             });
-            return { token };
+            return {
+                name: '',
+                email: '',
+                active: true,
+                token
+            };
         }
         const user = await this._model.findOne({ email: props.email }).select('+password');
         if (!user) {
@@ -73,7 +78,11 @@ class UserController extends Mutable_1.Mutable {
             throw new Error('incorrect password');
         }
         const token = tokenService_1.TokenService.sign(user.toObject());
-        return { token };
+        return {
+            ...user._doc,
+            password: undefined,
+            token
+        };
     }
 }
 exports.UserController = UserController;

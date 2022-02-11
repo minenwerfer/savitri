@@ -1,7 +1,7 @@
 <template>
-  <div v-if="visible" :class="`${ isFloating ? 'absolute z-40' : 'mb-3' } ${ animate ? 'animate-fade' : '' }`" @dblclick="$emit('close')">
-    <sv-overlay v-if="isFloating" class="z-0"></sv-overlay>
-    <div :class="`${ isFloating ? 'fixed inset-0 flex justify-center items-center' : ''}`">
+  <div v-if="visible" :class="`${ isFloating ? 'absolute z-40' : 'mb-3' } ${ animate ? 'animate-fade' : '' }`">
+    <sv-overlay v-if="isFloating"></sv-overlay>
+    <div :class="`${ isFloating ? 'fixed inset-0 z-50 flex justify-center items-center' : ''}`">
       <div
         @click="$event.stopPropagation()"
         :class="`
@@ -11,9 +11,9 @@
               : ''
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
-          ${ isFloating ? 'px-2 sm:px-4' : ( fullWidth ? '' : 'px-auto' ) }
-          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow ${paddingY}` }
-          flex flex-col bg-white overscroll-none
+          ${ isFloating ? 'px-2 sm:px-4' : ( fullWidth || fill ? '' : 'px-auto' ) }
+          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow ${fill || paddingY}` }
+          flex flex-col ${ transparent || 'bg-white' } overscroll-none
           ${ classes }
         `"
       >
@@ -72,7 +72,9 @@ const props = defineProps({
   paddingY: {
     type: String,
     default: 'py-4 md:py-5'
-  }
+  },
+  fill: Boolean,
+  transparent: Boolean
 })
 
 const isFloating = computed(() => props.floating || props.float)

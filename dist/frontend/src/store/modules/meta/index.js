@@ -18,17 +18,25 @@ class MetaModule extends module_1.Module {
             },
             modal: {
                 isVisible: false,
-                title: 'Teste',
-                body: 'Lorem ipsum dolor sit amet',
+                title: '',
+                body: '',
                 image: '',
                 component: '',
                 details: {}
             },
             prompt: {
                 isVisible: false,
-                title: 'Teste',
-                body: 'Lorem ipsum dolor sit amet',
+                title: '',
+                body: '',
                 actions: [],
+            },
+            sidebar: {
+                isVisible: false,
+                title: '',
+                component: ''
+            },
+            report: {
+                isVisible: false
             },
             crud: {
                 isInsertVisible: false,
@@ -57,6 +65,14 @@ class MetaModule extends module_1.Module {
                     });
                     resolve(data?.result);
                 });
+            }),
+            describe: ({ commit }, modules) => new Promise(async (resolve) => {
+                for (const module of modules) {
+                    await this._http.get(`/${module}/describe`).then(({ data }) => {
+                        commit('DESCRIPTIONS_ADD', data?.result);
+                    });
+                }
+                resolve();
             }),
             setViewTitle: ({ commit }, value) => {
                 commit('VIEW_TITLE_SET', value);
@@ -93,7 +109,19 @@ class MetaModule extends module_1.Module {
             },
             closeCrud: ({ commit }) => {
                 commit('CRUD_CLOSE');
-            }
+            },
+            spawnSidebar: ({ commit }, payload) => {
+                commit('SIDEBAR_SPAWN', payload);
+            },
+            closeSidebar: ({ commit }) => {
+                commit('SIDEBAR_CLOSE');
+            },
+            spawnReport: ({ commit }) => {
+                commit('REPORT_SPAWN');
+            },
+            closeReport: ({ commit }) => {
+                commit('REPORT_CLOSE');
+            },
         };
     }
     mutations() {
@@ -148,10 +176,27 @@ class MetaModule extends module_1.Module {
                     actions: {}
                 });
             },
-            PROMPT_FULFILL: (state, option) => {
+            PROMPT_FULFILL: (_, option) => {
                 window.dispatchEvent(new CustomEvent('__prompt', {
                     detail: { option }
                 }));
+            },
+            SIDEBAR_SPAWN: (state, payload) => {
+                Object.assign(state.sidebar, {
+                    isVisible: true,
+                    ...payload
+                });
+            },
+            SIDEBAR_CLOSE: (state) => {
+                Object.assign(state.sidebar, {
+                    isVisible: false,
+                });
+            },
+            REPORT_SPAWN: (state) => {
+                state.report.isVisible = true;
+            },
+            REPORT_CLOSE: (state) => {
+                state.report.isVisible = false;
             },
             CRUD_CLOSE: (state) => {
                 state.crud.isInsertVisible = false;
@@ -163,7 +208,7 @@ class MetaModule extends module_1.Module {
             CRUD_OPEN: (state) => {
                 state.crud.isInsertVisible = true;
                 state.crud.isInsertReadonly = true;
-            }
+            },
         };
     }
 }

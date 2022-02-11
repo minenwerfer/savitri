@@ -1,6 +1,7 @@
 {
   "module": "notification",
   "route": true,
+  "flex": true,
   "actions": {
     "spawnAdd": {
       "name": "Adicionar"

@@ -1,7 +1,7 @@
 <template>
   <select
     ref="select"
-    class="px-2 py-1 w-full border border-gray-300 hover:border-purple-500 bg-gray-100"
+    class="px-2 py-1 w-full border border-gray-300 active:border-purple-500 bg-gray-100"
 
     :key="modelValue"
     :value="getValue(modelValue)"

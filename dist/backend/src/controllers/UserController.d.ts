@@ -1,4 +1,4 @@
-import { UserDocument } from '../models/User';
+import { UserDocument, User } from '../models/User';
 import { Mutable } from './abstract/Mutable';
 /**
  * @exports
@@ -18,7 +18,7 @@ export declare class UserController extends Mutable<UserDocument> {
     authenticate(props: {
         email: string;
         password: string;
-    }): Promise<{
+    }): Promise<User & {
         token: string;
     }>;
 }
