@@ -26,12 +26,12 @@
         :schema="menuSchema">
       </sv-menu>
 
-      <div :class="`relative flex flex-col md:w-view ${$route.meta?.noMargin ? '' : 'px-0 md:px-5 py-auto'}`">
-        <div class="order-2">
+      <div :class="`relative flex flex-col gap-4 md:w-view`">
+        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-5'}`">
           <router-view />
         </div>
 
-        <sv-breadcumb class="hidden md:block order-1" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)">
+        <sv-breadcumb class="hidden md:block sticky inset-0 order-1" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)">
           <sv-utilities></sv-utilities>
         </sv-breadcumb>
 

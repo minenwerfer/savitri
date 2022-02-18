@@ -43,10 +43,9 @@ export abstract class Mutable<T> extends Controller<T> {
    * Inserts a single document in the database.
    */
   public async insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): Promise<any> {
+
     const { _id, ...rest } = props.what
     const what = typeof _id === 'string' ? Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
-
-      const result = a
       const append = value && typeof value === 'object' && Object.keys(value).length === 0
         ? '$unset' : '$set'
 
@@ -59,7 +58,7 @@ export abstract class Mutable<T> extends Controller<T> {
     }) : rest
 
     Object.keys(what)
-      .filter(k => typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
+      .filter(k => !what[k] || typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
       .forEach(k => delete what[k])
 
     if( typeof _id !== 'string' ) {
@@ -86,7 +85,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Gets a collection of documents from database.
    */
-  public async getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }): Promise<MultipleQuery<T>> {
+  protected _getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }): MultipleQuery<T> {
     const defaultSort = {
       created_at: -1,
       date_updated: -1,
@@ -98,16 +97,18 @@ export abstract class Mutable<T> extends Controller<T> {
     }
 
     const entries = Object.entries(props.filters||{})
-      .map(([key, value]: [string, any]) => [key, typeof value === 'object' && 'id' in value ? value._id : value])
+      .map(([key, value]: [string, any]) => [key, value && typeof value === 'object' && 'id' in value ? value._id : value])
 
     props.filters = fromEntries(entries)
 
-    const result = await this._model.find(props.filters||{})
+    return this._model.find(props.filters||{})
       .sort(props.sort || defaultSort)
       .skip(props.offset || 0)
       .limit(props.limit)
+  }
 
-    return result
+  public async getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }, response?: unknown, decodedToken?: any) {
+    return (await this._getAll(props))
       .map((item: any) => depopulateChildren(item))
   }
 

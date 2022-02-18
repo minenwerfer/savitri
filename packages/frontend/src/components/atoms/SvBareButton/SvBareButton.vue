@@ -1,7 +1,7 @@
 <template>
   <button
     :class="`
-      active:underline
+      active:underline flex items-center gap-x-1
       inline-block select-none outline-none
       ${
         !disabled

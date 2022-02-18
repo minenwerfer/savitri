@@ -3,10 +3,7 @@
     <sv-form
       :form="availableFilters"
       :form-data="$store.state[module]._filters"
-      :padding-bottom="0"
-
       :flex="true"
-      :gap-x="4"
 
       @change="filter"
       >

@@ -10,3 +10,4 @@ export { default as SvDropdown } from 'frontend/components/atoms/SvDropdown/SvDr
 export { default as SvWrapper } from 'frontend/components/atoms/SvWrapper/SvWrapper.vue';
 export { default as SvPanel } from 'frontend/components/atoms/SvPanel/SvPanel.vue';
 export { default as SvOverlay } from 'frontend/components/atoms/SvOverlay/SvOverlay.vue';
+export { default as SvToast } from 'frontend/components/atoms/SvToast/SvToast.vue';

@@ -55,7 +55,8 @@
     },
     "comment": {
       "label": "Comentário",
-      "type": "textbox"
+      "type": "textbox",
+      "notable": true
     }
   }
 }

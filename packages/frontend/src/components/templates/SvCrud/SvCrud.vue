@@ -1,94 +1,95 @@
 <template>
-  <sv-box v-if="description.actions" :key="module">
-    <template #body>
-      <div class="flex gap-2 w-screen overflow-x-auto">
-        <sv-button
-          v-for="([action, props], index) in Object.entries(description.actions||{})"
-          :key="`action-${index}`"
-          :disabled="isLoading || selectedIds.length === 0 && props.selection"
-          type="neutral"
+  <div class="flex flex-col gap-4">
+    <div class="flex gap-2 overflow-x-auto mt-3" v-if="description.actions" :key="module">
+      <sv-button
+        v-for="([action, props], index) in Object.entries(description.actions||{})"
+        :key="`action-${index}`"
+        :disabled="isLoading || selectedIds.length === 0 && props.selection"
+        type="neutral"
 
-          @clicked="buttonAction(action, props, { _id: selectedIds })"
-        >
-          {{ props.name }}
-        </sv-button>
-      </div>
-    </template>
-  </sv-box>
-
-  <sv-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" classes="min-w-[40vw] md:mx-[10vw] md:w-8/12 lg:w-auto">
-    <template #body>
-      <sv-form
-        :form="fields"
-        :form-data="item"
-        @add="$e.preventDefault()"
-
-        :is-readonly="isInsertReadonly"
-        :key="`${item._id ? item._id : 'form'}`"
-        :item-index="getItemIndex(item)"
-        :flex="description.flex"
-        >
-      </sv-form>
-    </template>
-    <template #footer v-if="!isInsertReadonly">
-      <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })">
-        Salvar
+        @clicked="buttonAction(action, props, { _id: selectedIds })"
+      >
+        {{ props.name }}
       </sv-button>
-    </template>
-  </sv-box>
-
-  <sv-report :module="module" v-model:visible="isReportVisible"></sv-report>
-
-  <sv-box title="Filtrar por" v-if="Object.keys(availableFilters).length > 0" :collapsable="true" :collapsed="true">
-    <sv-filter :module="module" :key="module"></sv-filter>
-  </sv-box>
-
-  <sv-box class="flex-grow">
-    <div class="flex">
-      <div class="mr-auto">
-        <sv-bare-button @clicked="store.dispatch('meta/spawnReport')" class="opacity-80 text-sm" v-if="description.report">
-          <div class="flex items-center gap-x-1">
-            <unicon name="clipboard" fill="black" class="w-5 h-5"></unicon>
-            <div>Solicitar relatório</div>
-          </div>
-        </sv-bare-button>
-      </div>
-      <div class="flex items-center gap-2 lg:gap-4">
-        <sv-records-summary
-          :records-count="recordsCount"
-          :records-total="recordsTotal"
-        ></sv-records-summary>
-        <sv-pagination :module="module"></sv-pagination>
-      </div>
     </div>
-  </sv-box>
 
-  <sv-box :fill="true" :transparent="true">
-    <sv-table
-      :key="module"
-      v-if="tableDescription"
-      :columns="{
-        ...tableDescription,
-        ...(individualActions.length > 0
-          ? {
-            __custom: {
-              label: 'Ações',
-              actions: individualActions
-            }
-          } : {}
-        )
-      }"
+    <teleport to="body">
+      <sv-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" :classes="`min-w-[40vw] md:mx-[6vw] md:w-8/12 ${Object.keys(fields).length > 8 && 'lg:w-auto'}`">
+        <template #body>
+          <sv-form
+            :form="fields"
+            :form-data="item"
+            @add="$e.preventDefault()"
 
-      :rows="items"
-      :recordsCount="recordsCount"
-      :recordsTotal="recordsTotal"
+            :is-readonly="isInsertReadonly"
+            :key="`${item._id ? item._id : 'form'}`"
+            :item-index="getItemIndex(item)"
+            :flex="description.flex"
+            >
+          </sv-form>
+        </template>
+        <template #footer v-if="!isInsertReadonly">
+          <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })">
+            Salvar
+          </sv-button>
+        </template>
+      </sv-box>
+    </teleport>
 
-      :row-color="description.rowColor"
+    <sv-report :module="module" v-model:visible="isReportVisible"></sv-report>
 
-      :class="isLoading ? 'opacity-50' : ''"
-      ></sv-table>
-  </sv-box>
+    <sv-box title="Filtrar por" v-if="Object.keys(availableFilters).length > 0" :collapsable="true" :collapsed="true">
+      <sv-filter :module="module" :key="module"></sv-filter>
+    </sv-box>
 
+    <sv-box class="flex-grow">
+      <div class="flex">
+        <div class="mr-auto">
+          <sv-bare-button @clicked="store.dispatch('meta/spawnReport')" class="opacity-80 text-sm" v-if="description.report">
+            <div class="flex items-center gap-x-1">
+              <unicon name="clipboard" fill="black" class="w-5 h-5"></unicon>
+              <div>Solicitar relatório</div>
+            </div>
+          </sv-bare-button>
+        </div>
+        <div class="flex items-center gap-2 lg:gap-4">
+          <sv-records-summary
+            :records-count="recordsCount"
+            :records-total="recordsTotal"
+          ></sv-records-summary>
+          <sv-pagination :module="module"></sv-pagination>
+        </div>
+      </div>
+    </sv-box>
+
+    <sv-box :fill="true" :transparent="true">
+      <sv-table
+        :key="module"
+        v-if="tableDescription"
+        :checkbox="Object.keys(description.actions||{}).length > 0"
+        :columns="{
+          ...tableDescription,
+          ...(individualActions.length > 0
+            ? {
+              __custom: {
+                label: 'Ações',
+                actions: individualActions
+              }
+            } : {}
+          )
+        }"
+
+        :rows="items"
+        :recordsCount="recordsCount"
+        :recordsTotal="recordsTotal"
+
+        :row-color="description.rowColor"
+
+        :class="isLoading ? 'opacity-50' : ''"
+        ></sv-table>
+    </sv-box>
+
+  </div>
 </template>
 
 <script setup lang="ts">

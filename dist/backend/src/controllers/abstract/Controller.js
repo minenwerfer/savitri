@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Controller = void 0;
+const services_1 = require("../../services");
 class Controller {
     _webInterface;
     _description;
@@ -77,6 +78,16 @@ class Controller {
      */
     describe() {
         return this._description;
+    }
+    async forward(route, props, decodedToken) {
+        delete decodedToken.exp;
+        delete decodedToken.iap;
+        const token = services_1.TokenService.sign(decodedToken, this.fwdTokenSecret);
+        if (!this.http.token) {
+            this.http.token = token;
+        }
+        const { data: { result } } = await this.http.post(route, props);
+        return result;
     }
 }
 exports.Controller = Controller;

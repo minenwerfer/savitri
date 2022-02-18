@@ -5,7 +5,6 @@
       <sv-form
         :form="moduleRefs.fields"
         :form-data="edited"
-        :padding-bottom="0"
         :item-index="itemIndex"
         :field-index="fieldIndex"
       ></sv-form>

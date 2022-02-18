@@ -35,6 +35,11 @@ class MetaModule extends module_1.Module {
                 title: '',
                 component: ''
             },
+            toast: {
+                isVisible: false,
+                text: '',
+                itr: 0
+            },
             report: {
                 isVisible: false
             },
@@ -116,6 +121,12 @@ class MetaModule extends module_1.Module {
             closeSidebar: ({ commit }) => {
                 commit('SIDEBAR_CLOSE');
             },
+            spawnToast: ({ commit }, payload) => {
+                commit('TOAST_SPAWN', payload);
+            },
+            closeToast: ({ commit }) => {
+                commit('TOAST_CLOSE');
+            },
             spawnReport: ({ commit }) => {
                 commit('REPORT_SPAWN');
             },
@@ -190,6 +201,18 @@ class MetaModule extends module_1.Module {
             SIDEBAR_CLOSE: (state) => {
                 Object.assign(state.sidebar, {
                     isVisible: false,
+                });
+            },
+            TOAST_SPAWN: (state, payload) => {
+                Object.assign(state.toast, {
+                    isVisible: true,
+                    itr: state.toast.itr + 1,
+                    ...payload
+                });
+            },
+            TOAST_CLOSE: (state) => {
+                Object.assign(state.toast, {
+                    isVisible: false
                 });
             },
             REPORT_SPAWN: (state) => {

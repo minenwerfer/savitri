@@ -22,10 +22,9 @@
       :readonly="readonly"
     />
 
-
     <textarea
       v-else
-      :class="`${classes} h-48`"
+      :class="`${classes} h-36`"
       :placeholder="placeholder"
 
       @input="$emit('update:modelValue', $event.target.value)"
@@ -84,18 +83,18 @@ const ISOToDate = (raw: string) => {
   ].join('/')
 }
 
-const inputValue = ref(props.type === 'datetime'
+const inputValue = computed(() => props.type === 'datetime'
   ? dateToISO(props.modelValue)
   : props.modelValue)
 
 const classes = computed(() => `
     w-full
     border-box rounded
-    border border-gray-400 focus:border-purple-500
+    border border-stone-300 focus:border-purple-500
     bg-white
     px-3 py-1
     text-gray-600 outline-none
-    ${props.readonly ? 'bg-gray-50' : ''}
+    ${props.readonly && 'bg-stone-50'}
 `)
 
 const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {

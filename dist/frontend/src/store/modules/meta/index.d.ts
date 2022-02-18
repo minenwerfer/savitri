@@ -37,6 +37,11 @@ export interface Meta {
         title: string;
         component: string;
     };
+    toast: {
+        isVisible: boolean;
+        text: string;
+        itr: number;
+    };
     report: {
         isVisible: boolean;
     };
@@ -73,6 +78,8 @@ export declare class MetaModule extends Module<Meta, {}> {
         closeCrud: ({ commit }: ActionProps) => void;
         spawnSidebar: ({ commit }: ActionProps, payload: any) => void;
         closeSidebar: ({ commit }: ActionProps) => void;
+        spawnToast: ({ commit }: ActionProps, payload: any) => void;
+        closeToast: ({ commit }: ActionProps) => void;
         spawnReport: ({ commit }: ActionProps) => void;
         closeReport: ({ commit }: ActionProps) => void;
     };
@@ -92,6 +99,8 @@ export declare class MetaModule extends Module<Meta, {}> {
         PROMPT_FULFILL: (_: unknown, option: string) => void;
         SIDEBAR_SPAWN: (state: any, payload: any) => void;
         SIDEBAR_CLOSE: (state: any) => void;
+        TOAST_SPAWN: (state: any, payload: any) => void;
+        TOAST_CLOSE: (state: any) => void;
         REPORT_SPAWN: (state: any) => void;
         REPORT_CLOSE: (state: any) => void;
         CRUD_CLOSE: (state: any) => void;

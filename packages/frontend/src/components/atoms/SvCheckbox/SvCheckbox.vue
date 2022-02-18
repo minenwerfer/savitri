@@ -71,6 +71,10 @@ const selectedValues = (values: any[]): (string|boolean)[] => {
 
 const bindVal = computed({
   get: () => {
+    if( !props.modelValue ) {
+      return false
+    }
+
     if( props.isRadio ) {
       return props.modelValue === props.value
     }

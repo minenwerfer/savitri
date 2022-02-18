@@ -37,7 +37,6 @@ class Mutable extends Controller_1.Controller {
     async insert(props, response, decodedToken) {
         const { _id, ...rest } = props.what;
         const what = typeof _id === 'string' ? Object.entries(rest).reduce((a, [key, value]) => {
-            const result = a;
             const append = value && typeof value === 'object' && Object.keys(value).length === 0
                 ? '$unset' : '$set';
             a[append][key] = value;
@@ -47,7 +46,7 @@ class Mutable extends Controller_1.Controller {
             $unset: {}
         }) : rest;
         Object.keys(what)
-            .filter(k => typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
+            .filter(k => !what[k] || typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
             .forEach(k => delete what[k]);
         if (typeof _id !== 'string') {
             const newDoc = await this._model.create(what);
@@ -69,7 +68,7 @@ class Mutable extends Controller_1.Controller {
      * @method
      * Gets a collection of documents from database.
      */
-    async getAll(props) {
+    _getAll(props) {
         const defaultSort = {
             created_at: -1,
             date_updated: -1,
@@ -79,13 +78,15 @@ class Mutable extends Controller_1.Controller {
             props.limit = +(exports.PAGINATION_LIMIT || 35);
         }
         const entries = Object.entries(props.filters || {})
-            .map(([key, value]) => [key, typeof value === 'object' && 'id' in value ? value._id : value]);
+            .map(([key, value]) => [key, value && typeof value === 'object' && 'id' in value ? value._id : value]);
         props.filters = (0, helpers_1.fromEntries)(entries);
-        const result = await this._model.find(props.filters || {})
+        return this._model.find(props.filters || {})
             .sort(props.sort || defaultSort)
             .skip(props.offset || 0)
             .limit(props.limit);
-        return result
+    }
+    async getAll(props, response, decodedToken) {
+        return (await this._getAll(props))
             .map((item) => (0, exports.depopulateChildren)(item));
     }
     /**

@@ -1,5 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import { Model } from '../../database'
+import { TokenService } from '../../services'
 
 export interface HandlerRequest {
   payload: {
@@ -106,5 +107,18 @@ export abstract class Controller<T> {
    */
   public describe(): object {
     return this._description;
+  }
+
+  public async forward(this: any, route: string, props: any, decodedToken: any) {
+    delete decodedToken.exp
+    delete decodedToken.iap
+    const token = TokenService.sign(decodedToken, this.fwdTokenSecret)
+
+    if( !this.http.token ) {
+      this.http.token = token
+    }
+
+    const { data: { result } } = await this.http.post(route, props)
+    return result
   }
 }

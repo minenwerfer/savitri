@@ -60,6 +60,7 @@ export declare class UserModule extends Module<User, UserItem> {
     };
     getters(): {
         token: (state: any) => any;
+        current: (state: any) => any;
     };
     mutations(): {
         USER_AUTH(state: CommonState & {

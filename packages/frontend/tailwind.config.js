@@ -24,19 +24,15 @@ module.exports = {
         'menu': style.menuWidth,
         'view': `calc(100vw - ${style.menuWidth})`
       },
-      minHeight: {
-        'modal': '30vh'
-      },
-      maxHeight: {
-        'modal': '90vh'
-      },
       fontSize: {
         'base': '.98rem',
         'md': '.9rem'
       },
       animation: {
         'fade': 'fade .25s forwards',
+        'fadeout': 'fadeout .6s forwards',
         'slowfade': 'fade .75s forwards',
+        'overlay': 'overlay .2s forwards',
         'toast': 'toast .15s forwards',
         'slip': 'slip .10s forwards',
       },
@@ -47,6 +43,15 @@ module.exports = {
         'fade': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' }
+        },
+        'fadeout': {
+          '0%': { opacity: '1' },
+          '80%': { transform: 'scale(1.2)' },
+          '100%': { opacity: '0', transform: 'scale(0)' },
+        },
+        'overlay': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '.6' }
         },
         'toast': {
           '0%': { transform: 'translateY(1.5em)' },

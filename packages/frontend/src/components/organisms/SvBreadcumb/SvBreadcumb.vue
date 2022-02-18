@@ -1,26 +1,26 @@
 <template>
-  <sv-box classes="relative">
-    <div class="flex items-center relative">
-      <div class="text-xl font-bold border-r-2 pr-4">
-        {{ $tc(getTitle(routes[routes.length-1]), 2).capitalize() }}
-      </div>
-      <div class="flex px-auto items-center">
-        <sv-bare-button @clicked="$router.push({ name: 'dashboard-home' })">
-          <unicon name="home" fill="purple" class="mr-2" />
-        </sv-bare-button>
-        <router-link
-          class="_link text-md"
-          v-for="(route, index) in routes"
-          :key="`route-${index}`"
-          :to="{ name: route.name, params: $route.params }"
-        >
-          {{ $t(getTitle(route)).capitalize() }}
-        </router-link>
+  <sv-box classes="relative shadow-none border-b">
+    <div class="flex justify-between">
+      <div class="flex items-center relative">
+        <div class="text-xl font-bold border-r-2 pr-4 truncate">
+          {{ $tc(getTitle(routes[routes.length-1]), 2).capitalize() }}
+        </div>
+        <div class="flex px-auto items-center truncate flex-0">
+          <sv-bare-button @clicked="$router.push({ name: 'dashboard-home' })">
+            <unicon name="home" fill="purple" class="mr-2" />
+          </sv-bare-button>
+          <router-link
+            class="_link text-md"
+            v-for="(route, index) in routes"
+            :key="`route-${index}`"
+            :to="{ name: route.name, params: $route.params }"
+          >
+            {{ $t(getTitle(route)).capitalize() }}
+          </router-link>
+        </div>
+
       </div>
 
-    </div>
-
-    <div class="absolute top-6 right-4">
       <div class="flex gap-x-4">
         <slot></slot>
       </div>

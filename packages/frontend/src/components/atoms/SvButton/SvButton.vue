@@ -2,9 +2,11 @@
   <sv-bare-button
     :class="`
       text-white text-center font-bold outline-none
-      py-1 px-4 rounded-md
+      py-1 px-4 rounded-md transition-all delay-200 duration-150 ease-in-out transform ${disabled || 'hover:scale-95'}
       ${bgColorClasses[type||'success']} ${borderClasses[type||'success']} border-b-2 
     `"
+
+    :disabled="disabled"
   >
     <slot></slot>
   </sv-bare-button>
@@ -15,6 +17,7 @@ import { SvBareButton } from '..'
 
 const props = defineProps<{
   type?: string
+  disabled?: boolean
 }>()
 
 const bgColorClasses = {

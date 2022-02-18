@@ -1,6 +1,6 @@
 <template>
   <div v-if="formData" class="w-full">
-    <div :class="`grid ${flex && 'md:flex md:flex-wrap items-end'} gap-x-${gapX} gap-y-${gapY} pt-${paddingTop} pb-${paddingBottom} w-full`" v-if="!isReadonly">
+    <div :class="`grid ${flex && 'md:flex md:flex-wrap items-end'} gap-x-2 gap-y-6 w-full`" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
@@ -28,7 +28,7 @@
             {{ field.description }}
           </div>
 
-          <div v-if="field.type !== 'select'" :class="flex || 'grid md:grid-cols-2 gap-2'">
+          <div v-if="field.type !== 'select'" :class="flex || 'grid md:grid-cols-2 gap-1'">
             <sv-checkbox
               v-if="['checkbox', 'radio'].includes(field.type)"
               v-for="(value, vindex) in field.values"
@@ -46,7 +46,12 @@
               <template #description>{{ value.description }}</template>
             </sv-checkbox>
 
-            <sv-checkbox v-else-if="field.type === 'boolean'" v-model="formData[key]" :value="formData[key] === true" :readonly="field.readonly">
+            <sv-checkbox
+              v-else-if="field.type === 'boolean'"
+              v-model="formData[key]"
+              :value="formData[key] === true"
+              :readonly="field.readonly"
+            >
               <template #label>{{ field.label }}</template>
             </sv-checkbox>
           </div>
@@ -88,7 +93,7 @@
       </sv-search>
     </div>
 
-    <div v-if="isReadonly" class="flex flex-wrap gap-x-4 gap-y-6 text-md">
+    <div v-if="isReadonly" :class="`${ isSmall && 'flex-col' } flex flex-wrap gap-x-4 gap-y-6 text-md`">
       <sv-input
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
@@ -100,7 +105,7 @@
           value: field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)
         }"
 
-        :class="`flex-grow ${ field.flexGrow || field.type === 'textbox' && 'w-full'}`"
+        :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'w-[35%]'}`"
       >
         {{ field.label }}
       </sv-input>
@@ -109,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, inject, ref, toRefs, reactive, watch, } from 'vue'
+import { defineAsyncComponent, inject, computed, ref, toRefs, reactive, watch, } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
 import { SvInput, SvCheckbox, SvSelect } from 'frontend/components'
@@ -127,6 +132,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  module: {
+    type: String,
+    required: false
+  },
   // HTML5 has a DOM property with the same name
   isReadonly: {
     type: Boolean,
@@ -135,22 +144,6 @@ const props = defineProps({
   flex: {
     type: Boolean,
     default: false
-  },
-  gapX: {
-    type: Number,
-    default: 2
-  },
-  gapY: {
-    type: Number,
-    default: 4
-  },
-  paddingTop: {
-    type: Number,
-    default: 2
-  },
-  paddingBottom: {
-    type: Number,
-    default: 2
   },
   itemIndex: {
     type: Number,
@@ -163,7 +156,7 @@ const props = defineProps({
 })
 
 const store = useStore()
-const module = ref<string>(inject('module', ''))
+const module = ref<string>(inject('module', props.module))
 
 const moduleRefs = reactive<any>({})
 watch(module, () => Object.assign(moduleRefs as any, useModule(module.value, store)), { immediate: true })
@@ -172,6 +165,10 @@ const filterFields = (condition: (f: any) => boolean) =>
   Object.entries(props.form)
     .filter(([, field]: [unknown, any]) => field && !field.meta && !field.noform)
     .filter(([, field]) => condition(field))
+    .map(([key, field]: [string, any]) => [key, {
+      ...field,
+      hidden: undefined
+    }])
 
 const fields = filterFields((f: any) => typeof f.module !== 'string' || f.module === 'file')
 const moduleFields = filterFields((f: any) => typeof f.module === 'string' && f.module !== 'file')
@@ -189,6 +186,8 @@ const allInOne = Object.entries(props.form)
     value: moduleRefs.formatValue((props.formData||{})[key], key, true),
   }]
 })
+
+const isSmall = computed(() => Object.keys(props.form).length < 5)
 
 const isTextType = (type: string) => {
   return ['text', 'textbox', 'password', 'number', 'datetime'].includes(type)

@@ -1,14 +1,14 @@
 <template>
-  <div :class="vertical ? 'lg:flex lg:gap-x-4' : ''">
-    <sv-box :class="vertical ? 'lg:w-1/6' : ''" classes="w-screen md:w-auto lg:w-full" v-if="titles && titles.length > 0" :padding-y="`pt-2 lg:pt-2 ${vertical ? 'lg:py-5' : ''}`">
-      <div :class="`flex gap-x-4 w-full whitespace-nowrap overflow-auto ${vertical ? 'lg:flex-col lg:gap-y-4' : ''}`">
-        <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden lg:block ${vertical ? menuClasses : ''}`"></slot>
+  <div :class="`flex gap-y-3 flex-col ${vertical && 'xl:flex-row xl:gap-x-4' }`">
+    <sv-box :class="vertical ? 'xl:w-1/6' : ''" classes="w-screen md:w-auto xl:w-full px-5 xl:px-0" v-if="titles && titles.length > 0" :padding-y="`pt-2 xl:pt-2 ${vertical ? 'xl:pt-0' : ''}`" :fill="true">
+      <div :class="`flex w-full whitespace-nowrap overflow-auto ${vertical ? 'xl:flex-col' : ''}`">
+        <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden xl:block ${vertical ? menuClasses : ''}`"></slot>
         <sv-bare-button
           :class="`
-            text-center text-blue-500
-            py-2 flex-1
+            flex flex-1
+            text-blue-500 py-2
             ${currentTab === index+1 ? 'font-semibold' : ''}
-            ${vertical ? 'lg:border-b-2 lg:text-left lg:flex-none lg:py-0' : ''}
+            ${vertical ? 'xl:border-b xl:flex-none xl:px-3 xl:py-2' : ''}
             transition-all whitespace-nowrap
           `"
           v-for="(title, index) in titles"
@@ -16,12 +16,14 @@
 
           @clicked="$emit('update:currentTab', index+1)"
         >
-          {{ title }}
+          <div :class="`${vertical && 'xl:text-left'} text-center flex-1`">
+            {{ title }}
+          </div>
         </sv-bare-button>
       </div>
     </sv-box>
 
-    <div :class="vertical ? 'lg:flex-1' : ''">
+    <div :class="vertical ? 'xl:flex-1' : ''">
       <div
         v-for="tab in tabs"
         :key="`tab-${tab}`"

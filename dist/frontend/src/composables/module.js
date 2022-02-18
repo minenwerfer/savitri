@@ -73,7 +73,7 @@ exports.default = (name, store) => {
         if (!value) {
             return '-';
         }
-        const { values } = store.state[name]?.__description.fields[key] || {};
+        const { values } = (store.state[name]?.__description.fields || {})[key] || {};
         const query = (Array.isArray(values)
             ? values[0]
             : values)?.__query || {};

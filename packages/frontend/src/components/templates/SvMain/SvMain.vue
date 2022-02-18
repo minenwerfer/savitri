@@ -1,4 +1,9 @@
 <template>
+
+  <sv-toast v-if="toast.isVisible" :key="toast.itr">
+    {{ toast.text }}
+  </sv-toast>
+
   <div class="grid min-h-screen">
     <router-view></router-view>
 
@@ -23,13 +28,14 @@
 import { watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { SvModal, SvPrompt } from 'frontend/components'
+import { SvModal, SvPrompt, SvToast } from 'frontend/components'
 
 const store = useStore()
 const router = useRouter()
 
 const modal = computed(() => store.state.meta.modal)
 const prompt = computed(() => store.state.meta.prompt)
+const toast = computed(() => store.state.meta.toast)
 
 /**
   Updates routes based on global descriptions.

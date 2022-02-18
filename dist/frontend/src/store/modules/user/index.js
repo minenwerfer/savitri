@@ -57,6 +57,7 @@ class UserModule extends module_1.Module {
     getters() {
         return {
             token: (state) => state.current.token,
+            current: (state) => state.current,
         };
     }
     mutations() {

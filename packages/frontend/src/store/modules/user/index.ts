@@ -87,6 +87,7 @@ export class UserModule extends Module<User, UserItem> {
   getters() {
     return {
       token: (state: any) => state.current.token,
+      current: (state: any) => state.current,
     }
   }
 

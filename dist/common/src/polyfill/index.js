@@ -8,6 +8,16 @@ Object.assign(String.prototype, {
         return hours
             ? new Date(this).toLocaleString(locale, { timeZone: 'UTC' }).split(':').slice(0, -1).join(':')
             : new Date(this).toLocaleDateString(locale, { timeZone: 'UTC' });
+    },
+    formatDocument: function () {
+        return this && this
+            .split(/(\w{3})/).filter(_ => _).join('.')
+            .replace(/\.(\w{2})$/, '-$1');
+    },
+    formatPhone: function () {
+        return this && this
+            .replace(/^0?(\w{2})/, '($1) ')
+            .replace(/(\w{4})$/, '-$1');
     }
 });
 Object.assign(Date.prototype, {

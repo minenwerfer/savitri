@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" :class="`${ isFloating ? 'absolute z-40' : 'mb-3' } ${ animate ? 'animate-fade' : '' }`">
+  <div v-if="visible" :class="`${ isFloating && 'absolute z-40' } ${ animate ? 'animate-fade' : '' }`">
     <sv-overlay v-if="isFloating"></sv-overlay>
     <div :class="`${ isFloating ? 'fixed inset-0 z-50 flex justify-center items-center' : ''}`">
       <div
@@ -7,17 +7,17 @@
         :class="`
           ${
             isFloating
-              ? 'w-full h-full sm:w-3/4 md:w-3/5 lg:w-5/12 sm:h-auto sm:min-h-modal z-10 max-h-screen md:max-h-modal'
+              ? 'w-full h-full sm:w-3/4 md:w-3/5 lg:w-5/12 sm:h-auto sm:min-h-[30vh] z-10 max-h-screen md:max-h-[95vh]'
               : ''
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
-          ${ isFloating ? 'px-2 sm:px-4' : ( fullWidth || fill ? '' : 'px-auto' ) }
-          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow ${fill || paddingY}` }
+          ${ isFloating ? '' : ( fullWidth || fill ? '' : 'py-4 px-auto' ) }
+          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow` }
           flex flex-col ${ transparent || 'bg-white' } overscroll-none
           ${ classes }
         `"
       >
-        <div :class="`flex ${ isCollapsed ? '' : 'mb-8 md:mb-10' }`" v-if="$slots.title || title">
+      <div :class="`flex ${isFloating && 'border-b py-4 px-auto bg-gray-50'}`" v-if="$slots.title || title">
           <div class="flex-1 font-semibold text-xl">
             <slot v-if="$slots.title" name="title"></slot>
             <div v-else-if="title">{{ title }}</div>
@@ -32,12 +32,12 @@
           </div>
         </div>
 
-        <div v-if="!isCollapsed" :class="`overflow-x-hidden overflow-y-auto flex-grow ${$slots.footer ? 'pb-5' : ''}`">
+        <div v-if="!isCollapsed" :class="`overflow-x-hidden overflow-y-auto flex-grow ${ (($slots.title || title) && !isCollapsed) && 'pt-4' } ${isFloating && 'px-auto'} ${(isFloating || $slots.footer) && 'pb-6'}`">
           <slot v-if="$slots.default"></slot>
           <slot v-else name="body"></slot>
         </div>
 
-        <div class="self-end mt-2" v-if="$slots.footer">
+        <div class="self-end pb-4 px-auto" v-if="$slots.footer">
           <slot name="footer"></slot>
         </div>
       </div>

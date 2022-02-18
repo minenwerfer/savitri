@@ -41,6 +41,11 @@ export interface Meta {
     title: string
     component: string
   },
+  toast: {
+    isVisible: boolean
+    text: string
+    itr: number
+  },
   report: {
     isVisible: boolean
   },
@@ -83,6 +88,11 @@ export class MetaModule extends Module<Meta, {}> {
         isVisible: false,
         title: '',
         component: ''
+      },
+      toast: {
+        isVisible: false,
+        text: '',
+        itr: 0
       },
       report: {
         isVisible: false
@@ -184,6 +194,14 @@ export class MetaModule extends Module<Meta, {}> {
         commit('SIDEBAR_CLOSE')
       },
 
+      spawnToast: ({ commit }: ActionProps, payload: any) => {
+        commit('TOAST_SPAWN', payload)
+      },
+
+      closeToast: ({ commit }: ActionProps) => {
+        commit('TOAST_CLOSE')
+      },
+
       spawnReport: ({ commit }: ActionProps) => {
         commit('REPORT_SPAWN')
       },
@@ -272,6 +290,20 @@ export class MetaModule extends Module<Meta, {}> {
       SIDEBAR_CLOSE: (state: any) => {
         Object.assign(state.sidebar, {
           isVisible: false,
+        })
+      },
+
+      TOAST_SPAWN:(state: any, payload: any) => {
+        Object.assign(state.toast, {
+          isVisible: true,
+          itr: state.toast.itr + 1,
+          ...payload
+        })
+      },
+
+      TOAST_CLOSE: (state: any) => {
+        Object.assign(state.toast, {
+          isVisible: false
         })
       },
 

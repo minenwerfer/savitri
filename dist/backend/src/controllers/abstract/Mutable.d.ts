@@ -42,12 +42,18 @@ export declare abstract class Mutable<T> extends Controller<T> {
      * @method
      * Gets a collection of documents from database.
      */
+    protected _getAll(props: {
+        filters?: object;
+        offset?: number;
+        limit?: number;
+        sort?: any;
+    }): MultipleQuery<T>;
     getAll(props: {
         filters?: object;
         offset?: number;
         limit?: number;
         sort?: any;
-    }): Promise<MultipleQuery<T>>;
+    }, response?: unknown, decodedToken?: any): Promise<any[]>;
     /**
      * @method
      * Removes a document from database.

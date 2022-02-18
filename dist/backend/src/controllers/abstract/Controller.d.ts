@@ -42,4 +42,5 @@ export declare abstract class Controller<T> {
      * Describes the controller.
      */
     describe(): object;
+    forward(this: any, route: string, props: any, decodedToken: any): Promise<any>;
 }
