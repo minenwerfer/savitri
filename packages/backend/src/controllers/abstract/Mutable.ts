@@ -45,7 +45,9 @@ export abstract class Mutable<T> extends Controller<T> {
   public async insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): Promise<any> {
 
     const { _id, ...rest } = props.what
-    const what = typeof _id === 'string' ? Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
+    const what = typeof _id === 'string' ? Object.entries(rest)
+      .filter(([key]: [string, unknown]) => !(this._description.fields[key]||{}).readonly)
+      .reduce((a: any, [key, value]: [string, any]) => {
       const append = value && typeof value === 'object' && Object.keys(value).length === 0
         ? '$unset' : '$set'
 

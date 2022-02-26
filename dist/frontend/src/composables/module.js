@@ -93,7 +93,7 @@ exports.default = (name, store) => {
     };
     const formatValue = (value, key, form = false, field) => {
         const firstValue = value && typeof value === 'object'
-            ? getFirstValue(value, key, form)
+            ? ((Array.isArray(value) || value?._id) ? getFirstValue(value, key, form) : Object.values(value)[0])
             : value;
         return firstValue !== undefined
             ? (field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue)
@@ -103,7 +103,7 @@ exports.default = (name, store) => {
         return Object.entries(item || {})
             .reduce((a, [key, value]) => ({
             ...a,
-            [key]: typeof value === 'object'
+            [key]: value && typeof value === 'object' && '_id' in value
                 ? getFirstValue(value, key)
                 : value
         }), {});
@@ -128,12 +128,20 @@ exports.default = (name, store) => {
         formatValue,
         resumeItem,
         resumedItem: (0, vue_1.computed)(() => resumeItem(store.getters[`${name}/item`])),
-        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`].map((i) => resumeItem(i))),
+        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`]?.map((i) => resumeItem(i))),
         getItemIndex,
         setItem,
-        ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
-        ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),
-        ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})
+        ...getters.reduce((a, k) => ({
+            ...a,
+            [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`])
+        }), {}),
+        ...props.reduce((a, k) => ({
+            ...a,
+            [k]: (0, vue_1.computed)(() => store.state[name][k])
+        }), {}),
+        ...actions.reduce((a, k) => ({
+            ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload)
+        }), {})
     };
 };
 //# sourceMappingURL=module.js.map

@@ -36,7 +36,9 @@ class Mutable extends Controller_1.Controller {
      */
     async insert(props, response, decodedToken) {
         const { _id, ...rest } = props.what;
-        const what = typeof _id === 'string' ? Object.entries(rest).reduce((a, [key, value]) => {
+        const what = typeof _id === 'string' ? Object.entries(rest)
+            .filter(([key]) => !(this._description.fields[key] || {}).readonly)
+            .reduce((a, [key, value]) => {
             const append = value && typeof value === 'object' && Object.keys(value).length === 0
                 ? '$unset' : '$set';
             a[append][key] = value;

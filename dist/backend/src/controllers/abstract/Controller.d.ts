@@ -9,7 +9,7 @@ export interface HandlerRequest {
 }
 export declare abstract class Controller<T> {
     private _webInterface;
-    private _description;
+    protected _description: any;
     protected _model: Model<T>;
     /**
      * @protected @readonly

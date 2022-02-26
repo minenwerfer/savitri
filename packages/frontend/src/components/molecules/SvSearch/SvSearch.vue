@@ -8,13 +8,13 @@
         :item-index="itemIndex"
         :field-index="fieldIndex"
       ></sv-form>
-      <div v-if="!expand" class="text-sm">
+      <div v-if="!expand" class="text-sm flex">
         <sv-button @clicked="insert" class="justify-self-end mr-2">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
     </div>
 
-    <div v-else class="flex flex-wrap gap-x-4 gap-y-2">
+    <div v-else class="flex flex-wrap gap-2">
       <div
         v-for="([indexName, searchField], index) in indexes.map((i) => [i, field.fields[i]])"
         :key="`searchField-${index}`"
@@ -32,7 +32,7 @@
     </div>
 
     <div v-if="!isExpanded || array" :key="inputValue" style="max-width: 20em">
-      <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`">
+      <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`" v-if="!isExpanded">
         <div v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)">
           <div class="cursor-pointer p-2 border">{{ item[indexes[0]] }}</div>
         </div>
@@ -200,7 +200,7 @@ const unselect = async (item: any) => {
 }
 
 const addItem = () => {
-  fieldIndex.value = selected.value.length
+  fieldIndex.value = selected.value.length + 1
 
   edited.value = {}
   expanded.value = true

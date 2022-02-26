@@ -1,34 +1,31 @@
 <template>
   <div
-    @click="closeMobile"
-    :class="`${ mobileVisible ? '' : 'hidden' } md:hidden fixed inset-0 w-screen h-screen bg-gray-900 opacity-60 z-30 transition-all`"
-    ></div>
-
-  <div :class="`
-    fixed md:sticky top-0 right-0 w-10/12 md:w-auto h-screen z-40
-    bg-white pt-4 border-r md:border-l
-    animate-slip md:animate-slowfade transition-all
-    ${ visible ? '' : 'block md:hidden' } 
-    ${ mobileVisible ? '' : 'hidden md:block' }
-    overflow-y-auto overscroll-none
+    style="background: conic-gradient(from 180deg at 50% 66.3%, #08217c 0deg, rgba(8, 33, 124, 0.8) 360deg)"
+    :class="`
+      fixed md:sticky top-0 right-0 w-10/12 md:w-auto h-screen z-40 pt-4 
+      text-white
+      animate-slip md:animate-slowfade transition-all
+      ${ visible ? '' : 'block md:hidden' } 
+      ${ mobileVisible ? '' : 'hidden md:block' }
+      overflow-y-auto overscroll-none
   `">
 
     <div @click="$router.push({ name: 'dashboard-home' })">
       <sv-bare-button
-        v-if="!productLogo"
+        v-if="!productLogoAlt"
         class="text-center font-semibold text-2xl pt-6 mb-10 hidden md:block"
       >
         {{ productName }}
       </sv-bare-button>
       <img
         v-else
-        :src="require(`@/../assets/${productLogo}`).default"
-        class="cursor-pointer mx-auto mt-6 mb-14 w-3/4 h-20 object-contain transition-all transform hover:skew-x-12"
+        :src="require(`@/../assets/${productLogoAlt}`).default"
+        class="cursor-pointer mx-auto mt-6 mb-14 w-3/5 h-20 object-contain transition-all transform hover:skew-x-12"
       />
     </div>
 
     <!-- menu entries -->
-    <div class="grid md:pl-2 leading-8 md:leading-7">
+    <div class="grid leading-8 md:leading-7">
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"
@@ -46,7 +43,7 @@
             @click="onEntryClick(subroute)"
             :class="`
             menu-entry menu-subroute
-            ${(subroute.redirect || subroute.path) === $route.path ? 'border-l-8 md:border-l-0 md:border-r-8 border-purple-600 bg-gray-200' : ''}
+            ${(subroute.redirect || subroute.path) === $route.path ? 'border-l-8 border-white' : ''}
           `">
             {{ $tc(subroute.meta.title, 2).capitalize() }}
           </a>
@@ -54,15 +51,20 @@
 
       </div>
     </div>
-
   </div>
+
+  <sv-overlay
+    @click="closeMobile"
+    :class="`${ mobileVisible ? '' : 'hidden' } md:hidden z-30`"
+  ></sv-overlay>
+
 </template>
 
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { SvBareButton } from 'frontend/components'
+import { SvBareButton, SvOverlay } from 'frontend/components'
 import { Route } from 'frontend/router'
 
 const props = defineProps<{
@@ -77,7 +79,7 @@ const router = useRouter()
 
 const tick = ref(0)
 const productName = inject('productName')
-const productLogo = inject('productLogo', undefined)
+const productLogoAlt = inject('productLogoAlt', undefined)
 
 const closeMobile = () => {
   store.dispatch('meta/swapMenu', { desktop: true, mobile: false })
@@ -152,7 +154,6 @@ watch(() => store.state.meta?.globalDescriptions, () => {
 .menu-route {
   @apply font-semibold;
   @apply uppercase;
-  @apply opacity-40;
   @apply text-sm;
 }
 
@@ -160,6 +161,5 @@ watch(() => store.state.meta?.globalDescriptions, () => {
   @apply md:hover:bg-gray-300;
   @apply py-1;
   @apply cursor-pointer;
-  @apply opacity-70;
 }
 </style>

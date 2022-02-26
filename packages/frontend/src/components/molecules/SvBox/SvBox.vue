@@ -37,7 +37,7 @@
           <slot v-else name="body"></slot>
         </div>
 
-        <div class="self-end pb-4 px-auto" v-if="$slots.footer">
+        <div :class="`self-end ${isFloating && 'px-auto pb-4'}`" v-if="$slots.footer">
           <slot name="footer"></slot>
         </div>
       </div>

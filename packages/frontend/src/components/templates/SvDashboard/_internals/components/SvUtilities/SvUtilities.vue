@@ -1,12 +1,12 @@
 <template>
   <sv-bare-button v-if="webpackVariables.releases" @clicked="spawnSidebar('Notas de atualização', 'sv-releases')">
-    <unicon name="newspaper" fill="black"></unicon>
+    <unicon name="newspaper" fill="white"></unicon>
   </sv-bare-button>
   <sv-bare-button v-if="webpackVariables.notification" @clicked="spawnSidebar('Notificações', 'sv-notifications')">
-    <unicon name="bell" fill="black"></unicon>
+    <unicon name="bell" fill="white"></unicon>
   </sv-bare-button>
   <sv-bare-button @clicked="spawnSidebar('Usuário', 'sv-profile')">
-    <unicon name="user" fill="black"></unicon>
+    <unicon name="user" fill="white"></unicon>
   </sv-bare-button>
 </template>
 

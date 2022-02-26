@@ -13,7 +13,7 @@ export interface HandlerRequest {
 
 export abstract class Controller<T> {
   private _webInterface: Controller<T>
-  private _description: any
+  protected _description: any
 
   protected _model: Model<T>
 

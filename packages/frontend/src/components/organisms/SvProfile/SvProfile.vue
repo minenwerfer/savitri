@@ -30,7 +30,7 @@ const signout = async () => {
   router.push({ name: 'signin' })
 }
 
-const current = computed(() => store.state.user.current)
+const current = computed(() => store.getters['user/current'])
 
 const {
   item

@@ -15,7 +15,7 @@ const typeMapping = [
  * @exports @function
  * Converts a description object into a mongoose Schema structure.
  */
-const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
+const descriptionToSchema = ({ strict, fields }, options = {}, extra = {}) => {
     const convert = (a, [key, value]) => {
         const query = Array.isArray(value.values || [])
             ? (value.values || [{}])[0]?.__query
@@ -26,7 +26,7 @@ const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
             select: value.hidden !== true,
             unique: value.unique === true,
             default: value.default,
-            required: value.required || false,
+            required: value.required || strict,
             autopopulate: (typeof moduleName === 'string' && !value.preventPopulate) || false,
         };
         const typeMatch = typeMapping.find(([keys, _]) => keys.includes(value.type));
@@ -38,6 +38,11 @@ const descriptionToSchema = ({ fields }, options = {}, extra = {}) => {
             result.type = value.array || Array.isArray(value.values)
                 ? [ObjectId]
                 : ObjectId;
+            if (value._id === false) {
+                result.type = value.array
+                    ? [Object]
+                    : Object;
+            }
         }
         if (['checkbox', 'radio', 'select'].includes(value.type)) {
             result.validator = (v) => value.values.include(v);

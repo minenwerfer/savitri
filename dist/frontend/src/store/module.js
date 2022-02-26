@@ -259,7 +259,14 @@ class Module {
     _getters() {
         return {
             queryCache: (state) => state._queryCache,
-            item: (state) => state.item,
+            item: (state) => {
+                const merge = Object.entries(state._clearItem)
+                    .reduce((a, [key, value]) => ({
+                    ...a,
+                    [key]: state.item[key] || value
+                }), {});
+                return Object.assign(state.item, merge);
+            },
             condensedItem: (state) => this._condenseItem(state.item),
             items: (state) => {
                 if (!Array.isArray(state.items))
@@ -443,7 +450,9 @@ class Module {
             deepInsert: ({ dispatch, getters, rootGetters }, payload) => new Promise(async (resolve) => {
                 const { expandedSubmodules } = getters;
                 for (const [k, { module }] of expandedSubmodules) {
-                    payload.what[k] = await dispatch(`${module}/insert`, { what: payload.what[k] }, { root: true });
+                    if (payload.what[k] && typeof payload.what[k] === 'object' && Object.keys(payload.what[k]).length > 0) {
+                        payload.what[k] = await dispatch(`${module}/insert`, { what: payload.what[k] }, { root: true });
+                    }
                 }
                 const result = await dispatch('insert', payload);
                 resolve(result);

@@ -87,7 +87,7 @@ export class UserModule extends Module<User, UserItem> {
   getters() {
     return {
       token: (state: any) => state.current.token,
-      current: (state: any) => state.current,
+      current: () => JSON.parse(sessionStorage.getItem('auth:current')||'{}'),
     }
   }
 
@@ -100,6 +100,7 @@ export class UserModule extends Module<User, UserItem> {
         })
 
         sessionStorage.setItem('auth:token', value.token)
+        sessionStorage.setItem('auth:current', JSON.stringify(value))
       },
 
       USER_SIGNOUT(state: CommonState & { current: any }) {

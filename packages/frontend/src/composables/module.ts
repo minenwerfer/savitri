@@ -115,7 +115,7 @@ export default (name: string, store: any): any => {
 
   const formatValue = (value: any, key: string, form: boolean = false, field: any) => {
     const firstValue = value && typeof value === 'object'
-      ? getFirstValue(value, key, form)
+      ? ((Array.isArray(value) || value?._id) ? getFirstValue(value, key, form) : Object.values(value)[0])
       : value
 
     return firstValue !== undefined
@@ -127,7 +127,7 @@ export default (name: string, store: any): any => {
     return Object.entries(item||{})
     .reduce((a: object, [key, value]: [string, any]) => ({
       ...a,
-      [key]: typeof value === 'object'
+      [key]: value && typeof value === 'object' && '_id' in value
         ? getFirstValue(value, key)
         : value
     }), {})
@@ -156,12 +156,22 @@ export default (name: string, store: any): any => {
     formatValue,
     resumeItem,
     resumedItem: computed(() => resumeItem(store.getters[`${name}/item`])),
-    resumedItems: computed(() => store.getters[`${name}/items`].map((i: any) => resumeItem(i))),
+    resumedItems: computed(() => store.getters[`${name}/items`]?.map((i: any) => resumeItem(i))),
     getItemIndex,
     setItem,
 
-    ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
-    ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),
-    ...actions.reduce((a, k: string) => ({ ...a, [k]: (payload: any) => store.dispatch(`${name}/${k}`, payload) }), {})
+    ...getters.reduce((a, k: string) => ({
+      ...a,
+      [k]: computed(() => store.getters[`${name}/${k}`])
+    }), {}),
+
+    ...props.reduce((a, k: string) => ({
+      ...a,
+      [k]: computed(() => store.state[name][k])
+    }), {}),
+
+    ...actions.reduce((a, k: string) => ({
+      ...a, [k]: (payload: any) => store.dispatch(`${name}/${k}`, payload)
+    }), {})
   }
 }

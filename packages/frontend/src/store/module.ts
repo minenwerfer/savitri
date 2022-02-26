@@ -378,7 +378,15 @@ export abstract class Module<T=any, Item=any> {
 
       queryCache: (state: CommonState) => state._queryCache,
 
-      item: (state: CommonState) => state.item,
+      item: (state: CommonState) => {
+        const merge = Object.entries(state._clearItem)
+          .reduce((a: any, [key, value]: [string, any]) => ({
+            ...a,
+            [key]: state.item[key] || value
+          }), {})
+
+        return Object.assign(state.item, merge)
+      },
 
       condensedItem: (state: CommonState) => this._condenseItem(state.item),
 
@@ -562,17 +570,17 @@ export abstract class Module<T=any, Item=any> {
         }
 
         return Object.entries(state._description?.fields||{})
-        .reduce((a: object, [key, value]: [string, any]) => ({
-          ...a,
-          [key]: {
-            ...value,
-            type: ![undefined].includes(value.type)
-              ? value.type : typeof value.module === 'string'
-              ? 'module' : 'text',
+          .reduce((a: object, [key, value]: [string, any]) => ({
+            ...a,
+            [key]: {
+              ...value,
+              type: ![undefined].includes(value.type)
+                ? value.type : typeof value.module === 'string'
+                ? 'module' : 'text',
 
-            ...(!!value.values ? { values: normalizeValues(value.values) } : {})
-          }
-        }), {})
+              ...(!!value.values ? { values: normalizeValues(value.values) } : {})
+            }
+          }), {})
       }
     }
   }
@@ -597,7 +605,9 @@ export abstract class Module<T=any, Item=any> {
       deepInsert: ({ dispatch, getters, rootGetters }: ActionProps, payload: any) => new Promise(async (resolve) => {
         const { expandedSubmodules } = getters
         for ( const [k, { module }] of expandedSubmodules ) {
-          payload.what[k] = await dispatch(`${module}/insert`, { what: payload.what[k] }, { root: true })
+          if( payload.what[k] && typeof payload.what[k] === 'object' && Object.keys(payload.what[k]).length > 0 ) {
+            payload.what[k] = await dispatch(`${module}/insert`, { what: payload.what[k] }, { root: true })
+          }
         }
 
         const result = await dispatch('insert', payload)

@@ -1,7 +1,7 @@
 <template>
   <div :class="`flex gap-y-3 flex-col ${vertical && 'xl:flex-row xl:gap-x-4' }`">
     <sv-box :class="vertical ? 'xl:w-1/6' : ''" classes="w-screen md:w-auto xl:w-full px-5 xl:px-0" v-if="titles && titles.length > 0" :padding-y="`pt-2 xl:pt-2 ${vertical ? 'xl:pt-0' : ''}`" :fill="true">
-      <div :class="`flex w-full whitespace-nowrap overflow-auto ${vertical ? 'xl:flex-col' : ''}`">
+      <div :class="`flex gap-x-4 w-full whitespace-nowrap overflow-auto ${vertical ? 'xl:flex-col' : ''}`">
         <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden xl:block ${vertical ? menuClasses : ''}`"></slot>
         <sv-bare-button
           :class="`
@@ -23,13 +23,15 @@
       </div>
     </sv-box>
 
-    <div :class="vertical ? 'xl:flex-1' : ''">
-      <div
-        v-for="tab in tabs"
-        :key="`tab-${tab}`"
-      >
-        <div v-if="tab === currentTab" class="animate-fade">
-          <slot :name="`tab-${tab}`"></slot>
+    <div :class="`${vertical && 'xl:flex-1'} flex flex-col gap-y-4`">
+      <div>
+        <div
+          v-for="tab in tabs"
+          :key="`tab-${tab}`"
+        >
+          <div v-if="tab === currentTab" class="animate-fade">
+            <slot :name="`tab-${tab}`"></slot>
+          </div>
         </div>
       </div>
 

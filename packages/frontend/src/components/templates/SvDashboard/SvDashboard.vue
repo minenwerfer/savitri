@@ -14,11 +14,7 @@
         <div>Feedback</div>
     </sv-bare-button>
 
-    <sv-top-bar class="md:hidden">
-      <sv-utilities></sv-utilities>
-    </sv-top-bar>
-
-    <div :class="`grid md:grid-cols-${isMenuVisible ? 'menu' : 1}`">
+    <div :class="`grid ${isMenuVisible ? 'md:grid-cols-menu' : 'md:grid-cols-1'}`">
       <sv-menu
         entrypoint="dashboard"
         v-model:visible="isMenuVisible"
@@ -26,14 +22,24 @@
         :schema="menuSchema">
       </sv-menu>
 
-      <div :class="`relative flex flex-col gap-4 md:w-view`">
-        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-5'}`">
+      <div :class="`relative flex flex-col md:w-view`">
+        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-6 pb-6'}`">
+
+          <sv-bare-button class="flex my-3 opacity-80" v-if="history.state.back != '/signin'" @clicked="$router.back()">
+            <unicon name="arrow-left"></unicon>
+            <div>Voltar</div>
+          </sv-bare-button>
+
           <router-view />
         </div>
 
-        <sv-breadcumb class="hidden md:block sticky inset-0 order-1" v-if="!($route.meta?.noMargin || $route.meta?.noBreadcumb)">
+        <sv-topbar class="sticky inset-0 order-0" v-if="!($route.meta?.noMargin || $route.meta?.noTopbar)">
           <sv-utilities></sv-utilities>
-        </sv-breadcumb>
+        </sv-topbar>
+
+        <div class="bg-gray-300 text-white text-center order-1" v-if="notice">
+          {{ notice }}
+        </div>
 
       </div>
     </div>
@@ -50,8 +56,7 @@ import { default as webpackVariables } from 'variables'
 
 import {
   SvMenu,
-  SvBreadcumb,
-  SvTopBar,
+  SvTopbar,
   SvBareButton,
   SvFeedback,
   SvSidebar
@@ -62,6 +67,9 @@ import SvUtilities from './_internals/components/SvUtilities/SvUtilities.vue'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
+const notice = inject('notice', undefined)
+
+const history = window.history
 
 const menu = computed(() => store.state.meta.menu)
 

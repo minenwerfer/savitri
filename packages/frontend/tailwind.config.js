@@ -10,7 +10,8 @@ module.exports = {
   content: [
     '../public/**/*.html',
     '../src/**/*.vue',
-    path.join(global.appDir, './src/**/*.vue')
+    path.join(global.appDir, './src/**/*.vue'),
+    path.join(global.appDir, '../frontend-common/src/**/*.vue')
   ],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
@@ -23,6 +24,9 @@ module.exports = {
       width: {
         'menu': style.menuWidth,
         'view': `calc(100vw - ${style.menuWidth})`
+      },
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif']
       },
       fontSize: {
         'base': '.98rem',

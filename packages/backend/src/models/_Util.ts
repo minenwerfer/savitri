@@ -14,7 +14,7 @@ const typeMapping: Array<[string[], any]>= [
  * @exports @function
  * Converts a description object into a mongoose Schema structure.
  */
-export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any = {}) => {
+export const descriptionToSchema = <T>({ strict, fields }: any, options = {}, extra: any = {}) => {
 
   const convert = (a: any, [key, value]: [string, any]) => {
 
@@ -29,7 +29,7 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
       select: value.hidden !== true,
       unique: value.unique === true,
       default: value.default,
-      required: value.required || false,
+      required: value.required || strict,
       autopopulate: (typeof moduleName === 'string' && !value.preventPopulate) || false,
     }
 
@@ -44,6 +44,12 @@ export const descriptionToSchema = <T>({ fields }: any, options = {}, extra: any
       result.type = value.array || Array.isArray(value.values)
         ? [ObjectId]
         : ObjectId
+
+      if( value._id === false ) {
+        result.type = value.array
+          ? [Object]
+          : Object
+      }
     }
 
     if( ['checkbox', 'radio', 'select'].includes(value.type) ) {

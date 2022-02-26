@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <div :class="`grid ${flex && 'md:flex'} gap-x-${gapX} gap-y-${gapY} mt-8`" v-if="!isReadonly">
+    <div :class="`grid ${flex && 'md:flex'} gap-x-2 gap-y-4 mt-8`" v-if="!isReadonly">
       <sv-search
         v-for="([childModule, field], index) in moduleFields"
         :key="`modulefield-${index}`"
@@ -155,6 +155,10 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits<{
+  (e: 'update:formData', value: any): void
+}>()
+
 const store = useStore()
 const module = ref<string>(inject('module', props.module))
 
@@ -164,7 +168,7 @@ watch(module, () => Object.assign(moduleRefs as any, useModule(module.value, sto
 const filterFields = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
     .filter(([, field]: [unknown, any]) => field && !field.meta && !field.noform)
-    .filter(([, field]) => condition(field))
+    .filter(([, field]) => !condition || condition(field))
     .map(([key, field]: [string, any]) => [key, {
       ...field,
       hidden: undefined
@@ -178,7 +182,7 @@ const moduleFields = filterFields((f: any) => typeof f.module === 'string' && f.
   }])
 
 
-const allInOne = Object.entries(props.form)
+const allInOne = filterFields()
   .sort((a: any, b: any) => typeof a.module === typeof b.module ? 1 : -1)
   .map(([key, field]: [string, any]) => {
     return [key, {
@@ -190,7 +194,14 @@ const allInOne = Object.entries(props.form)
 const isSmall = computed(() => Object.keys(props.form).length < 5)
 
 const isTextType = (type: string) => {
-  return ['text', 'textbox', 'password', 'number', 'datetime'].includes(type)
+  return [
+    'text',
+    'textbox',
+    'password',
+    'number',
+    'integer',
+    'datetime'
+  ].includes(type)
 }
 
 const {

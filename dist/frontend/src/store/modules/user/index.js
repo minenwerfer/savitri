@@ -57,7 +57,7 @@ class UserModule extends module_1.Module {
     getters() {
         return {
             token: (state) => state.current.token,
-            current: (state) => state.current,
+            current: () => JSON.parse(sessionStorage.getItem('auth:current') || '{}'),
         };
     }
     mutations() {
@@ -68,6 +68,7 @@ class UserModule extends module_1.Module {
                     password: ''
                 });
                 sessionStorage.setItem('auth:token', value.token);
+                sessionStorage.setItem('auth:current', JSON.stringify(value));
             },
             USER_SIGNOUT(state) {
                 state.current = {};

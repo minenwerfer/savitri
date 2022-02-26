@@ -7,24 +7,29 @@
     <div class="text-sm opacity-50" v-if="$slots.description">
       <slot name="description"></slot>
     </div>
-    <input
-      v-if="type !== 'textbox'"
-      :class="classes"
+    <div v-if="type !== 'textbox'" class="relative">
+      <input
+        :class="style === 'light' ? classesLight : classesNormal"
 
-      ref="input"
-      :type="type !== 'datetime' ? type : 'text'"
-      :value="inputValue || value"
-      :placeholder="placeholder"
-      @input="onInput"
-      @change="onChange"
+        ref="input"
+        :type="type !== 'datetime' ? type : 'text'"
+        :value="inputValue || value"
+        :placeholder="placeholder"
+        @input="onInput"
+        @change="onChange"
 
-      v-maska="mask"
-      :readonly="readonly"
-    />
+        v-maska="mask"
+        :readonly="readonly"
+      />
+      <div class="absolute left-0 top-0" v-if="icon">
+        <unicon :name="icon" class="opacity-80"></unicon>
+      </div>
+    </div>
+
 
     <textarea
       v-else
-      :class="`${classes} h-36`"
+      :class="`${classesNormal} h-36`"
       :placeholder="placeholder"
 
       @input="$emit('update:modelValue', $event.target.value)"
@@ -35,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, inject, computed } from 'vue'
 import { maska as vMaska } from 'maska'
 
 const props = defineProps<{
@@ -44,6 +49,8 @@ const props = defineProps<{
   type?: string
   placeholder?: string
   mask?: string
+  icon?: string
+  style?: string
   readonly?: boolean
 }>()
 
@@ -52,6 +59,7 @@ const emit = defineEmits<{
 }>()
 
 const input = ref<any>(null)
+const style = inject('inputStyle', props.style)
 
 const dateToISO = (raw: string) => {
   if( !raw ) {
@@ -87,13 +95,23 @@ const inputValue = computed(() => props.type === 'datetime'
   ? dateToISO(props.modelValue)
   : props.modelValue)
 
-const classes = computed(() => `
+const classesNormal = computed(() => `
     w-full
     border-box rounded
     border border-stone-300 focus:border-purple-500
-    bg-white
-    px-3 py-1
+    bg-white px-3 py-1
     text-gray-600 outline-none
+    ${props.icon && 'pl-8'}
+    ${props.readonly && 'bg-stone-50'}
+`)
+
+const classesLight = computed(() => `
+    w-full
+    border-box 
+    border-b border-stone-400 focus:border-purple-500
+    bg-transparent pb-1
+    text-gray-600 outline-none
+    ${props.icon && 'pl-8'}
     ${props.readonly && 'bg-stone-50'}
 `)
 

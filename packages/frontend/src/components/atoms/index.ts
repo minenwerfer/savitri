@@ -11,3 +11,4 @@ export { default as SvWrapper } from 'frontend/components/atoms/SvWrapper/SvWrap
 export { default as SvPanel } from 'frontend/components/atoms/SvPanel/SvPanel.vue'
 export { default as SvOverlay } from 'frontend/components/atoms/SvOverlay/SvOverlay.vue'
 export { default as SvToast } from 'frontend/components/atoms/SvToast/SvToast.vue'
+export { default as SvProse } from 'frontend/components/atoms/SvProse/SvProse.vue'
