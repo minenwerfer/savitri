@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex gap-2 overflow-x-auto mt-3" v-if="description.actions" :key="module">
+    <div class="flex gap-2 overflow-x-auto" v-if="description.actions" :key="module">
       <sv-button
         v-for="([action, props], index) in Object.entries(description.actions||{})"
         :key="`action-${index}`"
@@ -11,6 +11,7 @@
       >
         {{ props.name }}
       </sv-button>
+      <slot name="actions"></slot>
     </div>
 
     <teleport to="body">

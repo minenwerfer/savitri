@@ -302,11 +302,18 @@ export abstract class Module<T=any, Item=any> {
       }
 
       /**
-       * This empty entry will prevent duplicate requests.
+       * @remarks This empty entry will prevent duplicate requests.
        */
       (window as any)._queryCache = {
         ...((window as any)._queryCache || {}),
         [value.module]: {}
+      }
+
+      /**
+       * @remarks optimization
+       */
+      if( !sessionStorage.getItem('auth:token') && !value.public ) {
+        return {}
       }
 
       const route = `${value.module}/getAll`
@@ -326,14 +333,12 @@ export abstract class Module<T=any, Item=any> {
       return result
     }
 
-    const type = array ? [] : {}
-
     const entries = Array.isArray(obj)
       ? obj.map((i) => Object.entries(i)[0])
       : Object.entries(obj)
 
+    const result: any = array ? [] : {}
 
-    const result: any = type
     for (const pair of entries) {
       const parsed = await parse(pair)
 
@@ -385,7 +390,7 @@ export abstract class Module<T=any, Item=any> {
             [key]: state.item[key] || value
           }), {})
 
-        return Object.assign(state.item, merge)
+        return Object.assign(Object.assign({}, state.item), merge)
       },
 
       condensedItem: (state: CommonState) => this._condenseItem(state.item),
@@ -738,11 +743,11 @@ private _mutations() {
     },
 
     LOADING_SWAP: (state: CommonState, value: boolean) => {
-      state.isLoading = typeof value === 'boolean' ? value : !state.isLoading;
+      state.isLoading = typeof value === 'boolean' ? value : !state.isLoading
     },
 
     OFFSET_UPDATE: (state: CommonState, offset: number) => {
-      state._offset = offset;
+      state._offset = offset
     },
 
     LIMIT_UPDATE: (state: CommonState, limit: number) => {
@@ -752,8 +757,8 @@ private _mutations() {
     COUNT_UPDATE: (state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) => {
       if( recordsCount ) state.recordsCount = recordsCount
       if( recordsTotal ) state.recordsTotal = recordsTotal
-      if( offset ) state._offset = offset;
-      if( limit ) state._limit = limit;
+      if( offset ) state._offset = offset
+      if( limit ) state._limit = limit
     },
 
     ITEM_GET: (state: CommonState, { result }: MutationProps) => {
@@ -761,7 +766,7 @@ private _mutations() {
     },
 
     ITEMS_GET: (state: CommonState, { result }: MutationProps) => {
-      state.items = result;
+      state.items = result
     },
 
     ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {

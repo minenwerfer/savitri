@@ -1,6 +1,7 @@
 {
   "module": "feedback",
   "route": true,
+  "alwaysAttribute": true,
   "actions": {
     "removeAll": {
       "name": "Remover",

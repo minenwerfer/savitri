@@ -1,6 +1,7 @@
 {
     "module": "notification",
     "route": true,
+    "alwaysAttribute": true,
     "flex": true,
     "actions": {
         "spawnAdd": {

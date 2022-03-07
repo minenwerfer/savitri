@@ -23,9 +23,13 @@
       </sv-menu>
 
       <div :class="`relative flex flex-col md:w-view`">
-        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-6 pb-6'}`">
+        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-4 pb-6 pt-4'}`">
 
-          <sv-bare-button class="flex my-3 opacity-80" v-if="history.state.back != '/signin'" @clicked="$router.back()">
+          <sv-bare-button
+            class="flex mb-8 opacity-80"
+            v-if="history.state.back != '/signin' && !$route.meta?.noMargin"
+            @clicked="$router.back()"
+          >
             <unicon name="arrow-left"></unicon>
             <div>Voltar</div>
           </sv-bare-button>
@@ -33,11 +37,11 @@
           <router-view />
         </div>
 
-        <sv-topbar class="sticky inset-0 order-0" v-if="!($route.meta?.noMargin || $route.meta?.noTopbar)">
+        <sv-topbar class="sticky inset-0 order-0" v-if="!$route.meta?.noTopbar">
           <sv-utilities></sv-utilities>
         </sv-topbar>
 
-        <div class="bg-gray-300 text-white text-center order-1" v-if="notice">
+        <div class="bg-orange-400 text-white text-center order-1" v-if="notice">
           {{ notice }}
         </div>
 

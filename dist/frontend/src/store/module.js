@@ -201,12 +201,18 @@ class Module {
                 return normalize(stored, value);
             }
             /**
-             * This empty entry will prevent duplicate requests.
+             * @remarks This empty entry will prevent duplicate requests.
              */
             window._queryCache = {
                 ...(window._queryCache || {}),
                 [value.module]: {}
             };
+            /**
+             * @remarks optimization
+             */
+            if (!sessionStorage.getItem('auth:token') && !value.public) {
+                return {};
+            }
             const route = `${value.module}/getAll`;
             const filters = value.filters || {};
             const { data } = await this._http.post(route, filters);
@@ -220,11 +226,10 @@ class Module {
             }));
             return result;
         };
-        const type = array ? [] : {};
         const entries = Array.isArray(obj)
             ? obj.map((i) => Object.entries(i)[0])
             : Object.entries(obj);
-        const result = type;
+        const result = array ? [] : {};
         for (const pair of entries) {
             const parsed = await parse(pair);
             array
@@ -265,7 +270,7 @@ class Module {
                     ...a,
                     [key]: state.item[key] || value
                 }), {});
-                return Object.assign(state.item, merge);
+                return Object.assign(Object.assign({}, state.item), merge);
             },
             condensedItem: (state) => this._condenseItem(state.item),
             items: (state) => {

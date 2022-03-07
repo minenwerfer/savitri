@@ -13,6 +13,7 @@ export declare type MultipleQuery<T> = Query<(T & {
     _id: any;
 }, {}, T>;
 export declare const depopulateChildren: (item: any) => any;
+export declare const select: (obj: any, fields: string[]) => any;
 export declare abstract class Mutable<T> extends Controller<T> {
     /**
      * @constructor

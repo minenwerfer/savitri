@@ -4,6 +4,7 @@
       :form="availableFilters"
       :form-data="$store.state[module]._filters"
       :flex="true"
+      :search-only="true"
 
       @change="filter"
       >
@@ -28,8 +29,6 @@ const props = defineProps<{
 
 const store = useStore()
 const moduleRefs = reactive(useModule(props.module, store))
-
-provide('searchOnly', true)
 
 const filter = () => {
   const filters = moduleRefs.filters

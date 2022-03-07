@@ -36,6 +36,7 @@ class Controller {
                     throw new Error('forbidden method (explicitly forbidden)');
                 }
                 const method = target[key];
+                const alwaysAttribute = this._description?.alwaysAttribute;
                 return function (req, res, decodedToken) {
                     const { module } = target._description || {};
                     if (!module) {
@@ -53,7 +54,7 @@ class Controller {
                     if (typeof req.payload?.limit === 'number' && (req.payload.limit > 150 || req.payload.limit <= 0)) {
                         req.payload.limit = 150;
                     }
-                    if (decodedToken.access?.visibility !== 'everything') {
+                    if (decodedToken.access?.visibility !== 'everything' || alwaysAttribute) {
                         if (payload.what)
                             payload.what.user_id = decodedToken._id;
                         if (payload.filters)

@@ -12,3 +12,5 @@ export { default as SvPanel } from 'frontend/components/atoms/SvPanel/SvPanel.vu
 export { default as SvOverlay } from 'frontend/components/atoms/SvOverlay/SvOverlay.vue'
 export { default as SvToast } from 'frontend/components/atoms/SvToast/SvToast.vue'
 export { default as SvProse } from 'frontend/components/atoms/SvProse/SvProse.vue'
+export { default as SvInfo } from 'frontend/components/atoms/SvInfo/SvInfo.vue'
+export { default as SvPicture } from 'frontend/components/atoms/SvPicture/SvPicture.vue'

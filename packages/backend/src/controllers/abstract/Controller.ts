@@ -54,6 +54,7 @@ export abstract class Controller<T> {
         }
 
         const method = (target as { [key: string]: any })[key]
+        const alwaysAttribute = this._description?.alwaysAttribute
         return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
 
           const { module } = target._description || {}
@@ -78,7 +79,7 @@ export abstract class Controller<T> {
             req.payload.limit = 150
           }
 
-          if( decodedToken.access?.visibility !== 'everything' ) {
+          if( decodedToken.access?.visibility !== 'everything' || alwaysAttribute ) {
             if( payload.what ) payload.what.user_id = decodedToken._id;
             if( payload.filters ) payload.filters.user_id = decodedToken._id;
           }

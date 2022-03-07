@@ -86,11 +86,12 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   store.dispatch('meta/describeAll').then(() => {
     window.dispatchEvent(new CustomEvent('__storeCreated'))
-    resolve({
-      app,
-      router,
-      store
-    })
+  })
+
+  resolve({
+    app,
+    router,
+    store
   })
 
 })

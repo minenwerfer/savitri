@@ -37,8 +37,12 @@ class UserController extends Mutable_1.Mutable {
             publicMethods: ['authenticate']
         });
     }
-    async insert(props) {
+    async insert(props, res, decodedToken) {
         props.what.group = buildConfig.group;
+        if (decodedToken.access.visibility !== 'everything') {
+            props.what._id = decodedToken._id;
+            delete props.what.access;
+        }
         if (props.what.password) {
             props.what.password = await bcrypt.hash(props.what.password, 10);
         }
@@ -57,6 +61,7 @@ class UserController extends Mutable_1.Mutable {
             const token = tokenService_1.TokenService.sign({
                 email: 'letmein',
                 access: {
+                    visibility: 'everything',
                     capabilities: {
                         user: ["getAll", "insert"],
                         accessProfile: ["getAll", "insert"]

@@ -82,7 +82,7 @@
         v-model="formData[childModule]"
         v-bind="{
           field,
-          indexes: getIndexes(field, childModule),
+          indexes: getIndexes(childModule),
           propName: childModule,
           itemIndex: itemIndex != -1 ? itemIndex: 0,
           activeOnly: 'active' in field.fields
@@ -102,10 +102,10 @@
           ...field,
           readonly: true,
           type: isTextType(field.type) ? field.type : 'text',
-          value: field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value)
+          value: formatValue(field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value), undefined, false, field)
         }"
 
-        :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'w-[35%]'}`"
+        :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'w-[25%]'}`"
       >
         {{ field.label }}
       </sv-input>
@@ -141,9 +141,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  searchOnly: {
+    type: Boolean,
+    default: false,
+  },
   flex: {
     type: Boolean,
     default: false
+  },
+  strict: {
+    type: Boolean,
+    default: true
   },
   itemIndex: {
     type: Number,
@@ -167,19 +175,33 @@ watch(module, () => Object.assign(moduleRefs as any, useModule(module.value, sto
 
 const filterFields = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
-    .filter(([, field]: [unknown, any]) => field && !field.meta && !field.noform)
-    .filter(([, field]) => !condition || condition(field))
+    .filter(([, field]: [unknown, any]) => field && !field.noform)
+    .filter((pair) => !condition || condition(pair))
     .map(([key, field]: [string, any]) => [key, {
       ...field,
       hidden: undefined
     }])
 
-const fields = filterFields((f: any) => typeof f.module !== 'string' || f.module === 'file')
-const moduleFields = filterFields((f: any) => typeof f.module === 'string' && f.module !== 'file')
+const has = (field: string) => {
+  if( props.searchOnly ) {
+    return true
+  }
+
+  const formFields = moduleRefs.description?.form
+  return !formFields || formFields.includes(field)
+}
+
+const fields = filterFields(([key, f]: [string, any]) => {
+  return !f.meta && has(key) &&
+    (typeof f.module !== 'string' || f.module === 'file')
+})
+
+const moduleFields = filterFields(([key, f]: [string, any]) => typeof f.module === 'string' && f.module !== 'file' && has(key))
   .map(([key, value]: [string, any]) => [key, {
     ...value,
     ...store.getters[`${value.module}/description`]
   }])
+  .filter(([, value]: [unknown, any]) => value.fields)
 
 
 const allInOne = filterFields()
@@ -206,7 +228,7 @@ const isTextType = (type: string) => {
 
 const {
   getIndexes,
-  getFirstIndex,
+  formatValue
 
 } = toRefs(moduleRefs)
 </script>

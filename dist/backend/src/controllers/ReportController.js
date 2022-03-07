@@ -84,7 +84,6 @@ class ReportController extends Mutable_1.Mutable {
         if (!decodedToken.access?.capabilities[props.what?.module].includes('report')) {
             throw new Error('forbidden method');
         }
-        props.what.user_id = decodedToken._id;
         props.what.filters = props.what.type !== 'everything'
             ? (props.what.filters || {})
             : {};

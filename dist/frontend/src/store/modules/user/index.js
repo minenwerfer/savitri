@@ -9,7 +9,6 @@ const module_1 = require("frontend/store/module");
 exports.initialState = {
     current: {
         email: '',
-        password: '',
         token: '',
         level: [],
     }
@@ -20,7 +19,6 @@ exports.initialState = {
  */
 exports.initialItemState = {
     email: '',
-    password: ''
 };
 /**
  * @exports @class
@@ -51,7 +49,11 @@ class UserModule extends module_1.Module {
             signout: ({ commit }) => new Promise((resolve) => {
                 commit('USER_SIGNOUT');
                 resolve();
-            })
+            }),
+            spawnChangePwd: ({ commit }, { payload: { filters } }) => {
+                commit('ITEM_GET', { result: filters });
+                window._router.push({ name: 'dashboard-user-changepass' });
+            }
         };
     }
     getters() {
@@ -68,6 +70,11 @@ class UserModule extends module_1.Module {
                     password: ''
                 });
                 sessionStorage.setItem('auth:token', value.token);
+                sessionStorage.setItem('auth:current', JSON.stringify(value));
+            },
+            CURRENT_UPDATE(state) {
+                const value = JSON.parse(sessionStorage.getItem('auth:current') || '{}');
+                Object.assign(state.current, value);
                 sessionStorage.setItem('auth:current', JSON.stringify(value));
             },
             USER_SIGNOUT(state) {

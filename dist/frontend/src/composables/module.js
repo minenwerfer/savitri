@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const vue_1 = require("vue");
 const helpers_1 = require("common/helpers");
+const entity_1 = require("common/entity");
 const getters = [
     'item',
     'condensedItem',
@@ -41,27 +42,11 @@ exports.default = (name, store) => {
      * @param {string} key
      * @param {boolean} form - tells whether or not the value is being used in a form
      */
-    const getIndexes = (value, key, form = false) => {
-        const [_, reference] = Object.entries(store.state[name].__description.fields || {})
-            .find(([k]) => key === k) || [,];
-        const query = {};
-        // retrieves index if dynamic querying is used
-        if (reference?.values) {
-            // values can be either arrays or objects
-            const prop = Array.isArray(reference.values)
-                ? reference.values.find((e) => Object.keys(e)[0] === '__query')?.__query
-                : reference.values.__query;
-            Object.assign(query, prop || {});
-        }
-        const { module, index, formIndex } = query.module ? query : (reference || {});
-        if (!module) {
-            return;
-        }
-        const field = (form ? (formIndex || index) : index) || Object.keys(store.getters[`${module}/description`].fields)[0];
-        return Array.isArray(field) ? field : [field];
+    const _getIndexes = (key, form = false) => {
+        return (0, entity_1.getIndexes)(store.state[name].__description, key, form);
     };
-    const getFirstIndex = (value, key, form = false) => {
-        const fields = getIndexes(value, key, form);
+    const getFirstIndex = (key, form = false) => {
+        const fields = _getIndexes(key, form);
         return (fields || [])[0];
     };
     /**
@@ -77,7 +62,7 @@ exports.default = (name, store) => {
         const query = (Array.isArray(values)
             ? values[0]
             : values)?.__query || {};
-        const firstField = getFirstIndex(value, key, form);
+        const firstField = getFirstIndex(key, form);
         const source = query.module && !(Array.isArray(value) ? value[0]?._id : value._id)
             ? store.state[name]._queryCache[query.module].filter(({ _id }) => Array.isArray(value) ? value.includes(_id) : value._id === _id)
             : value;
@@ -95,9 +80,12 @@ exports.default = (name, store) => {
         const firstValue = value && typeof value === 'object'
             ? ((Array.isArray(value) || value?._id) ? getFirstValue(value, key, form) : Object.values(value)[0])
             : value;
-        return firstValue !== undefined
+        const formatted = firstValue !== undefined
             ? (field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue)
             : '-';
+        return typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
+            ? formatted.substr(0, field.trim - 3) + '...'
+            : formatted;
     };
     const resumeItem = (item) => {
         return Object.entries(item || {})
@@ -122,7 +110,7 @@ exports.default = (name, store) => {
     return {
         useFields,
         useFieldsExcept,
-        getIndexes,
+        getIndexes: _getIndexes,
         getFirstIndex,
         getFirstValue,
         formatValue,

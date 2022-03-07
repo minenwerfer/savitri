@@ -4,7 +4,7 @@
     :bottom-helpers="false"
     :titles="['Sistema local', 'Base']"
     v-model:current-tab="currentTab"
-    :key="items"
+    :key="item.base"
     >
     <template #tab-1>
       <sv-releases-item :items="item.product"></sv-releases-item>

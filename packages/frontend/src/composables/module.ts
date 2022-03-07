@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { fromEntries } from 'common/helpers'
+import { getIndexes } from 'common/entity'
 
 const getters = [
   'item',
@@ -46,35 +47,12 @@ export default (name: string, store: any): any => {
    * @param {string} key
    * @param {boolean} form - tells whether or not the value is being used in a form
    */
-  const getIndexes = (value: any, key: string, form: boolean = false) => {
-
-    const [_, reference]: any = Object.entries(store.state[name].__description.fields||{})
-      .find(([k]: [string, unknown]) => key === k)||[,]
-
-    const query:any = {}
-
-    // retrieves index if dynamic querying is used
-    if( reference?.values ) {
-
-      // values can be either arrays or objects
-      const prop = Array.isArray(reference.values)
-        ? reference.values.find((e: any) => Object.keys(e)[0] === '__query')?.__query
-        : reference.values.__query
-
-      Object.assign(query, prop||{})
-    }
-
-    const { module, index, formIndex } = query.module ? query : (reference||{})
-    if( !module ) {
-      return
-    }
-
-    const field = (form ? (formIndex || index) : index) || Object.keys(store.getters[`${module}/description`].fields)[0]
-    return Array.isArray(field) ? field : [field]
+  const _getIndexes = (key: string, form: boolean = false) => {
+    return getIndexes(store.state[name].__description, key, form)
   }
 
-  const getFirstIndex = (value: any, key: string, form: boolean = false) => {
-    const fields = getIndexes(value, key, form)
+  const getFirstIndex = (key: string, form: boolean = false) => {
+    const fields = _getIndexes(key, form)
     return (fields||[])[0]
   }
 
@@ -94,7 +72,7 @@ export default (name: string, store: any): any => {
       ? values[0]
       : values)?.__query||{}
 
-    const firstField = getFirstIndex(value, key, form)
+    const firstField = getFirstIndex(key, form)
 
     const source = query.module && !(Array.isArray(value) ? value[0]?._id : value._id)
       ? store.state[name]._queryCache[query.module].filter(({ _id }: any) => Array.isArray(value) ? value.includes(_id) : value._id === _id)
@@ -118,9 +96,13 @@ export default (name: string, store: any): any => {
       ? ((Array.isArray(value) || value?._id) ? getFirstValue(value, key, form) : Object.values(value)[0])
       : value
 
-    return firstValue !== undefined
+    const formatted = firstValue !== undefined
       ? ( field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue )
       : '-'
+
+    return typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
+      ? formatted.substr(0, field.trim - 3) + '...'
+      : formatted
   }
 
   const resumeItem = (item: any) => {
@@ -150,7 +132,7 @@ export default (name: string, store: any): any => {
   return {
     useFields,
     useFieldsExcept,
-    getIndexes,
+    getIndexes: _getIndexes,
     getFirstIndex,
     getFirstValue,
     formatValue,

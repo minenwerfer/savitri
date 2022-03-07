@@ -13,7 +13,10 @@
         </div>
 
         <div class="h-screen overflow-auto">
-          <component :is="components[store.state.meta.sidebar.component]"></component>
+          <component
+            :is="components[store.state.meta.sidebar.component]"
+            @close="close"
+          ></component>
         </div>
       </div>
     </div>

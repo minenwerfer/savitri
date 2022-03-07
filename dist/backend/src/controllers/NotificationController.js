@@ -16,10 +16,6 @@ class NotificationController extends Mutable_1.Mutable {
         });
         this.http = new http_1.RequestProvider({ baseURL: process.env.DOMAIN_API_URL });
     }
-    async insert(props, res, decodedToken) {
-        props.what.user_id = decodedToken._id;
-        return super.insert.call(this, props);
-    }
     async ping(props, res, decodedToken) {
         if (!decodedToken?._id) {
             return {};

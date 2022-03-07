@@ -6,3 +6,4 @@ export { default as SvNotifications } from 'frontend/components/organisms/SvNoti
 export { default as SvProfile } from 'frontend/components/organisms/SvProfile/SvProfile.vue';
 export { default as SvReport } from 'frontend/components/organisms/SvReport/SvReport.vue';
 export { default as SvReleases } from 'frontend/components/organisms/SvReleases/SvReleases.vue';
+export { default as SvHint } from 'frontend/components/organisms/SvHint/SvHint.vue';

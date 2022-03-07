@@ -57,9 +57,9 @@ exports.baseWebpackConfig = {
         ]
       },
       {
-        test: /\.png$/,
+        test: /\.(svg|png)/,
         use: 'file-loader'
-      }
+      },
     ]
   },
 

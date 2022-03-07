@@ -41,6 +41,7 @@
     "maska": "^1.4.6",
     "vue": "^3.2.20",
     "vue-i18n": "^9.2.0-beta.16",
+    "vue-inline-svg": "^3.1.0",
     "vue-router": "^4.0.12",
     "vue-unicons": "^3.3.1",
     "vuex": "^4.0.2"

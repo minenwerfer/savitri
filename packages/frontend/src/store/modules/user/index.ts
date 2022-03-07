@@ -21,7 +21,6 @@ export interface UserItem {
   email: string,
   active?: boolean,
   level?: number,
-  password: string,
 }
 
 /**
@@ -31,7 +30,6 @@ export interface UserItem {
 export const initialState = {
   current: {
     email: '',
-    password: '',
     token: '',
     level: [],
   }
@@ -43,7 +41,6 @@ export const initialState = {
  */
 export const initialItemState = {
   email: '',
-  password: ''
 }
 
 /**
@@ -51,7 +48,6 @@ export const initialItemState = {
  * User module.
  */
 export class UserModule extends Module<User, UserItem> {
-
   constructor() {
     super('user', initialState, initialItemState)
   }
@@ -80,7 +76,12 @@ export class UserModule extends Module<User, UserItem> {
       signout: ({ commit }: ActionProps): Promise<void> => new Promise((resolve) => {
         commit('USER_SIGNOUT')
         resolve()
-      })
+      }),
+
+      spawnChangePwd: ({ commit }: ActionProps, { payload: { filters } }: { payload: { filters: any } }) => {
+        commit('ITEM_GET', { result: filters });
+        (window as any)._router.push({ name: 'dashboard-user-changepass' })
+      }
     }
   }
 
@@ -100,6 +101,13 @@ export class UserModule extends Module<User, UserItem> {
         })
 
         sessionStorage.setItem('auth:token', value.token)
+        sessionStorage.setItem('auth:current', JSON.stringify(value))
+      },
+
+      CURRENT_UPDATE(state: CommonState & { current: any }) {
+        const value = JSON.parse(sessionStorage.getItem('auth:current')||'{}')
+
+        Object.assign(state.current, value)
         sessionStorage.setItem('auth:current', JSON.stringify(value))
       },
 

@@ -10,6 +10,9 @@
         "spawnEdit": {
             "name": "Editar"
         },
+        "spawnChangePwd": {
+            "name": "Mudar senha"
+        },
         "remove": {
             "name": "Remover",
             "ask": true
@@ -41,7 +44,9 @@
             "label": "Senha",
             "type": "password",
             "required": true,
-            "hidden": true
+            "hidden": true,
+            "noform": true,
+            "notable": true
         },
         "active": {
             "label": "Ativo",
@@ -50,7 +55,13 @@
         },
         "phone": {
             "label": "Telefone",
-            "type": "text"
+            "type": "text",
+            "mask": "(##) #####-####"
+        },
+        "picture": {
+            "module": "file",
+            "label": "Foto de perfil",
+            "index": "filename"
         },
         "group": {
             "label": "Grupo",

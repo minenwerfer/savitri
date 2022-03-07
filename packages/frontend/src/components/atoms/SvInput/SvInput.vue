@@ -9,7 +9,7 @@
     </div>
     <div v-if="type !== 'textbox'" class="relative">
       <input
-        :class="style === 'light' ? classesLight : classesNormal"
+        :class="classes[variant]"
 
         ref="input"
         :type="type !== 'datetime' ? type : 'text'"
@@ -29,7 +29,7 @@
 
     <textarea
       v-else
-      :class="`${classesNormal} h-36`"
+      :class="`${classes[variant]} h-36`"
       :placeholder="placeholder"
 
       @input="$emit('update:modelValue', $event.target.value)"
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, computed } from 'vue'
+import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
 
 const props = defineProps<{
@@ -50,7 +50,7 @@ const props = defineProps<{
   placeholder?: string
   mask?: string
   icon?: string
-  style?: string
+  variant?: string
   readonly?: boolean
 }>()
 
@@ -59,7 +59,7 @@ const emit = defineEmits<{
 }>()
 
 const input = ref<any>(null)
-const style = inject('inputStyle', props.style)
+const variant = inject('variant', props.variant) || 'normal'
 
 const dateToISO = (raw: string) => {
   if( !raw ) {
@@ -91,29 +91,31 @@ const ISOToDate = (raw: string) => {
   ].join('/')
 }
 
-const inputValue = computed(() => props.type === 'datetime'
+const inputValue = ref(props.type === 'datetime'
   ? dateToISO(props.modelValue)
   : props.modelValue)
 
-const classesNormal = computed(() => `
-    w-full
-    border-box rounded
-    border border-stone-300 focus:border-purple-500
-    bg-white px-3 py-1
-    text-gray-600 outline-none
-    ${props.icon && 'pl-8'}
-    ${props.readonly && 'bg-stone-50'}
-`)
+const classes ={
+  normal: `
+      w-full
+      border-box rounded
+      border border-stone-300 focus:border-purple-500
+      bg-white px-3 py-1
+      text-gray-600 outline-none
+      ${props.icon && 'pl-8'}
+      ${props.readonly && 'bg-stone-50'}
+  `,
 
-const classesLight = computed(() => `
-    w-full
-    border-box 
-    border-b border-stone-400 focus:border-purple-500
-    bg-transparent pb-1
-    text-gray-600 outline-none
-    ${props.icon && 'pl-8'}
-    ${props.readonly && 'bg-stone-50'}
-`)
+  light: `
+      w-full
+      border-box 
+      border-b border-stone-400 focus:border-purple-500
+      bg-transparent pb-1v
+      text-gray-600 outline-none
+      ${props.icon && 'pl-8'}
+      ${props.readonly && 'bg-stone-50'}
+  `
+}
 
 const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {
   inputValue.value = event.target.value

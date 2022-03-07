@@ -12,7 +12,7 @@
         <div v-else>
           <p>
             Seu relatório foi gerado e retornou {{ item.entries_count }} registros.
-            Clique <sv-bare-button class="font-semibold" @clicked="download">aqui</sv-bare-button> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
+            Clique <a class="inline-block font-semibold cursor-pointer" @click="download">aqui</a> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
           </p>
         </div>
       </template>
@@ -25,10 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs } from 'vue'
+import { provide, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import useModule from 'frontend/composables/module'
-import { SvBox, SvForm, SvButton, SvBareButton } from 'frontend/components'
+import { SvBox, SvForm, SvButton } from 'frontend/components'
 
 const props = defineProps<{
   module: string
@@ -40,13 +40,16 @@ const emit = defineEmits<{
 }>()
 
 const store = useStore()
-const moduleRefs = reactive(useModule('report', store))
+const moduleRefs = reactive(useModule(props.module, store))
+const reportRefs = reactive(useModule('report', store))
+
+provide('module', 'report')
 
 const requestReport = () => {
   return store.dispatch('report/insert', {
     payload: {
       what: {
-        ...moduleRefs.item,
+        ...reportRefs.item,
         module: props.module,
         filters: moduleRefs.filters
       }
@@ -55,7 +58,7 @@ const requestReport = () => {
 }
 
 const download = () => {
-  store.dispatch('report/download', { payload: { filters: moduleRefs.item } })
+  store.dispatch('report/download', { payload: { filters: reportRefs.item } })
 }
 
 const onClose = () => {
@@ -67,5 +70,5 @@ const {
   item,
   useFieldsExcept
 
-} = toRefs(moduleRefs)
+} = toRefs(reportRefs)
 </script>

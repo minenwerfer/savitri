@@ -21,11 +21,6 @@ export class NotificationController extends Mutable<NotificationDocument> {
     this.http = new RequestProvider({ baseURL: process.env.DOMAIN_API_URL })
   }
 
-  public override async insert(props: { what: any }, res: unknown, decodedToken: any) {
-    props.what.user_id = decodedToken._id
-    return super.insert.call(this, props)
-  }
-
   public async ping(props: { last_id: string, localOnly: boolean }, res: unknown, decodedToken: any) {
     if( !decodedToken?._id ) {
       return {}

@@ -18,7 +18,6 @@ export interface UserItem {
     email: string;
     active?: boolean;
     level?: number;
-    password: string;
 }
 /**
  * @exports @const
@@ -27,7 +26,6 @@ export interface UserItem {
 export declare const initialState: {
     current: {
         email: string;
-        password: string;
         token: string;
         level: never[];
     };
@@ -38,7 +36,6 @@ export declare const initialState: {
  */
 export declare const initialItemState: {
     email: string;
-    password: string;
 };
 /**
  * @exports @class
@@ -57,6 +54,11 @@ export declare class UserModule extends Module<User, UserItem> {
             };
         }) => Promise<void>;
         signout: ({ commit }: ActionProps) => Promise<void>;
+        spawnChangePwd: ({ commit }: ActionProps, { payload: { filters } }: {
+            payload: {
+                filters: any;
+            };
+        }) => void;
     };
     getters(): {
         token: (state: any) => any;
@@ -67,6 +69,9 @@ export declare class UserModule extends Module<User, UserItem> {
             current: any;
         }, value: {
             token: string;
+        }): void;
+        CURRENT_UPDATE(state: CommonState & {
+            current: any;
         }): void;
         USER_SIGNOUT(state: CommonState & {
             current: any;

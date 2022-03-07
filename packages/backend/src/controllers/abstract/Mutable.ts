@@ -2,6 +2,7 @@ import { Model, Document, Query, FilterQuery, UpdateQuery } from '../../database
 import { Controller } from './Controller'
 
 import { fromEntries } from '../../../../common/src/helpers'
+import { getIndexes } from '../../../../common/src/entity'
 
 export const { PAGINATION_LIMIT } = process.env
 
@@ -28,6 +29,19 @@ export const depopulateChildren = (item: any) => {
   }
 }
 
+export const select = (obj: any, fields: string[]) => {
+  if( !obj || typeof obj !== 'object' || !fields ) {
+    return obj
+  }
+
+  const sanitizedFields = [ '_id', ...typeof fields === 'object' ? fields : [fields] ]
+  const _select = (what: any) => sanitizedFields.reduce((a: any, c: string) => ({ ...a, [c]: what[c] }), {})
+
+  return Array.isArray(obj)
+    ? obj.map((o: any) => _select(o))
+    : _select(obj)
+}
+
 export abstract class Mutable<T> extends Controller<T> {
   /**
    * @constructor
@@ -45,19 +59,25 @@ export abstract class Mutable<T> extends Controller<T> {
   public async insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): Promise<any> {
 
     const { _id, ...rest } = props.what
+
+    const forbidden = (key: string) => {
+      return (this._description.fields[key]||{}).readonly
+        || (this._description.form && this._description.form.includes(key))
+    }
+
     const what = typeof _id === 'string' ? Object.entries(rest)
-      .filter(([key]: [string, unknown]) => !(this._description.fields[key]||{}).readonly)
+      .filter(([key]: [string, unknown]) => !forbidden(key))
       .reduce((a: any, [key, value]: [string, any]) => {
-      const append = value && typeof value === 'object' && Object.keys(value).length === 0
-        ? '$unset' : '$set'
+        const append = !value || (typeof value === 'object' ? Object.keys(value||{}).length : String(value).length ) === 0
+          ? '$unset' : '$set'
 
-      a[append][key] = value
-      return a
+        a[append][key] = append === '$set' ? value : 1
+        return a
 
-    }, {
-      $set: {},
-      $unset: {}
-    }) : rest
+      }, {
+        $set: {},
+        $unset: {}
+      }) : rest
 
     Object.keys(what)
       .filter(k => !what[k] || typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
@@ -68,7 +88,11 @@ export abstract class Mutable<T> extends Controller<T> {
       return this._model.findOne({ _id: newDoc._id })
     }
 
-    return this._model.findOneAndUpdate({ _id } as FilterQuery<T>, what as UpdateQuery<T>, { new: true, runValidators: true })
+    return this._model.findOneAndUpdate(
+      { _id } as FilterQuery<T>,
+      what as UpdateQuery<T>,
+      { new: true, runValidators: true }
+    )
   }
 
   public count(props: { filters?: object }) {
@@ -89,9 +113,9 @@ export abstract class Mutable<T> extends Controller<T> {
    */
   protected _getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }): MultipleQuery<T> {
     const defaultSort = {
-      created_at: -1,
       date_updated: -1,
       date_created: -1,
+      created_at: -1,
     }
 
     if( typeof props.limit !== 'number' ) {
@@ -110,8 +134,21 @@ export abstract class Mutable<T> extends Controller<T> {
   }
 
   public async getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }, response?: unknown, decodedToken?: any) {
+    const depopulate = (item: T) => {
+      const entries = Object.entries((item as any)._doc || item)
+        .map(([key, value]: [string, any]) => ([
+          key,
+          !(this._description.fields[key]||{}).expand
+            ? select(value, getIndexes(this._description, key))
+            : value
+        ]))
+
+      return fromEntries(entries)
+    }
+
     return (await this._getAll(props))
-      .map((item: any) => depopulateChildren(item))
+      .map((item: T) => depopulate(item))
+      .map((item: T) => depopulateChildren(item))
   }
 
   /**

@@ -20,7 +20,7 @@
       <img
         v-else
         :src="require(`@/../assets/${productLogoAlt}`).default"
-        class="cursor-pointer mx-auto mt-6 mb-14 w-3/5 h-20 object-contain transition-all transform hover:skew-x-12"
+        class="cursor-pointer mx-auto mt-6 mb-14 w-3/5 h-20 object-contain"
       />
     </div>
 
@@ -43,7 +43,7 @@
             @click="onEntryClick(subroute)"
             :class="`
             menu-entry menu-subroute
-            ${(subroute.redirect || subroute.path) === $route.path ? 'border-l-8 border-white' : ''}
+            ${(subroute.redirect || subroute.path) === $route.path ? 'border-l-8 md:border-r-8 md:border-l-0 border-white' : ''}
           `">
             {{ $tc(subroute.meta.title, 2).capitalize() }}
           </a>
@@ -110,7 +110,7 @@ const getSchema = (schema: any, routes: Route[]) => {
 
 const getRoutes = (children?: Route, subschema?: any) => {
   const routes: unknown = children || typeof props.entrypoint === 'string'
-    ? router.getRoutes().filter((route) => (route.name as string).startsWith(`${props.entrypoint}-`))
+    ? router.getRoutes().filter((route) => (route.name ||'').startsWith(`${props.entrypoint}-`))
     : router.getRoutes()
 
   const schema = getSchema(subschema || props.schema, routes as Route[])

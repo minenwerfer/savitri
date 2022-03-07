@@ -1,15 +1,15 @@
 <template>
   <div :class="`flex gap-y-3 flex-col ${vertical && 'xl:flex-row xl:gap-x-4' }`">
-    <sv-box :class="vertical ? 'xl:w-1/6' : ''" classes="w-screen md:w-auto xl:w-full px-5 xl:px-0" v-if="titles && titles.length > 0" :padding-y="`pt-2 xl:pt-2 ${vertical ? 'xl:pt-0' : ''}`" :fill="true">
-      <div :class="`flex gap-x-4 w-full whitespace-nowrap overflow-auto ${vertical ? 'xl:flex-col' : ''}`">
+    <sv-box :class="vertical ? 'xl:w-1/6' : ''" classes="w-screen md:w-auto xl:w-full" v-if="titles && titles.length > 0" :padding-y="`pt-2 xl:pt-2 ${vertical ? 'xl:pt-0' : ''}`" :fill="true">
+      <div :class="`flex w-full whitespace-nowrap overflow-auto ${vertical ? 'xl:flex-col' : ''}`">
         <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden xl:block ${vertical ? menuClasses : ''}`"></slot>
         <sv-bare-button
           :class="`
             flex flex-1
-            text-blue-500 py-2
-            ${currentTab === index+1 ? 'font-semibold' : ''}
-            ${vertical ? 'xl:border-b xl:flex-none xl:px-3 xl:py-2' : ''}
-            transition-all whitespace-nowrap
+            text-blue-500 py-2 border-b-4
+            ${currentTab === index+1 ? activeStyle : 'border-transparent'}
+            ${vertical ? 'xl:border-transparent xl:flex-none xl:px-3 xl:py-2' : ''}
+            transition-all whitespace-nowrap px-6
           `"
           v-for="(title, index) in titles"
           :key="`tabtitle-${index}`"
@@ -26,11 +26,11 @@
     <div :class="`${vertical && 'xl:flex-1'} flex flex-col gap-y-4`">
       <div>
         <div
-          v-for="tab in tabs"
-          :key="`tab-${tab}`"
+          v-for="([key, value], tab) in Object.entries($slots)"
+          :key="`tab-${key}`"
         >
-          <div v-if="tab === currentTab" class="animate-fade">
-            <slot :name="`tab-${tab}`"></slot>
+          <div v-if="tab + 1 === currentTab" class="animate-fade">
+            <slot :name="key"></slot>
           </div>
         </div>
       </div>
@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { SvBareButton, SvButton, SvBox } from 'frontend/components'
 
 const props: any = defineProps({
@@ -82,6 +83,15 @@ const props: any = defineProps({
 const emit = defineEmits<{
   (e: 'update:currentTab', event: number): void
 }>()
+
+const activeStyle = computed(() => {
+  const horizontal = 'border-purple-500'
+  const vertical = 'xl:font-semibold xl:bg-blue-50'
+
+  return props.vertical
+    ? horizontal + ' ' + vertical
+    : horizontal
+})
 
 const previous = () => {
   const previousTab = props.currentTab === 1 ? props.tabs : props.currentTab - 1;

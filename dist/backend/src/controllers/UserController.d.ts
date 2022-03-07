@@ -9,7 +9,7 @@ export declare class UserController extends Mutable<UserDocument> {
     constructor();
     insert(props: {
         what: any;
-    }): Promise<any>;
+    }, res: unknown, decodedToken: any): Promise<any>;
     /**
      * @method
      * @param {string} username - string to match email or another field

@@ -19,6 +19,6 @@
 import { SvPanel } from 'frontend/components'
 
 const props = defineProps<{
-  items: any[]
+  items: any
 }>()
 </script>

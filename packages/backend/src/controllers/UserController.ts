@@ -19,8 +19,13 @@ export class UserController extends Mutable<UserDocument> {
     })
   }
 
-  public override async insert(props: { what: any }) {
+  public override async insert(props: { what: any }, res: unknown, decodedToken: any) {
     props.what.group = buildConfig.group
+
+    if( decodedToken.access.visibility !== 'everything' ) {
+      props.what._id = decodedToken._id
+      delete props.what.access
+    }
 
     if( props.what.password ) {
       props.what.password = await bcrypt.hash(props.what.password, 10)
@@ -43,6 +48,7 @@ export class UserController extends Mutable<UserDocument> {
       const token = TokenService.sign({
         email: 'letmein',
         access: {
+          visibility: 'everything',
           capabilities: {
             user: ["getAll", "insert"],
             accessProfile: ["getAll", "insert"]

@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mutable = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
+exports.Mutable = exports.select = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
 const Controller_1 = require("./Controller");
 const helpers_1 = require("../../../../common/src/helpers");
+const entity_1 = require("../../../../common/src/entity");
 exports.PAGINATION_LIMIT = process.env.PAGINATION_LIMIT;
 const depopulateChildren = (item) => {
     const depopulate = (i) => {
@@ -21,6 +22,17 @@ const depopulateChildren = (item) => {
     };
 };
 exports.depopulateChildren = depopulateChildren;
+const select = (obj, fields) => {
+    if (!obj || typeof obj !== 'object' || !fields) {
+        return obj;
+    }
+    const sanitizedFields = ['_id', ...typeof fields === 'object' ? fields : [fields]];
+    const _select = (what) => sanitizedFields.reduce((a, c) => ({ ...a, [c]: what[c] }), {});
+    return Array.isArray(obj)
+        ? obj.map((o) => _select(o))
+        : _select(obj);
+};
+exports.select = select;
 class Mutable extends Controller_1.Controller {
     /**
      * @constructor
@@ -36,12 +48,16 @@ class Mutable extends Controller_1.Controller {
      */
     async insert(props, response, decodedToken) {
         const { _id, ...rest } = props.what;
+        const forbidden = (key) => {
+            return (this._description.fields[key] || {}).readonly
+                || (this._description.form && this._description.form.includes(key));
+        };
         const what = typeof _id === 'string' ? Object.entries(rest)
-            .filter(([key]) => !(this._description.fields[key] || {}).readonly)
+            .filter(([key]) => !forbidden(key))
             .reduce((a, [key, value]) => {
-            const append = value && typeof value === 'object' && Object.keys(value).length === 0
+            const append = !value || (typeof value === 'object' ? Object.keys(value || {}).length : String(value).length) === 0
                 ? '$unset' : '$set';
-            a[append][key] = value;
+            a[append][key] = append === '$set' ? value : 1;
             return a;
         }, {
             $set: {},
@@ -72,9 +88,9 @@ class Mutable extends Controller_1.Controller {
      */
     _getAll(props) {
         const defaultSort = {
-            created_at: -1,
             date_updated: -1,
             date_created: -1,
+            created_at: -1,
         };
         if (typeof props.limit !== 'number') {
             props.limit = +(exports.PAGINATION_LIMIT || 35);
@@ -88,7 +104,18 @@ class Mutable extends Controller_1.Controller {
             .limit(props.limit);
     }
     async getAll(props, response, decodedToken) {
+        const depopulate = (item) => {
+            const entries = Object.entries(item._doc || item)
+                .map(([key, value]) => ([
+                key,
+                !(this._description.fields[key] || {}).expand
+                    ? (0, exports.select)(value, (0, entity_1.getIndexes)(this._description, key))
+                    : value
+            ]));
+            return (0, helpers_1.fromEntries)(entries);
+        };
         return (await this._getAll(props))
+            .map((item) => depopulate(item))
             .map((item) => (0, exports.depopulateChildren)(item));
     }
     /**

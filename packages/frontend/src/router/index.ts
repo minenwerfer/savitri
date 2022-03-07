@@ -66,6 +66,18 @@ export const privateRoutes: Route[] = [
         name: 'dashboard-access-edit',
         component: () => import('frontend/components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'),
         meta: { title: 'Editar preset de acesso', hidden: true }
+      },
+      {
+        path: 'user-profile',
+        name: 'dashboard-user-profile',
+        component: () => import('frontend/components/views/SvDashboard/SvUser/SvProfile/SvProfile.vue'),
+        meta: { title: 'Meu perfil', hidden: true }
+      },
+      {
+        path: 'user-changepass',
+        name: 'dashboard-user-changepass',
+        component: () => import('frontend/components/views/SvDashboard/SvUser/SvPasswordChange/SvPasswordChange.vue'),
+        meta: { title: 'Mudar senha', hidden: true }
       }
     ]
   }

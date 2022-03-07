@@ -33,15 +33,15 @@
           >
           <div :class="cindex === 0 && 'font-semibold opacity-80'">
             <div v-if="field.module === 'file' && row[column]._id" class="mt-2">
-              <img :src="`${SV_API_URL}/download/${row[column]._id}`" class="w-20 h-20 mb-4 lg:mb-0"/>
+              <img :src="`${SV_API_URL}/download/${row[column]._id}`" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"/>
             </div>
             <div v-else>
               {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
             </div>
           </div>
-          <div v-if="getIndexes(row[column], column)?.length > 1" class="hidden lg:flex gap-x-2">
+          <div v-if="getIndexes(column)?.length > 1" class="hidden lg:flex gap-x-2">
             <div
-              v-for="(subvalue, index) in getIndexes(row[column], column).slice(1, 2)"
+              v-for="(subvalue, index) in getIndexes(column).slice(1, 2)"
               :key="`subvalue-${index}`"
               class="text-sm text-blue-500"
               >
