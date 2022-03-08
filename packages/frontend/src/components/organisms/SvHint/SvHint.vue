@@ -9,10 +9,7 @@
   <teleport to="body">
     <sv-box :float="true" v-model:visible="visible" @close="visible = false">
       <template #title>
-        <div class="flex items-start gap-x-2">
-          <slot name="title"></slot>
-          <unicon name="info-circle"></unicon>
-        </div>
+        <slot name="title"></slot>
       </template>
       <template #body>
         <sv-prose>

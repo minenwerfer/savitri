@@ -59,7 +59,7 @@ const emit = defineEmits<{
 }>()
 
 const input = ref<any>(null)
-const variant = inject('variant', props.variant) || 'normal'
+const variant = inject('inputVariant', props.variant) || 'normal'
 
 const dateToISO = (raw: string) => {
   if( !raw ) {

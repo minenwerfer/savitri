@@ -17,7 +17,7 @@ const props = defineProps<{
   disabled?: boolean
 }>()
 
-const variant = inject('variant', props.variant) || 'normal'
+const variant = inject('buttonVariant', props.variant) || 'normal'
 
 const bgColorClasses = {
   success: 'bg-green-500',
