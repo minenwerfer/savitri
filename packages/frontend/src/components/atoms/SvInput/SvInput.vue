@@ -21,7 +21,14 @@
         v-maska="mask"
         :readonly="readonly"
       />
-      <div class="absolute left-0 top-0" v-if="icon">
+      <div 
+        v-if="icon"
+        :class="
+          variant !== 'light'
+            ? 'absolute top-[58%] left-2 transform -translate-y-1/2'
+            : 'absolute top-0 left-0'
+        "
+      >
         <unicon :name="icon" class="opacity-80"></unicon>
       </div>
     </div>
@@ -36,7 +43,7 @@
       :readonly="readonly"
 
     >{{ inputValue || value }}</textarea>
-    </label>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -97,8 +104,7 @@ const inputValue = ref(props.type === 'datetime'
 
 const classes ={
   normal: `
-      w-full
-      border-box rounded
+      w-full border-box rounded
       border border-stone-300 focus:border-purple-500
       bg-white px-3 py-1
       text-gray-600 outline-none
@@ -107,13 +113,20 @@ const classes ={
   `,
 
   light: `
-      w-full
-      border-box 
+      w-full border-box 
       border-b border-stone-400 focus:border-purple-500
       bg-transparent pb-1v
       text-gray-600 outline-none
       ${props.icon && 'pl-8'}
       ${props.readonly && 'bg-stone-50'}
+  `,
+
+  bold: `
+    w-full border-box rounded
+    border border-gray-300 py-3 focus:border-purple-500
+    outline-none
+    ${props.icon && 'pl-10'}
+    ${props.readonly ? 'bg-stone-50' : 'bg-white'}
   `
 }
 

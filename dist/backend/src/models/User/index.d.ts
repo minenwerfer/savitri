@@ -6,6 +6,7 @@ import { AccessProfileDocument } from '../AccessProfile';
 import '../AccessProfile';
 export interface User {
     name: string;
+    first_name: string;
     email: string;
     password?: string;
     active: boolean;

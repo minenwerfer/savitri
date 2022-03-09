@@ -74,6 +74,7 @@ export declare abstract class Module<T = any, Item = any> {
     private _initialState;
     private _initialItemState;
     private _commonState;
+    private _filters;
     private _description;
     namespaced: boolean;
     /**
@@ -117,6 +118,7 @@ export declare abstract class Module<T = any, Item = any> {
         };
         selected: any[];
     } & T & {
+        _filters: any;
         item: Item;
     };
     private _getters;

@@ -1,5 +1,5 @@
 <template>
-  <sv-box :key="item" class="lg:w-[40em]">
+  <sv-box :key="item" class="xl:w-2/5">
     <sv-form
       :form="fields"
       :form-data="item"

@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex gap-2 overflow-x-auto" v-if="description.actions" :key="module">
+    <div class="flex gap-2 overflow-x-auto" v-if="description.actions || $slots.actions" :key="module">
       <sv-button
         v-for="([action, props], index) in Object.entries(description.actions||{})"
         :key="`action-${index}`"
         :disabled="isLoading || selectedIds.length === 0 && props.selection"
         type="neutral"
 
+        :icon="props.unicon"
         @clicked="buttonAction(action, props, { _id: selectedIds })"
       >
         {{ props.name }}
@@ -129,16 +130,23 @@ const isReportVisible = computed({
 })
 
 watch(() => props.module, async (module: string) => {
-
   if( !store.getters[`${module}/fields`] ) {
     await store.dispatch(`${module}/describe`)
   }
 
   Object.assign(moduleRefs, useModule(module, store))
   store.dispatch('meta/setViewTitle', module)
-  store.dispatch(`${module}/getAll`, {
-    filters: moduleRefs.filters
-  })
+
+  if( moduleRefs.items.length === 0 ) {
+    const filters = moduleRefs.description._filters
+
+    store.dispatch(`${module}/getAll`, {
+      filters: {
+        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[module].defaultFilters : {}),
+        ...filters
+      },
+    })
+  }
 
 }, { immediate: true })
 

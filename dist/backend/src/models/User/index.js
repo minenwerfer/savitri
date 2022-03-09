@@ -38,6 +38,9 @@ exports.UserSchema.plugin(require('mongoose-autopopulate'));
 exports.UserSchema.methods.testPassword = async function (candidate) {
     return bcrypt.compare(candidate, this.password || '');
 };
+exports.UserSchema.post('init', function () {
+    this.first_name = this.name?.split(' ')[0];
+});
 /**
  * @exports
  * User model.

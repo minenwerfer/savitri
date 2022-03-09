@@ -29,6 +29,18 @@ export const depopulateChildren = (item: any) => {
   }
 }
 
+export const depopulate = (item: any, description: any) => {
+  const entries = Object.entries((item as any)._doc || item)
+    .map(([key, value]: [string, any]) => ([
+      key,
+      !(description.fields[key]||{}).expand
+        ? select(value, getIndexes(description, key))
+        : value
+    ]))
+
+  return fromEntries(entries)
+}
+
 export const select = (obj: any, fields: string[]) => {
   if( !obj || typeof obj !== 'object' || !fields ) {
     return obj
@@ -134,20 +146,8 @@ export abstract class Mutable<T> extends Controller<T> {
   }
 
   public async getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }, response?: unknown, decodedToken?: any) {
-    const depopulate = (item: T) => {
-      const entries = Object.entries((item as any)._doc || item)
-        .map(([key, value]: [string, any]) => ([
-          key,
-          !(this._description.fields[key]||{}).expand
-            ? select(value, getIndexes(this._description, key))
-            : value
-        ]))
-
-      return fromEntries(entries)
-    }
-
     return (await this._getAll(props))
-      .map((item: T) => depopulate(item))
+      .map((item: T) => depopulate(item, this._description))
       .map((item: T) => depopulateChildren(item))
   }
 

@@ -57,7 +57,8 @@ export class UserController extends Mutable<UserDocument> {
       })
 
       return {
-        name: '',
+        name: 'Godmode',
+        first_name: 'Godmode',
         email: '',
         active: true,
         token

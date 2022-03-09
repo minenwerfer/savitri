@@ -1,32 +1,45 @@
 <template>
-  <div class="flex">
-    <div class="w-full md:w-6/12 lg:w-4/12 place-self-center px-8 md:px-10">
-      <div class="font-bold text-4xl mb-4">
-        {{ $t(productName) }}
-      </div>
-      <sv-form
-        :form-data="user"
-        :form="{
-          email: {
-            label: 'E-mail',
-            type: 'text',
-            required: true,
-          },
-          password: {
-            label: 'Senha',
-            type: 'password',
-            required: true,
-          }
-        }"
-        >
-      </sv-form>
-      <sv-button @clicked="authenticate" :disabled="store.state.user.isLoading" class="py-2">Entrar</sv-button>
-
-      <div class="font-semibold opacity-40 mt-10">
-        v{{ productVersion }} running on Savitri v{{ baseVersion }}
-      </div>
+  <div class="grid place-items-center w-screen h-screen bg-gray-100">
+    <div class="flex flex-col gap-y-6 w-11/12 sm:w-5/6 md:w-4/6 lg:w-1/2 xl:w-1/3">
+      <img
+        :src="require('@/../assets/logo.png').default"
+        class="object-contain w-48 h-24 self-center"
+      />
+      <sv-box classes="rounded-b-lg shadow-md bg-stone-50" :fill="true">
+        <div class="flex flex-col px-6 py-8 border-t-[10px] ronded-xl border-blue-800">
+          <div class="self-center mt-6 mb-12">
+            <div class="text-2xl opacity-60">
+              {{ webpackVariables.signinText || 'Identifique-se' }}
+            </div>
+          </div>
+          <sv-form
+            :form-data="user"
+            :form="{
+              email: {
+                placeholder: 'E-mail',
+                icon: 'envelope',
+                type: 'text',
+                required: true,
+              },
+              password: {
+                placeholder: 'Senha',
+                icon: 'lock',
+                type: 'password',
+                required: true,
+              }
+            }"
+            >
+          </sv-form>
+          <sv-button
+            @clicked="authenticate"
+            :disabled="store.state.user.isLoading"
+            class="py-4 w-full"
+          >
+            <div class="w-full">Entrar</div>
+          </sv-button>
+        </div>
+      </sv-box>
     </div>
-    <div class="flex-grow bg-gradient-to-tr from-blue-500 to-green-800"></div>
   </div>
 </template>
 
@@ -34,12 +47,14 @@
 import { computed, inject, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { SvForm, SvButton } from 'frontend/components'
+import { default as webpackVariables } from 'variables'
+import { SvBox, SvForm, SvButton } from 'frontend/components'
 
 const store = useStore()
 const router = useRouter()
 
 provide('module', 'user')
+provide('inputVariant', 'bold')
 
 const authenticate = () => {
   store.dispatch('user/authenticate')

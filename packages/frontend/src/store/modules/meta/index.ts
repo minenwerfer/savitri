@@ -67,7 +67,7 @@ export class MetaModule extends Module<Meta, {}> {
       globalDescriptions: [],
       viewTitle: '',
       menu: {
-        isVisible: true,
+        isVisible: false,
         isMobileVisible: false,
       },
       modal: {
@@ -233,9 +233,14 @@ export class MetaModule extends Module<Meta, {}> {
         state.globalDescriptions = []
       },
 
-      MENU_SWAP: (state: any, { desktop, mobile }: { desktop?: boolean, mobile?: boolean }): void => {
-        state.menu.isVisible = typeof desktop === 'boolean' ? desktop : !state.menu.isVisible;
-        state.menu.isMobileVisible = typeof mobile === 'boolean' ? mobile : !state.menu.isMobileVisible;
+      MENU_SWAP: (state: any, value: { isVisible?: boolean, isMobileVisible?: boolean }): void => {
+        if( Object.keys(value).length > 0 ) {
+          Object.assign(state.menu, value)
+          return
+        }
+
+        state.menu.isVisible = !state.menu.isVisible
+        state.menu.isMobileVisible = !state.menu.isMobileVisible
       },
 
       MODAL_SPAWN: (state: any, payload: any): void => {

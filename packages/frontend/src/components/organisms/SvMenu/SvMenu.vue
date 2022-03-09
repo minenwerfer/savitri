@@ -1,52 +1,53 @@
 <template>
   <div
-    style="background: conic-gradient(from 180deg at 50% 66.3%, #08217c 0deg, rgba(8, 33, 124, 0.8) 360deg)"
     :class="`
-      fixed md:sticky top-0 right-0 w-10/12 md:w-auto h-screen z-40 pt-4 
-      text-white
-      animate-slip md:animate-slowfade transition-all
-      ${ visible ? '' : 'block md:hidden' } 
-      ${ mobileVisible ? '' : 'hidden md:block' }
+      fixed md:sticky top-0 right-0 md:top-[calc(3rem+1px)] w-10/12 h-screen z-40
+      bg-white border-r
+      animate-slip md:animate-slowfade transition-all duration-75
+      ${ visible ? 'md:w-[17em]' : 'md:w-[4em] overflow-x-hidden' } 
+      ${ mobileVisible || 'hidden md:block' }
       overflow-y-auto overscroll-none
   `">
 
-    <div @click="$router.push({ name: 'dashboard-home' })">
-      <sv-bare-button
-        v-if="!productLogoAlt"
-        class="text-center font-semibold text-2xl pt-6 mb-10 hidden md:block"
-      >
-        {{ productName }}
-      </sv-bare-button>
-      <img
-        v-else
-        :src="require(`@/../assets/${productLogoAlt}`).default"
-        class="cursor-pointer mx-auto mt-6 mb-14 w-3/5 h-20 object-contain"
-      />
-    </div>
+    <sv-bare-button @clicked="$store.dispatch('meta/swapMenu')" class="hidden md:block">
+      <div class="flex gap-x-1 items-center transform-all pl-2 opacity-80 h-12">
+        <unicon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-10 h-10`"></unicon>
+        <div v-if="visible" class="text-sm">
+          Recolher
+        </div>
+      </div>
+    </sv-bare-button>
 
     <!-- menu entries -->
     <div class="grid leading-8 md:leading-7">
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"
-        class="py-2 mb-2"
+        class="border-y border-collapse mt-[-1px]"
       >
-        <a @click="onEntryClick(route)" class="menu-entry menu-route mb-2">
-          {{ $tc(route.meta.title, 2).capitalize() }}
-        </a>
+        <!-- <a @click="onEntryClick(route)" class="menu-entry menu-route mb-2"> -->
+        <!--   {{ $tc(route.meta.title, 2).capitalize() }} -->
+        <!-- </a> -->
 
         <!-- subroutes -->
         <div>
-          <a
+          <sv-bare-button
             v-for="(subroute, index) in route.children"
             :key="`subroute-${index}`"
-            @click="onEntryClick(subroute)"
+            @clicked="onEntryClick(subroute)"
+
             :class="`
-            menu-entry menu-subroute
-            ${(subroute.redirect || subroute.path) === $route.path ? 'border-l-8 md:border-r-8 md:border-l-0 border-white' : ''}
+              flex items-center gap-x-2 pl-4 py-[10px] hover:bg-blue-100 active:no-underline w-full
+              ${isCurrent(subroute) ? 'border-l-8 md:border-r-8 md:border-l-0 border-blue-500 bg-blue-50' : ''}
           `">
-            {{ $tc(subroute.meta.title, 2).capitalize() }}
-          </a>
+            <unicon
+              :name="subroute.meta?.unicon || 'file'"
+              :fill="isCurrent(subroute) ? 'blue' : 'gray'"
+            ></unicon>
+            <div :class="`whitespace-nowrap ${visible || 'md:invisible'}`">
+              {{ $tc(subroute.meta.title, 2).capitalize() }}
+            </div>
+          </sv-bare-button>
         </div>
 
       </div>
@@ -63,7 +64,7 @@
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { SvBareButton, SvOverlay } from 'frontend/components'
 import { Route } from 'frontend/router'
 
@@ -79,10 +80,10 @@ const router = useRouter()
 
 const tick = ref(0)
 const productName = inject('productName')
-const productLogoAlt = inject('productLogoAlt', undefined)
+const productLogo = inject('productLogo', undefined)
 
 const closeMobile = () => {
-  store.dispatch('meta/swapMenu', { desktop: true, mobile: false })
+  store.dispatch('meta/swapMenu', { isMobileVisible: false })
 }
 
 const onEntryClick = (route: Route & { meta: any }) => {
@@ -136,6 +137,11 @@ const getRoutes = (children?: Route, subschema?: any) => {
   ]
 }
 
+const isCurrent = (subroute: any) => {
+  const route = useRoute()
+  return (subroute.redirect || subroute.path) === route.path
+}
+
 const routes = ref<Route[]>(getRoutes())
 
 watch(() => store.state.meta?.globalDescriptions, () => {
@@ -143,23 +149,3 @@ watch(() => store.state.meta?.globalDescriptions, () => {
     .sort((a, b) => (a.meta?.order||0) < (b.meta?.order||0) ? -1 : 1)
 })
 </script>
-
-<style>
-.menu-entry {
-  @apply block;
-  @apply pl-4;
-  @apply select-none;
-}
-
-.menu-route {
-  @apply font-semibold;
-  @apply uppercase;
-  @apply text-sm;
-}
-
-.menu-subroute {
-  @apply md:hover:bg-gray-300;
-  @apply py-1;
-  @apply cursor-pointer;
-}
-</style>

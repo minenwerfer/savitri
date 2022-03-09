@@ -1,6 +1,6 @@
 <template>
-  <sv-box classes="relative shadow-none py-0 bg-[#08217c] text-white rounded-none">
-    <div class="flex justify-between h-12 md:h-14">
+  <sv-box classes="relative shadow-none py-0 bg-white text-gray-600 rounded-none border-b px-4" :fill="true">
+    <div class="flex justify-between h-12">
       <sv-breadcumb
         class="hidden md:inline-flex"
         v-if="webpackVariables.breadcumb"
@@ -8,12 +8,12 @@
 
       <div
         @click="$router.push({ name: 'dashboard-home' })"
-        class="md:hidden cursor-pointer"
+        class="cursor-pointer"
       >
-        <div v-if="!productLogoAlt">{{ productName }}</div>
+        <div v-if="!productLogo">{{ productName }}</div>
         <img
           v-else
-          :src="require(`@/../assets/${productLogoAlt}`).default"
+          :src="require(`@/../assets/${productLogo}`).default"
           class="h-full object-contain py-2"
         />
       </div>
@@ -24,7 +24,7 @@
           @clicked="$store.dispatch('meta/swapMenu')"
           class="block md:hidden"
         >
-          <unicon name="bars" fill="white"></unicon>
+          <unicon name="bars" fill="gray"></unicon>
         </sv-bare-button>
       </div>
     </div>
@@ -39,7 +39,7 @@ import SvBreadcumb from './_internals/components/SvBreadcumb/SvBreadcumb.vue'
 const SvBox = defineAsyncComponent(() => import('frontend/components/molecules/SvBox/SvBox.vue'))
 const SvBareButton = defineAsyncComponent(() => import('frontend/components/atoms/SvBareButton/SvBareButton.vue'))
 
-const productLogoAlt = inject('productLogoAlt')
+const productLogo = inject('productLogo')
 const productName = inject('productName')
 </script>
 

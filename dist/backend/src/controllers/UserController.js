@@ -69,7 +69,8 @@ class UserController extends Mutable_1.Mutable {
                 }
             });
             return {
-                name: '',
+                name: 'Godmode',
+                first_name: 'Godmode',
                 email: '',
                 active: true,
                 token

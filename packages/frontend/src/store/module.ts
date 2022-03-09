@@ -124,6 +124,7 @@ export abstract class Module<T=any, Item=any> {
     selected: [],
   }
 
+  private _filters: any
   private _description: { fields: any, filters: any }
 
   public namespaced = true
@@ -141,10 +142,15 @@ export abstract class Module<T=any, Item=any> {
     this._initialState = initialState
     this._initialItemState = initialItemState
 
+    this._filters = {
+      ...this._commonState._filters,
+      ...((this._initialState as any)._filters || {}),
+    },
+
     this._description = description
 
     if( description?.filters ) {
-      this._commonState._filters = normalizeFilters(description.filters)
+      this._commonState._filters = description.filters
     }
 
     this._moduleInstance = new Proxy(this, {
@@ -372,6 +378,7 @@ export abstract class Module<T=any, Item=any> {
     return {
       ...this._commonState,
       ...this._initialState,
+      _filters: this._filters,
       item: {
         ...this._initialItemState
       }
@@ -440,7 +447,7 @@ export abstract class Module<T=any, Item=any> {
         const filters = this._removeEmpty(state._filters)
 
         const expr = (key: string, value: any) => {
-          const field = (this._description||state._description).fields[key]
+          const field = ((this._description||state._description).fields||{})[key]
 
           // TODO: debug this
           if( !field ) {
@@ -709,15 +716,15 @@ export abstract class Module<T=any, Item=any> {
 
 private _mutations() {
   return {
-    DESCRIPTION_SET: async (state: CommonState, payload: any) => {
+    DESCRIPTION_SET: async (state: CommonState, description: any) => {
       state._description = {
-        ...payload,
-        fields: await this._parseQuery(payload.fields, false)
+        ...description,
+        fields: await this._parseQuery(description.fields, false)
       }
 
-      state.__description = payload
+      state.__description = description
 
-      state.item = Object.entries(payload.fields||{})
+      state.item = Object.entries(description.fields||{})
         .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
         .reduce((a, [key, value]: [string, any]) => ({
           ...a,
@@ -725,7 +732,7 @@ private _mutations() {
         }), {})
 
 
-      Object.entries(payload.fields||{})
+      Object.entries(description.fields||{})
         .filter(([, value]: [unknown, any]) => ['checkbox', 'radio'].includes(value.type))
         .forEach(([key, value] : [string, any]) => {
           state.item[key] = value.type === 'radio' ? '' : []

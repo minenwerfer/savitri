@@ -1,6 +1,7 @@
 {
   "module": "accessProfile",
   "route": true,
+  "unicon": "users-alt",
   "actions": {
     "spawnAdd": {
       "name": "Adicionar"

@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-stone-100">
+  <div class="bg-zinc-100">
     <sv-bare-button
       class="
         fixed bottom-0 right-0 z-30
-        border border-purple-400
         py-2 px-4 rounded-tl-lg
-        bg-purple-600 text-white font-semibold items-center flex gap-x-2 hover:opacity-60 text-sm
+        border border-green-800
+        bg-green-600 text-white font-semibold items-center flex gap-x-2 hover:opacity-60 text-sm
       "
       @clicked="isFeedbackVisible = true"
       v-if="webpackVariables.feedback"
@@ -14,19 +14,22 @@
         <div>Feedback</div>
     </sv-bare-button>
 
-    <div :class="`grid ${isMenuVisible ? 'md:grid-cols-menu' : 'md:grid-cols-1'}`">
+    <div class="flex flex-wrap">
+      <sv-topbar class="sticky inset-0 z-30 w-full" v-if="!$route.meta?.noTopbar">
+        <sv-utilities></sv-utilities>
+      </sv-topbar>
+
       <sv-menu
         entrypoint="dashboard"
         v-model:visible="isMenuVisible"
         v-model:mobileVisible="isMenuMobileVisible"
-        :schema="menuSchema">
-      </sv-menu>
+        :schema="menuSchema"
+      ></sv-menu>
 
-      <div :class="`relative flex flex-col md:w-view`">
+      <div class="relative flex flex-col flex-grow overflow-y-scroll">
         <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-4 pb-6 pt-4'}`">
-
           <sv-bare-button
-            class="flex mb-8 opacity-80"
+            class="flex mb-8 opacity-60"
             v-if="history.state.back != '/signin' && !$route.meta?.noMargin"
             @clicked="$router.back()"
           >
@@ -37,11 +40,7 @@
           <router-view />
         </div>
 
-        <sv-topbar class="sticky inset-0 order-0" v-if="!$route.meta?.noTopbar">
-          <sv-utilities></sv-utilities>
-        </sv-topbar>
-
-        <div class="bg-orange-400 text-white text-center order-1" v-if="notice">
+        <div class="bg-gray-300 text-white text-center order-1" v-if="notice">
           {{ notice }}
         </div>
 

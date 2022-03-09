@@ -88,9 +88,9 @@ export declare class MetaModule extends Module<Meta, {}> {
         VIEW_TITLE_SET: (state: any, value: string) => void;
         DESCRIPTIONS_ADD: (state: any, module: any) => void;
         DESCRIPTIONS_CLEAR: (state: any) => void;
-        MENU_SWAP: (state: any, { desktop, mobile }: {
-            desktop?: boolean | undefined;
-            mobile?: boolean | undefined;
+        MENU_SWAP: (state: any, value: {
+            isVisible?: boolean;
+            isMobileVisible?: boolean;
         }) => void;
         MODAL_SPAWN: (state: any, payload: any) => void;
         MODAL_CLOSE: (state: any) => void;

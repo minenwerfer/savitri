@@ -56,7 +56,10 @@ watch(() => store.state.meta.globalDescriptions, descriptions => {
         name,
         path: description.module,
         redirect: `/dashboard/c/${description.module}`,
-        meta: { title: description.module }
+        meta: {
+          title: description.module,
+          unicon: description.unicon,
+        }
       }
 
       router.addRoute('dashboard', route)

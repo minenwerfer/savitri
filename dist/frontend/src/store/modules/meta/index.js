@@ -13,7 +13,7 @@ class MetaModule extends module_1.Module {
             globalDescriptions: [],
             viewTitle: '',
             menu: {
-                isVisible: true,
+                isVisible: false,
                 isMobileVisible: false,
             },
             modal: {
@@ -152,9 +152,13 @@ class MetaModule extends module_1.Module {
             DESCRIPTIONS_CLEAR: (state) => {
                 state.globalDescriptions = [];
             },
-            MENU_SWAP: (state, { desktop, mobile }) => {
-                state.menu.isVisible = typeof desktop === 'boolean' ? desktop : !state.menu.isVisible;
-                state.menu.isMobileVisible = typeof mobile === 'boolean' ? mobile : !state.menu.isMobileVisible;
+            MENU_SWAP: (state, value) => {
+                if (Object.keys(value).length > 0) {
+                    Object.assign(state.menu, value);
+                    return;
+                }
+                state.menu.isVisible = !state.menu.isVisible;
+                state.menu.isMobileVisible = !state.menu.isMobileVisible;
             },
             MODAL_SPAWN: (state, payload) => {
                 Object.assign(state.modal, {

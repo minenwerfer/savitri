@@ -1,6 +1,7 @@
 {
   "module": "user",
   "route": true,
+  "unicon": "user-circle",
   "actions": {
     "spawnAdd": {
       "name": "Adicionar"
@@ -24,6 +25,12 @@
       "type": "text",
       "required": true
     },
+    "first_name": {
+      "label": "Nome",
+      "type": "text",
+      "notable": true,
+      "noform": true
+    },
     "access": {
       "label": "Preset de acesso",
       "type": "select",
@@ -43,7 +50,6 @@
     "password": {
       "label": "Senha",
       "type": "password",
-      "required": true,
       "hidden": true,
       "noform": true,
       "notable": true

@@ -56,6 +56,7 @@ class Module {
         },
         selected: [],
     };
+    _filters;
     _description;
     namespaced = true;
     /**
@@ -70,9 +71,13 @@ class Module {
     constructor(route, initialState, initialItemState, description, apiUrl) {
         this._initialState = initialState;
         this._initialItemState = initialItemState;
-        this._description = description;
+        this._filters = {
+            ...this._commonState._filters,
+            ...(this._initialState._filters || {}),
+        },
+            this._description = description;
         if (description?.filters) {
-            this._commonState._filters = (0, exports.normalizeFilters)(description.filters);
+            this._commonState._filters = description.filters;
         }
         this._moduleInstance = new Proxy(this, {
             get: (target, key) => {
@@ -256,6 +261,7 @@ class Module {
         return {
             ...this._commonState,
             ...this._initialState,
+            _filters: this._filters,
             item: {
                 ...this._initialItemState
             }
@@ -312,7 +318,7 @@ class Module {
             filters: (state) => {
                 const filters = this._removeEmpty(state._filters);
                 const expr = (key, value) => {
-                    const field = (this._description || state._description).fields[key];
+                    const field = ((this._description || state._description).fields || {})[key];
                     // TODO: debug this
                     if (!field) {
                         return;
@@ -535,19 +541,19 @@ class Module {
     }
     _mutations() {
         return {
-            DESCRIPTION_SET: async (state, payload) => {
+            DESCRIPTION_SET: async (state, description) => {
                 state._description = {
-                    ...payload,
-                    fields: await this._parseQuery(payload.fields, false)
+                    ...description,
+                    fields: await this._parseQuery(description.fields, false)
                 };
-                state.__description = payload;
-                state.item = Object.entries(payload.fields || {})
+                state.__description = description;
+                state.item = Object.entries(description.fields || {})
                     .filter(([, value]) => typeof value.module === 'string' || value.type === 'object')
                     .reduce((a, [key, value]) => ({
                     ...a,
                     [key]: value.array ? [] : {}
                 }), {});
-                Object.entries(payload.fields || {})
+                Object.entries(description.fields || {})
                     .filter(([, value]) => ['checkbox', 'radio'].includes(value.type))
                     .forEach(([key, value]) => {
                     state.item[key] = value.type === 'radio' ? '' : [];

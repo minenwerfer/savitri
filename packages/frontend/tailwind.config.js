@@ -17,13 +17,8 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        'menu': `${style.menuWidth} auto`,
         'checkbox': '4em auto',
         'form': '30% auto'
-      },
-      width: {
-        'menu': style.menuWidth,
-        'view': `calc(100vw - ${style.menuWidth})`
       },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif']

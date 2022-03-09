@@ -10,6 +10,7 @@ import '../AccessProfile'
 
 export interface User {
   name: string
+  first_name: string
   email: string
   password?: string
   active: boolean
@@ -30,6 +31,10 @@ UserSchema.plugin(require('mongoose-autopopulate'))
 UserSchema.methods.testPassword = async function(candidate: string) {
   return bcrypt.compare(candidate, this.password || '')
 }
+
+UserSchema.post('init', function() {
+  this.first_name = this.name?.split(' ')[0]
+})
 
 /**
  * @exports

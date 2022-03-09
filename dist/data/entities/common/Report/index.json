@@ -1,6 +1,7 @@
 {
     "module": "report",
     "route": true,
+    "unicon": "bag-alt",
     "alwaysAttribute": true,
     "actions": {
         "removeAll": {

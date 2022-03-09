@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mutable = exports.select = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
+exports.Mutable = exports.select = exports.depopulate = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
 const Controller_1 = require("./Controller");
 const helpers_1 = require("../../../../common/src/helpers");
 const entity_1 = require("../../../../common/src/entity");
@@ -22,6 +22,17 @@ const depopulateChildren = (item) => {
     };
 };
 exports.depopulateChildren = depopulateChildren;
+const depopulate = (item, description) => {
+    const entries = Object.entries(item._doc || item)
+        .map(([key, value]) => ([
+        key,
+        !(description.fields[key] || {}).expand
+            ? (0, exports.select)(value, (0, entity_1.getIndexes)(description, key))
+            : value
+    ]));
+    return (0, helpers_1.fromEntries)(entries);
+};
+exports.depopulate = depopulate;
 const select = (obj, fields) => {
     if (!obj || typeof obj !== 'object' || !fields) {
         return obj;
@@ -104,18 +115,8 @@ class Mutable extends Controller_1.Controller {
             .limit(props.limit);
     }
     async getAll(props, response, decodedToken) {
-        const depopulate = (item) => {
-            const entries = Object.entries(item._doc || item)
-                .map(([key, value]) => ([
-                key,
-                !(this._description.fields[key] || {}).expand
-                    ? (0, exports.select)(value, (0, entity_1.getIndexes)(this._description, key))
-                    : value
-            ]));
-            return (0, helpers_1.fromEntries)(entries);
-        };
         return (await this._getAll(props))
-            .map((item) => depopulate(item))
+            .map((item) => (0, exports.depopulate)(item, this._description))
             .map((item) => (0, exports.depopulateChildren)(item));
     }
     /**

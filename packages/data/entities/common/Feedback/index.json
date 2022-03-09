@@ -1,6 +1,7 @@
 {
   "module": "feedback",
   "route": true,
+  "unicon": "comment-alt-dots",
   "alwaysAttribute": true,
   "actions": {
     "removeAll": {
