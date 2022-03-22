@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { reactive, toRefs, computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 
 
 const store = useStore()

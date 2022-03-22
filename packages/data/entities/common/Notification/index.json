@@ -10,10 +10,12 @@
   },
   "individualActions": {
     "spawnEdit": {
-      "name": "Editar"
+      "name": "Editar",
+      "unicon": "edit"
     },
     "remove": {
       "name": "Remover",
+      "unicon": "trash-alt",
       "ask": true
     }
   },

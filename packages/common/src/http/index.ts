@@ -15,6 +15,8 @@ export class RequestProvider {
   }
 
   private _authToken: string|null = null
+  private _maxRetries = 3
+  private _retries = 0
 
   /**
    * @constructor
@@ -53,13 +55,25 @@ export class RequestProvider {
              : method
         }
 
-        return (...args: any) => {
+        const func = (...args: any) => {
           return method.apply(target, args)
             .then((res: AxiosResponse) => {
-              RequestProvider.throwOnError(res)
+              try {
+                RequestProvider.throwOnError(res)
+              } catch( err ) {
+                if( this._retries < this._maxRetries && res.status !== 200 ) {
+                  this._retries++;
+                  return func(...args)
+                }
+
+                throw err
+              }
+
               return res
             })
         }
+
+        return func
       }
 
     })

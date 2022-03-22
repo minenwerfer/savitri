@@ -11,6 +11,8 @@ export declare class RequestProvider {
     private _proxiedInstance;
     private _defaultConfig;
     private _authToken;
+    private _maxRetries;
+    private _retries;
     /**
      * @constructor
      * @param {AxiosRequestConfig} config - pass this config to axios along with the default one

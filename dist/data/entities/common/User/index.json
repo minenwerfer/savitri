@@ -9,13 +9,16 @@
     },
     "individualActions": {
         "spawnEdit": {
-            "name": "Editar"
+            "name": "Editar",
+            "unicon": "edit"
         },
         "spawnChangePwd": {
-            "name": "Mudar senha"
+            "name": "Mudar senha",
+            "unicon": "key-skeleton"
         },
         "remove": {
             "name": "Remover",
+            "unicon": "trash-alt",
             "ask": true
         }
     },

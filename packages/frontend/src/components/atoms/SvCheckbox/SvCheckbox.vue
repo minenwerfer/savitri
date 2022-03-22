@@ -2,7 +2,6 @@
   <div
     :class="`
     rounded
-    bg-white
     py-2
     flex items-center
     select-none border
@@ -23,9 +22,11 @@
       >
       <div class="">
         <slot name="label" v-if="$slots.label"></slot>
+        <div v-else-if="label" v-html="label"></div>
       </div>
       <div class="opacity-80">
         <slot name="description" v-if="$slots.description"></slot>
+        <div v-else-if="description" v-html="description"></div>
       </div>
     </div>
   </div>
@@ -37,6 +38,8 @@ import { onMounted, computed, ref } from 'vue'
 const props = defineProps<{
   modelValue?: any
   required?: boolean
+  label?: string
+  description?: string
   value: string|boolean
   array?: boolean
   isRadio?: boolean
@@ -84,13 +87,18 @@ const bindVal = computed({
       : !!props.value
   },
 
-  set: () => {
+  set: (newVal: boolean) => {
     if( props.readonly ) {
       return
     }
 
     if( props.isRadio ) {
-      emit('update:modelValue', value)
+      emit('update:modelValue', props.value)
+      return
+    }
+
+    if( props.isBoolean ) {
+      emit('update:modelValue', newVal)
       return
     }
 
@@ -98,6 +106,7 @@ const bindVal = computed({
       emit('update:modelValue', !selectedValues(props.modelValue||[]).includes(value)
         ? [ ...props.modelValue||[], value ]
         : selectedValues(props.modelValue).filter((v: any) => v !== value))
+
     } else {
       emit('update:modelValue', !(props.modelValue === true))
     }

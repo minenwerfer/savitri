@@ -34,8 +34,8 @@
 <script setup lang="ts">
 import { ref, provide, inject, defineAsyncComponent } from 'vue'
 import { useStore } from 'vuex'
+import { useModule } from 'frontend/composables'
 import { SvForm, SvButton } from 'frontend/components'
-import useModule from 'frontend/composables/module'
 
 const SvBox = defineAsyncComponent(() => import('frontend/components/molecules/SvBox/SvBox.vue'))
 

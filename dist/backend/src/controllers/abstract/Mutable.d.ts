@@ -15,6 +15,8 @@ export declare type MultipleQuery<T> = Query<(T & {
 export declare const depopulateChildren: (item: any) => any;
 export declare const depopulate: (item: any, description: any) => any;
 export declare const select: (obj: any, fields: string[]) => any;
+export declare const project: (item: any, props: any) => any;
+export declare const fill: (obj: any, fields: any) => any;
 export declare abstract class Mutable<T> extends Controller<T> {
     /**
      * @constructor
@@ -39,7 +41,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
      */
     get(props: {
         filters?: object;
-    }, response?: unknown, decodedToken?: any): any | Promise<any>;
+    }, response?: unknown, decodedToken?: any): Promise<any>;
     /**
      * @method
      * Gets a collection of documents from database.
@@ -49,12 +51,14 @@ export declare abstract class Mutable<T> extends Controller<T> {
         offset?: number;
         limit?: number;
         sort?: any;
-    }): MultipleQuery<T>;
+        project?: string | string[];
+    }): Query<import("mongoose").HydratedDocument<T, {}, {}>[], import("mongoose").HydratedDocument<T, {}, {}>, {}, T>;
     getAll(props: {
         filters?: object;
         offset?: number;
         limit?: number;
         sort?: any;
+        project?: string | string[];
     }, response?: unknown, decodedToken?: any): Promise<any[]>;
     /**
      * @method

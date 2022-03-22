@@ -21,7 +21,7 @@ import { SvForm } from '../index'
 import { SvBareButton } from 'frontend/components'
 import { fromEntries } from 'common/helpers'
 
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 
 const props = defineProps<{
   module: string

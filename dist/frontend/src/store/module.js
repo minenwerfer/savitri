@@ -219,8 +219,10 @@ class Module {
                 return {};
             }
             const route = `${value.module}/getAll`;
-            const filters = value.filters || {};
-            const { data } = await this._http.post(route, filters);
+            const { data } = await this._http.post(route, {
+                filters: value.filters || {},
+                project: value.index || {}
+            });
             const result = normalize(data.result, value);
             window.dispatchEvent(new CustomEvent('__updateQueryCache', {
                 detail: {
@@ -276,7 +278,7 @@ class Module {
                     ...a,
                     [key]: state.item[key] || value
                 }), {});
-                return Object.assign(Object.assign({}, state.item), merge);
+                return Object.assign(state.item, merge);
             },
             condensedItem: (state) => this._condenseItem(state.item),
             items: (state) => {
@@ -451,7 +453,16 @@ class Module {
                 commit('meta/GLOBAL_LOADING_SWAP', value, { root: true });
             },
             describe: this._actionHelper('describe', 'DESCRIPTION_SET'),
-            get: this._actionHelper('get', 'ITEM_GET'),
+            get: (...args) => {
+                const func = this._actionHelper('get', 'ITEM_GET');
+                const [{ state }] = args;
+                const every = (target, filters) => Object.entries(filters)
+                    .every(([key, value]) => target[key] === value);
+                const found = state.items.find((item) => every(item, args[1].filters));
+                return !found
+                    ? func.apply(this, args)
+                    : found;
+            },
             getAll: this._actionHelper('getAll', 'ITEMS_GET'),
             insert: this._actionHelper('insert', 'ITEM_INSERT'),
             remove: this._actionHelper('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
@@ -547,17 +558,21 @@ class Module {
                     fields: await this._parseQuery(description.fields, false)
                 };
                 state.__description = description;
-                state.item = Object.entries(description.fields || {})
-                    .filter(([, value]) => typeof value.module === 'string' || value.type === 'object')
-                    .reduce((a, [key, value]) => ({
-                    ...a,
-                    [key]: value.array ? [] : {}
-                }), {});
-                Object.entries(description.fields || {})
-                    .filter(([, value]) => ['checkbox', 'radio'].includes(value.type))
-                    .forEach(([key, value]) => {
-                    state.item[key] = value.type === 'radio' ? '' : [];
-                });
+                if (!state.item) {
+                    state.item = Object.entries(description.fields || {})
+                        .filter(([, value]) => typeof value.module === 'string' || value.type === 'object')
+                        .reduce((a, [key, value]) => ({
+                        ...a,
+                        [key]: value.array ? [] : {}
+                    }), {});
+                    Object.entries(description.fields || {})
+                        .filter(([, value]) => ['checkbox', 'radio', 'boolean'].includes(value.type))
+                        .forEach(([key, value]) => {
+                        state.item[key] = value.type !== 'radio'
+                            ? (value.type === 'boolean' ? false : [])
+                            : '';
+                    });
+                }
                 state._clearItem = Object.assign({}, state.item);
             },
             CACHE_QUERY: (state, { module, result }) => {

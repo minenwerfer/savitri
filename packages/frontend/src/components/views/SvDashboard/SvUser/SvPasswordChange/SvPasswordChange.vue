@@ -1,5 +1,5 @@
 <template>
-  <sv-box :key="item" class="xl:w-2/5">
+  <sv-box class="xl:w-2/5">
     <sv-form
       :form="fields"
       :form-data="item"
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { provide, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 import { SvBox, SvForm, SvButton } from 'frontend/components'
 
 const store = useStore()

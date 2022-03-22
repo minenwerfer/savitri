@@ -1,9 +1,12 @@
 <template>
-  <div class="flex flex-col gap-y-4">
+  <div class="flex flex-col gap-y-6">
     <div class="border-2 border-gray-500 rounded-full w-40 h-40 grid place-items-center self-center overflow-hidden">
       <sv-picture :file="current.picture">
         <template #fallback>
-          <unicon name="user" fill="gray" class="w-32 h-32"></unicon>
+          <inline-svg
+            :src="require('frontend/../assets/svg/profile.svg').default"
+            class="w-full h-40"
+          ></inline-svg>
         </template>
       </sv-picture>
     </div>
@@ -12,7 +15,7 @@
       <div>Autenticado como: {{ current.access?.name }}</div>
     </div>
 
-    <div class="flex flex-col gap-y-1">
+    <div class="flex flex-col gap-y-2">
       <sv-bare-button @clicked="editProfile">Editar perfil</sv-bare-button>
       <sv-bare-button @clicked="signout">Sair</sv-bare-button>
     </div>
@@ -23,7 +26,8 @@
 import { computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import useModule from 'frontend/composables/module'
+import { default as InlineSvg } from 'vue-inline-svg'
+import { useModule } from 'frontend/composables'
 import { SvBareButton, SvPicture } from 'frontend/components'
 
 const emit = defineEmits<{
@@ -37,13 +41,14 @@ const moduleRefs = reactive(useModule('user', store))
 const current = computed(() => store.getters['user/current'])
 
 const signout = async () => {
-  await store.dispatch('user/signout')
   emit('close')
+  await store.dispatch('user/signout')
   router.push({ name: 'signin' })
 }
 
 const editProfile = () => {
   emit('close')
+  moduleRefs.setItem(store.getters['user/current'])
   router.push({ name: 'dashboard-user-profile' })
 }
 

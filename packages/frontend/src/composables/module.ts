@@ -33,7 +33,7 @@ const actions = [
   'clear'
 ]
 
-export default (name: string, store: any): any => {
+export const useModule = (name: string, store: any): any => {
 
   const useFields = (fields: string[], except = false) => {
     return fromEntries(Object.entries(store.getters[`${name}/fields`])
@@ -100,7 +100,7 @@ export default (name: string, store: any): any => {
       ? ( field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue )
       : '-'
 
-    return typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
+    return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
       ? formatted.substr(0, field.trim - 3) + '...'
       : formatted
   }

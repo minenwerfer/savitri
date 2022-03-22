@@ -19,6 +19,7 @@ exports.initialState = {
  */
 exports.initialItemState = {
     email: '',
+    verification: '',
 };
 /**
  * @exports @class

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mutable = exports.select = exports.depopulate = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
+exports.Mutable = exports.fill = exports.project = exports.select = exports.depopulate = exports.depopulateChildren = exports.PAGINATION_LIMIT = void 0;
 const Controller_1 = require("./Controller");
 const helpers_1 = require("../../../../common/src/helpers");
 const entity_1 = require("../../../../common/src/entity");
@@ -44,6 +44,33 @@ const select = (obj, fields) => {
         : _select(obj);
 };
 exports.select = select;
+const project = (item, props) => {
+    if (!props) {
+        return item;
+    }
+    const obj = {
+        _id: item._id
+    };
+    (Array.isArray(props) ? props : [props])
+        .forEach((field) => {
+        obj[field] = item[field];
+    });
+    return obj;
+};
+exports.project = project;
+const fill = (obj, fields) => {
+    if (!obj) {
+        return {};
+    }
+    const missing = Object.keys(fields)
+        .filter((field) => !obj[field])
+        .reduce((a, b) => ({
+        ...a,
+        [b]: null
+    }), {});
+    return Object.assign(missing, obj._doc || obj);
+};
+exports.fill = fill;
 class Mutable extends Controller_1.Controller {
     /**
      * @constructor
@@ -90,8 +117,8 @@ class Mutable extends Controller_1.Controller {
      * @method
      * Gets a document from database.
      */
-    get(props, response, decodedToken) {
-        return this._model.findOne(props?.filters);
+    async get(props, response, decodedToken) {
+        return (0, exports.fill)(await this._model.findOne(props?.filters), this._description.fields);
     }
     /**
      * @method
@@ -107,7 +134,10 @@ class Mutable extends Controller_1.Controller {
             props.limit = +(exports.PAGINATION_LIMIT || 35);
         }
         const entries = Object.entries(props.filters || {})
-            .map(([key, value]) => [key, value && typeof value === 'object' && 'id' in value ? value._id : value]);
+            .map(([key, value]) => [
+            key,
+            value && typeof value === 'object' && 'id' in value ? value._id : value
+        ]);
         props.filters = (0, helpers_1.fromEntries)(entries);
         return this._model.find(props.filters || {})
             .sort(props.sort || defaultSort)
@@ -115,9 +145,12 @@ class Mutable extends Controller_1.Controller {
             .limit(props.limit);
     }
     async getAll(props, response, decodedToken) {
-        return (await this._getAll(props))
+        const result = (await this._getAll(props))
+            .map((item) => (0, exports.project)(item, props.project));
+        return result
             .map((item) => (0, exports.depopulate)(item, this._description))
-            .map((item) => (0, exports.depopulateChildren)(item));
+            .map((item) => (0, exports.depopulateChildren)(item))
+            .map((item) => props.project ? item : (0, exports.fill)(item, this._description.fields));
     }
     /**
      * @method

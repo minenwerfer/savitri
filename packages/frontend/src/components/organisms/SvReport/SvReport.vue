@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { provide, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 import { SvBox, SvForm, SvButton } from 'frontend/components'
 
 const props = defineProps<{

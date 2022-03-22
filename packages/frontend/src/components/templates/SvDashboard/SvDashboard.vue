@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-zinc-100">
+  <div class="bg-gray-100">
     <sv-bare-button
       class="
         fixed bottom-0 right-0 z-30
-        py-2 px-4 rounded-tl-lg
+        py-1 px-4 rounded-tl-lg
         border border-green-800
         bg-green-600 text-white font-semibold items-center flex gap-x-2 hover:opacity-60 text-sm
       "
@@ -26,8 +26,8 @@
         :schema="menuSchema"
       ></sv-menu>
 
-      <div class="relative flex flex-col flex-grow overflow-y-scroll">
-        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-4 pb-6 pt-4'}`">
+      <div class="relative inline-flex flex-col flex-grow md:w-0 overflow-y-scroll">
+        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-4 pb-6 pt-2'}`">
           <sv-bare-button
             class="flex mb-8 opacity-60"
             v-if="history.state.back != '/signin' && !$route.meta?.noMargin"

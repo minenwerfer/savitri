@@ -54,6 +54,38 @@ export const select = (obj: any, fields: string[]) => {
     : _select(obj)
 }
 
+export const project = (item: any, props: any) => {
+  if( !props ) {
+    return item
+  }
+
+  const obj: any = {
+    _id: item._id
+  };
+
+  (Array.isArray(props) ? props : [props])
+    .forEach((field: string) => {
+      obj[field] = item[field]
+    })
+
+  return obj
+}
+
+export const fill = (obj: any, fields: any) => {
+  if( !obj ) {
+    return {}
+  }
+
+  const missing = Object.keys(fields)
+    .filter((field: string) => !obj[field])
+    .reduce((a: any, b: string) => ({
+      ...a,
+      [b]: null
+    }), {})
+
+  return Object.assign(missing, obj._doc || obj)
+}
+
 export abstract class Mutable<T> extends Controller<T> {
   /**
    * @constructor
@@ -61,7 +93,7 @@ export abstract class Mutable<T> extends Controller<T> {
    */
   constructor(model: Model<T>, description: object, options = {}) {
     super({ description, ...options })
-    this._model = model;
+    this._model = model
   }
 
   /**
@@ -115,15 +147,23 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Gets a document from database.
    */
-  public get(props: { filters?: object }, response?: unknown, decodedToken?: any): any | Promise<any> {
-    return this._model.findOne(props?.filters)
+  public async get(props: { filters?: object }, response?: unknown, decodedToken?: any): Promise<any> {
+    return fill(await this._model.findOne(props?.filters), this._description.fields)
   }
 
   /**
    * @method
    * Gets a collection of documents from database.
    */
-  protected _getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }): MultipleQuery<T> {
+  protected _getAll(props: {
+    filters?: object,
+    offset?: number,
+    limit?: number,
+    sort?: any,
+    project?: string|string[],
+
+  }) {
+
     const defaultSort = {
       date_updated: -1,
       date_created: -1,
@@ -135,7 +175,10 @@ export abstract class Mutable<T> extends Controller<T> {
     }
 
     const entries = Object.entries(props.filters||{})
-      .map(([key, value]: [string, any]) => [key, value && typeof value === 'object' && 'id' in value ? value._id : value])
+      .map(([key, value]: [string, any]) => [
+        key,
+        value && typeof value === 'object' && 'id' in value ? value._id : value
+      ])
 
     props.filters = fromEntries(entries)
 
@@ -145,10 +188,21 @@ export abstract class Mutable<T> extends Controller<T> {
       .limit(props.limit)
   }
 
-  public async getAll(props: { filters?: object, offset?: number, limit?: number, sort?: any }, response?: unknown, decodedToken?: any) {
-    return (await this._getAll(props))
+  public async getAll(props: {
+    filters?: object,
+    offset?: number,
+    limit?: number,
+    sort?: any,
+    project?: string|string[],
+
+ }, response?: unknown, decodedToken?: any) {
+   const result = (await this._getAll(props))
+    .map((item: T) => project(item, props.project))
+
+   return result
       .map((item: T) => depopulate(item, this._description))
       .map((item: T) => depopulateChildren(item))
+      .map((item: T) => props.project ? item : fill(item, this._description.fields))
   }
 
   /**

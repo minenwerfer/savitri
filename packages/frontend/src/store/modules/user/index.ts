@@ -41,6 +41,7 @@ export const initialState = {
  */
 export const initialItemState = {
   email: '',
+  verification: '',
 }
 
 /**

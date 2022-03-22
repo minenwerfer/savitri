@@ -22,10 +22,10 @@
       :key="`column-${rindex}-${cindex}`"
       @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
 
-      :class="`block lg:table-cell truncate cursor-pointer lg:pl-4 ${field.cellStyle || ''} ${ border && 'border' }`"
-      >
+      :class="`block lg:table-cell truncate cursor-pointer lg:pl-4 lg:py-1 ${field.cellStyle || ''} ${ border && 'border' }`"
+    >
 
-      <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm">
+      <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm align-middle">
         <div class="font-semibold opacity-60 lg:hidden text-ellipsis truncate">{{ field.label }}</div>
         <div
           v-if="column !== '__custom' && field.type !== 'image'"
@@ -61,8 +61,15 @@
             @clicked="action.click(row)"
 
             :class="`cursor-pointer ${action.color && fgColorClasses[action.color]}`"
-            >
-            {{ action.name }}
+          >
+            <sv-info v-if="action.unicon">
+              <!-- <template #text>{{ action.name }}</template> -->
+              <unicon :name="action.unicon" fill="gray" v-if="action.unicon" class="w-5 h-5"></unicon>
+            </sv-info>
+
+            <div v-else>
+              {{ action.name }}
+            </div>
           </sv-bare-button>
         </div>
       </div>
@@ -74,9 +81,9 @@
 <script setup lang="ts">
 import { inject, ref, watch, reactive, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 import { SV_API_URL } from 'frontend/store/module'
-import { SvBareButton } from 'frontend/components'
+import { SvBareButton, SvInfo } from 'frontend/components'
 
 const props = defineProps({
 columns: {

@@ -7,7 +7,7 @@
     <div class="text-sm opacity-50" v-if="$slots.description">
       <slot name="description"></slot>
     </div>
-    <div v-if="type !== 'textbox'" class="relative">
+    <div v-if="type !== 'textbox'" class="relative flex">
       <input
         :class="classes[variant]"
 
@@ -29,7 +29,19 @@
             : 'absolute top-0 left-0'
         "
       >
-        <unicon :name="icon" class="opacity-80"></unicon>
+        <unicon :name="icon" fill="gray"></unicon>
+      </div>
+
+      <div
+        v-if="readonly"
+        class="flex items-center border border-stone-300 transform -translate-x-4 bg-white px-1"
+      >
+        <sv-info>
+          <template #text>Copiar</template>
+          <sv-bare-button @clicked="copy(inputValue || value)">
+            <unicon name="clipboard" fill="gray" class="w-5 h-5"></unicon>
+          </sv-bare-button>
+        </sv-info>
       </div>
     </div>
 
@@ -48,7 +60,10 @@
 
 <script setup lang="ts">
 import { ref, inject } from 'vue'
+import { useStore } from 'vuex'
 import { maska as vMaska } from 'maska'
+import { copyToClipboard } from 'frontend/helpers'
+import { SvBareButton, SvInfo } from 'frontend/components'
 
 const props = defineProps<{
   modelValue?: string
@@ -64,6 +79,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
 }>()
+
+const store = useStore()
 
 const input = ref<any>(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
@@ -105,7 +122,7 @@ const inputValue = ref(props.type === 'datetime'
 const classes ={
   normal: `
       w-full border-box rounded
-      border border-stone-300 focus:border-purple-500
+      border border-stone-300 focus:border-blue-600
       bg-white px-3 py-1
       text-gray-600 outline-none
       ${props.icon && 'pl-8'}
@@ -114,8 +131,8 @@ const classes ={
 
   light: `
       w-full border-box 
-      border-b border-stone-400 focus:border-purple-500
-      bg-transparent pb-1v
+      border-b border-stone-400 focus:border-blue-600
+      bg-transparent pb-1
       text-gray-600 outline-none
       ${props.icon && 'pl-8'}
       ${props.readonly && 'bg-stone-50'}
@@ -123,7 +140,7 @@ const classes ={
 
   bold: `
     w-full border-box rounded
-    border border-gray-300 py-3 focus:border-purple-500
+    border border-gray-300 py-2 focus:border-blue-600
     outline-none
     ${props.icon && 'pl-10'}
     ${props.readonly ? 'bg-stone-50' : 'bg-white'}
@@ -143,5 +160,12 @@ const onChange = (event: { target: { value: string } }) => {
   if( props.type === 'datetime' ) {
     emit('update:modelValue', ISOToDate(event.target.value))
   }
+}
+
+const copy = (value: string) => {
+  copyToClipboard(value)
+  store.dispatch('meta/spawnToast', {
+    text: 'Copiado!'
+  })
 }
 </script>

@@ -29,6 +29,8 @@ class RequestProvider {
     //
     };
     _authToken = null;
+    _maxRetries = 3;
+    _retries = 0;
     /**
      * @constructor
      * @param {AxiosRequestConfig} config - pass this config to axios along with the default one
@@ -60,13 +62,23 @@ class RequestProvider {
                         ? (...args) => method.apply(target, args)
                         : method;
                 }
-                return (...args) => {
+                const func = (...args) => {
                     return method.apply(target, args)
                         .then((res) => {
-                        RequestProvider.throwOnError(res);
+                        try {
+                            RequestProvider.throwOnError(res);
+                        }
+                        catch (err) {
+                            if (this._retries < this._maxRetries && res.status !== 200) {
+                                this._retries++;
+                                return func(...args);
+                            }
+                            throw err;
+                        }
                         return res;
                     });
                 };
+                return func;
             }
         });
     }

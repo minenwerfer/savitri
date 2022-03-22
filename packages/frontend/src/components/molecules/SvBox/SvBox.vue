@@ -11,9 +11,9 @@
               : ''
           }
           ${ isFloating && animate ? 'animate-toast' : '' }
-          ${ isFloating ? '' : ( fullWidth || fill ? '' : 'py-4 px-auto' ) }
+          ${ isFloating || ( fullWidth || fill ? '' : 'py-4 px-auto' ) }
           ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded shadow` }
-          flex flex-col ${ transparent || 'bg-white' } overscroll-none
+          flex flex-col ${ transparent || 'bg-[#fdfdfd]' } overscroll-none
           ${ classes }
         `"
       >

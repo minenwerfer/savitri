@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 
 const props = defineProps<{
   modelValue?: any

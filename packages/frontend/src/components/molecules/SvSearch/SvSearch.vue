@@ -33,19 +33,19 @@
 
     <div v-if="!isExpanded || array" :key="inputValue" style="max-width: 20em">
       <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`" v-if="!isExpanded">
-        <div v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)">
+        <div v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)" class="bg-white">
           <div class="cursor-pointer p-2 border">{{ item[indexes[0]] }}</div>
         </div>
       </div>
 
       <div v-if="!searchOnly && selected.length > 0" class="mt-4">
-        <div v-for="(item, index) in selected" :key="`item-${index}`" class="flex gap-x-2 px-2 py-1 border">
+        <div v-for="(item, index) in selected" :key="`item-${index}`" class="flex gap-x-2 px-2 py-1 border bg-white">
           <div class="flex-1">{{ item[indexes[0]] }}</div>
           <sv-bare-button @clicked="edit(item)">
-            <unicon name="edit" fill="black"></unicon>
+            <unicon name="edit" fill="gray"></unicon>
           </sv-bare-button>
           <sv-bare-button @clicked="unselect(item)">
-            <unicon name="trash" fill="black"></unicon>
+            <unicon name="trash" fill="gray"></unicon>
           </sv-bare-button>
         </div>
       </div>
@@ -57,7 +57,7 @@
 import { provide, inject, computed, ref, reactive, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { SvInput, SvButton, SvBareButton } from 'frontend/components'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 
 const SvForm = defineAsyncComponent(() => import('frontend/components/molecules/SvForm/SvForm.vue'))
 

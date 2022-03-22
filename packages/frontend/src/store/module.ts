@@ -323,9 +323,12 @@ export abstract class Module<T=any, Item=any> {
       }
 
       const route = `${value.module}/getAll`
-      const filters = value.filters || {}
 
-      const { data } = await this._http.post(route, filters)
+      const { data } = await this._http.post(route, {
+        filters: value.filters || {},
+        project: value.index || {}
+      })
+
       const result = normalize(data.result, value)
 
       window.dispatchEvent(new CustomEvent('__updateQueryCache', {
@@ -387,7 +390,6 @@ export abstract class Module<T=any, Item=any> {
 
   private _getters()  {
     return {
-
       queryCache: (state: CommonState) => state._queryCache,
 
       item: (state: CommonState) => {
@@ -397,7 +399,8 @@ export abstract class Module<T=any, Item=any> {
             [key]: state.item[key] || value
           }), {})
 
-        return Object.assign(Object.assign({}, state.item), merge)
+
+        return Object.assign(state.item, merge)
       },
 
       condensedItem: (state: CommonState) => this._condenseItem(state.item),
@@ -606,7 +609,19 @@ export abstract class Module<T=any, Item=any> {
 
       describe: this._actionHelper<any>('describe', 'DESCRIPTION_SET'),
 
-      get: this._actionHelper<Item>('get', 'ITEM_GET'),
+      get: (...args:any) => {
+        const func = this._actionHelper<Item>('get', 'ITEM_GET')
+        const [{ state }]: [ActionProps, unknown] = args
+
+        const every = (target: any, filters: any) => Object.entries(filters)
+          .every(([key, value]: [string, any]) => target[key] === value)
+
+        const found = state.items.find((item: Item) => every(item, args[1].filters)) 
+        return !found
+          ? func.apply(this, args)
+          : found
+      },
+
       getAll: this._actionHelper<Item[]>('getAll', 'ITEMS_GET'),
       insert: this._actionHelper<Item>('insert', 'ITEM_INSERT'),
       remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
@@ -724,19 +739,22 @@ private _mutations() {
 
       state.__description = description
 
-      state.item = Object.entries(description.fields||{})
-        .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
-        .reduce((a, [key, value]: [string, any]) => ({
-          ...a,
-          [key]:  value.array ? [] : {}
-        }), {})
+      if( !state.item ) {
+        state.item = Object.entries(description.fields||{})
+          .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
+          .reduce((a, [key, value]: [string, any]) => ({
+            ...a,
+            [key]:  value.array ? [] : {}
+          }), {})
 
-
-      Object.entries(description.fields||{})
-        .filter(([, value]: [unknown, any]) => ['checkbox', 'radio'].includes(value.type))
-        .forEach(([key, value] : [string, any]) => {
-          state.item[key] = value.type === 'radio' ? '' : []
-      })
+        Object.entries(description.fields||{})
+          .filter(([, value]: [unknown, any]) => ['checkbox', 'radio', 'boolean'].includes(value.type))
+          .forEach(([key, value] : [string, any]) => {
+            state.item[key] = value.type !== 'radio'
+              ? (value.type === 'boolean' ? false : [])
+              : ''
+        })
+      }
 
       state._clearItem = Object.assign({}, state.item)
     },

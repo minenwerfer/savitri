@@ -25,26 +25,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.options = exports.mongoose = exports.ReleaseDescription = exports.ReportDescription = exports.NotificationDescription = exports.FileDescription = exports.FeedbackDescription = exports.AccessProfileDescription = exports.UserDescription = void 0;
+exports.defaultDescriptions = exports.options = exports.mongoose = void 0;
 __exportStar(require("./src/controllers/abstract/Mutable"), exports);
 __exportStar(require("./src/controllers/abstract/Controller"), exports);
-var User_1 = require("./src/models/User");
-Object.defineProperty(exports, "UserDescription", { enumerable: true, get: function () { return User_1.Description; } });
-var AccessProfile_1 = require("./src/models/AccessProfile");
-Object.defineProperty(exports, "AccessProfileDescription", { enumerable: true, get: function () { return AccessProfile_1.Description; } });
-var Feedback_1 = require("./src/models/Feedback");
-Object.defineProperty(exports, "FeedbackDescription", { enumerable: true, get: function () { return Feedback_1.Description; } });
-var File_1 = require("./src/models/File");
-Object.defineProperty(exports, "FileDescription", { enumerable: true, get: function () { return File_1.Description; } });
-var Notification_1 = require("./src/models/Notification");
-Object.defineProperty(exports, "NotificationDescription", { enumerable: true, get: function () { return Notification_1.Description; } });
-var Report_1 = require("./src/models/Report");
-Object.defineProperty(exports, "ReportDescription", { enumerable: true, get: function () { return Report_1.Description; } });
-var index_json_1 = require("../data/entities/common/Release/index.json");
-Object.defineProperty(exports, "ReleaseDescription", { enumerable: true, get: function () { return __importDefault(index_json_1).default; } });
 __exportStar(require("./src/models/_Util"), exports);
 exports.mongoose = __importStar(require("./src/database"));
 var database_1 = require("./src/database");
 Object.defineProperty(exports, "options", { enumerable: true, get: function () { return database_1.options; } });
 __exportStar(require("./src/services"), exports);
+const User_1 = require("./src/models/User");
+const AccessProfile_1 = require("./src/models/AccessProfile");
+const Feedback_1 = require("./src/models/Feedback");
+const File_1 = require("./src/models/File");
+const Notification_1 = require("./src/models/Notification");
+const Report_1 = require("./src/models/Report");
+const index_json_1 = __importDefault(require("../data/entities/common/Release/index.json"));
+exports.defaultDescriptions = {
+    user: User_1.Description,
+    accessProfile: AccessProfile_1.Description,
+    feedback: Feedback_1.Description,
+    file: File_1.Description,
+    notification: Notification_1.Description,
+    report: Report_1.Description,
+    release: index_json_1.default
+};
 //# sourceMappingURL=index.js.map

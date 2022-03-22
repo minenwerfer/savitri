@@ -1,16 +1,16 @@
 <template>
   <div
     :class="`
-      fixed md:sticky top-0 right-0 md:top-[calc(3rem+1px)] w-10/12 h-screen z-40
+      fixed md:sticky top-0 right-0 md:top-[calc(3rem+1px)] w-10/12 h-screen md:h-[calc(100vh-3rem-1px)] z-40
       bg-white border-r
-      animate-slip md:animate-slowfade transition-all duration-75
-      ${ visible ? 'md:w-[17em]' : 'md:w-[4em] overflow-x-hidden' } 
+      animate-slip md:animate-slowfade transition-all ease-in-out
+      ${ visible ? 'md:w-[17em]' : 'md:w-[50px] overflow-x-hidden' } 
       ${ mobileVisible || 'hidden md:block' }
       overflow-y-auto overscroll-none
   `">
 
-    <sv-bare-button @clicked="$store.dispatch('meta/swapMenu')" class="hidden md:block">
-      <div class="flex gap-x-1 items-center transform-all pl-2 opacity-80 h-12">
+    <sv-bare-button @clicked="store.dispatch('meta/swapMenu')" class="hidden md:block w-full">
+      <div class="flex gap-x-1 items-center transform-all opacity-80 h-12 pl-[5px]">
         <unicon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-10 h-10`"></unicon>
         <div v-if="visible" class="text-sm">
           Recolher
@@ -23,7 +23,7 @@
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"
-        class="border-y border-collapse mt-[-1px]"
+        class="border-y mt-[-1px]"
       >
         <!-- <a @click="onEntryClick(route)" class="menu-entry menu-route mb-2"> -->
         <!--   {{ $tc(route.meta.title, 2).capitalize() }} -->
@@ -37,14 +37,16 @@
             @clicked="onEntryClick(subroute)"
 
             :class="`
-              flex items-center gap-x-2 pl-4 py-[10px] hover:bg-blue-100 active:no-underline w-full
-              ${isCurrent(subroute) ? 'border-l-8 md:border-r-8 md:border-l-0 border-blue-500 bg-blue-50' : ''}
+              flex items-center pl-[12px] py-[10px] hover:bg-blue-100 active:no-underline w-full
+              border-l-4 md:border-r-4 md:border-l-0 
+              ${visible && 'gap-x-3'}
+              ${isCurrent(subroute) ? 'border-blue-500 bg-blue-50' : 'border-transparent'}
           `">
             <unicon
               :name="subroute.meta?.unicon || 'file'"
               :fill="isCurrent(subroute) ? 'blue' : 'gray'"
             ></unicon>
-            <div :class="`whitespace-nowrap ${visible || 'md:invisible'}`">
+            <div :class="`whitespace-nowrap ${visible || 'md:invisible w-0'}`">
               {{ $tc(subroute.meta.title, 2).capitalize() }}
             </div>
           </sv-bare-button>

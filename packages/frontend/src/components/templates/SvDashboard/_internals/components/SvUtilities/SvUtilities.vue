@@ -7,7 +7,7 @@
   </sv-bare-button>
 
   <sv-bare-button @clicked="spawnSidebar('Usuário', 'sv-profile')">
-    <div class="flex gap-x-2 border border-gray-300 rounded-lg px-3 py-2 bg-white">
+    <div class="flex gap-x-2 border border-gray-300 rounded-lg px-3 py-1 bg-white text-sm items-center">
       <div>{{ $store.getters['user/current'].first_name || 'Usuário' }}</div>
       <unicon name="user" fill="gray"></unicon>
     </div>

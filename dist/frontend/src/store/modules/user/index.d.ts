@@ -36,6 +36,7 @@ export declare const initialState: {
  */
 export declare const initialItemState: {
     email: string;
+    verification: string;
 };
 /**
  * @exports @class

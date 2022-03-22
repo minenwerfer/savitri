@@ -38,22 +38,23 @@
               v-bind="{
                 array: true,
                 value: value.value,
+                label: value.label,
+                description: value.description,
                 isRadio: field.type === 'radio',
                 readonly: field.readonly
               }"
-            >
-              <template #label>{{ field.translate ? $t(value.label) : value.label }}</template>
-              <template #description>{{ value.description }}</template>
-            </sv-checkbox>
+            ></sv-checkbox>
 
             <sv-checkbox
               v-else-if="field.type === 'boolean'"
               v-model="formData[key]"
-              :value="formData[key] === true"
-              :readonly="field.readonly"
-            >
-              <template #label>{{ field.label }}</template>
-            </sv-checkbox>
+
+              v-bind="{
+                value: formData[key] == true,
+                readonly: field.readonly,
+                label: field.label
+              }"
+            ></sv-checkbox>
           </div>
 
 
@@ -102,10 +103,10 @@
           ...field,
           readonly: true,
           type: isTextType(field.type) ? field.type : 'text',
-          value: formatValue(field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value), undefined, false, field)
+          value: formatValue(field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value), undefined, true, field)
         }"
 
-        :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'w-[25%]'}`"
+        :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'lg:w-[25%]'}`"
       >
         {{ field.label }}
       </sv-input>
@@ -116,7 +117,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, inject, computed, ref, toRefs, reactive, watch, } from 'vue'
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 import { SvInput, SvCheckbox, SvSelect } from 'frontend/components'
 
 const SvSearch = defineAsyncComponent(() => import('frontend/components/molecules/SvSearch/SvSearch.vue'))
@@ -213,7 +214,7 @@ const allInOne = filterFields()
   }]
 })
 
-const isSmall = computed(() => Object.keys(props.form).length < 5)
+const isSmall = computed(() => Object.keys(allInOne).length < 6)
 
 const isTextType = (type: string) => {
   return [

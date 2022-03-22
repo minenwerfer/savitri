@@ -1,5 +1,5 @@
 <template>
-  <sv-box classes="relative shadow-none py-0 bg-white text-gray-600 rounded-none border-b px-4" :fill="true">
+  <div class="relative bg-white text-gray-600 border-b px-4" :fill="true">
     <div class="flex justify-between h-12">
       <sv-breadcumb
         class="hidden md:inline-flex"
@@ -28,15 +28,13 @@
         </sv-bare-button>
       </div>
     </div>
-  </sv-box>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent, inject } from 'vue'
 import { default as webpackVariables } from 'variables'
 import SvBreadcumb from './_internals/components/SvBreadcumb/SvBreadcumb.vue'
-
-const SvBox = defineAsyncComponent(() => import('frontend/components/molecules/SvBox/SvBox.vue'))
 const SvBareButton = defineAsyncComponent(() => import('frontend/components/atoms/SvBareButton/SvBareButton.vue'))
 
 const productLogo = inject('productLogo')

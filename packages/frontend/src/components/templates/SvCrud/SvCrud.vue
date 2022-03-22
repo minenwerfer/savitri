@@ -47,10 +47,10 @@
     <sv-box class="flex-grow">
       <div class="flex">
         <div class="mr-auto">
-          <sv-bare-button @clicked="store.dispatch('meta/spawnReport')" class="opacity-80 text-sm" v-if="description.report">
-            <div class="flex items-center gap-x-1">
-              <unicon name="clipboard" fill="black" class="w-5 h-5"></unicon>
-              <div>Solicitar relatório</div>
+          <sv-bare-button @clicked="store.dispatch('meta/spawnReport')" class="text-sm" v-if="description.report">
+            <div class="flex items-center gap-x-2">
+              <unicon name="clipboard" fill="gray" class="w-5 h-5"></unicon>
+              <div class="h-4 opacity-80">Solicitar relatório</div>
             </div>
           </sv-bare-button>
         </div>
@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { provide, watch, computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import useModule from 'frontend/composables/module'
+import { useModule } from 'frontend/composables'
 import {
   SvBox,
   SvTable,

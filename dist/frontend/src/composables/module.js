@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useModule = void 0;
 const vue_1 = require("vue");
 const helpers_1 = require("common/helpers");
 const entity_1 = require("common/entity");
@@ -31,7 +32,7 @@ const actions = [
     'remove',
     'clear'
 ];
-exports.default = (name, store) => {
+const useModule = (name, store) => {
     const useFields = (fields, except = false) => {
         return (0, helpers_1.fromEntries)(Object.entries(store.getters[`${name}/fields`])
             .filter(([key]) => except ? !fields.includes(key) : fields.includes(key)));
@@ -83,7 +84,7 @@ exports.default = (name, store) => {
         const formatted = firstValue !== undefined
             ? (field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue)
             : '-';
-        return typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
+        return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
             ? formatted.substr(0, field.trim - 3) + '...'
             : formatted;
     };
@@ -132,4 +133,5 @@ exports.default = (name, store) => {
         }), {})
     };
 };
+exports.useModule = useModule;
 //# sourceMappingURL=module.js.map

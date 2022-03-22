@@ -12,10 +12,12 @@
   },
   "individualActions": {
     "download": {
-      "name": "Baixar"
+      "name": "Baixar",
+      "unicon": "cloud-download"
     },
     "remove": {
       "name": "Remover",
+      "unicon": "trash-alt",
       "ask": true
     }
   },
