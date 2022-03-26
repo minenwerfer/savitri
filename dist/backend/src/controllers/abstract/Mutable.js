@@ -88,7 +88,7 @@ class Mutable extends Controller_1.Controller {
         const { _id, ...rest } = props.what;
         const forbidden = (key) => {
             return (this._description.fields[key] || {}).readonly
-                || (this._description.form && this._description.form.includes(key));
+                || (this._description.form && !this._description.form.includes(key));
         };
         const what = typeof _id === 'string' ? Object.entries(rest)
             .filter(([key]) => !forbidden(key))

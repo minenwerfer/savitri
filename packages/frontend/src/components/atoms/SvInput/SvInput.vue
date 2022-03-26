@@ -67,7 +67,7 @@ import { SvBareButton, SvInfo } from 'frontend/components'
 
 const props = defineProps<{
   modelValue?: string
-  value?: string
+  value?: string|number
   type?: string
   placeholder?: string
   mask?: string

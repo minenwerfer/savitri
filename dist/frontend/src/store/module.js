@@ -71,14 +71,17 @@ class Module {
     constructor(route, initialState, initialItemState, description, apiUrl) {
         this._initialState = initialState;
         this._initialItemState = initialItemState;
-        this._filters = {
-            ...this._commonState._filters,
-            ...(this._initialState._filters || {}),
-        },
-            this._description = description;
+        this._description = description;
         if (description?.filters) {
             this._commonState._filters = description.filters;
         }
+        if (initialState.defaultFilters) {
+            Object.assign(this._commonState._filters, initialState.defaultFilters);
+        }
+        this._filters = {
+            ...(this._initialState._filters || {}),
+            ...this._commonState._filters,
+        };
         this._moduleInstance = new Proxy(this, {
             get: (target, key) => {
                 const method = target[key];
@@ -608,11 +611,12 @@ class Module {
                 state.items = result;
             },
             ITEM_INSERT: (state, { result }) => {
-                const found = state.items.filter(({ _id }) => result._id === _id).length > 0;
+                const found = state.items.find(({ _id }) => result._id === _id);
                 if (found) {
-                    state.items = state.items.map((item) => ({
-                        ...(item._id === result._id ? result : item)
-                    }));
+                    // state.items = state.items.map((item: T & { _id: string }) => ({
+                    //   ...(item._id === result._id ? result : item)
+                    // }))
+                    Object.assign(found, result);
                     return;
                 }
                 state.item = result;

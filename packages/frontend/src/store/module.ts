@@ -75,6 +75,7 @@ export interface CommonState {
     filters?: any
   }
   selected: any[]
+  defaultFilters?: any
 }
 
 export const normalizeFilters = (filters: any[]) => {
@@ -138,19 +139,23 @@ export abstract class Module<T=any, Item=any> {
    * @param {object} initialItemState - initial item state
    * @param {string} apiUrl - URL to be used in place of SV_API_URL
    */
-  constructor(route: string, initialState: T, initialItemState: Item, description?: any, apiUrl?: string) {
+  constructor(route: string, initialState: T & CommonState, initialItemState: Item, description?: any, apiUrl?: string) {
     this._initialState = initialState
     this._initialItemState = initialItemState
-
-    this._filters = {
-      ...this._commonState._filters,
-      ...((this._initialState as any)._filters || {}),
-    },
 
     this._description = description
 
     if( description?.filters ) {
       this._commonState._filters = description.filters
+    }
+
+    if( initialState.defaultFilters ) {
+      Object.assign(this._commonState._filters, initialState.defaultFilters)
+    }
+
+    this._filters = {
+      ...((this._initialState as any)._filters || {}),
+      ...this._commonState._filters,
     }
 
     this._moduleInstance = new Proxy(this, {
@@ -795,11 +800,12 @@ private _mutations() {
     },
 
     ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {
-      const found = state.items.filter(({ _id }: any) => result._id === _id).length > 0
+      const found = state.items.find(({ _id }: any) => result._id === _id)
       if( found ) {
-        state.items = state.items.map((item: T & { _id: string }) => ({
-          ...(item._id === result._id ? result : item)
-        }))
+        // state.items = state.items.map((item: T & { _id: string }) => ({
+        //   ...(item._id === result._id ? result : item)
+        // }))
+        Object.assign(found, result)
         return
       }
 

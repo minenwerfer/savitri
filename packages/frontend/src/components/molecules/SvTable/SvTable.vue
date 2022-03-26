@@ -22,14 +22,14 @@
       :key="`column-${rindex}-${cindex}`"
       @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
 
-      :class="`block lg:table-cell truncate cursor-pointer lg:pl-4 lg:py-1 ${field.cellStyle || ''} ${ border && 'border' }`"
+      :class="`block lg:table-cell truncate cursor-pointer lg:pl-4 lg:py-1 ${ border && 'border' }`"
     >
 
       <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm align-middle">
         <div class="font-semibold opacity-60 lg:hidden text-ellipsis truncate">{{ field.label }}</div>
         <div
           v-if="column !== '__custom' && field.type !== 'image'"
-          :class="`grid gap-y-1 opacity-80 justify-end`"
+          :class="`grid gap-y-1 opacity-80 justify-end ${ computedCellStyle(row, field) }`"
           >
           <div :class="cindex === 0 && 'font-semibold opacity-80'">
             <div v-if="field.module === 'file' && row[column]._id" class="mt-2">
@@ -54,7 +54,7 @@
           <img :src="row[column].src" v-if="row[column]?.src" class="w-8 h-8 inline-block" />
         </div>
 
-        <div v-else class="flex gap-x-1 justify-end">
+        <div v-else class="flex gap-x-2 justify-end">
           <sv-bare-button
             v-for="(action, aindex) in columns.__custom.actions"
             :key="`action-${rindex}-${aindex}`"
@@ -153,12 +153,21 @@ blue: 'bg-blue-100'
 }
 
 const computedRowColor = (row: any, rindex: number) => {
-const color = !!props.rowColor && (Object.entries(props.rowColor)
-  .find(([key, value]: [string, any]) => eval(value)(row, rowCtx))||[])[0]
+  const color = !!props.rowColor && (Object.entries(props.rowColor)
+    .find(([key, value]: [string, any]) => eval(value)(row, rowCtx))||[])[0]
 
-return color
-  ? bgColorClasses[color]
-  : ( rindex % 2 !== 0 ? 'bg-white lg:bg-gray-50' : 'bg-white' )
+  return color
+    ? bgColorClasses[color]
+    : ( rindex % 2 !== 0 ? 'bg-white lg:bg-gray-50' : 'bg-white' )
+}
+
+const computedCellStyle = (row: any, field: any) => {
+  if( !field.cellStyle ) {
+    return
+  }
+
+  const cellStyle = eval(field.cellStyle)
+  return cellStyle(row)
 }
 
 const {

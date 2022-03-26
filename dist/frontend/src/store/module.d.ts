@@ -60,6 +60,7 @@ export interface CommonState {
         filters?: any;
     };
     selected: any[];
+    defaultFilters?: any;
 }
 export declare const normalizeFilters: (filters: any[]) => any;
 /**
@@ -86,7 +87,7 @@ export declare abstract class Module<T = any, Item = any> {
      * @param {object} initialItemState - initial item state
      * @param {string} apiUrl - URL to be used in place of SV_API_URL
      */
-    constructor(route: string, initialState: T, initialItemState: Item, description?: any, apiUrl?: string);
+    constructor(route: string, initialState: T & CommonState, initialItemState: Item, description?: any, apiUrl?: string);
     get module(): Module<T, Item>;
     get http(): ProxiedRequestProvider;
     protected route(verb: string): string;
@@ -117,6 +118,7 @@ export declare abstract class Module<T = any, Item = any> {
             filters?: any;
         };
         selected: any[];
+        defaultFilters?: any;
     } & T & {
         _filters: any;
         item: Item;

@@ -83,6 +83,7 @@ class UserController extends Mutable_1.Mutable {
         if (!await user.testPassword(props.password)) {
             throw new Error('incorrect password');
         }
+        delete user.password;
         const token = tokenService_1.TokenService.sign(user.toObject());
         return {
             ...user._doc,

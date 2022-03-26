@@ -74,6 +74,7 @@ export class UserController extends Mutable<UserDocument> {
       throw new Error('incorrect password')
     }
 
+    delete user.password
     const token = TokenService.sign(user.toObject())
     return {
       ...(user as any)._doc,

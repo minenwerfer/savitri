@@ -40,7 +40,7 @@
           <router-view />
         </div>
 
-        <div class="bg-gray-300 text-white text-center order-1" v-if="notice">
+        <div class="bg-orange-300 text-white text-center text-sm font-semibold order-1" v-if="notice">
           {{ notice }}
         </div>
 

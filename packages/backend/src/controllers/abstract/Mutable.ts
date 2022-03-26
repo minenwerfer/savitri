@@ -106,7 +106,7 @@ export abstract class Mutable<T> extends Controller<T> {
 
     const forbidden = (key: string) => {
       return (this._description.fields[key]||{}).readonly
-        || (this._description.form && this._description.form.includes(key))
+        || (this._description.form && !this._description.form.includes(key))
     }
 
     const what = typeof _id === 'string' ? Object.entries(rest)

@@ -157,10 +157,6 @@ watch(() => isInsertVisible.value, (value: boolean) => {
   }
 })
 
-const actionColors = {
-  'remove': 'red',
-}
-
 const buttonAction = (action: string, actionProps: any, filters: any) => {
   return actionProps.ask
     ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filters }}})
@@ -170,7 +166,6 @@ const buttonAction = (action: string, actionProps: any, filters: any) => {
 const individualActions = computed(() => {
   return store.getters[`${props.module}/individualActions`]
     .map((action: any) => ({
-      color: actionColors[action.action] || 'blue',
       click: (filters: any) => buttonAction(action.action, action, filters),
       ...action
     }))

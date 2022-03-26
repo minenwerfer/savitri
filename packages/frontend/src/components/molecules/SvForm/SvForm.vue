@@ -103,7 +103,7 @@
           ...field,
           readonly: true,
           type: isTextType(field.type) ? field.type : 'text',
-          value: formatValue(field.translate ? $t(field.formValue || field.value) : (field.formValue || field.value), undefined, true, field)
+          value: formatValue(field.translate ? $t(field.formValue || (field.value || '')) : (field.formValue || field.value), undefined, true, field)
         }"
 
         :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'lg:w-[25%]'}`"

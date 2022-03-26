@@ -15,13 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, provide, inject } from 'vue'
+import { reactive, provide, inject } from 'vue'
 import { useStore } from 'vuex'
-import { SvForm } from '../index'
-import { SvBareButton } from 'frontend/components'
 import { fromEntries } from 'common/helpers'
-
 import { useModule } from 'frontend/composables'
+import { SvBareButton } from 'frontend/components'
+import { SvForm } from '../index'
 
 const props = defineProps<{
   module: string
@@ -45,8 +44,6 @@ const clear = () => {
   store.commit(`${props.module}/FILTERS_CLEAR`)
   filter()
 }
-
-onMounted(() => store.commit(`${props.module}/FILTERS_CLEAR`))
 
 const {
   availableFilters,
