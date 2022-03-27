@@ -6,6 +6,13 @@
         :form-data="item"
       >
       </sv-form>
+      <sv-button
+        class="mb-4"
+        @clicked="grantEverything"
+        variant="light"
+      >
+        Marcar tudo
+      </sv-button>
       <sv-form
         :form="capabilitiesFields"
         :form-data="item.capabilities"
@@ -66,6 +73,13 @@ if( !accessItem.capabilities ) {
 
 const item = computed(() => accessItem)
 const isLoading = computed(() => store.state.accessProfile.isLoading)
+
+const grantEverything = () => {
+  Object.entries(capabilitiesFields)
+    .forEach(([key, value]: [string, string[]]) => {
+      accessItem.capabilities[key] = value.values.map((v: { value: string }) => v.value)
+    })
+}
 
 const insert = async () => {
   await store.dispatch('accessProfile/insert', { payload: { what: item.value } })

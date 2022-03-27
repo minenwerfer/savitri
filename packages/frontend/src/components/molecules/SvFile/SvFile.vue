@@ -19,8 +19,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
+import { useFile } from 'frontend/composables'
 import { SvBareButton } from 'frontend/components'
-import { SV_API_URL } from 'frontend/store/module'
 
 const props = defineProps<{
   modelValue: any
@@ -34,7 +34,7 @@ const emit = defineEmits<{
 const store = useStore()
 const file = ref(null)
 
-const fileUrl = computed(() => `${SV_API_URL}/download/${(props.modelValue||{})._id}`)
+const fileUrl = computed(() => useFile(props.modelValue).link)
 const isImage = computed(() => /^image\//.test((props.modelValue||{}).mime))
 
 const readFile = (event: any): Promise<any> => new Promise((resolve) => {

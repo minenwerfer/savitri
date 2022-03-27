@@ -7,7 +7,7 @@
         :class="`
           ${
             isFloating
-              ? 'w-full h-full sm:w-3/4 md:w-3/5 lg:w-5/12 sm:h-auto sm:min-h-[30vh] z-10 max-h-screen md:max-h-[95vh]'
+              ? 'w-full h-full md:w-4/5 lg:w-[50em] sm:h-auto sm:min-h-[30vh] z-10 max-h-screen md:max-h-[95vh]'
               : ''
           }
           ${ isFloating && animate ? 'animate-toast' : '' }

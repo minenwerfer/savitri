@@ -23,8 +23,9 @@ const getController = (controller) => {
     const controllerPath = exports.commonControllers.includes(controller)
         ? __dirname
         : `${process.cwd()}/api-assets/controllers`;
+    const controllerFile = `${controller.replace(/\./g, '')}.ctl`;
     const controllerName = `${controller.replace(/\./g, '').capitalize()}Controller`;
-    const Controller = require(`${controllerPath}/${controllerName}`)[controllerName];
+    const Controller = require(`${controllerPath}/${controllerFile}`)[controllerName];
     return Controller;
 };
 exports.getController = getController;

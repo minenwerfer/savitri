@@ -66,5 +66,6 @@ export const descriptionToSchema = <T>({ strict, fields }: any, options = {}, ex
     }
   }
 
-  return new Schema<T>(Object.entries(fields).filter(([, field]: [unknown, any]) => !field.meta).reduce(convert, extra), options)
+  return new Schema<T>(Object.entries(fields).filter(([, field]: [unknown, any]) => !field.meta)
+                       .reduce(convert, extra), options)
 }

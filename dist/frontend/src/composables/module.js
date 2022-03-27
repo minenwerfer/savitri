@@ -1,9 +1,28 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useModule = void 0;
 const vue_1 = require("vue");
 const helpers_1 = require("common/helpers");
-const entity_1 = require("common/entity");
+const Entity = __importStar(require("common/entity"));
 const getters = [
     'item',
     'condensedItem',
@@ -33,105 +52,43 @@ const actions = [
     'clear'
 ];
 const useModule = (name, store) => {
-    const useFields = (fields, except = false) => {
-        return (0, helpers_1.fromEntries)(Object.entries(store.getters[`${name}/fields`])
-            .filter(([key]) => except ? !fields.includes(key) : fields.includes(key)));
+    const description = () => store.state[name].__description;
+    const self = {
+        useFields: (fields, except = false) => {
+            return (0, helpers_1.fromEntries)(Object.entries(store.getters[`${name}/fields`])
+                .filter(([key]) => except ? !fields.includes(key) : fields.includes(key)));
+        },
+        useFieldsExcept: (fields) => {
+            return self.useFields(fields, true);
+        },
+        getIndexes: (key, form = false) => {
+            return Entity.getIndexes(description(), key, form);
+        },
+        getFirstIndex: (key, form = false) => {
+            return Entity.getFirstIndex(description(), key, form);
+        },
+        getFirstValue: (value, key, form = false) => {
+            return Entity.getFirstValue(description(), value, key, form, name);
+        },
+        formatValue: (value, key, form = false, field) => {
+            return Entity.formatValue(description(), value, key, form, field);
+        },
+        resumeItem: (item) => {
+            return Entity.resumeItem(description(), item);
+        },
+        getItemIndex: (item, items) => {
+            return Entity.getItemIndex(item, items, name);
+        },
+        setItem: (item) => {
+            store.commit(`${name}/ITEM_GET`, { result: item });
+        },
+        resumedItem: (0, vue_1.computed)(() => self.resumeItem(store.getters[`${name}/item`])),
+        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`]?.map((i) => self.resumeItem(i))),
+        ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
+        ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),
+        ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})
     };
-    const useFieldsExcept = (fields) => useFields(fields, true);
-    /**
-     * @param {string} value
-     * @param {string} key
-     * @param {boolean} form - tells whether or not the value is being used in a form
-     */
-    const _getIndexes = (key, form = false) => {
-        return (0, entity_1.getIndexes)(store.state[name].__description, key, form);
-    };
-    const getFirstIndex = (key, form = false) => {
-        const fields = _getIndexes(key, form);
-        return (fields || [])[0];
-    };
-    /**
-     * @param {string} value
-     * @param {string} key
-     * @param {boolean} form - tells whether or not the value is being used in a form
-     */
-    const getFirstValue = (value, key, form = false) => {
-        if (!value) {
-            return '-';
-        }
-        const { values } = (store.state[name]?.__description.fields || {})[key] || {};
-        const query = (Array.isArray(values)
-            ? values[0]
-            : values)?.__query || {};
-        const firstField = getFirstIndex(key, form);
-        const source = query.module && !(Array.isArray(value) ? value[0]?._id : value._id)
-            ? store.state[name]._queryCache[query.module].filter(({ _id }) => Array.isArray(value) ? value.includes(_id) : value._id === _id)
-            : value;
-        const extract = (v) => typeof v === 'object' || firstField
-            ? v[firstField]
-            : v;
-        const firstValue = Array.isArray(source)
-            ? source.map((v) => extract(v)).join(', ')
-            : extract(source);
-        return firstValue && typeof firstValue === 'object'
-            ? getFirstValue(firstValue, firstField)
-            : firstValue;
-    };
-    const formatValue = (value, key, form = false, field) => {
-        const firstValue = value && typeof value === 'object'
-            ? ((Array.isArray(value) || value?._id) ? getFirstValue(value, key, form) : Object.values(value)[0])
-            : value;
-        const formatted = firstValue !== undefined
-            ? (field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue)
-            : '-';
-        return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
-            ? formatted.substr(0, field.trim - 3) + '...'
-            : formatted;
-    };
-    const resumeItem = (item) => {
-        return Object.entries(item || {})
-            .reduce((a, [key, value]) => ({
-            ...a,
-            [key]: value && typeof value === 'object' && '_id' in value
-                ? getFirstValue(value, key)
-                : value
-        }), {});
-    };
-    const getItemIndex = (item, items) => {
-        const _id = typeof item === 'object'
-            ? item._id
-            : item;
-        return (items || store.getters[`${name}/items`])
-            .sort((a, b) => a._id > b._id ? -1 : 1)
-            .findIndex((i) => i._id === _id) + 1;
-    };
-    const setItem = (item) => {
-        store.commit(`${name}/ITEM_GET`, { result: item });
-    };
-    return {
-        useFields,
-        useFieldsExcept,
-        getIndexes: _getIndexes,
-        getFirstIndex,
-        getFirstValue,
-        formatValue,
-        resumeItem,
-        resumedItem: (0, vue_1.computed)(() => resumeItem(store.getters[`${name}/item`])),
-        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`]?.map((i) => resumeItem(i))),
-        getItemIndex,
-        setItem,
-        ...getters.reduce((a, k) => ({
-            ...a,
-            [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`])
-        }), {}),
-        ...props.reduce((a, k) => ({
-            ...a,
-            [k]: (0, vue_1.computed)(() => store.state[name][k])
-        }), {}),
-        ...actions.reduce((a, k) => ({
-            ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload)
-        }), {})
-    };
+    return self;
 };
 exports.useModule = useModule;
 //# sourceMappingURL=module.js.map

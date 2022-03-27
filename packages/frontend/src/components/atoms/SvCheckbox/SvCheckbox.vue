@@ -2,7 +2,7 @@
   <div
     :class="`
     rounded
-    py-2
+    py-2 bg-white
     flex items-center
     select-none border
     ${readonly ? 'bg-gray-100' : ''}

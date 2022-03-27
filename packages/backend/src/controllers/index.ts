@@ -22,8 +22,10 @@ export const getController = (controller: string) => {
     ? __dirname
     : `${process.cwd()}/api-assets/controllers`
 
+  const controllerFile = `${controller.replace(/\./g, '')}.ctl`
   const controllerName = `${(controller.replace(/\./g, '') as any).capitalize()}Controller`
-  const Controller = require(`${controllerPath}/${controllerName}`)[controllerName]
+
+  const Controller = require(`${controllerPath}/${controllerFile}`)[controllerName]
 
   return Controller
 }

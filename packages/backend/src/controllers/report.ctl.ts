@@ -2,6 +2,7 @@ const { writeFile } = require('fs').promises
 const path = require('path')
 
 import { fromEntries } from '../../../common/src/helpers'
+import * as Entity from '../../../common/src/entity'
 
 import { ReportDocument, Report, Description } from '../models/Report'
 import { Mutable } from './abstract/Mutable'
@@ -9,20 +10,17 @@ import { getController } from './index'
 
 import { File } from '../models/File'
 
-export interface ReportController {
-  formatMap: any
-}
-
 export class ReportController extends Mutable<ReportDocument> {
+  private readonly _formatMap: any = {
+    'csv': this._saveCSV,
+    'pdf': this._savePDF
+  }
+
   constructor() {
     super(Report, Description, {
       publicMethods: ['getAll']
     })
 
-    this.formatMap = {
-      'csv': this._saveCSV,
-      'pdf': this._savePDF
-    }
   }
 
   private _getFields(description: any) {
@@ -43,29 +41,6 @@ export class ReportController extends Mutable<ReportDocument> {
 
   private _getColumns(fields: any[]) {
     return Object.values(fields).map((f: { label: string }) => f.label)
-  }
-
-  private _formatValue(field: any, value: any) {
-    if(!value || typeof value !== 'object' ) {
-      return value
-    }
-
-    const getFirstValue = (v: any, index: string) => {
-      const entry = Array.isArray(field.values)
-        ? field.values[0]
-        : field.values
-
-      if( entry?.__query ) {
-        return v[entry.__query.index]
-      }
-
-      const i = Array.isArray(index) ? index[0] : index
-      return v[i]
-    }
-
-    return Array.isArray(value)
-      ? value.map((v: any) => getFirstValue(v, field.index)).join(', ')
-      : getFirstValue(value, field.index)
   }
 
   private _filename(ext: string) {
@@ -100,7 +75,7 @@ export class ReportController extends Mutable<ReportDocument> {
       throw new Error('especifique um formato')
     }
 
-    if( !(props.what?.format in this.formatMap) ) {
+    if( !(props.what?.format in this._formatMap) ) {
       throw new Error('formato inválido')
     }
 
@@ -148,11 +123,16 @@ export class ReportController extends Mutable<ReportDocument> {
         .filter(([key]: [string, any]) => key in fields)
         .reduce((a: any, [key, value]: [string, any]) => ({
           ...a,
-          [key]: this._formatValue(fields[key], value)
+          [key]: (() => {
+            const val = Entity.formatValue(description, value, key, false, fields[key])
+            return val.includes(',') && props.what.format === 'csv'
+              ? `"${val}"`
+              : val
+          })()
         }), {})
     })
 
-    const func = this.formatMap[props.what.format]
+    const func = this._formatMap[props.what.format]
     const { filename, mime } = await func.call(this, columns, rows)
 
     props.what.entries_count = rows.length

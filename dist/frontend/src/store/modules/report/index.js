@@ -2,14 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReportModule = void 0;
 const module_1 = require("frontend/store/module");
+const composables_1 = require("frontend/composables");
+const initialItemState = {
+    limit: 150
+};
 class ReportModule extends module_1.Module {
     constructor() {
-        super('report', {}, {});
+        super('report', {}, initialItemState);
     }
     actions() {
         return {
             download: ({}, { payload }) => {
-                window.open(module_1.SV_API_URL + `/download/${payload.filters.file._id}/download`);
+                window.open((0, composables_1.useFile)(payload.filters.file).link);
             }
         };
     }

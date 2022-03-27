@@ -188,7 +188,7 @@ class Module {
         const normalize = (data, value) => data
             .reduce((a, item) => ({
             ...a,
-            [item._id]: item[value.index]
+            [item._id]: item[Array.isArray(value.index) ? value.index[0] : value.index]
         }), {});
         const parse = async ([key, value]) => {
             if (key !== '__query') {

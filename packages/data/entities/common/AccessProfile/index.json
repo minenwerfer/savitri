@@ -46,10 +46,12 @@
     },
     "created_at": {
       "label": "Criado em",
+      "type": "datetime",
       "meta": true
     },
     "updated_at": {
       "label": "Modificado em",
+      "type": "datetime",
       "meta": true
     }
   }

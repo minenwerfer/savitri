@@ -33,7 +33,7 @@
           >
           <div :class="cindex === 0 && 'font-semibold opacity-80'">
             <div v-if="field.module === 'file' && row[column]._id" class="mt-2">
-              <img :src="`${SV_API_URL}/download/${row[column]._id}`" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"/>
+              <img :src="useFile(row[column]).link" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"/>
             </div>
             <div v-else>
               {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
@@ -81,8 +81,7 @@
 <script setup lang="ts">
 import { inject, ref, watch, reactive, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useModule } from 'frontend/composables'
-import { SV_API_URL } from 'frontend/store/module'
+import { useModule, useFile } from 'frontend/composables'
 import { SvBareButton, SvInfo } from 'frontend/components'
 
 const props = defineProps({

@@ -6,7 +6,7 @@ import { getController } from '../src/controllers'
 import { TokenService } from '../src/services/tokenService'
 import { HandlerRequest } from '../src/controllers/abstract/Controller'
 
-import { FileController } from '../src/controllers/FileController'
+import { FileController } from '../src/controllers/file.ctl'
 
 interface Environment {
   PAGINATION_LIMIT?: number;
@@ -103,7 +103,7 @@ export const init = async (port: number = 3000): Promise<Server> => {
 
   server.route({
     method: ['GET'],
-    path: '/api/download/{hash}/{options?}',
+    path: '/api/file/{hash}/{options?}',
     handler: async (request, h) => {
       try {
         const instance = new FileController

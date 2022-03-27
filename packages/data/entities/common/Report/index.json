@@ -56,7 +56,6 @@
     "type": {
       "label": "Tipo",
       "type": "radio",
-      "description": "Relatórios de todo o período são custosos em termos de processamento, portanto utilize essa opção com comedimento. Verifique antes se já não há um relatório pronto na seção 'Relatórios' antes de prosseguir.",
       "values": {
         "filtered_only": "Apenas resultados filtrados",
         "everything": "Todo o período"
@@ -65,7 +64,7 @@
     },
     "limit": {
       "label": "Limite",
-      "description": "Deixe vazio para retornar todos",
+      "description": "Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção 'Relatórios' antes de prosseguir.",
       "type": "number",
       "notable": true
     },

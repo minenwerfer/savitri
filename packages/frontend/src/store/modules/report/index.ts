@@ -1,14 +1,19 @@
-import { Module, SV_API_URL } from 'frontend/store/module'
+import { Module } from 'frontend/store/module'
+import { useFile } from 'frontend/composables'
+
+const initialItemState = {
+  limit: 150
+}
 
 export class ReportModule extends Module<{}, {}> {
   constructor() {
-    super('report', {}, {})
+    super('report', {}, initialItemState)
   }
 
   actions() {
     return {
       download: ({}, { payload }: any) => {
-        window.open(SV_API_URL + `/download/${payload.filters.file._id}/download`)
+        window.open(useFile(payload.filters.file).link)
       }
     }
   }

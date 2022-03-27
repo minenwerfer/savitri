@@ -139,7 +139,7 @@ export abstract class Module<T=any, Item=any> {
    * @param {object} initialItemState - initial item state
    * @param {string} apiUrl - URL to be used in place of SV_API_URL
    */
-  constructor(route: string, initialState: T & CommonState, initialItemState: Item, description?: any, apiUrl?: string) {
+  constructor(route: string, initialState: any, initialItemState: Item, description?: any, apiUrl?: string) {
     this._initialState = initialState
     this._initialItemState = initialItemState
 
@@ -287,7 +287,7 @@ export abstract class Module<T=any, Item=any> {
     const normalize = (data: any, value: any) => data
       .reduce((a: any, item: any) => ({
         ...a,
-        [item._id]: item[value.index]
+        [item._id]: item[Array.isArray(value.index) ? value.index[0] : value.index]
       }), {})
 
     const parse = async ([key, value]: [string, any]) => {

@@ -1,7 +1,7 @@
 <template>
   <img
     v-if="file"
-    :src="`${SV_API_URL}/download/${file._id||file}`"
+    :src="useFile(file).link"
 
     class="object-cover w-full h-full"
   />
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { SV_API_URL } from 'frontend/store/module'
+import { useFile } from 'frontend/composables'
 
 const props = defineProps<{
   file: any

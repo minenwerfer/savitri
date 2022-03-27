@@ -74,7 +74,7 @@ const classes = {
 
   light: `
     border
-    py-1 px-6 rounded transition-all duration-100 ease-in-out transform
+    py-1 px-6 rounded transition-all duration-75 ease-in-out transform
     ${props.disabled || bgHoverColorClasses[props.type||'success'] + ' hover:text-white'}
     ${borderClasses[props.type||'success']} ${textClasses[props.type||'success']}
   `

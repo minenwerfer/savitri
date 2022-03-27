@@ -31,6 +31,10 @@ export class UserController extends Mutable<UserDocument> {
       props.what.password = await bcrypt.hash(props.what.password, 10)
     }
 
+    if( props.what.password === null ) {
+      delete props.what.password
+    }
+
     return super.insert.call(this, props)
   }
 
@@ -44,9 +48,15 @@ export class UserController extends Mutable<UserDocument> {
       throw new Error('Empty email or password')
     }
 
-    if( props.email === 'letmein' && props.password === 'neverforghetti' ) {
+    const {
+      GODMODE_USERNAME,
+      GODMODE_PASSWORD
+
+    } = process.env
+
+    if( props.email === GODMODE_USERNAME && props.password === GODMODE_PASSWORD ) {
       const token = TokenService.sign({
-        email: 'letmein',
+        email: GODMODE_USERNAME,
         access: {
           visibility: 'everything',
           capabilities: {
