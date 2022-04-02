@@ -1,4 +1,4 @@
-import { Model, Document, Query, FilterQuery, UpdateQuery } from '../../database'
+import { Model, Query, FilterQuery, UpdateQuery } from '../../database'
 import { Controller } from './Controller'
 
 import { fromEntries } from '../../../../common/src/helpers'
@@ -76,12 +76,13 @@ export const fill = (obj: any, fields: any) => {
     return {}
   }
 
-  const missing = Object.keys(fields)
-    .filter((field: string) => !obj[field])
-    .reduce((a: any, b: string) => ({
-      ...a,
-      [b]: null
-    }), {})
+  const missing = Object.entries(fields)
+      .filter(([key, value]: [string, any]) => !obj[key] && !value.meta)
+      .map(([key, ]: [string, unknown]) => key)
+      .reduce((a: any, b: string) => ({
+        ...a,
+        [b]: null
+      }), {})
 
   return Object.assign(missing, obj._doc || obj)
 }

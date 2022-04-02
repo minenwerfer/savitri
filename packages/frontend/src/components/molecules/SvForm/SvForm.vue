@@ -38,7 +38,7 @@
               v-bind="{
                 array: true,
                 value: value.value,
-                label: value.label,
+                label: field.translate ? $t(value.label) : value.label,
                 description: value.description,
                 isRadio: field.type === 'radio',
                 readonly: field.readonly
@@ -94,7 +94,7 @@
       </sv-search>
     </div>
 
-    <div v-if="isReadonly" :class="`${ isSmall && 'flex-col' } flex flex-wrap gap-x-4 gap-y-6 text-md`">
+    <div v-if="isReadonly" :class="`${ isSmall && 'flex-col' } flex flex-wrap gap-x-4 gap-y-6`">
       <sv-input
         v-for="([, field], index) in allInOne"
         :key="`module-${index}`"
@@ -176,7 +176,7 @@ watch(module, () => Object.assign(moduleRefs as any, useModule(module.value, sto
 
 const filterFields = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
-    .filter(([, field]: [unknown, any]) => field && !field.noform)
+    .filter(([, field]: [unknown, any]) => field && (!field.noform || props.searchOnly))
     .filter((pair) => !condition || condition(pair))
     .map(([key, field]: [string, any]) => [key, {
       ...field,

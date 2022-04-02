@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.descriptionToSchema = void 0;
 const mongoose_1 = require("mongoose");
+// import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = mongoose_1.Schema.Types;
 const typeMapping = [
     [['text', 'password', 'radio', 'select'], String],
@@ -55,8 +56,16 @@ const descriptionToSchema = ({ strict, fields }, options = {}, extra = {}) => {
             [key]: result
         };
     };
-    return new mongoose_1.Schema(Object.entries(fields).filter(([, field]) => !field.meta)
-        .reduce(convert, extra), options);
+    const initial = {
+    // _id: {
+    //   type: String,
+    //   default: uuidv1
+    // }
+    };
+    const schemaStructure = Object.entries(fields)
+        .filter(([, field]) => !field.meta)
+        .reduce(convert, { ...extra, ...initial });
+    return new mongoose_1.Schema(schemaStructure, options);
 };
 exports.descriptionToSchema = descriptionToSchema;
 //# sourceMappingURL=_Util.js.map

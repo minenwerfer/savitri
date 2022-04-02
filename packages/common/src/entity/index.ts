@@ -83,7 +83,7 @@ export const formatValue = (description: any, value: any, key: string, form: boo
 
   return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
     ? formatted.substr(0, field.trim - 3) + '...'
-    : String(formatted)
+    : String(formatted || '-')
 }
 
 export const resumeItem = (description: any, item: any) => {

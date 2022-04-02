@@ -49,7 +49,8 @@ const actions = [
     'deepInsert',
     'modify',
     'remove',
-    'clear'
+    'clear',
+    'clearAll'
 ];
 const useModule = (name, store) => {
     const description = () => store.state[name].__description;

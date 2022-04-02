@@ -61,7 +61,7 @@ const capabilitiesFields = modules.reduce((a: any, { module, report, methods, ex
     translate: true,
     values: [...(methods || defaultMethods), ...(extraMethods||[]), ...(report ? ['report'] : [])].map((method: any) => ({
       label: method,
-      value: method
+      value: method,
     }))
   }
 }), {})

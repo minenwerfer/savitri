@@ -67,7 +67,7 @@ const fillClasses = {
 const classes = {
   normal: `
     text-white text-center font-bold outline-none
-    py-1 px-6 rounded transition-all delay-200 duration-150 ease-in-out filter
+    py-1 px-4 rounded transition-all delay-200 duration-150 ease-in-out filter
     ${props.disabled || 'hover:brightness-90'}
     ${bgColorClasses[props.type||'success']}
   `,

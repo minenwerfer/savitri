@@ -1,7 +1,7 @@
 <template>
   <a :class="`
     block overflow-hidden bg-white animate-fade
-    border shadow-md rounded-xl
+    border shadow rounded-xl
     ${ disabled ? 'filter grayscale' : 'transition-all transform hover:translate-y-0.5 hover:shadow-none' }
   `">
     <div class="overflow-hidden select-none">

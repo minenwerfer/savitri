@@ -1,19 +1,19 @@
 <template>
-  <div class="flex items-center relative">
-    <div class="text-xl font-bold border-r-2 pr-4 truncate">
-      {{ $tc(getTitle(routes[routes.length-1]), 2).capitalize() }}
-    </div>
-    <div class="flex px-auto items-center truncate flex-0">
-      <sv-bare-button @clicked="$router.push({ name: 'dashboard-home' })">
-        <unicon name="home" fill="purple" class="mr-2" />
-      </sv-bare-button>
+  <div class="flex items-center">
+    <!-- <div class="text-xl font-bold border-r-2 pr-4 truncate"> -->
+    <!--   {{ $tc(getTitle(routes[routes.length-1]), 2).capitalize() }} -->
+    <!-- </div> -->
+    <div class="flex items-center truncate flex-0">
+      <!-- <sv-bare-button @clicked="$router.push({ name: 'dashboard-home' })"> -->
+      <!--   <unicon name="home" fill="gray" class="mr-2" /> -->
+      <!-- </sv-bare-button> -->
       <router-link
-        class="_link text-md"
+        class="_link first:opacity-60"
         v-for="(route, index) in routes"
         :key="`route-${index}`"
         :to="{ name: route.name, params: $route.params }"
-        >
-        {{ $t(getTitle(route)).capitalize() }}
+      >
+        {{ $tc(getTitle(route), 2).capitalize() }}
       </router-link>
     </div>
 

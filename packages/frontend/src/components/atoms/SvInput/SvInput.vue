@@ -34,7 +34,7 @@
 
       <div
         v-if="readonly"
-        class="flex items-center border border-stone-300 transform -translate-x-4 bg-white px-1"
+        class="flex items-center border border-stone-300 transform -translate-x-1 bg-white px-1"
       >
         <sv-info>
           <template #text>Copiar</template>
@@ -121,26 +121,26 @@ const inputValue = ref(props.type === 'datetime'
 
 const classes ={
   normal: `
-      w-full border-box rounded
-      border border-stone-300 focus:border-blue-600
-      bg-white px-3 py-1
-      text-gray-600 outline-none
-      ${props.icon && 'pl-8'}
-      ${props.readonly && 'bg-stone-50'}
+    w-full border-box rounded
+    border border-stone-300 focus:border-gray-600 focus:shadow
+    bg-white px-3 py-1
+    text-gray-600 outline-none
+    ${props.icon && 'pl-8'}
+    ${props.readonly && 'bg-stone-50'}
   `,
 
   light: `
-      w-full border-box 
-      border-b border-stone-400 focus:border-blue-600
-      bg-transparent pb-1
-      text-gray-600 outline-none
-      ${props.icon && 'pl-8'}
-      ${props.readonly && 'bg-stone-50'}
+    w-full border-box 
+    border-b border-stone-400 focus:border-gray-600 focus:shadow
+    bg-transparent pb-1
+    text-gray-600 outline-none
+    ${props.icon && 'pl-8'}
+    ${props.readonly && 'bg-stone-50'}
   `,
 
   bold: `
     w-full border-box rounded
-    border border-gray-300 py-2 focus:border-blue-600
+    border border-gray-300 py-2 focus:border-gray-600 focus:shadow
     outline-none
     ${props.icon && 'pl-10'}
     ${props.readonly ? 'bg-stone-50' : 'bg-white'}

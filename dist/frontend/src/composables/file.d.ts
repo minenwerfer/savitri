@@ -1,4 +1,4 @@
 export declare const useFile: (file: any) => {
-    link: string;
+    link: any;
     download: string;
 };

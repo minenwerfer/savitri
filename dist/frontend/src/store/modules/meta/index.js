@@ -13,7 +13,7 @@ class MetaModule extends module_1.Module {
             globalDescriptions: [],
             viewTitle: '',
             menu: {
-                isVisible: false,
+                isVisible: true,
                 isMobileVisible: false,
             },
             modal: {

@@ -23,10 +23,6 @@ module.exports = {
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif']
       },
-      fontSize: {
-        'base': '.98rem',
-        'md': '.9rem'
-      },
       animation: {
         'fade': 'fade .25s forwards',
         'fadeout': 'fadeout .6s forwards',

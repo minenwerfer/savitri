@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose'
+// import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
 
 const typeMapping: Array<[string[], any]>= [
@@ -15,9 +16,7 @@ const typeMapping: Array<[string[], any]>= [
  * Converts a description object into a mongoose Schema structure.
  */
 export const descriptionToSchema = <T>({ strict, fields }: any, options = {}, extra: any = {}) => {
-
   const convert = (a: any, [key, value]: [string, any]) => {
-
     const query = Array.isArray(value.values||[])
       ? (value.values||[{}])[0]?.__query
       : value.values?.__query
@@ -66,6 +65,16 @@ export const descriptionToSchema = <T>({ strict, fields }: any, options = {}, ex
     }
   }
 
-  return new Schema<T>(Object.entries(fields).filter(([, field]: [unknown, any]) => !field.meta)
-                       .reduce(convert, extra), options)
+  const initial = {
+    // _id: {
+    //   type: String,
+    //   default: uuidv1
+    // }
+  }
+
+  const schemaStructure = Object.entries(fields)
+    .filter(([, field]: [unknown, any]) => !field.meta)
+    .reduce(convert, { ...extra, ...initial })
+
+  return new Schema<T>(schemaStructure, options)
 }

@@ -62,8 +62,9 @@ const fill = (obj, fields) => {
     if (!obj) {
         return {};
     }
-    const missing = Object.keys(fields)
-        .filter((field) => !obj[field])
+    const missing = Object.entries(fields)
+        .filter(([key, value]) => !obj[key] && !value.meta)
+        .map(([key,]) => key)
         .reduce((a, b) => ({
         ...a,
         [b]: null

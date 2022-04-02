@@ -1,6 +1,6 @@
 {
   "name": "savitri",
-  "version": "0.1.5096",
+  "version": "0.1.5103",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,10 @@
     "savitri-bundle": "./frontend/build/compile.js"
   },
   "dependencies": {
+    "@types/uuid": "^8.3.4",
     "backend-core": "file:packages/backend",
     "frontend-core": "file:packages/frontend",
+    "uuid": "^8.3.2",
     "yaml": "^1.10.2"
   },
   "devDependencies": {

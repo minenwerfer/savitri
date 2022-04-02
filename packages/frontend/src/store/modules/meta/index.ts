@@ -67,7 +67,7 @@ export class MetaModule extends Module<Meta, {}> {
       globalDescriptions: [],
       viewTitle: '',
       menu: {
-        isVisible: false,
+        isVisible: true,
         isMobileVisible: false,
       },
       modal: {

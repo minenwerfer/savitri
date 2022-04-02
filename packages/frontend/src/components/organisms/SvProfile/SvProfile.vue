@@ -10,7 +10,7 @@
         </template>
       </sv-picture>
     </div>
-    <div class="opacity-80">
+    <div class="flex flex-col gap-y-2 opacity-80 border-b text-center pb-4">
       <strong class="text-xl">{{ current.name }}</strong>
       <div>Autenticado como: {{ current.access?.name }}</div>
     </div>

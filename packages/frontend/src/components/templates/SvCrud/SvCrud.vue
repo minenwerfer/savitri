@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex gap-2 overflow-x-auto" v-if="description.actions || $slots.actions" :key="module">
+    <div class="flex flex-wrap gap-2 overflow-x-auto" v-if="description.actions || $slots.actions" :key="module">
       <sv-button
         v-for="([action, props], index) in Object.entries(description.actions||{})"
         :key="`action-${index}`"
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, watch, computed, reactive, toRefs } from 'vue'
+import { onUnmounted, provide, watch, computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useModule } from 'frontend/composables'
 import {
@@ -129,6 +129,23 @@ const isReportVisible = computed({
   set: (value: boolean) => store.dispatch(`meta/${value ? 'spawn' : 'close'}Report`)
 })
 
+onUnmounted(() => {
+  const getFilters = () => store.state[props.module]._filters
+  const oldFilters = getFilters()
+  store.commit(`${props.module}/FILTERS_CLEAR`)
+
+  if( Object.keys(oldFilters).length > 0 )
+  {
+    const filters = getFilters()
+    const changed = Object.entries(oldFilters)
+      .some(([key, value]: [string, any]) => filters[key] !== value)
+
+    if( changed ) {
+      moduleRefs.clearAll()
+    }
+  }
+})
+
 watch(() => props.module, async (module: string) => {
   if( !store.getters[`${module}/fields`] ) {
     await store.dispatch(`${module}/describe`)
@@ -142,8 +159,9 @@ watch(() => props.module, async (module: string) => {
 
     store.dispatch(`${module}/getAll`, {
       filters: {
+        ...filters,
         ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[module].defaultFilters : {}),
-        ...filters
+        ...moduleRefs.filters
       },
     })
   }

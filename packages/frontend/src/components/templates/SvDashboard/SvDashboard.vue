@@ -27,7 +27,7 @@
       ></sv-menu>
 
       <div class="relative inline-flex flex-col flex-grow md:w-0 overflow-y-scroll">
-        <div :class="`order-2 ${$route.meta?.noMargin ? '' : 'px-0 md:px-4 pb-6 pt-2'}`">
+        <div :class="`order-2 ${$route.meta?.noMargin || 'px-0 md:px-4 pb-6 pt-2'}`">
           <sv-bare-button
             class="flex mb-8 opacity-60"
             v-if="history.state.back != '/signin' && !$route.meta?.noMargin"
@@ -37,7 +37,9 @@
             <div>Voltar</div>
           </sv-bare-button>
 
-          <router-view />
+          <div :class="$route.meta?.noMargin || 'mt-4'">
+            <router-view />
+          </div>
         </div>
 
         <div class="bg-orange-300 text-white text-center text-sm font-semibold order-1" v-if="notice">

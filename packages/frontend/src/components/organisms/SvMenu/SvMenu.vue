@@ -1,7 +1,7 @@
 <template>
   <div
     :class="`
-      fixed md:sticky top-0 right-0 md:top-[calc(3rem+1px)] w-10/12 h-screen md:h-[calc(100vh-3rem-1px)] z-40
+      fixed md:sticky top-0 right-0 md:top-[calc(3.2rem+1px)] w-10/12 h-screen md:h-[calc(100vh-3.2rem-1px)] z-40
       bg-white border-r
       animate-slip md:animate-slowfade transition-all ease-in-out
       ${ visible ? 'md:w-[17em]' : 'md:w-[50px] overflow-x-hidden' } 

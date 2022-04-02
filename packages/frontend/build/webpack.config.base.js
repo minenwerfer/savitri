@@ -13,7 +13,9 @@ exports.baseWebpackConfig = {
       '.vue'
     ],
     modules: [
-      path.resolve(__dirname, '../node_modules')
+      path.resolve(__dirname, '../node_modules'),
+      path.resolve(global.appDir, './node_modules'),
+      path.resolve(global.appDir, '../node_modules')
     ],
     alias: {
       // shorthand for application directory

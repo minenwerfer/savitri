@@ -30,7 +30,8 @@ const actions = [
   'deepInsert',
   'modify',
   'remove',
-  'clear'
+  'clear',
+  'clearAll'
 ]
 
 export const useModule = (name: string, store: any): any => {

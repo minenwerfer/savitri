@@ -1,24 +1,23 @@
 <template>
-  <div class="relative bg-white text-gray-600 border-b px-4" :fill="true">
-    <div class="flex justify-between h-12">
+  <div class="relative bg-white text-gray-600 border-b px-4">
+    <div class="flex justify-between h-[3.2rem]">
       <sv-breadcumb
         class="hidden md:inline-flex"
-        v-if="webpackVariables.breadcumb"
       ></sv-breadcumb>
 
       <div
         @click="$router.push({ name: 'dashboard-home' })"
-        class="cursor-pointer"
+        class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer inline-flex"
       >
         <div v-if="!productLogo">{{ productName }}</div>
         <img
           v-else
           :src="require(`@/../assets/${productLogo}`).default"
-          class="h-full object-contain py-2"
+          class="h-16 w-24 object-contain"
         />
       </div>
 
-      <div class="flex ml-auto gap-x-4">
+      <div class="flex gap-x-2 md:gap-x-4">
         <slot></slot>
         <sv-bare-button
           @clicked="$store.dispatch('meta/swapMenu')"

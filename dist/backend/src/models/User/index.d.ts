@@ -1,4 +1,4 @@
-/// <reference types="mongoose" />
+/// <reference types="packages/backend/node_modules/mongoose" />
 import { Document } from '../../database';
 import { default as Description } from '../../../../data/entities/common/User/index.json';
 export { Description };
@@ -15,7 +15,7 @@ export interface User {
 export declare type UserDocument = User & Document & {
     testPassword: (password: string) => boolean;
 };
-export declare const UserSchema: import("mongoose").Schema<UserDocument, import("mongoose").Model<UserDocument, any, any, any>, any>;
+export declare const UserSchema: import("mongoose").Schema<UserDocument, import("mongoose").Model<UserDocument, any, any, any>, any, any>;
 /**
  * @exports
  * User model.

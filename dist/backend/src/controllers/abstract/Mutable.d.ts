@@ -1,4 +1,4 @@
-/// <reference types="mongoose" />
+/// <reference types="packages/backend/node_modules/mongoose" />
 import { Model, Query } from '../../database';
 import { Controller } from './Controller';
 export declare const PAGINATION_LIMIT: string | undefined;

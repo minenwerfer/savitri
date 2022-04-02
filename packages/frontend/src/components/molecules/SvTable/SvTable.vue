@@ -1,5 +1,5 @@
 <template>
-  <table class="w-full" v-if="Object.keys(columns).length > 0">
+  <table v-if="Object.keys(columns).length > 0" class="w-full">
     <tr class="leading-9 text-xs uppercase text-left bg-white" v-if="headers">
       <th v-if="module && checkbox" :class="`hidden lg:table-cell w-10 px-2 ${border && 'border'}`">
         <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
@@ -7,7 +7,7 @@
       <th
         v-for="(header, index) in columns"
         :key="`header-${index}`"
-        :class="`hidden lg:table-cell truncate lg:pl-4 ${border && 'border'}`"
+        :class="`hidden lg:table-cell truncate ${!checkbox && 'lg:pl-4'} ${border && 'border'}`"
         >
         {{ header.label || header.placeholder }}
       </th>
@@ -21,8 +21,7 @@
       v-for="([column, field], cindex) in Object.entries(columns)"
       :key="`column-${rindex}-${cindex}`"
       @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
-
-      :class="`block lg:table-cell truncate cursor-pointer lg:pl-4 lg:py-1 ${ border && 'border' }`"
+      :class="`block lg:table-cell truncate cursor-pointer lg:py-1 ${!checkbox && 'lg:pl-4'} ${border && 'border'}`"
     >
 
       <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm align-middle">
@@ -30,7 +29,7 @@
         <div
           v-if="column !== '__custom' && field.type !== 'image'"
           :class="`grid gap-y-1 opacity-80 justify-end ${ computedCellStyle(row, field) }`"
-          >
+        >
           <div :class="cindex === 0 && 'font-semibold opacity-80'">
             <div v-if="field.module === 'file' && row[column]._id" class="mt-2">
               <img :src="useFile(row[column]).link" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"/>
@@ -127,28 +126,28 @@ const moduleRefs = reactive({})
 watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
 
 const selected = computed({
-get: () => store.state[module.value].selected,
-set: (items: any[]) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
+  get: () => store.state[module.value].selected,
+  set: (items: any[]) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
 })
 
 const rowCtx = {
-date: (() => {
-  const date = new Date()
-  date.setHours(0, 0, 0, 0)
-  return date
-})()
+  date: (() => {
+    const date = new Date()
+    date.setHours(0, 0, 0, 0)
+    return date
+  })()
 }
 
 const fgColorClasses = {
-yellow: 'text-yellow-600',
-red: 'text-red-600',
-blue: 'text-blue-600'
+  yellow: 'text-yellow-600',
+  red: 'text-red-600',
+  blue: 'text-blue-600'
 }
 
 const bgColorClasses = {
-yellow: 'bg-yellow-100',
-red: 'bg-red-100',
-blue: 'bg-blue-100'
+  yellow: 'bg-yellow-100',
+  red: 'bg-red-100',
+  blue: 'bg-blue-100'
 }
 
 const computedRowColor = (row: any, rindex: number) => {
@@ -170,8 +169,8 @@ const computedCellStyle = (row: any, field: any) => {
 }
 
 const {
-getIndexes,
-formatValue,
+  getIndexes,
+  formatValue,
 
 } = toRefs(moduleRefs)
 </script>

@@ -1,4 +1,4 @@
-/// <reference types="mongoose" />
+/// <reference types="packages/backend/node_modules/mongoose" />
 import { Document } from '../../database';
 import { default as Description } from '../../../../data/entities/common/File/index.json';
 export { Description };
@@ -14,5 +14,5 @@ export interface FileDocument extends Document {
     last_modified: Date;
     immutable: boolean;
 }
-export declare const FileSchema: import("mongoose").Schema<FileDocument, import("mongoose").Model<FileDocument, any, any, any>, any>;
+export declare const FileSchema: import("mongoose").Schema<FileDocument, import("mongoose").Model<FileDocument, any, any, any>, any, any>;
 export declare const File: import("mongoose").Model<FileDocument, {}, {}, {}>;

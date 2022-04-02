@@ -1,5 +1,5 @@
 <template>
-  <div class="grid place-items-center w-screen h-screen bg-gray-100">
+  <div class="grid place-items-center h-screen bg-gray-100">
     <div class="flex flex-col gap-y-5 w-11/12 sm:w-5/6 md:w-4/6 lg:w-1/2 xl:w-1/3">
       <img
         :src="require('@/../assets/logo.png').default"
