@@ -1,4 +1,4 @@
-/// <reference types="packages/backend/node_modules/mongoose" />
+/// <reference types="mongoose" />
 import { Document } from '../../database';
 import { default as Description } from '../../../../data/entities/common/Notification/index.json';
 export { Description };
@@ -12,5 +12,5 @@ export interface NotificationDocument extends Document {
     action: string;
     subject: string;
 }
-export declare const NotificationSchema: import("mongoose").Schema<NotificationDocument, import("mongoose").Model<NotificationDocument, any, any, any>, any, any>;
+export declare const NotificationSchema: import("mongoose").Schema<NotificationDocument, import("mongoose").Model<NotificationDocument, any, any, any>, any>;
 export declare const Notification: import("mongoose").Model<NotificationDocument, {}, {}, {}>;

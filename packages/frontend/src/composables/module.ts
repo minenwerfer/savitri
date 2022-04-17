@@ -36,7 +36,7 @@ const actions = [
 
 export const useModule = (name: string, store: any): any => {
 
-  const description = () => store.state[name].__description
+  const description = () => store.state[name]?.__description||{}
 
   const self: any = {
     useFields: (fields: string[], except = false) => {
@@ -76,12 +76,14 @@ export const useModule = (name: string, store: any): any => {
       store.commit(`${name}/ITEM_GET`, { result: item })
     },
 
-    resumedItem: computed(() => self.resumeItem(store.getters[`${name}/item`])),
-    resumedItems: computed(() => store.getters[`${name}/items`]?.map((i: any) => self.resumeItem(i))),
+    ...(name ? {
+      resumedItem: computed(() => self.resumeItem(store.getters[`${name}/item`])),
+      resumedItems: computed(() => store.getters[`${name}/items`]?.map((i: any) => self.resumeItem(i))),
 
-    ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
-    ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),
-    ...actions.reduce((a, k: string) => ({ ...a, [k]: (payload: any) => store.dispatch(`${name}/${k}`, payload) }), {})
+      ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
+      ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),
+      ...actions.reduce((a, k: string) => ({ ...a, [k]: (payload: any) => store.dispatch(`${name}/${k}`, payload) }), {})
+    }: {})
   }
 
     return self

@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const bcrypt = __importStar(require("bcrypt"));
 const User_1 = require("../models/User");
-const tokenService_1 = require("../services/tokenService");
+const token_svc_1 = require("../services/token.svc");
 const Mutable_1 = require("./abstract/Mutable");
 const path = require('path');
 const buildConfig = require(path.join(process.cwd(), 'build.json'));
@@ -57,12 +57,12 @@ class UserController extends Mutable_1.Mutable {
      * @param {string} password - plain text password
      */
     async authenticate(props) {
-        if (!props.email || !props.password) {
+        if (!props.email) {
             throw new Error('Empty email or password');
         }
         const { GODMODE_USERNAME, GODMODE_PASSWORD } = process.env;
         if (props.email === GODMODE_USERNAME && props.password === GODMODE_PASSWORD) {
-            const token = tokenService_1.TokenService.sign({
+            const token = token_svc_1.TokenService.sign({
                 email: GODMODE_USERNAME,
                 access: {
                     visibility: 'everything',
@@ -88,7 +88,7 @@ class UserController extends Mutable_1.Mutable {
             throw new Error('incorrect password');
         }
         delete user.password;
-        const token = tokenService_1.TokenService.sign(user.toObject());
+        const token = token_svc_1.TokenService.sign(user.toObject());
         return {
             ...user._doc,
             password: undefined,

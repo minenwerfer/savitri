@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Module = exports.normalizeFilters = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
+exports.Module = exports.normalizeValues = exports.normalizeFilters = exports.SV_API_URL_2 = exports.SV_API_URL = void 0;
 const http_1 = require("common/http");
 const helpers_1 = require("common/helpers");
 const variables_1 = __importDefault(require("variables"));
@@ -26,6 +26,28 @@ const normalizeFilters = (filters) => {
     }, {});
 };
 exports.normalizeFilters = normalizeFilters;
+const normalizeValues = (values) => {
+    if (Array.isArray(values)) {
+        return values.reduce((a, value) => ({
+            ...a,
+            [value]: {
+                value,
+                label: value
+            }
+        }), {});
+    }
+    return Object.entries(values)
+        .reduce((a, [key, value]) => ({
+        ...a,
+        [key]: {
+            value: key,
+            ...(typeof value === 'string'
+                ? { label: value }
+                : value)
+        }
+    }), {});
+};
+exports.normalizeValues = normalizeValues;
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.
@@ -414,27 +436,6 @@ class Module {
                 }), {});
             },
             fields: (state) => {
-                const normalizeValues = (values) => {
-                    if (Array.isArray(values)) {
-                        return values.reduce((a, value) => ({
-                            ...a,
-                            [value]: {
-                                value,
-                                label: value
-                            }
-                        }), {});
-                    }
-                    return Object.entries(values)
-                        .reduce((a, [key, value]) => ({
-                        ...a,
-                        [key]: {
-                            value: key,
-                            ...(typeof value === 'string'
-                                ? { label: value }
-                                : value)
-                        }
-                    }), {});
-                };
                 return Object.entries(state._description?.fields || {})
                     .reduce((a, [key, value]) => ({
                     ...a,
@@ -443,7 +444,7 @@ class Module {
                         type: ![undefined].includes(value.type)
                             ? value.type : typeof value.module === 'string'
                             ? 'module' : 'text',
-                        ...(!!value.values ? { values: normalizeValues(value.values) } : {})
+                        ...(!!value.values ? { values: (0, exports.normalizeValues)(value.values) } : {})
                     }
                 }), {});
             }
@@ -459,9 +460,10 @@ class Module {
             get: (...args) => {
                 const func = this._actionHelper('get', 'ITEM_GET');
                 const [{ state }] = args;
+                const { force } = args[1] || {};
                 const every = (target, filters) => Object.entries(filters)
                     .every(([key, value]) => target[key] === value);
-                const found = state.items.find((item) => every(item, args[1].filters));
+                const found = !force && state.items.find((item) => every(item, args[1].filters));
                 return !found
                     ? func.apply(this, args)
                     : found;
@@ -527,7 +529,10 @@ class Module {
                     : (typeof page === 'string' && /^(\+|-)[0-9]+$/.test(page) ? eval(`${prevOffset}${page}`) : 0);
                 return dispatch('getAll', {
                     offset: (newOffset - 1) * state._limit,
-                    filters: getters.filters,
+                    filters: {
+                        ...(state._description.filters || {}),
+                        ...getters.filters
+                    },
                     limit
                 })
                     .then((res) => {
@@ -561,7 +566,7 @@ class Module {
                     fields: await this._parseQuery(description.fields, false)
                 };
                 state.__description = description;
-                if (!state.item) {
+                if (!state.item || Object.keys(state.item).length === 0) {
                     state.item = Object.entries(description.fields || {})
                         .filter(([, value]) => typeof value.module === 'string' || value.type === 'object')
                         .reduce((a, [key, value]) => ({
@@ -611,6 +616,7 @@ class Module {
                 state.items = result;
             },
             ITEM_INSERT: (state, { result }) => {
+                state.item = result;
                 const found = state.items.find(({ _id }) => result._id === _id);
                 if (found) {
                     // state.items = state.items.map((item: T & { _id: string }) => ({
@@ -619,7 +625,6 @@ class Module {
                     Object.assign(found, result);
                     return;
                 }
-                state.item = result;
                 state.items = [
                     result,
                     ...state.items,

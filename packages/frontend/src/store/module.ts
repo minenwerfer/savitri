@@ -80,17 +80,41 @@ export interface CommonState {
 
 export const normalizeFilters = (filters: any[]) => {
   return filters
-    .reduce((a: any, b: any) => {
-      const filter = typeof b !== 'string'
-        ? { [b.field]: b.default||'' }
-        : { [b]: '' }
+  .reduce((a: any, b: any) => {
+    const filter = typeof b !== 'string'
+      ? { [b.field]: b.default||'' }
+      : { [b]: '' }
 
       return {
         ...a,
         ...filter
       }
-    }, {})
+  }, {})
 }
+
+export const normalizeValues = (values: any|any[]) => {
+  if( Array.isArray(values) ) {
+    return values.reduce((a, value) => ({
+      ...a,
+      [value]: {
+        value,
+        label: value
+      }
+    }), {})
+  }
+
+  return Object.entries(values)
+  .reduce((a, [key, value]: [string, any]) => ({
+    ...a,
+    [key]: {
+      value: key,
+      ...(typeof value === 'string'
+        ? { label: value }
+        : value)
+    }
+  }), {})
+}
+
 
 /**
  * @exports @abstract @class
@@ -566,29 +590,6 @@ export abstract class Module<T=any, Item=any> {
 
       fields: (state: CommonState) => {
 
-        const normalizeValues = (values: any|any[]) => {
-          if( Array.isArray(values) ) {
-            return values.reduce((a, value) => ({
-              ...a,
-              [value]: {
-                value,
-                label: value
-              }
-            }), {})
-          }
-
-          return Object.entries(values)
-          .reduce((a, [key, value]: [string, any]) => ({
-            ...a,
-            [key]: {
-              value: key,
-              ...(typeof value === 'string'
-                 ? { label: value }
-                 : value)
-            }
-          }), {})
-        }
-
         return Object.entries(state._description?.fields||{})
           .reduce((a: object, [key, value]: [string, any]) => ({
             ...a,
@@ -618,10 +619,12 @@ export abstract class Module<T=any, Item=any> {
         const func = this._actionHelper<Item>('get', 'ITEM_GET')
         const [{ state }]: [ActionProps, unknown] = args
 
+        const { force } = args[1] || {}
+
         const every = (target: any, filters: any) => Object.entries(filters)
           .every(([key, value]: [string, any]) => target[key] === value)
 
-        const found = state.items.find((item: Item) => every(item, args[1].filters)) 
+        const found = !force && state.items.find((item: Item) => every(item, args[1].filters)) 
         return !found
           ? func.apply(this, args)
           : found
@@ -704,7 +707,10 @@ export abstract class Module<T=any, Item=any> {
 
       return dispatch('getAll', {
         offset: (newOffset-1) * state._limit,
-        filters: getters.filters,
+        filters: {
+          ...(state._description.filters||{}),
+          ...getters.filters
+        },
         limit
       })
         .then((res: any) => {
@@ -744,7 +750,7 @@ private _mutations() {
 
       state.__description = description
 
-      if( !state.item ) {
+      if( !state.item || Object.keys(state.item).length === 0 ) {
         state.item = Object.entries(description.fields||{})
           .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
           .reduce((a, [key, value]: [string, any]) => ({
@@ -800,6 +806,7 @@ private _mutations() {
     },
 
     ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {
+      state.item = result
       const found = state.items.find(({ _id }: any) => result._id === _id)
       if( found ) {
         // state.items = state.items.map((item: T & { _id: string }) => ({
@@ -809,7 +816,6 @@ private _mutations() {
         return
       }
 
-      state.item = result
       state.items = [
         result,
         ...state.items,

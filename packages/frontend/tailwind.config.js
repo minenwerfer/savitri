@@ -30,6 +30,7 @@ module.exports = {
         'overlay': 'overlay .2s forwards',
         'toast': 'toast .15s forwards',
         'slip': 'slip .10s forwards',
+        'grow': 'grow .25s forwards'
       },
       boxShadow: {
         'foldl': '0 10px 15px -3px rgba(0, 0, 0, 0.1) 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
@@ -56,6 +57,10 @@ module.exports = {
           '0%': { transform: 'translateX(20%)' },
           '100%': { transform: 'translateX(0)' }
         },
+        'grow': {
+          '0%': { transform: 'scale(.85)' },
+          '100%': { transform: 'scale(1)' },
+        }
       },
       colors: {
         success: colors.green,

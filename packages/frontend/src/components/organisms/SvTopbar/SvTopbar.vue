@@ -1,6 +1,6 @@
 <template>
   <div class="relative bg-white text-gray-600 border-b px-4">
-    <div class="flex justify-between h-[3.2rem]">
+    <div class="flex justify-end md:justify-between h-[3.2rem]">
       <sv-breadcumb
         class="hidden md:inline-flex"
       ></sv-breadcumb>
@@ -13,7 +13,7 @@
         <img
           v-else
           :src="require(`@/../assets/${productLogo}`).default"
-          class="h-16 w-24 object-contain"
+          class="h-10 w-24 object-contain"
         />
       </div>
 
@@ -23,7 +23,7 @@
           @clicked="$store.dispatch('meta/swapMenu')"
           class="block md:hidden"
         >
-          <unicon name="bars" fill="gray"></unicon>
+          <sv-icon name="bars" fill="gray"></sv-icon>
         </sv-bare-button>
       </div>
     </div>
@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, inject } from 'vue'
 import { default as webpackVariables } from 'variables'
+import { SvIcon } from 'frontend/components'
 import SvBreadcumb from './_internals/components/SvBreadcumb/SvBreadcumb.vue'
 const SvBareButton = defineAsyncComponent(() => import('frontend/components/atoms/SvBareButton/SvBareButton.vue'))
 

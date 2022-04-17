@@ -1,0 +1,78 @@
+{
+    "module": "user",
+    "route": true,
+    "unicon": "user-circle",
+    "presets": [
+        "crud"
+    ],
+    "individualActions": {
+        "spawnChangePwd": {
+            "name": "Mudar senha",
+            "unicon": "key-skeleton"
+        }
+    },
+    "fields": {
+        "name": {
+            "label": "Nome",
+            "type": "text",
+            "required": true
+        },
+        "first_name": {
+            "label": "Nome",
+            "type": "text",
+            "notable": true,
+            "noform": true
+        },
+        "access": {
+            "label": "Preset de acesso",
+            "type": "select",
+            "values": {
+                "__query": {
+                    "module": "accessProfile",
+                    "index": "name"
+                }
+            },
+            "required": true
+        },
+        "email": {
+            "label": "Email",
+            "type": "text",
+            "unique": true,
+            "required": true
+        },
+        "password": {
+            "label": "Senha",
+            "type": "password",
+            "hidden": true,
+            "noform": true,
+            "notable": true
+        },
+        "active": {
+            "label": "Ativo",
+            "type": "boolean",
+            "default": true
+        },
+        "phone": {
+            "label": "Telefone",
+            "type": "text",
+            "mask": "(##) #####-####"
+        },
+        "picture": {
+            "module": "file",
+            "label": "Foto de perfil",
+            "index": "filename",
+            "cellStyle": "() => `border rounded-full overflow-hidden`"
+        },
+        "group": {
+            "label": "Grupo",
+            "type": "text",
+            "noform": true,
+            "notable": true
+        },
+        "updated_at": {
+            "label": "Atualizado em",
+            "type": "datetime",
+            "meta": true
+        }
+    }
+}

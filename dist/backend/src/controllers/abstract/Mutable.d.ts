@@ -1,4 +1,4 @@
-/// <reference types="packages/backend/node_modules/mongoose" />
+/// <reference types="mongoose" />
 import { Model, Query } from '../../database';
 import { Controller } from './Controller';
 export declare const PAGINATION_LIMIT: string | undefined;
@@ -12,11 +12,6 @@ export declare type MultipleQuery<T> = Query<(T & {
 })[], T & {
     _id: any;
 }, {}, T>;
-export declare const depopulateChildren: (item: any) => any;
-export declare const depopulate: (item: any, description: any) => any;
-export declare const select: (obj: any, fields: string[]) => any;
-export declare const project: (item: any, props: any) => any;
-export declare const fill: (obj: any, fields: any) => any;
 export declare abstract class Mutable<T> extends Controller<T> {
     /**
      * @constructor
@@ -41,6 +36,7 @@ export declare abstract class Mutable<T> extends Controller<T> {
      */
     get(props: {
         filters?: object;
+        project?: string | string[];
     }, response?: unknown, decodedToken?: any): Promise<any>;
     /**
      * @method

@@ -22,26 +22,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = void 0;
 const Hapi = __importStar(require("@hapi/hapi"));
 require("../../common/src/polyfill");
-const controllers_1 = require("../src/controllers");
-const tokenService_1 = require("../src/services/tokenService");
-const file_ctl_1 = require("../src/controllers/file.ctl");
+const controller_1 = require("../src/controller");
+const token_svc_1 = require("../src/services/token.svc");
+const file_ctl_1 = require("../entities/file/file.ctl");
 async function handler(request, h) {
     try {
         const { params: { controller, verb } } = request;
         if (/^_/.test(verb)) {
             throw new Error('cannot call private method');
         }
-        const Controller = (0, controllers_1.getController)(controller);
+        const Controller = (0, controller_1.getController)(controller);
         const instance = new Controller;
         if (!(verb in instance)) {
             throw new Error('invalid verb');
         }
         const token = request.headers.authorization
-            ? tokenService_1.TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
+            ? token_svc_1.TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
             : {};
         // use webinterface whenever it's available
         const result = await (instance.webInterface || instance)[verb](request, h, token);
-        if (/_?get/i.test(verb) && !result) {
+        if (/_?get$/i.test(verb) && Object.keys(result).length === 0) {
             throw new Error('item not found');
         }
         const mime = instance.rawType(verb);

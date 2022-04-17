@@ -11,7 +11,7 @@
 
     <sv-bare-button @clicked="store.dispatch('meta/swapMenu')" class="hidden md:block w-full">
       <div class="flex gap-x-1 items-center transform-all opacity-80 h-12 pl-[5px]">
-        <unicon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-10 h-10`"></unicon>
+        <sv-icon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-10 h-10`"></sv-icon>
         <div v-if="visible" class="text-sm">
           Recolher
         </div>
@@ -38,14 +38,14 @@
 
             :class="`
               flex items-center pl-[12px] py-[10px] hover:bg-blue-100 active:no-underline w-full
-              border-l-4 md:border-r-4 md:border-l-0 
+              border-l-4 md:border-r-4 md:border-l-0
               ${visible && 'gap-x-3'}
               ${isCurrent(subroute) ? 'border-blue-500 bg-blue-50' : 'border-transparent'}
           `">
-            <unicon
+            <sv-icon
               :name="subroute.meta?.unicon || 'file'"
               :fill="isCurrent(subroute) ? 'blue' : 'gray'"
-            ></unicon>
+            ></sv-icon>
             <div :class="`whitespace-nowrap ${visible || 'md:invisible w-0'}`">
               {{ $tc(subroute.meta.title, 2).capitalize() }}
             </div>
@@ -67,7 +67,13 @@
 import { ref, watch, inject } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { SvBareButton, SvOverlay } from 'frontend/components'
+import {
+  SvBareButton,
+  SvOverlay,
+  SvIcon
+
+} from 'frontend/components'
+
 import { Route } from 'frontend/router'
 
 const props = defineProps<{

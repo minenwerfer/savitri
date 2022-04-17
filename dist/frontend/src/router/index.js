@@ -36,7 +36,7 @@ exports.publicRoutes = [
     {
         path: '/',
         name: 'landing',
-        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvLanding/SvLanding.vue'))),
+        redirect: '/signin',
         meta: { title: 'Página inicial', hidden: true, }
     },
     {

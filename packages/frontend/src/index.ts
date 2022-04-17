@@ -38,6 +38,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   const store = createStore()
   const router = createRouter(store)
+  const _i18n = useI18n(i18n)
 
   if( routerExtension ) {
     extendRouter(router, routerExtension)
@@ -51,7 +52,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   app.use(router as any)
   app.use(store as any)
-  app.use(useI18n(i18n))
+  app.use(_i18n)
 
   app.provide('menuSchema', menuSchema)
   app.provide('i18n', i18n)
@@ -72,6 +73,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
   Object.assign(window, {
     _router: router,
     _store: store,
+    _i18n
   })
 
   // initializes storage singleton

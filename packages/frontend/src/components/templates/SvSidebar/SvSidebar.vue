@@ -8,7 +8,7 @@
             {{ $store.state.meta.sidebar.title }}
           </strong>
           <sv-bare-button @clicked="close">
-            <unicon name="arrow-to-right" fill="black"></unicon>
+            <sv-icon name="arrow-to-right" fill="black"></sv-icon>
           </sv-bare-button>
         </div>
 
@@ -30,7 +30,8 @@ import {
   SvBareButton,
   SvReleases,
   SvProfile,
-  SvNotifications
+  SvNotifications,
+  SvIcon
 
 
 } from 'frontend/components'

@@ -9,25 +9,27 @@
         ></inline-svg>
       </div>
     </div> 
-    <sv-box :key="fields" class="flex-grow xl:order-1">
-      <sv-form
-        :form="useFieldsExcept(['access', 'password'])"
-        :form-data="item"
-      ></sv-form>
+    <sv-box :key="fields" class="flex-grow">
+      <div class="flex flex-col gap-y-6 xl:order-1">
+        <sv-form
+          :form="useFieldsExcept(['access', 'password'])"
+          :form-data="item"
+        ></sv-form>
 
-      <div class="flex gap-x-4">
-        <sv-button
-          @clicked="insert"
-          :disabled="isLoading"
-        >
-          Salvar
-        </sv-button>
-        <sv-bare-button
-          @clicked="$router.push({ name: 'dashboard-user-changepass' })"
-          class="text-blue-500"
-        >
-          Mudar senha
-        </sv-bare-button>
+        <div class="flex gap-x-4">
+          <sv-button
+            @clicked="insert"
+            :disabled="isLoading"
+          >
+            Salvar
+          </sv-button>
+          <sv-bare-button
+            @clicked="$router.push({ name: 'dashboard-user-changepass' })"
+            class="text-blue-500"
+          >
+            Mudar senha
+          </sv-bare-button>
+        </div>
       </div>
     </sv-box>
   </div>

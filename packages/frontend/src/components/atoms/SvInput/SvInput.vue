@@ -29,7 +29,7 @@
             : 'absolute top-0 left-0'
         "
       >
-        <unicon :name="icon" fill="gray"></unicon>
+        <sv-icon :name="icon" fill="gray"></sv-icon>
       </div>
 
       <div
@@ -39,7 +39,7 @@
         <sv-info>
           <template #text>Copiar</template>
           <sv-bare-button @clicked="copy(inputValue || value)">
-            <unicon name="clipboard" fill="gray" class="w-5 h-5"></unicon>
+            <sv-icon name="clipboard" fill="gray" class="w-5 h-5"></sv-icon>
           </sv-bare-button>
         </sv-info>
       </div>
@@ -63,7 +63,12 @@ import { ref, inject } from 'vue'
 import { useStore } from 'vuex'
 import { maska as vMaska } from 'maska'
 import { copyToClipboard } from 'frontend/helpers'
-import { SvBareButton, SvInfo } from 'frontend/components'
+import {
+  SvBareButton,
+  SvInfo,
+  SvIcon
+
+} from 'frontend/components'
 
 const props = defineProps<{
   modelValue?: string
@@ -141,7 +146,7 @@ const classes ={
   bold: `
     w-full border-box rounded
     border border-gray-300 py-2 focus:border-gray-600 focus:shadow
-    outline-none
+    outline-none px-3
     ${props.icon && 'pl-10'}
     ${props.readonly ? 'bg-stone-50' : 'bg-white'}
   `

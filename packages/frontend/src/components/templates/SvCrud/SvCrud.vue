@@ -49,7 +49,7 @@
         <div class="mr-auto">
           <sv-bare-button @clicked="store.dispatch('meta/spawnReport')" class="text-sm" v-if="description.report">
             <div class="flex items-center gap-x-2">
-              <unicon name="clipboard" fill="gray" class="w-5 h-5"></unicon>
+              <sv-icon name="clipboard" fill="gray" class="w-5 h-5"></sv-icon>
               <div class="h-4 opacity-80">Solicitar relatório</div>
             </div>
           </sv-bare-button>
@@ -97,6 +97,7 @@
 <script setup lang="ts">
 import { onUnmounted, provide, watch, computed, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 import { useModule } from 'frontend/composables'
 import {
   SvBox,
@@ -106,7 +107,8 @@ import {
   SvPagination,
   SvFilter,
   SvBareButton,
-  SvReport
+  SvReport,
+  SvIcon
 
 } from 'frontend/components'
 
@@ -117,6 +119,8 @@ const props = defineProps<{
 }>()
 
 const store = useStore()
+const router = useRouter()
+const { hash } = useRoute()
 const moduleRefs = reactive({})
 
 provide('module', computed(() => props.module))
@@ -130,6 +134,10 @@ const isReportVisible = computed({
 })
 
 onUnmounted(() => {
+  if( !hash.split(',').includes('refresh') ) {
+    return
+  }
+
   const getFilters = () => store.state[props.module]._filters
   const oldFilters = getFilters()
   store.commit(`${props.module}/FILTERS_CLEAR`)
@@ -160,8 +168,8 @@ watch(() => props.module, async (module: string) => {
     store.dispatch(`${module}/getAll`, {
       filters: {
         ...filters,
+        ...moduleRefs.filters,
         ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[module].defaultFilters : {}),
-        ...moduleRefs.filters
       },
     })
   }
@@ -176,6 +184,11 @@ watch(() => isInsertVisible.value, (value: boolean) => {
 })
 
 const buttonAction = (action: string, actionProps: any, filters: any) => {
+  if( action.split('/')[0] === 'route' ) {
+    moduleRefs.setItem(filters)
+    return router.push({ name: action.split('/')[1], params: { id: filters._id } })
+  }
+
   return actionProps.ask
     ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filters }}})
     : store.dispatch(`${props.module}/${action}`, { payload: { filters  }})

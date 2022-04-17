@@ -1,7 +1,7 @@
 <template>
   <div class="grid gap-y-1">
     <div>
-      <img v-if="isImage" :src="fileUrl" class="w-80 object-cover" />
+      <img v-if="isImage" :src="fileUrl" class="w-80 object-cover border" />
       <sv-bare-button
         v-if="(modelValue||{})._id"
         @clicked="download(modelValue._id)"

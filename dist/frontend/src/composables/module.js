@@ -53,7 +53,7 @@ const actions = [
     'clearAll'
 ];
 const useModule = (name, store) => {
-    const description = () => store.state[name].__description;
+    const description = () => store.state[name]?.__description || {};
     const self = {
         useFields: (fields, except = false) => {
             return (0, helpers_1.fromEntries)(Object.entries(store.getters[`${name}/fields`])
@@ -83,11 +83,13 @@ const useModule = (name, store) => {
         setItem: (item) => {
             store.commit(`${name}/ITEM_GET`, { result: item });
         },
-        resumedItem: (0, vue_1.computed)(() => self.resumeItem(store.getters[`${name}/item`])),
-        resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`]?.map((i) => self.resumeItem(i))),
-        ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
-        ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),
-        ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})
+        ...(name ? {
+            resumedItem: (0, vue_1.computed)(() => self.resumeItem(store.getters[`${name}/item`])),
+            resumedItems: (0, vue_1.computed)(() => store.getters[`${name}/items`]?.map((i) => self.resumeItem(i))),
+            ...getters.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.getters[`${name}/${k}`]) }), {}),
+            ...props.reduce((a, k) => ({ ...a, [k]: (0, vue_1.computed)(() => store.state[name][k]) }), {}),
+            ...actions.reduce((a, k) => ({ ...a, [k]: (payload) => store.dispatch(`${name}/${k}`, payload) }), {})
+        } : {})
     };
     return self;
 };

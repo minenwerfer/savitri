@@ -23,12 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.options = exports.mongoose = void 0;
-__exportStar(require("./src/controllers/abstract/Mutable"), exports);
-__exportStar(require("./src/controllers/abstract/Controller"), exports);
-__exportStar(require("./src/models/_Util"), exports);
+__exportStar(require("./src/controller"), exports);
+__exportStar(require("./src/entity"), exports);
 exports.mongoose = __importStar(require("./src/database"));
 var database_1 = require("./src/database");
 Object.defineProperty(exports, "options", { enumerable: true, get: function () { return database_1.options; } });
-__exportStar(require("./src/services"), exports);
-__exportStar(require("./src/descriptions"), exports);
 //# sourceMappingURL=index.js.map

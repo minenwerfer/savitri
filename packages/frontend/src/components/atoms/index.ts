@@ -14,3 +14,4 @@ export { default as SvToast } from 'frontend/components/atoms/SvToast/SvToast.vu
 export { default as SvProse } from 'frontend/components/atoms/SvProse/SvProse.vue'
 export { default as SvInfo } from 'frontend/components/atoms/SvInfo/SvInfo.vue'
 export { default as SvPicture } from 'frontend/components/atoms/SvPicture/SvPicture.vue'
+export { default as SvIcon } from 'frontend/components/atoms/SvIcon/SvIcon.vue'

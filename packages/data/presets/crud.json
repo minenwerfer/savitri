@@ -1,0 +1,19 @@
+{
+  "actions": {
+    "spawnAdd": {
+      "name": "Adicionar",
+      "unicon": "plus"
+    }
+  },
+  "individualActions": {
+    "spawnEdit": {
+      "name": "Editar",
+      "unicon": "edit"
+    },
+    "remove": {
+      "name": "Remover",
+      "unicon": "trash-alt",
+      "ask": true
+    }
+  }
+}

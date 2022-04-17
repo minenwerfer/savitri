@@ -1,16 +1,19 @@
 <template>
   <sv-box class="xl:w-2/5">
-    <sv-form
-      :form="fields"
-      :form-data="item"
-    ></sv-form>
+    <div class="flex flex-col gap-y-6">
+      <sv-form
+        :form="fields"
+        :form-data="item"
+      ></sv-form>
 
-    <sv-button
-      @clicked="insert"
-      :disabled="(item.password?.length||0) < 4 || item.password !== item.verification"
-    >
-      Salvar
-    </sv-button>
+      <sv-button
+        @clicked="insert"
+        :disabled="(item.password?.length||0) < 4 || item.password !== item.verification"
+        class="self-start"
+      >
+        Salvar
+      </sv-button>
+    </div>
   </sv-box>
 </template>
 

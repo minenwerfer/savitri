@@ -44,6 +44,7 @@ const useApp = (config) => new Promise((resolve) => {
     const { component, i18n, menuSchema, routerExtension, storeExtension } = config;
     const store = (0, store_2.instance)();
     const router = (0, router_2.instance)(store);
+    const _i18n = (0, i18n_1.useI18n)(i18n);
     if (routerExtension) {
         (0, router_1.extendRouter)(router, routerExtension);
     }
@@ -53,7 +54,7 @@ const useApp = (config) => new Promise((resolve) => {
     const app = (0, vue_1.createApp)(component);
     app.use(router);
     app.use(store);
-    app.use((0, i18n_1.useI18n)(i18n));
+    app.use(_i18n);
     app.provide('menuSchema', menuSchema);
     app.provide('i18n', i18n);
     app.provide('baseVersion', require('../../../package.json').version);
@@ -68,6 +69,7 @@ const useApp = (config) => new Promise((resolve) => {
     Object.assign(window, {
         _router: router,
         _store: store,
+        _i18n
     });
     // initializes storage singleton
     const persistentStorage = new singleton_1.PersistentStorage();

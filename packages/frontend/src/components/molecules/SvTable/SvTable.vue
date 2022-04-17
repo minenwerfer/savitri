@@ -7,23 +7,27 @@
       <th
         v-for="(header, index) in columns"
         :key="`header-${index}`"
-        :class="`hidden lg:table-cell truncate ${!checkbox && 'lg:pl-4'} ${border && 'border'}`"
+        :class="`hidden lg:table-cell truncate ${!checkbox && 'first:lg:pl-4'} ${border && 'border'}`"
         >
         {{ header.label || header.placeholder }}
       </th>
     </tr>
 
-    <tr v-for="(row, rindex) in rows" :key="`row-${rindex}`" :class="`block shadow mb-3 last:mb-0 p-2 lg:p-0 lg:table-row lg:shadow-none leading-8 lg:leading-10 hover:bg-gray-200 ${computedRowColor(row, rindex)}`">
+    <tr
+      v-for="(row, rindex) in rows"
+      :key="`row-${rindex}`"
+      :class="`block shadow mb-3 last:mb-0 p-2 lg:p-0 lg:table-row lg:shadow-none leading-8 lg:leading-10 hover:bg-gray-200 ${computedRowColor(row, rindex)}`"
+
+      @click="moduleRefs.setItem(row)"
+    >
     <td v-if="module && checkbox" :class="`hidden lg:table-cell px-2 ${ border && 'border' }`">
       <input type="checkbox" v-model="selected" :value="{ _id: row._id }" />
     </td>
     <td
       v-for="([column, field], cindex) in Object.entries(columns)"
       :key="`column-${rindex}-${cindex}`"
-      @click="store.dispatch(`${module}/spawnOpen`, { payload: { filters: row } })"
-      :class="`block lg:table-cell truncate cursor-pointer lg:py-1 ${!checkbox && 'lg:pl-4'} ${border && 'border'}`"
+      :class="`block lg:table-cell truncate cursor-pointer lg:py-1 ${!checkbox && 'first:lg:pl-4'} ${border && 'border'}`"
     >
-
       <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm align-middle">
         <div class="font-semibold opacity-60 lg:hidden text-ellipsis truncate">{{ field.label }}</div>
         <div
@@ -31,7 +35,7 @@
           :class="`grid gap-y-1 opacity-80 justify-end ${ computedCellStyle(row, field) }`"
         >
           <div :class="cindex === 0 && 'font-semibold opacity-80'">
-            <div v-if="field.module === 'file' && row[column]._id" class="mt-2">
+            <div v-if="field.module === 'file' && row[column]._id">
               <img :src="useFile(row[column]).link" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"/>
             </div>
             <div v-else>
@@ -53,26 +57,36 @@
           <img :src="row[column].src" v-if="row[column]?.src" class="w-8 h-8 inline-block" />
         </div>
 
-        <div v-else class="flex gap-x-2 justify-end">
-          <sv-bare-button
-            v-for="(action, aindex) in columns.__custom.actions"
-            :key="`action-${rindex}-${aindex}`"
-            @clicked="action.click(row)"
+        <div v-else class="flex gap-x-2 justify-end w-full lg:w-auto">
 
-            :class="`cursor-pointer ${action.color && fgColorClasses[action.color]}`"
-          >
-            <sv-info v-if="action.unicon">
-              <!-- <template #text>{{ action.name }}</template> -->
-              <unicon :name="action.unicon" fill="gray" v-if="action.unicon" class="w-5 h-5"></unicon>
-            </sv-info>
+          <sv-dropdown>
+            <template #trigger>
+              <sv-icon name="setting" fill="gray" class="w-5 h-5"></sv-icon>
+            </template>
+            <template #content>
+              <teleport :to="`#dropdown-${rindex}`">
+              <div :class="`absolute right-0 ${rindex > Object.keys(rows).length - 3 && 'bottom-0'} z-50 bg-white rounded border shadow-lg whitespace-nowrap`">
+                <sv-bare-button
+                  v-for="(action, aindex) in columns.__custom.actions"
+                  :key="`action-${rindex}-${aindex}`"
+                  @clicked="action.click(row)"
 
-            <div v-else>
-              {{ action.name }}
-            </div>
-          </sv-bare-button>
+                  class="w-full px-2 hover:bg-gray-100"
+                >
+                  <div class="flex gap-x-2 items-center">
+                    <sv-icon :name="action.unicon" fill="gray" v-if="action.unicon" class="w-5 h-5"></sv-icon>
+                    <div>{{ action.name }}</div>
+                  </div>
+                </sv-bare-button>
+              </div>
+              </teleport>
+            </template>
+          </sv-dropdown>
+
         </div>
       </div>
     </td>
+    <div :id="`dropdown-${rindex}`" class="relative"></div>
   </tr>
 </table>
 </template>
@@ -81,7 +95,12 @@
 import { inject, ref, watch, reactive, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useModule, useFile } from 'frontend/composables'
-import { SvBareButton, SvInfo } from 'frontend/components'
+import {
+  SvBareButton,
+  SvDropdown,
+  SvIcon
+
+} from 'frontend/components'
 
 const props = defineProps({
 columns: {

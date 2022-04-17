@@ -77,13 +77,18 @@ export const formatValue = (description: any, value: any, key: string, form: boo
     ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key, form) : Object.values(value)[0])
     : value
 
-  const formatted = firstValue !== undefined
-    ? ( field?.type === 'datetime' ? firstValue?.formatDateTime(field.includeHours) : firstValue )
-    : '-'
+  const formatted = (() => {
+    switch(true) {
+      case field?.type === 'datetime': return firstValue?.formatDateTime(field.includeHours)
+      case field?.type === 'boolean': return firstValue ? 'sim' : 'não'
+      case [undefined, null].includes(firstValue): return '-'
+      default: return firstValue
+    }
+  })()
 
   return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
     ? formatted.substr(0, field.trim - 3) + '...'
-    : String(formatted || '-')
+    : String([undefined, null].includes(formatted) ? '-' : formatted)
 }
 
 export const resumeItem = (description: any, item: any) => {

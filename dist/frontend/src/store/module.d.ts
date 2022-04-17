@@ -63,6 +63,7 @@ export interface CommonState {
     defaultFilters?: any;
 }
 export declare const normalizeFilters: (filters: any[]) => any;
+export declare const normalizeValues: (values: any | any[]) => any;
 /**
  * @exports @abstract @class
  * Generic module with useful helpers.

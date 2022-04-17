@@ -10,7 +10,7 @@
       @clicked="isFeedbackVisible = true"
       v-if="webpackVariables.feedback"
     >
-        <unicon name="comment-dots" fill="white"></unicon>
+        <sv-icon name="comment-dots" fill="white"></sv-icon>
         <div>Feedback</div>
     </sv-bare-button>
 
@@ -33,7 +33,7 @@
             v-if="history.state.back != '/signin' && !$route.meta?.noMargin"
             @clicked="$router.back()"
           >
-            <unicon name="arrow-left"></unicon>
+            <sv-icon name="arrow-left"></sv-icon>
             <div>Voltar</div>
           </sv-bare-button>
 
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="bg-orange-300 text-white text-center text-sm font-semibold order-1" v-if="notice">
+        <div class="bg-blue-500 text-white text-center text-sm font-semibold order-1" v-if="notice">
           {{ notice }}
         </div>
 
@@ -64,7 +64,8 @@ import {
   SvTopbar,
   SvBareButton,
   SvFeedback,
-  SvSidebar
+  SvSidebar,
+  SvIcon
 
 } from 'frontend/components'
 

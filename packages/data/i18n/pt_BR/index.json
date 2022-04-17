@@ -8,6 +8,8 @@
   "none": "nenhum",
   "everything": "tudo",
   "filtered_only": "apenas filtrado",
+  "yes": "sim",
+  "no": "não",
 
   "get": "ler",
   "getAll": "listar",

@@ -1,1 +1,1 @@
-export * from './tokenService';
+export * from './token.svc';

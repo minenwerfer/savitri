@@ -2,11 +2,10 @@ import { Request, ResponseToolkit, Server } from '@hapi/hapi'
 import * as Hapi from '@hapi/hapi'
 
 import '../../common/src/polyfill'
-import { getController } from '../src/controllers'
-import { TokenService } from '../src/services/tokenService'
-import { HandlerRequest } from '../src/controllers/abstract/Controller'
+import { getController, HandlerRequest } from '../src/controller'
+import { TokenService } from '../src/services/token.svc'
 
-import { FileController } from '../src/controllers/file.ctl'
+import { FileController } from '../entities/file/file.ctl'
 
 interface Environment {
   PAGINATION_LIMIT?: number;
@@ -34,7 +33,7 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
 
     // use webinterface whenever it's available
     const result = await (instance.webInterface || instance)[verb](request, h, token)
-    if( /_?get/i.test(verb) && !result ) {
+    if( /_?get$/i.test(verb) && Object.keys(result).length === 0 ) {
       throw new Error('item not found')
     }
 

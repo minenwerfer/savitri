@@ -2,7 +2,7 @@
   <sv-bare-button @clicked="visible = true">
     <div class="flex items-center gap-x-1">
       <slot></slot>
-      <unicon name="info-circle" class="w-5 h-5"></unicon>
+      <sv-icon name="info-circle" class="w-5 h-5"></sv-icon>
     </div>
   </sv-bare-button>
 
@@ -25,7 +25,8 @@ import { ref } from 'vue'
 import {
   SvBox,
   SvBareButton,
-  SvProse
+  SvProse,
+  SvIcon
 
 } from 'frontend/components'
 

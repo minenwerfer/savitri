@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="mongoose" />
 import { FileDocument } from '../models/File';
 import { Mutable, SingleQuery } from './abstract/Mutable';
 export declare class FileController extends Mutable<FileDocument> {
@@ -17,6 +18,7 @@ export declare class FileController extends Mutable<FileDocument> {
         id?: any;
         immutable: boolean;
         filename: string;
+        user_id: import("mongoose").LeanDocument<import("../models/User").UserDocument>;
         size: number;
         context: string;
         absolute_path: string;

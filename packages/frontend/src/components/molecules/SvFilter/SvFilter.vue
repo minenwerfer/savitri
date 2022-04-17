@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div :key="$store.state[module]._filters" class="flex flex-col gap-y-6">
     <sv-form
       :form="availableFilters"
       :form-data="$store.state[module]._filters"
       :flex="true"
       :search-only="true"
+    ></sv-form>
 
-      @change="filter"
-      >
-    </sv-form>
-
-    <sv-bare-button type="neutral" @clicked="clear" class="opacity-60">Limpar</sv-bare-button>
+    <div class="flex gap-x-2">
+      <sv-button variant="light" @clicked="clear">Limpar</sv-button>
+      <sv-button icon="filter" @clicked="filter">Filtrar</sv-button>
+    </div>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ import { reactive, provide, inject } from 'vue'
 import { useStore } from 'vuex'
 import { fromEntries } from 'common/helpers'
 import { useModule } from 'frontend/composables'
-import { SvBareButton } from 'frontend/components'
+import { SvButton } from 'frontend/components'
 import { SvForm } from '../index'
 
 const props = defineProps<{

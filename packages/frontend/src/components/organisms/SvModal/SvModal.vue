@@ -4,7 +4,7 @@
       <slot name="title"></slot>
     </template>
     <template #body>
-      <div class="opacity-60">
+      <div class="opacity-60 whitespace-pre-wrap">
         <slot name="body"></slot>
       </div>
     </template>

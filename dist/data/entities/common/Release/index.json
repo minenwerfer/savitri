@@ -4,25 +4,6 @@
     "methods": [
         "getAll"
     ],
-    "actions": {
-        "spawnAdd": {
-            "name": "Adicionar"
-        },
-        "removeAll": {
-            "name": "Remover",
-            "ask": true,
-            "selection": true
-        }
-    },
-    "individualActions": {
-        "spawnEdit": {
-            "name": "Editar"
-        },
-        "remove": {
-            "name": "Remover",
-            "ask": true
-        }
-    },
     "fields": {
         "base": {
             "label": "Base",

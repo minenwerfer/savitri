@@ -7,10 +7,10 @@
     :key="item.base"
     >
     <template #tab-1>
-      <sv-releases-item :items="item.product"></sv-releases-item>
+      <sv-item :items="item.product"></sv-item>
     </template>
     <template #tab-2>
-      <sv-releases-item :items="item.base"></sv-releases-item>
+      <sv-item :items="item.base"></sv-item>
     </template>
   </sv-tabbed>
 </template>
@@ -20,7 +20,7 @@ import { onMounted, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useModule } from 'frontend/composables'
 import { SvTabbed, } from 'frontend/components'
-import { default as SvReleasesItem } from './_internals/components/SvReleasesItem/SvReleasesItem.vue'
+import { default as SvItem } from './_internals/components/SvItem/SvItem.vue'
 
 const store = useStore()
 const moduleRefs = reactive(useModule('release', store))

@@ -32,7 +32,7 @@ export const publicRoutes: Route[] = [
   {
     path: '/',
     name: 'landing',
-    component: () => import('frontend/components/views/SvLanding/SvLanding.vue'),
+    redirect: '/signin',
     meta: { title: 'Página inicial', hidden: true, }
   },
   {

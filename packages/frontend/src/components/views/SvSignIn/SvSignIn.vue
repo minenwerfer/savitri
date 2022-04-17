@@ -8,8 +8,7 @@
       <sv-box classes="rounded-b-lg shadow-md bg-stone-50" :fill="true">
         <div class="flex flex-col px-6 py-8 border-t-[10px] ronded-xl border-blue-800">
           <div class="self-center mt-6 mb-12">
-            <div class="text-2xl opacity-60">
-              {{ webpackVariables.signinText || 'Identifique-se' }}
+            <div class="text-2xl opacity-60" v-html="webpackVariables.signinText || 'Identifique-se'">
             </div>
           </div>
           <sv-form
@@ -33,7 +32,7 @@
           <sv-button
             @clicked="authenticate"
             :disabled="store.state.user.isLoading"
-            class="py-3 w-full"
+            class="py-3 mt-6 w-full"
           >
             <div class="w-full">Entrar</div>
           </sv-button>

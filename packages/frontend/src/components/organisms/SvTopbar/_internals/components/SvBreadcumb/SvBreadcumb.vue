@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center">
     <!-- <div class="text-xl font-bold border-r-2 pr-4 truncate"> -->
-    <!--   {{ $tc(getTitle(routes[routes.length-1]), 2).capitalize() }} -->
+    <!--   {{ $getTitle(routes[routes.length-1]) }} -->
     <!-- </div> -->
     <div class="flex items-center truncate flex-0">
       <!-- <sv-bare-button @clicked="$router.push({ name: 'dashboard-home' })"> -->

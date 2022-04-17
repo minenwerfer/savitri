@@ -4,7 +4,7 @@ exports.NotificationController = void 0;
 const Mutable_1 = require("./abstract/Mutable");
 const Notification_1 = require("../models/Notification");
 const http_1 = require("../../../common/src/http");
-const tokenService_1 = require("../services/tokenService");
+const token_svc_1 = require("../services/token.svc");
 const path = require('path');
 const buildConfig = require(path.join(process.cwd(), 'build.json'));
 class NotificationController extends Mutable_1.Mutable {
@@ -28,7 +28,7 @@ class NotificationController extends Mutable_1.Mutable {
             if (!this.http.token) {
                 delete decodedToken.iat;
                 delete decodedToken.exp;
-                this.http.token = tokenService_1.TokenService.sign(decodedToken, process.env.DOMAIN_SECRET);
+                this.http.token = token_svc_1.TokenService.sign(decodedToken, process.env.DOMAIN_SECRET);
             }
             const { data: { result: { local } } } = await this.http.post('/notification/ping', { localOnly: true });
             result.domain = local;

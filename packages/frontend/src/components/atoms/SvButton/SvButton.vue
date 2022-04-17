@@ -1,14 +1,18 @@
 <template>
   <sv-bare-button
-    :class="classes[variant]"
+    :class="`_button transition-all ${classes[variant]}`"
     :disabled="disabled"
   >
-    <div class="flex items-center justify-center gap-x-2" v-if="icon">
-      <unicon
+    <div class="flex items-start justify-center gap-x-1" v-if="icon">
+      <sv-icon
         v-if="icon"
         :name="icon"
-        :class="`w-5 h-5 ${ variant === 'light' ? fillClasses[type||'success'] : 'fill-white'}`"
-      ></unicon>
+        :class="`
+          w-5 h-5
+          ${!disabled && '_icon'}
+          ${variant === 'light' ? fillClasses[type||'success'] : 'fill-white'}
+        `"
+      ></sv-icon>
       <slot></slot>
     </div>
 
@@ -17,8 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
-import { SvBareButton } from '..'
+import { inject, computed } from 'vue'
+import {
+  SvBareButton,
+  SvIcon
+
+} from '..'
 
 const props = defineProps<{
   type?: string
@@ -64,21 +72,21 @@ const fillClasses = {
   neutral: 'fill-blue-700'
 }
 
-const classes = {
+const classes = computed(() => ({
   normal: `
     text-white text-center font-bold outline-none
-    py-1 px-4 rounded transition-all delay-200 duration-150 ease-in-out filter
-    ${props.disabled || 'hover:brightness-90'}
+    py-1 px-4 rounded delay-200 duration-150 ease-in-out filter
+    ${!!props.disabled || 'hover:brightness-90'}
     ${bgColorClasses[props.type||'success']}
   `,
 
   light: `
-    border
-    py-1 px-6 rounded transition-all duration-75 ease-in-out transform
-    ${props.disabled || bgHoverColorClasses[props.type||'success'] + ' hover:text-white'}
+    border whitespace-nowrap
+    py-1 px-4 rounded transition-none
+    ${!!props.disabled || bgHoverColorClasses[props.type||'success'] + ' hover:text-white'}
     ${borderClasses[props.type||'success']} ${textClasses[props.type||'success']}
   `
-}
+}))
 </script>
 
 <style scoped>
@@ -86,5 +94,9 @@ const classes = {
   .underline {
     text-decoration: none;
   }
+}
+
+._button:hover >>> ._icon {
+  @apply fill-white;
 }
 </style>

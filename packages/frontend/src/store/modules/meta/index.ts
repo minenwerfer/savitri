@@ -1,6 +1,8 @@
 import { Module, ActionProps } from 'frontend/store/module'
 import { AxiosResponse } from 'common/http'
 
+import { default as webpackVariables } from 'variables'
+
 /**
  * @exports @interface
  * Prompt actions.
@@ -219,7 +221,13 @@ export class MetaModule extends Module<Meta, {}> {
       },
 
       VIEW_TITLE_SET: (state: any, value: string) => {
-        state.viewTitle = value
+
+        const translated = (window as any)._i18n.global.tc(value, 2)
+          .capitalize()
+          .replace('%viewTitle%', '-')
+
+        state.viewTitle = translated
+        document.title = `${webpackVariables.productName} | ${translated}`
       },
 
       DESCRIPTIONS_ADD: (state: any, module: any): void => {

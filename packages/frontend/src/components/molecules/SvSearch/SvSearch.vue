@@ -1,15 +1,15 @@
 <template>
-  <div :key="parent" @change.prevent.stop="" class="w-full mb-4">
+  <div :key="parent" @change.prevent.stop="" class="w-full">
     <header class="font-semibold mb-1">{{ moduleName }}</header>
-    <div v-if="isExpanded" class="mb-2">
+    <div v-if="isExpanded" class="flex items-end gap-x-2">
       <sv-form
         :form="moduleRefs.fields"
         :form-data="edited"
         :item-index="itemIndex"
         :field-index="fieldIndex"
       ></sv-form>
-      <div v-if="!expand" class="text-sm flex">
-        <sv-button @clicked="insert" class="justify-self-end mr-2">Salvar</sv-button>
+      <div class="flex gap-x-1">
+        <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
     </div>
@@ -18,47 +18,89 @@
       <div
         v-for="([indexName, searchField], index) in indexes.map((i) => [i, field.fields[i]])"
         :key="`searchField-${index}`"
-        class="flex-grow"
+        class="flex flex-grow items-end gap-x-2"
       >
         <sv-input
           @input="lazySearch(indexName, inputValue[indexName])"
           v-model="inputValue[indexName]"
           v-if="!field.purge"
+
+          class="flex-grow"
         >
             {{ searchField.label }}
         </sv-input>
-        <sv-button class="self-end text-sm" v-if="array" @clicked="addItem">Adicionar</sv-button>
+        <sv-button
+          v-if="array"
+          icon="plus"
+          @clicked="addItem"
+        >
+          Novo
+        </sv-button>
       </div>
     </div>
 
     <div v-if="!isExpanded || array" :key="inputValue" style="max-width: 20em">
-      <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`" v-if="!isExpanded">
-        <div v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)" class="bg-white">
-          <div class="cursor-pointer p-2 border">{{ item[indexes[0]] }}</div>
-        </div>
+      <div v-if="selected.length > 0">
+        <sv-item v-for="(item, index) in selected" :key="`item-${index}`">
+          <div class="flex justify-between gap-x-2">
+            <div class="flex-1">{{ item[indexes[0]] }}</div>
+
+            <div v-if="!searchOnly" class="flex gap-x-1">
+              <sv-bare-button @clicked="edit(item)">
+                <sv-icon name="edit" fill="gray" class="w-5 h-5"></sv-icon>
+              </sv-bare-button>
+              <sv-bare-button @clicked="unselect(item)">
+                <sv-icon name="trash" fill="gray" class="w-5 h-5"></sv-icon>
+              </sv-bare-button>
+            </div>
+
+            <div v-else>
+              <sv-bare-button @clicked="unselect(item, false)">
+                <sv-icon name="minus" fill="gray" class="w-5 h-5"></sv-icon>
+              </sv-bare-button>
+            </div>
+
+          </div>
+
+        </sv-item>
       </div>
 
-      <div v-if="!searchOnly && selected.length > 0" class="mt-4">
-        <div v-for="(item, index) in selected" :key="`item-${index}`" class="flex gap-x-2 px-2 py-1 border bg-white">
-          <div class="flex-1">{{ item[indexes[0]] }}</div>
-          <sv-bare-button @clicked="edit(item)">
-            <unicon name="edit" fill="gray"></unicon>
-          </sv-bare-button>
-          <sv-bare-button @clicked="unselect(item)">
-            <unicon name="trash" fill="gray"></unicon>
-          </sv-bare-button>
-        </div>
+      <div :class="`grid select-none ${isLoading ? 'opacity-30' : ''}`" v-if="!isExpanded">
+        <sv-item v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)" class="bg-white">
+          <div class="flex justify-between gap-x-2 cursor-pointer">
+            <div>{{ item[indexes[0]] }}</div>
+            <sv-icon name="plus" fill="gray"></sv-icon>
+          </div>
+        </sv-item>
       </div>
+
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { provide, inject, computed, ref, reactive, defineAsyncComponent, onMounted } from 'vue'
+import {
+  provide,
+  inject,
+  computed,
+  ref,
+  reactive,
+  defineAsyncComponent,
+  onMounted
+
+} from 'vue'
 import { useStore } from 'vuex'
-import { SvInput, SvButton, SvBareButton } from 'frontend/components'
 import { useModule } from 'frontend/composables'
 
+import {
+  SvInput,
+  SvButton,
+  SvBareButton,
+  SvIcon
+
+} from 'frontend/components'
+
+import SvItem from './_internals/components/SvItem/SvItem.vue'
 const SvForm = defineAsyncComponent(() => import('frontend/components/molecules/SvForm/SvForm.vue'))
 
 const props = defineProps<{
@@ -90,7 +132,6 @@ provide('module', field.module)
 onMounted(() => store.dispatch(`${field.module}/clearAll`))
 
 const expanded = ref<boolean>(false)
-
 const edited = ref<any>(parentRefs.item.value[props.propName])
 
 const module = computed(() => field.module)
@@ -187,8 +228,8 @@ const select = (item: any) => {
   emit('changed')
 }
 
-const unselect = async (item: any) => {
-  if( props.field.purge ) {
+const unselect = async (item: any, purge=true) => {
+  if( props.field.purge && purge ) {
     const { _id } = item
     await store.dispatch(`${props.field.module}/remove`, { payload: { filter: { _id } }})
   }

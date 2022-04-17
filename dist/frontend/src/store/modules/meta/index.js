@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MetaModule = void 0;
 const module_1 = require("frontend/store/module");
+const variables_1 = __importDefault(require("variables"));
 /**
  * @exports @class
  * Meta module.
@@ -141,7 +145,11 @@ class MetaModule extends module_1.Module {
                 state.globalIsLoading = typeof value === 'boolean' ? value : !state.globalIsLoading;
             },
             VIEW_TITLE_SET: (state, value) => {
-                state.viewTitle = value;
+                const translated = window._i18n.global.tc(value, 2)
+                    .capitalize()
+                    .replace('%viewTitle%', '-');
+                state.viewTitle = translated;
+                document.title = `${variables_1.default.productName} | ${translated}`;
             },
             DESCRIPTIONS_ADD: (state, module) => {
                 state.globalDescriptions = [

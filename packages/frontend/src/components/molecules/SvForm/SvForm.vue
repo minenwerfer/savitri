@@ -1,20 +1,19 @@
 <template>
-  <div v-if="formData" class="w-full">
-    <div :class="`grid ${flex && 'md:flex md:flex-wrap items-end'} gap-x-2 gap-y-6 w-full`" v-if="!isReadonly">
+  <div v-if="formData" class="flex flex-col gap-y-8 w-full">
+    <div :class="`grid ${(!isSmall && flex) && 'md:grid-cols-3 items-end'} gap-4 w-full`" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
-
-        :class="`flex-grow ${(field.type === 'textbox' || field.flexGrow) && 'w-full'}`"
-        style="min-width: 30%"
+        :class="(field.type === 'textbox' || field.flexGrow) && 'md:col-span-3'"
       >
         <!-- text -->
         <sv-input
           v-if="isTextType(field.type)"
           v-model="formData[key]"
           v-bind="{
-            ...field
+            ...field,
+            readonly: field.readonly && !searchOnly
           }"
         >
           <template #label>{{ field.label }}</template>
@@ -59,9 +58,7 @@
 
 
           <sv-select v-else v-model="formData[key]" :values="field.values" class="py-2">
-            <option value="">
-              {{ $t('none') }}
-            </option>
+            <option value="">{{ $t('none') }}</option>
             <option v-for="(option, oindex) in field.values" :value="option.value">
               {{ field.translate ? $t(option.label) : option.label }}
             </option>
@@ -72,10 +69,22 @@
           <strong class="text-xs uppercase">{{ field.label }}</strong>
           <sv-file v-model="formData[key]" :context="`${module}.${itemIndex}.${key}.${fieldIndex}`"></sv-file>
         </div>
+
+        <sv-input
+          v-else-if="field.module"
+          v-bind="{
+            ...field,
+            readonly: true,
+            type: isTextType(field.type) ? field.type : 'text',
+            value: formatValue(field.translate ? $t(formData[key]||'') : formData[key], key, true, field)
+          }"
+        >
+          {{ field.label }}
+        </sv-input>
       </div>
     </div>
 
-    <div :class="`grid ${flex && 'md:flex'} gap-x-2 gap-y-4 mt-8`" v-if="!isReadonly">
+    <div :class="`grid ${flex && 'md:flex'} gap-x-2 gap-y-4`" v-if="!isReadonly && moduleFields.length > 0">
       <sv-search
         v-for="([childModule, field], index) in moduleFields"
         :key="`modulefield-${index}`"
@@ -94,19 +103,19 @@
       </sv-search>
     </div>
 
-    <div v-if="isReadonly" :class="`${ isSmall && 'flex-col' } flex flex-wrap gap-x-4 gap-y-6`">
+    <div v-if="isReadonly" :class="`grid ${(!isSmall && flex) && 'md:grid-cols-3 items-end'} gap-4 w-full`">
       <sv-input
-        v-for="([, field], index) in allInOne"
+        v-for="([key, field], index) in allInOne"
         :key="`module-${index}`"
 
         v-bind="{
           ...field,
           readonly: true,
           type: isTextType(field.type) ? field.type : 'text',
-          value: formatValue(field.translate ? $t(field.formValue || (field.value || '')) : (field.formValue || field.value), undefined, true, field)
+          value: formatValue(field.translate ? $t(formData[key]||'') : formData[key], key, true, field)
         }"
 
-        :class="`flex-grow ${ (field.flexGrow || field.type === 'textbox' || isSmall) ? 'w-full' : 'lg:w-[25%]'}`"
+        :class="(field.type === 'textbox' || field.flexGrow) && 'md:col-span-3'"
       >
         {{ field.label }}
       </sv-input>
@@ -115,7 +124,18 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, inject, computed, ref, toRefs, reactive, watch, } from 'vue'
+import {
+  defineAsyncComponent,
+  provide,
+  inject,
+  computed,
+  ref,
+  toRefs,
+  reactive,
+  watch,
+
+} from 'vue'
+
 import { useStore } from 'vuex'
 import { useModule } from 'frontend/composables'
 import { SvInput, SvCheckbox, SvSelect } from 'frontend/components'
@@ -174,17 +194,19 @@ const module = ref<string>(inject('module', props.module))
 const moduleRefs = reactive<any>({})
 watch(module, () => Object.assign(moduleRefs as any, useModule(module.value, store)), { immediate: true })
 
+provide('searchOnly', props.searchOnly||false)
+
 const filterFields = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
     .filter(([, field]: [unknown, any]) => field && (!field.noform || props.searchOnly))
     .filter((pair) => !condition || condition(pair))
     .map(([key, field]: [string, any]) => [key, {
       ...field,
-      hidden: undefined
+      hidden: undefined,
     }])
 
 const has = (field: string) => {
-  if( props.searchOnly ) {
+  if( props.searchOnly || !module ) {
     return true
   }
 
@@ -194,10 +216,15 @@ const has = (field: string) => {
 
 const fields = filterFields(([key, f]: [string, any]) => {
   return !f.meta && has(key) &&
-    (typeof f.module !== 'string' || f.module === 'file')
+    (!(typeof f.module === 'string' && !f.readonly) || f.module === 'file')
 })
 
-const moduleFields = filterFields(([key, f]: [string, any]) => typeof f.module === 'string' && f.module !== 'file' && has(key))
+const moduleFields = filterFields(([key, f]: [string, any]) => {
+  return typeof f.module === 'string'
+    && f.module !== 'file'
+    && !f.readonly
+    && has(key)
+})
   .map(([key, value]: [string, any]) => [key, {
     ...value,
     ...store.getters[`${value.module}/description`]
@@ -210,7 +237,6 @@ const allInOne = filterFields()
   .map(([key, field]: [string, any]) => {
     return [key, {
     ...field,
-    value: moduleRefs.formatValue((props.formData||{})[key], key, true),
   }]
 })
 
