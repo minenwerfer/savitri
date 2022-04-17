@@ -1,1 +1,0 @@
-{"version":3,"file":"accessProfile.ctl.js","sourceRoot":"","sources":["../../../../../packages/backend/src/defaults/accessProfile/accessProfile.ctl.ts"],"names":[],"mappings":";;;AAAA,2DAAuF;AACvF,iDAA0C;AAE1C,MAAa,uBAAwB,SAAQ,oBAA8B;IACzE;QACE,KAAK,CAAC,iCAAa,EAAE,+BAAW,EAAE;YAChC,aAAa,EAAE,CAAC,QAAQ,CAAC;SAC1B,CAAC,CAAA;IACJ,CAAC;CACF;AAND,0DAMC"}
