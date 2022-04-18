@@ -1,6 +1,6 @@
-import { Model, Query, FilterQuery, UpdateQuery } from '../database'
+import { Model, Query, FilterQuery, UpdateQuery } from '../../database'
 import { Controller } from './Controller'
-import { fromEntries } from '../../../common/src/helpers'
+import { fromEntries } from '../../../../common/src/helpers'
 
 import {
   depopulate,
@@ -9,7 +9,7 @@ import {
   fill,
   prepareInsert
 
-} from '../entity'
+} from '../../entity'
 
 export const { PAGINATION_LIMIT } = process.env
 

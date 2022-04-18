@@ -4,8 +4,8 @@ import { Document, model, options } from '../../src/database'
 import { descriptionToSchema } from '../../src/entity'
 import { default as Description } from './index.json'
 
-import { AccessProfileDocument } from '../accessProfile/accessProfile.mdl'
-import '../accessProfile/accessProfile.mdl'
+import { AccessProfileDocument } from '../accessProfile/accessProfile.model'
+import '../accessProfile/accessProfile.model'
 
 export interface User {
   name: string

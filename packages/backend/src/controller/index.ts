@@ -16,7 +16,7 @@ export const getController = (controller: string) => {
 
   const sanitizedName = controller.replace(/\./g, '') as string & { capitalize: () => string }
 
-  const controllerFile = `${sanitizedName}/${sanitizedName}.ctl`
+  const controllerFile = `${sanitizedName}/${sanitizedName}.controller`
   const controllerName = `${sanitizedName.capitalize()}Controller`
 
   const Controller = require(`${controllerPath}/${controllerFile}`)[controllerName]
@@ -24,5 +24,5 @@ export const getController = (controller: string) => {
   return Controller
 }
 
-export * from './Controller'
-export * from './Mutable'
+export * from './abstract/Controller'
+export * from './abstract/Mutable'

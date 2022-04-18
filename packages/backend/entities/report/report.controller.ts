@@ -4,11 +4,11 @@ const path = require('path')
 import { fromEntries } from '../../../common/src/helpers'
 import * as Entity from '../../../common/src/entity'
 
-import { ReportDocument, Report } from './report.mdl'
+import { ReportDocument, Report } from './report.model'
 import { default as Description } from './index.json'
 import { Mutable, getController } from '../../src/controller'
 
-import { File } from '../file/file.mdl'
+import { File } from '../file/file.model'
 
 export class ReportController extends Mutable<ReportDocument> {
   private readonly _formatMap: any = {

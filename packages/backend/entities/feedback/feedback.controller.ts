@@ -1,4 +1,4 @@
-import { FeedbackDocument, Feedback } from './feedback.mdl'
+import { FeedbackDocument, Feedback } from './feedback.model'
 import { default as Description } from './index.json'
 import { Mutable } from '../../src/controller'
 

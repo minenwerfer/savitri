@@ -1,5 +1,5 @@
-import { Controller } from './index'
-import { default as manifestContent } from '../resources/manifest.json'
+import { Controller } from '../../src/controller'
+import { default as manifestContent } from '../../src/resources/manifest.json'
 
 const path = require('path')
 const { readFile } = require('fs').promises
@@ -43,12 +43,12 @@ export class ApplicationController extends Controller<unknown> {
   }
 
   public async serviceWorker() {
-    const content = await readFile(path.join(__dirname, '../resources/serviceWorker.js'))
+    const content = await readFile(path.join(__dirname, '../../resources/serviceWorker.js'))
     return content
   }
 
   public async index() {
-    const content = await readFile(path.join(__dirname, '../resources/index.html'))
+    const content = await readFile(path.join(__dirname, '../../resources/index.html'))
     const initial_data = JSON.stringify(buildConfig)
 
     const config = Object.assign(buildConfig.product, {

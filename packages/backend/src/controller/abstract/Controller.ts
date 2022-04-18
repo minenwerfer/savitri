@@ -1,6 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
-import { Model } from '../database'
-import { TokenService } from '../services'
+import { Model } from '../../database'
+import { TokenService } from '../../services'
 
 export interface HandlerRequest {
   payload: {

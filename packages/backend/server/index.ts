@@ -5,7 +5,7 @@ import '../../common/src/polyfill'
 import { getController, HandlerRequest } from '../src/controller'
 import { TokenService } from '../src/services/token.svc'
 
-import { FileController } from '../entities/file/file.ctl'
+import { FileController } from '../entities/file/file.controller'
 
 interface Environment {
   PAGINATION_LIMIT?: number;

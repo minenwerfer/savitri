@@ -1,5 +1,5 @@
 import { Mutable } from '../../src/controller'
-import { NotificationDocument, Notification } from './notification.mdl'
+import { NotificationDocument, Notification } from './notification.model'
 import { default as Description } from './index.json'
 import { RequestProvider } from '../../../common/src/http'
 import { TokenService } from '../../src/services/token.svc'

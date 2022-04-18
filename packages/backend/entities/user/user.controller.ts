@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 
-import { UserDocument, User } from './user.mdl'
+import { UserDocument, User } from './user.model'
 import { default as Description } from './index.json'
 import { TokenService } from '../../src/services/token.svc'
 import { Mutable } from '../../src/controller'

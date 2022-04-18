@@ -1,2 +1,2 @@
-export * from './user/user.mdl'
-export * from './file/file.mdl'
+export * from './user/user.model'
+export * from './file/file.model'

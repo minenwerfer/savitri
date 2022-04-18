@@ -1,4 +1,4 @@
-import { AccessProfileDocument, AccessProfile } from './accessProfile.mdl'
+import { AccessProfileDocument, AccessProfile } from './accessProfile.model'
 import { default as Description } from './index.json'
 import { Mutable } from '../../src/controller'
 

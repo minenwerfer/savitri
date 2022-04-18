@@ -1,7 +1,7 @@
 import { createHash } from 'crypto'
 const { writeFile, readFile, unlink } = require('fs').promises
 
-import { FileDocument, File } from './file.mdl'
+import { FileDocument, File } from './file.model'
 import { default as Description } from './index.json'
 import { Mutable, SingleQuery } from '../../src/controller'
 
