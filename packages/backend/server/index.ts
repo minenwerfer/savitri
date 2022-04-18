@@ -2,8 +2,8 @@ import { Request, ResponseToolkit, Server } from '@hapi/hapi'
 import * as Hapi from '@hapi/hapi'
 
 import '../../common/src/polyfill'
-import { getController, HandlerRequest } from '../src/controller'
-import { TokenService } from '../src/services/token.svc'
+import { getController, HandlerRequest } from '../core/controller'
+import { TokenService } from '../core/services/token.svc'
 
 import { FileController } from '../entities/file/file.controller'
 

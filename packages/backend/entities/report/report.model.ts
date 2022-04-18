@@ -1,5 +1,5 @@
-import { Document, model, options } from '../../src/database'
-import { descriptionToSchema } from '../../src/entity'
+import { Document, model, options } from '../../core/database'
+import { descriptionToSchema } from '../../core/entity'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'

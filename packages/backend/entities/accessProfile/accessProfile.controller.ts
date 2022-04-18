@@ -1,6 +1,6 @@
 import { AccessProfileDocument, AccessProfile } from './accessProfile.model'
 import { default as Description } from './index.json'
-import { Mutable } from '../../src/controller'
+import { Mutable } from '../../core/controller'
 
 export class AccessProfileController extends Mutable<AccessProfileDocument> {
   constructor() {

@@ -1,5 +1,5 @@
-import { Controller } from '../../src/controller'
-import { applyPreset } from '../../src/entity'
+import { Controller } from '../../core/controller'
+import { applyPreset } from '../../core/entity'
 
 const { readdirSync, existsSync } = require('fs')
 

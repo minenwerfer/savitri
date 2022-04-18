@@ -3,7 +3,7 @@ const { writeFile, readFile, unlink } = require('fs').promises
 
 import { FileDocument, File } from './file.model'
 import { default as Description } from './index.json'
-import { Mutable, SingleQuery } from '../../src/controller'
+import { Mutable, SingleQuery } from '../../core/controller'
 
 const { STORAGE_PATH } = process.env
 

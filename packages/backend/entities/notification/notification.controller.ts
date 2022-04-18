@@ -1,8 +1,8 @@
-import { Mutable } from '../../src/controller'
+import { Mutable } from '../../core/controller'
 import { NotificationDocument, Notification } from './notification.model'
 import { default as Description } from './index.json'
 import { RequestProvider } from '../../../common/src/http'
-import { TokenService } from '../../src/services/token.svc'
+import { TokenService } from '../../core/services/token.svc'
 
 const path = require('path')
 const buildConfig = require(path.join(process.cwd(), 'build.json'))

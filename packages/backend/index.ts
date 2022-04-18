@@ -1,5 +1,5 @@
-export * from './src/controller'
-export * from './src/entity'
+export * from './core/controller'
+export * from './core/entity'
 
-export * as mongoose from './src/database'
-export { options  } from './src/database'
+export * as mongoose from './core/database'
+export { options  } from './core/database'

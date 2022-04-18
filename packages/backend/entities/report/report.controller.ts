@@ -6,7 +6,7 @@ import * as Entity from '../../../common/src/entity'
 
 import { ReportDocument, Report } from './report.model'
 import { default as Description } from './index.json'
-import { Mutable, getController } from '../../src/controller'
+import { Mutable, getController } from '../../core/controller'
 
 import { File } from '../file/file.model'
 
