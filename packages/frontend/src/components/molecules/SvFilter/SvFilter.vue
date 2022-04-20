@@ -1,5 +1,5 @@
 <template>
-  <div :key="$store.state[module]._filters" class="flex flex-col gap-y-6">
+  <div :key="filters" class="flex flex-col gap-y-6">
     <sv-form
       :form="availableFilters"
       :form-data="$store.state[module]._filters"
@@ -9,13 +9,19 @@
 
     <div class="flex gap-x-2">
       <sv-button variant="light" @clicked="clear">Limpar</sv-button>
-      <sv-button icon="filter" @clicked="filter">Filtrar</sv-button>
+      <sv-button
+        icon="filter"
+        @clicked="filter"
+        :disabled="!anyFilters"
+      >
+        Filtrar
+      </sv-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, provide, inject } from 'vue'
+import { reactive, provide, inject, computed } from 'vue'
 import { useStore } from 'vuex'
 import { fromEntries } from 'common/helpers'
 import { useModule } from 'frontend/composables'
@@ -44,6 +50,13 @@ const clear = () => {
   store.commit(`${props.module}/FILTERS_CLEAR`)
   filter()
 }
+
+const filters = computed(() => store.state[props.module]._filters)
+
+const anyFilters = computed(() => {
+  return Object.values(store.state[props.module]._filters)
+    .some((value: any) => !!value)
+})
 
 const {
   availableFilters,

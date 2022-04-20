@@ -1,0 +1,41 @@
+{
+    "module": "notification",
+    "route": true,
+    "flex": true,
+    "presets": [
+        "alwaysOwned",
+        "crud"
+    ],
+    "fields": {
+        "destination": {
+            "module": "user",
+            "label": "Destinatário",
+            "index": "email",
+            "array": true
+        },
+        "title": {
+            "label": "Título",
+            "type": "text",
+            "required": true
+        },
+        "action": {
+            "label": "Ação",
+            "type": "text"
+        },
+        "groups": {
+            "label": "Grupos",
+            "type": "text",
+            "placeholder": "Ex.: logistic,producer",
+            "description": "Separados por vírgula, ou vazio"
+        },
+        "subject": {
+            "label": "Sujeito",
+            "type": "text"
+        },
+        "content": {
+            "label": "Conteúdo",
+            "type": "textbox",
+            "notable": true
+        }
+    }
+}

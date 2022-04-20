@@ -61,7 +61,7 @@
       "module": "file",
       "label": "Foto de perfil",
       "index": "filename",
-      "cellStyle": "() => `border rounded-full overflow-hidden`"
+      "cellStyle": "(row) => row.picture && `border rounded-full overflow-hidden`"
     },
     "group": {
       "label": "Grupo",

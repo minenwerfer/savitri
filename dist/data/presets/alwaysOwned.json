@@ -1,0 +1,10 @@
+{
+  "alwaysAttribute": true,
+  "fields": {
+    "user_id": {
+      "module": "user",
+      "label": "Usuário",
+      "index": "email"
+    }
+  }
+}

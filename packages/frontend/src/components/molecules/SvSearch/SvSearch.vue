@@ -1,5 +1,5 @@
 <template>
-  <div :key="parent" @change.prevent.stop="" class="w-full">
+  <div :key="parent" @change.prevent.stop="" class="w-full p-4 border rounded">
     <header class="font-semibold mb-1">{{ moduleName }}</header>
     <div v-if="isExpanded" class="flex items-end gap-x-2">
       <sv-form

@@ -675,7 +675,7 @@ export abstract class Module<T=any, Item=any> {
       ask: ({ dispatch }: ActionProps, { action, params, title, body }: { action: string, params: any, title?: string, body?: string}): Promise<void> => new Promise((resolve, reject) =>
         dispatch('meta/spawnPrompt', {
           title: title || 'Diálogo de confirmação',
-          body: body || `Confirmar ação?`,
+          body: body || `Essa ação não poderá ser desfeita. Tem certeza de que desseja prosseguir?`,
           actions: [
             { name: 'cancel', title: 'Cancelar' },
             { name: 'confirm', title: 'Confirmar', type: 'critical' }

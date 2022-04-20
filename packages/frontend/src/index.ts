@@ -63,7 +63,6 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
   Unicon.add([ ...Object.values(Icons) ] as string[])
   app.use(Unicon as any)
 
-
   app.mixin({
     provide: {
       ...webpackVariables

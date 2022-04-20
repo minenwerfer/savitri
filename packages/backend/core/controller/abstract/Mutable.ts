@@ -132,7 +132,14 @@ export abstract class Mutable<T> extends Controller<T> {
     if( !Array.isArray(props.filters?._id) || props.filters?._id?.length === 0 ) {
       throw new Error('no criteria specified')
     }
-    return this._model.deleteMany(props.filters as FilterQuery<T>, { strict: 'throw' })
+
+    const { _id, ...rest } = props.filters
+    const filters = {
+      _id: { $in: props.filters._id },
+      ...rest
+    }
+
+    return this._model.deleteMany(filters as FilterQuery<T>, { strict: 'throw' })
   }
 
   /**

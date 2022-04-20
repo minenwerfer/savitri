@@ -5,7 +5,7 @@
     :titles="['Sistema local', 'Base']"
     v-model:current-tab="currentTab"
     :key="item.base"
-    >
+  >
     <template #tab-1>
       <sv-item :items="item.product"></sv-item>
     </template>

@@ -11,7 +11,7 @@
       <template #title>{{ modal.title }}</template>
       <template #body>
         <div class="flex flex-col sm:flex-row justify-between">
-          <p>{{ modal.body }}</p>
+          <p v-html="modal.body"></p>
           <img v-if="modal.image" :src="modal.image" class="w-52 object-contain" />
         </div>
       </template>
