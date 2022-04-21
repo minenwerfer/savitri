@@ -24,7 +24,7 @@ const Hapi = __importStar(require("@hapi/hapi"));
 require("../../common/src/polyfill");
 const controller_1 = require("../core/controller");
 const token_svc_1 = require("../core/services/token.svc");
-const file_controller_1 = require("../entities/file/file.controller");
+const file_controller_1 = require("../modules/file/file.controller");
 async function handler(request, h) {
     try {
         const { params: { controller, verb } } = request;

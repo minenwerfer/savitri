@@ -9,8 +9,8 @@ const style = {
 module.exports = {
   content: [
     '../public/**/*.html',
-    '../src/**/*.vue',
-    path.join(global.appDir, './src/**/*.vue'),
+    '../../components/**/*.vue',
+    path.join(global.appDir, './../components/**/*.vue'),
     path.join(global.appDir, '../frontend-common/src/**/*.vue')
   ],
   darkMode: 'media', // or 'media' or 'class'

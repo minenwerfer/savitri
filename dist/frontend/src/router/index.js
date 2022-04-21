@@ -42,7 +42,7 @@ exports.publicRoutes = [
     {
         path: '/signin',
         name: 'signin',
-        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvSignIn/SvSignIn.vue'))),
+        component: () => Promise.resolve().then(() => __importStar(require('components/views/SvSignIn/SvSignIn.vue'))),
         meta: { title: 'Autenticação', hidden: true, }
     }
 ];
@@ -54,32 +54,32 @@ exports.privateRoutes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: () => Promise.resolve().then(() => __importStar(require('frontend/components/templates/SvDashboard/SvDashboard.vue'))),
+        component: () => Promise.resolve().then(() => __importStar(require('components/templates/SvDashboard/SvDashboard.vue'))),
         redirect: { name: 'dashboard-home' },
         meta: { title: 'Dashboard' },
         children: [
             {
                 path: 'c/:module?',
                 name: 'dashboard-crud',
-                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvDashboard/SvCrudView/SvCrudView.vue'))),
+                component: () => Promise.resolve().then(() => __importStar(require('components/views/SvDashboard/SvCrudView/SvCrudView.vue'))),
                 meta: { title: '%viewTitle%', hidden: true, }
             },
             {
                 path: 'access-edit',
                 name: 'dashboard-access-edit',
-                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'))),
+                component: () => Promise.resolve().then(() => __importStar(require('components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'))),
                 meta: { title: 'Editar preset de acesso', hidden: true }
             },
             {
                 path: 'user-profile',
                 name: 'dashboard-user-profile',
-                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvDashboard/SvUser/SvProfile/SvProfile.vue'))),
+                component: () => Promise.resolve().then(() => __importStar(require('components/views/SvDashboard/SvUser/SvProfile/SvProfile.vue'))),
                 meta: { title: 'Meu perfil', hidden: true }
             },
             {
                 path: 'user-changepass',
                 name: 'dashboard-user-changepass',
-                component: () => Promise.resolve().then(() => __importStar(require('frontend/components/views/SvDashboard/SvUser/SvPasswordChange/SvPasswordChange.vue'))),
+                component: () => Promise.resolve().then(() => __importStar(require('components/views/SvDashboard/SvUser/SvPasswordChange/SvPasswordChange.vue'))),
                 meta: { title: 'Mudar senha', hidden: true }
             }
         ]

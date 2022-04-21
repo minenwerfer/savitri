@@ -92,7 +92,7 @@ class Mutable extends Controller_1.Controller {
             _id: { $in: props.filters._id },
             ...rest
         };
-        return this._model.deleteMany(rest, { strict: 'throw' });
+        return this._model.deleteMany(filters, { strict: 'throw' });
     }
     /**
      * @method

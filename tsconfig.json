@@ -18,7 +18,8 @@
       "common/*": ["./packages/common/src/*"],
       "data/*": ["./packages/data/*"],
       "backend/*": ["./packages/backend/src/*"],
-      "frontend/*": ["./packages/frontend/src/*"]
+      "frontend/*": ["./packages/frontend/src/*"],
+      "components/*": ["./packages/components/*"]
     },
     "lib": [
       "esnext",
@@ -30,7 +31,9 @@
   "include": [
     "packages/backend/**/*.ts",
     "packages/frontend/**/*.ts",
-    "packages/frontend/**/*.vue",
+    "packages/frontend/**/*.ts",
+    "packages/components/**/*.ts",
+    "packages/components/**/*.vue",
     "packages/common/**/*.ts"
   ],
   "exclude": [

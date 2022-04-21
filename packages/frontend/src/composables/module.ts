@@ -35,7 +35,6 @@ const actions = [
 ]
 
 export const useModule = (name: string, store: any): any => {
-
   const description = () => store.state[name]?.__description||{}
 
   const self: any = {

@@ -41,7 +41,7 @@ __exportStar(require("vue"), exports);
 const vue_unicons_1 = __importDefault(require("vue-unicons"));
 const Icons = __importStar(require("vue-unicons/dist/icons"));
 const useApp = (config) => new Promise((resolve) => {
-    const { component, i18n, menuSchema, routerExtension, storeExtension } = config;
+    const { component, i18n, menuSchema, routerExtension, storeExtension, } = config;
     const store = (0, store_2.instance)();
     const router = (0, router_2.instance)(store);
     const _i18n = (0, i18n_1.useI18n)(i18n);
@@ -50,6 +50,13 @@ const useApp = (config) => new Promise((resolve) => {
     }
     if (storeExtension) {
         (0, store_1.extendStore)(store, storeExtension);
+    }
+    if (config.plugins) {
+        config.plugins.forEach((plugin) => {
+            if (plugin.routerExtension) {
+                (0, router_1.extendRouter)(router, plugin.routerExtension);
+            }
+        });
     }
     const app = (0, vue_1.createApp)(component);
     app.use(router);

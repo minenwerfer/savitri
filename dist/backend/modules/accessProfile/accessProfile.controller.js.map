@@ -1,0 +1,1 @@
+{"version":3,"file":"accessProfile.controller.js","sourceRoot":"","sources":["../../../../packages/backend/modules/accessProfile/accessProfile.controller.ts"],"names":[],"mappings":";;;;;;AAAA,+DAA4E;AAC5E,8DAAqD;AACrD,sDAA+C;AAE/C,MAAa,uBAAwB,SAAQ,oBAA8B;IACzE;QACE,KAAK,CAAC,mCAAa,EAAE,oBAAW,EAAE;YAChC,aAAa,EAAE,CAAC,QAAQ,CAAC;SAC1B,CAAC,CAAA;IACJ,CAAC;CACF;AAND,0DAMC"}

@@ -38,7 +38,7 @@ export const publicRoutes: Route[] = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('frontend/components/views/SvSignIn/SvSignIn.vue'),
+    component: () => import('components/views/SvSignIn/SvSignIn.vue'),
     meta: { title: 'Autenticação', hidden: true, }
   }
 ]
@@ -51,32 +51,32 @@ export const privateRoutes: Route[] = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('frontend/components/templates/SvDashboard/SvDashboard.vue'),
+    component: () => import('components/templates/SvDashboard/SvDashboard.vue'),
     redirect: { name: 'dashboard-home' },
     meta: { title: 'Dashboard' },
     children: [
       {
         path: 'c/:module?',
         name: 'dashboard-crud',
-        component: () => import('frontend/components/views/SvDashboard/SvCrudView/SvCrudView.vue'),
+        component: () => import('components/views/SvDashboard/SvCrudView/SvCrudView.vue'),
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: () => import('frontend/components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'),
+        component: () => import('components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'),
         meta: { title: 'Editar preset de acesso', hidden: true }
       },
       {
         path: 'user-profile',
         name: 'dashboard-user-profile',
-        component: () => import('frontend/components/views/SvDashboard/SvUser/SvProfile/SvProfile.vue'),
+        component: () => import('components/views/SvDashboard/SvUser/SvProfile/SvProfile.vue'),
         meta: { title: 'Meu perfil', hidden: true }
       },
       {
         path: 'user-changepass',
         name: 'dashboard-user-changepass',
-        component: () => import('frontend/components/views/SvDashboard/SvUser/SvPasswordChange/SvPasswordChange.vue'),
+        component: () => import('components/views/SvDashboard/SvUser/SvPasswordChange/SvPasswordChange.vue'),
         meta: { title: 'Mudar senha', hidden: true }
       }
     ]
@@ -125,7 +125,7 @@ export const instance = (store: any) => {
   })
 
   // eslint-disable-next-line
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, from, next: (props?: any) => void) => {
 
     /**
      * @remarks

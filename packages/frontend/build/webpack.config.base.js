@@ -25,6 +25,9 @@ exports.baseWebpackConfig = {
       // shorthand for frontend root
       'frontend': path.resolve(__dirname, '../src'),
 
+      // shorthand for components
+      'components': path.resolve(__dirname, '../../components'),
+
       // shorthand for library root
       'savitri': path.resolve(__dirname, '../../../'),
 

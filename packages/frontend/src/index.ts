@@ -17,12 +17,18 @@ export * from 'vue'
 import Unicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
 
+interface Plugin {
+  routerExtension?: RouterExtension
+  storeExtension?: StoreExtension
+}
+
 interface AppOptions {
-  component: any;
-  i18n?: any;
-  menuSchema?: any;
-  routerExtension?: RouterExtension;
-  storeExtension?: StoreExtension;
+  component: any
+  i18n?: any
+  menuSchema?: any
+  routerExtension?: RouterExtension
+  storeExtension?: StoreExtension
+  plugins?: Plugin[]
 }
 
 export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve) => {
@@ -32,9 +38,9 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
     i18n,
     menuSchema,
     routerExtension,
-    storeExtension
+    storeExtension,
 
-  }: AppOptions = config;
+  }: AppOptions = config
 
   const store = createStore()
   const router = createRouter(store)
@@ -46,6 +52,14 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   if( storeExtension ) {
     extendStore(store, storeExtension)
+  }
+
+  if( config.plugins ) {
+    config.plugins.forEach((plugin: Plugin) => {
+      if( plugin.routerExtension ) {
+        extendRouter(router, plugin.routerExtension)
+      }
+    })
   }
 
   const app = createApp(component)

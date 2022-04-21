@@ -16,15 +16,15 @@ const { readdirSync } = require('fs');
  * @exports @const
  * Array of lowercased controller names.
 */
-exports.commonControllers = readdirSync(`${__dirname}/../../entities`);
+exports.commonControllers = readdirSync(`${__dirname}/../../modules`);
 /**
  * @exports @const
  * Retrieves controller class from alias.
  */
 const getController = (controller) => {
     const controllerPath = exports.commonControllers.includes(controller)
-        ? `${__dirname}/../../entities`
-        : `${process.cwd()}/entities`;
+        ? `${__dirname}/../../modules`
+        : `${process.cwd()}/modules`;
     const sanitizedName = controller.replace(/\./g, '');
     const controllerFile = `${sanitizedName}/${sanitizedName}.controller`;
     const controllerName = `${sanitizedName.capitalize()}Controller`;
