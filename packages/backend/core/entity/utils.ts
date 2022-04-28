@@ -80,7 +80,14 @@ export const fill = (obj: any, fields: any) => {
 }
 
 export const prepareInsert = (description: any, payload: any) => {
-  const { _id, ...rest } = payload
+  const {
+    _id,
+    created_at,
+    updated_at,
+    ...rest
+
+  } = payload
+
   const forbidden = (key: string) => {
     return (description.fields[key]||{}).readonly
       || (description.form && !description.form.includes(key))

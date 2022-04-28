@@ -10,9 +10,20 @@ export const commonControllers = readdirSync(`${__dirname}/../../modules`)
  * Retrieves controller class from alias.
  */
 export const getController = (controller: string) => {
-  const controllerPath = commonControllers.includes(controller)
-    ? `${__dirname}/../../modules`
-    : `${process.cwd()}/modules`
+  const controllerPath = (() => {
+    const module = (globalThis.modules||[])
+      .find(({ exportedEntities }: { exportedEntities: string[] }) => {
+        return exportedEntities?.includes(controller)
+      })
+
+    if( module ) {
+      return `${process.cwd()}/../../node_modules/${module.name}/dist/backend/entities`
+    }
+
+    return commonControllers.includes(controller)
+      ? `${__dirname}/../../entities`
+      : `${process.cwd()}/entities`
+  })()
 
   const sanitizedName = controller.replace(/\./g, '') as string & { capitalize: () => string }
 

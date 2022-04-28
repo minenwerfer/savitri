@@ -38,7 +38,7 @@ export const publicRoutes: Route[] = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('components/views/SvSignIn/SvSignIn.vue'),
+    component: () => import('components/views/sv-signin/sv-signin.vue'),
     meta: { title: 'Autenticação', hidden: true, }
   }
 ]
@@ -51,32 +51,32 @@ export const privateRoutes: Route[] = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('components/templates/SvDashboard/SvDashboard.vue'),
+    component: () => import('components/templates/sv-dashboard/sv-dashboard.vue'),
     redirect: { name: 'dashboard-home' },
     meta: { title: 'Dashboard' },
     children: [
       {
         path: 'c/:module?',
         name: 'dashboard-crud',
-        component: () => import('components/views/SvDashboard/SvCrudView/SvCrudView.vue'),
+        component: () => import('components/views/sv-dashboard/sv-crud-view/sv-crud-view.vue'),
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: () => import('components/views/SvDashboard/SvAccessProfile/SvAccessProfileEdit.vue'),
+        component: () => import('components/views/sv-dashboard/sv-access-profile/sv-access-profile-edit.vue'),
         meta: { title: 'Editar preset de acesso', hidden: true }
       },
       {
         path: 'user-profile',
         name: 'dashboard-user-profile',
-        component: () => import('components/views/SvDashboard/SvUser/SvProfile/SvProfile.vue'),
+        component: () => import('components/views/sv-dashboard/sv-user/sv-profile/sv-profile.vue'),
         meta: { title: 'Meu perfil', hidden: true }
       },
       {
         path: 'user-changepass',
         name: 'dashboard-user-changepass',
-        component: () => import('components/views/SvDashboard/SvUser/SvPasswordChange/SvPasswordChange.vue'),
+        component: () => import('components/views/sv-dashboard/sv-user/sv-password-change/sv-password-change.vue'),
         meta: { title: 'Mudar senha', hidden: true }
       }
     ]

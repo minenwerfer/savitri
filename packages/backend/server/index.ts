@@ -5,15 +5,18 @@ import '../../common/src/polyfill'
 import { getController, HandlerRequest } from '../core/controller'
 import { TokenService } from '../core/services/token.svc'
 
-import { FileController } from '../modules/file/file.controller'
+import { FileController } from '../entities/file/file.controller'
 
 interface Environment {
-  PAGINATION_LIMIT?: number;
+  PAGINATION_LIMIT?: number
+}
+
+declare global {
+  var modules: any[]
 }
 
 async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
   try {
-
     const { params: { controller, verb } } = request
 
     if( /^_/.test(verb) ) {
@@ -73,16 +76,25 @@ async function handler(request: Request & HandlerRequest, h: ResponseToolkit) {
   }
 }
 
-export const init = async (port: number = 3000): Promise<Server> => {
+export const init = async (props?: { port?: number, modules?: any[] }): Promise<Server> => {
+  props = props || {
+    port: 3000,
+    modules: []
+  }
+
+  if( props.modules ) {
+    globalThis.modules = props.modules
+  }
+
   const server = Hapi.server({
-    port,
+    port: props.port || 3000,
     host: '0.0.0.0',
     routes: {
       cors: {
         origin: ['*'],
         headers: [
           'Accept', 
-          'Accept-Version', 
+          'Accept-Version',
           'Authorization', 
           'Content-Length', 
           'Content-MD5', 

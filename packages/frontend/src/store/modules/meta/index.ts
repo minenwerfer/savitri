@@ -221,8 +221,7 @@ export class MetaModule extends Module<Meta, {}> {
       },
 
       VIEW_TITLE_SET: (state: any, value: string) => {
-
-        const translated = (window as any)._i18n.global.tc(value, 2)
+        const translated = (window as any)._i18n.global.tc(value||'', 2)
           .capitalize()
           .replace('%viewTitle%', '-')
 

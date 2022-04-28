@@ -28,7 +28,7 @@ interface AppOptions {
   menuSchema?: any
   routerExtension?: RouterExtension
   storeExtension?: StoreExtension
-  plugins?: Plugin[]
+  modules?: Plugin[]
 }
 
 export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve) => {
@@ -54,10 +54,14 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
     extendStore(store, storeExtension)
   }
 
-  if( config.plugins ) {
-    config.plugins.forEach((plugin: Plugin) => {
+  if( config.modules ) {
+    config.modules.forEach((plugin: Plugin) => {
       if( plugin.routerExtension ) {
         extendRouter(router, plugin.routerExtension)
+      }
+
+      if( plugin.storeExtension ) {
+        extendStore(store, plugin.storeExtension)
       }
     })
   }

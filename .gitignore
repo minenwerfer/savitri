@@ -3,4 +3,4 @@ package-lock.json
 __pycache__
 .env
 .prod.env
-dist
+# dist

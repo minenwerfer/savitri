@@ -61,7 +61,7 @@ export interface CommonState {
   recordsCount: number
   recordsTotal: number
   _clearItem: any
-  _offset: number
+  currentPage: number
   _limit: number
   _halt: boolean
   _filters: any
@@ -136,7 +136,7 @@ export abstract class Module<T=any, Item=any> {
     recordsCount: 0,
     recordsTotal: 0,
     _clearItem: {},
-    _offset: 0,
+    currentPage: 0,
     _limit: 0,
     _halt: false,
     _filters: {},
@@ -538,12 +538,8 @@ export abstract class Module<T=any, Item=any> {
         return state._description
       },
 
-      /**
-       * @function
-       * For pagination.
-       */
-      currentPage: (state: CommonState) => {
-        return Math.floor(state._offset / state._limit);
+      limit: (state: CommonState) => {
+        return state._limit
       },
 
       /**
@@ -675,7 +671,7 @@ export abstract class Module<T=any, Item=any> {
       ask: ({ dispatch }: ActionProps, { action, params, title, body }: { action: string, params: any, title?: string, body?: string}): Promise<void> => new Promise((resolve, reject) =>
         dispatch('meta/spawnPrompt', {
           title: title || 'Diálogo de confirmação',
-          body: body || `Essa ação não poderá ser desfeita. Tem certeza de que desseja prosseguir?`,
+          body: body || `Essa ação não poderá ser desfeita. Tem certeza de que deseja prosseguir?`,
           actions: [
             { name: 'cancel', title: 'Cancelar' },
             { name: 'confirm', title: 'Confirmar', type: 'critical' }
@@ -700,13 +696,13 @@ export abstract class Module<T=any, Item=any> {
 
     // will getAll starting from the given offset
     paginate: ({ commit, dispatch, state, getters }: ActionProps, { page, limit }: { page: number|string, limit: number }): Promise<any> => new Promise((resolve) => {
-      const prevOffset = state._offset || 0
-      const newOffset = ['undefined', 'number'].includes(typeof page)
-        ? page || prevOffset
-        : (typeof page === 'string' && /^(\+|-)[0-9]+$/.test(page) ? eval(`${prevOffset}${page}`) : 0)
+      const prevPage = state.currentPage || 0
+      const newPage = ['undefined', 'number'].includes(typeof page)
+        ? page || prevPage
+        : (typeof page === 'string' && /^(\+|-)[0-9]+$/.test(page) ? eval(`${prevPage}${page}`) : 0)
 
       return dispatch('getAll', {
-        offset: (newOffset-1) * state._limit,
+        offset: (newPage-1) * state._limit,
         filters: {
           ...(state._description.filters||{}),
           ...getters.filters
@@ -714,7 +710,7 @@ export abstract class Module<T=any, Item=any> {
         limit
       })
         .then((res: any) => {
-          commit('OFFSET_UPDATE', res.page || page)
+          commit('PAGE_UPDATE', res.page || page)
           commit('LIMIT_UPDATE', limit)
           resolve(res)
         })
@@ -782,8 +778,8 @@ private _mutations() {
       state.isLoading = typeof value === 'boolean' ? value : !state.isLoading
     },
 
-    OFFSET_UPDATE: (state: CommonState, offset: number) => {
-      state._offset = offset
+    PAGE_UPDATE: (state: CommonState, offset: number) => {
+      state.currentPage = offset
     },
 
     LIMIT_UPDATE: (state: CommonState, limit: number) => {
@@ -793,7 +789,7 @@ private _mutations() {
     COUNT_UPDATE: (state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) => {
       if( recordsCount ) state.recordsCount = recordsCount
       if( recordsTotal ) state.recordsTotal = recordsTotal
-      if( offset ) state._offset = offset
+      // if( offset ) state.currentPage = offset
       if( limit ) state._limit = limit
     },
 

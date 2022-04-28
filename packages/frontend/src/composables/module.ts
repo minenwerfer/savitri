@@ -13,14 +13,16 @@ const getters = [
   'tableDescription',
   'selectedIds',
   'individualActions',
-  'queryCache'
+  'queryCache',
+  'limit'
 ]
 
 const props = [
   'recordsCount',
   'recordsTotal',
   'isLoading',
-  'selected'
+  'selected',
+  'currentPage'
 ]
 
 const actions = [
