@@ -1,0 +1,9 @@
+{
+  "actions": {
+    "removeAll": {
+      "name": "Remover",
+      "ask": true,
+      "selection": true
+    }
+  }
+}

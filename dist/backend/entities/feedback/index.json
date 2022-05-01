@@ -4,15 +4,9 @@
     "unicon": "comment-alt-dots",
     "presets": [
         "alwaysOwned",
+        "removeAll",
         "view"
     ],
-    "actions": {
-        "removeAll": {
-            "name": "Remover",
-            "ask": true,
-            "selection": true
-        }
-    },
     "individualActions": {
         "remove": {
             "name": "Remover",

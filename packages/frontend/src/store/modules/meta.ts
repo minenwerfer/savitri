@@ -1,4 +1,4 @@
-import { Module, ActionProps } from 'frontend/store/module'
+import { Module, ActionProps } from '../module'
 import { AxiosResponse } from 'common/http'
 
 import { default as webpackVariables } from 'variables'
@@ -62,7 +62,6 @@ export interface Meta {
  * Meta module.
  */
 export class MetaModule extends Module<Meta, {}> {
-
   constructor() {
     super('meta', {
       globalIsLoading: false,
@@ -109,7 +108,10 @@ export class MetaModule extends Module<Meta, {}> {
   getters() {
     return {
       isInsertVisible: (state: any) => state.crud.isInsertVisible,
-      isInsertReadonly: (state: any) => state.crud.isInsertReadonly
+      isInsertReadonly: (state: any) => state.crud.isInsertReadonly,
+
+      isMenuVisible: (state: any) =>  state.menu.isVisible,
+      isMobileMenuVisible: (state: any) => state.menu.isMobileVisible,
     }
   }
 
@@ -248,6 +250,9 @@ export class MetaModule extends Module<Meta, {}> {
 
         state.menu.isVisible = !state.menu.isVisible
         state.menu.isMobileVisible = !state.menu.isMobileVisible
+
+        localStorage.setItem('meta:menu:isVisible', state.menu.isVisible)
+        localStorage.setItem('meta:menu:isMobileVisible', state.menu.isMobileVisible)
       },
 
       MODAL_SPAWN: (state: any, payload: any): void => {

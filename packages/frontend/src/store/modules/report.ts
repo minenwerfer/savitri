@@ -1,5 +1,5 @@
-import { Module } from 'frontend/store/module'
-import { useFile } from 'frontend/composables'
+import { Module } from '../module'
+import { useFile } from '../../composables'
 
 const initialItemState = {
   limit: 150

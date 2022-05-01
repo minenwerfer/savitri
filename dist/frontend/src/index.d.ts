@@ -1,4 +1,4 @@
-import 'common/polyfill';
+import '../../common/src/polyfill';
 import { RouterExtension } from './router';
 import { StoreExtension } from './store';
 import 'frontend/../assets/tailwind.css';

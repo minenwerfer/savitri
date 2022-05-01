@@ -3,15 +3,9 @@
   "route": true,
   "unicon": "bag-alt",
   "presets": [
-    "alwaysOwned"
+    "alwaysOwned",
+    "removeAll"
   ],
-  "actions": {
-    "removeAll": {
-      "name": "Remover",
-      "ask": true,
-      "selection": true
-    }
-  },
   "individualActions": {
     "download": {
       "name": "Baixar",

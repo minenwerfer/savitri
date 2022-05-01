@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useApp = void 0;
-require("common/polyfill");
+require("../../common/src/polyfill");
 const vue_1 = require("vue");
 const router_1 = require("./router");
 const store_1 = require("./store");

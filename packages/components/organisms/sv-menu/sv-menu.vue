@@ -6,20 +6,22 @@
       animate-slip md:animate-slowfade transition-all ease-in-out
       ${ visible ? 'md:w-[17em]' : 'md:w-[3.2rem] overflow-x-hidden' } 
       ${ mobileVisible || 'hidden md:block' }
-      overflow-y-auto overscroll-none
+      overflow-x-hidden overflow-y-auto overscroll-none
   `">
 
-    <sv-bare-button @clicked="store.dispatch('meta/swapMenu')" class="hidden md:block w-full">
-      <div class="flex gap-x-1 items-center transform-all opacity-80 h-10 pl-[5px]">
-        <sv-icon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-10 h-10`"></sv-icon>
-        <div v-if="visible" class="text-sm">
-          Recolher
+    <div class="bg-gray-50">
+      <sv-bare-button @clicked="store.dispatch('meta/swapMenu')" class="hidden md:block w-full">
+        <div class="flex gap-x-1 items-center transform-all opacity-80 pl-[8px]">
+          <sv-icon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-9 h-9`"></sv-icon>
+          <div v-if="visible" class="text-sm">
+            Recolher
+          </div>
         </div>
-      </div>
-    </sv-bare-button>
+      </sv-bare-button>
+    </div>
 
     <!-- menu entries -->
-    <div class="grid leading-8 md:leading-7">
+    <div class="grid">
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"
@@ -35,19 +37,22 @@
             v-for="(subroute, index) in route.children"
             :key="`subroute-${index}`"
             @clicked="onEntryClick(subroute)"
-
-            :class="`
-              flex items-center pl-[12px] py-[10px] hover:bg-blue-100 active:no-underline w-full
-              border-l-4 md:border-r-4 md:border-l-0
-              ${visible && 'gap-x-3'}
-              ${isCurrent(subroute) ? 'border-blue-500 bg-blue-50' : 'border-transparent'}
-          `">
-            <sv-icon
-              :name="subroute.meta?.unicon || 'file'"
-              :fill="isCurrent(subroute) ? 'blue' : 'gray'"
-            ></sv-icon>
-            <div :class="`whitespace-nowrap ${visible || 'md:invisible w-0'}`">
-              {{ $tc(subroute.meta.title, 2).capitalize() }}
+            class="w-full"
+          >
+            <div
+              :class="`
+                flex items-center pl-[12px] py-3 hover:bg-blue-100 active:no-underline w-full
+                border-l-4 md:border-r-4 md:border-l-0
+                ${visible && 'gap-x-3'}
+                ${isCurrent(subroute) ? 'border-blue-500 bg-blue-50' : 'border-transparent'}
+            `">
+              <sv-icon
+                :name="subroute.meta?.unicon || 'file'"
+                :fill="isCurrent(subroute) ? 'blue' : 'gray'"
+              ></sv-icon>
+              <div :class="`whitespace-nowrap ${visible || 'md:invisible w-0'}`">
+                {{ $tc(subroute.meta.title, 2).capitalize() }}
+              </div>
             </div>
           </sv-bare-button>
         </div>

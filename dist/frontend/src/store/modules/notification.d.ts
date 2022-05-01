@@ -1,4 +1,4 @@
-import { Module, CommonState } from 'frontend/store/module';
+import { Module, CommonState, MutationProps } from '../module';
 export declare const initialState: {
     messages: {
         local: never[];
@@ -13,8 +13,10 @@ export declare class NotificationModule extends Module<{}, {}> {
         domainLast: (state: any) => number;
     };
     actions(this: NotificationModule): {
-        ping: (...args: any) => any;
-        notify: any;
+        ping: (...args: any) => Promise<unknown>;
+        notify: ({ commit, dispatch, state }: import("../module").ContextFunctions & {
+            state: any;
+        }, value?: any) => Promise<unknown>;
     };
     mutations(this: NotificationModule): {
         NOTIFICATION_PING: (state: CommonState & {

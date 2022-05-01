@@ -12,7 +12,8 @@ module.exports = {
     '../../components/**/*.vue',
     path.join(global.appDir, './src/**/*.vue'),
     path.join(global.appDir, './modules/**/*.vue'),
-    path.join(global.appDir, '../frontend-common/src/**/*.vue')
+    path.join(global.appDir, '../frontend-common/src/**/*.vue'),
+    path.join(global.appDir, '../../node_modules/@savitri/**/*.vue')
   ],
   darkMode: 'media', // or 'media' or 'class'
   theme: {

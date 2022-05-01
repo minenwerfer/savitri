@@ -122,6 +122,7 @@ class ReportController extends controller_1.Mutable {
                 })()
             }), {});
         });
+        // console.log(rows)
         const func = this._formatMap[props.what.format];
         const { filename, mime } = await func.call(this, columns, rows);
         props.what.entries_count = rows.length;

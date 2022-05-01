@@ -1,4 +1,4 @@
-import { Module, CommonState, ActionProps, SV_API_URL_2 } from 'frontend/store/module'
+import { Module, CommonState, ActionProps, SV_API_URL_2 } from '../module'
 import { AxiosResponse } from 'axios'
 
 /**

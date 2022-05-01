@@ -7,7 +7,8 @@ exports.applyPreset = void 0;
 const merge_1 = __importDefault(require("lodash/merge"));
 const applyPreset = (description, name, parent) => {
     const preset = require(__dirname + `/../../../data/presets/${name}`);
-    return (0, merge_1.default)(description, parent ? (preset[parent] || {}) : preset);
+    const presetObject = Object.assign({}, parent ? (preset[parent] || {}) : preset);
+    return (0, merge_1.default)(description, presetObject);
 };
 exports.applyPreset = applyPreset;
 //# sourceMappingURL=preset.js.map

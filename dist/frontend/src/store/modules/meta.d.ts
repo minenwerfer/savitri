@@ -1,4 +1,4 @@
-import { Module } from 'frontend/store/module';
+import { Module, ActionProps } from '../module';
 /**
  * @exports @interface
  * Prompt actions.
@@ -59,6 +59,8 @@ export declare class MetaModule extends Module<Meta, {}> {
     getters(): {
         isInsertVisible: (state: any) => any;
         isInsertReadonly: (state: any) => any;
+        isMenuVisible: (state: any) => any;
+        isMobileMenuVisible: (state: any) => any;
     };
     actions(this: MetaModule): {
         /**

@@ -3,12 +3,25 @@
   "route": true,
   "unicon": "user-circle",
   "presets": [
-    "crud"
+    "crud",
+    "view"
   ],
   "individualActions": {
     "spawnChangePwd": {
       "name": "Mudar senha",
-      "unicon": "key-skeleton"
+      "unicon": "key-skeleton",
+      "useronly": true
+    },
+    "spawnEdit": {
+      "name": "Editar",
+      "unicon": "edit",
+      "useronly": true
+    },
+    "remove": {
+      "name": "remover",
+      "unicon": "trash-alt",
+      "useronly": true,
+      "ask": true
     }
   },
   "fields": {

@@ -1,4 +1,4 @@
-import { Module } from 'frontend/store/module'
+import { Module } from '../module'
 
 /**
  * @exports @const

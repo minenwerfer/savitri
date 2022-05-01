@@ -1,4 +1,4 @@
-import { Module } from 'frontend/store/module';
+import { Module, ActionProps } from '../module';
 export declare class AccessProfileModule extends Module<{}, {}> {
     constructor();
     actions(this: AccessProfileModule): {

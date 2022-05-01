@@ -59,12 +59,15 @@ const getFirstValue = (description, value, key, form = false, name) => {
 };
 exports.getFirstValue = getFirstValue;
 const formatValue = (description, value, key, form = false, field) => {
-    const firstValue = value && typeof value === 'object'
+    const firstValue = value && typeof value === 'object' && !(value instanceof Date)
         ? ((Array.isArray(value) || value?._id) ? (0, exports.getFirstValue)(description, value, key, form) : Object.values(value)[0])
         : value;
     const formatted = (() => {
         switch (true) {
-            case field?.type === 'datetime': return firstValue?.formatDateTime(field.includeHours);
+            case field?.type === 'datetime':
+                return firstValue
+                    ? String(firstValue).formatDateTime(field.includeHours)
+                    : '-';
             case field?.type === 'boolean': return firstValue ? 'sim' : 'não';
             case [undefined, null].includes(firstValue): return '-';
             default: return firstValue;

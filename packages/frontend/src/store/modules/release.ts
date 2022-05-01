@@ -1,4 +1,4 @@
-import { Module, } from 'frontend/store/module'
+import { Module, } from '../module'
 
 export class ReleaseModule extends Module<{}, {}> {
   constructor() {

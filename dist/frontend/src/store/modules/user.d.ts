@@ -1,4 +1,4 @@
-import { Module, CommonState, ActionProps } from '../../module';
+import { Module, CommonState, ActionProps } from '../module';
 /**
  * @exports @interface
  * User metadata.
@@ -45,7 +45,7 @@ export declare const initialItemState: {
 export declare class UserModule extends Module<User, UserItem> {
     constructor();
     actions(this: UserModule): {
-        authenticate: ({ commit, dispatch, state: { current } }: import("../../module").ContextFunctions & {
+        authenticate: ({ commit, dispatch, state: { current } }: import("../module").ContextFunctions & {
             state: CommonState;
             getters?: any;
             rootGetters?: any;

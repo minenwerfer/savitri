@@ -1,6 +1,8 @@
 import { createStore, createLogger, Store } from 'vuex'
 import { autoModules, crud } from './plugins'
 
+export * from './module'
+
 import { MetaModule } from './modules/meta'
 import { UserModule } from './modules/user'
 import { AccessProfileModule } from './modules/accessProfile'

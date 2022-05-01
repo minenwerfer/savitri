@@ -1,4 +1,4 @@
-import { Module, ActionProps, CommonState, MutationProps } from 'frontend/store/module'
+import { Module, ActionProps, CommonState, MutationProps } from '../module'
 
 export const initialState = {
   messages: {

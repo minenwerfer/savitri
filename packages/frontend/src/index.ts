@@ -1,4 +1,4 @@
-import 'common/polyfill'
+import '../../common/src/polyfill'
 
 import { createApp } from 'vue'
 import { extendRouter, RouterExtension } from './router'

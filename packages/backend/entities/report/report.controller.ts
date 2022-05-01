@@ -132,6 +132,8 @@ export class ReportController extends Mutable<ReportDocument> {
         }), {})
     })
 
+    // console.log(rows)
+
     const func = this._formatMap[props.what.format]
     const { filename, mime } = await func.call(this, columns, rows)
 

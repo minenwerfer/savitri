@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { onMounted, computed, inject, ref } from 'vue'
 import { useStore } from 'vuex'
 import { default as webpackVariables } from 'variables'
 
@@ -69,11 +69,18 @@ import {
 
 } from 'components'
 
-import SvUtilities from './_internals/components/SvUtilities/SvUtilities.vue'
+import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
 const notice = inject('notice', undefined)
+
+onMounted(() => {
+  store.dispatch('meta/swapMenu', {
+    isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
+    isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') || false,
+  })
+})
 
 const history = window.history
 
@@ -82,7 +89,7 @@ const menu = computed(() => store.state.meta.menu)
 const isFeedbackVisible = ref(false)
 const isReleasesVisible = ref(false)
 
-const isMenuVisible = computed(() => store.state.meta.menu.isVisible)
-const isMenuMobileVisible = computed(() => store.state.meta.menu.isMobileVisible)
+const isMenuVisible = computed(() => store.getters['meta/isMenuVisible'])
+const isMenuMobileVisible = computed(() => store.getters['meta/isMenuMobileVisible'])
 const isSidebarVisible = computed(() => store.state.meta.sidebar.isVisible)
 </script>

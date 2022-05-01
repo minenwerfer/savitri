@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModule = exports.initialItemState = exports.initialState = void 0;
-const module_1 = require("../../module");
+const module_1 = require("../module");
 /**
  * @exports @const
  * Initial state.
@@ -86,4 +86,4 @@ class UserModule extends module_1.Module {
     }
 }
 exports.UserModule = UserModule;
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=user.js.map

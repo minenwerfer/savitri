@@ -60,13 +60,15 @@
           <div v-else class="flex gap-x-2 justify-end w-full lg:w-auto">
             <sv-dropdown>
               <template #trigger>
-                <sv-icon name="setting" fill="gray" class="w-5 h-5"></sv-icon>
+                <div class="grid place-items-center border bg-white p-1 rounded shadow">
+                  <sv-icon name="setting" fill="gray" class="w-5 h-5"></sv-icon>
+                </div>
               </template>
               <template #content>
                 <teleport :to="`#dropdown-${rindex}`">
                   <div :class="`absolute right-0 ${rindex > Object.keys(rows).length - 3 && 'bottom-0'} z-50 bg-white rounded border shadow-lg whitespace-nowrap`">
                     <sv-bare-button
-                      v-for="(action, aindex) in columns.__custom.actions"
+                      v-for="(action, aindex) in filterActions(columns.__custom.actions)"
                       :key="`action-${rindex}-${aindex}`"
                       @clicked="action.click(row)"
 
@@ -184,6 +186,11 @@ const computedCellStyle = (row: any, field: any) => {
 
   const cellStyle = eval(field.cellStyle)
   return cellStyle(row)
+}
+
+const filterActions = (actions: any[]) => {
+  return actions
+    .filter((action: any) => !action.useronly || store.getters['user/current'].access.visibility !== 'useronly')
 }
 
 const {
