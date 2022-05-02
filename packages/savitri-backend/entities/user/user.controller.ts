@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt'
 
 import { UserDocument, User } from './user.model'
 import { default as Description } from './index.json'
-import { TokenService } from '../../core/services/token.svc'
+import { TokenService } from '../../core/services/token.service'
 import { Mutable } from '../../core/controller'
 
 const path = require('path')

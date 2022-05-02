@@ -4,7 +4,8 @@ const { readdirSync } = require('fs')
  * @exports @const
  * Array of lowercased controller names.
 */
-export const commonControllers = readdirSync(`${__dirname}/../../modules`)
+export const commonControllers = readdirSync(`${__dirname}/../../entities`)
+
 /**
  * @exports @const
  * Retrieves controller class from alias.

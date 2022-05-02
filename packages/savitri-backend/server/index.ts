@@ -3,7 +3,7 @@ import * as Hapi from '@hapi/hapi'
 
 import '../../common/src/polyfill'
 import { getController, HandlerRequest } from '../core/controller'
-import { TokenService } from '../core/services/token.svc'
+import { TokenService } from '../core/services/token.service'
 
 import { FileController } from '../entities/file/file.controller'
 

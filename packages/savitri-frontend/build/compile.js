@@ -8,7 +8,7 @@ const WebpackDevServer = require('webpack-dev-server')
 const makeConfig = require('./make-config')
 
 const filename = 'build.json'
-const mode = process.argv[2]
+const mode = process.argv[3]
 
 try {
   const content = JSON.parse( readFileSync(filename) )

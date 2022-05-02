@@ -6,10 +6,10 @@ const { baseWebpackConfig } = require('./webpack.config.base')
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   entry: {
-    components: path.resolve(__dirname, '../src/components/index.ts'),
+    components: path.resolve(__dirname, '../../components/index.ts'),
   },
   output: {
-    path: path.resolve(__dirname, '../../../dist/frontend'),
+    path: path.resolve(__dirname, '../../../dist/components'),
     filename: '[name].js',
   },
   optimization: {

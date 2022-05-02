@@ -7,7 +7,7 @@ export const useI18n = (options:any) => {
 
       [key]: {
         ...value,
-        ...require(`data/i18n/${key}/index.json`)
+        ...require(`../../i18n/${key}/index.json`)
       }
 
     }), {})
@@ -21,7 +21,7 @@ export const useI18n = (options:any) => {
   return createI18n({
     locale: 'pt_BR',
     messages: {
-      pt_BR: require(`data/i18n/pt_BR/index.json`)
+      pt_BR: require(`../../i18n/pt_BR/index.json`)
     }
   })
 }

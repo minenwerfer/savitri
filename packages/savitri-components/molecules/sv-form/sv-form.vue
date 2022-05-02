@@ -56,7 +56,6 @@
             ></sv-checkbox>
           </div>
 
-
           <sv-select v-else v-model="formData[key]" :values="field.values" class="py-2">
             <option value="">{{ $t('none') }}</option>
             <option v-for="(option, oindex) in field.values" :value="option.value">

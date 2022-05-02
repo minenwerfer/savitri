@@ -32,8 +32,6 @@
     "packages/backend/**/*.ts",
     "packages/frontend/**/*.ts",
     "packages/frontend/**/*.vue",
-    "packages/components/**/*.ts",
-    "packages/components/**/*.vue",
     "packages/common/**/*.ts"
   ],
   "exclude": [
