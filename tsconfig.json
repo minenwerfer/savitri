@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "./dist",
     "declaration": true,
     "skipLibCheck": true,
@@ -31,11 +31,13 @@
   "include": [
     "packages/backend/**/*.ts",
     "packages/frontend/**/*.ts",
+    "packages/frontend/**/*.js",
     "packages/frontend/**/*.vue",
     "packages/common/**/*.ts"
   ],
   "exclude": [
     "packages/**/node_modules/*",
+    "packages/components/*",
     "dist/**/*"
   ],
   "ts-node": {

@@ -22,6 +22,7 @@
     "savitri-bundle": "./frontend/build/compile.js"
   },
   "dependencies": {
+    "@savitri/frontend": "file:packages/savitri-frontend",
     "backend-core": "file:packages/backend",
     "frontend-core": "file:packages/frontend",
     "lodash": "^4.17.21",
