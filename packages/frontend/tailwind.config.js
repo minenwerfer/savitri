@@ -1,11 +1,6 @@
 const path = require('path')
 const colors = require('tailwindcss/colors')
 
-const style = {
-  /** @see CMenu.vue */
-  menuWidth: '15rem'
-}
-
 module.exports = {
   content: [
     '../public/**/*.html',
@@ -13,9 +8,9 @@ module.exports = {
     path.join(global.appDir, './src/**/*.vue'),
     path.join(global.appDir, './modules/**/*.vue'),
     path.join(global.appDir, '../frontend-common/src/**/*.vue'),
-    path.join(global.appDir, '../../node_modules/@savitri/**/*.vue')
+    path.join(global.appDir, '../../node_modules/@savitri/components/**/*.vue')
   ],
-  darkMode: 'media', // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
       gridTemplateColumns: {

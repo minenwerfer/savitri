@@ -62,7 +62,7 @@
 import { ref, inject } from 'vue'
 import { useStore } from 'vuex'
 import { maska as vMaska } from 'maska'
-import { copyToClipboard } from '../../../frontend'
+import { copyToClipboard } from '../../../frontend/src/helpers'
 import {
   SvBareButton,
   SvInfo,

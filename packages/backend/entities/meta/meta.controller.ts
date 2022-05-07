@@ -1,5 +1,5 @@
 import { Controller } from '../../core/controller'
-import { applyPreset } from '../../core/entity'
+import { preloadEntity } from '../../core/entity'
 
 const { readdirSync, existsSync } = require('fs')
 
@@ -28,7 +28,7 @@ export class MetaController extends Controller<unknown> {
         ...readdirSync(dir)
           .filter((d: string) => !d.startsWith('_'))
           .filter((d: string) => existsSync(`${dir}/${d}/index.json`))
-          .reduce((a: any, d: string) => ({ ...a, [d]: require(`${dir}/${d}/index.json`) }), {})
+          .reduce((a: any, d: string) => ({ ...a, [d]: preloadEntity(require(`${dir}/${d}/index.json`)) }), {})
       }), {})
 
     return modules
@@ -37,12 +37,12 @@ export class MetaController extends Controller<unknown> {
   public describeAll() {
     const descriptions = this._getDescriptions()
 
-    Object.keys(descriptions).forEach((key: string) => {
-      const description = descriptions[key]
-      description.presets?.forEach((name: string) => {
-        applyPreset(description, name)
-      })
-    })
+    // Object.keys(descriptions).forEach((key: string) => {
+    //   const description = descriptions[key]
+    //   description.presets?.forEach((name: string) => {
+    //     applyPreset(description, name)
+    //   })
+    // })
 
     return descriptions
   }

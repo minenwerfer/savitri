@@ -14,7 +14,7 @@ export const publicRoutes: Route[] = [
   {
     path: '/signin',
     name: 'signin',
-    component: import('./views').then((m: any) => m.SvSignin),
+    component: () => import('./views/sv-signin/sv-signin.vue'),
     meta: { title: 'Autenticação', hidden: true, }
   }
 ]
@@ -27,32 +27,32 @@ export const privateRoutes: Route[] = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: import('./views').then((m: any) => m.SvDashboard),
+    component: () => import('./templates').then((m: any) => m.SvDashboard),
     redirect: { name: 'dashboard-home' },
     meta: { title: 'Dashboard' },
     children: [
       {
         path: 'c/:module?',
         name: 'dashboard-crud',
-        component: import('./views').then((m: any) => m.SvCrudView),
+        component: () => import('./views').then((m: any) => m.SvCrudView),
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: import('./views').then((m: any) => m.SvAccessProfile),
+        component: () => import('./views').then((m: any) => m.SvAccessProfile),
         meta: { title: 'Editar preset de acesso', hidden: true }
       },
       {
         path: 'user-profile',
         name: 'dashboard-user-profile',
-        component: import('./views').then((m: any) => m.SvProfile),
+        component: () => import('./views').then((m: any) => m.SvProfile),
         meta: { title: 'Meu perfil', hidden: true }
       },
       {
         path: 'user-changepass',
         name: 'dashboard-user-changepass',
-        component: import('./views').then((m: any) => m.SvPasswordChange),
+        component: () => import('./views').then((m: any) => m.SvPasswordChange),
         meta: { title: 'Mudar senha', hidden: true }
       }
     ]
@@ -61,6 +61,6 @@ export const privateRoutes: Route[] = [
 
 /**
  * @exports
- * All routes. You may import it for using in whatever component.
+ * All routes. You may () => import it for using in whatever component.
  */
 export const routes = makeRoutes(publicRoutes, privateRoutes)

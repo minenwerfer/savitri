@@ -30,8 +30,10 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
+    "@types/hapi__hapi": "^20.0.10",
     "@types/lodash": "^4.14.181",
     "@types/uuid": "^8.3.4",
+    "circular-dependency-plugin": "^5.2.2",
     "copy-webpack-plugin": "^10.2.0"
   }
 }

@@ -17,9 +17,9 @@ const mode = process.argv[3];
     const buildConfig = Object.assign(content, {
       mode,
       name: process.cwd().split('/').pop(),
-    })
+    });
 
-    global.appDir = process.cwd()
+    (global as any).appDir = process.cwd()
     process.chdir(__dirname)
 
     const config = makeConfig(buildConfig)
@@ -31,6 +31,7 @@ const mode = process.argv[3];
     }
 
     const options = {
+      hot: false,
       compress: true,
       allowedHosts: 'all',
       historyApiFallback: {

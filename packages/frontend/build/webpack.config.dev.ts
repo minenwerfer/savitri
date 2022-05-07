@@ -13,4 +13,5 @@ export const webpackConfig = merge(baseWebpackConfig, {
       template: path.resolve(__dirname, '../../../packages/frontend/public/index.html')
     })
   ],
+
 } as any)

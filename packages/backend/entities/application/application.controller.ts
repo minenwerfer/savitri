@@ -1,5 +1,5 @@
 import { Controller } from '../../core/controller'
-import { default as manifestContent } from '../../core/resources/manifest.json'
+import { default as manifestContent } from '../../resources/manifest.json'
 
 const path = require('path')
 const { readFile } = require('fs').promises

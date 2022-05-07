@@ -1,5 +1,4 @@
 <template>
-
   <sv-toast v-if="toast.isVisible" :key="toast.itr">
     {{ toast.text }}
   </sv-toast>

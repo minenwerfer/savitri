@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="flex lg:justify-between">
+  <div class="flex flex-col gap-3">
+    <div class="flex justify-between">
       <div class="flex flex-wrap gap-2 overflow-x-auto w-1/3 items-end">
         <sv-button
           icon="filter"
@@ -87,7 +87,7 @@
       <sv-table
         :key="module"
         v-if="tableDescription"
-        :checkbox="Object.keys(description.actions||{}).length > 0"
+        :checkbox="hasSelectionActions"
         :columns="{
           ...tableDescription,
           ...(individualActions.length > 0
@@ -166,6 +166,11 @@ const filtersCount = computed(() => {
     .length
 })
 
+const hasSelectionActions = computed(() => {
+  return Object.values(moduleRefs.description.actions||{})
+    .some((action: any) => !!action.selection)
+})
+
 onUnmounted(() => {
   if( !hash.split(',').includes('refresh') ) {
     return
@@ -175,8 +180,7 @@ onUnmounted(() => {
   const oldFilters = getFilters()
   store.commit(`${props.module}/FILTERS_CLEAR`)
 
-  if( Object.keys(oldFilters).length > 0 )
-  {
+  if( Object.keys(oldFilters).length > 0 ) {
     const filters = getFilters()
     const changed = Object.entries(oldFilters)
       .some(([key, value]: [string, any]) => filters[key] !== value)

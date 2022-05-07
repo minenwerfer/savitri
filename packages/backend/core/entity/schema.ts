@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import { applyPreset } from './preset'
+import { applyPreset } from './preload'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
 
@@ -17,7 +17,6 @@ const typeMapping: Array<[string[], any]> = [
  * Converts a description object into a mongoose Schema structure.
  */
 export const descriptionToSchema = <T>({ strict, fields, ...props }: any, options = {}, extra: any = {}) => {
-
   let hasRefs = false
 
   const convert = (a: any, [key, value]: [string, any]) => {

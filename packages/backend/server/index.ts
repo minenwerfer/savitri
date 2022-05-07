@@ -115,7 +115,7 @@ export const init = async (props?: { port?: number, modules?: any[] }): Promise<
   server.route({
     method: ['GET'],
     path: '/api/file/{hash}/{options?}',
-    handler: async (request, h) => {
+    handler: async (request: Request & HandlerRequest, h: ResponseToolkit) => {
       try {
         const instance = new FileController
 

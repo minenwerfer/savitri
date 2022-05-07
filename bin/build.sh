@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 BUILD_COMPONENTS=
+
+shopt -s extglob
 
 npm run build && \
   cp -r packages/backend/core/resources/* dist/backend/core/resources && \

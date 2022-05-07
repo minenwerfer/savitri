@@ -1,9 +1,15 @@
 const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
+// const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default
+// const CircularDependencyPlugin = require('circular-dependency-plugin')
+//
+declare namespace global {
+  const appDir: string
+}
 
 export const baseWebpackConfig = {
   // entry file
-  entry: path.resolve(__dirname, `${global.appDir}/src`),
+  entry: path.resolve(__dirname, global.appDir),
 
   // resolve typescript along with js
   resolve: {
@@ -24,7 +30,7 @@ export const baseWebpackConfig = {
     }
   },
 
-  // define laoders for each extension
+  // define loaders for each extension
   module: {
     rules: [
       {
@@ -43,7 +49,19 @@ export const baseWebpackConfig = {
         use: [
           'vue-style-loader',
           'css-loader',
-          'postcss-loader'
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: {
+                  tailwindcss: {
+                    config: '../tailwind.config.js'
+                  },
+                  autoprefixer: {}
+                }
+              }
+            }
+          }
         ]
       },
       {
@@ -56,6 +74,17 @@ export const baseWebpackConfig = {
   // these plugins will be included by default
   plugins: [
     new VueLoaderPlugin(),
+    // new WatchExternalFilesPlugin({
+    //   files: [
+    //     '../../components/**/*.vue'
+    //   ]
+    // }),
+    // new CircularDependencyPlugin({
+    //   exclude: /(node_modules|\.vue)/,
+    //   failOnError: true,
+    //   allowAsyncCicles: false,
+    //   cwd: global.appDir
+    // })
   ],
 
   // optimization, mainly for production builds
@@ -67,5 +96,5 @@ export const baseWebpackConfig = {
 
   stats: {
     errorDetails: true
-  }
+  },
 }

@@ -11,6 +11,7 @@ import { instance as createStore } from './store'
 import { instance as createRouter } from './router'
 // import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
+import { routes } from '../../../packages/components'
 
 export * from 'vue'
 
@@ -37,8 +38,6 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
     storeExtension,
 
   }: AppOptions = config
-
-  const { routes } = require('../../components/router')
 
   const store = createStore()
   const router = createRouter(routes, store)

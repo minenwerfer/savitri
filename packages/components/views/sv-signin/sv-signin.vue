@@ -1,8 +1,8 @@
 <template>
   <div class="grid place-items-center h-screen bg-gray-100">
-    <div class="flex flex-col gap-y-5 w-11/12 sm:w-5/6 md:w-4/6 lg:w-1/2 xl:w-1/3">
+    <div class="flex flex-col gap-y-5 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]">
       <img
-        :src="webpackVariables.productLogoFile"
+        :src="require(`@/../assets/${productLogo}`).default"
         class="object-contain w-36 h-16 md:w-48 md:h-24 self-center"
       />
       <sv-box classes="rounded-b-lg shadow-md bg-stone-50" :fill="true">
@@ -65,6 +65,7 @@ const authenticate = () => {
 
 const user = computed(() => store.state.user.current)
 const productName = inject('productName')
+const productLogo = inject('productLogo')
 const productVersion = inject('productVersion')
 const baseVersion = inject('baseVersion')
 </script>

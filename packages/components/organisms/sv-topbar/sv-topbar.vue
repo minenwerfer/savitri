@@ -9,10 +9,10 @@
         @click="$router.push({ name: 'dashboard-home' })"
         class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer inline-flex"
       >
-        <div v-if="!productLogoFile">{{ productName }}</div>
+        <div v-if="!productLogo">{{ productName }}</div>
         <img
           v-else
-          :src="productLogoFile"
+          :src="require(`@/../assets/${productLogo}`).default"
           class="h-10 w-24 object-contain"
         />
       </div>
@@ -38,7 +38,7 @@ import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 const SvBareButton = defineAsyncComponent(() => import('../../atoms/sv-bare-button/sv-bare-button.vue'))
 
 const productName = inject('productName')
-const productLogoFile = inject('productLogoFile')
+const productLogo = inject('productLogo')
 </script>
 
 <style>

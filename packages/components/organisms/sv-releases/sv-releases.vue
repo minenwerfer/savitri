@@ -25,7 +25,7 @@ import { default as SvItem } from './_internals/components/sv-item/sv-item.vue'
 const store = useStore()
 const moduleRefs = reactive(useModule('release', store))
 
-const currentTab = ref(1)
+const currentTab = ref(0)
 
 onMounted(() => {
   if( !moduleRefs.item?.base?.length ) {

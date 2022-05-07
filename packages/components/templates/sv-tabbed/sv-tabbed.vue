@@ -95,17 +95,21 @@ const emit = defineEmits<{
 const router = useRouter()
 const route = useRoute()
 
+const updateTab = (() => {
+  if( route.hash ) {
+    emit('update:currentTab', Number(route.hash.slice(1)))
+  }
+})
+
+watch(() => route.hash, updateTab)
+
 watch(() => props.currentTab, (v: string) => {
   if( route.hash !== `#${v}` ) {
     router.push({ hash: `#${v}` })
   }
 })
 
-onMounted(() => {
-  if( route.hash ) {
-    emit('update:currentTab', Number(route.hash.slice(1)))
-  }
-})
+onMounted(updateTab)
 
 const activeStyle = computed(() => {
   const horizontal = 'border-purple-500'

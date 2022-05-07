@@ -22,7 +22,7 @@
       <sv-menu
         entrypoint="dashboard"
         v-model:visible="isMenuVisible"
-        v-model:mobileVisible="isMenuMobileVisible"
+        v-model:mobileVisible="isMobileMenuVisible"
         :schema="menuSchema"
       ></sv-menu>
 
@@ -78,7 +78,7 @@ const notice = inject('notice', undefined)
 onMounted(() => {
   store.dispatch('meta/swapMenu', {
     isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
-    isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') || false,
+    isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') !== 'false',
   })
 })
 
@@ -90,6 +90,6 @@ const isFeedbackVisible = ref(false)
 const isReleasesVisible = ref(false)
 
 const isMenuVisible = computed(() => store.getters['meta/isMenuVisible'])
-const isMenuMobileVisible = computed(() => store.getters['meta/isMenuMobileVisible'])
+const isMobileMenuVisible = computed(() => store.getters['meta/isMobileMenuVisible'])
 const isSidebarVisible = computed(() => store.state.meta.sidebar.isVisible)
 </script>

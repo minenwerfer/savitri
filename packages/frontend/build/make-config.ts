@@ -1,5 +1,6 @@
 import { merge } from 'webpack-merge'
-const fs = require('fs').promises
+// const { readFileSync } = require('fs')
+
 const oldCwd = process.cwd()
 
 /**
@@ -11,10 +12,6 @@ module.exports = (params: any) => {
   // dev, prod or lib
   const { webpackConfig } = require(`./webpack.config.${params.mode||'dev'}`)
 
-  const {
-    productLogo
-  } = (params.externals?.variables||{})
-
   params.externals = {
     ...(params.externals||{}),
     variables: {
@@ -22,18 +19,26 @@ module.exports = (params: any) => {
       workingDir: oldCwd,
       bundleName: params.name,
       productVersion: require(`${oldCwd}/package.json`).version,
-      productLogoFile: productLogo
-        && (async () => await fs.readFile(`${oldCwd}/assets/${productLogo}`, { encoding: 'base64' }))()
+      // productLogoFile: productLogo
+      //   && readFileSync(`${oldCwd}/assets/${productLogo}`, { encoding: 'base64' })
     }
   }
 
   const config = merge(webpackConfig, {
-    externals: Object.entries(params.externals||{})
-    .reduce((a, [key, value]) => ({ ...a, [key]: JSON.stringify(value) }), {}),
+    externals: {
+      ...Object.entries(params.externals||{}).reduce((a, [key, value]) => ({ ...a, [key]: JSON.stringify(value) }), {}),
 
-    output: {
-      ...(params.mode === 'prod' ? { path: `/var/www/html/${params.name}` } : {})
-    }
+    },
+
+   resolve: {
+      alias: {
+        'variables': `${oldCwd}/build.json`
+      },
+    },
+
+    output: params.mode === 'prod'
+      ? { path: `/var/www/html/${params.name}` }
+      : {}
   })
 
   if( params.mode === 'prod' || true ) {
