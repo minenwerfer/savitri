@@ -30,11 +30,11 @@ module.exports = (params: any) => {
 
     },
 
-   resolve: {
-      alias: {
-        'variables': `${oldCwd}/build.json`
-      },
-    },
+   // resolve: {
+   //    alias: {
+   //      'variables': `${oldCwd}/build.json`
+   //    },
+   //  },
 
     output: params.mode === 'prod'
       ? { path: `/var/www/html/${params.name}` }

@@ -13,7 +13,7 @@ export interface User {
   email: string
   password?: string
   active: boolean
-  access?: AccessProfileDocument[]
+  access?: AccessProfileDocument|any
 }
 
 export type UserDocument = User & Document & {

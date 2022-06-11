@@ -26,7 +26,7 @@ export const baseWebpackConfig = {
     alias: {
       // shorthand for application directory
       // or the current working dir
-      '@': `${global.appDir}/src`,
+      '@': global.appDir,
     }
   },
 
@@ -62,6 +62,14 @@ export const baseWebpackConfig = {
               }
             }
           }
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
         ]
       },
       {

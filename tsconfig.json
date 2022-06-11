@@ -31,11 +31,11 @@
   "include": [
     "packages/backend/**/*.ts",
     "packages/frontend/**/*.ts",
-    "packages/common/**/*.ts"
+    "packages/common/**/*.ts",
+    "packages/components/**/*.ts"
   ],
   "exclude": [
     "packages/**/node_modules/*",
-    "packages/components/**",
     "dist/**/*"
   ],
   "ts-node": {

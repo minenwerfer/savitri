@@ -42,6 +42,7 @@ export interface Meta {
     isVisible: boolean
     title: string
     component: string
+    componentProps: any
   },
   toast: {
     isVisible: boolean
@@ -88,7 +89,8 @@ export class MetaModule extends Module<Meta, {}> {
       sidebar: {
         isVisible: false,
         title: '',
-        component: ''
+        component: '',
+        componentProps: {}
       },
       toast: {
         isVisible: false,
@@ -123,7 +125,6 @@ export class MetaModule extends Module<Meta, {}> {
        * It may be accessed through _description.
        */
       describeAll: ({ commit }: ActionProps): Promise<any> => new Promise((resolve) => {
-
         commit('DESCRIPTIONS_CLEAR')
 
         this._http.get(this.route('describeAll')).then(({ data }: AxiosResponse) => {
@@ -157,7 +158,6 @@ export class MetaModule extends Module<Meta, {}> {
 
         const event = () => {
           window.removeEventListener('__modal', event)
-          commit('MODAL_CLOSE')
           resolve()
         }
 
@@ -167,6 +167,7 @@ export class MetaModule extends Module<Meta, {}> {
       closeModal: ({ commit }: ActionProps): void => {
         commit('MODAL_CLOSE')
       },
+
       spawnPrompt: ({ commit }: ActionProps, payload: any): Promise<string> => new Promise((resolve) => {
         commit('PROMPT_SPAWN', payload)
 
@@ -231,10 +232,10 @@ export class MetaModule extends Module<Meta, {}> {
         document.title = `${webpackVariables.productName} | ${translated}`
       },
 
-      DESCRIPTIONS_ADD: (state: any, module: any): void => {
+      DESCRIPTIONS_ADD: (state: any, description: any): void => {
         state.globalDescriptions = [
-          ...state.globalDescriptions,
-          module
+          ...(state.globalDescriptions||[]),
+          Object.freeze(description)
         ]
       },
 

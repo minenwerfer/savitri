@@ -1,7 +1,6 @@
 {
   "module": "notification",
   "route": true,
-  "flex": true,
   "presets": [
     "alwaysOwned",
     "crud"

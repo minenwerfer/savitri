@@ -1,12 +1,26 @@
-import { RequestProvider, AxiosResponse, fromEntries } from '../../../common'
+import { Router } from 'vue-router'
 import { default as webpackVariables } from 'variables'
+import {
+  RequestProvider,
+  AxiosResponse,
+  fromEntries,
+  withIsomorphicLock
+
+} from '../../../common'
+
+declare global {
+  interface Window {
+    _queryCache?: any
+    _router: Router
+  }
+}
 
 export const SV_API_URL = process.env.NODE_ENV === 'development'
-  ? 'http://0.0.0.0:3000/api'
+  ? 'http://localhost:3000/api'
   : '/api'
 
 export const SV_API_URL_2 = process.env.NODE_ENV === 'development'
-  ? 'http://0.0.0.0:3001/api'
+  ? 'http://localhost:3001/api'
   : '/api2'
 
 export type DispatchFunction = (action: string, payload?: any, options?: any) => Promise<any> | any
@@ -29,6 +43,7 @@ export type ActionProps = ContextFunctions & {
   state: CommonState
   getters?: any
   rootGetters?: any
+  rootState?: any
 }
 
 /**
@@ -227,7 +242,7 @@ export abstract class Module<T=any, Item=any> {
 
             }, { root: true });
 
-            (window as any)._router.push({ name: 'signin' })
+            window._router.push({ name: 'signin' })
 
           } else {
             ctx.commit('meta/MODAL_SPAWN', {
@@ -329,44 +344,55 @@ export abstract class Module<T=any, Item=any> {
         throw new Error('dynamic query but no module is specified')
       }
 
-      const stored = ((window as any)._queryCache||{})[value.module]
-      if( stored && Object.keys(stored).length > 0 ) {
-        return normalize(stored, value)
-      }
+      return withIsomorphicLock(`dynamicQuery:${value.module}`, async () => {
+        const stored = (window._queryCache||{})[value.module]
 
-      /**
-       * @remarks This empty entry will prevent duplicate requests.
-       */
-      (window as any)._queryCache = {
-        ...((window as any)._queryCache || {}),
-        [value.module]: {}
-      }
+        const hasToUpdate = typeof value.limit === 'number'
+          && (value.limit > stored?.length || value.limit === 0)
 
-      /**
-       * @remarks optimization
-       */
-      if( !sessionStorage.getItem('auth:token') && !value.public ) {
-        return {}
-      }
-
-      const route = `${value.module}/getAll`
-
-      const { data } = await this._http.post(route, {
-        filters: value.filters || {},
-        project: value.index || {}
-      })
-
-      const result = normalize(data.result, value)
-
-      window.dispatchEvent(new CustomEvent('__updateQueryCache', {
-        detail: {
-          parentModule: this._route,
-          module: value.module,
-          result: data.result
+        if( stored?.length > 0 && !hasToUpdate ) {
+          return normalize(stored, value)
         }
-      }))
 
-      return result
+        if( hasToUpdate && stored ) {
+          value.offset = stored.length
+        }
+
+        /**
+         * @remarks This empty entry will prevent duplicate requests.
+         */
+        if( !window._queryCache ) {
+          window._queryCache = {}
+        }
+
+        /**
+         * @remarks optimization
+         */
+        if( !sessionStorage.getItem('auth:token') && !value.public ) {
+          return {}
+        }
+
+        const route = `${value.module}/getAll`
+
+        const { data } = await this._http.post(route, {
+          filters: value.filters || {},
+          project: value.index || {},
+          limit: value.limit,
+          offset: value.offset
+        })
+
+        const result = normalize(data.result, value)
+
+        window.dispatchEvent(new CustomEvent('__updateQueryCache', {
+          detail: {
+            parentModule: this._route,
+            module: value.module,
+            result: data.result
+          }
+        }))
+
+        return result
+      })
     }
 
     const entries = Array.isArray(obj)
@@ -415,7 +441,7 @@ export abstract class Module<T=any, Item=any> {
     }
   }
 
-  private _getters()  {
+  protected _getters()  {
     return {
       queryCache: (state: CommonState) => state._queryCache,
 
@@ -457,6 +483,13 @@ export abstract class Module<T=any, Item=any> {
        */
       selectedIds: (state: CommonState) => state.selected.map((s:any) => s._id),
 
+      actions: (state: CommonState) => {
+        const entries = Object.entries(state._description.actions||{})
+          .filter(([, value]: [unknown, any]) => !!value)
+
+        return fromEntries(entries)
+      },
+
       /**
        * @function
        * @see components/reusable/CTable/CTable.vue
@@ -464,6 +497,7 @@ export abstract class Module<T=any, Item=any> {
        */
       individualActions: (state: CommonState) => {
         return Object.entries(state._description.individualActions||{})
+          .filter(([, value]: [unknown, any]) => !!value)
           .reduce((a: object[], [key, value]: [string, any]) => [
             ...a,
             {
@@ -583,7 +617,6 @@ export abstract class Module<T=any, Item=any> {
       },
 
       fields: (state: CommonState) => {
-
         return Object.entries(state._description?.fields||{})
           .reduce((a: object, [key, value]: [string, any]) => ({
             ...a,
@@ -600,7 +633,7 @@ export abstract class Module<T=any, Item=any> {
     }
   }
 
-  private _actions() {
+  protected _actions() {
     return {
       swapLoading: ({ commit }: ActionProps, value?: boolean): void => {
         commit('LOADING_SWAP', value)
@@ -734,141 +767,141 @@ export abstract class Module<T=any, Item=any> {
   }
 }
 
-private _mutations() {
-  return {
-    DESCRIPTION_SET: async (state: CommonState, description: any) => {
-      state._description = {
-        ...description,
-        fields: await this._parseQuery(description.fields, false)
-      }
+  protected _mutations() {
+    return {
+      DESCRIPTION_SET: async (state: CommonState, description: any) => {
+        state._description = {
+          ...description,
+          fields: await this._parseQuery(description.fields, false)
+        }
 
-      state.__description = description
+        state.__description = description
 
-      if( !state.item || Object.keys(state.item).length === 0 ) {
-        state.item = Object.entries(description.fields||{})
-          .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
-          .reduce((a, [key, value]: [string, any]) => ({
-            ...a,
-            [key]:  value.array ? [] : {}
-          }), {})
+        if( !state.item || Object.keys(state.item).length === 0 ) {
+          state.item = Object.entries(description.fields||{})
+            .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
+            .reduce((a, [key, value]: [string, any]) => ({
+              ...a,
+              [key]:  value.array ? [] : {}
+            }), {})
 
-        Object.entries(description.fields||{})
-          .filter(([, value]: [unknown, any]) => ['checkbox', 'radio', 'boolean'].includes(value.type))
-          .forEach(([key, value] : [string, any]) => {
-            state.item[key] = value.type !== 'radio'
-              ? (value.type === 'boolean' ? false : [])
-              : ''
-        })
-      }
+          Object.entries(description.fields||{})
+            .filter(([, value]: [unknown, any]) => ['checkbox', 'radio', 'boolean'].includes(value.type))
+            .forEach(([key, value] : [string, any]) => {
+              state.item[key] = value.type !== 'radio'
+                ? (value.type === 'boolean' ? false : [])
+                : ''
+          })
+        }
 
-      state._clearItem = Object.assign({}, state.item)
-    },
+        state._clearItem = Object.assign({}, state.item)
+      },
 
-    CACHE_QUERY: (state: CommonState, { module, result }: { module: string, result: any }) => {
-      state._queryCache[module] = result;
-      (window as any)._queryCache = {
-        ...((window as any)._queryCache||{}),
-        [module]: result
-      }
-    },
+      CACHE_QUERY: (state: CommonState, { module, result }: { module: string, result: any }) => {
+        state._queryCache[module] = result;
+        window._queryCache = {
+          ...(window._queryCache||{}),
+          [module]: result
+        }
+      },
 
-    LOADING_SWAP: (state: CommonState, value: boolean) => {
-      state.isLoading = typeof value === 'boolean' ? value : !state.isLoading
-    },
+      LOADING_SWAP: (state: CommonState, value: boolean) => {
+        state.isLoading = typeof value === 'boolean' ? value : !state.isLoading
+      },
 
-    PAGE_UPDATE: (state: CommonState, offset: number) => {
-      state.currentPage = offset
-    },
+      PAGE_UPDATE: (state: CommonState, offset: number) => {
+        state.currentPage = offset
+      },
 
-    LIMIT_UPDATE: (state: CommonState, limit: number) => {
-      state._limit = limit
-    },
+      LIMIT_UPDATE: (state: CommonState, limit: number) => {
+        state._limit = limit
+      },
 
-    COUNT_UPDATE: (state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) => {
-      if( recordsCount ) state.recordsCount = recordsCount
-      if( recordsTotal ) state.recordsTotal = recordsTotal
-      // if( offset ) state.currentPage = offset
-      if( limit ) state._limit = limit
-    },
+      COUNT_UPDATE: (state: CommonState, { recordsCount, recordsTotal, offset, limit }: any) => {
+        if( recordsCount ) state.recordsCount = recordsCount
+        if( recordsTotal ) state.recordsTotal = recordsTotal
+        // if( offset ) state.currentPage = offset
+        if( limit ) state._limit = limit
+      },
 
-    ITEM_GET: (state: CommonState, { result }: MutationProps) => {
-      state.item = result
-    },
+      ITEM_GET: (state: CommonState, { result }: MutationProps) => {
+        state.item = result
+      },
 
-    ITEMS_GET: (state: CommonState, { result }: MutationProps) => {
-      state.items = result
-    },
+      ITEMS_GET: (state: CommonState, { result }: MutationProps) => {
+        state.items = result
+      },
 
-    ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {
-      state.item = result
-      const found = state.items.find(({ _id }: any) => result._id === _id)
-      if( found ) {
-        // state.items = state.items.map((item: T & { _id: string }) => ({
-        //   ...(item._id === result._id ? result : item)
-        // }))
-        Object.assign(found, result)
-        return
-      }
+      ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {
+        state.item = result
+        const found = state.items.find(({ _id }: any) => result._id === _id)
+        if( found ) {
+          // state.items = state.items.map((item: T & { _id: string }) => ({
+          //   ...(item._id === result._id ? result : item)
+          // }))
+          Object.assign(found, result)
+          return
+        }
 
-      state.items = [
-        result,
-        ...state.items,
-      ]
-    },
+        state.items = [
+          result,
+          ...state.items,
+        ]
+      },
 
-    ITEM_MODIFY: (state: CommonState, { props }: MutationProps) => {
-      state.item = {
-        ...state.item,
-        ...props
-      }
-    },
+      ITEM_MODIFY: (state: CommonState, { props }: MutationProps) => {
+        state.item = {
+          ...state.item,
+          ...props
+        }
+      },
 
-    ITEMS_MODIFY: (state: CommonState, { props: { what }, payload }: MutationProps) => {
-      const satisfiesFilter = (item: Item & any) =>
-        Object.entries(payload.filters)
-          .every(([key, value]: [string, any]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key])
+      ITEMS_MODIFY: (state: CommonState, { props: { what }, payload }: MutationProps) => {
+        const satisfiesFilter = (item: Item & any) =>
+          Object.entries(payload.filters)
+            .every(([key, value]: [string, any]) => Array.isArray(value) ? value.includes(item[key]) : value === item[key])
 
-      state.items = state.items
-        .map((item: Item) => ({
-          ...item,
-          ...(satisfiesFilter(item) ? what : {})
-        }))
-    },
+        state.items = state.items
+          .map((item: Item) => ({
+            ...item,
+            ...(satisfiesFilter(item) ? what : {})
+          }))
+      },
 
-    ITEM_REMOVE: (state: CommonState, { result }: MutationProps) => {
-      state.items = state.items.filter(({ _id }: any) => result._id !== _id)
-    },
+      ITEM_REMOVE: (state: CommonState, { result }: MutationProps) => {
+        state.items = state.items.filter(({ _id }: any) => result._id !== _id)
+      },
 
-    ITEMS_REMOVE: (state: CommonState, { payload }: MutationProps) => {
-      state.items = state.items.filter(({ _id }: any) => !payload.filters?._id?.includes(_id))
-    },
+      ITEMS_REMOVE: (state: CommonState, { payload }: MutationProps) => {
+        state.items = state.items.filter(({ _id }: any) => !payload.filters?._id?.includes(_id))
+      },
 
-    ITEM_CLEAR: (state: CommonState) => {
-      state.item = Object.assign({}, state._clearItem)
-    },
+      ITEM_CLEAR: (state: CommonState) => {
+        state.item = Object.assign({}, state._clearItem)
+      },
 
-    ITEMS_CLEAR: (state: CommonState) => {
-      state._halt = true
-      state.items = []
-    },
+      ITEMS_CLEAR: (state: CommonState) => {
+        state._halt = true
+        state.items = []
+      },
 
-    ITEM_SELECT: (state: CommonState, { item, value }: { item: any, value?: boolean }) => {
-      const select = (i: any) => [ ...state.selected, Object.assign({}, i) ]
-      const unselect = (i: any) => state.selected.filter(({ _id }: any) => _id !== i._id)
+      ITEM_SELECT: (state: CommonState, { item, value }: { item: any, value?: boolean }) => {
+        const select = (i: any) => [ ...state.selected, Object.assign({}, i) ]
+        const unselect = (i: any) => state.selected.filter(({ _id }: any) => _id !== i._id)
 
-      state.selected = value === false
-        ? unselect(item)
-        : (state.selected.some(({ _id }: any) => _id === item._id)
-          ? unselect(item) : select(item))
-    },
+        state.selected = value === false
+          ? unselect(item)
+          : (state.selected.some(({ _id }: any) => _id === item._id)
+            ? unselect(item) : select(item))
+      },
 
-    ITEMS_SELECT: (state: CommonState, { items, value }: { items: any[], value: boolean }) => {
-      state.selected = value ? items.map(({ _id }: { _id: string }) => ({ _id })) ||[] : []
-    },
+      ITEMS_SELECT: (state: CommonState, { items, value }: { items: any[], value: boolean }) => {
+        state.selected = value ? items.map(({ _id }: { _id: string }) => ({ _id })) ||[] : []
+      },
 
-    FILTERS_CLEAR: (state: CommonState) => {
-      state._filters = normalizeFilters(this._description?.filters || [])
-    },
-  }
+      FILTERS_CLEAR: (state: CommonState) => {
+        state._filters = normalizeFilters(this._description?.filters || [])
+      },
+    }
 }
 }

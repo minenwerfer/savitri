@@ -65,21 +65,23 @@ export class UserController extends Mutable<UserDocument> {
     } = process.env
 
     if( props.email === GODMODE_USERNAME && props.password === GODMODE_PASSWORD ) {
+      const access = {
+        visibility: 'everything',
+        capabilities: {
+          user: [
+            'getAll',
+            'insert'
+          ],
+          accessProfile: [
+            'getAll',
+            'insert'
+          ]
+        }
+      }
+
       const token = TokenService.sign({
         email: GODMODE_USERNAME,
-        access: {
-          visibility: 'everything',
-          capabilities: {
-            user: [
-              'getAll',
-              'insert'
-            ],
-            accessProfile: [
-              'getAll',
-              'insert'
-            ]
-          }
-        }
+        access
       })
 
       return {
@@ -87,7 +89,8 @@ export class UserController extends Mutable<UserDocument> {
         first_name: 'Godmode',
         email: '',
         active: true,
-        token
+        token,
+        access
       }
     }
 

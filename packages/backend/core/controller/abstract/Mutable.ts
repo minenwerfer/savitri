@@ -18,13 +18,19 @@ export type MultipleQuery<T> = Query<(T & { _id: any; })[], T & { _id: any; }, {
 
 
 export abstract class Mutable<T> extends Controller<T> {
+  protected _queryPreset: {
+    filters: any
+    sort: any
+  }
+
   /**
    * @constructor
    * @param {Model<T>} model - a singleton instance of Model<T>
    */
-  constructor(model: Model<T>, description: object, options = {}) {
+  constructor(model: Model<T>, description: object, options:any = {}) {
     super({ description, ...options })
     this._model = model
+    this._queryPreset = options.queryPreset || {}
   }
 
   /**
@@ -48,7 +54,8 @@ export abstract class Mutable<T> extends Controller<T> {
   }
 
   public count(props: { filters?: object }) {
-    return this._model.countDocuments(props?.filters || {})
+    const filters = props?.filters || {}
+    return this._model.countDocuments({ ...filters, ...this._queryPreset.filters||{} })
   }
 
   /**
@@ -88,10 +95,10 @@ export abstract class Mutable<T> extends Controller<T> {
         value && typeof value === 'object' && 'id' in value ? value._id : value
       ])
 
-    props.filters = fromEntries(entries)
+    props.filters = fromEntries(entries) || {}
 
-    return this._model.find(props.filters||{})
-      .sort(props.sort || defaultSort)
+    return this._model.find({ ...props.filters, ...this._queryPreset.filters||{} })
+      .sort({ ...(props.sort || defaultSort), ...this._queryPreset.sort||{} })
       .skip(props.offset || 0)
       .limit(props.limit)
   }

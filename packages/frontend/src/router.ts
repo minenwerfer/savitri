@@ -53,7 +53,7 @@ export const makeRoutes = (publicRoutes: Route[], privateRoutes: Route[]) => {
  * @exports
  * The router instance.
  */
-export const instance = (routes: Route[], store: any) => {
+export const routerInstance = (routes: Route[], store: any) => {
   const router = createRouter({
     history: createWebHistory(),
     routes
@@ -65,7 +65,7 @@ export const instance = (routes: Route[], store: any) => {
      * @remarks
      * Will wait for module registration if necessary.
      */
-    if( !(store.state.meta?.globalDescriptions?.length > 0) ) {
+    if( !(store.state.meta.globalDescriptions?.length > 0) ) {
       await new Promise((resolve) => {
         /**
          * @event __storeCreated

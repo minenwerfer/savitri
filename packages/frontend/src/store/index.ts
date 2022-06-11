@@ -10,7 +10,7 @@ import { NotificationModule } from './modules/notification'
 import { ReportModule } from './modules/report'
 import { ReleaseModule } from './modules/release'
 
-export const instance = (): Store<any> => {
+export const storeInstance = (): Store<any> => {
   const store = createStore<any>({
     modules: {
       meta: (new MetaModule() as any).module,

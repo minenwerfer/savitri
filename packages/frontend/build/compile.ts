@@ -8,7 +8,7 @@ const WebpackDevServer = require('webpack-dev-server')
 const makeConfig = require('./make-config')
 
 const filename = 'build.json'
-const mode = process.argv[3];
+const mode = process.argv[2];
 
 (() => {
   try {
@@ -32,6 +32,7 @@ const mode = process.argv[3];
 
     const options = {
       hot: false,
+      client: false,
       compress: true,
       allowedHosts: 'all',
       historyApiFallback: {

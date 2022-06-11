@@ -14,7 +14,7 @@ export const publicRoutes: Route[] = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('./views/sv-signin/sv-signin.vue'),
+    component: () => import('./components/views/sv-signin/sv-signin.vue'),
     meta: { title: 'Autenticação', hidden: true, }
   }
 ]
@@ -27,32 +27,32 @@ export const privateRoutes: Route[] = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('./templates').then((m: any) => m.SvDashboard),
+    component: () => import('./components/templates').then((m: any) => m.SvDashboard),
     redirect: { name: 'dashboard-home' },
     meta: { title: 'Dashboard' },
     children: [
       {
         path: 'c/:module?',
         name: 'dashboard-crud',
-        component: () => import('./views').then((m: any) => m.SvCrudView),
+        component: () => import('./components/views').then((m: any) => m.SvCrudView),
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: () => import('./views').then((m: any) => m.SvAccessProfile),
+        component: () => import('./components/views').then((m: any) => m.SvAccessProfile),
         meta: { title: 'Editar preset de acesso', hidden: true }
       },
       {
         path: 'user-profile',
         name: 'dashboard-user-profile',
-        component: () => import('./views').then((m: any) => m.SvProfile),
+        component: () => import('./components/views').then((m: any) => m.SvProfile),
         meta: { title: 'Meu perfil', hidden: true }
       },
       {
         path: 'user-changepass',
         name: 'dashboard-user-changepass',
-        component: () => import('./views').then((m: any) => m.SvPasswordChange),
+        component: () => import('./components/views').then((m: any) => m.SvPasswordChange),
         meta: { title: 'Mudar senha', hidden: true }
       }
     ]

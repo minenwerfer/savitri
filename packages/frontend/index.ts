@@ -1,4 +1,5 @@
 export * from './src'
 export * from './src/store'
+export * from './src/router'
 export * from './src/helpers'
 export * from './src/composables'

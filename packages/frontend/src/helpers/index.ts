@@ -13,3 +13,10 @@ export const copyToClipboard = (text: string) => {
   document.execCommand('copy')
   document.body.removeChild(textarea)
 }
+
+export const withLock = async (lockName: string, callback: () => any) => {
+  if( !localStorage.getItem(`lock:${lockName}`) ) {
+    await callback()
+    localStorage.setItem(`lock:${lockName}`, 'true')
+  }
+}

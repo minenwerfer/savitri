@@ -30,6 +30,11 @@
       "type": "text",
       "required": true
     },
+    "active": {
+      "label": "Ativo",
+      "type": "boolean",
+      "default": true
+    },
     "first_name": {
       "label": "Nome",
       "type": "text",
@@ -59,11 +64,6 @@
       "hidden": true,
       "noform": true,
       "notable": true
-    },
-    "active": {
-      "label": "Ativo",
-      "type": "boolean",
-      "default": true
     },
     "phone": {
       "label": "Telefone",

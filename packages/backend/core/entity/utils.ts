@@ -96,7 +96,8 @@ export const prepareInsert = (description: any, payload: any) => {
   const what = typeof _id === 'string' ? Object.entries(rest)
     .filter(([key]: [string, unknown]) => !forbidden(key))
     .reduce((a: any, [key, value]: [string, any]) => {
-      const append = !value || (typeof value === 'object' ? Object.keys(value||{}).length : String(value).length ) === 0
+      const append = [undefined, null].includes(value)
+        || (typeof value === 'object' ? Object.keys(value||{}).length : String(value).length ) === 0
         ? '$unset' : '$set'
 
       a[append][key] = append === '$set' ? value : 1
@@ -108,7 +109,7 @@ export const prepareInsert = (description: any, payload: any) => {
     }) : rest
 
   Object.keys(what)
-    .filter(k => !what[k] || typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
+    .filter(k => (typeof what[k] !== 'boolean' && !what[k]) || typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
     .forEach(k => delete what[k])
 
   return what

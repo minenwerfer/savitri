@@ -1,6 +1,7 @@
 {
   "name": "@savitri/frontend",
-  "version": "1.0.1",
+  "pulic": true,
+  "version": "1.1.12",
   "description": "## Project setup ``` npm install ```",
   "main": "main.ts",
   "scripts": {
@@ -19,8 +20,6 @@
   },
   "homepage": "https://github.com/capsul-dev/beta-frontend#readme",
   "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@vue/test-utils": "^2.0.0-rc.16",
     "autoprefixer": "^10.4.2",
     "css-loader": "^6.5.0",
     "file-loader": "^6.2.0",
@@ -41,6 +40,8 @@
     "@types/webpack-env": "^1.16.3",
     "axios": "^0.24.0",
     "maska": "^1.4.6",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^13.0.0",
     "vue": "^3.2.20",
     "vue-i18n": "^9.2.0-beta.16",
     "vue-inline-svg": "^3.1.0",

@@ -1,9 +1,2 @@
-export * from './atoms'
-export * from './molecules'
-export * from './organisms'
-export * from './templates'
+export * from './components'
 export { routes } from './router'
-
-import './assets/tailwind.css'
-import './assets/main.css'
-

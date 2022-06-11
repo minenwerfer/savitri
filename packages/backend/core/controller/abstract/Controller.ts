@@ -44,7 +44,6 @@ export abstract class Controller<T> {
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
-
         if( this._internal.includes(key) ) {
           throw new Error('forbidden method (cannot be called externally)')
         }
@@ -55,15 +54,14 @@ export abstract class Controller<T> {
 
         const method = (target as { [key: string]: any })[key]
         const alwaysAttribute = this._description?.alwaysAttribute
-        return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
 
+        return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
           const { module } = target._description || {}
           if( !module ) {
             throw new Error('module is undefined')
           }
 
           if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
-
             if( decodedToken?.access ) {
               throw new Error('forbidden method (access denied)')
             }
@@ -99,7 +97,7 @@ export abstract class Controller<T> {
   }
 
   get webInterface(): Controller<T> {
-    return this._webInterface;
+    return this._webInterface
   }
 
   /**
@@ -107,7 +105,7 @@ export abstract class Controller<T> {
    * Describes the controller.
    */
   public describe(): object {
-    return this._description;
+    return this._description
   }
 
   public async forward(this: any, route: string, props: any, decodedToken: any) {

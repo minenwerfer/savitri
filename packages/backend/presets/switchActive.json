@@ -1,0 +1,8 @@
+{
+  "individualActions": {
+    "switchActive": {
+      "name": "Ativa/desativa",
+      "unicon": "toggle-on"
+    }
+  }
+}

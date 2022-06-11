@@ -29,12 +29,12 @@
       "label": "User-Agent",
       "type": "text",
       "notable": true,
-      "noform": true,
-      "flexGrow": true
+      "noform": true
     },
     "section": {
       "label": "Seção",
-      "type": "text"
+      "type": "text",
+      "formStyle": "col-span-4"
     },
     "type": {
       "label": "Tipo",
@@ -46,7 +46,8 @@
         "Elogio",
         "Bug report",
         "Outra coisa"
-      ]
+      ],
+      "formStyle": "col-span-2"
     },
     "comment": {
       "label": "Comentário",

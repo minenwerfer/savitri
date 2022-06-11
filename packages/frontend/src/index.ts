@@ -7,11 +7,11 @@ import * as Icons from 'vue-unicons/dist/icons'
 import { extendRouter, RouterExtension } from './router'
 import { extendStore, StoreExtension } from './store'
 import { useI18n } from './i18n'
-import { instance as createStore } from './store'
-import { instance as createRouter } from './router'
+import { storeInstance as createStore } from './store'
+import { routerInstance as createRouter } from './router'
 // import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
-import { routes } from '../../../packages/components'
+import { routes } from '@savitri/components'
 
 export * from 'vue'
 
@@ -72,7 +72,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
   app.provide('menuSchema', menuSchema)
   app.provide('i18n', i18n)
 
-  app.provide('baseVersion', require('../../../package.json').version)
+  app.provide('baseVersion', require('../package.json').version)
   // app.provide('productVersion', require(`./package.json`).version)
 
   Unicon.add([ ...Object.values(Icons) ] as string[])

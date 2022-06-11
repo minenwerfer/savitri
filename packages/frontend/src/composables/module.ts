@@ -6,6 +6,7 @@ const getters = [
   'item',
   'condensedItem',
   'items',
+  'actions',
   'fields',
   'filters',
   'availableFilters',

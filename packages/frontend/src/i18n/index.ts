@@ -1,16 +1,21 @@
 import { createI18n } from 'vue-i18n'
 
+const __defaultLocales = [
+  'pt_BR'
+]
+
 export const useI18n = (options:any) => {
   if( options ) {
-    const messages = Object.entries(options.messages)
-    .reduce((a, [key, value]: [string, any]) => ({
+    const messages = options.messages
 
-      [key]: {
-        ...value,
-        ...require(`../../i18n/${key}/index.json`)
+    __defaultLocales.forEach((locale:string) => {
+      if( locale in messages ) {
+        messages[locale] = {
+          ...messages[locale],
+          ...require(`../../i18n/${locale}/index.json`)
+        }
       }
-
-    }), {})
+    })
 
     return createI18n({
       ...options,
