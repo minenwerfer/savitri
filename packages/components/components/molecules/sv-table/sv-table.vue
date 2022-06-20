@@ -1,5 +1,5 @@
 <template>
-  <table v-if="Object.keys(columns).length > 0" class="w-full">
+  <table v-if="Object.keys(columns).length > 0" class="w-full table">
     <tr class="leading-9 text-xs uppercase text-left bg-gray-50 border-b" v-if="headers">
       <th v-if="module && checkbox" :class="`hidden lg:table-cell w-10 px-2 ${border && 'border'}`">
         <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
@@ -199,3 +199,5 @@ const {
 
 } = toRefs(moduleRefs)
 </script>
+
+<style scoped src="./sv-table.scss"></style>

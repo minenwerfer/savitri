@@ -29,10 +29,6 @@ export class FileController extends Mutable<FileDocument> {
       throw new Error('filename lacks extension')
     }
 
-    if( ['shtml', 'html', 'html', 'php', 'php5', 'exe', 'msi', 'vbs'].includes(extension) ) {
-      throw new Error('hoje não, joãozinho defacer')
-    }
-
     const oldFile = await File.findOne({
       $and: [
         { user_id: what.user_id },

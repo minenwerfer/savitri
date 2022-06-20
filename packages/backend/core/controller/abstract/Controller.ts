@@ -32,9 +32,9 @@ export abstract class Controller<T> {
 
   /**
    * @constructor
-   * Sets controller metadata and creates a proxy that passes
-   * req.payload instead of req as first parameter and forbiddens call if
-   * user hasn't the capability set.
+   * Sets controller metadata and creates a proxy that passes req.payload
+   * instead of req as first parameter and forbiddens call if user hasn't the
+   * capability set.
    */
   constructor(props: { description?: any, forbiddenMethods?: string[], publicMethods?: string[], rawMethods?: { [key: string]: string } }) {
     this._description = props?.description

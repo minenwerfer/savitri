@@ -1,0 +1,67 @@
+.menu {
+  position: sticky;
+  top: calc(3.2rem + 1px);
+  width: 17em;
+  height: calc(100vh - 3.2rem - 1px);
+  border-right: 1px solid #dedede;
+  z-index: 20;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  background: #fff;
+  transition: width .15s ease-out;
+
+  @media screen and (max-width: 600px) {
+    position: fixed;
+  }
+
+  &--hidden {
+    @media screen and (max-width: 600px) {
+      width: 0;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    padding: 1em;
+    gap: 1em;
+    border-bottom: 1px solid #dedede;
+  }
+
+  &__picture {
+    $size: 4.5em;
+    width: $size;
+    height: $size;
+
+    border: 1px solid #dedede;
+    border-radius: 100%;
+    overflow: hidden;
+
+    transition: filter .35s;
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(.8);
+    }
+  }
+
+  &__entries {
+    padding: 1em;
+  }
+
+  &__group {
+    font-weight: bold;
+  }
+
+  &__subroute {
+    padding: .5em .5em;
+  }
+
+  &__icon {
+    :deep(svg) {
+      width: 1.3em;
+      fill: #63b3ed;
+    }
+  }
+}

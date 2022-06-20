@@ -1,15 +1,15 @@
 <template>
-  <label class="outline-none select-none">
-    <strong class="text-xs uppercase">
+  <label class="input">
+    <strong class="input__label">
       <slot v-if="$slots.default"></slot>
       <slot v-else name="label"></slot>
     </strong>
-    <div class="text-sm opacity-50" v-if="$slots.description">
+    <div v-if="$slots.description" class="input__description">
       <slot name="description"></slot>
     </div>
-    <div v-if="type !== 'textbox'" class="relative flex">
+    <div v-if="type !== 'textbox'" :class="`input__container input__container--${variant}`">
       <input
-        :class="classes[variant]"
+        :class="`input__input input__input--${variant} ${icon && 'input__input--icon'}`"
 
         ref="input"
         :type="type !== 'datetime' ? type : 'text'"
@@ -21,25 +21,20 @@
         v-maska="mask"
         :readonly="readonly"
       />
-      <div 
+      <sv-icon 
         v-if="icon"
-        :class="
-          variant !== 'light'
-            ? 'absolute top-[58%] left-2 transform -translate-y-1/2'
-            : 'absolute top-0 left-0'
-        "
-      >
-        <sv-icon :name="icon" fill="gray"></sv-icon>
-      </div>
+        :name="icon"
+        :class="`input__icon input__icon--${variant}`"
+      ></sv-icon>
 
       <div
         v-if="readonly"
-        class="flex items-center border border-stone-300 transform -translate-x-1 bg-white px-1"
+        class="input__clipboard"
       >
         <sv-info>
           <template #text>Copiar</template>
           <sv-bare-button @clicked="copy(inputValue || value)">
-            <sv-icon name="clipboard" fill="gray" class="w-5 h-5"></sv-icon>
+            <sv-icon name="clipboard" fill="gray"></sv-icon>
           </sv-bare-button>
         </sv-info>
       </div>
@@ -48,7 +43,7 @@
 
     <textarea
       v-else
-      :class="`${classes[variant]} h-36`"
+      :class="`input__textarea input__input--${variant}`"
       :placeholder="placeholder"
 
       @input="$emit('update:modelValue', $event.target.value)"
@@ -124,34 +119,6 @@ const inputValue = ref(props.type === 'datetime'
   ? dateToISO(props.modelValue)
   : props.modelValue)
 
-const classes ={
-  normal: `
-    w-full border-box rounded
-    border border-stone-300 focus:border-gray-600 focus:shadow
-    bg-white px-3 py-1
-    text-gray-600 outline-none
-    ${props.icon && 'pl-8'}
-    ${props.readonly && 'bg-stone-50'}
-  `,
-
-  light: `
-    w-full border-box 
-    border-b border-stone-400 focus:border-gray-600 focus:shadow
-    bg-transparent pb-1
-    text-gray-600 outline-none
-    ${props.icon && 'pl-8'}
-    ${props.readonly && 'bg-stone-50'}
-  `,
-
-  bold: `
-    w-full border-box rounded
-    border border-gray-300 py-2 focus:border-gray-600 focus:shadow
-    outline-none px-3
-    ${props.icon && 'pl-10'}
-    ${props.readonly ? 'bg-stone-50' : 'bg-white'}
-  `
-}
-
 const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {
   inputValue.value = event.target.value
   const newValue = props.type !== 'datetime'
@@ -174,3 +141,5 @@ const copy = (value: string) => {
   })
 }
 </script>
+
+<style scoped src="./sv-input.scss"></style>

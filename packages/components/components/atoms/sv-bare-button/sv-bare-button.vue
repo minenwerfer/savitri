@@ -1,14 +1,9 @@
 <template>
   <button
     :class="`
-      active:underline flex items-center gap-x-1
-      inline-block select-none outline-none
-      ${
-        !disabled
-          ? 'cursor-pointer'
-          : 'cursor-not-allowed opacity-50'
-      }
-      `"
+      barebutton
+      barebutton--${disabled ? 'disabled' : 'enabled'}
+    `"
     @click="onClick"
   >
     <slot></slot>
@@ -33,3 +28,5 @@ const onClick = (event: any) => {
   }
 }
 </script>
+
+<style scoped src="./sv-bare-button.scss"></style>

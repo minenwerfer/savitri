@@ -1,41 +1,39 @@
 <template>
   <div class="grid place-items-center h-screen bg-gray-100">
-    <div class="flex flex-col gap-y-4 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]">
+    <div class="flex flex-col gap-y-6 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]">
       <img
         :src="require(`@/assets/${productLogo}`).default"
-        class="object-contain w-36 h-16 md:w-48 md:h-24 self-center"
+        style="width: 12em" class="object-contain self-center"
       />
-      <sv-box classes="rounded-b-lg shadow-md bg-stone-50" :fill="true">
-        <div class="flex flex-col px-6 py-8 border-t-[10px] ronded-xl border-blue-800">
-          <div class="self-center mt-6 mb-12">
-            <div class="text-2xl opacity-60" v-html="webpackVariables.signinText || 'Identifique-se'">
-            </div>
-          </div>
-          <sv-form
-            :form-data="user"
-            :form="{
-              email: {
-                placeholder: 'E-mail',
-                icon: 'envelope',
-                type: 'text',
-                required: true,
-              },
-              password: {
-                placeholder: 'Senha',
-                icon: 'lock',
-                type: 'password',
-                required: true,
-              }
-            }"
+      <sv-box>
+        <div style="padding: 1.4em" class="flex justify-center">
+          <div style="width: 26.5em" class="flex flex-col items-center gap-y-6">
+            <div class="py-6 text-2xl font-bold opacity-80" v-html="webpackVariables.signinText || 'Identifique-se'"></div>
+            <sv-form
+              :form-data="user"
+              :form="{
+                email: {
+                  placeholder: 'E-mail',
+                  icon: 'user',
+                  type: 'text',
+                  required: true,
+                },
+                password: {
+                  placeholder: 'Senha',
+                  icon: 'key-skeleton',
+                  type: 'password',
+                  required: true,
+                }
+              }"
+            ></sv-form>
+            <sv-button
+              @clicked="authenticate"
+              :disabled="store.state.user.isLoading"
+              style="padding: .8em 0; width: 100%;"
             >
-          </sv-form>
-          <sv-button
-            @clicked="authenticate"
-            :disabled="store.state.user.isLoading"
-            class="py-3 mt-6 w-full"
-          >
-            <div class="w-full">Entrar</div>
-          </sv-button>
+              <div class="w-full">Entrar</div>
+            </sv-button>
+          </div>
         </div>
       </sv-box>
       <div class="self-center opacity-40 text-sm">

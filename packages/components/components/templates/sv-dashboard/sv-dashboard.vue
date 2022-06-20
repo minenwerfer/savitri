@@ -1,7 +1,7 @@
 <template>
   <component :is="runonceSlot" v-if="runonceSlot"></component>
 
-  <div class="bg-gray-100">
+  <div class="dashboard">
     <sv-bare-button
       class="
         fixed bottom-0 right-0 z-30
@@ -24,23 +24,15 @@
 
       <sv-menu
         entrypoint="dashboard"
-        v-model:visible="isMenuVisible"
-        v-model:mobileVisible="isMobileMenuVisible"
+        v-model:visible="isMobileMenuVisible"
         :schema="menuSchema"
       ></sv-menu>
 
       <div class="relative inline-flex flex-col flex-grow md:w-0 overflow-y-scroll">
-        <div :class="`order-2 ${$route.meta?.noMargin || 'px-0 md:px-4 pb-6 pt-2'}`">
-          <sv-bare-button
-            class="flex mb-8 opacity-60 transition-all hover:scale-105"
-            v-if="history.state.back != '/signin' && !$route.meta?.noMargin"
-            @clicked="$router.back()"
-          >
-            <sv-icon name="arrow-left"></sv-icon>
-            <div>Voltar</div>
-          </sv-bare-button>
+        <div :class="`order-2 ${$route.meta?.noMargin || 'px-6 py-6'}`">
+          <sv-breadcumb></sv-breadcumb>
 
-          <div :class="$route.meta?.noMargin || 'mt-4'">
+          <div :class="$route.meta?.noMargin || 'mt-6'">
             <router-view />
           </div>
         </div>
@@ -73,6 +65,7 @@ import {
 } from '../../'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
+import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
@@ -99,3 +92,5 @@ const isMenuVisible = computed(() => store.getters['meta/isMenuVisible'])
 const isMobileMenuVisible = computed(() => store.getters['meta/isMobileMenuVisible'])
 const isSidebarVisible = computed(() => store.state.meta.sidebar.isVisible)
 </script>
+
+<style scoped src="./sv-dashboard.scss"></style>

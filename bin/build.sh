@@ -14,7 +14,7 @@ npm run build && \
   cp -r packages/backend/resources/* dist/backend/resources && \
   cp -r packages/backend/presets dist/backend && \
   cp -r packages/frontend/i18n dist/frontend && \
-  cp -r packages/components/components/assets dist/components/components && \
+  cp -r packages/components/assets dist/components && \
   cp packages/backend/RELEASE.yml dist/backend/ 2>/dev/null && \
   [ ! -z $BUILD_COMPONENTS ] && (cd frontend && npm run build)
 

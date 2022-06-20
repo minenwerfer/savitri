@@ -12,7 +12,7 @@ export const useI18n = (options:any) => {
       if( locale in messages ) {
         messages[locale] = {
           ...messages[locale],
-          ...require(`../../i18n/${locale}/index.json`)
+          ...require(`../../../i18n/${locale}/index.json`)
         }
       }
     })
@@ -26,7 +26,7 @@ export const useI18n = (options:any) => {
   return createI18n({
     locale: 'pt_BR',
     messages: {
-      pt_BR: require('../../i18n/pt_BR/index.json')
+      pt_BR: require('../../../i18n/pt_BR/index.json')
     }
   })
 }

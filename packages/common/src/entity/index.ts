@@ -24,7 +24,13 @@ export const getIndexes = (description: any, key: string, form: boolean = false)
     Object.assign(query, prop||{})
   }
 
-  const { module, index, formIndex } = query.module ? query : (reference||{})
+  const {
+    module,
+    index,
+    formIndex
+
+  } = query.module ? query : (reference||{})
+
   if( !module ) {
     return
   }
@@ -34,8 +40,8 @@ export const getIndexes = (description: any, key: string, form: boolean = false)
 }
 
 export const getFirstIndex = (description: any, key: string, form: boolean = false) => {
-  const fields = getIndexes(description, key, form)
-  return (fields||[])[0]
+  const fields = getIndexes(description, key, form)||[]
+  return fields[0]
 }
 
 /**
@@ -91,7 +97,7 @@ export const formatValue = (description: any, value: any, key: string, form: boo
   })()
 
   return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
-    ? formatted.substr(0, field.trim - 3) + '...'
+    ? formatted.slice(0, field.trim - 3) + '...'
     : String([undefined, null].includes(formatted) ? '-' : formatted)
 }
 

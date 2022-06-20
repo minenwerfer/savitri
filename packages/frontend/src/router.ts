@@ -1,4 +1,7 @@
+import { provide } from 'vue'
+import { useStore } from 'vuex'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useModule } from './composables'
 
 /**
  * @exports
@@ -6,6 +9,18 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
  */
 export const BareTemplate = {
   template: `<router-view />`
+}
+
+export const ContextTemplate = {
+  template: `<slot />`,
+  setup: (props: { moduleName: string }) => {
+    const store = useStore()
+    provide('module', useModule(props.moduleName, store))
+    provide('moduleName', props.moduleName)
+  },
+  props: {
+    moduleName: String
+  }
 }
 
 export interface RouteMeta {

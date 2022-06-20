@@ -8,7 +8,7 @@
         :item-index="itemIndex"
         :field-index="fieldIndex"
       ></sv-form>
-      <div class="flex gap-x-1">
+      <div class="flex gap-x-1" v-if="!expand">
         <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
@@ -47,16 +47,16 @@
 
             <div v-if="!searchOnly" class="flex gap-x-1">
               <sv-bare-button @clicked="edit(item)">
-                <sv-icon name="edit" fill="gray" class="w-5 h-5"></sv-icon>
+                <sv-icon name="edit" fill="gray"></sv-icon>
               </sv-bare-button>
               <sv-bare-button @clicked="unselect(item)">
-                <sv-icon name="trash" fill="gray" class="w-5 h-5"></sv-icon>
+                <sv-icon name="trash" fill="gray"></sv-icon>
               </sv-bare-button>
             </div>
 
             <div v-else>
               <sv-bare-button @clicked="unselect(item, false)">
-                <sv-icon name="minus" fill="gray" class="w-5 h-5"></sv-icon>
+                <sv-icon name="minus" fill="gray"></sv-icon>
               </sv-bare-button>
             </div>
 
@@ -139,6 +139,7 @@ const moduleRefs = reactive(useModule(props.field.module, store))
 
 const field = props.field
 provide('module', field.module)
+provide('iconReactive', true)
 
 onMounted(() => store.dispatch(`${field.module}/clearAll`))
 

@@ -1,36 +1,30 @@
 <template>
-  <div
-    :class="`
-    test
-      fixed md:sticky top-0 right-0 md:top-[calc(3.2rem+1px)] w-10/12 h-screen md:h-[calc(100vh-3.2rem-1px)] z-40
-      bg-white border-r
-      animate-slip md:animate-slowfade transition-all ease-in-out
-      ${ visible ? 'md:w-[17em]' : 'md:w-[3.2rem] overflow-x-hidden' } 
-      ${ mobileVisible || 'hidden md:block' }
-      overflow-x-hidden overflow-y-auto overscroll-none
-  `">
+  <div :class="`menu ${!visible && 'menu--hidden'}`">
+    <!-- Internals!!!! -->
+    <div class="menu__profile">
+      <sv-picture
+        :file="store.getters['user/current'].picture"
+        class="menu__picture"
+      ></sv-picture>
 
-    <div class="bg-gray-50">
-      <sv-bare-button @clicked="store.dispatch('meta/swapMenu')" class="hidden md:block w-full">
-        <div class="flex gap-x-1 items-center transform-all opacity-80 pl-[8px]">
-          <sv-icon name="angle-left" fill="gray" :class="`${!visible && 'rotate-180'} w-9 h-9`"></sv-icon>
-          <div v-if="visible" class="text-sm">
-            Recolher
-          </div>
-        </div>
-      </sv-bare-button>
+      <div>
+        {{ store.getters['user/current'].first_name }}
+      </div>
     </div>
 
     <!-- menu entries -->
-    <div class="grid">
+    <div class="menu__entries">
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"
-        class="border-y mt-[-1px]"
+        class="mt-[-1px] py-2"
       >
-        <!-- <a @click="onEntryClick(route)" class="menu-entry menu-route mb-2"> -->
-        <!--   {{ $tc(route.meta.title, 2).capitalize() }} -->
-        <!-- </a> -->
+        <a
+          class="menu__group px-2 text-xs uppercase font-bold"
+          @click="onEntryClick(route)"
+        >
+          {{ $tc(route.meta.title, 2).capitalize() }}
+        </a>
 
         <!-- subroutes -->
         <div>
@@ -42,16 +36,16 @@
           >
             <div
               :class="`
-                flex items-center pl-[12px] py-3 hover:bg-blue-100 active:no-underline w-full
-                border-l-4 md:border-r-4 md:border-l-0
-                ${visible && 'gap-x-3'}
-                ${isCurrent(subroute) ? 'border-blue-500 bg-blue-50' : 'border-transparent'}
+                menu__subroute flex items-center hover:bg-blue-100 active:no-underline w-full
+                gap-x-2 rounded-lg 
+                ${isCurrent(subroute) ? 'border-blue-500 bg-blue-100' : 'border-transparent'}
             `">
               <sv-icon
                 :name="subroute.meta?.unicon || 'file'"
                 :fill="isCurrent(subroute) ? 'blue' : 'gray'"
+                class="menu__icon"
               ></sv-icon>
-              <div :class="`${visible || 'md:invisible w-0'} whitespace-nowrap uppercase text-xs font-semibold opacity-60`">
+              <div :class="`whitespace-nowrap opacity-60`">
                 {{ $tc(subroute.meta.title, 2).capitalize() }}
               </div>
             </div>
@@ -64,7 +58,8 @@
 
   <sv-overlay
     @click="closeMobile"
-    :class="`${ mobileVisible ? '' : 'hidden' } md:hidden z-30`"
+    v-if="false"
+    class="z-10"
   ></sv-overlay>
 
 </template>
@@ -76,7 +71,8 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   SvBareButton,
   SvOverlay,
-  SvIcon
+  SvIcon,
+  SvPicture
 
 } from '../../'
 
@@ -164,10 +160,4 @@ watch(() => store.state.meta?.globalDescriptions, () => {
 })
 </script>
 
-<style lang="scss">
-$color: red;
-
-.test {
-  color: $color;
-}
-</style>
+<style scoped src="./sv-menu.scss"></style>

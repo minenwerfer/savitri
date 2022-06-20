@@ -1,0 +1,54 @@
+.button {
+  transition: all;
+  
+  &:hover {
+    ::v-deep .button__icon {
+      fill: white;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0 .4rem;
+  }
+
+  &__icon {
+    width: 1.1em;
+    height: 1.1em;
+
+    ::v-deep svg {
+      fill: white;
+    }
+
+    &--light {
+      fill: purple;
+    }
+  }
+
+  &--normal {
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    outline: none;
+    padding: .35em 1em;
+    border-radius: 5px;
+  }
+
+  &--neutral {
+    background: #998099;
+    border: darkblue;
+    text: white;
+  }
+
+  &--success {
+    background: green;
+    border: darkblue;
+    text: white;
+  }
+
+  &--critical {
+    background: red;
+  }
+}

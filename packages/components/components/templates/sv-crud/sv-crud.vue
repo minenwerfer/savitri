@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-4">
     <div class="flex justify-between">
       <div class="flex flex-wrap gap-2 overflow-x-auto w-1/3 items-end">
         <sv-button

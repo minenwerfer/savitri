@@ -48,7 +48,7 @@ export type ActionProps = ContextFunctions & {
 
 /**
  * @exports @interface
- * Object passed to commit() when _actionHelper succeeds.
+ * Object passed to commit() when actionHelper succeeds.
  */
 export interface MutationProps {
   result?: any
@@ -281,7 +281,7 @@ export abstract class Module<T=any, Item=any> {
     return `${this._route}/${verb}`
   }
 
-  protected _actionHelper<T_>(verb: string, mutation?: string, transform: (what: any) => any = (what) => what) {
+  protected actionHelper<T_>(verb: string, mutation?: string, transform: (what: any) => any = (what) => what) {
     const route = this.route(verb)
     return ({ commit, dispatch, state }: ContextFunctions & { state: any }, value?: any): Promise<T_> => new Promise((resolve, reject) => {
       state._halt = false
@@ -640,10 +640,10 @@ export abstract class Module<T=any, Item=any> {
         commit('meta/GLOBAL_LOADING_SWAP', value, { root: true })
       },
 
-      describe: this._actionHelper<any>('describe', 'DESCRIPTION_SET'),
+      describe: this.actionHelper<any>('describe', 'DESCRIPTION_SET'),
 
       get: (...args:any) => {
-        const func = this._actionHelper<Item>('get', 'ITEM_GET')
+        const func = this.actionHelper<Item>('get', 'ITEM_GET')
         const [{ state }]: [ActionProps, unknown] = args
 
         const { force } = args[1] || {}
@@ -657,12 +657,12 @@ export abstract class Module<T=any, Item=any> {
           : found
       },
 
-      getAll: this._actionHelper<Item[]>('getAll', 'ITEMS_GET'),
-      insert: this._actionHelper<Item>('insert', 'ITEM_INSERT'),
-      remove: this._actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
-      removeAll: this._actionHelper<Item>('removeAll', 'ITEMS_REMOVE'),
-      modify: this._actionHelper<Item>('modify', 'ITEM_MODIFY'),
-      modifyAll: this._actionHelper<Item>('modifyAll', 'ITEMS_MODIFY'),
+      getAll: this.actionHelper<Item[]>('getAll', 'ITEMS_GET'),
+      insert: this.actionHelper<Item>('insert', 'ITEM_INSERT'),
+      remove: this.actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
+      removeAll: this.actionHelper<Item>('removeAll', 'ITEMS_REMOVE'),
+      modify: this.actionHelper<Item>('modify', 'ITEM_MODIFY'),
+      modifyAll: this.actionHelper<Item>('modifyAll', 'ITEMS_MODIFY'),
 
       deepInsert: ({ dispatch, getters, rootGetters }: ActionProps, payload: any) => new Promise(async (resolve) => {
         const { expandedSubmodules } = getters
@@ -683,7 +683,7 @@ export abstract class Module<T=any, Item=any> {
       deactivateAll: ({ dispatch }: ActionProps, payload: any) => dispatch('modifyAll', { ...payload, what: { active: false } }),
 
       update: (...args:any) => {
-        const func = this._actionHelper<string>('update')
+        const func = this.actionHelper<string>('update')
         const [{ commit, dispatch }]: [ActionProps, unknown] = args
 
         return func.apply(this, args)

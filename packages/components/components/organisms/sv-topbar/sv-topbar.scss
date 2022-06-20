@@ -1,0 +1,46 @@
+.mobile-only {
+  display: none;
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
+}
+
+.topbar {
+  background: white;
+  border-bottom: 1px solid #dedede;
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    height: 3.2rem;
+
+    @media screen and (max-width: 600px) {
+      padding: 0 .6em;
+    }
+  }
+
+  &__branding {
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+
+    width: 17em;
+    border-right: 1px solid #dedede;
+
+    @media screen and (max-width: 600px) {
+      display: none;
+    }
+  }
+
+  &__logo {
+    height: 2.5rem;
+    width: 6rem;
+    object-fit: contain;
+  }
+
+  &__icons {
+    display: flex;
+    gap: 0 .35rem;
+    fill: gray;
+  }
+}

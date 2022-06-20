@@ -4,7 +4,7 @@
     <div class="xl:flex justify-center xl:w-1/2 xl:order-2">
       <div class="hidden xl:block xl:w-3/5 self-start">
         <inline-svg
-          :src="require('../../../../assets/svg/browsing.svg').default"
+          :src="require('../../../../../assets/svg/browsing.svg').default"
           class="xl:w-11/12"
         ></inline-svg>
       </div>

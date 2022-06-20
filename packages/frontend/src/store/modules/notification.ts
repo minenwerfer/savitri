@@ -34,7 +34,7 @@ export class NotificationModule extends Module<{}, {}> {
   actions(this: NotificationModule) {
     return {
       ping: (...args:any) => {
-        const func = this._actionHelper('ping', 'NOTIFICATION_PING')
+        const func = this.actionHelper('ping', 'NOTIFICATION_PING')
         const [{ getters: { localLast, domainLast } }]: [ ActionProps, unknown ] = args
 
         return func(args[0], {
@@ -45,7 +45,7 @@ export class NotificationModule extends Module<{}, {}> {
         })
       },
 
-      notify: this._actionHelper('notify'),
+      notify: this.actionHelper('notify'),
     }
   }
 

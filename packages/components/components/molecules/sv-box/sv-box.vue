@@ -12,22 +12,22 @@
           }
           ${ isFloating && animate ? 'ease-out animate-grow' : '' }
           ${ isFloating || ( fullWidth || fill ? '' : 'py-4 px-auto' ) }
-          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded-lg shadow` }
+          ${ fullWidth ? 'w-screen md:w-auto centered-fullwidth' : `rounded-lg border` }
           flex flex-col ${ transparent || 'bg-white' } overflow-y-hidden overscroll-none
           ${ classes }
         `"
       >
-      <div :class="`flex bg-gray-50 ${isFloating && 'border-b py-4 px-auto'}`" v-if="$slots.title || title">
+      <div :class="`flex items-center bg-gray-50 ${isFloating && 'border-b py-3 px-4'}`" v-if="$slots.title || title">
           <div class="flex-1 font-semibold text-xl">
             <slot v-if="$slots.title" name="title"></slot>
             <div v-else-if="title">{{ title }}</div>
           </div>
           <div v-if="closeHint || collapsable">
             <sv-bare-button v-if="collapsable" @click="isCollapsed = !isCollapsed">
-              <sv-icon :name="!isCollapsed ? 'minus' : 'plus'" :animate="true" />
+              <sv-icon :name="!isCollapsed ? 'minus' : 'plus'" :reactive="true" />
             </sv-bare-button>
             <sv-bare-button v-else-if="closeHint" @click="$emit('close')">
-              <sv-icon name="multiply" :animate="true" />
+              <sv-icon name="multiply" :reactive="true" />
             </sv-bare-button>
           </div>
         </div>

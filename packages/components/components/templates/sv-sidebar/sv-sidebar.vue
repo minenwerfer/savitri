@@ -8,7 +8,7 @@
             {{ $store.state.meta.sidebar.title }}
           </strong>
           <sv-bare-button @clicked="close">
-            <sv-icon name="arrow-to-right" fill="black" :animate="true"></sv-icon>
+            <sv-icon name="arrow-to-right" fill="black" :reactive="true"></sv-icon>
           </sv-bare-button>
         </div>
 

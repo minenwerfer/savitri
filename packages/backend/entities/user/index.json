@@ -7,14 +7,14 @@
     "view"
   ],
   "individualActions": {
-    "spawnChangePwd": {
-      "name": "Mudar senha",
-      "unicon": "key-skeleton",
-      "useronly": true
-    },
     "spawnEdit": {
       "name": "Editar",
       "unicon": "edit",
+      "useronly": true
+    },
+    "spawnChangePwd": {
+      "name": "Mudar senha",
+      "unicon": "key-skeleton",
       "useronly": true
     },
     "remove": {

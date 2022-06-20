@@ -18,10 +18,7 @@
   <sv-info where="bottom">
     <template #text>Menu</template>
     <sv-bare-button @clicked="spawnSidebar('Usuário', 'sv-profile')">
-      <div class="flex gap-x-2 border border-gray-300 rounded-lg px-2 py-1 bg-white text-sm items-center">
-        <div class="hidden md:inline-flex">{{ $store.getters['user/current'].first_name || 'Usuário' }}</div>
-        <sv-icon name="user-circle"></sv-icon>
-      </div>
+      <sv-icon name="user-circle" :reactive="false"></sv-icon>
     </sv-bare-button>
   </sv-info>
 </template>

@@ -4,7 +4,7 @@
       <sv-picture :file="current.picture">
         <template #fallback>
           <inline-svg
-            :src="require('../../assets/svg/profile.svg').default"
+            :src="require('../../../assets/svg/profile.svg').default"
             class="w-full h-40"
           ></inline-svg>
         </template>

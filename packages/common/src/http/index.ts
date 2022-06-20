@@ -47,8 +47,8 @@ export class RequestProvider {
      */
     this._proxiedInstance = new Proxy(this._instance, {
       get: (target: any, key: string) => {
-
         const method = target[key]
+
         if( !['request', 'post', 'get'].includes(key) )  {
            return typeof method === 'function'
              ? (...args: any) => method.apply(target, args)
