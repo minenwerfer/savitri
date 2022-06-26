@@ -1,16 +1,7 @@
 <template>
   <div :class="`menu ${!visible && 'menu--hidden'}`">
     <!-- Internals!!!! -->
-    <div class="menu__profile">
-      <sv-picture
-        :file="store.getters['user/current'].picture"
-        class="menu__picture"
-      ></sv-picture>
-
-      <div>
-        {{ store.getters['user/current'].first_name }}
-      </div>
-    </div>
+    <sv-menu-header></sv-menu-header>
 
     <!-- menu entries -->
     <div class="menu__entries">
@@ -72,11 +63,12 @@ import {
   SvBareButton,
   SvOverlay,
   SvIcon,
-  SvPicture
 
 } from '../../'
 
-import { Route } from 'frontend/router'
+import { Route } from '@savitri/frontend/router'
+
+import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
 
 const props = defineProps<{
   entrypoint?: string
@@ -104,7 +96,7 @@ const onEntryClick = (route: Route & { meta: any }) => {
     route.meta.action()
   }
 
-  closeMobile()
+  // closeMobile()
 }
 
 const getSchema = (schema: any, routes: Route[]) => {

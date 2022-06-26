@@ -1,0 +1,23 @@
+.results__box {
+  position: fixed;
+  left: calc(17rem);
+  width: 40rem;
+
+  transform: translateY(-1px);
+
+  margin: 0 1rem;
+  z-index: 50;
+}
+
+.results {
+  display: grid;
+  gap: 1rem;
+
+  &__module {
+    //
+  }
+
+  &__module-name {
+    font-weight: bold;
+  }
+}

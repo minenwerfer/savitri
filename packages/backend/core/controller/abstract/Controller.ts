@@ -78,8 +78,8 @@ export abstract class Controller<T> {
           }
 
           if( decodedToken.access?.visibility !== 'everything' || alwaysAttribute ) {
-            if( payload.what ) payload.what.user_id = decodedToken._id;
-            if( payload.filters ) payload.filters.user_id = decodedToken._id;
+            if( payload.what ) payload.what.user_id = decodedToken._id
+            if( payload.filters ) payload.filters.user_id = decodedToken._id
           }
 
           (req as { -readonly [P in keyof Request]: Request[P] }).payload = payload

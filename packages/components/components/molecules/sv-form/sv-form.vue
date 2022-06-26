@@ -1,6 +1,6 @@
 <template>
-  <div v-if="formData" class="flex flex-col gap-y-8 w-full">
-    <fieldset :class="`grid grid-cols-6 items-end gap-4 w-full`" v-if="!isReadonly">
+  <div v-if="formData" class="form">
+    <fieldset class="form__fieldset" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
@@ -286,3 +286,5 @@ const {
 
 } = toRefs(moduleRefs)
 </script>
+
+<style scoped src="./sv-form.scss"></style>

@@ -39,5 +39,5 @@ UserSchema.post('init', function() {
  * @exports
  * User model.
  */
-export const User = model<UserDocument>('User', UserSchema)
+export const User = model<UserDocument>('user', UserSchema)
 

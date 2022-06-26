@@ -148,8 +148,8 @@ export abstract class Module<T=any, Item=any> {
     items: [],
     recordsCount: 0,
     recordsTotal: 0,
-    _clearItem: {},
     currentPage: 0,
+    _clearItem: {},
     _limit: 0,
     _halt: false,
     _filters: {},
@@ -293,7 +293,6 @@ export abstract class Module<T=any, Item=any> {
 
       this.http.post({ commit, dispatch }, route, { ...payload, ...props })
         .then((response: AxiosResponse) => {
-
           const data = response?.data || {}
           if( state._halt ) {
             return reject('operation halted')
@@ -345,10 +344,10 @@ export abstract class Module<T=any, Item=any> {
       }
 
       return withIsomorphicLock(`dynamicQuery:${value.module}`, async () => {
-        const stored = (window._queryCache||{})[value.module]
+        const stored = window._queryCache?.[value.module]||[]
 
         const hasToUpdate = typeof value.limit === 'number'
-          && (value.limit > stored?.length || value.limit === 0)
+          && (value.limit > stored.length || value.limit === 0)
 
         if( stored?.length > 0 && !hasToUpdate ) {
           return normalize(stored, value)
@@ -381,12 +380,15 @@ export abstract class Module<T=any, Item=any> {
           offset: value.offset
         })
 
-        const result = normalize(data.result, value)
+        const result = normalize([
+          ...stored,
+          ...data.result
+        ], value)
 
         window.dispatchEvent(new CustomEvent('__updateQueryCache', {
           detail: {
             parentModule: this._route,
-            module: value.module,
+            moduleName: value.module,
             result: data.result
           }
         }))
@@ -797,12 +799,13 @@ export abstract class Module<T=any, Item=any> {
         state._clearItem = Object.assign({}, state.item)
       },
 
-      CACHE_QUERY: (state: CommonState, { module, result }: { module: string, result: any }) => {
-        state._queryCache[module] = result;
-        window._queryCache = {
-          ...(window._queryCache||{}),
-          [module]: result
-        }
+      CACHE_QUERY: (state: CommonState, { moduleName, result }: { moduleName: string, result: any }) => {
+        state._queryCache[moduleName] = result
+
+        window._queryCache[moduleName] = [
+          ...(window._queryCache[moduleName]||[]),
+          ...result
+        ]
       },
 
       LOADING_SWAP: (state: CommonState, value: boolean) => {
@@ -830,15 +833,20 @@ export abstract class Module<T=any, Item=any> {
 
       ITEMS_GET: (state: CommonState, { result }: MutationProps) => {
         state.items = result
+        // const newItems = result.filter((item: Item & { _id: string }) => {
+        //   return !state.items.find(({ _id }: { _id: string }) => item._id === _id )
+        // })
+
+        // state.items = [
+        //   ...state.items,
+        //   ...newItems
+        // ]
       },
 
       ITEM_INSERT: (state: CommonState, { result }: MutationProps) => {
         state.item = result
         const found = state.items.find(({ _id }: any) => result._id === _id)
         if( found ) {
-          // state.items = state.items.map((item: T & { _id: string }) => ({
-          //   ...(item._id === result._id ? result : item)
-          // }))
           Object.assign(found, result)
           return
         }

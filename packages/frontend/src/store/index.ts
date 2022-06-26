@@ -9,6 +9,7 @@ import { AccessProfileModule } from './modules/accessProfile'
 import { NotificationModule } from './modules/notification'
 import { ReportModule } from './modules/report'
 import { ReleaseModule } from './modules/release'
+import { SearchableModule } from './modules/searchable'
 
 export const storeInstance = (): Store<any> => {
   const store = createStore<any>({
@@ -18,7 +19,8 @@ export const storeInstance = (): Store<any> => {
       accessProfile: (new AccessProfileModule() as any).module,
       notification: (new NotificationModule()  as any).module,
       report: (new ReportModule()  as any).module,
-      release: (new ReleaseModule()  as any).module
+      release: (new ReleaseModule()  as any).module,
+      searchable: (new SearchableModule()  as any).module,
     },
     plugins: [
       autoModules,

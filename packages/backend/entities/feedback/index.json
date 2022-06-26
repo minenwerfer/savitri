@@ -3,7 +3,7 @@
   "route": true,
   "unicon": "comment-alt-dots",
   "presets": [
-    "alwaysOwned",
+    "owned",
     "removeAll",
     "view"
   ],

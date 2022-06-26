@@ -16,4 +16,4 @@ export interface NotificationDocument extends Document {
 
 
 export const NotificationSchema = descriptionToSchema<NotificationDocument>(Description, options)
-export const Notification = model<NotificationDocument>('Notification', NotificationSchema)
+export const Notification = model<NotificationDocument>('notification', NotificationSchema)

@@ -3,10 +3,11 @@
   <div class="flex flex-col xl:flex-row gap-y-6">
     <div class="xl:flex justify-center xl:w-1/2 xl:order-2">
       <div class="hidden xl:block xl:w-3/5 self-start">
-        <inline-svg
-          :src="require('../../../../../assets/svg/browsing.svg').default"
-          class="xl:w-11/12"
-        ></inline-svg>
+        Teste
+        <!-- <inline-svg -->
+        <!--   :src="require('../../../../../assets/svg/browsing.svg').default" -->
+        <!--   class="xl:w-11/12" -->
+        <!-- ></inline-svg> -->
       </div>
     </div> 
     <sv-box :key="fields" class="flex-grow">
@@ -38,7 +39,6 @@
 <script setup lang="ts">
 import { onMounted, provide, reactive, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { default as InlineSvg } from 'vue-inline-svg'
 import { useModule } from '../../../../../../frontend'
 import {
   SvHeader,

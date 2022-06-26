@@ -6,8 +6,12 @@
 
   &--reactive {
     padding: 4px;
-    &:hover {;
+    &:hover {
       background: #eee;
+    }
+
+    &:active {
+      background: #ccc;
     }
   }
 

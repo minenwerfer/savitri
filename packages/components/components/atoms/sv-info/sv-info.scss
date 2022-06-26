@@ -39,9 +39,9 @@
     }
 
     &--top {
-      top: -3em;
+      top: -2.8em;
       left: 50%;
-      transform: translateY(-50%);
+      transform: translateX(-50%);
     }
   }
 
@@ -50,24 +50,23 @@
     background: #000;
     width: .8em;
     height: .8em;
-    transform: rotate(45deg);
 
     &--left {
       top: 50%;
       right: -.4em;
-      transform: translateY(-50%);
+      transform: rotate(45deg) translateY(-50%);
     }
 
     &--bottom {
       top: -.4em;
       left: 50%;
-      transform: translateX(-50);
+      transform: rotate(45deg) translateX(-50);
     }
 
     &--top {
-      bottom: -.4em;
+      bottom: -.6em;
       left: 50%;
-      transform: translateY(-50%);
+      transform: rotate(45deg) translateX(-50%);
     }
   }
 }

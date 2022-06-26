@@ -3,11 +3,11 @@
     <div class="flex flex-col gap-y-6 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]">
       <img
         :src="require(`@/assets/${productLogo}`).default"
-        style="width: 12em" class="object-contain self-center"
+        style="width: 10em; height: 3em" class="object-contain self-center"
       />
       <sv-box>
         <div style="padding: 1.4em" class="flex justify-center">
-          <div style="width: 26.5em" class="flex flex-col items-center gap-y-6">
+          <div class="flex flex-col items-center gap-y-6 w-[28em]">
             <div class="py-6 text-2xl font-bold opacity-80" v-html="webpackVariables.signinText || 'Identifique-se'"></div>
             <sv-form
               :form-data="user"

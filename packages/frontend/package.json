@@ -1,7 +1,7 @@
 {
   "name": "@savitri/frontend",
   "pulic": true,
-  "version": "1.1.14",
+  "version": "1.1.15",
   "description": "## Project setup ``` npm install ```",
   "main": "main.ts",
   "scripts": {
@@ -19,8 +19,10 @@
     "url": "https://github.com/capsul-dev/beta-frontend/issues"
   },
   "homepage": "https://github.com/capsul-dev/beta-frontend#readme",
+  "devDependencies": {
+    "@types/webpack-env": "^1.16.3"
+  },
   "dependencies": {
-    "@types/webpack-env": "^1.16.3",
     "autoprefixer": "^10.4.2",
     "axios": "^0.24.0",
     "css-loader": "^6.5.0",

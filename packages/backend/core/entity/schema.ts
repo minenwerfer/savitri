@@ -44,7 +44,7 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
     if( typeof moduleName === 'string' ) {
       hasRefs = true
 
-      result.ref = (moduleName as any).capitalize()
+      result.ref = moduleName
       result.type = value.array || Array.isArray(value.values)
         ? [ObjectId]
         : ObjectId
@@ -74,6 +74,10 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
     // _id: {
     //   type: String,
     //   default: uuidv1
+    // }
+    // domain_id: {
+    //   type: ObjectId,
+    //   required: true
     // }
   }
 

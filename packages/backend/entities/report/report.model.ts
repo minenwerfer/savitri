@@ -12,4 +12,4 @@ export interface ReportDocument extends Document {
 
 
 export const ReportSchema = descriptionToSchema<ReportDocument>(Description, options)
-export const Report = model<ReportDocument>('Report', ReportSchema)
+export const Report = model<ReportDocument>('report', ReportSchema)

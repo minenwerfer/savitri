@@ -6,29 +6,33 @@
 }
 
 .topbar {
-  background: white;
+  position: sticky;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 3.2rem;
+  padding: 0 .4rem;
+  z-index: 30;
+
+  background: #fff;
   border-bottom: 1px solid #dedede;
 
-  &__content {
-    display: flex;
-    justify-content: space-between;
-    height: 3.2rem;
-
-    @media screen and (max-width: 600px) {
-      padding: 0 .6em;
-    }
+  @media screen and (min-width: 600px) {
+    width: auto;
+    padding: 0;
   }
 
   &__branding {
-    display: grid;
+    display: none;
     place-items: center;
     cursor: pointer;
 
     width: 17em;
     border-right: 1px solid #dedede;
 
-    @media screen and (max-width: 600px) {
-      display: none;
+    @media screen and (min-width: 600px) {
+      display: grid;
     }
   }
 
@@ -38,9 +42,27 @@
     object-fit: contain;
   }
 
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    flex-grow: 1;
+
+    padding: 0 1.5rem;
+
+    @media screen and (max-width: 600px) {
+      padding: 0 .2rem;
+    }
+  }
+
   &__icons {
     display: flex;
+    margin-left: auto;
     gap: 0 .35rem;
     fill: gray;
+
+    @media screen and (max-width: 600px) {
+      gap: 0;
+    }
   }
 }

@@ -1,5 +1,73 @@
 .table {
+  width: 100%;
+
   @media screen and (min-width: 600px) {
     transform: scale(.998);
+  }
+
+  &__row {
+    &--header {
+      line-height: 2.25rem;
+      font-size: 8pt;
+      text-transform: uppercase;
+      text-align: left;
+      border-bottom: 1px solid #dedede;
+    }
+
+    &--body {
+      display: block;
+      margin-bottom: 1.2rem;
+      padding: .6rem;
+      line-height: 2.25rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:hover {
+        background: #eee;
+      }
+
+      @media screen and (min-width: 600px) {
+        display: table-row;
+      }
+    }
+  }
+
+  &__header {
+    display: hidden;
+
+    &--border {
+      border: 1px solid #dedede;
+    }
+
+    &--checkbox {
+      width: 2rem;
+      padding: 0 .4rem;
+    }
+
+    &--label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &--padded {
+      @media screen and (min-width: 600px) {
+        &:first-child {
+          padding-left: 1.1rem;
+        }
+      }
+    }
+
+    @media screen and (min-width: 600px) {
+      display: table-cell;
+    }
+  }
+
+  &__cell {
+    @media screen and (min-width: 600px) {
+      display: table-cell;
+    }
   }
 }

@@ -3,44 +3,35 @@
 
   <div class="dashboard">
     <sv-bare-button
-      class="
-        fixed bottom-0 right-0 z-30
-        py-1 px-4 rounded-tl-lg
-        border border-green-800
-        bg-green-600 text-white font-semibold items-center flex gap-x-2 hover:opacity-60 text-sm
-      "
-      @clicked="isFeedbackVisible = true"
+      class="dashboard__feedback-button"
       v-if="webpackVariables.feedback"
+      @clicked="isFeedbackVisible = true"
     >
         <sv-icon name="comment-dots" fill="white"></sv-icon>
         <div>Feedback</div>
     </sv-bare-button>
 
-    <div class="flex flex-wrap">
-      <sv-topbar class="sticky inset-0 z-30 w-full" v-if="!$route.meta?.noTopbar">
-        <component :is="topbarSlot" v-if="topbarSlot"></component>
-        <sv-utilities></sv-utilities>
-      </sv-topbar>
+    <sv-topbar v-if="!$route.meta?.notopbar">
+      <component :is="topbarSlot" v-if="topbarSlot"></component>
+      <sv-utilities></sv-utilities>
+    </sv-topbar>
 
+    <div class="dashboard__main">
       <sv-menu
         entrypoint="dashboard"
         v-model:visible="isMobileMenuVisible"
         :schema="menuSchema"
       ></sv-menu>
 
-      <div class="relative inline-flex flex-col flex-grow md:w-0 overflow-y-scroll">
-        <div :class="`order-2 ${$route.meta?.noMargin || 'px-6 py-6'}`">
-          <sv-breadcumb></sv-breadcumb>
-
-          <div :class="$route.meta?.noMargin || 'mt-6'">
-            <router-view />
-          </div>
-        </div>
-
-        <div class="bg-blue-500 text-white text-center text-sm font-semibold order-1" v-if="notice">
+      <div class="dashboard__content">
+        <div class="dashboard__notice" v-if="notice">
           {{ notice }}
         </div>
 
+        <div class="dashboard__view">
+          <sv-breadcumb></sv-breadcumb>
+          <router-view />
+        </div>
       </div>
     </div>
 
@@ -69,7 +60,7 @@ import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
-const notice = inject('notice', undefined)
+const notice = inject('notice')
 
 const topbarSlot = inject('topbarSlot')
 const runonceSlot = inject('runonceSlot')

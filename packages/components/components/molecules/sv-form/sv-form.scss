@@ -1,0 +1,14 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4rem;
+
+  &__fieldset {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    align-items: end;
+    width: 100%;
+    gap: 1.15rem;
+  }
+}

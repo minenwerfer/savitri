@@ -13,9 +13,8 @@ import {
 
 export const { PAGINATION_LIMIT } = process.env
 
-export type SingleQuery<T> = Query<(T & { _id: any; }), T & { _id: any; }, {}, T>;
-export type MultipleQuery<T> = Query<(T & { _id: any; })[], T & { _id: any; }, {}, T>;
-
+export type SingleQuery<T> = Query<(T & { _id: any }), T & { _id: any }, {}, T>
+export type MultipleQuery<T> = Query<(T & { _id: any })[], T & { _id: any }, {}, T>
 
 export abstract class Mutable<T> extends Controller<T> {
   protected _queryPreset: {
@@ -53,7 +52,7 @@ export abstract class Mutable<T> extends Controller<T> {
     )
   }
 
-  public count(props: { filters?: object }) {
+  public count(props?: { filters?: object }) {
     const filters = props?.filters || {}
     return this._model.countDocuments({ ...filters, ...this._queryPreset.filters||{} })
   }
@@ -68,7 +67,7 @@ export abstract class Mutable<T> extends Controller<T> {
 
   /**
    * @method
-   * Gets a collection of documents from database.
+   * Gets a entity of documents from database.
    */
   protected _getAll(props: {
     filters?: object,

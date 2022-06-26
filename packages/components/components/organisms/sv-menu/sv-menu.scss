@@ -1,8 +1,10 @@
 .menu {
   position: sticky;
-  top: calc(3.2rem + 1px);
+  top: 3.2rem;
+  left: 0;
   width: 17em;
-  height: calc(100vh - 3.2rem - 1px);
+  flex-shrink: 0;
+  height: calc(100vh - 3.2rem);
   border-right: 1px solid #dedede;
   z-index: 20;
   overflow-x: hidden;
@@ -10,44 +12,18 @@
   overscroll-behavior: contain;
 
   background: #fff;
-  transition: width .15s ease-out;
+  transition: width .55s ease-out;
+  padding: 1em 0;
 
-  @media screen and (max-width: 600px) {
-    position: fixed;
+  @media screen and (min-width: 600px) {
   }
 
   &--hidden {
-    @media screen and (max-width: 600px) {
-      width: 0;
-    }
-  }
-
-  &__profile {
-    display: flex;
-    padding: 1em;
-    gap: 1em;
-    border-bottom: 1px solid #dedede;
-  }
-
-  &__picture {
-    $size: 4.5em;
-    width: $size;
-    height: $size;
-
-    border: 1px solid #dedede;
-    border-radius: 100%;
-    overflow: hidden;
-
-    transition: filter .35s;
-    cursor: pointer;
-
-    &:hover {
-      filter: brightness(.8);
-    }
+    width: 0;
   }
 
   &__entries {
-    padding: 1em;
+    padding: 1em 1em 2em 1em;
   }
 
   &__group {
@@ -56,6 +32,7 @@
 
   &__subroute {
     padding: .5em .5em;
+    font-size: .98rem;
   }
 
   &__icon {

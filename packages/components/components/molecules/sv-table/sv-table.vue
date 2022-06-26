@@ -1,13 +1,13 @@
 <template>
-  <table v-if="Object.keys(columns).length > 0" class="w-full table">
-    <tr class="leading-9 text-xs uppercase text-left bg-gray-50 border-b" v-if="headers">
-      <th v-if="module && checkbox" :class="`hidden lg:table-cell w-10 px-2 ${border && 'border'}`">
+  <table v-if="Object.keys(columns).length > 0" class="table">
+    <tr v-if="headers" class="table__row table__row--header">
+      <th v-if="module && checkbox" :class="`table__header table__header--checkbox ${border && 'table__header--border'}`">
         <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
       </th>
       <th
         v-for="(header, index) in columns"
         :key="`header-${index}`"
-        :class="`hidden lg:table-cell truncate ${!checkbox && 'first:lg:pl-4'} ${border && 'border'}`"
+        :class="`table__header table__header--label ${!checkbox && 'table__header--padded'} ${border && 'table__header--border'}`"
         >
         {{ header.label || header.placeholder }}
       </th>
@@ -16,7 +16,7 @@
     <tr
       v-for="(row, rindex) in rows"
       :key="`row-${rindex}`"
-      :class="`block shadow mb-3 last:mb-0 p-2 lg:p-0 lg:table-row lg:shadow-none leading-8 lg:leading-10 hover:bg-gray-200 ${computedRowColor(row, rindex)}`"
+      :class="`table__row table__row--body ${computedRowColor(row, rindex)}`"
 
       @click="moduleRefs.setItem(row)"
       >
@@ -60,7 +60,7 @@
           <div v-else class="flex gap-x-2 justify-end w-full lg:w-auto">
             <sv-dropdown>
               <template #trigger>
-                <div class="grid place-items-center border bg-white p-1 rounded shadow">
+                <div class="grid place-items-center border p-1 rounded">
                   <sv-icon name="setting" fill="gray" class="w-5 h-5"></sv-icon>
                 </div>
               </template>

@@ -9,7 +9,7 @@
     </div>
     <div v-if="type !== 'textbox'" :class="`input__container input__container--${variant}`">
       <input
-        :class="`input__input input__input--${variant} ${icon && 'input__input--icon'}`"
+        :class="`input__input input__input--${variant} ${icon && 'input__input--icon'} ${readonly && 'input__input--readonly'}`"
 
         ref="input"
         :type="type !== 'datetime' ? type : 'text'"

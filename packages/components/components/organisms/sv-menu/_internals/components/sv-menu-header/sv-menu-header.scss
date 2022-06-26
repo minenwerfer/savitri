@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  width: 15em;
+  padding: 0 1em;
+  gap: .8em;
+
+
+  &__picture {
+    $size: 4.2em;
+    width: $size;
+    height: $size;
+
+    border: 1px solid #dedede;
+    border-radius: 100%;
+    overflow: hidden;
+
+    transition: filter .35s;
+    cursor: pointer;
+
+    &:active {
+      filter: brightness(.8);
+    }
+  }
+}
+

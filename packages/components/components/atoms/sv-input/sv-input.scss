@@ -1,6 +1,6 @@
 @mixin focus {
   .input {
-    &__input {
+    &__input, &__textarea {
       outline: 1px solid blue;
     }
 
@@ -12,11 +12,13 @@
   }
 }
 
-.input {
+.input, .textarea {
   &:focus-within {
     @include focus;
   }
+}
 
+.input {
   &__label {
     font-size: 9pt;
     text-transform: uppercase;
@@ -66,14 +68,20 @@
     }
 
     &--icon {
-      padding-left: 2.6em !important;
+      padding-left: 2.2em !important;
+    }
+
+    &--readonly {
+      background: #eee;
     }
   }
 
   &__textarea {
     display: block;
     border: 1px solid #dedede;
-    height: 4em;
+    width: 100%;
+    height: 8em;
+    outline: none;
   }
 
   &__icon {

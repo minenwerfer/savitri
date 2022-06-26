@@ -23,7 +23,7 @@ const props = defineProps<{
 }>()
 
 const visible = ref(false)
-const where = props.where || 'bottom'
+const where = props.where || 'top'
 </script>
 
 <style scoped src="./sv-info.scss"></style>

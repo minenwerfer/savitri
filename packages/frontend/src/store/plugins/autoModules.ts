@@ -6,7 +6,6 @@ import { Module } from '../module'
  */
 export const autoModules = (store: any) => {
   store.subscribe(async (mutation: { type: string, payload: any }, state: any) => {
-
     const { type, payload } = mutation
     if( type === 'meta/DESCRIPTIONS_ADD' ) {
 

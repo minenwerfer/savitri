@@ -2,7 +2,7 @@
   transition: all;
   
   &:hover {
-    ::v-deep .button__icon {
+    :deep(.button__icon) {
       fill: white;
     }
   }
@@ -12,13 +12,14 @@
     align-items: center;
     justify-content: center;
     gap: 0 .4rem;
+    font-size: 11pt;
   }
 
   &__icon {
     width: 1.1em;
     height: 1.1em;
 
-    ::v-deep svg {
+    :deep(svg) {
       fill: white;
     }
 

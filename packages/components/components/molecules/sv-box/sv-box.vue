@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" :class="`${ isFloating && 'absolute z-40' } ${ animate ? 'ease-out animate-fade' : '' }`">
+  <div v-if="visible" :class="`box ${isFloating && 'box--floating'}`">
     <sv-overlay v-if="isFloating"></sv-overlay>
     <div :class="`${ isFloating ? 'fixed inset-0 z-50 flex justify-center items-center' : ''}`">
       <div
@@ -7,7 +7,7 @@
         :class="`
           ${
             isFloating
-              ? 'w-full h-full md:w-4/5 lg:w-[50em] sm:h-auto sm:min-h-[30vh] z-10 max-h-screen md:max-h-[95vh]'
+              ? 'w-11/12 min-h-48 md:w-4/5 lg:w-[50em] sm:h-auto sm:min-h-[30vh] z-10 max-h-screen md:max-h-[95vh]'
               : ''
           }
           ${ isFloating && animate ? 'ease-out animate-grow' : '' }
@@ -86,19 +86,4 @@ const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
 </script>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all .15s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.centered-fullwidth {
-  position: relative;
-  left: 0;
-}
-</style>
+<style scoped="./sv-box.scss"></style>

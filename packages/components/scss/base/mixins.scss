@@ -1,0 +1,9 @@
+@mixin default-border {
+  border: 1px solid $default-border-color;
+}
+
+@mixin cursor-pointer {
+  @media screen and (min-width: 600px) {
+    cursor: pointer;
+  }
+}

@@ -6,9 +6,9 @@ import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
 export interface FeedbackDocument extends Document {
-  user_id: UserDocument;
-  comment: string;
+  user_id: UserDocument
+  comment: string
 }
 
 export const FeedbackSchema = descriptionToSchema<FeedbackDocument>(Description, options)
-export const Feedback = model<FeedbackDocument>('Feedback', FeedbackSchema)
+export const Feedback = model<FeedbackDocument>('feedback', FeedbackSchema)
