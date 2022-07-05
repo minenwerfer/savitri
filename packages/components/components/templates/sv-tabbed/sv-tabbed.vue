@@ -4,7 +4,7 @@
       v-if="titles && titles.length > 0"
 
       :class="vertical ? 'xl:w-1/6' : ''"
-      classes="w-screen md:w-auto xl:w-full"
+      classes="md:w-auto xl:w-full"
       :padding-y="`pt-2 xl:pt-2 ${vertical ? 'xl:pt-0' : ''}`"
       :fill="true"
     >
@@ -43,9 +43,9 @@
       </div>
 
       <div class="flex gap-x-2" v-if="bottomHelpers">
-        <sv-button @clicked="previous" :disabled="currentTab === 1">Voltar</sv-button>
-        <sv-button @clicked="next" :disabled="currentTab === tabs" v-if="!finishButton || currentTab !== tabs">Próximo</sv-button>
-        <sv-button @clicked="$emit('finish')" v-else-if="currentTab === tabs">Finalizar</sv-button>
+        <sv-button @clicked="previous" :disabled="currentTab === 0">Voltar</sv-button>
+        <sv-button @clicked="next" :disabled="currentTab === tabs" v-if="!finishButton || currentTab + 1 !== tabs">Próximo</sv-button>
+        <sv-button @clicked="$emit('finish')" v-else-if="currentTab + 1 === tabs">Finalizar</sv-button>
       </div>
     </div>
   </div>
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { SvBareButton, SvButton, SvBox } from '../../'
+import { SvBareButton, SvButton, SvBox } from '../..'
 
 const props: any = defineProps({
   tabs: {
@@ -137,3 +137,5 @@ const next = () => {
   emit('update:currentTab', nextTab)
 }
 </script>
+
+<style scoped src="./sv-tabbed.scss"></style>

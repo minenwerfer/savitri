@@ -1,30 +1,22 @@
 <template>
-  <div
-    :class="`
-    rounded
-    py-2 bg-white
-    flex items-center
-    select-none border
-    ${readonly ? 'bg-gray-100' : ''}
-    `"
-    >
-    <div class="px-2 w-8">
+  <div :class="`checkbox ${readonly && 'checkbox--readonly'}`" >
+    <div class="checkbox__square">
       <input
         ref="checkbox"
         type="checkbox"
         v-model="bindVal"
         @input="onInput"
-        />
+      />
     </div>
     <div
-      class="grid w-full border-l px-4 cursor-pointer"
+      class="checkbox__text"
       @click="onClick"
-      >
-      <div class="">
+    >
+      <div class="checkbox__label">
         <slot name="label" v-if="$slots.label"></slot>
         <div v-else-if="label" v-html="label"></div>
       </div>
-      <div class="opacity-80">
+      <div class="checkbox__description">
         <slot name="description" v-if="$slots.description"></slot>
         <div v-else-if="description" v-html="description"></div>
       </div>
@@ -113,3 +105,5 @@ const bindVal = computed({
   }
 })
 </script>
+
+<style scoped src="./sv-checkbox.scss"></style>

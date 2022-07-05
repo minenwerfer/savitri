@@ -18,7 +18,7 @@ export const getController = (controller: string) => {
       })
 
     if( module ) {
-      return `${process.cwd()}/../../node_modules/${module.name}/dist/backend/entities`
+      return `${process.cwd()}/../../node_modules/${module.name}/backend/entities`
     }
 
     return commonControllers.includes(controller)

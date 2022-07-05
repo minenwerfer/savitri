@@ -1,0 +1,8 @@
+{
+  "individualActions": {
+    "duplicate": {
+      "name": "Duplicar",
+      "unicon": "share-alt"
+    }
+  }
+}

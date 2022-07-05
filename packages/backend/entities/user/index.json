@@ -24,6 +24,14 @@
       "ask": true
     }
   },
+  "searchable": {
+    "picture": "picture",
+    "indexes": [
+      "name",
+      "phone",
+      "email"
+    ]
+  },
   "fields": {
     "name": {
       "label": "Nome",

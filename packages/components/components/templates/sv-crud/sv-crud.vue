@@ -1,23 +1,34 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="crud flex flex-col gap-4">
     <div class="flex justify-between">
-      <div class="flex flex-wrap gap-2 overflow-x-auto w-1/3 items-end">
-        <sv-button
-          icon="filter"
-          type="neutral"
-          :disabled="Object.keys(availableFilters).length == 0"
-          @clicked="isFilterVisible = true"
-        >
-          <div class="flex gap-x-2">
+      <div class="flex flex-wrap gap-2 overflow-x-auto items-end">
+        <div class="crud__filter">
+          <div class="flex gap-x-1">
             <div>Filtros</div>
             <div v-if="filtersCount > 0">
               ({{ filtersCount }})
             </div>
           </div>
-        </sv-button>
+          <div class="crud__filter-icons">
+            <sv-bare-button
+              type="neutral"
+              :disabled="Object.keys(availableFilters).length === 0"
+              @clicked="isFilterVisible = true"
+            >
+              <sv-icon name="filter" :reactive="true"></sv-icon>
+            </sv-bare-button>
+            <sv-bare-button
+              type="neutral"
+              :disabled="Object.keys(availableFilters).length === 0"
+            >
+              <sv-icon name="trash" :reactive="true"></sv-icon>
+            </sv-bare-button>
+          </div>
+        </div>
         <sv-button
           icon="export"
           type="neutral"
+          variant="light"
           @clicked="store.dispatch('meta/spawnReport')"
           v-if="description.report"
         >
@@ -32,7 +43,7 @@
           type="neutral"
 
           :icon="props.unicon"
-          @clicked="buttonAction(action, props, { _id: selectedIds })"
+          @clicked="callAction(action, props, { _id: selectedIds })"
         >
           {{ props.name }}
         </sv-button>
@@ -121,10 +132,21 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, provide, watch, computed, reactive, ref, toRefs } from 'vue'
+import {
+  onUnmounted,
+  provide,
+  watch,
+  computed,
+  reactive,
+  ref,
+  toRefs
+
+} from 'vue'
+
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useModule } from '../../../../frontend'
+import { action } from '../../../../common'
 import {
   SvBox,
   SvTable,
@@ -172,7 +194,7 @@ const hasSelectionActions = computed(() => {
 })
 
 onUnmounted(() => {
-  if( !hash.split(',').includes('refresh') ) {
+  if( !hash.slice(1).split(',').includes('refresh') ) {
     return
   }
 
@@ -191,22 +213,22 @@ onUnmounted(() => {
   }
 })
 
-watch(() => props.module, async (module: string) => {
-  if( !store.getters[`${module}/fields`] ) {
-    await store.dispatch(`${module}/describe`)
+watch(() => [props.module, hash], async ([moduleName]: [string]) => {
+  if( !store.getters[`${moduleName}/fields`] ) {
+    await store.dispatch(`${moduleName}/describe`)
   }
 
-  Object.assign(moduleRefs, useModule(module, store))
-  store.dispatch('meta/setViewTitle', module)
+  Object.assign(moduleRefs, useModule(moduleName, store))
+  store.dispatch('meta/setViewTitle', moduleName)
 
   if( moduleRefs.items.length === 0 ) {
     const filters = moduleRefs.description._filters
 
-    store.dispatch(`${module}/getAll`, {
+    store.dispatch(`${moduleName}/getAll`, {
       filters: {
         ...filters,
         ...moduleRefs.filters,
-        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[module].defaultFilters : {}),
+        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[moduleName].defaultFilters : {}),
       },
     })
   }
@@ -220,21 +242,12 @@ watch(() => isInsertVisible.value, (value: boolean) => {
   }
 })
 
-const buttonAction = (action: string, actionProps: any, filters: any) => {
-  if( action.split('/')[0] === 'route' ) {
-    moduleRefs.setItem(filters)
-    return router.push({ name: action.split('/')[1], params: { id: filters._id } })
-  }
-
-  return actionProps.ask
-    ? store.dispatch(`${props.module}/ask`, { action, params: { payload: { filters }}})
-    : store.dispatch(`${props.module}/${action}`, { payload: { filters  }})
-}
+const callAction = action(props.module, store, router)
 
 const individualActions = computed(() => {
   return store.getters[`${props.module}/individualActions`]
     .map((action: any) => ({
-      click: (filters: any) => buttonAction(action.action, action, filters),
+      click: (filters: any) => callAction(action.action, action, filters),
       ...action
     }))
 })
@@ -259,3 +272,5 @@ const {
 
 } = toRefs(moduleRefs)
 </script>
+
+<style scoped src="./sv-crud.scss"></style>

@@ -1,5 +1,5 @@
 <template>
-  <div :key="parent" @change.prevent.stop="" class="relative w-full border-t py-4 rounded">
+  <div :key="parent" @change.prevent.stop="" class="search relative w-full border-t py-4 rounded">
     <header class="text-lg mb-4">{{ moduleName }}</header>
     <div v-if="isExpanded" class="flex flex-col gap-y-2">
       <sv-form
@@ -45,7 +45,7 @@
           <div class="flex justify-between gap-x-2">
             <div class="flex-1">{{ item[indexes[0]] }}</div>
 
-            <div v-if="!searchOnly" class="flex gap-x-1">
+            <div v-if="!searchOnly" class="flex gap-x-1 search__icons">
               <sv-bare-button @clicked="edit(item)">
                 <sv-icon name="edit" fill="gray"></sv-icon>
               </sv-bare-button>
@@ -301,3 +301,5 @@ const lazySearch = (searchField: string, value: string) => {
   }, 800)
 }
 </script>
+
+<style scoped src="./sv-search.scss"></style>

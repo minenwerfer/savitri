@@ -1,11 +1,13 @@
 declare namespace globalThis {
   const _store: any
+  const _router: any
 }
 
 /**
  * @remarks frontend only (vuex)
  */
 const _store = globalThis._store
+const _router = globalThis._router
 
 export const getIndexes = (description: any, key: string, form: boolean = false): any => {
   const [_, reference]: any = Object.entries(description.fields||{})
@@ -96,9 +98,11 @@ export const formatValue = (description: any, value: any, key: string, form: boo
     }
   })()
 
-  return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
-    ? formatted.slice(0, field.trim - 3) + '...'
-    : String([undefined, null].includes(formatted) ? '-' : formatted)
+  // return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
+  //   ? formatted.slice(0, field.trim - 3) + '...'
+  //   : String([undefined, null].includes(formatted) ? '-' : formatted)
+
+  return String([undefined, null].includes(formatted) ? '-' : formatted)
 }
 
 export const resumeItem = (description: any, item: any) => {
@@ -119,4 +123,17 @@ export const getItemIndex = (item: any, items?: any[], name?: string) => {
   return ((items||_store?.getters[`${name}/items`])||[])
     .sort((a: any, b: any) => a._id > b._id ? -1 : 1)
     .findIndex((i: any) => i._id === _id) + 1
+}
+
+export const action =
+  (moduleName: string, store: any, router: any) =>
+  async (action: string, actionProps: any, filters: any) => {
+  if( action.split('/')[0] === 'route' ) {
+    await store.dispatch(`${moduleName}/get`, { filters: { _id: filters._id } })
+    return router.push({ name: action.split('/')[1], params: { id: filters._id } })
+  }
+
+  return actionProps.ask
+    ? store.dispatch(`${moduleName}/ask`, { action, params: { payload: { filters }}})
+    : store.dispatch(`${moduleName}/${action}`, { payload: { filters  }})
 }

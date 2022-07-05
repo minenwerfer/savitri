@@ -3,7 +3,8 @@
   "route": true,
   "unicon": "users-alt",
   "presets": [
-    "crud"
+    "crud",
+    "duplicate"
   ],
   "table": [
     "name",

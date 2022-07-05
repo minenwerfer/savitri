@@ -907,6 +907,10 @@ export abstract class Module<T=any, Item=any> {
         state.selected = value ? items.map(({ _id }: { _id: string }) => ({ _id })) ||[] : []
       },
 
+      FILTERS_SET: (state: CommonState, filters: any) => {
+        state._filters = filters
+      },
+
       FILTERS_CLEAR: (state: CommonState) => {
         state._filters = normalizeFilters(this._description?.filters || [])
       },

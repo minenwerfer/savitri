@@ -37,12 +37,12 @@ const actions = [
   'clearAll'
 ]
 
-export const useModule = (name: string, store: any): any => {
-  const description = () => store.state[name]?.__description||{}
+export const useModule = (moduleName: string, store: any): any => {
+  const description = () => store.state[moduleName]?.__description||{}
 
   const self: any = {
     useFields: (fields: string[], except = false) => {
-      return fromEntries(Object.entries(store.getters[`${name}/fields`])
+      return fromEntries(Object.entries(store.getters[`${moduleName}/fields`])
         .filter(([key]: [string, unknown]) => except ? !fields.includes(key) : fields.includes(key)))
     },
 
@@ -59,7 +59,7 @@ export const useModule = (name: string, store: any): any => {
     },
 
     getFirstValue: (value: any, key: string, form: boolean = false): any => {
-      return Entity.getFirstValue(description(), value, key, form, name)
+      return Entity.getFirstValue(description(), value, key, form, moduleName)
     },
 
     formatValue: (value: any, key: string, form: boolean = false, field?: any) => {
@@ -71,20 +71,20 @@ export const useModule = (name: string, store: any): any => {
     },
 
     getItemIndex: (item: any, items?: any[]) => {
-      return Entity.getItemIndex(item, items, name)
+      return Entity.getItemIndex(item, items, moduleName)
     },
 
     setItem: (item: any) => {
-      store.commit(`${name}/ITEM_GET`, { result: item })
+      store.commit(`${moduleName}/ITEM_GET`, { result: item })
     },
 
-    ...(name ? {
-      resumedItem: computed(() => self.resumeItem(store.getters[`${name}/item`])),
-      resumedItems: computed(() => store.getters[`${name}/items`]?.map((i: any) => self.resumeItem(i))),
+    ...(moduleName ? {
+      resumedItem: computed(() => self.resumeItem(store.getters[`${moduleName}/item`])),
+      resumedItems: computed(() => store.getters[`${moduleName}/items`]?.map((i: any) => self.resumeItem(i))),
 
-      ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${name}/${k}`]) }), {}),
-      ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[name][k]) }), {}),
-      ...actions.reduce((a, k: string) => ({ ...a, [k]: (payload: any) => store.dispatch(`${name}/${k}`, payload) }), {})
+      ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${moduleName}/${k}`]) }), {}),
+      ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[moduleName][k]) }), {}),
+      ...actions.reduce((a, k: string) => ({ ...a, [k]: (payload: any) => store.dispatch(`${moduleName}/${k}`, payload) }), {})
     }: {})
   }
 

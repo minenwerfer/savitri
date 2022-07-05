@@ -55,7 +55,10 @@ export class MetaController extends Controller<unknown> {
     const descriptions = new MetaController().describeAll()
 
     const searchable = Object.entries(descriptions)
-      .filter(([, description]: [string, any]) => !!description.searchable?.indexes)
+      .filter(([, description]: [string, any]) => (
+        !!description.searchable?.indexes
+        && !description.alias
+      ))
       .reduce((a: any, [key, description]: [string, any]) => {
         const indexes = description.searchable.indexes.reduce((a: any, index: string) => {
           const field = description.fields[index]

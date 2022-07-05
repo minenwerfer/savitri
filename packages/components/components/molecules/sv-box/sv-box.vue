@@ -7,7 +7,7 @@
         :class="`
           ${
             isFloating
-              ? 'w-11/12 min-h-48 md:w-4/5 lg:w-[50em] sm:h-auto sm:min-h-[30vh] z-10 max-h-screen md:max-h-[95vh]'
+              ? 'w-11/12 min-h-48 md:w-4/5 lg:w-[50em] sm:h-auto sm:min-h-[30vh] max-h-screen md:max-h-[95vh]'
               : ''
           }
           ${ isFloating && animate ? 'ease-out animate-grow' : '' }
@@ -17,7 +17,7 @@
           ${ classes }
         `"
       >
-      <div :class="`flex items-center bg-gray-50 ${isFloating && 'border-b py-3 px-4'}`" v-if="$slots.title || title">
+        <div :class="`flex items-center bg-gray-50 ${isFloating && 'border-b py-3 px-4'}`" v-if="$slots.title || title">
           <div class="flex-1 font-semibold text-xl">
             <slot v-if="$slots.title" name="title"></slot>
             <div v-else-if="title">{{ title }}</div>
@@ -86,4 +86,4 @@ const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
 </script>
 
-<style scoped="./sv-box.scss"></style>
+<style scoped src="./sv-box.scss"></style>

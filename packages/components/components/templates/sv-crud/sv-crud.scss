@@ -1,0 +1,16 @@
+.crud {
+  &__filter {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+
+    :deep(svg) {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+  }
+
+  &__filter-icons {
+    display: flex;
+  }
+}

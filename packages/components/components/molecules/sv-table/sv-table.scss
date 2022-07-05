@@ -7,11 +7,16 @@
 
   &__row {
     &--header {
+      display: none;
       line-height: 2.25rem;
-      font-size: 8pt;
+      font-size: 8.5pt;
       text-transform: uppercase;
       text-align: left;
       border-bottom: 1px solid #dedede;
+
+      @media screen and (min-width: 600px) {
+        display: table-row;
+      }
     }
 
     &--body {
@@ -32,6 +37,7 @@
         display: table-row;
       }
     }
+
   }
 
   &__header {

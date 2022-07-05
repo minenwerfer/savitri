@@ -12,7 +12,7 @@
   overscroll-behavior: contain;
 
   background: #fff;
-  transition: width .55s ease-out;
+  transition: width .25s ease-out;
   padding: 1em 0;
 
   @media screen and (min-width: 600px) {
@@ -27,7 +27,10 @@
   }
 
   &__group {
+    font-size: 8.5pt;
     font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   &__subroute {

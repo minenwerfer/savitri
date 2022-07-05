@@ -1,0 +1,22 @@
+.card {
+  display: block;
+  overflow: hidden;
+
+  background: #fff;
+  border: 1px solid #dedede;
+  border-radius: 5px;
+
+  &--disabled {
+    filter: grayscale(1);
+  }
+
+  &__content {
+    overflow: hidden;
+    user-select: none;
+  }
+
+  &__bottom {
+    position: relative;
+    padding: 1rem;
+  }
+}

@@ -1,5 +1,10 @@
 <template>
-  <sv-box title="Feedback" :float="true" @close="$emit('update:visible', false)" v-model:visible="visible">
+  <sv-box
+    title="Feedback"
+    :float="true"
+    @close="$emit('update:visible', false)"
+    v-model:visible="visible"
+  >
     <template #body>
       <div v-if="!inserted">
         <p class="opacity-60 mb-8">
@@ -12,10 +17,7 @@
         />
       </div>
       <div v-else class="flex justify-between">
-        <p>
-          Obrigado por contribuir com o software da Capsul.
-          Você pode enviar um feedback por sessão. Deus te abençoe.
-        </p>
+        <p>Obrigado por contribuir. Você pode enviar um feedback por sessão.</p>
         <img :src="derpImage" class="w-52 object-contain"/>
       </div>
     </template>

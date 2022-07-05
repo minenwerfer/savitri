@@ -1,6 +1,5 @@
 <template>
   <div :class="`menu ${!visible && 'menu--hidden'}`">
-    <!-- Internals!!!! -->
     <sv-menu-header></sv-menu-header>
 
     <!-- menu entries -->
@@ -11,7 +10,7 @@
         class="mt-[-1px] py-2"
       >
         <a
-          class="menu__group px-2 text-xs uppercase font-bold"
+          class="menu__group"
           @click="onEntryClick(route)"
         >
           {{ $tc(route.meta.title, 2).capitalize() }}

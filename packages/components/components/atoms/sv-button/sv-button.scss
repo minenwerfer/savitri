@@ -1,11 +1,33 @@
+$success-foreground-color: green;
+$neutral-foreground-color: blue;
+$critical-foreground-color: red;
+
+@mixin normal-style($color) {
+  background: $color;
+  border: 1px solid $color;
+}
+
+@mixin light-style($color) {
+  color: $color;
+  border: 1px solid $color;
+  :deep(svg) {
+    fill: $color;
+  }
+}
+
 .button {
   transition: all;
+  padding: .35em 1em;
+  text-align: center;
+  border-radius: 5px;
+  outline: none;
   
   &:hover {
     :deep(.button__icon) {
       fill: white;
     }
   }
+
 
   &__content {
     display: flex;
@@ -18,38 +40,42 @@
   &__icon {
     width: 1.1em;
     height: 1.1em;
-
-    :deep(svg) {
-      fill: white;
-    }
-
-    &--light {
-      fill: purple;
-    }
   }
 
   &--normal {
     color: white;
-    text-align: center;
+    font-size: .9rem;
     font-weight: bold;
-    outline: none;
-    padding: .35em 1em;
-    border-radius: 5px;
+    :deep(svg) {
+      fill: white;
+    }
   }
 
-  &--neutral {
-    background: #998099;
-    border: darkblue;
-    text: white;
+  &--light {
+    background: transparent;
   }
 
-  &--success {
-    background: green;
-    border: darkblue;
-    text: white;
+  &--normal#{&}--neutral {
+    @include normal-style($color: $neutral-foreground-color);
   }
 
-  &--critical {
-    background: red;
+  &--normal#{&}--success {
+    @include normal-style($color: $success-foreground-color);
+  }
+  
+  &--normal#{&}--critical {
+    @include normal-style($color: $critical-foreground-color);
+  }
+
+  &--light#{&}--neutral {
+    @include light-style($color: $neutral-foreground-color);
+  }
+
+  &--light#{&}--success {
+    @include light-style($color: $success-foreground-color);
+  }
+  
+  &--light#{&}--critical {
+    @include light-style($color: $critical-foreground-color);
   }
 }

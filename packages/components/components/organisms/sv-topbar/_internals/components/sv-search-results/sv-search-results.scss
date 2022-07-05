@@ -1,23 +1,133 @@
-.results__box {
-  position: fixed;
-  left: calc(17rem);
-  width: 40rem;
-
-  transform: translateY(-1px);
-
-  margin: 0 1rem;
-  z-index: 50;
-}
+$horizontal-padding: 1rem;
+$picture-size: 3.6rem;
 
 .results {
-  display: grid;
-  gap: 1rem;
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  width: 100vw;
+
+  background: #fff;
+  border: 1px solid #dedede;
+
+  transform: translate(-1px, -1px);
+
+  height: 100vh;
+  max-height: auto;
+  overflow-y: scroll;
+  transition: all .35s ease-out;
+
+  padding-bottom: 2.8rem;
+
+  @media screen and (min-width: 600px) {
+    left: calc(17rem);
+    height: auto;
+    max-height: 28rem;
+    width: 40rem;
+    padding-bottom: 0;
+  }
+
+  &--hidden {
+    max-height: 0;
+    border: none;
+    padding-bottom: 0;
+  }
+
+  &__modules {
+    display: grid;
+  }
 
   &__module {
-    //
+    &:not(:last-child) {
+      border-bottom: 1px solid #dedede;
+    }
   }
 
   &__module-name {
+    padding: .6rem $horizontal-padding;
+    background: #eee;
+  }
+
+  &__results {
+  }
+
+  &__result {
+    display: flex;
+    gap: 1.2rem;
+    padding: .6rem $horizontal-padding;
+    background: #fdfdfd;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #dedede;
+    }
+  }
+
+  &__picture {
+    width: $picture-size;
+    height: $picture-size;
+    border: 1px solid #dedede;
+  }
+
+  &__picture-fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #f4f4f4;
+  }
+
+  &__info {
+    opacity: .75;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 22rem;
+  }
+
+  &__info-line {
+    display: flex;
+    align-items: flex-end;
+    gap: .6rem;
+  }
+
+  &__info-label {
+    font-size: .9rem;
     font-weight: bold;
+
+    &:after {
+      content: ': ';
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-self: center;
+    margin-left: auto;
+    gap: .4rem;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    padding: .2rem .4rem;
+    background: white;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    user-select: none;
+
+    @media screen and (min-width: 600px) {
+      cursor: pointer;
+    }
+  }
+
+  &__action-icon {
+    :deep(svg) {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__action-name {
+    font-size: .8rem;
+    text-align: center;
   }
 }

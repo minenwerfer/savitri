@@ -36,7 +36,7 @@
             >
             <div :class="cindex === 0 && 'font-semibold opacity-80'">
               <div v-if="field.module === 'file' && row[column]._id">
-                <img :src="useFile(row[column]).link" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"/>
+                <sv-picture :file="row[column]" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"></sv-picture>
               </div>
               <div v-else>
                 {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
@@ -99,6 +99,7 @@ import { useModule, useFile } from '../../../../frontend'
 import {
   SvBareButton,
   SvDropdown,
+  SvPicture,
   SvIcon
 
 } from '../../'

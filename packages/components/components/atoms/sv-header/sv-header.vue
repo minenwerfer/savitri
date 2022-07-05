@@ -1,5 +1,7 @@
 <template>
-  <div class="text-2xl opacity-80 pl-2 md:pl-0">
+  <div class="header">
     <slot></slot>
   </div>
 </template>
+
+<style scoped src="./sv-header.scss"></style>

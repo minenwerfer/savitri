@@ -5,18 +5,17 @@ import { MetaController } from '../meta/meta.controller'
 export class SearchableController extends Controller<unknown> {
   constructor() {
     super({
-      publicMethods: ['test'],
+      publicMethods: ['search'],
       description: {
-        module: 'searchable'
+        module: 'searchables'
       }
     })
   }
 
-  public _buildAggregations(query: Array<string>) {
-    const searchable = MetaController.getSearchables()
+  public _buildAggregations(searchables: any, query: Array<string>) {
     const aggregations: { [key: string]: any } = {}
 
-    Object.entries(searchable).forEach(([moduleName, config]: [string, any]) => {
+    Object.entries(searchables).forEach(([moduleName, config]: [string, any]) => {
       const matches = Object.entries(config.indexes).reduce((a: any, [indexName, index]: [string, any]) => {
         const getType: any = (q: any) => {
           switch(index.type) {
@@ -42,22 +41,40 @@ export class SearchableController extends Controller<unknown> {
 
       }, { $or: [] })
 
+      const project = Object.keys(config.indexes).reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {})
+      if( config.picture ) {
+        project._picture = `$${config.picture}`
+      }
+
       aggregations[moduleName] = [
         { $match: matches },
         { $limit: 5 },
-        { $project: Object.keys(config.indexes).reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {}) }
+        { $project: project }
       ]
     })
 
     return aggregations
   }
 
-  public async search(props: { query: Array<string> }) {
-    if( !props?.query || props.query.some((q: string) => !q) ) {
+  public async search(props: { query: Array<string> }, _: unknown, decodedToken: any) {
+    if( !decodedToken?.access?.capabilities ) {
+      throw new Error('signed out')
+    }
+
+    props.query = props.query.filter((q: string) => !!q)
+    if( !props?.query || props.query.length === 0 ) {
       throw new Error('no query provided')
     }
 
-    const aggregations = this._buildAggregations(props.query)
+    const { capabilities } = decodedToken.access
+    const searchables = Object.entries(MetaController.getSearchables()).reduce((a: any, [key, value]: [string, any]) => {
+      return {
+        ...a,
+        ...(capabilities[key].includes('getAll') ? { [key]: value } : {})
+      }
+    }, {})
+
+    const aggregations = this._buildAggregations(searchables, props.query)
     const result: { [key: string]: any } = {}
 
     for (const [moduleName, aggregation] of Object.entries(aggregations)) {

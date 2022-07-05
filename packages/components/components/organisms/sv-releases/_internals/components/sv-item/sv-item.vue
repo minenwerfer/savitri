@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-y-3 pb-24">
-    <sv-panel v-for="(item, index) in props.items" :key="`item-${index}`">
+    <div v-for="(item, index) in items" class="bg-white border-l-[6px] border-purple-400 px-3 py-2 min-h-[5em] shadow rounded">
       <div class="flex flex-col gap-y-3 w-full">
         <div class="flex justify-between">
           <div class="flex gap-x-3 items-center">
@@ -11,13 +11,11 @@
         </div>
         <div class="whitespace-pre-wrap opacity-80" v-html="item.text"></div>
       </div>
-    </sv-panel>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SvPanel } from '../../../../..'
-
 const props = defineProps<{
   items: any
 }>()
