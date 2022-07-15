@@ -10,9 +10,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   disabled?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 </script>
 
 <style scoped src="./sv-card.scss"></style>

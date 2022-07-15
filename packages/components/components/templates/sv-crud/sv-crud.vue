@@ -1,30 +1,12 @@
 <template>
-  <div class="crud flex flex-col gap-4">
-    <div class="flex justify-between">
-      <div class="flex flex-wrap gap-2 overflow-x-auto items-end">
-        <div class="crud__filter">
-          <div class="flex gap-x-1">
-            <div>Filtros</div>
-            <div v-if="filtersCount > 0">
-              ({{ filtersCount }})
-            </div>
-          </div>
-          <div class="crud__filter-icons">
-            <sv-bare-button
-              type="neutral"
-              :disabled="Object.keys(availableFilters).length === 0"
-              @clicked="isFilterVisible = true"
-            >
-              <sv-icon name="filter" :reactive="true"></sv-icon>
-            </sv-bare-button>
-            <sv-bare-button
-              type="neutral"
-              :disabled="Object.keys(availableFilters).length === 0"
-            >
-              <sv-icon name="trash" :reactive="true"></sv-icon>
-            </sv-bare-button>
-          </div>
-        </div>
+  <div class="crud">
+    <div class="crud__panel">
+      <div class="crud__panel-control">
+        <sv-filter-widget v-bind="{
+          module,
+          availableFilters,
+          filters
+        }"></sv-filter-widget>
         <sv-button
           icon="export"
           type="neutral"
@@ -35,7 +17,7 @@
           Exportar
         </sv-button>
       </div>
-      <div class="flex justify-end flex-wrap gap-2 overflow-x-auto" v-if="actions || $slots.actions" :key="module">
+      <div class="crud__panel-control" v-if="actions || $slots.actions" :key="module">
         <sv-button
           v-for="([action, props], index) in Object.entries(actions||{})"
           :key="`action-${index}`"
@@ -43,7 +25,7 @@
           type="neutral"
 
           :icon="props.unicon"
-          @clicked="callAction(action, props, { _id: selectedIds })"
+          @clicked="callAction()(action, props, { _id: selectedIds })"
         >
           {{ props.name }}
         </sv-button>
@@ -52,7 +34,12 @@
     </div>
 
     <teleport to="body">
-      <sv-box :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`" :float="true" v-model:visible="isInsertVisible" @close="store.dispatch('meta/closeCrud')" :classes="`min-w-[40vw] md:mx-[6vw] md:w-8/12 ${Object.keys(fields).length > 8 && 'lg:w-auto'}`">
+      <sv-box
+        :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`"
+        :float="true"
+        v-model:visible="isInsertVisible"
+        @close="store.dispatch('meta/closeCrud')"
+        :classes="`min-w-[40vw] md:mx-[6vw] md:w-8/12 ${Object.keys(fields).length > 8 && 'lg:w-auto'}`">
         <template #body>
           <sv-form
             :form="fields"
@@ -76,12 +63,8 @@
 
     <sv-report :module="module" v-model:visible="isReportVisible"></sv-report>
 
-    <sv-box title="Filtrar por" :float="true" v-model:visible="isFilterVisible" @close="isFilterVisible = false">
-      <sv-filter :module="module" :key="module" @close="isFilterVisible = false"></sv-filter>
-    </sv-box>
-
-    <sv-box class="flex-grow">
-      <div class="flex items-center justify-between gap-2 lg:gap-4">
+    <sv-box>
+      <div class="crud__table-panel">
         <sv-pagination :module="module"></sv-pagination>
         <sv-records-summary
           v-bind="{
@@ -138,7 +121,6 @@ import {
   watch,
   computed,
   reactive,
-  ref,
   toRefs
 
 } from 'vue'
@@ -153,7 +135,6 @@ import {
   SvForm,
   SvButton,
   SvPagination,
-  SvFilter,
   SvBareButton,
   SvReport,
   SvIcon
@@ -161,10 +142,13 @@ import {
 } from '../../'
 
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
+import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 
-const props = defineProps<{
+interface Props {
   module: string
-}>()
+}
+
+const props = defineProps<Props>()
 
 const store = useStore()
 const router = useRouter()
@@ -179,13 +163,6 @@ const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
 const isReportVisible = computed({
   get: () => store.state.meta.report.isVisible,
   set: (value: boolean) => store.dispatch(`meta/${value ? 'spawn' : 'close'}Report`)
-})
-
-const isFilterVisible = ref(false)
-const filtersCount = computed(() => {
-  return Object.values(moduleRefs.filters)
-    .filter((_: any) => !!_)
-    .length
 })
 
 const hasSelectionActions = computed(() => {
@@ -242,12 +219,12 @@ watch(() => isInsertVisible.value, (value: boolean) => {
   }
 })
 
-const callAction = action(props.module, store, router)
+const callAction = () => action(props.module, store, router)
 
 const individualActions = computed(() => {
   return store.getters[`${props.module}/individualActions`]
     .map((action: any) => ({
-      click: (filters: any) => callAction(action.action, action, filters),
+      click: (filters: any) => callAction()(action.action, action, filters),
       ...action
     }))
 })

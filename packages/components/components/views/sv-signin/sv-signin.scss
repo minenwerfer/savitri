@@ -1,0 +1,20 @@
+.signin {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background: #ddd4;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    width: 30rem;
+  }
+
+  &__logo {
+    width: 10rem;
+    height: 3rem;
+    object-fit: contain;
+    align-self: center;
+  }
+}

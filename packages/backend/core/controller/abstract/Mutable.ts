@@ -9,7 +9,7 @@ import {
   fill,
   prepareInsert
 
-} from '../../entity'
+} from '../../collection'
 
 export const { PAGINATION_LIMIT } = process.env
 
@@ -61,20 +61,20 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Gets a document from database.
    */
-  public async get(props: { filters?: object, project?: string|string[] }, response?: unknown, decodedToken?: any): Promise<any> {
+  public async get(props: { filters?: object, project?: string|Array<string> }, response?: unknown, decodedToken?: any): Promise<any> {
     return project(fill(await this._model.findOne(props?.filters), this._description.fields), props?.project)
   }
 
   /**
    * @method
-   * Gets a entity of documents from database.
+   * Gets a collection of documents from database.
    */
   protected _getAll(props: {
     filters?: object,
     offset?: number,
     limit?: number,
     sort?: any,
-    project?: string|string[],
+    project?: string|Array<string>,
 
   }) {
 
@@ -107,7 +107,7 @@ export abstract class Mutable<T> extends Controller<T> {
     offset?: number,
     limit?: number,
     sort?: any,
-    project?: string|string[],
+    project?: string|Array<string>,
 
  }, response?: unknown, decodedToken?: any) {
    const result = (await this._getAll(props))
@@ -123,7 +123,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Removes a document from database.
    */
-  public remove(props: { filters: any }): any | Promise<any> {
+  public delete(props: { filters: any }): any | Promise<any> {
     if( !props.filters ) {
       throw new Error('no criteria specified')
     }
@@ -134,7 +134,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Removing all documents from database matching the criteria.
    */
-  public removeAll(props: { filters: any }) {
+  public deleteAll(props: { filters: any }) {
     if( !Array.isArray(props.filters?._id) || props.filters?._id?.length === 0 ) {
       throw new Error('no criteria specified')
     }
@@ -161,7 +161,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * @method
    * Modify documents matching criteria.
    */
-  public modifyAll(props: { filters: any[], what: any }) {
+  public modifyAll(props: { filters: Array<any>, what: any }) {
     const what = prepareInsert(this._description, props.what)
     return this._model.updateMany(props.filters as FilterQuery<T>, what)
   }

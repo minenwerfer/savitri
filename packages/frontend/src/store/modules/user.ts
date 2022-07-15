@@ -8,7 +8,7 @@ import { AxiosResponse } from 'axios'
 export interface User {
   current: {
     token: string,
-    level: string[]
+    level: Array<string>
   }
 }
 

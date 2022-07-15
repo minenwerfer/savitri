@@ -1,19 +1,21 @@
 <template>
   <div :class="`icon ${reactive && 'icon--reactive'}`">
-    <unicon
-      v-bind="props"
-    ></unicon>
+    <unicon v-bind="props"></unicon>
   </div>
 </template>
 
 <script setup lang="ts">
 import { inject } from 'vue'
 
-const props = defineProps<{
+interface Props {
   name: string
   fill?: string
   reactive?: boolean
-}>()
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  reactive: false
+})
 
 const reactive = inject('iconReactive', props.reactive)
 </script>

@@ -65,7 +65,7 @@ import {
 
 } from '../../'
 
-const props = defineProps<{
+interface Props {
   modelValue?: string
   value?: string|number
   type?: string
@@ -74,7 +74,9 @@ const props = defineProps<{
   icon?: string
   variant?: string
   readonly?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void

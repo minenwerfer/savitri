@@ -4,9 +4,10 @@ import { createApp } from 'vue'
 import Unicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
 
+import { createPinia } from 'pinia'
+import { createI18n } from 'vue-i18n'
 import { extendRouter, RouterExtension } from './router'
 import { extendStore, StoreExtension } from './store'
-import { useI18n } from './i18n'
 import { storeInstance as createStore } from './store'
 import { routerInstance as createRouter } from './router'
 // import { PersistentStorage } from './idb/singleton'
@@ -41,7 +42,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   const store = createStore()
   const router = createRouter(routes, store)
-  const _i18n = useI18n(i18n)
+  const _i18n = createI18n(i18n)
 
   if( routerExtension ) {
     extendRouter(router, routerExtension)
@@ -65,6 +66,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
 
   const app = createApp(component)
 
+  app.use(createPinia())
   app.use(router as any)
   app.use(store as any)
   app.use(_i18n)
@@ -75,7 +77,7 @@ export const useApp = (config: AppOptions): Promise<any> => new Promise((resolve
   app.provide('baseVersion', require('../package.json').version)
   // app.provide('productVersion', require(`./package.json`).version)
 
-  Unicon.add([ ...Object.values(Icons) ] as string[])
+  Unicon.add([ ...Object.values(Icons) ] as Array<string>)
   app.use(Unicon as any)
 
   app.mixin({

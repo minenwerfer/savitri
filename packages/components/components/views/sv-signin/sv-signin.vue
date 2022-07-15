@@ -1,9 +1,10 @@
 <template>
-  <div class="grid place-items-center h-screen bg-gray-100">
-    <div class="flex flex-col gap-y-6 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]">
+  <div class="signin">
+    <!-- <div class="flex flex-col gap-y-6 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]"> -->
+    <div class="signin__content">
       <img
+        class="signin__logo"
         :src="require(`@/assets/${productLogo}`).default"
-        style="width: 10em; height: 3em" class="object-contain self-center"
       />
       <sv-box>
         <div style="padding: 1.4em" class="flex justify-center">
@@ -67,3 +68,5 @@ const productLogo = inject('productLogo')
 const productVersion = inject('productVersion')
 const baseVersion = inject('baseVersion')
 </script>
+
+<style scoped src="./sv-signin.scss"></style>

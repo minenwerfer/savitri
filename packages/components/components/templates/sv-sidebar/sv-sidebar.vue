@@ -1,26 +1,28 @@
 <template>
   <div v-if="visible">
     <sv-overlay @click="close"></sv-overlay>
-    <div class="fixed top-0 right-0 z-50 h-screen bg-gray-50 py-6 w-screen md:w-3/6 lg:w-[28em] shadow-lg animate-slip transform-gpu">
-      <div class="flex flex-col gap-y-6 px-auto">
-        <div class="flex justify-between">
-          <strong class="text-xl">
-            {{ $store.state.meta.sidebar.title }}
-          </strong>
-          <sv-bare-button @clicked="close">
-            <sv-icon name="arrow-to-right" fill="black" :reactive="true"></sv-icon>
-          </sv-bare-button>
-        </div>
+    <div class="sidebar">
+      <div class="sidebar__header">
+        <strong class="text-xl">
+          {{ $store.state.meta.sidebar.title }}
+        </strong>
+        <sv-bare-button @clicked="close">
+          <sv-icon
+            name="arrow-to-right"
+            fill="black"
+            :reactive="true"
+          ></sv-icon>
+        </sv-bare-button>
+      </div>
 
-        <div class="h-screen overflow-auto">
-          <KeepAlive>
-            <component
-              :is="components[store.state.meta.sidebar.component]"
-              v-bind="store.state.meta.sidebar.componentProps"
-              @close="close"
-            ></component>
-          </KeepAlive>
-        </div>
+      <div class="sidebar__content">
+        <KeepAlive>
+          <component
+            :is="components[store.state.meta.sidebar.component]"
+            v-bind="store.state.meta.sidebar.componentProps"
+            @close="close"
+          ></component>
+        </KeepAlive>
       </div>
     </div>
   </div>
@@ -57,3 +59,5 @@ const {
 const store = useStore()
 const close = () => store.dispatch('meta/closeSidebar')
 </script>
+
+<style scoped src="./sv-sidebar.scss"></style>

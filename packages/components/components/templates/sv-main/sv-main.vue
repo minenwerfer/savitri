@@ -3,7 +3,7 @@
     {{ toast.text }}
   </sv-toast>
 
-  <div class="grid min-h-screen">
+  <div class="main">
     <router-view></router-view>
 
     <sv-modal v-model:visible="modal.isVisible" style="z-index: 60">
@@ -77,3 +77,5 @@ const __unused = [
   'col-span-6'
 ]
 </script>
+
+<style scoped src="./sv-main.scss"></style>

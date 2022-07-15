@@ -7,10 +7,10 @@
       <div
         v-for="(route, index) in routes"
         :key="`route-${index}`"
-        class="mt-[-1px] py-2"
+        class="menu__entry"
       >
         <a
-          class="menu__group"
+          class="menu__entry-name"
           @click="onEntryClick(route)"
         >
           {{ $tc(route.meta.title, 2).capitalize() }}
@@ -21,23 +21,19 @@
           <sv-bare-button
             v-for="(subroute, index) in route.children"
             :key="`subroute-${index}`"
+            :class="`
+              menu__subroute
+              ${isCurrent(subroute) && 'menu__subroute--current'}
+            `"
             @clicked="onEntryClick(subroute)"
-            class="w-full"
           >
-            <div
-              :class="`
-                menu__subroute flex items-center hover:bg-blue-100 active:no-underline w-full
-                gap-x-2 rounded-lg 
-                ${isCurrent(subroute) ? 'border-blue-500 bg-blue-100' : 'border-transparent'}
-            `">
-              <sv-icon
-                :name="subroute.meta?.unicon || 'file'"
-                :fill="isCurrent(subroute) ? 'blue' : 'gray'"
-                class="menu__icon"
-              ></sv-icon>
-              <div :class="`whitespace-nowrap opacity-60`">
-                {{ $tc(subroute.meta.title, 2).capitalize() }}
-              </div>
+            <sv-icon
+              :name="subroute.meta?.unicon || 'file'"
+              :fill="isCurrent(subroute) ? 'blue' : 'gray'"
+              class="menu__icon"
+            ></sv-icon>
+            <div class="menu__subroute--title">
+              {{ $tc(subroute.meta.title, 2).capitalize() }}
             </div>
           </sv-bare-button>
         </div>
@@ -69,12 +65,14 @@ import { Route } from '@savitri/frontend/router'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
 
-const props = defineProps<{
+interface Props {
   entrypoint?: string
   visible: boolean
   mobileVisible: boolean
   schema?: any
-}>()
+}
+
+const props = defineProps<Props>()
 
 const store = useStore()
 const router = useRouter()
@@ -98,7 +96,7 @@ const onEntryClick = (route: Route & { meta: any }) => {
   // closeMobile()
 }
 
-const getSchema = (schema: any, routes: Route[]) => {
+const getSchema = (schema: any, routes: Array<Route>) => {
   if( !Array.isArray(schema) ) {
     return schema
   }
@@ -115,8 +113,8 @@ const getRoutes = (children?: Route, subschema?: any) => {
     ? router.getRoutes().filter((route) => (route.name ||'').startsWith(`${props.entrypoint}-`))
     : router.getRoutes()
 
-  const schema = getSchema(subschema || props.schema, routes as Route[])
-  const entries: { [key: string]: Route } = {}
+  const schema = getSchema(subschema || props.schema, routes as Array<Route>)
+  const entries: Record<string, Route> = {}
 
   Object.entries(schema)
     .filter(([, value]) => !!value)
@@ -134,7 +132,7 @@ const getRoutes = (children?: Route, subschema?: any) => {
     })
 
   return [
-    ...Object.values(entries) as Route[]
+    ...Object.values(entries) as Array<Route>
   ]
 }
 
@@ -143,7 +141,7 @@ const isCurrent = (subroute: any) => {
   return (subroute.redirect || subroute.path) === route.path
 }
 
-const routes = ref<Route[]>(getRoutes())
+const routes = ref<Array<Route>>(getRoutes())
 
 watch(() => store.state.meta?.globalDescriptions, () => {
   routes.value = getRoutes()

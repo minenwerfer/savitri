@@ -10,12 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, provide } from 'vue'
 import { useStore } from 'vuex'
 import { SvInput } from '../../../../..'
 
 const store = useStore()
 const query = ref('')
+
+provide('iconReactive', false)
 
 watch(() => query.value, () => {
   if( query.value.length === 0 ) {

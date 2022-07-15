@@ -1,11 +1,13 @@
 <template>
-  <div :class="`overlay fixed inset-0 cursor-pointer ${invisible || 'bg-gray-900 opacity-0 transform-gpu animate-overlay'}`"></div>
+  <div :class="`overlay ${invisible || 'overlay--visible'}`"></div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   invisible?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 </script>
 
 <style scoped src="./sv-overlay.scss"></style>

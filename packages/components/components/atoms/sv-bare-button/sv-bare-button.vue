@@ -11,9 +11,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   disabled?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'clicked', event: any): void

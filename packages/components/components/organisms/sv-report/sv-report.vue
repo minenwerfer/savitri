@@ -30,10 +30,12 @@ import { useStore } from 'vuex'
 import { useModule } from '../../../../frontend'
 import { SvBox, SvForm, SvButton } from '../..'
 
-const props = defineProps<{
+interface Props {
   module: string
   visible: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void

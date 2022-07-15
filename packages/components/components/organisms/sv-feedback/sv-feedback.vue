@@ -41,9 +41,11 @@ import { SvForm, SvButton } from '../..'
 
 const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
 
-const props = defineProps<{
+interface Props {
   visible: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const store = useStore()
 const moduleRefs = useModule('feedback', store)

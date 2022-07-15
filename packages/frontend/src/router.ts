@@ -32,11 +32,11 @@ export interface RouteMeta {
   }
 }
 
-export type RouterExtension = { [key: string]: Route[] };
+export type RouterExtension = Record<string, Array<Route>>
 
 export type Route = RouteMeta & RouteRecordRaw & {
-  children?: Route[];
-  components?: any;
+  children?: Array<Route>
+  components?: any
 }
 
 /**
@@ -57,7 +57,7 @@ const labelRoute = (target: Route, meta: any): Route => {
 /**
  * @exports
  */
-export const makeRoutes = (publicRoutes: Route[], privateRoutes: Route[]) => {
+export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Route>) => {
   return [
     ...publicRoutes.map((route: Route) => labelRoute(route, { isPrivate: false })),
     ...privateRoutes.map((route: Route) => labelRoute(route, { isPrivate: true })),
@@ -68,7 +68,7 @@ export const makeRoutes = (publicRoutes: Route[], privateRoutes: Route[]) => {
  * @exports
  * The router instance.
  */
-export const routerInstance = (routes: Route[], store: any) => {
+export const routerInstance = (routes: Array<Route>, store: any) => {
   const router = createRouter({
     history: createWebHistory(),
     routes
@@ -113,7 +113,7 @@ export const routerInstance = (routes: Route[], store: any) => {
 
 export const extendRouter = (router: any, routerExtension: RouterExtension) => {
   Object.entries(routerExtension)
-    .forEach(([parentName, routes]: [string, Route[]]) => {
+    .forEach(([parentName, routes]: [string, Array<Route>]) => {
       routes.forEach((route: Route) => router.addRoute(parentName, route))
     })
 }

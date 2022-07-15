@@ -17,7 +17,7 @@ export interface PromptAction {
  */
 export interface Meta {
   globalIsLoading: boolean
-  globalDescriptions: any[]
+  globalDescriptions: Array<any>
   viewTitle: string
 
   menu: {
@@ -136,7 +136,7 @@ export class MetaModule extends Module<Meta, {}> {
         })
       }),
 
-      describe: ({ commit }: ActionProps, modules: string[]): Promise<void> => new Promise(async (resolve) => {
+      describe: ({ commit }: ActionProps, modules: Array<string>): Promise<void> => new Promise(async (resolve) => {
         for (const module of modules) {
           await this._http.get(`/${module}/describe`).then(({ data }: AxiosResponse) => {
             commit('DESCRIPTIONS_ADD', data?.result)

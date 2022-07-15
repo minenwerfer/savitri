@@ -1,6 +1,6 @@
 <template>
-  <div :key="parent" @change.prevent.stop="" class="search relative w-full border-t py-4 rounded">
-    <header class="text-lg mb-4">{{ moduleName }}</header>
+  <div class="search" :key="parent" @change.prevent.stop="">
+    <header class="search__header">{{ moduleName }}</header>
     <div v-if="isExpanded" class="flex flex-col gap-y-2">
       <sv-form
         :form="moduleRefs.fields"
@@ -41,38 +41,52 @@
 
     <div v-if="!isExpanded || array" :key="inputValue">
       <div v-if="selected.length > 0">
-        <sv-item v-for="(item, index) in selected" :key="`item-${index}`">
-          <div class="flex justify-between gap-x-2">
-            <div class="flex-1">{{ item[indexes[0]] }}</div>
+        <div
+          v-for="(item, index) in selected"
+          :key="`item-${index}`"
+          class="search__item"
+        >
+          <div class="flex-1">{{ item[indexes[0]] }}</div>
 
-            <div v-if="!searchOnly" class="flex gap-x-1 search__icons">
-              <sv-bare-button @clicked="edit(item)">
-                <sv-icon name="edit" fill="gray"></sv-icon>
-              </sv-bare-button>
-              <sv-bare-button @clicked="unselect(item)">
-                <sv-icon name="trash" fill="gray"></sv-icon>
-              </sv-bare-button>
-            </div>
-
-            <div v-else>
-              <sv-bare-button @clicked="unselect(item, false)">
-                <sv-icon name="minus" fill="gray"></sv-icon>
-              </sv-bare-button>
-            </div>
-
+          <div v-if="!searchOnly" class="search__icons">
+            <sv-bare-button @clicked="edit(item)">
+              <sv-icon
+                name="edit"
+                fill="gray"
+              ></sv-icon>
+            </sv-bare-button>
+            <sv-bare-button @clicked="unselect(item)">
+              <sv-icon
+                name="trash"
+                fill="gray"
+              ></sv-icon>
+            </sv-bare-button>
           </div>
 
-        </sv-item>
+          <div v-else>
+            <sv-bare-button @clicked="unselect(item, false)">
+              <sv-icon name="minus" fill="gray"></sv-icon>
+            </sv-bare-button>
+          </div>
+        </div>
       </div>
 
       <div :class="`select-none ${isLoading ? 'opacity-30' : 'opacity-60'}`" v-if="!isExpanded">
-        <div v-if="items.length || selected.length" class="grid">
-          <sv-item v-for="(item, index) in items" :key="`item-${index}`" @click="select(item)" class="bg-white">
-            <div class="flex justify-between gap-x-2 cursor-pointer">
-              <div>{{ item[indexes[0]] }}</div>
-              <sv-icon name="plus" fill="gray"></sv-icon>
+        <div v-if="items.length || selected.length">
+          <div
+            v-for="(item, index) in items"
+            :key="`item-${index}`"
+            class="search__item"
+            @click="select(item)"
+          >
+            <div>{{ item[indexes[0]] }}</div>
+            <div class="search__icons">
+              <sv-icon
+                name="plus"
+                fill="gray"
+              ></sv-icon>
             </div>
-          </sv-item>
+          </div>
         </div>
         <div v-else class="p-2 text-sm">
           <div v-if="isTyping">
@@ -99,9 +113,9 @@ import {
   onMounted
 
 } from 'vue'
+
 import { useStore } from 'vuex'
 import { useModule } from '../../../../frontend'
-
 import {
   SvInput,
   SvButton,
@@ -110,10 +124,9 @@ import {
 
 } from '../..'
 
-import SvItem from './_internals/components/sv-item/sv-item.vue'
 const SvForm = defineAsyncComponent(() => import('../../molecules/sv-form/sv-form.vue'))
 
-const props = defineProps<{
+interface Props {
   modelValue: any
   propName: string
   field: any
@@ -121,7 +134,9 @@ const props = defineProps<{
   indexes: any
   activeOnly?: boolean
   searchOnly?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
@@ -227,7 +242,7 @@ const clear = () => {
 }
 
 const select = (item: any) => {
-  const filterEmpties = (array: any[]) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
+  const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
   const modelValue = array.value
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue

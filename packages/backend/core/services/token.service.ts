@@ -1,25 +1,34 @@
 import { promisify } from 'util'
-import * as jwt from 'jsonwebtoken'
+import {
+  Secret,
+  SignOptions,
+  sign,
+  verify
+
+} from 'jsonwebtoken'
 
 if( process.env.MODE !== 'PRODUCTION') {
   require('dotenv').config()
 }
 
-interface AsyncJwt {
-  sign: (payload: object, secret: string, options: any) => Promise<any>;
-  verify: (payloda: object, secret: string) => Promise<any>;
-}
+// interface AsyncJwt {
+//   sign: (payload: any, secret: string, options?: any) => Promise<string>
+//   verify: (payload: any, secret: string, options?: any) => Promise<string>
+// }
 
-const AsyncJwt = {
-  sign: promisify(jwt.sign),
-  verify: promisify(jwt.verify)
-}
+// const AsyncJwt: AsyncJwt = {
+//   sign: promisify(jwt.sign),
+//   verify: promisify(jwt.verify)
+// }
+
+const asyncSign = promisify<string|object|Buffer, Secret, SignOptions>(sign)
+const asyncVerify = promisify<string, Secret, any>(verify)
 
 /**
  * @exports @const
  * Random alphanumeric sequence for salting JWT.
  */
-export const { APPLICATION_SECRET } = process.env as { APPLICATION_SECRET: jwt.Secret }
+export const { APPLICATION_SECRET } = process.env as { APPLICATION_SECRET: Secret }
 if( !APPLICATION_SECRET ) {
   throw new Error('APPLICATION_SECRET is undefined')
 }
@@ -28,20 +37,19 @@ if( !APPLICATION_SECRET ) {
  * @exports @const
  * Expiration time in seconds.
  */
-export const EXPIRES_IN = 36000;
+export const EXPIRES_IN = 36000
 
 /**
  * @exports @class
  * Token service for signing and decoding objects with JWT.
  */
 export class TokenService {
-
   /**
    * @static @method
    * Creates a token from a object.
    */
   static sign(payload: object, secret?: string) {
-    return jwt.sign(payload, secret || APPLICATION_SECRET, {
+    return asyncSign(payload, secret || APPLICATION_SECRET, {
       expiresIn: EXPIRES_IN
     })
   }
@@ -51,14 +59,14 @@ export class TokenService {
    * Verifies token authenticity.
    */
   static verify(token: string, secret?: string) {
-    return jwt.verify(token, secret || APPLICATION_SECRET)
+    return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 
   /**
    * @static @method
    * Decodes token to object.
    */
-  static decode(token: string, secret?: string) {
-    return jwt.verify(token, secret || APPLICATION_SECRET, (err: any, decoded: any) => !err && decoded)
+  static decode(token: string, secret?: string): Promise<any> {
+    return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 }

@@ -1,0 +1,58 @@
+{
+  "module": "feedback",
+  "route": true,
+  "unicon": "comment-alt-dots",
+  "presets": [
+    "owned",
+    "removeAll",
+    "view"
+  ],
+  "individualActions": {
+    "remove": {
+      "name": "Remover",
+      "unicon": "trash-alt",
+      "ask": true
+    }
+  },
+  "fields": {
+    "product_version": {
+      "label": "Versão do produto",
+      "type": "text",
+      "noform": true
+    },
+    "base_version": {
+      "label": "Versão da base",
+      "type": "text",
+      "noform": true
+    },
+    "user_agent": {
+      "label": "User-Agent",
+      "type": "text",
+      "notable": true,
+      "noform": true
+    },
+    "section": {
+      "label": "Seção",
+      "type": "text",
+      "formSpan": 4
+    },
+    "type": {
+      "label": "Tipo",
+      "type": "select",
+      "required": true,
+      "values": [
+        "Dúvida",
+        "Sugestão",
+        "Elogio",
+        "Bug report",
+        "Outra coisa"
+      ],
+      "formSpan": 2
+    },
+    "comment": {
+      "label": "Comentário",
+      "type": "textbox",
+      "notable": true
+    }
+  }
+}

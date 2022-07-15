@@ -1,14 +1,27 @@
 <template>
   <table v-if="Object.keys(columns).length > 0" class="table">
     <tr v-if="headers" class="table__row table__row--header">
-      <th v-if="module && checkbox" :class="`table__header table__header--checkbox ${border && 'table__header--border'}`">
-        <input type="checkbox" @change="store.dispatch(`${module}/selectAll`, $event.target.checked)" />
+      <th
+        v-if="module && checkbox"
+        :class="`
+          table__header
+          table__header--checkbox
+          ${border && 'table__header--border'}
+      `">
+        <input
+          type="checkbox"
+          @change="store.dispatch(`${module}/selectAll`, $event.target.checked)"
+        />
       </th>
       <th
         v-for="(header, index) in columns"
         :key="`header-${index}`"
-        :class="`table__header table__header--label ${!checkbox && 'table__header--padded'} ${border && 'table__header--border'}`"
-        >
+        :class="`
+          table__header
+          table__header--label
+          ${!checkbox && 'table__header--padded'}
+          ${border && 'table__header--border'}
+      `">
         {{ header.label || header.placeholder }}
       </th>
     </tr>
@@ -16,30 +29,50 @@
     <tr
       v-for="(row, rindex) in rows"
       :key="`row-${rindex}`"
-      :class="`table__row table__row--body ${computedRowColor(row, rindex)}`"
-
+      :class="`table__row table__row--body`"
       @click="moduleRefs.setItem(row)"
-      >
+    >
       <td v-if="module && checkbox" :class="`hidden lg:table-cell px-2 ${ border && 'border' }`">
-        <input type="checkbox" v-model="selected" :value="{ _id: row._id }" />
+        <input
+          type="checkbox"
+          v-model="selected"
+          :value="{ _id: row._id }"
+        />
       </td>
       <td
         v-for="([column, field], cindex) in Object.entries(columns)"
         :key="`column-${rindex}-${cindex}`"
-        :class="`block lg:table-cell truncate cursor-pointer lg:py-1 ${!checkbox && 'first:lg:pl-4'} ${border && 'border'}`"
-      >
-        <div class="grid grid-cols-2 lg:inline-block justify-between lg:text-sm align-middle">
-          <div class="font-semibold opacity-60 lg:hidden text-ellipsis truncate">{{ field.label }}</div>
+        :class="`
+          table__cell
+          ${!checkbox && 'table__cell--padded'}
+          ${border && 'table__cell--border'}
+      `">
+
+        <div class="table__cell-grid">
+          <!-- responsivity on mobile -->
+          <div style="display: none">
+            {{ field.label }}
+          </div>
+
           <div
             v-if="column !== '__custom' && field.type !== 'image'"
             :class="`grid gap-y-1 opacity-80 justify-end ${ computedCellStyle(row, field) }`"
-            >
+          >
             <div :class="cindex === 0 && 'font-semibold opacity-80'">
-              <div v-if="field.module === 'file' && row[column]._id">
-                <sv-picture :file="row[column]" class="w-20 h-20 object-cover mb-4 lg:mb-0 border"></sv-picture>
-              </div>
+              <sv-picture
+                v-if="field.module === 'file' && row[column]._id" 
+                :file="row[column]"
+                class="w-20 h-20 object-cover mb-4 lg:mb-0 border"
+              ></sv-picture>
               <div v-else>
-                {{ formatValue(field.translate ? $t(row[column]||'-') : row[column], column, false, field) }}
+                {{
+                  formatValue(
+                    field.translate ? $t(row[column]||'-') : row[column],
+                    column,
+                    false,
+                    field
+                  )
+                }}
               </div>
             </div>
             <div v-if="getIndexes(column)?.length > 1" class="hidden lg:flex gap-x-2">
@@ -47,97 +80,70 @@
                 v-for="(subvalue, index) in getIndexes(column).slice(1, 2)"
                 :key="`subvalue-${index}`"
                 class="text-sm text-blue-500"
-                >
+              >
                 {{ row[column]?.[subvalue] }}
               </div>
             </div>
           </div>
 
           <div v-else-if="field.type === 'image'">
-            <img :src="row[column].src" v-if="row[column]?.src" class="w-8 h-8 inline-block" />
+            <img
+              :src="row[column].src"
+              v-if="row[column]?.src"
+            />
           </div>
 
-          <div v-else class="flex gap-x-2 justify-end w-full lg:w-auto">
-            <sv-dropdown>
-              <template #trigger>
-                <div class="grid place-items-center border p-1 rounded">
-                  <sv-icon name="setting" fill="gray" class="w-5 h-5"></sv-icon>
-                </div>
-              </template>
-              <template #content>
-                <teleport :to="`#dropdown-${rindex}`">
-                  <div :class="`absolute right-0 ${(Object.keys(rows).length > 10 && rindex > Object.keys(rows).length - 3) && '-bottom-0'} z-50 bg-white rounded border shadow-lg whitespace-nowrap`">
-                    <sv-bare-button
-                      v-for="(action, aindex) in filterActions(columns.__custom.actions)"
-                      :key="`action-${rindex}-${aindex}`"
-                      @clicked="action.click(row)"
-
-                      class="w-full px-2 hover:bg-gray-100"
-                      >
-                      <div class="flex gap-x-2 items-center">
-                        <sv-icon :name="action.unicon" fill="gray" v-if="action.unicon" class="w-5 h-5"></sv-icon>
-                        <div>{{ action.name }}</div>
-                      </div>
-                    </sv-bare-button>
-                  </div>
-                </teleport>
-              </template>
-            </sv-dropdown>
-
-          </div>
+          <sv-dropdown-trigger v-else>
+            <teleport :to="`#dropdown-${rindex}`">
+              <sv-dropdown-content v-bind="{
+                row,
+                actions: columns.__custom.actions
+              }"></sv-dropdown-content>
+            </teleport>
+          </sv-dropdown-trigger>
         </div>
       </td>
-      <div :id="`dropdown-${rindex}`" class="relative"></div>
+      <div :id="`dropdown-${rindex}`"></div>
     </tr>
   </table>
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch, reactive, computed, toRefs } from 'vue'
+import {
+  inject,
+  ref,
+  watch,
+  reactive,
+  computed,
+  toRefs
+
+} from 'vue'
+
 import { useStore } from 'vuex'
 import { useModule, useFile } from '../../../../frontend'
+
 import {
   SvBareButton,
-  SvDropdown,
-  SvPicture,
   SvIcon
 
-} from '../../'
+} from '../..'
 
-const props = defineProps({
-columns: {
-  type: Object,
-  required: true,
-},
-rows: {
-  type: Object,
-  required: true,
-  validator: (v: any) => Array.isArray(v)
-},
-module: {
-  type: String,
-  required: false
-},
-checkbox: {
-  type: Boolean,
-  default: true
-},
-border: {
-  type: Boolean,
-  defauçt: true
-},
-headers: {
-  type: Boolean,
-  default: true
-},
-cellStyle: {
-  type: String,
-  required: false
-},
-rowColor: {
-  type: Object,
-  required: false
+import SvDropdownTrigger from './_internals/components/sv-dropdown-trigger/sv-dropdown-trigger.vue'
+import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dropdown-content.vue'
+
+interface Props {
+  columns: any
+  rows: any
+  module?: string
+  checkbox?: boolean
+  border?: boolean
+  headers?: boolean
 }
+
+const props = withDefaults(defineProps<Props>(), {
+  checkbox: true,
+  border: false,
+  headers: true
 })
 
 const store = useStore()
@@ -148,7 +154,7 @@ watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), {
 
 const selected = computed({
   get: () => store.state[module.value].selected,
-  set: (items: any[]) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
+  set: (items: Array<any>) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
 })
 
 const rowCtx = {
@@ -159,27 +165,6 @@ const rowCtx = {
   })()
 }
 
-const fgColorClasses = {
-  yellow: 'text-yellow-600',
-  red: 'text-red-600',
-  blue: 'text-blue-600'
-}
-
-const bgColorClasses = {
-  yellow: 'bg-yellow-100',
-  red: 'bg-red-100',
-  blue: 'bg-blue-100'
-}
-
-const computedRowColor = (row: any, rindex: number) => {
-  const color = !!props.rowColor && (Object.entries(props.rowColor)
-    .find(([key, value]: [string, any]) => eval(value)(row, rowCtx))||[])[0]
-
-  return color
-    ? bgColorClasses[color]
-    : ( rindex % 2 !== 0 ? 'bg-white lg:bg-gray-50' : 'bg-white' )
-}
-
 const computedCellStyle = (row: any, field: any) => {
   if( !field.cellStyle ) {
     return
@@ -187,11 +172,6 @@ const computedCellStyle = (row: any, field: any) => {
 
   const cellStyle = eval(field.cellStyle)
   return cellStyle(row)
-}
-
-const filterActions = (actions: any[]) => {
-  return actions
-    .filter((action: any) => !action.useronly || store.getters['user/current'].access.visibility !== 'useronly')
 }
 
 const {

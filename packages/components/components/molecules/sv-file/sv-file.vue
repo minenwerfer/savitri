@@ -22,10 +22,12 @@ import { useStore } from 'vuex'
 import { useFile } from '../../../../frontend'
 import { SvBareButton } from '../../'
 
-const props = defineProps<{
+interface Props {
   modelValue: any
   context: string
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', result: any): void

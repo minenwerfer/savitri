@@ -9,17 +9,15 @@
     </template>
 
     <template #footer>
-      <div class="flex gap-x-2">
-        <sv-button
-          v-for="(action, index) in actions"
-          :key="`action-${index}`"
-          :type="action.type"
+      <sv-button
+        v-for="(action, index) in actions"
+        :key="`action-${index}`"
+        :type="action.type"
 
-          @clicked="onClick(action)"
-        >
-          {{ action.title }}
-        </sv-button>
-      </div>
+        @clicked="onClick(action)"
+      >
+        {{ action.title }}
+      </sv-button>
     </template>
   </sv-modal>
 </template>
@@ -32,9 +30,11 @@ import { SvButton } from '../../'
 const SvModal = defineAsyncComponent(() => import('../..//organisms/sv-modal/sv-modal.vue'))
 const store = useStore()
 
-const props = defineProps<{
-  actions: any[]
-}>()
+interface Props {
+  actions: Array<any>
+}
+
+const props = defineProps<Props>()
 
 const onClick = (action: any) => {
   store.dispatch('meta/fulfillPrompt', action.name)

@@ -25,12 +25,14 @@ import {
 
 } from '..'
 
-const props = defineProps<{
+interface Props {
   type?: string
   icon?: string
   variant?: string
   disabled?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const variant = inject('buttonVariant', props.variant) || 'normal'
 const type = props.type || 'success'

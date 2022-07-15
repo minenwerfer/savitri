@@ -16,7 +16,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   items: any
-}>()
+}
+
+const props = defineProps<Props>()
 </script>

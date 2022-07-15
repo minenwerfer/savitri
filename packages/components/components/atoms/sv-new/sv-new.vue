@@ -1,29 +1,29 @@
 <template>
-  <div class="inline-flex" @click="update">
+  <div class="new" @click="update">
     <slot></slot>
-
-    <div class="absolute left-4 bottom-1" v-if="last > modelValue">
-      <div class="grid place-items-center w-5 h-5 rounded-full bg-red-500 text-white text-xs">
-        <div class="text-white text-sm">
-          {{ text || (last - modelValue) }}
-        </div>
-      </div>
+    <div class="new__circle" v-if="last > modelValue">
+      {{ text || (last - modelValue) }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   last: number
   text?: string
   modelValue: any
-}>()
+}
 
-const emit = defineEmits<{
+interface Emits {
   (e: 'update:modelValue', value:any): void
-}>()
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 const update = () => {
   emit('update:modelValue', props.last)
 }
 </script>
+
+<style scoped src="./sv-new.scss"></style>

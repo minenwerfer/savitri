@@ -55,7 +55,7 @@ const defaultMethods = [
 ]
 
 const modules = store.state.meta.globalDescriptions
-const capabilitiesFields = modules.reduce((a: any, { module, report, methods, extraMethods }: { module: string, methods: string[], extraMethods: string[] }) => ({
+const capabilitiesFields = modules.reduce((a: any, { module, report, methods, extraMethods }: { module: string, methods: Array<string>, extraMethods: Array<string> }) => ({
   ...a,
   [module]: {
     label: module,
@@ -78,7 +78,7 @@ const isLoading = computed(() => store.state.accessProfile.isLoading)
 
 const grantEverything = () => {
   Object.entries(capabilitiesFields)
-    .forEach(([key, value]: [string, string[]]) => {
+    .forEach(([key, value]: [string, Array<string>]) => {
       accessItem.capabilities[key] = value.values.map((v: { value: string }) => v.value)
     })
 }

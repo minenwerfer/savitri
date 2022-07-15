@@ -18,9 +18,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-const props = defineProps<{
+interface Props {
   where?: string
-}>()
+}
+
+const props = defineProps<Props>()
 
 const visible = ref(false)
 const where = props.where || 'top'

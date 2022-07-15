@@ -1,6 +1,8 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
+import type { CollectionDescription } from '../../../../common/types'
 import { Model } from '../../database'
 import { TokenService } from '../../services'
+import { throws as assert } from 'assert'
 
 export interface HandlerRequest {
   payload: {
@@ -13,7 +15,7 @@ export interface HandlerRequest {
 
 export abstract class Controller<T> {
   private _webInterface: Controller<T>
-  protected _description: any
+  protected _description: CollectionDescription
 
   protected _model: Model<T>
 
@@ -21,14 +23,14 @@ export abstract class Controller<T> {
    * @protected @readonly
    * Supposed to contain method names as strings.
    */
-  protected readonly _internal: string[] = []
+  protected readonly _internal: Array<string> = []
 
-  protected _publicMethods: string[] = [
+  protected _publicMethods: Array<string> = [
     'describe'
   ]
 
-  protected _rawMethods: { [key: string]: string } = {}
-  protected _forbiddenMethods: string[] = []
+  protected _rawMethods: Record<string, string> = {}
+  protected _forbiddenMethods: Array<string> = []
 
   /**
    * @constructor
@@ -36,7 +38,14 @@ export abstract class Controller<T> {
    * instead of req as first parameter and forbiddens call if user hasn't the
    * capability set.
    */
-  constructor(props: { description?: any, forbiddenMethods?: string[], publicMethods?: string[], rawMethods?: { [key: string]: string } }) {
+  constructor(
+    props: {
+      description?: any,
+      forbiddenMethods?: Array<string>,
+      publicMethods?: Array<string>,
+      rawMethods?: Record<string, string>
+    }
+  ) {
     this._description = props?.description
     this._publicMethods = props?.publicMethods || this._publicMethods
     this._forbiddenMethods = props?.forbiddenMethods || []
@@ -44,24 +53,28 @@ export abstract class Controller<T> {
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
-        if( this._internal.includes(key) ) {
-          throw new Error('forbidden method (cannot be called externally)')
-        }
+        assert(
+          () => !this._internal.includes(key),
+          'forbidden method (cannot be called externally)'
+        )
 
-        if( this._forbiddenMethods.includes(key) ) {
-          throw new Error('forbidden method (explicitly forbidden)')
-        }
+        assert(
+          () => !this._forbiddenMethods.includes(key),
+          'forbidden method (explicitly forbidden)'
+        )
 
-        const method = (target as { [key: string]: any })[key]
+        const method = (target as Record<string, any>)[key]
         const alwaysAttribute = this._description?.alwaysAttribute
 
         return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
-          const { module } = target._description || {}
-          if( !module ) {
-            throw new Error('module is undefined')
-          }
+          const { module: moduleName } = target._description || {}
 
-          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[module]?.includes(key) )) {
+          assert(
+            () => moduleName,
+            'module is undefined'
+          )
+
+          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[moduleName]?.includes(key) )) {
             if( decodedToken?.access ) {
               throw new Error('forbidden method (access denied)')
             }

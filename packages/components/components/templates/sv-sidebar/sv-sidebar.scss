@@ -1,0 +1,29 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 50;
+  height: 100vh;
+
+  width: 100vw;
+  background: #ddd;
+
+  padding: 1rem;
+
+  @media screen and (min-width: 400px) {
+    width: 24rem;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__content {
+    height: 100vh;
+    overflow: auto;
+
+    padding: 1rem 0;
+  }
+}

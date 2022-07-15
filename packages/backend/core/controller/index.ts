@@ -1,10 +1,10 @@
-const { readdirSync } = require('fs')
+import { readdirSync } from 'fs'
 
 /**
  * @exports @const
  * Array of lowercased controller names.
 */
-export const commonControllers = readdirSync(`${__dirname}/../../entities`)
+export const commonControllers = readdirSync(`${__dirname}/../../collections`)
 
 /**
  * @exports @const
@@ -13,17 +13,17 @@ export const commonControllers = readdirSync(`${__dirname}/../../entities`)
 export const getController = (controller: string) => {
   const controllerPath = (() => {
     const module = (globalThis.modules||[])
-      .find(({ exportedEntities }: { exportedEntities: string[] }) => {
-        return exportedEntities?.includes(controller)
+      .find(({ exportedCollections }: { exportedCollections: Array<string> }) => {
+        return exportedCollections?.includes(controller)
       })
 
     if( module ) {
-      return `${process.cwd()}/../../node_modules/${module.name}/backend/entities`
+      return `${process.cwd()}/../../node_modules/${module.name}/backend/collections`
     }
 
     return commonControllers.includes(controller)
-      ? `${__dirname}/../../entities`
-      : `${process.cwd()}/entities`
+      ? `${__dirname}/../../collections`
+      : `${process.cwd()}/collections`
   })()
 
   const sanitizedName = controller.replace(/\./g, '') as string & { capitalize: () => string }

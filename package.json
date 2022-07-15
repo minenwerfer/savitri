@@ -22,10 +22,9 @@
     "savitri-bundle": "./frontend/build/compile.js"
   },
   "dependencies": {
-    "@savitri/frontend": "file:packages/savitri-frontend",
-    "backend-core": "file:packages/backend",
-    "frontend-core": "file:packages/frontend",
+    "@savitri/backend": "file:dist/backend",
     "lodash": "^4.17.21",
+    "pinia": "^2.0.16",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

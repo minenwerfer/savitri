@@ -15,10 +15,12 @@
 import { useStore } from 'vuex'
 import { useModule } from '../../../../frontend'
 
-const props = defineProps<{
+interface Props {
   modelValue?: any
   values?: any
-}>()
+}
+
+const props = defineProps<Props>()
 
 const getValue = (value: any) => {
   return typeof value !== 'string'

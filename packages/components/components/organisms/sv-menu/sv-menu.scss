@@ -2,45 +2,65 @@
   position: sticky;
   top: 3.2rem;
   left: 0;
-  width: 17em;
-  flex-shrink: 0;
+  width: 17rem;
   height: calc(100vh - 3.2rem);
+  flex-shrink: 0;
   border-right: 1px solid #dedede;
-  z-index: 20;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
+  z-index: 20;
 
   background: #fff;
-  transition: width .25s ease-out;
-  padding: 1em 0;
-
-  @media screen and (min-width: 600px) {
-  }
+  padding: 1rem 0;
 
   &--hidden {
     width: 0;
   }
 
   &__entries {
-    padding: 1em 1em 2em 1em;
+    padding: 1rem;
   }
 
-  &__group {
+  &__entry {
+    padding: .4rem 0;
+  }
+
+  &__entry-name {
     font-size: 8.5pt;
     font-weight: bold;
     text-transform: uppercase;
-    white-space: nowrap;
   }
 
   &__subroute {
-    padding: .5em .5em;
+    display: flex;
+    gap: .4rem;
+    width: 100%;
+    align-items: center;
+    padding: .3rem .5rem;
     font-size: .98rem;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    white-space: nowrap;
+
+    &:hover {
+      background: #6060ee;
+    }
+
+    &--current {
+      border-color: #2060fe;
+      background: #2060fa;
+    }
+  }
+
+  &__subroute-title {
+    white-space: nowrap;
+    opacity: .8;
   }
 
   &__icon {
     :deep(svg) {
-      width: 1.3em;
+      width: 1.3rem;
       fill: #63b3ed;
     }
   }

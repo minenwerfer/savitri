@@ -1,11 +1,15 @@
 <template>
-  <div v-if="formData" class="form">
+  <div class="form" v-if="formData">
     <fieldset class="form__fieldset" v-if="!isReadonly">
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
-        :class="fieldClass(field)"
+        :class="`form__field ${fieldClass(field)}`"
+        :style="`
+          --field-span: ${field.formSpan || 6};
+          grid-column: span var(--field-span) / span var(--field-span);
+        `"
       >
         <!-- text -->
         <sv-input
@@ -85,7 +89,7 @@
       </div>
     </fieldset>
 
-    <div :class="`grid gap-x-2 gap-y-4`" v-if="!isReadonly && moduleFields.length > 0">
+    <div class="form__search-grid" v-if="!isReadonly && moduleFields.length > 0">
       <sv-search
         v-for="([childModule, field], index) in moduleFields"
         :key="`modulefield-${index}`"
@@ -277,7 +281,7 @@ const fieldClass = (field: any) => {
   }
   */
 
-  return 'col-span-6'
+  return ''
 }
 
 const {

@@ -2,7 +2,7 @@
   <img
     v-if="file"
     :src="useFile(file).link"
-    class="object-cover w-full h-full"
+    class="picture"
   />
 
   <slot v-else-if="$slots.fallback" name="fallback"></slot>
@@ -12,7 +12,11 @@
 <script setup lang="ts">
 import { useFile } from '../../../../frontend'
 
-const props = defineProps<{
+interface Props {
   file: any
-}>()
+}
+
+const props = defineProps<Props>()
 </script>
+
+<style scoped src="./sv-picture.scss"></style>

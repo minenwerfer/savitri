@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { fromEntries } from '../../../common'
-import * as Entity from '../../../common/src/entity'
+import * as Collection from '../../../common/src/collection'
 
 const getters = [
   'item',
@@ -34,44 +34,46 @@ const actions = [
   'modify',
   'remove',
   'clear',
-  'clearAll'
+  'clearAll',
+  'filter',
+  'filterClear'
 ]
 
 export const useModule = (moduleName: string, store: any): any => {
   const description = () => store.state[moduleName]?.__description||{}
 
   const self: any = {
-    useFields: (fields: string[], except = false) => {
+    useFields: (fields: Array<string>, except = false) => {
       return fromEntries(Object.entries(store.getters[`${moduleName}/fields`])
         .filter(([key]: [string, unknown]) => except ? !fields.includes(key) : fields.includes(key)))
     },
 
-    useFieldsExcept: (fields: string[]) => {
+    useFieldsExcept: (fields: Array<string>) => {
       return self.useFields(fields, true)
     },
 
     getIndexes: (key: string, form: boolean = false) => {
-      return Entity.getIndexes(description(), key, form)
+      return Collection.getIndexes(description(), key, form)
     },
 
     getFirstIndex: (key: string, form: boolean = false) => {
-      return Entity.getFirstIndex(description(), key, form)
+      return Collection.getFirstIndex(description(), key, form)
     },
 
     getFirstValue: (value: any, key: string, form: boolean = false): any => {
-      return Entity.getFirstValue(description(), value, key, form, moduleName)
+      return Collection.getFirstValue(description(), value, key, form, moduleName)
     },
 
     formatValue: (value: any, key: string, form: boolean = false, field?: any) => {
-      return Entity.formatValue(description(), value, key, form, field)
+      return Collection.formatValue(description(), value, key, form, field)
     },
 
     resumeItem: (item: any) => {
-      return Entity.resumeItem(description(), item)
+      return Collection.resumeItem(description(), item)
     },
 
-    getItemIndex: (item: any, items?: any[]) => {
-      return Entity.getItemIndex(item, items, moduleName)
+    getItemIndex: (item: any, items?: Array<any>) => {
+      return Collection.getItemIndex(item, items, moduleName)
     },
 
     setItem: (item: any) => {

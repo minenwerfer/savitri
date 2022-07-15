@@ -4,7 +4,7 @@ import { Route, makeRoutes } from '../frontend/src/router'
  * @exports
  * Non authenticated routes.
  */
-export const publicRoutes: Route[] = [
+export const publicRoutes: Array<Route> = [
   {
     path: '/',
     name: 'landing',
@@ -23,7 +23,7 @@ export const publicRoutes: Route[] = [
  * @exports
  * Authenticated routes.
  */
-export const privateRoutes: Route[] = [
+export const privateRoutes: Array<Route> = [
   {
     path: '/dashboard',
     name: 'dashboard',

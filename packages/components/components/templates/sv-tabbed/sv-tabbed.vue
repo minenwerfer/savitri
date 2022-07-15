@@ -1,18 +1,18 @@
 <template>
-  <div :class="`flex gap-y-3 flex-col ${vertical && 'xl:flex-row xl:gap-x-4' }`">
+  <div :class="`tabbed ${vertical && 'tabbed--vertical'}`">
     <sv-box
       v-if="titles && titles.length > 0"
-
-      :class="vertical ? 'xl:w-1/6' : ''"
-      classes="md:w-auto xl:w-full"
-      :padding-y="`pt-2 xl:pt-2 ${vertical ? 'xl:pt-0' : ''}`"
       :fill="true"
     >
-      <div :class="`flex w-full whitespace-nowrap overflow-auto ${vertical ? 'xl:flex-col' : ''}`">
-        <slot name="menu" v-if="$slots.menu && vertical" :class="`hidden xl:block ${vertical ? menuClasses : ''}`"></slot>
+      <div :class="`tabbed__menu ${vertical && 'tabbed__menu--vertical'}`">
+        <slot
+          name="menu"
+          v-if="$slots.menu && vertical"
+          :class="`hidden xl:block ${vertical ? menuClasses : ''}`"
+        ></slot>
         <sv-bare-button
           :class="`
-            flex flex-1
+            tabbed__menu-button flex flex-1
             text-blue-500 py-2 border-b-4
             ${currentTab === index ? activeStyle : 'border-transparent'}
             ${vertical ? 'xl:border-transparent xl:flex-none xl:px-3 xl:py-2' : ''}
@@ -23,30 +23,29 @@
 
           @clicked="$emit('update:currentTab', index)"
         >
-          <div :class="`${vertical && 'xl:text-left'} text-center flex-1`">
-            {{ title }}
-          </div>
+          {{ title }}
         </sv-bare-button>
       </div>
     </sv-box>
 
-    <div :class="`${vertical && 'xl:flex-1'} flex flex-col gap-y-4`">
+    <div class="tabbed__content">
       <div>
         <div
           v-for="([key, value], tab) in Object.entries($slots)"
           :key="`tab-${key}`"
         >
-          <div v-if="tab === currentTab" class="animate-fade">
+          <!-- should be animated -->
+          <div v-if="tab === currentTab">
             <slot :name="key"></slot>
           </div>
         </div>
       </div>
 
-      <div class="flex gap-x-2" v-if="bottomHelpers">
-        <sv-button @clicked="previous" :disabled="currentTab === 0">Voltar</sv-button>
-        <sv-button @clicked="next" :disabled="currentTab === tabs" v-if="!finishButton || currentTab + 1 !== tabs">Próximo</sv-button>
-        <sv-button @clicked="$emit('finish')" v-else-if="currentTab + 1 === tabs">Finalizar</sv-button>
-      </div>
+      <!-- <div class="flex gap-x-2" v-if="bottomHelpers"> -->
+      <!--   <sv-button @clicked="previous" :disabled="currentTab === 0">Voltar</sv-button> -->
+      <!--   <sv-button @clicked="next" :disabled="currentTab === tabs" v-if="!finishButton || currentTab + 1 !== tabs">Próximo</sv-button> -->
+      <!--   <sv-button @clicked="$emit('finish')" v-else-if="currentTab + 1 === tabs">Finalizar</sv-button> -->
+      <!-- </div> -->
     </div>
   </div>
 </template>

@@ -1,13 +1,16 @@
 <template>
-  <div class="relative">
+  <div class="dropdown">
     <div
       @click="visible = !visible"
       class="cursor-pointer z-40"
     >
       <slot name="trigger"></slot>
     </div>
-    <div v-if="visible" class="mr-6">
-      <sv-overlay :invisible="true" @click="visible = false"></sv-overlay>
+    <div v-if="visible" class="dropdown__content">
+      <!-- <sv-overlay -->
+      <!--   :invisible="false" -->
+      <!--   @click="visible = false" -->
+      <!-- ></sv-overlay> -->
       <slot name="content"></slot>
     </div>
   </div>
@@ -19,3 +22,5 @@ import { SvOverlay } from '../../'
 
 const visible = ref(false)
 </script>
+
+<style scoped src="./sv-dropdown.scss"></style>

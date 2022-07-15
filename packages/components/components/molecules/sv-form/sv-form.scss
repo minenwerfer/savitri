@@ -1,14 +1,24 @@
+$section-gap: 2rem;
+
 .form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 4rem;
+  gap: $section-gap;
 
   &__fieldset {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     align-items: end;
     width: 100%;
-    gap: 1.15rem;
+    gap: .6rem;
+
+    border: none;
+    padding: 0;
+  }
+
+  &__search-grid {
+    display: grid;
+    gap: $section-gap;
   }
 }

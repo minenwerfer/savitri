@@ -32,7 +32,7 @@ export const storeInstance = (): Store<any> => {
 
   const evtListener = window.addEventListener('__updateQueryCache', ({ detail }: any) => {
     store.commit(`${detail.parentModule}/CACHE_QUERY`, {
-      module: detail.module,
+      moduleName: detail.moduleName,
       result: detail.result
     })
   })
@@ -40,7 +40,7 @@ export const storeInstance = (): Store<any> => {
   return store
 }
 
-export type StoreExtension = any;
+export type StoreExtension = any
 
 export const extendStore = (store: Store<any>, storeExtension: StoreExtension) => {
   Object.entries(storeExtension)

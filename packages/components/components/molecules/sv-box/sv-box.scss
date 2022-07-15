@@ -1,15 +1,71 @@
+$section-padding: .8rem;
+
 .box {
   &--floating {
     position: fixed;
     z-index: 40;
 
-    width: 100vw;
-    height: 100vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-    @media screen and (min-width: 600px) {;
+  &__content {
+    background: #fff;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+
+    &--floating {
+      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 60;
+
+      min-width: 90vw;
+
+      @media screen and (min-width: 600px) {
+        min-width: 36rem;
+      }
+
+      .box__body {
+        max-height: 80vh;
+      }
     }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+
+    padding: 0 $section-padding;
+    height: 3rem;
+    background: #ddd;
+  }
+
+  &__header-title {
+    flex: 1;
+  }
+
+  &__header-icons {
+    :deep(svg) {
+      height: 1.2rem;
+      width: 1.2rem;
+    }
+  }
+
+  &__body {
+    // max-height: 90vh;
+    overflow-y: scroll;
+
+    &--padded {
+      padding: $section-padding;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: .4rem;
+    padding: $section-padding;
   }
 }

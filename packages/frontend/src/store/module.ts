@@ -1,5 +1,4 @@
 import { Router } from 'vue-router'
-import { default as webpackVariables } from 'variables'
 import {
   RequestProvider,
   AxiosResponse,
@@ -54,7 +53,7 @@ export interface MutationProps {
   result?: any
   props?: any
   payload: {
-    filters?: any|any[]
+    filters?: any|Array<any>
   }
 }
 
@@ -70,11 +69,11 @@ export interface ProxiedRequestProvider {
 export interface CommonState {
   isLoading: boolean
   item: any
-  items: any[]
+  items: Array<any>
   recordsCount: number
   recordsTotal: number
-  _clearItem: any
   currentPage: number
+  _clearItem: any
   _limit: number
   _halt: boolean
   _filters: any
@@ -84,14 +83,14 @@ export interface CommonState {
     actions?: any
     individualActions?: any
     fields?: any
-    table?: string[]
+    table?: Array<string>
     filters?: any
   }
-  selected: any[]
+  selected: Array<any>
   defaultFilters?: any
 }
 
-export const normalizeFilters = (filters: any[]) => {
+export const normalizeFilters = (filters: Array<any>) => {
   return filters
   .reduce((a: any, b: any) => {
     const filter = typeof b !== 'string'
@@ -105,7 +104,7 @@ export const normalizeFilters = (filters: any[]) => {
   }, {})
 }
 
-export const normalizeValues = (values: any|any[]) => {
+export const normalizeValues = (values: any|Array<any>) => {
   if( Array.isArray(values) ) {
     return values.reduce((a, value) => ({
       ...a,
@@ -221,7 +220,8 @@ export abstract class Module<T=any, Item=any> {
      * @function
      * Catchs errors then spawns a modal.
      */
-    const _httpMethodWrapper = (target: RequestProvider, method: any, ctx: ContextFunctions, ...args: any) => new Promise((resolve, reject) => {
+    const _httpMethodWrapper = (target: RequestProvider, method: any, ctx: ContextFunctions, ...args: any) =>
+      new Promise((resolve, reject) => {
       const call = method.apply(target, ...args)
       if( !(call instanceof Promise) ) {
         return call
@@ -236,9 +236,6 @@ export abstract class Module<T=any, Item=any> {
             await ctx.dispatch('meta/spawnModal', {
               title: 'Sua sessão expirou',
               body: 'Você será redirecionado para a página de login.',
-              image: !webpackVariables.strict
-                ? 'http://3.bp.blogspot.com/-vu0LFEac67Y/TbIWEtl9VgI/AAAAAAAAADg/WnBZ_bVkXJs/s1600/foreveralone.gif'
-                : undefined
 
             }, { root: true });
 
@@ -500,7 +497,7 @@ export abstract class Module<T=any, Item=any> {
       individualActions: (state: CommonState) => {
         return Object.entries(state._description.individualActions||{})
           .filter(([, value]: [unknown, any]) => !!value)
-          .reduce((a: object[], [key, value]: [string, any]) => [
+          .reduce((a: Array<object>, [key, value]: [string, any]) => [
             ...a,
             {
               action: key,
@@ -659,14 +656,14 @@ export abstract class Module<T=any, Item=any> {
           : found
       },
 
-      getAll: this.actionHelper<Item[]>('getAll', 'ITEMS_GET'),
+      getAll: this.actionHelper<Array<Item>>('getAll', 'ITEMS_GET'),
       insert: this.actionHelper<Item>('insert', 'ITEM_INSERT'),
-      remove: this.actionHelper<Item>('remove', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
-      removeAll: this.actionHelper<Item>('removeAll', 'ITEMS_REMOVE'),
+      delete: this.actionHelper<Item>('delete', 'ITEM_REMOVE', (payload) => ({ ...payload, filters: { _id: payload.filters._id } })),
+      deleteAll: this.actionHelper<Item>('deleteAll', 'ITEMS_REMOVE'),
       modify: this.actionHelper<Item>('modify', 'ITEM_MODIFY'),
       modifyAll: this.actionHelper<Item>('modifyAll', 'ITEMS_MODIFY'),
 
-      deepInsert: ({ dispatch, getters, rootGetters }: ActionProps, payload: any) => new Promise(async (resolve) => {
+      deepInsert: ({ dispatch, getters }: ActionProps, payload: any) => new Promise(async (resolve) => {
         const { expandedSubmodules } = getters
         for ( const [k, { module }] of expandedSubmodules ) {
           if( payload.what[k] && typeof payload.what[k] === 'object' && Object.keys(payload.what[k]).length > 0 ) {
@@ -723,12 +720,15 @@ export abstract class Module<T=any, Item=any> {
     clearAll: ({ commit }: ActionProps): void => commit('ITEMS_CLEAR'),
 
     select: ({ commit }: ActionProps, props: any) => commit('ITEM_SELECT', props),
-    selectMany: ({ commit }: ActionProps, { items, value }: { items: any[], value: boolean }) => commit('ITEMS_SELECT', { items, value }),
+    selectMany: ({ commit }: ActionProps, { items, value }: { items: Array<any>, value: boolean }) => commit('ITEMS_SELECT', { items, value }),
     selectAll: ({ commit, getters }: any, value:boolean = true) =>
       commit('ITEMS_SELECT', { items: getters.items, value }),
 
     // will getAll starting from the given offset
-    paginate: ({ commit, dispatch, state, getters }: ActionProps, { page, limit }: { page: number|string, limit: number }): Promise<any> => new Promise((resolve) => {
+    paginate: (
+      { commit, dispatch, state, getters }: ActionProps,
+      { page, limit }: { page: number|string, limit: number }
+    ): Promise<any> => new Promise((resolve) => {
       const prevPage = state.currentPage || 0
       const newPage = ['undefined', 'number'].includes(typeof page)
         ? page || prevPage
@@ -748,6 +748,18 @@ export abstract class Module<T=any, Item=any> {
           resolve(res)
         })
     }),
+
+    async filter({ dispatch, getters, state }: ActionProps) {
+      return dispatch('getAll', {
+        filters: getters.filters,
+        limit: state._limit
+      })
+    },
+
+    async filterClear({ dispatch, commit }: ActionProps) {
+      commit('FILTERS_CLEAR')
+      return dispatch('filter')
+    },
 
     /**
      * @see components/views/CCrud/CCrud.vue
@@ -903,7 +915,7 @@ export abstract class Module<T=any, Item=any> {
             ? unselect(item) : select(item))
       },
 
-      ITEMS_SELECT: (state: CommonState, { items, value }: { items: any[], value: boolean }) => {
+      ITEMS_SELECT: (state: CommonState, { items, value }: { items: Array<any>, value: boolean }) => {
         state.selected = value ? items.map(({ _id }: { _id: string }) => ({ _id })) ||[] : []
       },
 

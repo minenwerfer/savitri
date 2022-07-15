@@ -1,4 +1,4 @@
-export const __locks: { [key: string]: boolean } = {}
+export const __locks: Record<string, boolean> = {}
 
 export const withIsomorphicLock =
 async (lockName: string, cb: () => void, throwOnLocked: boolean = false) => {

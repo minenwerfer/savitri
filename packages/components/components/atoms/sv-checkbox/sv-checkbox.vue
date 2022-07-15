@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue'
 
-const props = defineProps<{
+interface Props {
   modelValue?: any
   required?: boolean
   label?: string
@@ -36,10 +36,12 @@ const props = defineProps<{
   array?: boolean
   isRadio?: boolean
   readonly?: boolean
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', event: string|string[]|boolean): void
+  (e: 'update:modelValue', event: string|Array<string>|boolean): void
 }>()
 
 const checkbox = ref<any>(null)
@@ -60,7 +62,7 @@ const value = typeof props.value === 'object'
   ? (props.value?._id || props.value)
   : props.value
 
-const selectedValues = (values: any[]): (string|boolean)[] => {
+const selectedValues = (values: Array<any>): (string|boolean)[] => {
   return values.map((v: any) => v._id || v)
 }
 

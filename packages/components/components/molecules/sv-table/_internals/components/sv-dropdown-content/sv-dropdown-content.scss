@@ -1,0 +1,31 @@
+.dropdown {
+  position: absolute;
+  right: 0;
+
+  background: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+
+
+  z-index: 60;
+
+  &--bottom {
+    bottom: 0;
+  }
+
+  &__item {
+    display: flex;
+    width: 100%;
+    padding: .4rem;
+
+    &:hover {
+      background: #ddd;
+    }
+  }
+
+  &__item-icon {
+    fill: #555;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}

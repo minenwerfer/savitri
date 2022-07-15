@@ -1,0 +1,19 @@
+.filter {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+
+  :deep(svg) {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  &__count {
+    display: flex;
+    gap: .4rem;
+  }
+
+  &__icons {
+    display: flex;
+  }
+}

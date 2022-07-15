@@ -1,14 +1,17 @@
 <template>
-  <div class="flex gap-x-4" @change="paginate">
-    <div class="flex items-center gap-x-2">
+  <div class="pagination" @change="paginate">
+    <div class="pagination__control">
       <div>Limite</div>
       <sv-select v-model="limit">
-        <option v-for="limit in [10, 35, 100, 150]" :key="`limit-${limit}`">
+        <option
+          v-for="limit in [10, 35, 100, 150]"
+          :key="`limit-${limit}`"
+        >
           {{ limit }}
         </option>
       </sv-select>
     </div>
-    <div class="flex items-center gap-x-2">
+    <div class="pagination__control">
       <div>Página</div>
       <sv-select v-model="page">
         <option v-for="page in pageCount" :key="`page-${page}`">
@@ -26,9 +29,11 @@ import { SvSelect } from '../../'
 
 const SvBareButton = defineAsyncComponent(() => import('../..//atoms/sv-bare-button/sv-bare-button.vue'))
 
-const props = defineProps<{
+interface Props {
   module: string
-}>()
+}
+
+const props = defineProps<Props>()
 
 const page = ref<number>(1)
 const limit = ref<number>(35)
@@ -41,3 +46,5 @@ const store = useStore()
 const pageCount = computed(() => store.getters[`${props.module}/pageCount`])
 const currentPage = computed(() => store.getters[`${props.module}/currentPage`])
 </script>
+
+<style scoped src="./sv-pagination.scss"></style>

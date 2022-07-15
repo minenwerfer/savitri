@@ -1,7 +1,7 @@
 @mixin focus {
   .input {
-    &__input, &__textarea {
-      outline: 1px solid blue;
+    &__container {
+      border: 1px solid blue;
     }
 
     &__icon {
@@ -20,8 +20,7 @@
 
 .input {
   &__label {
-    font-size: 9pt;
-    text-transform: uppercase;
+    font-size: 10pt;
   }
 
   &__description {
@@ -45,21 +44,20 @@
 
   &__input {
     width: 100%;
-    box-sizing: border-box;
     outline: none;
     user-select: none;
-
+    border: 0;
 
     &--normal, &--bold {
       border-radius: 3px;
     }
 
     &--normal {
-      padding: .2em .6em;
+      padding: .45em .6em;
     }
 
     &--bold {
-      padding: .4em .6em;
+      padding: .6em .6em;
     }
 
     &--light {
@@ -68,7 +66,7 @@
     }
 
     &--icon {
-      padding-left: 2.2em !important;
+      padding-left: 2.6em !important;
     }
 
     &--readonly {
@@ -86,7 +84,7 @@
 
   &__icon {
     position: absolute;
-    width: 1.2em;
+    width: 1.1em;
 
     &--normal, &--bold {
       top: 50%;

@@ -1,7 +1,10 @@
+$horizontal-padding: .6rem;
+
 .table {
   width: 100%;
+  border-collapse: collapse;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 1024px) {
     transform: scale(.998);
   }
 
@@ -14,7 +17,7 @@
       text-align: left;
       border-bottom: 1px solid #dedede;
 
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: 1024px) {
         display: table-row;
       }
     }
@@ -33,7 +36,7 @@
         background: #eee;
       }
 
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: 1024px) {
         display: table-row;
       }
     }
@@ -58,22 +61,33 @@
       white-space: nowrap;
     }
 
-    &--padded {
-      @media screen and (min-width: 600px) {
-        &:first-child {
-          padding-left: 1.1rem;
-        }
-      }
-    }
-
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 1024px) {
       display: table-cell;
+      padding: .2rem $horizontal-padding;
     }
   }
 
   &__cell {
-    @media screen and (min-width: 600px) {
+    display: block;
+    line-height: 1.3rem;
+
+    &--border {
+      border: 1px solid #dedede;
+    }
+
+    @media screen and (min-width: 1024px) {
       display: table-cell;
+      padding: $horizontal-padding;
     }
   }
+
+  &__cell-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    @media screen and (min-width: 600px) {
+      display: block;
+    }
+  }
+
 }
