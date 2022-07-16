@@ -36,7 +36,7 @@ export interface Meta {
     isVisible: boolean
     title: string
     body: string
-    actions: PromptAction[]
+    actions: Array<PromptAction>
   },
   sidebar: {
     isVisible: boolean
@@ -127,7 +127,7 @@ export class MetaModule extends Module<Meta, {}> {
       describeAll: ({ commit }: ActionProps): Promise<any> => new Promise((resolve) => {
         commit('DESCRIPTIONS_CLEAR')
 
-        this._http.get(this.route('describeAll')).then(({ data }: AxiosResponse) => {
+        this._http.get(this.route()).then(({ data }: AxiosResponse) => {
           Object.entries(data?.result).forEach(([, result]) => {
             commit('DESCRIPTIONS_ADD', result)
           })

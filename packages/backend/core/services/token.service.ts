@@ -48,7 +48,7 @@ export class TokenService {
    * @static @method
    * Creates a token from a object.
    */
-  static sign(payload: object, secret?: string) {
+  static sign(payload: object, secret?: string): Promise<void|string> {
     return asyncSign(payload, secret || APPLICATION_SECRET, {
       expiresIn: EXPIRES_IN
     })

@@ -10,7 +10,7 @@ import {
 export const routes: Array<ServerRoute> = [
   {
     method: 'GET',
-    path: '/api/{controller}/get/{id}',
+    path: '/api/{controller}/{id}',
     handler: safeHandle(regularVerb('get'))
   },
   {
@@ -34,12 +34,12 @@ export const routes: Array<ServerRoute> = [
     handler: safeHandle(regularVerb('delete'))
   },
   {
-    method: ['GET', 'POST'],
-    path: '/api/{controller/{verb}',
+    method: 'POST',
+    path: '/api/{controller}/{verb}',
     handler: safeHandle(customVerbs)
   },
   {
-    method: ['GET'],
+    method: 'GET',
     path: '/api/file/{hash}/{options?}',
     handler: safeHandle(fileDownload)
   }

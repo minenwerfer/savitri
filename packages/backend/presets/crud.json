@@ -1,4 +1,11 @@
 {
+  "methods": [
+    "get",
+    "getAll",
+    "insert",
+    "modify",
+    "delete"
+  ],
   "actions": {
     "spawnAdd": {
       "name": "Adicionar",

@@ -33,7 +33,7 @@
             {{ field.description }}
           </div>
 
-          <div v-if="field.type !== 'select'" class="grid md:grid-cols-2 gap-1">
+          <div v-if="field.type !== 'select'" class="form__options-grid">
             <sv-checkbox
               v-if="['checkbox', 'radio'].includes(field.type)"
               v-for="(value, vindex) in field.values"

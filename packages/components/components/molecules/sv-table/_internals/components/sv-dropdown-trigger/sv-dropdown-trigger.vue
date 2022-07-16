@@ -17,13 +17,7 @@
 import { ref } from 'vue'
 import { SvIcon } from '../../../../..'
 
-interface Props {
-  actions: any
-}
-
-const props = defineProps<Props>()
 const visible = ref(false)
-
 </script>
 
 <style scoped src="./sv-dropdown-trigger.scss"></style>

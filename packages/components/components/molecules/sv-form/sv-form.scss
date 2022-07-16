@@ -17,6 +17,12 @@ $section-gap: 2rem;
     padding: 0;
   }
 
+  &__options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .4rem;
+  }
+
   &__search-grid {
     display: grid;
     gap: $section-gap;

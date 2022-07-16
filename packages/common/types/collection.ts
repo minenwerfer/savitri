@@ -25,7 +25,11 @@ export type CollectionDescription = {
   fields: Record<string, CollectionField>
 }
 
-export type CollectionState<Item> = {
+export type PiniaState = {
+  $id?: string
+}
+
+export type CollectionState<Item> = PiniaState & {
   item: Item|object
   items: Array<Item>
   filters: Partial<Item>

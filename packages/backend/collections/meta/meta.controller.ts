@@ -1,8 +1,7 @@
+import { readdirSync, existsSync } from 'fs'
 import type { CollectionDescription } from '../../../common/types'
 import { Controller } from '../../core/controller'
 import { preloadCollection } from '../../core/collection'
-
-const { readdirSync, existsSync } = require('fs')
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
 const __searchable: Record<string, CollectionDescription> = {}
@@ -10,7 +9,7 @@ const __searchable: Record<string, CollectionDescription> = {}
 export class MetaController extends Controller<unknown> {
   constructor() {
     super({
-      publicMethods: ['describeAll'],
+      publicMethods: ['getAll'],
       description: {
         module: 'meta'
       }
@@ -31,7 +30,7 @@ export class MetaController extends Controller<unknown> {
     ]
 
     const descriptions = modulePaths
-      .reduce((a: any, dir: string) => ({
+      .reduce((a: Record<string, any>, dir: string) => ({
         ...a,
         ...readdirSync(dir)
           .filter((d: string) => !d.startsWith('_'))
@@ -46,6 +45,10 @@ export class MetaController extends Controller<unknown> {
   public describeAll() {
     const descriptions = this._getDescriptions()
     return descriptions
+  }
+
+  public getAll() {
+    return this.describeAll()
   }
 
   public static getSearchables() {

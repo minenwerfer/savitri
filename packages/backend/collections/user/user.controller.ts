@@ -1,3 +1,4 @@
+import path from 'path'
 import * as bcrypt from 'bcrypt'
 
 import { UserDocument, User } from './user.model'
@@ -5,7 +6,6 @@ import { default as Description } from './index.json'
 import { TokenService } from '../../core/services/token.service'
 import { Mutable } from '../../core/controller'
 
-const path = require('path')
 const buildConfig = require(path.join(process.cwd(), 'build.json'))
 
 /**
@@ -79,10 +79,10 @@ export class UserController extends Mutable<UserDocument> {
         }
       }
 
-      const token = TokenService.sign({
+      const token = await TokenService.sign({
         email: GODMODE_USERNAME,
         access
-      })
+      }) as string
 
       return {
         name: 'Godmode',
@@ -100,7 +100,7 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     delete user.password
-    const token = TokenService.sign(user.toObject())
+    const token = await TokenService.sign(user.toObject())
     return {
       ...(user as any)._doc,
       password: undefined,

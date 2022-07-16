@@ -274,8 +274,10 @@ export abstract class Module<T=any, Item=any> {
     return this._proxiedHttp
   }
 
-  protected route(verb: string) {
-    return `${this._route}/${verb}`
+  protected route(verb?: string) {
+    return verb
+      ? `${this._route}/${verb}`
+      : this._route
   }
 
   protected actionHelper<T_>(verb: string, mutation?: string, transform: (what: any) => any = (what) => what) {

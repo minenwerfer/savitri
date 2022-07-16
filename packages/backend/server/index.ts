@@ -37,7 +37,10 @@ export const init = async (props?: { port?: number, modules?: Array<any> }): Pro
     }
   })
 
-  routes.forEach(server.route)
+  // routes.forEach(server.route)
+  for( const route of routes ) {
+    server.route(route)
+  }
 
   return server
 }

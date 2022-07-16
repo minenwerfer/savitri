@@ -2,7 +2,7 @@ import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../../common/types'
 import { Model } from '../../database'
 import { TokenService } from '../../services'
-import { throws as assert } from 'assert'
+import assert from 'assert'
 
 export interface HandlerRequest {
   payload: {
@@ -54,12 +54,12 @@ export abstract class Controller<T> {
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
         assert(
-          () => !this._internal.includes(key),
+          !this._internal.includes(key),
           'forbidden method (cannot be called externally)'
         )
 
         assert(
-          () => !this._forbiddenMethods.includes(key),
+          !this._forbiddenMethods.includes(key),
           'forbidden method (explicitly forbidden)'
         )
 
@@ -70,7 +70,7 @@ export abstract class Controller<T> {
           const { module: moduleName } = target._description || {}
 
           assert(
-            () => moduleName,
+            moduleName,
             'module is undefined'
           )
 

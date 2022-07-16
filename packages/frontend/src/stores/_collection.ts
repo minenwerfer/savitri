@@ -1,5 +1,6 @@
 import type { CollectionState } from '../../../common/types'
 import { proxiedHttp as http } from './_http'
+import { mutations } from './_mutations'
 
 export function state<T=object>(): CollectionState<T> {
   return {
@@ -26,19 +27,19 @@ export function state<T=object>(): CollectionState<T> {
 
 export const actions = {
   setItem<T>(this: CollectionState<T>, item: T) {
-    this.item = item
+    mutations.ITEM_GET(this, item)
   },
 
   setItems<T>(this: CollectionState<T>, items: Array<T>) {
-    this.items = items
+    mutations.ITEMS_GET(this, items)
   },
 
   clearItem<T=any>(this: CollectionState<T>) {
-    this.item = {}
+    mutations.ITEM_CLEAR(this)
   },
 
   async describe<T=any>(this: CollectionState<T>) {
-    const t = await http.post('/api/test')
+    const t = await http.post(`${this.$id}/describe`)
     console.log(t)
   }
 }
