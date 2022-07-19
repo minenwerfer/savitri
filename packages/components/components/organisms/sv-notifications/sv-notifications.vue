@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { reactive, toRefs, computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useModule } from '../../../../frontend'
+import { useModule } from '../../../../web'
 
 const store = useStore()
 const moduleRefs = reactive(useModule('notification', store))

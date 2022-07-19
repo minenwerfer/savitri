@@ -7,7 +7,7 @@ declare namespace globalThis {
 }
 
 /**
- * @remarks frontend only (vuex)
+ * @remarks web only (vuex)
  */
 const _store = globalThis._store
 const _router = globalThis._router

@@ -1,4 +1,4 @@
-import { Route, makeRoutes } from '../frontend/src/router'
+import { Route, makeRoutes } from '../web/src/router'
 
 /**
  * @exports

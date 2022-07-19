@@ -1,4 +1,4 @@
-$horizontal-padding: .6rem;
+$horizontal-padding: .8rem;
 
 .table {
   width: 100%;
@@ -52,7 +52,7 @@ $horizontal-padding: .6rem;
 
     &--checkbox {
       width: 2rem;
-      padding: 0 .4rem;
+      border: 1px solid red;
     }
 
     &--label {
@@ -77,7 +77,10 @@ $horizontal-padding: .6rem;
 
     @media screen and (min-width: 1024px) {
       display: table-cell;
-      padding: $horizontal-padding;
+      padding: 0 $horizontal-padding;
+      &--padded {
+        padding: $horizontal-padding;
+      }
     }
   }
 

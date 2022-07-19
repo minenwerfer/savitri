@@ -15,7 +15,7 @@
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { Route } from '@savitri/frontend/router'
+import { Route } from '@savitri/web/router'
 
 const SvBareButton = defineAsyncComponent(() => import('../../../../../atoms/sv-bare-button/sv-bare-button.vue'))
 

@@ -1,3 +1,5 @@
+$icon-size: 1.8rem;
+
 .overlay {
   position: fixed;
   display: block;
@@ -9,12 +11,14 @@
 }
 
 .dropdown {
-  position: relative;
-  display: flex;
-
   &__trigger {
+    display: flex;
+    justify-content: flex-start;
+
     @media screen and (min-width: 600px) {
       cursor: pointer;
+      width: $icon-size;
+      height: $icon-size;
     }
   }
 }

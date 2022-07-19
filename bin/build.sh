@@ -10,10 +10,9 @@ PACKAGES=(
   "components"
 )
 
-npm run build && \
+npm run build || true && \
   cp -r packages/backend/resources/* dist/backend/resources && \
   cp -r packages/backend/presets dist/backend && \
-  cp -r packages/i18n dist && \
   cp -r packages/components/assets dist/components && \
   cp packages/backend/RELEASE.yml dist/backend/ 2>/dev/null && \
   [ ! -z $BUILD_COMPONENTS ] && (cd frontend && npm run build)

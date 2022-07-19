@@ -1,3 +1,5 @@
+$icon-size: 1.3rem;
+
 .search {
   &__header {
     margin-bottom: .6rem;
@@ -18,8 +20,8 @@
     display: flex;
 
     :deep(svg) {
-      width: 1.35rem;
-      height: 1.35rem;
+      width: $icon-size;
+      height: $icon-size;
     }
   }
 }

@@ -1,40 +1,37 @@
 <template>
   <div class="signin">
-    <!-- <div class="flex flex-col gap-y-6 w-11/12 sm:w-5/6 md:w-4/6 lg:w-[34em]"> -->
     <div class="signin__content">
       <img
         class="signin__logo"
         :src="require(`@/assets/${productLogo}`).default"
       />
       <sv-box>
-        <div style="padding: 1.4em" class="flex justify-center">
-          <div class="flex flex-col items-center gap-y-6 w-[28em]">
-            <div class="py-6 text-2xl font-bold opacity-80" v-html="webpackVariables.signinText || 'Identifique-se'"></div>
-            <sv-form
-              :form-data="user"
-              :form="{
-                email: {
-                  placeholder: 'E-mail',
-                  icon: 'user',
-                  type: 'text',
-                  required: true,
-                },
-                password: {
-                  placeholder: 'Senha',
-                  icon: 'key-skeleton',
-                  type: 'password',
-                  required: true,
-                }
-              }"
-            ></sv-form>
-            <sv-button
-              @clicked="authenticate"
-              :disabled="store.state.user.isLoading"
-              style="padding: .8em 0; width: 100%;"
-            >
-              <div class="w-full">Entrar</div>
-            </sv-button>
-          </div>
+        <div class="signin__form-container">
+          <div v-html="webpackVariables.signinText || 'Identifique-se'"></div>
+          <sv-form
+            :form-data="userStore.credentials"
+            :form="{
+              email: {
+                placeholder: 'E-mail',
+                icon: 'user',
+                type: 'text',
+                required: true,
+              },
+              password: {
+                placeholder: 'Senha',
+                icon: 'key-skeleton',
+                type: 'password',
+                required: true,
+              }
+            }"
+          ></sv-form>
+          <sv-button
+            @clicked="authenticate"
+            :disabled="store.state.user.isLoading"
+            class="signin__form-button"
+          >
+            <div class="signin__form-button-text">Entrar</div>
+          </sv-button>
         </div>
       </sv-box>
       <div class="self-center opacity-40 text-sm">
@@ -51,15 +48,21 @@ import { useRouter } from 'vue-router'
 import { default as webpackVariables } from 'variables'
 import { SvBox, SvForm, SvButton } from '../../'
 
+import { user as useUserStore } from '../../../../web/src/stores'
+const userStore = useUserStore()
+
 const store = useStore()
 const router = useRouter()
 
 provide('module', 'user')
 provide('inputVariant', 'bold')
 
-const authenticate = () => {
-  store.dispatch('user/authenticate')
-    .then(() => router.push({ name: 'dashboard-home'}))
+const authenticate = async () => {
+//  store.dispatch('user/authenticate')
+//    .then(() => router.push({ name: 'dashboard-home'}))
+
+  await userStore.authenticate(userStore.credentials)
+  router.push({ name: 'dashboard-home' })
 }
 
 const user = computed(() => store.state.user.current)

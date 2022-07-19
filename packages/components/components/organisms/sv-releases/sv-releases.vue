@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useModule } from '../../../../frontend'
+import { useModule } from '../../../../web'
 import { SvTabbed } from '../..'
 import { default as SvItem } from './_internals/components/sv-item/sv-item.vue'
 

@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from 'vuex'
 import {
   SvBareButton,
   SvIcon
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const store = useStore()
 
 const filterActions = (actions: Array<any>) => {
   return actions.filter((action: any) =>

@@ -1,26 +1,32 @@
 <template>
-  <div class="grid gap-y-1">
+  <div class="file">
     <div>
-      <img v-if="isImage" :src="fileUrl" class="w-80 object-cover border" />
+      <sv-picture
+        v-if="isImage"
+        :file="modelValue"
+        class="file__image"
+      ></sv-picture>
       <sv-bare-button
         v-if="(modelValue||{})._id"
+        class="file__name"
         @clicked="download(modelValue._id)"
-        class="text-blue-500 text-sm mt-2"
       >
         {{ modelValue.filename }}
       </sv-bare-button>
     </div>
-    <div>
-      <input type="file" ref="file" @click="onClick" @change="onChange" />
-    </div>
+    <input
+      type="file"
+      ref="file"
+      @click="onClick"
+      @change="onChange"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useFile } from '../../../../frontend'
-import { SvBareButton } from '../../'
+import { SvBareButton, SvPicture } from '../../'
 
 interface Props {
   modelValue: any
@@ -36,7 +42,6 @@ const emit = defineEmits<{
 const store = useStore()
 const file = ref(null)
 
-const fileUrl = computed(() => useFile(props.modelValue).link)
 const isImage = computed(() => /^image\//.test((props.modelValue||{}).mime))
 
 const readFile = (event: any): Promise<any> => new Promise((resolve) => {
@@ -74,3 +79,5 @@ const download = (filename: string) => {
   window.open(`${fileUrl.value}/download`)
 }
 </script>
+
+<style scoped src="./sv-file.scss"></style>

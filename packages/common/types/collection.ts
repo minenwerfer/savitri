@@ -47,5 +47,32 @@ export type CollectionState<Item> = PiniaState & {
     recordsTotal: number
     currentPage: number
   }
+
+}
+
+export type CollectionActions = {
+  setItem<T=any>(
+    this: Pick<CollectionState<T>, 'item'>,
+    item: T
+  ): void
+
+  setItems<T=any>(
+    this: Pick<CollectionState<T>, 'items'>,
+    items: Array<T>
+  ): void
+
+  clearItem<T=any>(
+    this: Pick<CollectionState<T>, 'item'>
+  ): void
+
+  clearItems<T=any>(
+    this: Pick<CollectionState<T>, 'items'>
+  ): void
+
+  customEffect(
+    verb: string,
+    payload: any,
+    fn: (state: any, result: any) => any
+  ): any|void
 }
 

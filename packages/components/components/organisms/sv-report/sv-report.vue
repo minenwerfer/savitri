@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { provide, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useModule } from '../../../../frontend'
+import { useModule } from '../../../../web'
 import { SvBox, SvForm, SvButton } from '../..'
 
 interface Props {

@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { useModule } from '../../../../../../../frontend'
+import { useModule } from '../../../../../../../web'
 import { SvPicture } from '../../../../../..'
 
 const store = useStore()

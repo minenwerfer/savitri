@@ -12,11 +12,9 @@
         ></slot>
         <sv-bare-button
           :class="`
-            tabbed__menu-button flex flex-1
-            text-blue-500 py-2 border-b-4
-            ${currentTab === index ? activeStyle : 'border-transparent'}
-            ${vertical ? 'xl:border-transparent xl:flex-none xl:px-3 xl:py-2' : ''}
-            transition-all whitespace-nowrap px-6
+            tabbed__menu-button
+            ${currentTab === index && 'tabbed__menu-button--active'}
+            ${vertical && 'tabbed__menu-button--vertical'}
           `"
           v-for="(title, index) in titles"
           :key="`tabtitle-${index}`"
@@ -29,23 +27,15 @@
     </sv-box>
 
     <div class="tabbed__content">
-      <div>
-        <div
-          v-for="([key, value], tab) in Object.entries($slots)"
-          :key="`tab-${key}`"
-        >
-          <!-- should be animated -->
-          <div v-if="tab === currentTab">
-            <slot :name="key"></slot>
-          </div>
-        </div>
+      <div
+        v-for="([key, value], tab) in Object.entries($slots)"
+        :key="`tab-${key}`"
+      >
+        <slot
+          v-if="tab == currentTab"
+          :name="key"
+        ></slot>
       </div>
-
-      <!-- <div class="flex gap-x-2" v-if="bottomHelpers"> -->
-      <!--   <sv-button @clicked="previous" :disabled="currentTab === 0">Voltar</sv-button> -->
-      <!--   <sv-button @clicked="next" :disabled="currentTab === tabs" v-if="!finishButton || currentTab + 1 !== tabs">Próximo</sv-button> -->
-      <!--   <sv-button @clicked="$emit('finish')" v-else-if="currentTab + 1 === tabs">Finalizar</sv-button> -->
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -53,7 +43,7 @@
 <script setup lang="ts">
 import { onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { SvBareButton, SvButton, SvBox } from '../..'
+import { SvBareButton, SvBox } from '../..'
 
 const props: any = defineProps({
   tabs: {
@@ -114,26 +104,6 @@ if( props.updateRoute ) {
   })
 
   onMounted(updateTab)
-}
-
-const activeStyle = computed(() => {
-  const horizontal = 'border-purple-500'
-  const vertical = 'xl:font-semibold xl:bg-blue-50'
-
-  return props.vertical
-    ? horizontal + ' ' + vertical
-    : horizontal
-})
-
-
-const previous = () => {
-  const previousTab = props.currentTab === 0 ? props.tabs : props.currentTab - 1;
-  emit('update:currentTab', previousTab)
-}
-
-const next = () => {
-  const nextTab = props.currentTab === props.tabs ? 0 : props.currentTab + 1
-  emit('update:currentTab', nextTab)
 }
 </script>
 

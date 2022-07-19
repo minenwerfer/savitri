@@ -127,7 +127,7 @@ import {
 
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import { useModule } from '../../../../frontend'
+import { useModule } from '../../../../web'
 import { action } from '../../../../common'
 import {
   SvBox,

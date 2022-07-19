@@ -61,7 +61,7 @@ import {
 
 } from '../../'
 
-import { Route } from '@savitri/frontend/router'
+import { Route } from '@savitri/web/router'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
 

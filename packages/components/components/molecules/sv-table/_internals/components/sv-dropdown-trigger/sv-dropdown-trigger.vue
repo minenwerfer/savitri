@@ -4,6 +4,7 @@
       <sv-icon
         name="setting"
         fill="gray"
+        :reactive="true"
         ></sv-icon>
     </div>
     <div class="dropdown__content" v-if="visible">

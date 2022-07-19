@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFile } from '../../../../frontend'
+import { useFile } from '../../../../web'
 
 interface Props {
   file: any

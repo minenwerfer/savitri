@@ -1,7 +1,7 @@
 <template>
   <select
     ref="select"
-    class="px-2 py-1 w-full border border-gray-300 active:border-blue-500 bg-gray-100"
+    class="select"
 
     :key="modelValue"
     :value="getValue(modelValue)"
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useStore } from 'vuex'
-import { useModule } from '../../../../frontend'
+import { useModule } from '../../../../web'
 
 interface Props {
   modelValue?: any
@@ -28,3 +28,5 @@ const getValue = (value: any) => {
     : value
 }
 </script>
+
+<style scoped src="./sv-select.scss"></style>

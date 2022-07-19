@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { reactive, computed, ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { useModule } from '../../../../../../../frontend'
+import { useModule } from '../../../../../../../web'
 import { fromEntries } from '../../../../../../../common/helpers'
 import {
   SvBox,

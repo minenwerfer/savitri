@@ -1,0 +1,16 @@
+$image-size: 20rem;
+
+.file {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+
+  &__image {
+    width: $image-size;
+    height: $image-size;
+  }
+
+  &__name {
+    color: blue;
+  }
+}

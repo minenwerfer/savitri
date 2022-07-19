@@ -34,7 +34,7 @@ import {
 } from 'vue'
 
 import { useStore } from 'vuex'
-import { useModule } from '../../../../../../frontend'
+import { useModule } from '../../../../../../web'
 import {
   SvHeader,
   SvBox,

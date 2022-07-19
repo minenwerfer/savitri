@@ -1,3 +1,5 @@
+$icon-size: 1.25rem;
+
 .menu {
   position: sticky;
   top: 3.2rem;
@@ -60,7 +62,7 @@
 
   &__icon {
     :deep(svg) {
-      width: 1.3rem;
+      width: $icon-size;
       fill: #63b3ed;
     }
   }

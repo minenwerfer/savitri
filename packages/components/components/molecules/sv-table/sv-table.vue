@@ -19,7 +19,6 @@
         :class="`
           table__header
           table__header--label
-          ${!checkbox && 'table__header--padded'}
           ${border && 'table__header--border'}
       `">
         {{ header.label || header.placeholder }}
@@ -32,7 +31,7 @@
       :class="`table__row table__row--body`"
       @click="moduleRefs.setItem(row)"
     >
-      <td v-if="module && checkbox" :class="`hidden lg:table-cell px-2 ${ border && 'border' }`">
+      <td v-if="module && checkbox">
         <input
           type="checkbox"
           v-model="selected"
@@ -44,7 +43,7 @@
         :key="`column-${rindex}-${cindex}`"
         :class="`
           table__cell
-          ${!checkbox && 'table__cell--padded'}
+          ${column !== '__custom' && 'table__cell--padded'}
           ${border && 'table__cell--border'}
       `">
 
@@ -120,7 +119,7 @@ import {
 } from 'vue'
 
 import { useStore } from 'vuex'
-import { useModule, useFile } from '../../../../frontend'
+import { useModule, useFile } from '../../../../web'
 
 import {
   SvBareButton,

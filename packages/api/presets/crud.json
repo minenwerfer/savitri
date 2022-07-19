@@ -1,0 +1,26 @@
+{
+  "methods": [
+    "get",
+    "getAll",
+    "insert",
+    "modify",
+    "delete"
+  ],
+  "actions": {
+    "spawnAdd": {
+      "name": "Adicionar",
+      "unicon": "plus"
+    }
+  },
+  "individualActions": {
+    "spawnEdit": {
+      "name": "Editar",
+      "unicon": "edit"
+    },
+    "delete": {
+      "name": "Remover",
+      "unicon": "trash-alt",
+      "ask": true
+    }
+  }
+}
