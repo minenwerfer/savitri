@@ -20,7 +20,7 @@ export class ReleaseController extends Controller<unknown> {
   }
 
   public async getAll() {
-    const baseRelease = await readFile(path.resolve(__dirname, '../../RELEASE.yml'), 'utf8')
+    const baseRelease = await readFile(path.resolve(__dirname, '../../api/RELEASE.yml'), 'utf8')
     const productRelease = await readFile(path.resolve(process.cwd(), './RELEASE.yml'), 'utf8')
 
     const base = YAML.parse(baseRelease).slice(0, MAX_ENTRIES)

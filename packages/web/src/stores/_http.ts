@@ -1,3 +1,4 @@
+import type { Router } from 'vue-router'
 import { RequestProvider } from '../../../common'
 
 const SV_API_URL = process.env.NODE_ENV === 'development'
@@ -17,6 +18,13 @@ export default () => {
 const http = new RequestProvider({
   baseURL: SV_API_URL
 })
+
+declare global {
+  interface Window {
+    _queryCache?: any
+    _router: Router
+  }
+}
 
 /**
  * @function

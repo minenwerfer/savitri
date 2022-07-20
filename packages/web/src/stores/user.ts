@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { CollectionState, CollectionActions } from '../../../common/types'
-import type { User } from '../../../api/collections/user/user.model'
+import type { User } from '../../../collections/user/user.model'
 import useCollection from './_collection'
 import useMetaStore from './meta'
 
@@ -33,7 +33,7 @@ export default defineStore('user', {
     authenticate(this: UserState & CollectionActions, payload: Credentials) {
       return this.customEffect(
         'authenticate', payload,
-        (result: User & { token: string }) => {
+        async (result: User & { token: string }) => {
           this.credentials = {}
           this.currentUser = {
             ...result
@@ -43,7 +43,9 @@ export default defineStore('user', {
           sessionStorage.setItem('auth:current', JSON.stringify(result))
 
           const metaStore = useMetaStore()
-          metaStore.describeAll()
+          await metaStore.describeAll()
+
+          // window.dispatchEvent(new CustomEvent('__storeCreated'))
         }
       )
     }

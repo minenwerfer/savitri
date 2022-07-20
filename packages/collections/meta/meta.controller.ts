@@ -25,7 +25,7 @@ export class MetaController extends Controller<unknown> {
       `${__dirname}/..`,
       `${process.cwd()}/collections`,
       ...global.modules
-        ? global.modules.map(({ name }: { name: string }) => `${process.cwd()}/../../node_modules/${name}/api/collections`)
+        ? global.modules.map(({ name: moduleName }: { name: string }) => `${process.cwd()}/../../node_modules/${moduleName}/collections`)
         : []
     ]
 

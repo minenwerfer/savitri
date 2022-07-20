@@ -25,7 +25,7 @@ export const storeInstance = (): Store<any> => {
     plugins: [
       autoModules,
       crud,
-      ...(process.env.NODE_ENV === 'development' ? [createLogger()] : [])
+      // ...(process.env.NODE_ENV === 'development' ? [createLogger()] : [])
     ],
     strict: process.env.NODE_ENV === 'production'
   })

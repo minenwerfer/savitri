@@ -3,7 +3,7 @@ import { HandlerRequest } from '../core/controller'
 
 import { getController } from '../core/controller'
 import { TokenService } from '../core/services/token.service'
-import { FileController } from '../collections/file/file.controller'
+import { FileController } from '../../collections/file/file.controller'
 
 import {
   pipeHooks,

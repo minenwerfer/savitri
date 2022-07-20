@@ -76,13 +76,13 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
         ...data.result
       ], value)
 
-      window.dispatchEvent(new CustomEvent('__updateQueryCache', {
-        detail: {
-          parentModule: this._route,
-          moduleName: value.module,
-          result: data.result
-        }
-      }))
+      // window.dispatchEvent(new CustomEvent('__updateQueryCache', {
+      //   detail: {
+      //     parentModule: this._route,
+      //     moduleName: value.module,
+      //     result: data.result
+      //   }
+      // }))
 
       return result
     })
@@ -115,7 +115,7 @@ const condenseItem = (item: any) => {
   }), {})
 }
 
-const removeEmpty =(item: any) => {
+const removeEmpty = (item: any) => {
   const entries = Object.entries(item)
   .filter(([_, value]: [unknown, any]) => value && !(typeof value === 'string' && value.length === 0))
 

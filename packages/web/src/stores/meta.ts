@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import { CollectionDescription } from '../../../common/types'
 import useHttp from './_http'
+import useUtil from './_util'
 import useCollection from './_collection'
 
-const stores = require('./')
+import { stores, hasStore, registerStore } from './'
 
 type CollectionName = string
 
 const { http } = useHttp()
+const { parseQuery } = useUtil()
 
 export default defineStore('meta', {
   state: () => ({
@@ -22,28 +24,39 @@ export default defineStore('meta', {
         this.descriptions = response.data?.result
 
       // monkeypatchs '@savitri/web/stores' object
-      Object.entries(descriptions).forEach(([collectionName, description]) => {
-        if( collectionName in stores ) {
+      for ( const [collectionName, description] of Object.entries(descriptions) ) {
+        console.log(collectionName)
+
+        const rawDescription = Object.assign({}, description)
+        description.fields = await parseQuery(description.fields, false)
+
+        if( hasStore(collectionName) ) {
           const store = stores[collectionName]()
-          store.description = description
-          return
+          store.$patch({
+            description,
+            rawDescription
+          })
+          continue
         }
 
         const {
           state,
-          actions: collectionActions
+          actions,
+          getters
         } = useCollection()
 
-        stores[collectionName] = defineStore(collectionName, {
+        const store = defineStore(collectionName, {
           state: () => Object.assign(state(), {
-            description
+            description,
+            rawDescription
           }),
 
-          actions: {
-            ...collectionActions,
-          }
+          actions,
+          getters
         })
-      })
+
+        registerStore(store)
+      }
     }
   }
 })

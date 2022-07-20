@@ -21,6 +21,8 @@ export type CollectionDescription = {
   module: string
   route: boolean
   preset: Array<CollectionPreset>
+  table: Array<string>
+  filters: Array<string>
   alwaysAttribute: boolean
   fields: Record<string, CollectionField>
 }
@@ -33,8 +35,10 @@ export type CollectionState<Item> = PiniaState & {
   item: Item|object
   items: Array<Item>
   filters: Partial<Item>
+
   queryCache: Record<string, any>
   description: Readonly<Partial<CollectionDescription>>
+  rawDescription: Readonly<Partial<CollectionDescription>>
 
   meta: {
     isLoading: boolean
@@ -47,7 +51,6 @@ export type CollectionState<Item> = PiniaState & {
     recordsTotal: number
     currentPage: number
   }
-
 }
 
 export type CollectionActions = {

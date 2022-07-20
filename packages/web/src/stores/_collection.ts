@@ -1,12 +1,5 @@
-import type {
-  CollectionState,
-  CollectionActions,
-  PiniaState
-
-} from '../../../common/types'
-
+import type { CollectionState, CollectionActions } from '../../../common/types'
 import useHttp from './_http'
-// import { mutations } from './_mutations'
 
 type CollectionStateItem<T> =
   Pick<CollectionState<T>, 'item'>
@@ -28,11 +21,12 @@ export default () => {
   return {
     state,
     mutations,
-    actions
+    actions,
+    getters
   }
 }
 
-function state<T=object>(): CollectionState<T>|object {
+const state = <T=object>(): CollectionState<T>|object => {
   return {
     item: {},
     items: [],
@@ -40,6 +34,7 @@ function state<T=object>(): CollectionState<T>|object {
     filters: {},
     queryCache: {},
     description: {},
+    rawDescription: {},
 
     meta: {
       isLoading: false,
@@ -84,6 +79,42 @@ const mutations = {
   }
 }
 
+const getters = {
+  tableDescription<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+    if( !this.description.fields ) {
+      return
+    }
+
+    const prepare = (value: any) => ({
+        ...value,
+        label: value.name?.capitalize() || value.label,
+        type: value.module ? 'module' : value.type,
+    })
+
+    const findField = (fieldName: string) =>
+      Object.entries(this.description.fields||{}).find(([key]: [string, unknown]) => fieldName === key)
+
+    if( !!this.description.table ) {
+      return this.description.table
+        .reduce((a:object, fieldName: string) => {
+          const field = findField(fieldName)
+          if( !field ) {
+            return a
+          }
+
+          return {
+            ...a,
+            [fieldName]: prepare(field[1])
+          }
+        }, {})
+    }
+
+    return Object.entries(this.description.fields)
+    .filter(([, value]: [unknown, any]) => !value.hidden && !value.notable)
+    .slice(0, 8)
+  }
+}
+
 const actions = {
   ...mutations,
 
@@ -113,3 +144,4 @@ const actions = {
     )
   },
 }
+

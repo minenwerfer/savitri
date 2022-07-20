@@ -4,7 +4,7 @@ import { readdirSync } from 'fs'
  * @exports @const
  * Array of lowercased controller names.
 */
-export const commonControllers = readdirSync(`${__dirname}/../../collections`)
+export const commonControllers = readdirSync(`${__dirname}/../../../collections`)
 
 /**
  * @exports @const
@@ -18,11 +18,11 @@ export const getController = (controller: string) => {
       })
 
     if( module ) {
-      return `${process.cwd()}/../../node_modules/${module.name}/api/collections`
+      return `${process.cwd()}/../../node_modules/${module.name}/collections`
     }
 
     return commonControllers.includes(controller)
-      ? `${__dirname}/../../collections`
+      ? `${__dirname}/../../../collections`
       : `${process.cwd()}/collections`
   })()
 

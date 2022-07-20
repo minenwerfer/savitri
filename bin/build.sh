@@ -4,23 +4,23 @@ COMMAND=$(expr "$1" \| "")
 BUILD_COMPONENTS=
 
 PACKAGES=(
-  "frontend"
-  "backend"
+  "web"
+  "api"
   "common"
   "components"
 )
 
 npm run build || true && \
-  cp -r packages/backend/resources/* dist/backend/resources && \
-  cp -r packages/backend/presets dist/backend && \
+  cp -r packages/api/resources/* dist/api/resources && \
+  cp -r packages/api/presets dist/api && \
   cp -r packages/components/assets dist/components && \
-  cp packages/backend/RELEASE.yml dist/backend/ 2>/dev/null && \
-  [ ! -z $BUILD_COMPONENTS ] && (cd frontend && npm run build)
+  cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
+  [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
 
 [ "$COMMAND" == "pack" ] && {
-  cp tsconfig.json dist/frontend
-  cp packages/frontend/tailwind.config.js dist/frontend
-  cp -r packages/frontend/public dist/frontend
+  cp tsconfig.json dist/web
+  cp packages/web/tailwind.config.js dist/web
+  cp -r packages/web/public dist/web
 
   for package in ${PACKAGES[*]}; do
     cp "packages/${package}/package.json" "dist/${package}/package.json"

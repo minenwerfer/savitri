@@ -3,21 +3,21 @@ import '../../common/src/polyfill'
 import { createApp } from 'vue'
 import Unicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
+import type { Router } from 'vue-router'
+import type { Store } from 'vuex'
+export * from 'vue'
 
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
+import { routes } from '@savitri/components'
 import { extendRouter, RouterExtension } from './router'
 import { extendStore, StoreExtension } from './store'
 import { storeInstance as createStore } from './store'
 import { routerInstance as createRouter } from './router'
 // import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
-import { routes } from '@savitri/components'
 
-import type { Router } from 'vue-router'
-import type { Store } from 'vuex'
-
-export * from 'vue'
+import { useStore } from './stores'
 
 interface Plugin {
   routerExtension?: RouterExtension
@@ -37,7 +37,7 @@ export const useApp = (config: AppOptions): Promise<{
   app: any
   router: Router
   store: Store<any>
-}> => new Promise((resolve) => {
+}> => new Promise(async (resolve) => {
   const {
     component,
     i18n,
@@ -102,6 +102,9 @@ export const useApp = (config: AppOptions): Promise<{
   // initializes storage singleton
   // const persistentStorage = new PersistentStorage()
   // PersistentStorage.instance.switchObjectStore('application')
+  //
+  const metaStore = useStore('meta')
+  await metaStore.describeAll()
 
   store.dispatch('meta/describeAll').then(() => {
     window.dispatchEvent(new CustomEvent('__storeCreated'))

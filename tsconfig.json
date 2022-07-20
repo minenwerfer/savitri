@@ -16,10 +16,10 @@
     "baseUrl": ".",
     "paths": {
       "common/*": ["./packages/common/src/*"],
-      "data/*": ["./packages/data/*"],
-      "backend/*": ["./packages/backend/src/*"],
-      "frontend/*": ["./packages/frontend/src/*"],
-      "components/*": ["./packages/components/*"]
+      "api/*": ["./packages/api/src/*"],
+      "web/*": ["./packages/web/src/*"],
+      "components/*": ["./packages/components/*"],
+      "components/*": ["./packages/collections/*"]
     },
     "lib": [
       "esnext",
@@ -29,10 +29,11 @@
     ]
   },
   "include": [
-    "packages/backend/**/*.ts",
-    "packages/frontend/**/*.ts",
+    "packages/api/**/*.ts",
+    "packages/web/**/*.ts",
     "packages/common/**/*.ts",
-    "packages/components/**/*.ts"
+    "packages/components/**/*.ts",
+    "packages/collections/**/*.ts"
   ],
   "exclude": [
     "packages/**/node_modules/*",
