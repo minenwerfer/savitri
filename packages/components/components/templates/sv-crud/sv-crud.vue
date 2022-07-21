@@ -2,32 +2,31 @@
   <div class="crud">
     <div class="crud__panel">
       <div class="crud__panel-control">
-        <sv-filter-widget v-bind="{
-          module,
-          availableFilters,
-          filters
-        }"></sv-filter-widget>
+        <sv-filter-widget :key="store1.$id"></sv-filter-widget>
         <sv-button
-          icon="export"
-          type="neutral"
-          variant="light"
-          @clicked="store.dispatch('meta/spawnReport')"
           v-if="description.report"
+          v-bind="{
+            icon: 'export',
+            type: 'neutral',
+            variant: 'light'
+          }"
+          @clicked="store.dispatch('meta/spawnReport')"
         >
           Exportar
         </sv-button>
       </div>
-      <div class="crud__panel-control" v-if="actions || $slots.actions" :key="module">
+      <div class="crud__panel-control" v-if="store1.actions || $slots.actions" :key="module">
         <sv-button
-          v-for="([action, props], index) in Object.entries(actions||{})"
+          v-for="([action, actionProps], index) in Object.entries(store1.actions||{})"
           :key="`action-${index}`"
-          :disabled="isLoading || selectedIds.length === 0 && props.selection"
-          type="neutral"
-
-          :icon="props.unicon"
+          v-bind="{
+            type: 'neutral',
+            icon: actionProps.unicon,
+            disabled: isLoading || selectedIds.length === 0 && actionProps.selection
+          }"
           @clicked="callAction()(action, props, { _id: selectedIds })"
         >
-          {{ props.name }}
+          {{ actionProps.name }}
         </sv-button>
         <slot name="actions"></slot>
       </div>
@@ -35,26 +34,29 @@
 
     <teleport to="body">
       <sv-box
+        v-model:visible="isInsertVisible"
         :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`"
         :float="true"
-        v-model:visible="isInsertVisible"
+        :classes="`min-w-[40vw] md:mx-[6vw] md:w-8/12 ${Object.keys(fields).length > 8 && 'lg:w-auto'}`"
         @close="store.dispatch('meta/closeCrud')"
-        :classes="`min-w-[40vw] md:mx-[6vw] md:w-8/12 ${Object.keys(fields).length > 8 && 'lg:w-auto'}`">
+      >
         <template #body>
           <sv-form
+            :key="`${item._id ? item._id : 'form'}`"
             :form="fields"
             :form-data="item"
-            @add="$e.preventDefault()"
 
             :is-readonly="isInsertReadonly"
-            :key="`${item._id ? item._id : 'form'}`"
             :item-index="getItemIndex(item)"
             :flex="description.flex"
-            >
-          </sv-form>
+            @add="$e.preventDefault()"
+          ></sv-form>
         </template>
         <template #footer v-if="!isInsertReadonly">
-          <sv-button :disabled="isLoading" @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })">
+          <sv-button
+            :disabled="isLoading"
+            @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })"
+          >
             Salvar
           </sv-button>
         </template>
@@ -79,30 +81,28 @@
 
     <sv-box :fill="true" :transparent="true" classes="overflow-y-visible">
       <sv-table
-        :key="module"
-        v-if="tableDescription"
+        :key="store1.$id"
+        v-if="store1.tableDescription"
         :checkbox="hasSelectionActions"
         :columns="{
-          ...tableDescription,
-          ...(individualActions.length > 0
+          ...store1.tableDescription,
+          ...(store1.individualActions.length > 0
             ? {
               __custom: {
                 label: 'Ações',
-                actions: individualActions
+                actions: store1.individualActions
               }
             } : {}
           )
         }"
 
-        :rows="items"
+        :rows="store1.$items"
         :recordsCount="recordsCount"
         :recordsTotal="recordsTotal"
-
         :row-color="description.rowColor"
-        :class="isLoading && 'opacity-50'"
       ></sv-table>
       <div
-        v-if="items.length === 0 && !isLoading"
+        v-if="store1.$items.length === 0 && !isLoading"
         class="grid place-items-center py-4"
       >
         <div class="opacity-80">
@@ -144,6 +144,10 @@ import {
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 
+import { useStore as useStore1 } from '../../../../web'
+const store1 = reactive({})
+const metaStore = useStore('meta')
+
 interface Props {
   module: string
 }
@@ -156,6 +160,7 @@ const { hash } = useRoute()
 const moduleRefs = reactive({})
 
 provide('module', computed(() => props.module))
+provide('storeId', computed(() => props.module))
 
 const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
 const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
@@ -191,23 +196,30 @@ onUnmounted(() => {
 })
 
 watch(() => [props.module, hash], async ([moduleName]: [string]) => {
-  if( !store.getters[`${moduleName}/fields`] ) {
-    await store.dispatch(`${moduleName}/describe`)
-  }
+
+  // new!
+  Object.assign(store1, useStore1(moduleName))
+
+//  if( !store.getters[`${moduleName}/fields`] ) {
+//    await store.dispatch(`${moduleName}/describe`)
+//  }
 
   Object.assign(moduleRefs, useModule(moduleName, store))
   store.dispatch('meta/setViewTitle', moduleName)
 
-  if( moduleRefs.items.length === 0 ) {
-    const filters = moduleRefs.description._filters
+  if( store1.itemsCount === 0 ) {
+    // const filters = moduleRefs.description._filters
 
-    store.dispatch(`${moduleName}/getAll`, {
-      filters: {
-        ...filters,
-        ...moduleRefs.filters,
-        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[moduleName].defaultFilters : {}),
-      },
-    })
+    // new!
+    store1.getAll()
+
+//    store.dispatch(`${moduleName}/getAll`, {
+//      filters: {
+//        ...filters,
+//        ...moduleRefs.filters,
+//        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[moduleName].defaultFilters : {}),
+//      },
+//    })
   }
 
 }, { immediate: true })
@@ -215,7 +227,8 @@ watch(() => [props.module, hash], async ([moduleName]: [string]) => {
 
 watch(() => isInsertVisible.value, (value: boolean) => {
   if( value === false ) {
-    store.dispatch(`${props.module}/clear`)
+    // store.dispatch(`${props.module}/clear`)
+    store1.clear()
   }
 })
 

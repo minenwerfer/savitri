@@ -25,7 +25,6 @@ export class ReportController extends Mutable<ReportDocument> {
   }
 
   private _getFields(description: any) {
-
     const filter = (entries: any): any => {
       return fromEntries(entries.filter(([_, value]: [unknown, any]) => !value.noreport))
     }

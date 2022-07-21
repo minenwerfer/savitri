@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
-import type { CollectionState, CollectionActions } from '../../../common/types'
+import type { CollectionState, CollectionStoreActions } from '../../types/store'
 import type { User } from '../../../collections/user/user.model'
 import useCollection from './_collection'
 import useMetaStore from './meta'
 
 const {
   state: collectionState,
-  actions: collectionActions
+  actions: collectionActions,
+  getters
 } = useCollection()
 
 type Credentials = {
@@ -16,12 +17,12 @@ type Credentials = {
 
 type UserState = CollectionState<User> & {
   credentials: Credentials|object
-  currentUser: User
+  currentUser: User|object
 }
 
 export default defineStore('user', {
-  state: () => ({
-    ...collectionState(),
+  state: (): UserState => ({
+    ...collectionState<User>(),
     currentUser: {},
     credentials: {
       email: '',
@@ -30,7 +31,7 @@ export default defineStore('user', {
   }),
   actions: {
     ...collectionActions,
-    authenticate(this: UserState & CollectionActions, payload: Credentials) {
+    authenticate(this: UserState & CollectionStoreActions, payload: Credentials) {
       return this.customEffect(
         'authenticate', payload,
         async (result: User & { token: string }) => {
@@ -49,5 +50,6 @@ export default defineStore('user', {
         }
       )
     }
-  }
+  },
+  getters
 })

@@ -42,8 +42,8 @@ const httpMethodWrapper = (
 
   return call
     .then(resolve)
-    .catch(async (error: string) => {
-      if( error === 'signed out' ) {
+    .catch(async (error: Error) => {
+      if( ['TokenExpiredError', 'AuthorizationError'].includes(error.name) ) {
         // ctx.dispatch('user/signout', {}, { root: true })
 
 //         await ctx.dispatch('meta/spawnModal', {
@@ -52,6 +52,8 @@ const httpMethodWrapper = (
 
 //         }, { root: true });
 
+
+        sessionStorage.clear()
         window._router.push({ name: 'signin' })
 
       } else {
@@ -64,7 +66,7 @@ const httpMethodWrapper = (
       }
 
       console.trace(error)
-      reject(error)
+      reject(error.message)
     })
 })
 

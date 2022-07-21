@@ -1,5 +1,5 @@
 {
-  "module": "accessProfile",
+  "collection": "accessProfile",
   "route": true,
   "unicon": "users-alt",
   "presets": [

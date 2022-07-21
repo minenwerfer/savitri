@@ -62,7 +62,7 @@ export class RequestProvider {
                 RequestProvider.throwOnError(res)
               } catch( err ) {
                 if( this._retries < this._maxRetries && res.status !== 200 ) {
-                  this._retries++;
+                  this._retries++
                   return func(...args)
                 }
 
@@ -98,9 +98,10 @@ export class RequestProvider {
    * Throws an error if request status is 200<=x<304 but _error property is present.
    */
   static throwOnError({ data }: AxiosResponse) {
-    const { _error, message } = data;
-    if( _error ) {
-      throw message || _error;
+    if( data._error ) {
+      const error = new Error(data.message)
+      Object.assign(error, data)
+      throw error
     }
   }
 

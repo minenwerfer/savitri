@@ -48,8 +48,8 @@ import { useRouter } from 'vue-router'
 import { default as webpackVariables } from 'variables'
 import { SvBox, SvForm, SvButton } from '../../'
 
-import { user as useUserStore } from '../../../../web/src/stores'
-const userStore = useUserStore()
+import { useStore as useStore1 } from '../../../../web/src/stores'
+const userStore = useStore1('user')
 
 const store = useStore()
 const router = useRouter()

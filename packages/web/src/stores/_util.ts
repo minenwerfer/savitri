@@ -31,12 +31,13 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
       }
     }
 
-    if( !value.module ) {
-      throw new Error('dynamic query but no module is specified')
+    if( !value.collection ) {
+      console.log(value)
+      throw new Error('dynamic query but no collection is specified')
     }
 
-    return withIsomorphicLock(`dynamicQuery:${value.module}`, async () => {
-      const stored = window._queryCache?.[value.module]||[]
+    return withIsomorphicLock(`dynamicQuery:${value.collection}`, async () => {
+      const stored = window._queryCache?.[value.collection]||[]
       const hasToUpdate = typeof value.limit === 'number'
         && (value.limit > stored.length || value.limit === 0)
 
@@ -62,7 +63,7 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
         return {}
       }
 
-      const route = `${value.module}/getAll`
+      const route = `${value.collection}/getAll`
 
       const { data } = await http.post(route, {
         filters: value.filters || {},
@@ -79,7 +80,7 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
       // window.dispatchEvent(new CustomEvent('__updateQueryCache', {
       //   detail: {
       //     parentModule: this._route,
-      //     moduleName: value.module,
+      //     moduleName: value.collection,
       //     result: data.result
       //   }
       // }))

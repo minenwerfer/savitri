@@ -1,32 +1,54 @@
-const __stores: Record<string, any> = {}
+import { inject } from 'vue'
+
+declare global {
+  interface Window {
+    stores: any
+  }
+}
+
+const stores: Record<string, any> = {}
 
 export {
   useStore,
+  useParentStore,
   hasStore,
   registerStore,
-  __stores as stores
+  getStores
 }
-__stores.accessProfile = require('./accessProfile').default
-__stores.meta = require('./meta').default
-__stores.user = require('./user').default
+stores.accessProfile = require('./accessProfile').default
+stores.meta = require('./meta').default
+stores.user = require('./user').default
 
 Object.assign(window, {
-  _stores: __stores
+  stores
 })
 
 const useStore = (storeId: string) => {
-  if( !(storeId in __stores) ) {
+  if( !(storeId in window.stores) ) {
     throw new Error(`tried to invoke non existent store "${storeId}"`)
   }
 
-  return __stores[storeId]()
+  return window.stores[storeId]()
+}
+
+const useParentStore = () => {
+  const parentStoreId = inject<any>('storeId')
+  if( !parentStoreId ) {
+    throw new Error('no parent store found')
+  }
+
+  return useStore(parentStoreId.value||parentStoreId)
 }
 
 const hasStore = (storeId: string) => {
-  return storeId in __stores
+  return storeId in stores
 }
 
 const registerStore = (store: any) => {
   const storeId = store.$id
-  __stores[storeId] = store
+  stores[storeId] = store
+}
+
+const getStores = () => {
+  return window.stores
 }

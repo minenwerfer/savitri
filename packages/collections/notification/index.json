@@ -1,5 +1,5 @@
 {
-  "module": "notification",
+  "collection": "notification",
   "route": true,
   "presets": [
     "alwaysOwned",
@@ -7,7 +7,7 @@
   ],
   "fields": {
     "destination": {
-      "module": "user",
+      "collection": "user",
       "label": "Destinatário",
       "index": "email",
       "array": true

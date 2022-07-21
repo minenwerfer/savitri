@@ -1,5 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../../common/types'
+import { AuthorizationError } from '.././../exceptions'
 import { Model } from '../../database'
 import { TokenService } from '../../services'
 import assert from 'assert'
@@ -67,21 +68,19 @@ export abstract class Controller<T> {
         const alwaysAttribute = this._description?.alwaysAttribute
 
         return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
-          const { module: moduleName } = target._description || {}
+          const { collection: collectionName } = target._description || {}
 
           assert(
-            moduleName,
-            'module is undefined'
+            collectionName,
+            'collection is undefined'
           )
 
-          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[moduleName]?.includes(key) )) {
+          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[collectionName]?.includes(key) )) {
             if( decodedToken?.access ) {
               throw new Error('forbidden method (access denied)')
             }
 
-            console.log(decodedToken)
-
-            throw new Error('signed out')
+            throw new AuthorizationError('signed out')
           }
 
           const payload = Object.keys(req.payload||{}).length === 0

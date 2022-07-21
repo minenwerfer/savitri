@@ -95,11 +95,13 @@ const baseWebpackConfig = {
 }
 
 try {
+  module.paths.push(`${global.appDir}/../../node_modules`)
   const tailwindAddon: any = require('@savitri/addon-tailwind').default;
   (baseWebpackConfig.module.rules[2].use as Array<string>).push(
     tailwindAddon
   )
 } catch(err ) {
+  // throw err
 }
 
 export {

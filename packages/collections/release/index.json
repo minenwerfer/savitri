@@ -1,5 +1,5 @@
 {
-  "module": "release",
+  "collection": "release",
   "route": true,
   "methods": [
     "getAll"

@@ -1,5 +1,5 @@
 {
-  "module": "feedback",
+  "collection": "feedback",
   "route": true,
   "unicon": "comment-alt-dots",
   "presets": [

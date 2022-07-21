@@ -40,8 +40,10 @@ export const safeHandle = (
     }
 
     return {
-      message: error.message,
-      _error: error
+      _error: true,
+      name: error.name,
+      code: error.code,
+      message: error.message
    }
   }
 }

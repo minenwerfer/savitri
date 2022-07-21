@@ -338,12 +338,12 @@ export abstract class Module<T=any, Item=any> {
         }
       }
 
-      if( !value.module ) {
+      if( !value.collection ) {
         throw new Error('dynamic query but no module is specified')
       }
 
-      return withIsomorphicLock(`dynamicQuery:${value.module}`, async () => {
-        const stored = window._queryCache?.[value.module]||[]
+      return withIsomorphicLock(`dynamicQuery:${value.collection}`, async () => {
+        const stored = window._queryCache?.[value.collection]||[]
 
         const hasToUpdate = typeof value.limit === 'number'
           && (value.limit > stored.length || value.limit === 0)
@@ -370,7 +370,7 @@ export abstract class Module<T=any, Item=any> {
           return {}
         }
 
-        const route = `${value.module}/getAll`
+        const route = `${value.collection}/getAll`
 
         const { data } = await this._http.post(route, {
           filters: value.filters || {},
@@ -387,7 +387,7 @@ export abstract class Module<T=any, Item=any> {
         window.dispatchEvent(new CustomEvent('__updateQueryCache', {
           detail: {
             parentModule: this._route,
-            moduleName: value.module,
+            moduleName: value.collection,
             result: data.result
           }
         }))
@@ -444,8 +444,10 @@ export abstract class Module<T=any, Item=any> {
 
   protected _getters()  {
     return {
+      /** @remarks DESNECESSÁRIO? */
       queryCache: (state: CommonState) => state._queryCache,
 
+      /** @remarks DESNECESSÁRIO? */
       item: (state: CommonState) => {
         const merge = Object.entries(state._clearItem)
           .reduce((a: any, [key, value]: [string, any]) => ({
@@ -463,7 +465,7 @@ export abstract class Module<T=any, Item=any> {
         if( !Array.isArray(state.items) ) return []
 
         const modules = Object.entries(state._description?.fields||{})
-          .filter(([, value]: [unknown, any]) => typeof value.module === 'string')
+          .filter(([, value]: [unknown, any]) => typeof value.collection === 'string')
           .map(([key, ]: [string, unknown]) => key)
 
         return state.items
@@ -475,7 +477,7 @@ export abstract class Module<T=any, Item=any> {
 
       expandedSubmodules: (state: CommonState) => {
         return Object.entries(state._description.fields)
-          .filter(([, value]: [unknown, any]) => typeof value.module === 'string' && value.expand === true)
+          .filter(([, value]: [unknown, any]) => typeof value.collection === 'string' && value.expand === true)
       },
 
       /**
@@ -529,7 +531,7 @@ export abstract class Module<T=any, Item=any> {
           const values = Array.isArray(field.values) ? field.values[0] : field.values
           const query = values?.__query
 
-          if( query?.module ) {
+          if( query?.collection ) {
             return { _id: value }
           }
 
@@ -579,6 +581,7 @@ export abstract class Module<T=any, Item=any> {
        * @function
        * Records total / limit.
        */
+      // falta
       pageCount: (state: CommonState) => {
         return Math.ceil(state.recordsTotal / state._limit||1);
       },
@@ -595,7 +598,7 @@ export abstract class Module<T=any, Item=any> {
         const prepare = (value: any) => ({
             ...value,
             label: value.name?.capitalize() || value.label,
-            type: value.module ? 'module' : value.type,
+            type: value.collection ? 'module' : value.type,
         })
 
         if( !!state._description.table ) {
@@ -617,6 +620,7 @@ export abstract class Module<T=any, Item=any> {
         }), {})
       },
 
+      // falta
       fields: (state: CommonState) => {
         return Object.entries(state._description?.fields||{})
           .reduce((a: object, [key, value]: [string, any]) => ({
@@ -624,7 +628,7 @@ export abstract class Module<T=any, Item=any> {
             [key]: {
               ...value,
               type: ![undefined].includes(value.type)
-                ? value.type : typeof value.module === 'string'
+                ? value.type : typeof value.collection === 'string'
                 ? 'module' : 'text',
 
               ...(!!value.values ? { values: normalizeValues(value.values) } : {})
@@ -795,7 +799,7 @@ export abstract class Module<T=any, Item=any> {
 
         if( !state.item || Object.keys(state.item).length === 0 ) {
           state.item = Object.entries(description.fields||{})
-            .filter(([, value]: [unknown, any]) => typeof value.module === 'string' || value.type === 'object')
+            .filter(([, value]: [unknown, any]) => typeof value.collection === 'string' || value.type === 'object')
             .reduce((a, [key, value]: [string, any]) => ({
               ...a,
               [key]:  value.array ? [] : {}

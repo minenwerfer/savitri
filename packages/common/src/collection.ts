@@ -1,6 +1,8 @@
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 
+import type { CollectionDescription, CollectionField } from '../types'
+
 declare namespace globalThis {
   const _store: Store<any>
   const _router: Router
@@ -54,12 +56,18 @@ export const getFirstIndex = (description: any, key: string, form: boolean = fal
  * @param {string} key
  * @param {boolean} form - tells whether or not the value is being used in a form
  */
-export const getFirstValue = (description: any, value: any, key: string, form: boolean = false, name?: string): any => {
+export const getFirstValue = (
+  description: CollectionDescription,
+  value: any,
+  key: string,
+  form: boolean = false,
+  name?: string
+): string|number|null => {
   if( !value ) {
     return '-'
   }
 
-  const { values } = (description||{})[key]||{}
+  const { values } = description.fields[key]
   const query = (Array.isArray(values)
     ? values[0]
     : values)?.__query||{}
@@ -83,7 +91,13 @@ export const getFirstValue = (description: any, value: any, key: string, form: b
     : firstValue
 }
 
-export const formatValue = (description: any, value: any, key: string, form: boolean = false, field?: any) => {
+export const formatValue = (
+  description: CollectionDescription,
+  value: any,
+  key: string,
+  form: boolean = false,
+  field?: CollectionField
+): string => {
   const firstValue = value && typeof value === 'object' && !(value instanceof Date)
     ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key, form) : Object.values(value)[0])
     : value
@@ -92,7 +106,7 @@ export const formatValue = (description: any, value: any, key: string, form: boo
     switch(true) {
       case field?.type === 'datetime':
         return firstValue
-          ? (String(firstValue) as any).formatDateTime(field.includeHours)
+          ? (String(firstValue) as any).formatDateTime(field?.includeHours)
           : '-'
 
       case field?.type === 'boolean': return firstValue ? 'sim' : 'não'
@@ -101,11 +115,9 @@ export const formatValue = (description: any, value: any, key: string, form: boo
     }
   })()
 
-  // return !form && typeof formatted === 'string' && formatted.length >= field?.trim && field && field.trim
-  //   ? formatted.slice(0, field.trim - 3) + '...'
-  //   : String([undefined, null].includes(formatted) ? '-' : formatted)
-
-  return String([undefined, null].includes(formatted) ? '-' : formatted)
+  return ![undefined, null].includes(formatted)
+    ? String(formatted)
+    : '-'
 }
 
 export const resumeItem = (description: any, item: any) => {
@@ -128,8 +140,7 @@ export const getItemIndex = (item: any, items?: Array<any>, name?: string) => {
     .findIndex((i: any) => i._id === _id) + 1
 }
 
-export const action =
-  (moduleName: string, store: any, router: any) =>
+export const action = (moduleName: string, store: any, router: any) =>
   async (action: string, actionProps: any, filters: any) => {
   if( action.split('/')[0] === 'route' ) {
     await store.dispatch(`${moduleName}/get`, { filters: { _id: filters._id } })

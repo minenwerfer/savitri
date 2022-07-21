@@ -1,5 +1,5 @@
 {
-  "module": "user",
+  "collection": "user",
   "route": true,
   "unicon": "user-circle",
   "presets": [
@@ -54,7 +54,7 @@
       "type": "select",
       "values": {
         "__query": {
-          "module": "accessProfile",
+          "collection": "accessProfile",
           "index": "name"
         }
       },
@@ -79,7 +79,7 @@
       "mask": "(##) #####-####"
     },
     "picture": {
-      "module": "file",
+      "collection": "file",
       "label": "Foto de perfil",
       "index": "filename",
       "cellStyle": "(row) => '_id' in row.picture && `border rounded-full overflow-hidden`"

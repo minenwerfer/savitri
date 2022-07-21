@@ -3,8 +3,8 @@
 const { readFileSync } = require('fs')
 
 import webpack from 'webpack'
-const WebpackDevServer = require('webpack-dev-server')
-const makeConfig = require('./make-config')
+import WebpackDevServer from 'webpack-dev-server'
+import makeConfig from './make-config'
 
 declare namespace global {
   let appDir: string
@@ -20,7 +20,7 @@ const mode = process.argv[2];
     const buildConfig = Object.assign(content, {
       mode,
       name: process.cwd().split('/').pop(),
-    });
+    })
 
     global.appDir = process.cwd()
     process.chdir(__dirname)

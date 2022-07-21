@@ -2,20 +2,20 @@
   <div class="filter">
     <div class="filter__count">
       <div>Filtros</div>
-      <div>({{ filtersCount }})</div>
+      <div>({{ store.filtersCount }})</div>
     </div>
     <div class="filter__icons">
       <sv-bare-button
         type="neutral"
-        :disabled="Object.keys(availableFilters).length === 0"
+        :disabled="Object.keys(store.availableFilters).length === 0"
         @clicked="isFilterVisible = true"
       >
         <sv-icon name="filter" :reactive="true"></sv-icon>
       </sv-bare-button>
       <sv-bare-button
         type="neutral"
-        :disabled="Object.keys(availableFilters).length === 0"
-        @clicked="filterClear"
+        :disabled="Object.keys(store.availableFilters).length === 0"
+        @clicked="store.clearFilters"
       >
         <sv-icon name="trash" :reactive="true"></sv-icon>
       </sv-bare-button>
@@ -23,30 +23,30 @@
   </div>
 
   <sv-box
-    @close="isFilterVisible = false"
     v-model:visible="isFilterVisible"
     v-bind="{
       title: 'Filtrar por',
       float: true
     }"
+    @close="isFilterVisible = false"
   >
     <sv-form
-      :form="availableFilters"
-      :form-data="store.state[module]._filters"
+      :form="store.availableFilters"
+      :form-data="store.filters"
       :flex="true"
       :search-only="true"
     ></sv-form>
     <template #footer>
       <sv-button
         variant="light"
-        @clicked="filterClear"
+        @clicked="store.clearFilters"
       >
         Limpar
       </sv-button>
       <sv-button
         icon="filter"
-        :disabled="!anyFilters"
-        @clicked="filter"
+        :disabled="!store.hasActiveFilters"
+        @clicked="store.filter"
       >
         Filtrar
       </sv-button>
@@ -55,10 +55,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, ref, toRefs } from 'vue'
-import { useStore } from 'vuex'
-import { useModule } from '../../../../../../../web'
-import { fromEntries } from '../../../../../../../common/helpers'
+import { ref } from 'vue'
+import { useParentStore } from '../../../../../../../web'
 import {
   SvBox,
   SvBareButton,
@@ -68,37 +66,8 @@ import {
 
 } from '../../../../..'
 
-interface Props {
-  module: string
-  availableFilters: any
-  filters: any
-}
-
-const props = defineProps<Props>()
-const store = useStore()
-
-const filterPanel = ref(null)
+const store = useParentStore()
 const isFilterVisible = ref(false)
-
-const moduleRefs = reactive(useModule(props.module, store))
-
-const filters = computed(() => store.state[props.module]._filters)
-const filtersCount = computed(() => {
-  return Object.values(props.filters)
-    .filter((_: any) => !!_)
-    .length
-})
-
-const anyFilters = computed(() => {
-  return Object.values(store.state[props.module]._filters)
-    .some((value: any) => !!value)
-})
-
-const {
-  filter,
-  filterClear,
-
-} = toRefs(moduleRefs)
 </script>
 
 <style scoped src="./sv-filter-widget.scss"></style>

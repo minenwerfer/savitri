@@ -11,7 +11,7 @@ export class MetaController extends Controller<unknown> {
     super({
       publicMethods: ['getAll'],
       description: {
-        module: 'meta'
+        collection: 'meta'
       }
     })
   }

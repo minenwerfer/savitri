@@ -19,7 +19,7 @@ export const preloadCollection = (collection: any) => {
     const _aliasedCollection = requireCollection(collection.alias)
 
     const {
-      module,
+      collection: collectionName,
       route,
       strict,
       ...aliasedCollection

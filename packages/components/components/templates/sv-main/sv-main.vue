@@ -47,17 +47,17 @@ watch(() => store.state.meta.globalDescriptions, descriptions => {
   descriptions.forEach((description: any) => {
     if( description.route ) {
 
-      const name = `dashboard-${description.module}`
+      const name = `dashboard-${description.collection}`
       if( router.hasRoute(name) ) {
         return
       }
 
       const route = {
         name,
-        path: description.module,
-        redirect: `/dashboard/c/${description.module}`,
+        path: description.collection,
+        redirect: `/dashboard/c/${description.collection}`,
         meta: {
-          title: description.module,
+          title: description.collection,
           unicon: description.unicon,
         }
       }

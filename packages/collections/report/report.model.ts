@@ -7,7 +7,13 @@ import '../user/user.model'
 
 export interface ReportDocument extends Document {
   user_id: UserDocument | string
-  module: string
+  _collection: string
+  format: string
+  type: string
+  limit: number
+  offset: number
+  filters: object
+  entries_count: number
 }
 
 

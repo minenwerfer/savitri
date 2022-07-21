@@ -3,7 +3,7 @@ import { merge } from 'webpack-merge'
 
 const oldCwd = process.cwd()
 
-module.exports = (params: any) => {
+export default (params: any) => {
   // dev, prod or lib
   const { webpackConfig } = require(`./webpack.config.${params.mode||'dev'}`)
 

@@ -9,8 +9,8 @@ export const autoModules = (store: any) => {
     const { type, payload } = mutation
     if( type === 'meta/DESCRIPTIONS_ADD' ) {
 
-      if( store.hasModule(payload.module) ) {
-        store.commit(`${payload.module}/DESCRIPTION_SET`, payload, { root: true })
+      if( store.hasModule(payload.collection) ) {
+        store.commit(`${payload.collection}/DESCRIPTION_SET`, payload, { root: true })
         return
       }
 
@@ -20,8 +20,8 @@ export const autoModules = (store: any) => {
         }
       }
 
-      store.registerModule(payload.module, (new Impl(payload.module, {}, {}) as Module<{}, {}>).module)
-      store.commit(`${payload.module}/DESCRIPTION_SET`, payload, { root: true })
+      store.registerModule(payload.collection, (new Impl(payload.collection, {}, {}) as Module<{}, {}>).module)
+      store.commit(`${payload.collection}/DESCRIPTION_SET`, payload, { root: true })
     }
   })
 }

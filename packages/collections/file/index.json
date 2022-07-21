@@ -1,5 +1,5 @@
 {
-  "module": "file",
+  "collection": "file",
   "route": true,
   "presets": [
     "owned"

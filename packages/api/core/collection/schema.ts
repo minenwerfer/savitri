@@ -24,7 +24,7 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
       ? (value.values||[{}])[0]?.__query
       : value.values?.__query
 
-    const moduleName = query?.module || value.module
+    const collectionName = query?.collection || value.collection
 
     const result: any = {
       type: String,
@@ -32,7 +32,7 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
       unique: value.unique === true,
       default: value.default,
       required: value.required || strict,
-      autopopulate: (typeof moduleName === 'string' && !value.preventPopulate) || false,
+      autopopulate: (typeof collectionName === 'string' && !value.preventPopulate) || false,
     }
 
     const typeMatch = typeMapping.find( ([keys, _]: [Array<string>, any]) => keys.includes(value.type) )
@@ -41,10 +41,10 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
       result.type = typeMatch[1]
     }
 
-    if( typeof moduleName === 'string' ) {
+    if( typeof collectionName === 'string' ) {
       hasRefs = true
 
-      result.ref = moduleName
+      result.ref = collectionName
       result.type = value.array || Array.isArray(value.values)
         ? [ObjectId]
         : ObjectId

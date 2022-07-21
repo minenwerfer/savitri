@@ -65,12 +65,12 @@
               ></sv-picture>
               <div v-else>
                 {{
-                  formatValue(
-                    field.translate ? $t(row[column]||'-') : row[column],
-                    column,
-                    false,
+                  store1.formatValue({
+                    value: field.translate ? $t(row[column]||'-') : row[column],
+                    key: column,
+                    form: false,
                     field
-                  )
+                  })
                 }}
               </div>
             </div>
@@ -120,9 +120,11 @@ import {
 
 import { useStore } from 'vuex'
 import { useModule, useFile } from '../../../../web'
+import { useParentStore } from '../../../../web'
 
 import {
   SvBareButton,
+  SvPicture,
   SvIcon
 
 } from '../..'
@@ -146,6 +148,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const store = useStore()
+const store1 = useParentStore()
 const module = ref<string>(props.module || inject('module', ''))
 
 const moduleRefs = reactive({})

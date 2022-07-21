@@ -11,7 +11,7 @@ export class ReleaseController extends Controller<unknown> {
   constructor() {
     super({
       description: {
-        module: 'release'
+        collection: 'release'
       },
       publicMethods: [
         'getAll'

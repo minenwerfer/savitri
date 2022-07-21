@@ -4,17 +4,113 @@ import useHttp from './_http'
 import useUtil from './_util'
 import useCollection from './_collection'
 
-import { stores, hasStore, registerStore } from './'
+import { useStore, hasStore, registerStore } from './'
 
 type CollectionName = string
 
 const { http } = useHttp()
 const { parseQuery } = useUtil()
 
+type ViewLayout =
+  'tabular'
+  | 'grid'
+  | 'list'
+
+type MetaState = {
+  descriptions: Array<CollectionDescription>
+
+  isLoading: boolean
+  globalIsLoading: boolean
+
+  view: {
+    title: string
+    layout: ViewLayout
+  }
+  menu: {
+    isVisible: boolean
+    isMobileVisible: boolean
+  }
+  modal: {
+    isVisible: boolean
+    title: string
+    body: string
+    image?: string
+    component?: string
+    details: {}
+  }
+  prompt: {
+    isVisible: boolean
+    title: string
+    body: string
+    actions: Array<{
+      title: string
+    }>
+  }
+  sidebar: {
+    isVisible: boolean
+    title: string
+    component: string
+    componentProps: any
+  }
+  toast: {
+    isVisible: boolean
+    text: string
+  }
+  report: {
+    isVisible: boolean
+  }
+  crud: {
+    isInsertVisible: boolean
+    isInsertReadonly: boolean
+  }
+}
+
 export default defineStore('meta', {
-  state: () => ({
+  state: (): MetaState => ({
     descriptions: [],
-    isLoading: false
+
+    isLoading: false,
+    globalIsLoading: false,
+
+    view: {
+      title: '',
+      layout: 'tabular'
+    },
+    menu: {
+      isVisible: true,
+      isMobileVisible: false
+    },
+    modal: {
+      isVisible: false,
+      title: '',
+      body: '',
+      image: '',
+      component: '',
+      details: {}
+    },
+    prompt: {
+      isVisible: false,
+      title: '',
+      body: '',
+      actions: [],
+    },
+    sidebar: {
+      isVisible: false,
+      title: '',
+      component: '',
+      componentProps: {}
+    },
+    toast: {
+      isVisible: false,
+      text: '',
+    },
+    report: {
+      isVisible: false
+    },
+    crud: {
+      isInsertVisible: false,
+      isInsertReadonly: false
+    }
   }),
 
   actions: {
@@ -25,13 +121,11 @@ export default defineStore('meta', {
 
       // monkeypatchs '@savitri/web/stores' object
       for ( const [collectionName, description] of Object.entries(descriptions) ) {
-        console.log(collectionName)
-
         const rawDescription = Object.assign({}, description)
         description.fields = await parseQuery(description.fields, false)
 
         if( hasStore(collectionName) ) {
-          const store = stores[collectionName]()
+          const store = useStore(collectionName)
           store.$patch({
             description,
             rawDescription

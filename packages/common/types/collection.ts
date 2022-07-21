@@ -10,72 +10,56 @@ export type CollectionPreset =
 export type CollectionFieldType =
   'text' 
   | 'number'
-  | 'module'
+  | 'collection'
+  | 'datetime'
+  | 'boolean'
 
 export type CollectionField = {
-    label: string
-    type: CollectionFieldType
+  label: string
+  type: CollectionFieldType
+  collection?: string
+
+  expand?: boolean
+  includeHours?: boolean
+
+  values?: Array<string>|Record<string, string> & {
+    __query: {
+      collection: string
+      index: Array<string>|string
+      limit?: number
+    }
+  }
 }
+
+export type CollectionAction = {
+  name: string
+  unicon?: string
+  ask?: boolean
+}
+
+export type CollectionActions = Record<string, CollectionAction>
 
 export type CollectionDescription = {
-  module: string
-  route: boolean
-  preset: Array<CollectionPreset>
-  table: Array<string>
-  filters: Array<string>
-  alwaysAttribute: boolean
+  collection: string
+
+  // modifiers
+  alwaysAttribute?: boolean
+  route?: boolean
+
+  // takes an array of something
+  preset?: Array<CollectionPreset>
+  table?: Array<string>
+  filters?: Array<string>
+
+  // actions
+  actions?: CollectionActions
+  individualActions?: CollectionActions
+
+  searchable?: {
+    indexes: Array<string>
+    actions: Record<string, CollectionAction>
+  }
+
+
   fields: Record<string, CollectionField>
 }
-
-export type PiniaState = {
-  $id?: string
-}
-
-export type CollectionState<Item> = PiniaState & {
-  item: Item|object
-  items: Array<Item>
-  filters: Partial<Item>
-
-  queryCache: Record<string, any>
-  description: Readonly<Partial<CollectionDescription>>
-  rawDescription: Readonly<Partial<CollectionDescription>>
-
-  meta: {
-    isLoading: boolean
-    halt: boolean
-  }
-
-  pagination: {
-    limit: number
-    recordsCount: number
-    recordsTotal: number
-    currentPage: number
-  }
-}
-
-export type CollectionActions = {
-  setItem<T=any>(
-    this: Pick<CollectionState<T>, 'item'>,
-    item: T
-  ): void
-
-  setItems<T=any>(
-    this: Pick<CollectionState<T>, 'items'>,
-    items: Array<T>
-  ): void
-
-  clearItem<T=any>(
-    this: Pick<CollectionState<T>, 'item'>
-  ): void
-
-  clearItems<T=any>(
-    this: Pick<CollectionState<T>, 'items'>
-  ): void
-
-  customEffect(
-    verb: string,
-    payload: any,
-    fn: (state: any, result: any) => any
-  ): any|void
-}
-
