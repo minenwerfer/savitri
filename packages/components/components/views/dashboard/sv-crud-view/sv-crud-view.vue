@@ -1,5 +1,8 @@
 <template>
-  <sv-crud :module="$route.params.module"></sv-crud>
+  <sv-crud
+    :module="$route.params.module"
+    :key="$route.params.module"
+  ></sv-crud>
 </template>
 
 <script setup lang="ts">

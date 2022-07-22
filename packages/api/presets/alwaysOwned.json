@@ -2,7 +2,7 @@
   "alwaysAttribute": true,
   "fields": {
     "user_id": {
-      "module": "user",
+      "collection": "user",
       "label": "Usuário",
       "index": "email"
     }

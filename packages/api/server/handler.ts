@@ -48,7 +48,8 @@ export const safeHandle = (
   }
 }
 
-export const customVerbs = async (
+export const customVerbs = (type: 'collections'|'controllables') =>
+  async (
   request: Request & HandlerRequest,
   h: ResponseToolkit
 ) => {
@@ -59,7 +60,7 @@ export const customVerbs = async (
       }
     } = request
 
-    const Controller = getController(controller)
+    const Controller = getController(controller, type)
     const instance = new Controller
 
     // if( !(verb in instance) ) {

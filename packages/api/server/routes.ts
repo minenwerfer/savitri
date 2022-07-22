@@ -36,7 +36,12 @@ export const routes: Array<ServerRoute> = [
   {
     method: 'POST',
     path: '/api/{controller}/{verb}',
-    handler: safeHandle(customVerbs)
+    handler: safeHandle(customVerbs('collections'))
+  },
+  {
+    method: ['POST', 'GET'],
+    path: '/api/_/{controller}/{verb}',
+    handler: safeHandle(customVerbs('controllables'))
   },
   {
     method: 'GET',

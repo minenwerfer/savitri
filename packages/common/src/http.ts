@@ -22,7 +22,7 @@ export class RequestProvider {
    * @constructor
    * @param {AxiosRequestConfig} config - pass this config to axios along with the default one
    */
-  constructor(config?: AxiosRequestConfig) {
+  constructor(readonly config?: AxiosRequestConfig) {
     this._instance = axios.create({
       ...this._defaultConfig,
       ...config,

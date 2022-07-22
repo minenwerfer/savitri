@@ -1,26 +1,39 @@
-export type CollectionPreset =
-  'crud'
-  | 'duplicate'
-  | 'owned'
-  | 'alwaysOwned'
-  | 'removeAll'
-  | 'toggleActive'
-  | 'view'
+export const COLLECTION_FIELD_TYPES = <const>[
+  'boolean',
+  'checkbox',
+  'collection',
+  'datetime',
+  'integer',
+  'number',
+  'object',
+  'password',
+  'radio',
+  'select',
+  'text',
+  'textbox',
+]
 
-export type CollectionFieldType =
-  'text' 
-  | 'number'
-  | 'collection'
-  | 'datetime'
-  | 'boolean'
+export const COLLECTION_PRESETS = <const>[
+  'alwaysOwned',
+  'crud',
+  'duplicate',
+  'owned',
+  'removeAll',
+  'toggleActive',
+  'view',
+]
 
-export type CollectionField = {
+export type CollectionFieldType = typeof COLLECTION_FIELD_TYPES[number]
+export type CollectionPreset = typeof COLLECTION_PRESETS[number]
+
+export type CollectionField = Readonly<{
   label: string
-  type: CollectionFieldType
+  type?: CollectionFieldType
   collection?: string
 
   expand?: boolean
   includeHours?: boolean
+  readOnly?: boolean
 
   values?: Array<string>|Record<string, string> & {
     __query: {
@@ -29,17 +42,17 @@ export type CollectionField = {
       limit?: number
     }
   }
-}
+}>
 
-export type CollectionAction = {
+export type CollectionAction = Readonly<{
   name: string
   unicon?: string
   ask?: boolean
-}
+}>
 
 export type CollectionActions = Record<string, CollectionAction>
 
-export type CollectionDescription = {
+export type CollectionDescription = Readonly<{
   collection: string
 
   // modifiers
@@ -47,7 +60,7 @@ export type CollectionDescription = {
   route?: boolean
 
   // takes an array of something
-  preset?: Array<CollectionPreset>
+  presets?: Array<CollectionPreset>
   table?: Array<string>
   filters?: Array<string>
 
@@ -62,4 +75,4 @@ export type CollectionDescription = {
 
 
   fields: Record<string, CollectionField>
-}
+}>

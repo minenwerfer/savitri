@@ -1,8 +1,8 @@
 import YAML from 'yaml'
+import path from 'path'
 import { Controller } from '../../api/core/controller'
 import { default as Description } from './index.json'
 
-const path = require('path')
 const { readFile } = require('fs').promises
 
 const MAX_ENTRIES = 32

@@ -21,6 +21,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",
     "mongoose-autopopulate": "^0.16.0",
+    "@savitri/collections": "^1.0.0",
+    "@savitri/controllables": "^1.0.0",
     "ts-node": "^10.4.0",
     "yaml": "^2.0.1"
   }

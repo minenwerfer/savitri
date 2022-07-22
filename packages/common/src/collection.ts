@@ -57,7 +57,7 @@ export const getFirstIndex = (description: any, key: string, form: boolean = fal
  * @param {boolean} form - tells whether or not the value is being used in a form
  */
 export const getFirstValue = (
-  description: CollectionDescription,
+  description: Pick<CollectionDescription, 'fields'>,
   value: any,
   key: string,
   form: boolean = false,
@@ -70,7 +70,7 @@ export const getFirstValue = (
   const { values } = description.fields[key]
   const query = (Array.isArray(values)
     ? values[0]
-    : values)?.__query||{}
+    : values as any)?.__query||{}
 
   const firstField = getFirstIndex(description, key, form)
 
@@ -92,7 +92,7 @@ export const getFirstValue = (
 }
 
 export const formatValue = (
-  description: CollectionDescription,
+  description: Pick<CollectionDescription, 'fields'>,
   value: any,
   key: string,
   form: boolean = false,

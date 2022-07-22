@@ -19,7 +19,8 @@
       "api/*": ["./packages/api/src/*"],
       "web/*": ["./packages/web/src/*"],
       "components/*": ["./packages/components/*"],
-      "components/*": ["./packages/collections/*"]
+      "collections/*": ["./packages/collections/*"],
+      "controllables/*": ["./packages/controllables/*"]
     },
     "lib": [
       "esnext",
@@ -33,7 +34,8 @@
     "packages/web/**/*.ts",
     "packages/common/**/*.ts",
     "packages/components/**/*.ts",
-    "packages/collections/**/*.ts"
+    "packages/collections/**/*.ts",
+    "packages/controllables/**/*.ts"
   ],
   "exclude": [
     "packages/**/node_modules/*",

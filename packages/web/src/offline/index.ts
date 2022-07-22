@@ -9,7 +9,7 @@ export class OfflineStorage {
   private _objectStore: string = ''
   private _db: any = {}
 
-  constructor(params: { name: string, version: number, objectStores: Array<string> }) {
+  constructor(readonly params: { name: string, version: number, objectStores: Array<string> }) {
     this._name = params.name;
     this._version = params.version;
     this._objectStores = params.objectStores;

@@ -9,7 +9,7 @@ const __searchable: Record<string, CollectionDescription> = {}
 export class MetaController extends Controller<unknown> {
   constructor() {
     super({
-      publicMethods: ['getAll'],
+      publicMethods: ['describeAll'],
       description: {
         collection: 'meta'
       }
@@ -45,10 +45,6 @@ export class MetaController extends Controller<unknown> {
   public describeAll() {
     const descriptions = this._getDescriptions()
     return descriptions
-  }
-
-  public getAll() {
-    return this.describeAll()
   }
 
   public static getSearchables() {

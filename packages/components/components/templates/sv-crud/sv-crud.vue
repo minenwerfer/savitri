@@ -4,7 +4,7 @@
       <div class="crud__panel-control">
         <sv-filter-widget :key="store1.$id"></sv-filter-widget>
         <sv-button
-          v-if="description.report"
+          v-if="store1.description.report"
           v-bind="{
             icon: 'export',
             type: 'neutral',
@@ -22,7 +22,7 @@
           v-bind="{
             type: 'neutral',
             icon: actionProps.unicon,
-            disabled: isLoading || selectedIds.length === 0 && actionProps.selection
+            disabled: isLoading || store1.selectedIds.length === 0 && actionProps.selection
           }"
           @clicked="callAction()(action, props, { _id: selectedIds })"
         >
@@ -34,21 +34,19 @@
 
     <teleport to="body">
       <sv-box
-        v-model:visible="isInsertVisible"
+        v-model:visible="metaStore.crud.isInsertVisible"
         :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`"
         :float="true"
-        :classes="`min-w-[40vw] md:mx-[6vw] md:w-8/12 ${Object.keys(fields).length > 8 && 'lg:w-auto'}`"
         @close="store.dispatch('meta/closeCrud')"
       >
         <template #body>
           <sv-form
-            :key="`${item._id ? item._id : 'form'}`"
-            :form="fields"
-            :form-data="item"
+            :key="`${store1.item?._id}-form`"
+            :form="store1.fields"
+            :form-data="store1.item"
 
             :is-readonly="isInsertReadonly"
-            :item-index="getItemIndex(item)"
-            :flex="description.flex"
+            :flex="store1.description.flex"
             @add="$e.preventDefault()"
           ></sv-form>
         </template>
@@ -99,13 +97,13 @@
         :rows="store1.$items"
         :recordsCount="recordsCount"
         :recordsTotal="recordsTotal"
-        :row-color="description.rowColor"
       ></sv-table>
       <div
-        v-if="store1.$items.length === 0 && !isLoading"
+        v-if="store1.itemsCount === 0 && !isLoading"
         class="grid place-items-center py-4"
       >
         <div class="opacity-80">
+          {{ store1.$items }}
           Não foram retornados resultados.
         </div>
       </div>
@@ -125,7 +123,6 @@ import {
 
 } from 'vue'
 
-import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useModule } from '../../../../web'
 import { action } from '../../../../common'
@@ -145,8 +142,6 @@ import SvRecordsSummary from './_internals/components/sv-records-summary/sv-reco
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 
 import { useStore as useStore1 } from '../../../../web'
-const store1 = reactive({})
-const metaStore = useStore('meta')
 
 interface Props {
   module: string
@@ -154,19 +149,17 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const store = useStore()
+const store1 = useStore1(props.module)
+const metaStore = useStore1('meta')
+
 const router = useRouter()
 const { hash } = useRoute()
 const moduleRefs = reactive({})
 
-provide('module', computed(() => props.module))
 provide('storeId', computed(() => props.module))
 
-const isInsertVisible = computed(() => store.getters['meta/isInsertVisible'])
-const isInsertReadonly = computed(() => store.getters['meta/isInsertReadonly'])
-
 const isReportVisible = computed({
-  get: () => store.state.meta.report.isVisible,
+  get: () => metaStore.report.isVisible,
   set: (value: boolean) => store.dispatch(`meta/${value ? 'spawn' : 'close'}Report`)
 })
 
@@ -176,13 +169,15 @@ const hasSelectionActions = computed(() => {
 })
 
 onUnmounted(() => {
+  metaStore.view.title = props.module
+
   if( !hash.slice(1).split(',').includes('refresh') ) {
     return
   }
 
-  const getFilters = () => store.state[props.module]._filters
+  const getFilters = () => store1.filters
   const oldFilters = getFilters()
-  store.commit(`${props.module}/FILTERS_CLEAR`)
+  store1.clearFilters()
 
   if( Object.keys(oldFilters).length > 0 ) {
     const filters = getFilters()
@@ -190,28 +185,18 @@ onUnmounted(() => {
       .some(([key, value]: [string, any]) => filters[key] !== value)
 
     if( changed ) {
-      moduleRefs.clearAll()
+      store1.clearAll()
     }
   }
 })
 
 watch(() => [props.module, hash], async ([moduleName]: [string]) => {
-
-  // new!
-  Object.assign(store1, useStore1(moduleName))
-
-//  if( !store.getters[`${moduleName}/fields`] ) {
-//    await store.dispatch(`${moduleName}/describe`)
-//  }
-
-  Object.assign(moduleRefs, useModule(moduleName, store))
-  store.dispatch('meta/setViewTitle', moduleName)
-
   if( store1.itemsCount === 0 ) {
     // const filters = moduleRefs.description._filters
 
     // new!
     store1.getAll()
+    console.log(store1.$items)
 
 //    store.dispatch(`${moduleName}/getAll`, {
 //      filters: {
@@ -225,7 +210,7 @@ watch(() => [props.module, hash], async ([moduleName]: [string]) => {
 }, { immediate: true })
 
 
-watch(() => isInsertVisible.value, (value: boolean) => {
+watch(() => metaStore.crud.isInsertVisible, (value: boolean) => {
   if( value === false ) {
     // store.dispatch(`${props.module}/clear`)
     store1.clear()
@@ -235,7 +220,7 @@ watch(() => isInsertVisible.value, (value: boolean) => {
 const callAction = () => action(props.module, store, router)
 
 const individualActions = computed(() => {
-  return store.getters[`${props.module}/individualActions`]
+  return store1.individualActions
     .map((action: any) => ({
       click: (filters: any) => callAction()(action.action, action, filters),
       ...action
@@ -253,7 +238,6 @@ const {
   selectedIds,
   isLoading,
   fields,
-  getItemIndex,
   filters,
   recordsCount,
   recordsTotal,

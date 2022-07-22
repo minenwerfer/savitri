@@ -10,20 +10,20 @@ export const commonControllers = readdirSync(`${__dirname}/../../../collections`
  * @exports @const
  * Retrieves controller class from alias.
  */
-export const getController = (controller: string) => {
+export const getController = (controller: string, type:'collections'|'controllables' = 'collections') => {
   const controllerPath = (() => {
-    const module = (globalThis.modules||[])
+    const moduleProps = (globalThis.modules||[])
       .find(({ exportedCollections }: { exportedCollections: Array<string> }) => {
         return exportedCollections?.includes(controller)
       })
 
-    if( module ) {
-      return `${process.cwd()}/../../node_modules/${module.name}/collections`
+    if( moduleProps ) {
+      return `${process.cwd()}/../../node_modules/${moduleProps.name}/${type}`
     }
 
     return commonControllers.includes(controller)
-      ? `${__dirname}/../../../collections`
-      : `${process.cwd()}/collections`
+      ? `${__dirname}/../../../${type}`
+      : `${process.cwd()}/${type}`
   })()
 
   const sanitizedName = controller.replace(/\./g, '') as string & { capitalize: () => string }

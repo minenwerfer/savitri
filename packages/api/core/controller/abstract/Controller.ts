@@ -5,7 +5,7 @@ import { Model } from '../../database'
 import { TokenService } from '../../services'
 import assert from 'assert'
 
-export interface HandlerRequest {
+export type HandlerRequest = {
   payload: {
     offset?: number
     limit?: number
@@ -16,7 +16,7 @@ export interface HandlerRequest {
 
 export abstract class Controller<T> {
   private _webInterface: Controller<T>
-  protected _description: CollectionDescription
+  protected _description?: Partial<CollectionDescription>
 
   protected _model: Model<T>
 
@@ -40,14 +40,14 @@ export abstract class Controller<T> {
    * capability set.
    */
   constructor(
-    props: {
-      description?: any,
+    readonly props: {
+      description?: Partial<CollectionDescription>,
       forbiddenMethods?: Array<string>,
       publicMethods?: Array<string>,
       rawMethods?: Record<string, string>
     }
   ) {
-    this._description = props?.description
+    this._description = props?.description || {}
     this._publicMethods = props?.publicMethods || this._publicMethods
     this._forbiddenMethods = props?.forbiddenMethods || []
     this._rawMethods = props?.rawMethods || {}

@@ -1,7 +1,7 @@
 import { CollectionDescription } from '../../common/types/collection'
 
 export type PiniaState = {
-  $id?: string
+  readonly $id?: string
 }
 
 export type CollectionState<Item> = PiniaState & {

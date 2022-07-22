@@ -32,8 +32,7 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
     }
 
     if( !value.collection ) {
-      console.log(value)
-      throw new Error('dynamic query but no collection is specified')
+      throw new TypeError('dynamic query but no collection is specified')
     }
 
     return withIsomorphicLock(`dynamicQuery:${value.collection}`, async () => {

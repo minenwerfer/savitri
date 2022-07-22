@@ -1,5 +1,14 @@
 import { Model, Query, FilterQuery, UpdateQuery } from '../../database'
 import { Controller } from './Controller'
+import type {
+  CollectionDescription,
+  CollectionField,
+  CollectionFieldType,
+  CollectionPreset
+
+} from '../../../../common/types'
+
+import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../../common/types'
 import { fromEntries } from '../../../../common/src/helpers'
 
 import {
@@ -16,7 +25,16 @@ export const { PAGINATION_LIMIT } = process.env
 export type SingleQuery<T> = Query<(T & { _id: any }), T & { _id: any }, {}, T>
 export type MultipleQuery<T> = Query<(T & { _id: any })[], T & { _id: any }, {}, T>
 
+const isValidPreset = (preset?: string): preset is CollectionPreset => {
+  return COLLECTION_PRESETS.includes(preset as CollectionPreset)
+}
+
+const isValidFieldType = (fieldType?: string): fieldType is CollectionFieldType => {
+  return COLLECTION_FIELD_TYPES.includes(fieldType as CollectionFieldType)
+}
+
 export abstract class Mutable<T> extends Controller<T> {
+  declare protected readonly description: CollectionDescription
   protected _queryPreset: {
     filters: any
     sort: any
@@ -26,8 +44,33 @@ export abstract class Mutable<T> extends Controller<T> {
    * @constructor
    * @param {Model<T>} model - a singleton instance of Model<T>
    */
-  constructor(model: Model<T>, description: object, options:any = {}) {
-    super({ description, ...options })
+  constructor(
+    model: Model<T>,
+    description: unknown,
+    readonly options:any = {}
+  ) {
+    (description as CollectionDescription).presets?.forEach((preset: string) => {
+      if( !isValidPreset(preset) ) {
+        throw TypeError(
+          `invalid preset "${preset}" at "${(description as CollectionDescription).collection}"`
+        )
+      }
+    })
+
+    Object.values((description as CollectionDescription).fields).forEach((_field: unknown) => {
+      const field = _field as Pick<CollectionField, 'type' | 'collection'>
+      if( !isValidFieldType(field.type) && !field.collection ) {
+        console.log(COLLECTION_FIELD_TYPES)
+        console.log(field)
+        throw TypeError(
+          `invalid field type "${field.type} at "${(description as CollectionDescription).collection}"`
+        )
+      }
+    })
+
+    super({ ...options, description })
+
+    this.description = description as CollectionDescription
     this._model = model
     this._queryPreset = options.queryPreset || {}
   }
@@ -38,7 +81,7 @@ export abstract class Mutable<T> extends Controller<T> {
    */
   public async insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): Promise<any> {
     const { _id } = props.what
-    const what = prepareInsert(this._description, props.what)
+    const what = prepareInsert(this.description, props.what)
 
     if( typeof _id !== 'string' ) {
       const newDoc = await this._model.create(what)
@@ -62,7 +105,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * Gets a document from database.
    */
   public async get(props: { filters?: object, project?: string|Array<string> }, response?: unknown, decodedToken?: any): Promise<any> {
-    return project(fill(await this._model.findOne(props?.filters), this._description.fields), props?.project)
+    return project(fill(await this._model.findOne(props?.filters), this.description.fields), props?.project)
   }
 
   /**
@@ -114,9 +157,9 @@ export abstract class Mutable<T> extends Controller<T> {
     .map((item: T) => project(item, props.project))
 
    return result
-      .map((item: T) => depopulate(item, this._description))
+      .map((item: T) => depopulate(item, this.description))
       .map((item: T) => depopulateChildren(item))
-      .map((item: T) => props.project ? item : fill(item, this._description.fields))
+      .map((item: T) => props.project ? item : fill(item, this.description.fields))
   }
 
   /**
@@ -153,7 +196,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * Modify a single document.
  */
   public modify(props: { filters: any, what: any }): any | Promise<any> {
-    const what = prepareInsert(this._description, props.what)
+    const what = prepareInsert(this.description, props.what)
     return this._model.findOneAndUpdate(props.filters as FilterQuery<T>, what, { new: true, runValidators: true })
   }
 
@@ -162,7 +205,7 @@ export abstract class Mutable<T> extends Controller<T> {
    * Modify documents matching criteria.
    */
   public modifyAll(props: { filters: Array<any>, what: any }) {
-    const what = prepareInsert(this._description, props.what)
+    const what = prepareInsert(this.description, props.what)
     return this._model.updateMany(props.filters as FilterQuery<T>, what)
   }
 }
