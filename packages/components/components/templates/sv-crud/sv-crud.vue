@@ -1,5 +1,6 @@
 <template>
   <div class="crud">
+    {{ store1.tableDescription }}
     <div class="crud__panel">
       <div class="crud__panel-control">
         <sv-filter-widget :key="store1.$id"></sv-filter-widget>

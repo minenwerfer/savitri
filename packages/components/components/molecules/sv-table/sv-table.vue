@@ -74,9 +74,9 @@
                 }}
               </div>
             </div>
-            <div v-if="getIndexes(column)?.length > 1" class="hidden lg:flex gap-x-2">
+            <div v-if="store1.getIndexes({ key: column })?.length > 1" class="hidden lg:flex gap-x-2">
               <div
-                v-for="(subvalue, index) in getIndexes(column).slice(1, 2)"
+                v-for="(subvalue, index) in store1.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
                 class="text-sm text-blue-500"
               >
@@ -175,12 +175,6 @@ const computedCellStyle = (row: any, field: any) => {
   const cellStyle = eval(field.cellStyle)
   return cellStyle(row)
 }
-
-const {
-  getIndexes,
-  formatValue,
-
-} = toRefs(moduleRefs)
 </script>
 
 <style scoped src="./sv-table.scss"></style>

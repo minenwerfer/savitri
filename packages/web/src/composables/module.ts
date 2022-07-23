@@ -52,25 +52,21 @@ export const useModule = (moduleName: string, store: any): any => {
       return self.useFields(fields, true)
     },
 
-    getIndexes: (key: string, form: boolean = false) => {
-      return Collection.getIndexes(description(), key, form)
-    },
-
     getFirstIndex: (key: string, form: boolean = false) => {
       return Collection.getFirstIndex(description(), key, form)
     },
 
     getFirstValue: (value: any, key: string, form: boolean = false): any => {
-      return Collection.getFirstValue(description(), value, key, form, moduleName)
+      return Collection.getFirstValue(description(), value, key, form)
     },
 
     formatValue: (value: any, key: string, form: boolean = false, field?: any) => {
       return Collection.formatValue(description(), value, key, form, field)
     },
 
-    resumeItem: (item: any) => {
-      return Collection.resumeItem(description(), item)
-    },
+    // resumeItem: (item: any) => {
+    //   return Collection.resumeItem(description(), item)
+    // },
 
     getItemIndex: (item: any, items?: Array<any>) => {
       return Collection.getItemIndex(item, items, moduleName)
@@ -81,8 +77,8 @@ export const useModule = (moduleName: string, store: any): any => {
     },
 
     ...(moduleName ? {
-      resumedItem: computed(() => self.resumeItem(store.getters[`${moduleName}/item`])),
-      resumedItems: computed(() => store.getters[`${moduleName}/items`]?.map((i: any) => self.resumeItem(i))),
+      // resumedItem: computed(() => self.resumeItem(store.getters[`${moduleName}/item`])),
+      // resumedItems: computed(() => store.getters[`${moduleName}/items`]?.map((i: any) => self.resumeItem(i))),
 
       ...getters.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.getters[`${moduleName}/${k}`]) }), {}),
       ...props.reduce((a, k: string) => ({ ...a, [k]: computed(() => store.state[moduleName][k]) }), {}),

@@ -1,7 +1,7 @@
 import * as Collection from '../../../common/src/collection'
-import type { CollectionField } from '../../../common/types'
+import type { CollectionDescription, CollectionField } from '../../../common/types'
 import type { CollectionState, CollectionStoreActions } from '../../types/store'
-import useHttp from './_http'
+import useHttp from '../http'
 
 type CollectionStateItem<T> =
   Pick<CollectionState<T>, 'item'>
@@ -81,9 +81,26 @@ export default {
   },
 
   formatValue<T>(
-    this: Pick<CollectionState<T>, 'description'>,
+    this: Pick<CollectionState<T>, 'rawDescription'>,
     args: { value: string|object, key: string, form: boolean, field: CollectionField }): string
     {
-      return Collection.formatValue(this.description, args.value, args.key, args.form, args.field)
+      return Collection.formatValue(
+        this.rawDescription as Pick<CollectionDescription, 'fields'>,
+        args.value,
+        args.key,
+        args.form,
+        args.field
+      )
+  },
+
+  getIndexes<T>(
+    this: Pick<CollectionState<T>, 'rawDescription'>,
+    args:  { key: string, form: boolean }
+  ): Array<string> {
+    return Collection.getIndexes(
+      this.rawDescription as Pick<CollectionDescription, 'fields'>,
+      args.key,
+      args.form
+    )
   }
 }

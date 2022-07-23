@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { CollectionDescription } from '../../../common/types'
-import useHttp from './_http'
+import useHttp from '../http'
 import useUtil from './_util'
 import useCollection from './_collection'
 

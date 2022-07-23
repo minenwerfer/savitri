@@ -1,7 +1,8 @@
+import path from 'path'
 import { Controller } from '../../api/core/controller'
 import { default as manifestContent } from '../../api/resources/manifest.json'
+import { replacePlaceholders } from './application.helper'
 
-const path = require('path')
 const { readFile } = require('fs').promises
 
 const buildConfig = require(path.join(process.cwd(), 'build.json'))
@@ -23,13 +24,6 @@ export class ApplicationController extends Controller<unknown> {
         module: 'application'
       }
     })
-  }
-
-  private _replacePlaceholders(input:string, map:any) {
-    return Object.entries(map).reduce((a: string, [key, value]: [string, any]) => {
-      return a.replace(new RegExp(`{{ ${key} }}`, 'g'), value)
-
-    }, input)
   }
 
   public manifest() {
@@ -58,6 +52,6 @@ export class ApplicationController extends Controller<unknown> {
       initial_data
     })
 
-    return this._replacePlaceholders(content.toString(), config)
+    return replacePlaceholders(content.toString(), config)
   }
 }

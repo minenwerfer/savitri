@@ -60,10 +60,10 @@ import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
 const store = useStore()
 const menuSchema = inject('menuSchema', {})
-const notice = inject('notice')
+const notice = inject('notice', null)
 
-const topbarSlot = inject('topbarSlot')
-const runonceSlot = inject('runonceSlot')
+const topbarSlot = inject('topbarSlot', null)
+const runonceSlot = inject('runonceSlot', null)
 
 onMounted(() => {
   store.dispatch('meta/swapMenu', {

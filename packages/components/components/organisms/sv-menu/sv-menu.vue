@@ -68,7 +68,6 @@ import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.
 interface Props {
   entrypoint?: string
   visible: boolean
-  mobileVisible: boolean
   schema?: any
 }
 

@@ -19,7 +19,7 @@ import { default as webpackVariables } from 'variables'
 
 import { useStore } from './stores'
 
-interface Plugin {
+type Plugin = {
   routerExtension?: RouterExtension
   storeExtension?: StoreExtension
 }
@@ -74,7 +74,7 @@ export const useApp = (config: AppOptions): Promise<{
   const app = createApp(component)
 
   app.use(createPinia())
-  app.use(router as any)
+  app.use(router)
   app.use(store as any)
   app.use(_i18n)
 

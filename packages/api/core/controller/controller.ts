@@ -1,8 +1,8 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
-import type { CollectionDescription } from '../../../../common/types'
-import { AuthorizationError } from '.././../exceptions'
-import { Model } from '../../database'
-import { TokenService } from '../../services'
+import type { CollectionDescription } from '../../../common/types'
+import { AuthorizationError } from '../exceptions'
+import { Model } from '../database'
+import { TokenService } from '../services'
 import assert from 'assert'
 
 export type HandlerRequest = {
@@ -114,12 +114,8 @@ export abstract class Controller<T> {
     return this._webInterface
   }
 
-  /**
-   * @virtual @method
-   * Describes the controller.
-   */
-  public describe(): object {
-    return this._description
+  public describe(): Partial<CollectionDescription>|object {
+    return this._description||{}
   }
 
   public async forward(this: any, route: string, props: any, decodedToken: any) {

@@ -1,5 +1,5 @@
 import { fromEntries, withIsomorphicLock } from '../../../common'
-import useHttp from './_http'
+import useHttp from '../http'
 
 export default () => {
   return {
@@ -83,6 +83,14 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
       //     result: data.result
       //   }
       // }))
+        // state._queryCache[moduleName] = result
+
+        // window._queryCache[moduleName] = [
+        //   ...(window._queryCache[moduleName]||[]),
+        //   ...result
+        // ]
+      //
+
 
       return result
     })

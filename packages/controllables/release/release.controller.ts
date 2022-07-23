@@ -1,7 +1,6 @@
 import YAML from 'yaml'
 import path from 'path'
 import { Controller } from '../../api/core/controller'
-import { default as Description } from './index.json'
 
 const { readFile } = require('fs').promises
 

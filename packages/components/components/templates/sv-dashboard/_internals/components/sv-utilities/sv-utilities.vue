@@ -24,8 +24,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue'
-import { useStore } from 'vuex'
+import {
+  onMounted,
+  provide,
+  computed,
+  reactive,
+  ref
+
+} from 'vue'
+
+import { useHttp } from '../../../../../../../web'
 import {
   SvBareButton,
   SvInfo,
@@ -36,23 +44,25 @@ import {
 
 import { default as webpackVariables } from 'variables'
 
-const store = useStore()
+const { http } = useHttp()
+const release = reactive({})
+provide('release', release)
 
-onMounted(() => {
+onMounted(async () => {
   if( webpackVariables.releases ) {
-    store.dispatch('release/getAll')
+    Object.assign(release, await http.get('_/release/getAll').data?.result)
   }
 })
 
 const spawnSidebar = (title: string, component: string, componentProps: any = {}) => {
-  store.dispatch('meta/spawnSidebar', {
-    title,
-    component,
-    componentProps
-  })
+//  store.dispatch('meta/spawnSidebar', {
+//    title,
+//    component,
+//    componentProps
+//  })
 }
 
-const lastRelease = computed(() => store.getters['release/item'].product?.length)
+const lastRelease = computed(() => release.product?.length)
 const _lastReadRelease = ref(0)
 
 const lastReadRelease = computed({

@@ -35,7 +35,7 @@ export type CollectionField = Readonly<{
   includeHours?: boolean
   readOnly?: boolean
 
-  values?: Array<string>|Record<string, string> & {
+  values?: Record<string, string> & {
     __query: {
       collection: string
       index: Array<string>|string
@@ -52,7 +52,7 @@ export type CollectionAction = Readonly<{
 
 export type CollectionActions = Record<string, CollectionAction>
 
-export type CollectionDescription = Readonly<{
+export type CollectionDescription = {
   collection: string
 
   // modifiers
@@ -75,4 +75,4 @@ export type CollectionDescription = Readonly<{
 
 
   fields: Record<string, CollectionField>
-}>
+}

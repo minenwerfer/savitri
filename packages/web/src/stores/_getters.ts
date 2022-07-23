@@ -95,9 +95,9 @@ export default {
         }, {})
     }
 
-    return Object.entries(this.description.fields)
-    .filter(([, value]: [unknown, any]) => !value.hidden && !value.notable)
-    .slice(0, 8)
+    return fromEntries(Object.entries(this.description.fields)
+      .filter(([, value]: [unknown, any]) => !value.hidden && !value.notable)
+      .slice(0, 8))
   },
 
   /**

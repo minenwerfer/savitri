@@ -75,21 +75,17 @@ export const routerInstance = (routes: Array<Route>, store: any) => {
   })
 
   // eslint-disable-next-line
-  router.beforeEach(async (to, from, next: (props?: any) => void) => {
-    /**
-     * @remarks
-     * Will wait for module registration if necessary.
-     */
-    if( !(store.state.meta.globalDescriptions?.length > 0) ) {
-      await new Promise((resolve) => {
-        /**
-         * @event __storeCreated
-         * Will fire as soon as modules are dinamically registered.
-         */
-        window.removeEventListener('__storeCreated', resolve)
-        window.addEventListener('__storeCreated', resolve)
-      })
-    }
+  router.beforeEach(async (to:Route, from:Route, next: (props?: any) => void) => {
+    // if( !(store.state.meta.globalDescriptions?.length > 0) ) {
+    //   await new Promise((resolve) => {
+    //     /**
+    //      * @event __storeCreated
+    //      * Will fire as soon as modules are dinamically registered.
+    //      */
+    //     window.removeEventListener('__storeCreated', resolve)
+    //     window.addEventListener('__storeCreated', resolve)
+    //   })
+    // }
 
     store.dispatch('meta/setViewTitle', to.meta.title)
     if( process.env.NODE_ENV === 'development' ) {

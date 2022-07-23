@@ -1,15 +1,15 @@
-import { Model, Query, FilterQuery, UpdateQuery } from '../../database'
-import { Controller } from './Controller'
+import { Model, Query, FilterQuery, UpdateQuery } from '../database'
+import { Controller } from './controller'
 import type {
   CollectionDescription,
   CollectionField,
   CollectionFieldType,
   CollectionPreset
 
-} from '../../../../common/types'
+} from '../../../common/types'
 
-import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../../common/types'
-import { fromEntries } from '../../../../common/src/helpers'
+import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../common/types'
+import { fromEntries } from '../../../common/src/helpers'
 
 import {
   depopulate,
@@ -18,7 +18,7 @@ import {
   fill,
   prepareInsert
 
-} from '../../collection'
+} from '../collection'
 
 export const { PAGINATION_LIMIT } = process.env
 

@@ -1,32 +1,31 @@
 import { readdirSync } from 'fs'
 
-/**
- * @exports @const
- * Array of lowercased controller names.
-*/
-export const commonControllers = readdirSync(`${__dirname}/../../../collections`)
+export const commonNames = [
+  ...readdirSync(`${__dirname}/../../../collections`),
+  ...readdirSync(`${__dirname}/../../../controllables`)
+]
 
 /**
  * @exports @const
  * Retrieves controller class from alias.
  */
-export const getController = (controller: string, type:'collections'|'controllables' = 'collections') => {
+export const getController = (id:string, type:'collections'|'controllables' = 'collections') => {
   const controllerPath = (() => {
     const moduleProps = (globalThis.modules||[])
       .find(({ exportedCollections }: { exportedCollections: Array<string> }) => {
-        return exportedCollections?.includes(controller)
+        return exportedCollections?.includes(id)
       })
 
     if( moduleProps ) {
       return `${process.cwd()}/../../node_modules/${moduleProps.name}/${type}`
     }
 
-    return commonControllers.includes(controller)
+    return commonNames.includes(id)
       ? `${__dirname}/../../../${type}`
       : `${process.cwd()}/${type}`
   })()
 
-  const sanitizedName = controller.replace(/\./g, '') as string & { capitalize: () => string }
+  const sanitizedName = id.replace(/\./g, '') as string & { capitalize: () => string }
 
   const controllerFile = `${sanitizedName}/${sanitizedName}.controller`
   const controllerName = `${sanitizedName.capitalize()}Controller`
@@ -36,5 +35,5 @@ export const getController = (controller: string, type:'collections'|'controllab
   return Controller
 }
 
-export * from './abstract/Controller'
-export * from './abstract/Mutable'
+export * from './controller'
+export * from './mutable'

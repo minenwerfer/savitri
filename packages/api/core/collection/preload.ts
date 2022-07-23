@@ -1,15 +1,15 @@
 import merge from 'lodash/merge'
-import { commonControllers } from '../controller'
+import { commonNames } from '../controller'
 
-export const applyPreset = (description: any, name: string, parent?: string) => {
-  const preset = require(__dirname + `/../../presets/${name}`)
-  const presetObject = Object.assign({}, parent ? (preset[parent]||{}) : preset)
+export const applyPreset = (description:any, collectionName:string, parentName?:string) => {
+  const preset = require(__dirname + `/../../presets/${collectionName}`)
+  const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
   return merge(description, presetObject)
 }
 
 export const requireCollection = (collectionName:string): any => {
-  return commonControllers.includes(collectionName)
+  return commonNames.includes(collectionName)
     ? require(`${__dirname}/../../../collections/${collectionName}/index.json`)
     : require(`${process.cwd()}/collections/${collectionName}/index.json`)
 }
