@@ -30,6 +30,7 @@ export type CollectionField = Readonly<{
   label: string
   type?: CollectionFieldType
   collection?: string
+  mask: string
 
   expand?: boolean
   includeHours?: boolean
