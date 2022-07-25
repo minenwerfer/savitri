@@ -1,7 +1,5 @@
-import { provide } from 'vue'
-import { useStore } from 'vuex'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { useModule } from './composables'
+import { useStore } from './stores'
 
 /**
  * @exports
@@ -11,19 +9,7 @@ export const BareTemplate = {
   template: `<router-view />`
 }
 
-export const ContextTemplate = {
-  template: `<slot />`,
-  setup: (props: { moduleName: string }) => {
-    const store = useStore()
-    provide('module', useModule(props.moduleName, store))
-    provide('moduleName', props.moduleName)
-  },
-  props: {
-    moduleName: String
-  }
-}
-
-export interface RouteMeta {
+export type RouteMeta = {
   meta?: {
     title: string
     hidden?: boolean
@@ -74,20 +60,22 @@ export const routerInstance = (routes: Array<Route>, store: any) => {
     routes
   })
 
+  const metaStore = useStore('meta')
+
   // eslint-disable-next-line
   router.beforeEach(async (to:Route, from:Route, next: (props?: any) => void) => {
     // if( !(store.state.meta.globalDescriptions?.length > 0) ) {
     //   await new Promise((resolve) => {
     //     /**
     //      * @event __storeCreated
-    //      * Will fire as soon as modules are dinamically registered.
+    //      * Will fire as soon as collections are dinamically registered.
     //      */
     //     window.removeEventListener('__storeCreated', resolve)
     //     window.addEventListener('__storeCreated', resolve)
     //   })
     // }
 
-    store.dispatch('meta/setViewTitle', to.meta.title)
+    metaStore.view.title = to.meta.title
     if( process.env.NODE_ENV === 'development' ) {
       return next()
     }

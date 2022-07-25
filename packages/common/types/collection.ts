@@ -62,6 +62,7 @@ export type CollectionDescription = {
   // takes an array of something
   presets?: Array<CollectionPreset>
   table?: Array<string>
+  form?: Array<string>
   filters?: Array<string>
 
   // actions

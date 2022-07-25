@@ -58,6 +58,7 @@ import {
 
 } from '../../'
 
+// #region props
 interface Props {
   closeHint?: boolean
   visible?: boolean
@@ -72,6 +73,7 @@ interface Props {
   fill?: boolean
   transparent?: boolean
 }
+// #endregion props
 
 const props = withDefaults(defineProps<Props>(), {
   closeHint: true,

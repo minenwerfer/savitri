@@ -1,3 +1,4 @@
+import { Request } from '@hapi/hapi'
 import { HandlerRequest } from '../../core/controller'
 import type { Controller } from '../../core/controller'
 

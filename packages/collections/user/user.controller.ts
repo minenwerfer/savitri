@@ -2,7 +2,7 @@ import path from 'path'
 import * as bcrypt from 'bcrypt'
 
 import { UserDocument, User } from './user.model'
-import { TokenService } from '../../api/core/services/token.service'
+import { TokenService } from '../../api/core/services/token'
 import { Mutable } from '../../api/core/controller'
 import { default as Description } from './index.json'
 
@@ -16,7 +16,7 @@ const buildConfig = require(path.join(process.cwd(), 'build.json'))
 export class UserController extends Mutable<UserDocument> {
   constructor() {
     super(User, Description, {
-      publicMethods: ['authenticate']
+      publicMethods: ['authenticate', 'getAll']
     })
   }
 

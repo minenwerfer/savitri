@@ -47,6 +47,9 @@ export const useApp = (config: AppOptions): Promise<{
 
   }: AppOptions = config
 
+  const app = createApp(component)
+  app.use(createPinia())
+
   const store = createStore()
   const router = createRouter(routes, store)
   const _i18n = createI18n(i18n)
@@ -71,9 +74,6 @@ export const useApp = (config: AppOptions): Promise<{
     })
   }
 
-  const app = createApp(component)
-
-  app.use(createPinia())
   app.use(router)
   app.use(store as any)
   app.use(_i18n)
@@ -106,9 +106,9 @@ export const useApp = (config: AppOptions): Promise<{
   const metaStore = useStore('meta')
   await metaStore.describeAll()
 
-  store.dispatch('meta/describeAll').then(() => {
-    window.dispatchEvent(new CustomEvent('__storeCreated'))
-  })
+  // store.dispatch('meta/describeAll').then(() => {
+  //   window.dispatchEvent(new CustomEvent('__storeCreated'))
+  // })
 
   resolve({
     app,

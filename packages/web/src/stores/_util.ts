@@ -15,7 +15,9 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
   const normalize = (data: any, value: any) => data
     .reduce((a: any, item: any) => ({
       ...a,
-      [item._id]: item[Array.isArray(value.index) ? value.index[0] : value.index]
+      [item._id]: item[Array.isArray(value.index)
+        ? value.index[0]
+        : value.index]
     }), {})
 
   const parse = async ([key, value]: [string, any]) => {
@@ -71,6 +73,7 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
         offset: value.offset
       })
 
+      console.log(data.result)
       const result = normalize([
         ...stored,
         ...data.result

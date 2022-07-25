@@ -1,5 +1,5 @@
+import * as R from 'ramda'
 import { Model, Query, FilterQuery, UpdateQuery } from '../database'
-import { Controller } from './controller'
 import type {
   CollectionDescription,
   CollectionField,
@@ -10,6 +10,7 @@ import type {
 
 import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../common/types'
 import { fromEntries } from '../../../common/src/helpers'
+import type { MongoDocument } from '../../types'
 
 import {
   depopulate,
@@ -19,6 +20,8 @@ import {
   prepareInsert
 
 } from '../collection'
+
+import { Controller } from './controller'
 
 export const { PAGINATION_LIMIT } = process.env
 
@@ -33,7 +36,7 @@ const isValidFieldType = (fieldType?: string): fieldType is CollectionFieldType 
   return COLLECTION_FIELD_TYPES.includes(fieldType as CollectionFieldType)
 }
 
-export abstract class Mutable<T> extends Controller<T> {
+export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
   declare protected readonly description: CollectionDescription
   protected _queryPreset: {
     filters: any
@@ -60,8 +63,6 @@ export abstract class Mutable<T> extends Controller<T> {
     Object.values((description as CollectionDescription).fields).forEach((_field: unknown) => {
       const field = _field as Pick<CollectionField, 'type' | 'collection'>
       if( !isValidFieldType(field.type) && !field.collection ) {
-        console.log(COLLECTION_FIELD_TYPES)
-        console.log(field)
         throw TypeError(
           `invalid field type "${field.type} at "${(description as CollectionDescription).collection}"`
         )
@@ -153,13 +154,18 @@ export abstract class Mutable<T> extends Controller<T> {
     project?: string|Array<string>,
 
  }, response?: unknown, decodedToken?: any) {
-   const result = (await this._getAll(props))
-    .map((item: T) => project(item, props.project))
+   const result: Array<T> = await this._getAll(props).lean()
 
-   return result
-      .map((item: T) => depopulate(item, this.description))
-      .map((item: T) => depopulateChildren(item))
-      .map((item: T) => props.project ? item : fill(item, this.description.fields))
+   const pipe = R.pipe(
+     (item: T) => project(item, props.project),
+     (item: T) => depopulate(this.description, item),
+     depopulateChildren,
+     (item: T) => !props.project
+      ? fill(this.description, item)
+      : item
+   )
+
+   return result.map(pipe)
   }
 
   /**

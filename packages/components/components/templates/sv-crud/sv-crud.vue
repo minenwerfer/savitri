@@ -1,6 +1,5 @@
 <template>
   <div class="crud">
-    {{ store1.tableDescription }}
     <div class="crud__panel">
       <div class="crud__panel-control">
         <sv-filter-widget :key="store1.$id"></sv-filter-widget>
@@ -16,7 +15,7 @@
           Exportar
         </sv-button>
       </div>
-      <div class="crud__panel-control" v-if="store1.actions || $slots.actions" :key="module">
+      <div class="crud__panel-control" v-if="store1.actions || $slots.actions" :key="collection">
         <sv-button
           v-for="([action, actionProps], index) in Object.entries(store1.actions||{})"
           :key="`action-${index}`"
@@ -36,7 +35,7 @@
     <teleport to="body">
       <sv-box
         v-model:visible="metaStore.crud.isInsertVisible"
-        :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(module)}`"
+        :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(collection)}`"
         :float="true"
         @close="store.dispatch('meta/closeCrud')"
       >
@@ -54,7 +53,7 @@
         <template #footer v-if="!isInsertReadonly">
           <sv-button
             :disabled="isLoading"
-            @clicked="store.dispatch(`${module}/deepInsert`, { what: item, __crudClose: true })"
+            @clicked="store.dispatch(`${collection}/deepInsert`, { what: item, __crudClose: true })"
           >
             Salvar
           </sv-button>
@@ -62,11 +61,11 @@
       </sv-box>
     </teleport>
 
-    <sv-report :module="module" v-model:visible="isReportVisible"></sv-report>
+    <sv-report :collection="collection" v-model:visible="isReportVisible"></sv-report>
 
     <sv-box>
       <div class="crud__table-panel">
-        <sv-pagination :module="module"></sv-pagination>
+        <sv-pagination :collection="collection"></sv-pagination>
         <sv-records-summary
           v-bind="{
             recordsCount,
@@ -104,7 +103,6 @@
         class="grid place-items-center py-4"
       >
         <div class="opacity-80">
-          {{ store1.$items }}
           Não foram retornados resultados.
         </div>
       </div>
@@ -115,12 +113,12 @@
 
 <script setup lang="ts">
 import {
+  onMounted,
   onUnmounted,
   provide,
   watch,
   computed,
   reactive,
-  toRefs
 
 } from 'vue'
 
@@ -145,19 +143,19 @@ import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-w
 import { useStore as useStore1 } from '../../../../web'
 
 interface Props {
-  module: string
+  collection: string
 }
 
 const props = defineProps<Props>()
 
-const store1 = useStore1(props.module)
+const store1 = useStore1(props.collection||'order')
 const metaStore = useStore1('meta')
 
 const router = useRouter()
 const { hash } = useRoute()
-const moduleRefs = reactive({})
+const collectionRefs = reactive({})
 
-provide('storeId', computed(() => props.module))
+provide('storeId', computed(() => props.collection))
 
 const isReportVisible = computed({
   get: () => metaStore.report.isVisible,
@@ -165,12 +163,19 @@ const isReportVisible = computed({
 })
 
 const hasSelectionActions = computed(() => {
-  return Object.values(moduleRefs.actions||{})
+  return Object.values(collectionRefs.actions||{})
     .some((action: any) => !!action.selection)
 })
 
+onMounted(() => {
+  if( store1.itemsCount === 0 ) {
+    store1.getAll()
+  }
+
+})
+
 onUnmounted(() => {
-  metaStore.view.title = props.module
+  metaStore.view.title = props.collection
 
   if( !hash.slice(1).split(',').includes('refresh') ) {
     return
@@ -191,34 +196,33 @@ onUnmounted(() => {
   }
 })
 
-watch(() => [props.module, hash], async ([moduleName]: [string]) => {
-  if( store1.itemsCount === 0 ) {
-    // const filters = moduleRefs.description._filters
+// watch(() => [props.collection, hash], async ([collectionName]: [string]) => {
+  // if( store1.itemsCount === 0 ) {
+    // const filters = collectionRefs.description._filters
 
     // new!
-    store1.getAll()
-    console.log(store1.$items)
+    // store1.getAll()
 
-//    store.dispatch(`${moduleName}/getAll`, {
+//    store.dispatch(`${collectionName}/getAll`, {
 //      filters: {
 //        ...filters,
-//        ...moduleRefs.filters,
-//        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[moduleName].defaultFilters : {}),
+//        ...collectionRefs.filters,
+//        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[collectionName].defaultFilters : {}),
 //      },
 //    })
-  }
+  // }
 
-}, { immediate: true })
+// }, { immediate: true })
 
 
 watch(() => metaStore.crud.isInsertVisible, (value: boolean) => {
   if( value === false ) {
-    // store.dispatch(`${props.module}/clear`)
+    // store.dispatch(`${props.collection}/clear`)
     store1.clear()
   }
 })
 
-const callAction = () => action(props.module, store, router)
+const callAction = () => action(props.collection, store, router)
 
 const individualActions = computed(() => {
   return store1.individualActions
@@ -227,25 +231,6 @@ const individualActions = computed(() => {
       ...action
     }))
 })
-
-const {
-  description,
-  actions,
-  tableDescription,
-  availableFilters,
-  item,
-  items,
-  condensedItem,
-  selectedIds,
-  isLoading,
-  fields,
-  filters,
-  recordsCount,
-  recordsTotal,
-  currentPage,
-  limit
-
-} = toRefs(moduleRefs)
 </script>
 
 <style scoped src="./sv-crud.scss"></style>

@@ -13,19 +13,19 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import { useStore } from '@savitri/web'
 import { Route } from '@savitri/web/router'
 
 const SvBareButton = defineAsyncComponent(() => import('../../../../../atoms/sv-bare-button/sv-bare-button.vue'))
 
-const store = useStore()
+const metaStore = useStore('meta')
 const getRoute = () => {
   const route = useRoute()
   return route.matched || [route]
 }
 
-const viewTitle = computed(() => store.state.meta.viewTitle)
+const viewTitle = computed(() => metaStore.view.title)
 const routes = computed(getRoute)
 
 const getTitle = (route: Route) => {

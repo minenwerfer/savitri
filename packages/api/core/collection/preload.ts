@@ -1,11 +1,11 @@
-import merge from 'lodash/merge'
+import * as R from 'ramda'
 import { commonNames } from '../controller'
 
 export const applyPreset = (description:any, collectionName:string, parentName?:string) => {
   const preset = require(__dirname + `/../../presets/${collectionName}`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
-  return merge(description, presetObject)
+  return R.mergeAll([description, presetObject])
 }
 
 export const requireCollection = (collectionName:string): any => {

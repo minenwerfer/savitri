@@ -32,7 +32,7 @@ export const privateRoutes: Array<Route> = [
     meta: { title: 'Dashboard' },
     children: [
       {
-        path: 'c/:module?',
+        path: 'c/:collection?',
         name: 'dashboard-crud',
         component: () => import('./components/views').then((m: any) => m.SvCrudView),
         meta: { title: '%viewTitle%', hidden: true, }

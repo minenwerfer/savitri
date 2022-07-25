@@ -41,18 +41,10 @@
       </div>
     </div>
   </div>
-
-  <sv-overlay
-    @click="closeMobile"
-    v-if="false"
-    class="z-10"
-  ></sv-overlay>
-
 </template>
 
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
-import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import {
   SvBareButton,
@@ -61,6 +53,7 @@ import {
 
 } from '../../'
 
+import { useStore } from '@savitri/web'
 import { Route } from '@savitri/web/router'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
@@ -73,16 +66,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const store = useStore()
+const metaStore = useStore('meta')
 const router = useRouter()
 
 const tick = ref(0)
 const productName = inject('productName')
 const productLogo = inject('productLogo', undefined)
-
-const closeMobile = () => {
-  store.dispatch('meta/swapMenu', { isMobileVisible: false })
-}
 
 const onEntryClick = (route: Route & { meta: any }) => {
   if( route.name ) {
@@ -91,8 +80,6 @@ const onEntryClick = (route: Route & { meta: any }) => {
   if( route.meta?.action ) {
     route.meta.action()
   }
-
-  // closeMobile()
 }
 
 const getSchema = (schema: any, routes: Array<Route>) => {
@@ -107,32 +94,29 @@ const getSchema = (schema: any, routes: Array<Route>) => {
   })
 }
 
-const getRoutes = (children?: Route, subschema?: any) => {
-  const routes: unknown = children || typeof props.entrypoint === 'string'
+const getRoutes = (children?: Route): Array<Route> => {
+  const routes = children || typeof props.entrypoint === 'string'
     ? router.getRoutes().filter((route) => (route.name ||'').startsWith(`${props.entrypoint}-`))
     : router.getRoutes()
 
-  const schema = getSchema(subschema || props.schema, routes as Array<Route>)
+  const schema = getSchema(children || props.schema, routes as Array<Route>)
   const entries: Record<string, Route> = {}
 
   Object.entries(schema)
     .filter(([, value]) => !!value)
-    .map(([key, value]: [string, any]) => [key, { ...value, subschema: value.children }])
     .forEach(([key, value]) => {
-      const { children, subschema, ...route } = value
+      const { children, ...route } = value
       entries[key] = route
       entries[key].meta = route.meta || {
         title: key
       }
 
       if( children ) {
-        entries[key].children = getRoutes(children, subschema)
+        entries[key].children = getRoutes(children)
       }
     })
 
-  return [
-    ...Object.values(entries) as Array<Route>
-  ]
+  return Object.values(entries) as Array<Route>
 }
 
 const isCurrent = (subroute: any) => {
@@ -142,7 +126,7 @@ const isCurrent = (subroute: any) => {
 
 const routes = ref<Array<Route>>(getRoutes())
 
-watch(() => store.state.meta?.globalDescriptions, () => {
+watch(() => metaStore.descriptions, () => {
   routes.value = getRoutes()
     .sort((a, b) => (a.meta?.order||0) < (b.meta?.order||0) ? -1 : 1)
 })

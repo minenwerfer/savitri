@@ -1,11 +1,28 @@
-import { fromEntries } from '../../../common/src/helpers'
-import { getIndexes } from '../../../common/src/collection'
+import { fromEntries, getIndexes } from '../../../common'
+import type { CollectionDescription } from '../../../common/types'
+import type { MongoDocument } from '../../types'
 
-export const depopulate = (item: any, description: any) => {
-  const entries = Object.entries((item as any)._doc || item)
+export const select = <T extends MongoDocument>(item: T, fields: Array<string>) => {
+  if( !item || typeof item !== 'object' || !fields ) {
+    return item
+  }
+
+  const sanitizedFields = [ '_id', ...typeof fields === 'object' ? fields : [fields] ]
+  const _select = (what: any) => sanitizedFields.reduce((a: any, c: string) => ({ ...a, [c]: what[c] }), {})
+
+  return Array.isArray(item)
+    ? item.map((o: any) => _select(o))
+    : _select(item)
+}
+
+export const depopulate = <T extends MongoDocument>(
+  description: Pick<CollectionDescription, 'fields'>,
+  item: T
+) => {
+  const entries = Object.entries(item)
     .map(([key, value]: [string, any]) => ([
       key,
-      !(description.fields[key]||{}).expand
+      !(description.fields[key]||{}).expand && key !== '_id'
         ? select(value, getIndexes(description, key))
         : value
     ]))
@@ -13,19 +30,24 @@ export const depopulate = (item: any, description: any) => {
   return fromEntries(entries)
 }
 
-export const depopulateChildren = (item: any) => {
-  const depopulate = (i: any) => {
-    if( !i || typeof i !== 'object' || !('_id' in i) ) {
-      return i
+export const depopulateChildren = <T extends { _id: string  }>(item: T) => {
+  const depopulate = (item: any) => {
+    if( !item || typeof item !== 'object' || !('_id' in item) ) {
+      return item
     }
 
-    return fromEntries(Object.entries(i._doc || i)
+    return fromEntries(Object.entries(item._doc || item)
       .map(([key, value]: [string, any]) => [key, value?._id ? value._id : value]))
   }
 
-  const { _id, ...doc } = item._doc || item
+  const { _id, ...doc } = item
   const entries = Object.entries(doc)
-    .map(([key, value]: [string, any]) => [key, !Array.isArray(value) ? depopulate(value) : value.map((v: any) => depopulate(v))])
+    .map(([key, value]: [string, any]) => [
+      key,
+      !Array.isArray(value)
+        ? depopulate(value)
+        : value.map((v: any) => depopulate(v))
+    ])
 
   return {
     _id,
@@ -33,20 +55,10 @@ export const depopulateChildren = (item: any) => {
   }
 }
 
-export const select = (obj: any, fields: Array<string>) => {
-  if( !obj || typeof obj !== 'object' || !fields ) {
-    return obj
-  }
-
-  const sanitizedFields = [ '_id', ...typeof fields === 'object' ? fields : [fields] ]
-  const _select = (what: any) => sanitizedFields.reduce((a: any, c: string) => ({ ...a, [c]: what[c] }), {})
-
-  return Array.isArray(obj)
-    ? obj.map((o: any) => _select(o))
-    : _select(obj)
-}
-
-export const project = (item: any, props: any) => {
+export const project = <T extends MongoDocument>(
+  item: Record<string, any> & T,
+  props: any
+) => {
   if( !props ) {
     return item
   }
@@ -63,23 +75,29 @@ export const project = (item: any, props: any) => {
   return obj
 }
 
-export const fill = (obj: any, fields: any) => {
-  if( !obj ) {
+export const fill = <T extends MongoDocument>(
+  description: Pick<CollectionDescription, 'fields'>,
+  item: T & Record<string, any>
+) => {
+  if( !item ) {
     return {}
   }
 
-  const missing = Object.entries(fields)
-      .filter(([key, value]: [string, any]) => !obj[key] && !value.meta)
+  const missing = Object.entries(description.fields)
+      .filter(([key, value]: [string, any]) => !item[key] && !value.meta)
       .map(([key, ]: [string, unknown]) => key)
       .reduce((a: any, b: string) => ({
         ...a,
         [b]: null
       }), {})
 
-  return Object.assign(missing, obj._doc || obj)
+  return Object.assign(missing, item)
 }
 
-export const prepareInsert = (description: any, payload: any) => {
+export const prepareInsert = (
+  description: Pick<CollectionDescription, 'fields' | 'form'>,
+  payload: any
+) => {
   const {
     _id,
     created_at,
@@ -89,7 +107,7 @@ export const prepareInsert = (description: any, payload: any) => {
   } = payload
 
   const forbidden = (key: string) => {
-    return (description.fields[key]||{}).readonly
+    return (description.fields[key]||{}).readOnly
       || (description.form && !description.form.includes(key))
   }
 

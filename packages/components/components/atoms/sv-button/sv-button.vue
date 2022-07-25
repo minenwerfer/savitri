@@ -25,12 +25,23 @@ import {
 
 } from '..'
 
+// #region props
+type Type = 
+  'neutral'
+  | 'success'
+  | 'critical'
+
+type Variant =
+  'normal'
+  | 'light'
+
 interface Props {
-  type?: string
+  type?: Type
+  variant?: Variant
   icon?: string
-  variant?: string
   disabled?: boolean
 }
+// #endregion props
 
 const props = defineProps<Props>()
 

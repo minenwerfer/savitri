@@ -1,15 +1,12 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as R from 'ramda'
 import { HandlerRequest } from '../core/controller'
 
 import { getController } from '../core/controller'
-import { TokenService } from '../core/services/token.service'
+import { TokenService } from '../core/services/token'
 import { FileController } from '../../collections/file/file.controller'
 
-import {
-  pipeHooks,
-  appendPagination
-
-} from './hooks'
+import { appendPagination } from './hooks/post'
 
 export type RegularVerb =
   'get'
@@ -63,20 +60,10 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     const Controller = getController(controller, type)
     const instance = new Controller
 
-    // if( !(verb in instance) ) {
-    //   throw new Error('invalid verb')
-    // }
-
     const token = await getToken(request)
     const method = (instance.webInterface||instance)[verb]
 
     const result = await method(request, h, token)
-
-    // use webinterface whenever it's available
-    // const result = await (instance.webInterface || instance)[verb](request, h, token)
-    // if( /_?get$/i.test(verb) && Object.keys(result).length === 0 ) {
-    //   throw new Error('item not found')
-    // }
 
     const mime = instance.rawType(verb)
     if( mime ) {
@@ -84,7 +71,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
         .header('Content-Type', mime)
     }
 
-    const pipe = pipeHooks(
+    const pipe = R.pipe(
       appendPagination
     )
 
@@ -131,7 +118,7 @@ export const regularVerb = (verb: RegularVerb) =>
   }
 
   const result = await instance[verb](requestCopy, h, token)
-  const pipe = pipeHooks(
+  const pipe = R.pipe(
     appendPagination
   )
 

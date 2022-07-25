@@ -25,13 +25,6 @@ export function getIndexes(
 
   } = query.collection ? query : (reference||{})
 
-  if( key === 'products' ) {
-    console.log({ description2: description })
-    console.log(query)
-    console.log(reference)
-  }
-
-
   if( !collection ) {
     return []
   }
@@ -60,12 +53,6 @@ export const getFirstValue = (
   }
 
   const firstField = getFirstIndex(description, key, form)
-  if( key === 'products' ) {
-    console.log(
-      '============ OUTRA LINHA ANIMAL'
-    )
-  }
-
   const extract = (v: any) => typeof v === 'object' || firstField
     ? v[firstField]
     : v
@@ -75,10 +62,6 @@ export const getFirstValue = (
     : extract(value)
 
   return firstValue
-
-  // return firstValue && typeof firstValue === 'object'
-  //   ? getFirstValue(description, firstValue, firstField, form, collectionName)
-  //   : firstValue
 }
 
 export const formatValue = (
@@ -109,16 +92,6 @@ export const formatValue = (
     ? String(formatted)
     : '-'
 }
-
-// export const resumeItem = (description: any, item: any) => {
-//   return Object.entries(item||{})
-//   .reduce((a: object, [key, value]: [string, any]) => ({
-//     ...a,
-//     [key]: value && typeof value === 'object' && '_id' in value
-//       ? getFirstValue(description, value, key)
-//       : value
-//   }), {})
-// }
 
 export const getItemIndex = <T extends { _id: string }>(item: any, items?: Array<T>) => {
   const _id = typeof item === 'object'
