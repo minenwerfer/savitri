@@ -9,17 +9,22 @@
     </div>
     <div v-if="type !== 'textbox'" :class="`input__container input__container--${variant}`">
       <input
-        :class="`input__input input__input--${variant} ${icon && 'input__input--icon'} ${readonly && 'input__input--readonly'}`"
+        v-maska="mask"
+        :class="`
+          input__input
+          input__input--${variant}
+          ${icon && 'input__input--icon'}
+          ${readonly && 'input__input--readonly'}
+        `"
 
         ref="input"
         :type="type !== 'datetime' ? type : 'text'"
         :value="inputValue || value"
         :placeholder="placeholder"
+        :readonly="readonly"
+
         @input="onInput"
         @change="onChange"
-
-        v-maska="mask"
-        :readonly="readonly"
       />
       <sv-icon 
         v-if="icon"
