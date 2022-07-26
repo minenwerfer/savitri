@@ -105,8 +105,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
    * @method
    * Gets a document from database.
    */
-  public async get(props: { filters?: object, project?: string|Array<string> }, response?: unknown, decodedToken?: any): Promise<any> {
-    return project(fill(await this._model.findOne(props?.filters), this.description.fields), props?.project)
+  public async get(props: { filters?: object, project?: string|Array<string> }, response?: unknown, decodedToken?: any): Promise<Array<T>> {
+    const pipe = R.pipe(
+      (item: T|null) => item && project(item, props?.project),
+      (item: T|null) => item && fill(this.description, item)
+    )
+
+    return pipe(await this._model.findOne(props?.filters))
   }
 
   /**
@@ -154,9 +159,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
     project?: string|Array<string>,
 
  }, response?: unknown, decodedToken?: any) {
-   const result: Array<T> = await this._getAll(props).lean()
+   const result: Array<T> = await this._getAll(props)
 
    const pipe = R.pipe(
+     (item: T & { _doc?: T }) => item._doc || item,
      (item: T) => project(item, props.project),
      (item: T) => depopulate(this.description, item),
      depopulateChildren,

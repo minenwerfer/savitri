@@ -22,7 +22,7 @@
           v-bind="{
             type: 'neutral',
             icon: actionProps.unicon,
-            disabled: isLoading || store1.selectedIds.length === 0 && actionProps.selection
+            disabled: store1.isLoading || store1.selectedIds.length === 0 && actionProps.selection
           }"
           @clicked="callAction()(action, props, { _id: selectedIds })"
         >
@@ -52,7 +52,7 @@
         </template>
         <template #footer v-if="!isInsertReadonly">
           <sv-button
-            :disabled="isLoading"
+            :disabled="store1.isLoading"
             @clicked="store.dispatch(`${collection}/deepInsert`, { what: item, __crudClose: true })"
           >
             Salvar
@@ -61,7 +61,7 @@
       </sv-box>
     </teleport>
 
-    <sv-report :collection="collection" v-model:visible="isReportVisible"></sv-report>
+    <sv-report v-model:visible="isReportVisible"></sv-report>
 
     <sv-box>
       <div class="crud__table-panel">
@@ -99,7 +99,7 @@
         :recordsTotal="recordsTotal"
       ></sv-table>
       <div
-        v-if="store1.itemsCount === 0 && !isLoading"
+        v-if="store1.itemsCount === 0 && !store1.isLoading"
         class="grid place-items-center py-4"
       >
         <div class="opacity-80">
@@ -132,11 +132,11 @@ import {
   SvButton,
   SvPagination,
   SvBareButton,
-  SvReport,
   SvIcon
 
 } from '../../'
 
+import SvReport from './_internals/components/sv-report/sv-report.vue'
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 
@@ -191,7 +191,7 @@ onUnmounted(() => {
       .some(([key, value]: [string, any]) => filters[key] !== value)
 
     if( changed ) {
-      store1.clearAll()
+      store1.clearItems()
     }
   }
 })

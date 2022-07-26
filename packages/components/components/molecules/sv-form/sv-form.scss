@@ -4,7 +4,7 @@ $section-gap: 2rem;
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: $section-gap;
+  row-gap: $section-gap;
 
   &__fieldset {
     display: grid;

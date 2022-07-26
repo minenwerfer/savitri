@@ -73,27 +73,10 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
         offset: value.offset
       })
 
-      console.log(data.result)
       const result = normalize([
         ...stored,
         ...data.result
       ], value)
-
-      // window.dispatchEvent(new CustomEvent('__updateQueryCache', {
-      //   detail: {
-      //     parentModule: this._route,
-      //     moduleName: value.collection,
-      //     result: data.result
-      //   }
-      // }))
-        // state._queryCache[moduleName] = result
-
-        // window._queryCache[moduleName] = [
-        //   ...(window._queryCache[moduleName]||[]),
-        //   ...result
-        // ]
-      //
-
 
       return result
     })

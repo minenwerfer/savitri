@@ -13,9 +13,7 @@
     </div>
 
     <div class="topbar__main">
-      <sv-bare-button
-        @clicked="$store.dispatch('meta/swapMenu')"
-      >
+      <sv-bare-button @clicked="metaStore.swapMenu()">
         <sv-icon name="bars"></sv-icon>
       </sv-bare-button>
 
@@ -34,13 +32,17 @@
 <script setup lang="ts">
 import { defineAsyncComponent, provide, inject } from 'vue'
 import { default as webpackVariables } from 'variables'
+import { useStore } from '@savitri/web'
 import { SvIcon, SvBox } from '../..'
+
 import SvSearchBar from './_internals/components/sv-search-bar/sv-search-bar.vue'
 import SvSearchResults from './_internals/components/sv-search-results/sv-search-results.vue'
 
 const SvBareButton = defineAsyncComponent(() => import('../../atoms/sv-bare-button/sv-bare-button.vue'))
 
 provide('iconReactive', true)
+
+const metaStore = useStore('meta')
 
 const productName = inject('productName')
 const productLogo = inject('productLogo')

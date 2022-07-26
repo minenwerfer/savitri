@@ -1,12 +1,12 @@
 <template>
   <div :class="`results ${resultsByModule.length === 0 && 'results--hidden'}`">
-    <div class="results__modules">
+    <div class="results__collections">
       <div
-        v-for="([moduleName, results], index) in resultsByModule"
-        :key="`results-${moduleName}`"
-        class="results__module"
+        v-for="([collectionName, results], index) in resultsByModule"
+        :key="`results-${collectionName}`"
+        class="results__collection"
         >
-        <div class="results__module-name">{{ $t(moduleName).capitalize() }}</div>
+        <div class="results__collection-name">{{ $t(collectionName).capitalize() }}</div>
         <div class="results__results">
           <div
             v-for="(result, rindex) in results"
@@ -20,7 +20,7 @@
             </div>
             <div class="results__info">
               <div
-                v-for="({ key, field, value }, iindex) in getEntries(moduleName, result)"
+                v-for="({ key, field, value }, iindex) in getEntries(collectionName, result)"
                 :key="`info-${result._id}-${iindex}`"
                 class="results__info-line"
               >
@@ -31,11 +31,11 @@
 
             <div class="results__actions">
               <div
-                v-for="([actionName, action]) in getActions(moduleName)"
+                v-for="([actionName, action]) in getActions(collectionName)"
                 :key="`action-${actionName}`"
                 class="results__action"
 
-                @click="callAction(moduleName, actionName, action, { _id: result._id })"
+                @click="callAction(collectionName, actionName, action, { _id: result._id })"
               >
                 <sv-icon :name="action.unicon" class="results__action-icon"></sv-icon>
                 <div class="results__action-name">{{ action.name }}</div>
@@ -50,23 +50,25 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useStore } from '@savitri/web'
 import { action } from '../../../../../../../common'
 import { SvPicture, SvIcon } from '../../../../..'
+import { results } from '../../stores/search'
 
-const store = useStore()
+// const store = useStore()
 const router = useRouter()
 
 const resultsByModule = computed(() => {
-  return Object.entries(store.getters['searchable/item'])
+  return Object.entries(results.items)
     .filter(([, results]: [unknown, Array<any>]) => results.length > 0)
 })
 
-const getEntries = (moduleName: string, result: any) => Object.entries(result)
+const getEntries = (collectionName: string, result: any) => Object.entries(result)
   .filter(([key]: [string, unknown]) => !['_id', '_picture'].includes(key))
   .map(([key, value]: [string, string]) => {
-    const field = store.state[moduleName]._description.fields[key]
+    const store = useStore(collectionName)
+    const field = store.description.fields[key]
     return {
       key,
       field,
@@ -74,12 +76,14 @@ const getEntries = (moduleName: string, result: any) => Object.entries(result)
     }
   })
 
-const getActions = (moduleName: string) =>
-  Object.entries(store.state[moduleName]._description.searchable.actions||{})
+const getActions = (collectionName: string) => {
+  const store = useStore(collectionName)
+  return Object.entries(store.description.searchable.actions||{})
+}
 
-const callAction = async (moduleName: string, actionName: string, props: any, filters: any) => {
-  store.dispatch('searchable/clear')
-  action(moduleName, store, router)(actionName, props, filters)
+const callAction = async (collectionName: string, actionName: string, props: any, filters: any) => {
+  results.items = []
+  action(collectionName, store, router)(actionName, props, filters)
 }
 </script>
 

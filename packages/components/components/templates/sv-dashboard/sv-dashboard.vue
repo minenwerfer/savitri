@@ -19,7 +19,7 @@
     <div class="dashboard__main">
       <sv-menu
         entrypoint="dashboard"
-        v-model:visible="isMobileMenuVisible"
+        v-model:visible="metaStore.menu.isVisible"
         :schema="menuSchema"
       ></sv-menu>
 
@@ -36,13 +36,13 @@
     </div>
 
     <sv-feedback v-model:visible="isFeedbackVisible"></sv-feedback>
-    <sv-sidebar v-model:visible="isSidebarVisible"></sv-sidebar>
+    <sv-sidebar v-model:visible="metaStore.sidebar.isVisible"></sv-sidebar>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, computed, inject, ref } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '@savitri/web'
 import { default as webpackVariables } from 'variables'
 
 import {
@@ -58,7 +58,7 @@ import {
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
-const store = useStore()
+const metaStore = useStore('meta')
 const menuSchema = inject('menuSchema', {})
 const notice = inject('notice', null)
 
@@ -66,22 +66,16 @@ const topbarSlot = inject('topbarSlot', null)
 const runonceSlot = inject('runonceSlot', null)
 
 onMounted(() => {
-  store.dispatch('meta/swapMenu', {
-    isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
-    isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') !== 'false',
+  metaStore.$patch({
+    menu: {
+      isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
+      isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') !== 'false',
+    }
   })
 })
 
-const history = window.history
-
-const menu = computed(() => store.state.meta.menu)
-
 const isFeedbackVisible = ref(false)
 const isReleasesVisible = ref(false)
-
-const isMenuVisible = computed(() => store.getters['meta/isMenuVisible'])
-const isMobileMenuVisible = computed(() => store.getters['meta/isMobileMenuVisible'])
-const isSidebarVisible = computed(() => store.state.meta.sidebar.isVisible)
 </script>
 
 <style scoped src="./sv-dashboard.scss"></style>

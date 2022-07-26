@@ -31,10 +31,14 @@ const useStore = (storeId: string) => {
   return window.stores[storeId]()
 }
 
-const useParentStore = () => {
-  const parentStoreId = inject<any>('storeId')
+const useParentStore = (fallback?: string) => {
+  let parentStoreId = inject<any>('storeId')
   if( !parentStoreId ) {
-    throw new Error('no parent store found')
+    if( !fallback ) {
+      throw new Error('no parent store found')
+    }
+
+    parentStoreId = fallback
   }
 
   return useStore(parentStoreId.value||parentStoreId)

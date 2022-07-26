@@ -1,9 +1,13 @@
 <template>
-  <div class="search" :key="parent" @change.prevent.stop="">
-    <header class="search__header">{{ moduleName }}</header>
+  <div
+    class="search"
+    :key="parentStore.item"
+    @change.prevent.stop=""
+  >
+    <header class="search__header">{{ collectionName }}</header>
     <div v-if="isExpanded" class="flex flex-col gap-y-2">
       <sv-form
-        :form="moduleRefs.fields"
+        :form="store.fields"
         :form-data="edited"
         :item-index="itemIndex"
         :field-index="fieldIndex"
@@ -71,10 +75,10 @@
         </div>
       </div>
 
-      <div :class="`select-none ${isLoading ? 'opacity-30' : 'opacity-60'}`" v-if="!isExpanded">
-        <div v-if="items.length || selected.length">
+      <div :class="`select-none ${store.isLoading ? 'opacity-30' : 'opacity-60'}`" v-if="!isExpanded">
+        <div v-if="store.items.length || selected.length">
           <div
-            v-for="(item, index) in items"
+            v-for="(item, index) in store.items"
             :key="`item-${index}`"
             class="search__item"
             @click="select(item)"
@@ -92,7 +96,7 @@
           <div v-if="isTyping">
             Pesquisando...
           </div>
-          <div v-else-if="!isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
+          <div v-else-if="!store.isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
             Não há resultados
           </div>
         </div>
@@ -114,8 +118,7 @@ import {
 
 } from 'vue'
 
-import { useStore } from 'vuex'
-import { useModule } from '../../../../web'
+import { useStore, useParentStore } from '@savitri/web'
 import {
   SvInput,
   SvButton,
@@ -143,33 +146,28 @@ const emit = defineEmits<{
   (e: 'changed'): void
 }>()
 
-const store = useStore()
-const _parentModule = inject<{ value: string }>('module', { value: '' })
-const parentModule = _parentModule.value || _parentModule
 
 const searchOnly = inject<boolean>('searchOnly', props.searchOnly)
 
-const parentRefs = useModule(parentModule, store)
-const moduleRefs = reactive(useModule(props.field.module, store))
-
-const field = props.field
-provide('module', field.module)
+const parentStore = useParentStore()
+const store = useStore(props.field.collection)
 provide('iconReactive', true)
 
-onMounted(() => store.dispatch(`${field.module}/clearAll`))
+onMounted(() => store.clearItems())
 
+const field = props.field
 const expanded = ref<boolean>(false)
-const edited = ref<any>(parentRefs.item.value[props.propName])
+const edited = ref<any>(parentStore.item[props.propName])
 
-const module = computed(() => field.module)
+const collection = computed(() => field.collection)
 const expand = computed(() => field.expand === true)
 const array = computed(() => field.array)
 
-const moduleName = computed(() => (field.label||'').capitalize())
+const collectionName = computed(() => (field.label||'').capitalize())
 const isExpanded = computed(() => expanded.value || field.expand)
 
 const rawItem = computed(() => {
-  const item = store.state[parentModule].item[props.propName]
+  const item = parentStore.item[props.propName]
   const items = field.array
     ? (Array.isArray(item) ? item : [item])
     : item
@@ -177,11 +175,7 @@ const rawItem = computed(() => {
   return items
 })
 
-const items = computed(() => store.state[field.module].items)
-const parent = computed<{ _id: string }>(() => store.state[parentModule].item)
-const isLoading = computed(() => store.state[field.module].isLoading)
 const isTyping = ref(false)
-
 const inputValue = reactive({})
 
 const selected = computed(() => {
@@ -197,7 +191,7 @@ const selected = computed(() => {
 const fieldIndex = ref(0)
 
 const insert = async () => {
-  const result: any = await store.dispatch(`${module.value}/insert`, { what: edited.value })
+  const result: any = await store.insert({ what: edited.value })
 
   const value = (() => {
     if( !array.value ) {
@@ -213,21 +207,21 @@ const insert = async () => {
     ]
   })()
 
-  const parentResult = await store.dispatch(`${parentModule}/insert`, {
+  const parentResult = await parentStore.insert({
     what: {
-      ...(parent.value._id ? { _id: parent.value._id } : parent.value),
+      ...(parentStore.item._id ? { _id: parentStore.item._id } : parentStore.item),
       [props.propName]: value
     }
   })
 
   emit('update:modelValue', parentResult[props.propName])
-  store.dispatch(`${props.field.module}/clearAll`)
+  store.clearItems()
   expanded.value = false
 }
 
 const edit = (item: any) => {
   const itemsCount = rawItem.value.length
-  fieldIndex.value = parentRefs.getItemIndex(item._id, selected.value)
+  fieldIndex.value = parentStore.getItemIndex(item._id, selected.value)
 
   edited.value = item
   expanded.value = true
@@ -235,7 +229,7 @@ const edit = (item: any) => {
 
 const clear = () => {
   expanded.value = false
-  store.dispatch(`${module.value}/clear`)
+  store.clearItems()
   if( array.value ) {
     rawItem.value = rawItem.value.slice(0, -1)
   }
@@ -247,7 +241,7 @@ const select = (item: any) => {
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
-  store.dispatch(`${module.value}/clearAll`)
+  store.clearItems()
   emit('update:modelValue', array.value
     ? [ ...modelValue, item ]
     : item
@@ -259,7 +253,7 @@ const select = (item: any) => {
 const unselect = async (item: any, purge=true) => {
   if( props.field.purge && purge ) {
     const { _id } = item
-    await store.dispatch(`${props.field.module}/remove`, { payload: { filter: { _id } }})
+    await store.remove({ payload: { filter: { _id } }})
   }
 
   emit('update:modelValue', array.value
@@ -277,15 +271,15 @@ const addItem = () => {
 
 const search = () => {
   if( Object.values(inputValue).every((v: string) => v.length === 0) ) {
-    store.dispatch(`${module.value}/clearAll`)
+    store.clearItems()
     return
   }
 
-  if( store.state[module.value].isLoading ) {
+  if( store.isLoading ) {
     return
   }
 
-  store.dispatch(`${module.value}/getAll`, {
+  store.getAll({
     limit: 5,
     filters: {
       ...(props.activeOnly ? { active: true } : {}),

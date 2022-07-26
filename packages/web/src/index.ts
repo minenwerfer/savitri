@@ -4,7 +4,6 @@ import { createApp } from 'vue'
 import Unicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
 import type { Router } from 'vue-router'
-import type { Store } from 'vuex'
 export * from 'vue'
 
 import { createPinia } from 'pinia'
@@ -12,7 +11,7 @@ import { createI18n } from 'vue-i18n'
 import { routes } from '@savitri/components'
 import { extendRouter, RouterExtension } from './router'
 import { extendStore, StoreExtension } from './store'
-import { storeInstance as createStore } from './store'
+// import { storeInstance as createStore } from './store'
 import { routerInstance as createRouter } from './router'
 // import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
@@ -36,7 +35,6 @@ interface AppOptions {
 export const useApp = (config: AppOptions): Promise<{
   app: any
   router: Router
-  store: Store<any>
 }> => new Promise(async (resolve) => {
   const {
     component,
@@ -50,17 +48,16 @@ export const useApp = (config: AppOptions): Promise<{
   const app = createApp(component)
   app.use(createPinia())
 
-  const store = createStore()
-  const router = createRouter(routes, store)
+  const router = createRouter(routes)
   const _i18n = createI18n(i18n)
 
   if( routerExtension ) {
     extendRouter(router, routerExtension)
   }
 
-  if( storeExtension ) {
-    extendStore(store, storeExtension)
-  }
+  // if( storeExtension ) {
+  //   extendStore(store, storeExtension)
+  // }
 
   if( config.modules ) {
     config.modules.forEach((plugin: Plugin) => {
@@ -68,14 +65,13 @@ export const useApp = (config: AppOptions): Promise<{
         extendRouter(router, plugin.routerExtension)
       }
 
-      if( plugin.storeExtension ) {
-        extendStore(store, plugin.storeExtension)
-      }
+      // if( plugin.storeExtension ) {
+      //   extendStore(store, plugin.storeExtension)
+      // }
     })
   }
 
   app.use(router)
-  app.use(store as any)
   app.use(_i18n)
 
   app.provide('menuSchema', menuSchema)
@@ -95,7 +91,7 @@ export const useApp = (config: AppOptions): Promise<{
 
   Object.assign(window, {
     _router: router,
-    _store: store,
+    // _store: store,
     _i18n
   })
 
@@ -113,6 +109,6 @@ export const useApp = (config: AppOptions): Promise<{
   resolve({
     app,
     router,
-    store
+    // store
   })
 })

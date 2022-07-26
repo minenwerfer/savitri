@@ -24,11 +24,11 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '@savitri/web'
 import { SvButton } from '../../'
 
 const SvModal = defineAsyncComponent(() => import('../..//organisms/sv-modal/sv-modal.vue'))
-const store = useStore()
+const metaStore = useStore('meta')
 
 interface Props {
   actions: Array<any>
@@ -37,6 +37,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const onClick = (action: any) => {
-  store.dispatch('meta/fulfillPrompt', action.name)
+  metaStore.fulfillPrompt(action.name)
 }
 </script>

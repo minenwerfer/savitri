@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex'
+import { useStore } from '@savitri/web'
 import {
   SvBareButton,
   SvIcon
@@ -30,11 +30,11 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const store = useStore()
+const userStore = useStore('user')
 
 const filterActions = (actions: Array<any>) => {
   return actions.filter((action: any) =>
-    !action.useronly || store.getters['user/current'].access.visibility !== 'useronly'
+    !action.useronly || userStore.current.access?.visibility !== 'useronly'
   )
 }
 </script>

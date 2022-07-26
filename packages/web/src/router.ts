@@ -54,13 +54,14 @@ export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Rout
  * @exports
  * The router instance.
  */
-export const routerInstance = (routes: Array<Route>, store: any) => {
+export const routerInstance = (routes: Array<Route>) => {
   const router = createRouter({
     history: createWebHistory(),
     routes
   })
 
   const metaStore = useStore('meta')
+  const userStore = useStore('user')
 
   // eslint-disable-next-line
   router.beforeEach(async (to:Route, from:Route, next: (props?: any) => void) => {
@@ -80,7 +81,7 @@ export const routerInstance = (routes: Array<Route>, store: any) => {
       return next()
     }
 
-    if( to.meta.isPrivate && !store.getters['user/token'] ) {
+    if( to.meta.isPrivate && !userStore.token ) {
       next({ name: 'signin' })
     }
 

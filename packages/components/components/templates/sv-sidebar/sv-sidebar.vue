@@ -4,7 +4,7 @@
     <div class="sidebar">
       <div class="sidebar__header">
         <strong class="text-xl">
-          {{ $store.state.meta.sidebar.title }}
+          {{ metaStore.sidebar.title }}
         </strong>
         <sv-bare-button @clicked="close">
           <sv-icon
@@ -18,8 +18,8 @@
       <div class="sidebar__content">
         <KeepAlive>
           <component
-            :is="components[store.state.meta.sidebar.component]"
-            v-bind="store.state.meta.sidebar.componentProps"
+            :is="components[metaStore.sidebar.component]"
+            v-bind="metaStore.sidebar.componentProps"
             @close="close"
           ></component>
         </KeepAlive>
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex'
+import { useStore } from '@savitri/web'
 import {
   SvOverlay,
   SvBareButton,
@@ -56,8 +56,8 @@ const {
 
 }>()
 
-const store = useStore()
-const close = () => store.dispatch('meta/closeSidebar')
+const metaStore = useStore('meta')
+const close = () => { metaStore.sidebar.isVisible }
 </script>
 
 <style scoped src="./sv-sidebar.scss"></style>

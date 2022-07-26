@@ -2,7 +2,7 @@
   <table v-if="Object.keys(columns).length > 0" class="table">
     <tr v-if="headers" class="table__row table__row--header">
       <th
-        v-if="module && checkbox"
+        v-if="collection && checkbox"
         :class="`
           table__header
           table__header--checkbox
@@ -10,7 +10,7 @@
       `">
         <input
           type="checkbox"
-          @change="store.dispatch(`${module}/selectAll`, $event.target.checked)"
+          @change="store.selectAll($event.target.checked)"
         />
       </th>
       <th
@@ -29,9 +29,9 @@
       v-for="(row, rindex) in rows"
       :key="`row-${rindex}`"
       :class="`table__row table__row--body`"
-      @click="moduleRefs.setItem(row)"
+      @click="collectionRefs.setItem(row)"
     >
-      <td v-if="module && checkbox">
+      <td v-if="collection && checkbox">
         <input
           type="checkbox"
           v-model="selected"
@@ -59,13 +59,13 @@
           >
             <div :class="cindex === 0 && 'font-semibold opacity-80'">
               <sv-picture
-                v-if="field.module === 'file' && row[column]._id" 
+                v-if="field.collection === 'file' && row[column]._id" 
                 :file="row[column]"
                 class="w-20 h-20 object-cover mb-4 lg:mb-0 border"
               ></sv-picture>
               <div v-else>
                 {{
-                  store1.formatValue({
+                  store.formatValue({
                     value: field.translate ? $t(row[column]||'-') : row[column],
                     key: column,
                     form: false,
@@ -74,9 +74,9 @@
                 }}
               </div>
             </div>
-            <div v-if="store1.getIndexes({ key: column })?.length > 1" class="hidden lg:flex gap-x-2">
+            <div v-if="store.getIndexes({ key: column })?.length > 1" class="hidden lg:flex gap-x-2">
               <div
-                v-for="(subvalue, index) in store1.getIndexes({ key: column }).slice(1, 2)"
+                v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
                 class="text-sm text-blue-500"
               >
@@ -118,9 +118,7 @@ import {
 
 } from 'vue'
 
-import { useStore } from 'vuex'
-import { useModule, useFile } from '../../../../web'
-import { useParentStore } from '../../../../web'
+import { useParentStore, useFile } from '@savitri/web'
 
 import {
   SvBareButton,
@@ -135,7 +133,7 @@ import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dr
 interface Props {
   columns: any
   rows: any
-  module?: string
+  collection?: string
   checkbox?: boolean
   border?: boolean
   headers?: boolean
@@ -147,16 +145,11 @@ const props = withDefaults(defineProps<Props>(), {
   headers: true
 })
 
-const store = useStore()
-const store1 = useParentStore()
-const module = ref<string>(props.module || inject('module', ''))
-
-const moduleRefs = reactive({})
-watch(module, () => Object.assign(moduleRefs, useModule(module.value, store)), { immediate: true })
+const store = useParentStore()
 
 const selected = computed({
-  get: () => store.state[module.value].selected,
-  set: (items: Array<any>) => store.dispatch(`${module.value}/selectMany`, { items, value: true })
+  get: () => store.selected,
+  set: (items: Array<any>) => store.selectMany({ items, value: true })
 })
 
 const rowCtx = {

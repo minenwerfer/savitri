@@ -151,6 +151,11 @@ export default defineStore('meta', {
 
         registerStore(store)
       }
+    },
+
+    swapMenu() {
+      this.menu.isVisible = !this.menu.isVisible
+      localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
     }
   }
 })

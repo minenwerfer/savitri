@@ -1,6 +1,6 @@
-import { Request } from '@hapi/hapi'
-import { HandlerRequest } from '../../core/controller'
+import type { Request } from '@hapi/hapi'
 import type { Controller } from '../../core/controller'
+import { HandlerRequest } from '../../core/controller'
 
 export const appendPagination = async (
   result: object|Array<object>,

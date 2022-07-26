@@ -3,7 +3,7 @@ $image-size: 20rem;
 .file {
   display: flex;
   flex-direction: column;
-  gap: .8rem;
+  row-gap: .8rem;
 
   &__image {
     width: $image-size;

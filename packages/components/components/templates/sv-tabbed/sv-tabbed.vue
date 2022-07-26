@@ -6,9 +6,9 @@
     >
       <div :class="`tabbed__menu ${vertical && 'tabbed__menu--vertical'}`">
         <slot
-          name="menu"
           v-if="$slots.menu && vertical"
-          :class="`hidden xl:block ${vertical ? menuClasses : ''}`"
+          name="menu"
+          class="hidden xl:block"
         ></slot>
         <sv-bare-button
           :class="`
@@ -45,40 +45,17 @@ import { onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { SvBareButton, SvBox } from '../..'
 
-const props: any = defineProps({
-  tabs: {
-    type: Number,
-    required: true,
-  },
-  titles: {
-    type: Array,
-    required: false,
-    validator: (value: any) => value.every((v: any) => typeof v === 'string')
-  },
-  currentTab: {
-    type: Number,
-    required: true,
-  },
-  bottomHelpers: {
-    type: Boolean,
-    default: true,
-  },
-  finishButton: {
-    type: Boolean,
-    default: true,
-  },
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  menuClasses: {
-    type: String,
-    default: ''
-  },
-  updateRoute: {
-    type: Boolean,
-    default: true
-  }
+interface Props {
+  tabs: number
+  currentTab: number
+  titles?: Array<string>
+  vertical?: boolean
+  updateRoute?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  vertical: false,
+  updateRoute: true
 })
 
 const emit = defineEmits<{

@@ -7,7 +7,7 @@ export const select = <T extends MongoDocument>(item: T, fields: Array<string>) 
     return item
   }
 
-  const sanitizedFields = [ '_id', ...typeof fields === 'object' ? fields : [fields] ]
+  const sanitizedFields = [ '_id', ...Array.isArray(fields) ? fields : [fields] ]
   const _select = (what: any) => sanitizedFields.reduce((a: any, c: string) => ({ ...a, [c]: what[c] }), {})
 
   return Array.isArray(item)
@@ -17,17 +17,22 @@ export const select = <T extends MongoDocument>(item: T, fields: Array<string>) 
 
 export const depopulate = <T extends MongoDocument>(
   description: Pick<CollectionDescription, 'fields'>,
-  item: T
+  _item: T
 ) => {
+  const { _id, ...item } = _item
+
   const entries = Object.entries(item)
     .map(([key, value]: [string, any]) => ([
       key,
-      !(description.fields[key]||{}).expand && key !== '_id'
+      !(description.fields[key]||{}).expand
         ? select(value, getIndexes(description, key))
         : value
     ]))
 
-  return fromEntries(entries)
+  return {
+    _id,
+    ...fromEntries(entries)
+  }
 }
 
 export const depopulateChildren = <T extends { _id: string  }>(item: T) => {

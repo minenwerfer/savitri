@@ -1,9 +1,9 @@
 <template>
   <sv-box
+    v-model:visible="visible"
     title="Feedback"
     :float="true"
     @close="$emit('update:visible', false)"
-    v-model:visible="visible"
   >
     <template #body>
       <div v-if="!inserted">
@@ -12,8 +12,8 @@
         </p>
 
         <sv-form
-          :form="useFieldsExcept(['user_id'])"
-          :form-data="item"
+          :form="store.useFieldsExcept(['user_id'])"
+          :form-data="store.item"
         />
       </div>
       <div v-else class="flex justify-between">
@@ -24,8 +24,8 @@
 
     <template #footer v-if="!inserted">
       <sv-button
+        :is-loading="stre.isLoading"
         @clicked="insert"
-        :is-loading="isLoading"
       >
         Enviar
       </sv-button>
@@ -35,8 +35,7 @@
 
 <script setup lang="ts">
 import { ref, provide, inject, defineAsyncComponent } from 'vue'
-import { useStore } from 'vuex'
-import { useModule } from '../../../../web'
+import { useStore } from '@savitri/web'
 import { SvForm, SvButton } from '../..'
 
 const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
@@ -47,23 +46,21 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const store = useStore()
-const moduleRefs = useModule('feedback', store)
-
-provide('module', 'feedback')
+const store = useStore('feedback')
+provide('storeId', 'feedback')
 
 const inserted = ref(false)
 const productVersion = inject('productVersion')
 const baseVersion = inject('baseVersion')
 
-const derpImage = 'https://listman.redhat.com/archives/avocado-devel/2015-November/pngF2MCc53SbA.png'
+const derpImage = ''
 const img = new Image()
 img.src = derpImage
 
 const insert = async () => {
-  await moduleRefs.insert({
+  await store.insert({
     what: {
-      ...moduleRefs.item.value,
+      ...store.item,
       base_version: baseVersion,
       product_version: productVersion,
       user_agent: navigator.userAgent
@@ -73,11 +70,4 @@ const insert = async () => {
 
   inserted.value = true
 }
-
-const {
-  item,
-  isLoading,
-  useFieldsExcept
-
-} = moduleRefs
 </script>

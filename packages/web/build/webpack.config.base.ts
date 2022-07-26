@@ -35,7 +35,10 @@ const baseWebpackConfig = {
     rules: [
       {
         test: /\.vue$/,
-        use: 'vue-loader',
+        loader: 'vue-loader',
+        options: {
+          reactivityTransform: true
+        }
       },
       {
         test: /\.tsx?$/,

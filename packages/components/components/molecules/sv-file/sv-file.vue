@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '@savitri/web'
 import { SvBareButton, SvPicture } from '../../'
 
 interface Props {
@@ -39,7 +39,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', result: any): void
 }>()
 
-const store = useStore()
+const store = useStore('file')
 const file = ref(null)
 
 const isImage = computed(() => /^image\//.test((props.modelValue||{}).mime))
@@ -65,7 +65,7 @@ const onClick = () => {
 
 const onChange = async (event: any) => {
   const file = await readFile(event)
-  const result = await store.dispatch('file/insert', {
+  const result = await store.insert({
     what: {
       ...file,
       context: props.context

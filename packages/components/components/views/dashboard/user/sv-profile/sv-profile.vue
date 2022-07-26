@@ -1,14 +1,14 @@
 <template>
   <sv-header>Editar perfil</sv-header>
-  <sv-box :key="fields" class="flex-grow">
+  <sv-box :key="store.fields" class="flex-grow">
     <sv-form
-      :form="useFieldsExcept(['access', 'password'])"
-      :form-data="item"
+      :form="store.useFieldsExcept(['access', 'password'])"
+      :form-data="store.item"
     ></sv-form>
 
     <template #footer>
       <sv-button
-        :disabled="isLoading"
+        :disabled="store.isLoading"
         @clicked="insert"
       >
         Salvar
@@ -24,17 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  onMounted,
-  provide,
-  reactive,
-  computed,
-  toRefs
-
-} from 'vue'
-
-import { useStore } from 'vuex'
-import { useModule } from '../../../../../../web'
+import { provide } from 'vue'
+import { useStore } from '@savitri/web'
 import {
   SvHeader,
   SvBox,
@@ -43,27 +34,19 @@ import {
 
 } from '../../../..'
 
-const store = useStore()
-const moduleRefs = reactive(useModule('user', store))
+const store = useStore('user')
+const metaStore = useStore('meta')
+provide('storeId', 'user')
 
-provide('module', 'user')
-store.commit('user/CURRENT_UPDATE')
+// store.commit('user/CURRENT_UPDATE')
 
 const insert = async () => {
-  await moduleRefs.insert({ what: moduleRefs.item })
-  sessionStorage.setItem('auth:current', JSON.stringify(moduleRefs.item))
+  await store.insert({ what: store.item })
+  sessionStorage.setItem('auth:currentUser', JSON.stringify(store.item))
 
-  store.dispatch('meta/spawnModal', {
+  metaStore.spawnModal({
     title: 'Feito!',
     body: 'Suas informações foram salvas'
   })
 }
-
-const {
-  isLoading,
-  item,
-  fields,
-  useFieldsExcept,
-
-} = toRefs(moduleRefs)
 </script>

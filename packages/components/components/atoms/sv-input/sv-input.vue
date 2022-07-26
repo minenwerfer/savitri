@@ -60,9 +60,8 @@
 
 <script setup lang="ts">
 import { ref, inject } from 'vue'
-import { useStore } from 'vuex'
 import { maska as vMaska } from 'maska'
-import { copyToClipboard } from '../../../../web/src/helpers'
+import { useStore, copyToClipboard } from '@savitri/web'
 import {
   SvBareButton,
   SvInfo,
@@ -87,7 +86,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
 }>()
 
-const store = useStore()
+const metaStore = useStore('meta')
 
 const input = ref<any>(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
@@ -143,7 +142,7 @@ const onChange = (event: { target: { value: string } }) => {
 
 const copy = (value: string) => {
   copyToClipboard(value)
-  store.dispatch('meta/spawnToast', {
+  metaStore.spawnToast({
     text: 'Copiado!'
   })
 }

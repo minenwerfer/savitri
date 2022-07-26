@@ -12,9 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex'
-import { useModule } from '../../../../web'
-
 interface Props {
   modelValue?: any
   values?: any

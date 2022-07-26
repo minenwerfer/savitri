@@ -41,7 +41,7 @@ export default defineStore('user', {
           }
 
           sessionStorage.setItem('auth:token', result.token)
-          sessionStorage.setItem('auth:current', JSON.stringify(result))
+          sessionStorage.setItem('auth:currentUser', JSON.stringify(result))
 
           const metaStore = useMetaStore()
           await metaStore.describeAll()

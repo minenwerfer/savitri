@@ -7,7 +7,7 @@ export class SearchableController extends Controller<unknown> {
     super({
       publicMethods: ['search'],
       description: {
-        module: 'searchables'
+        collection: 'searchables'
       }
     })
   }

@@ -11,26 +11,27 @@
 
 <script setup lang="ts">
 import { ref, watch, provide } from 'vue'
-import { useStore } from 'vuex'
+import { useHttp } from '@savitri/web'
 import { SvInput } from '../../../../..'
+import { results } from '../../stores/search'
 
-const store = useStore()
+const { http } = useHttp()
 const query = ref('')
 
 provide('iconReactive', false)
 
-watch(() => query.value, () => {
+watch(() => query.value, async () => {
   if( query.value.length === 0 ) {
-    store.dispatch('searchable/clear')
+    results.items = []
     return
   }
 
-  store.dispatch('searchable/search', {
+  results.items = (await http.post('_/searchable/search', {
     query: query.value
       .replace(/(\(|\))/g, '')
       .split(',')
       .map((q: string) => q.trim())
-  })
+  })).data.result
 })
 </script>
 

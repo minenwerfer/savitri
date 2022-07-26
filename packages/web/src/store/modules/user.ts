@@ -89,7 +89,7 @@ export class UserModule extends Module<User, UserItem> {
   getters() {
     return {
       token: (state: any) => state.current.token,
-      current: () => JSON.parse(sessionStorage.getItem('auth:current')||'{}'),
+      current: () => JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}'),
     }
   }
 
@@ -102,14 +102,14 @@ export class UserModule extends Module<User, UserItem> {
         })
 
         sessionStorage.setItem('auth:token', value.token)
-        sessionStorage.setItem('auth:current', JSON.stringify(value))
+        sessionStorage.setItem('auth:currentUser', JSON.stringify(value))
       },
 
       CURRENT_UPDATE(state: CommonState & { current: any }) {
-        const value = JSON.parse(sessionStorage.getItem('auth:current')||'{}')
+        const value = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
 
         Object.assign(state.current, value)
-        sessionStorage.setItem('auth:current', JSON.stringify(value))
+        sessionStorage.setItem('auth:currentUser', JSON.stringify(value))
       },
 
       USER_SIGNOUT(state: CommonState & { current: any }) {

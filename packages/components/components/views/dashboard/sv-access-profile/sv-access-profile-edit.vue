@@ -1,9 +1,13 @@
 <template>
-  <sv-box title="Editar preset de acesso" :float="true" @close="$router.back()">
+  <sv-box
+    title="Editar preset de acesso"
+    :float="true"
+    @close="$router.back()"
+  >
     <div class="flex flex-col gap-y-6">
       <sv-form
-        :form="fields"
-        :form-data="item"
+        :form="store.fields"
+        :form-data="store.item"
       >
       </sv-form>
       <sv-button
@@ -15,13 +19,13 @@
       </sv-button>
       <sv-form
         :form="capabilitiesFields"
-        :form-data="item.capabilities"
+        :form-data="store.item.capabilities"
         >
       </sv-form>
     </div>
     <template #footer>
       <sv-button
-        :disabled="isLoading"
+        :disabled="store.isLoading"
         @clicked="insert"
       >
         Salvar
@@ -32,14 +36,16 @@
 
 <script setup lang="ts">
 import { computed, provide } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useStore } from '@savitri/web'
 import type { CollectionDescription } from '@savitri/common'
 import { SvBox, SvForm, SvButton } from '../../..'
   
-const store = useStore()
+const store = useStore('accessProfile')
+const metaStore = useStore('meta')
 const router = useRouter()
-const { capabilities, ...fields } = store.getters['accessProfile/fields']
+
+const { capabilities, ...fields } = store.fields
 
 provide('module', 'accessProfile')
 
@@ -51,7 +57,7 @@ type AccParams = Pick<
   | 'extraMethods'
 >
 
-const modules = store.state.meta.globalDescriptions
+const modules = metaStore.globalDescriptions
 const capabilitiesFields = modules.reduce(
   (a: any, { module: moduleName, report, methods, extraMethods }: AccParams
 ) => {
@@ -77,18 +83,14 @@ const capabilitiesFields = modules.reduce(
   }
 }, {})
 
-const accessItem = store.getters['accessProfile/item']
-if( !accessItem.capabilities ) {
-  accessItem.capabilities = {}
+if( !store.item.capabilities ) {
+  store.item.capabilities = {}
 }
-
-const item = computed(() => accessItem)
-const isLoading = computed(() => store.state.accessProfile.isLoading)
 
 const grantEverything = () => {
   Object.entries(capabilitiesFields)
     .forEach(([key, value]: [string, Array<string>]) => {
-      accessItem.capabilities[key] = value.values.map((v: { value: string }) => v.value)
+      store.item.capabilities[key] = value.values.map((v: { value: string }) => v.value)
     })
 }
 

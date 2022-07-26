@@ -2,14 +2,14 @@
   <sv-box class="xl:w-2/5">
     <div class="flex flex-col gap-y-6">
       <sv-form
-        :form="fields"
-        :form-data="item"
+        :form="store.fields"
+        :form-data="store.item"
       ></sv-form>
 
       <sv-button
-        @clicked="insert"
-        :disabled="(item.password?.length||0) < 4 || item.password !== item.verification"
         class="self-start"
+        :disabled="(store.item.password?.length||0) < 4 || store.item.password !== store.item.verification"
+        @clicked="insert"
       >
         Salvar
       </sv-button>
@@ -19,14 +19,12 @@
 
 <script setup lang="ts">
 import { provide, reactive, toRefs } from 'vue'
-import { useStore } from 'vuex'
-import { useModule } from '../../../../../../web'
+import { useStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../..'
 
-const store = useStore()
-const moduleRefs = reactive(useModule('user', store))
-
-provide('module', 'user')
+const store = useStore('user')
+const metaStore = useStore('meta')
+provide('storeId', 'user')
 
 const fields = {
   password: {
@@ -40,22 +38,17 @@ const fields = {
 }
 
 const insert = async () => {
-  const { password } = moduleRefs.item
-  await moduleRefs.insert({
+  const { password } = store.item
+  await store.insert({
     what: {
-      _id: moduleRefs.item._id,
+      _id: store.item._id,
       password
     }
   })
 
-  store.dispatch('meta/spawnModal', {
+  metaStore.spawnModal({
     title: 'Feito!',
     body: 'A senha foi atualizada'
   })
 }
-
-const {
-  item
-
-} = toRefs(moduleRefs)
 </script>

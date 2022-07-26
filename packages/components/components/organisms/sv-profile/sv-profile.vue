@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <sv-picture
-      :file="current.picture"
+      :file="store.currentUser.picture"
       class="profile__picture"
     >
       <template #fallback>
@@ -11,8 +11,8 @@
       </template>
     </sv-picture>
     <div class="flex flex-col gap-y-2 opacity-80 border-b text-center pb-4">
-      <strong class="text-xl">{{ current.name }}</strong>
-      <div>Autenticado como: {{ current.access?.name }}</div>
+      <strong class="text-xl">{{ store.currentUser.name }}</strong>
+      <div>Autenticado como: {{ store.currentUser.access?.name }}</div>
     </div>
 
     <div class="profile__menu">
@@ -25,30 +25,20 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  reactive,
-  toRefs,
-  inject
-
-} from 'vue'
-
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { inject } from 'vue'
 import { default as InlineSvg } from 'vue-inline-svg'
-import { useModule } from '../../../../web'
+import { useRouter } from 'vue-router'
+import { useStore } from '@savitri/web'
 import { SvBareButton, SvPicture } from '../..'
 
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const store = useStore()
+const store = useStore('user')
 const router = useRouter()
-const moduleRefs = reactive(useModule('user', store))
 
 const profileSidebarSlot = inject('profileSidebarSlot')
-const current = computed(() => store.getters['user/current'])
 
 const signout = async () => {
   emit('close')
@@ -58,14 +48,9 @@ const signout = async () => {
 
 const editProfile = () => {
   emit('close')
-  moduleRefs.setItem(store.getters['user/current'])
+  store.setItem(store.currentUser)
   router.push({ name: 'dashboard-user-profile' })
 }
-
-const {
-  item
-
-} = toRefs(moduleRefs)
 </script>
 
 <style scoped src="./sv-profile.scss"></style>
