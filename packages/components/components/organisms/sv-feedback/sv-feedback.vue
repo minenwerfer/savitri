@@ -24,7 +24,7 @@
 
     <template #footer v-if="!inserted">
       <sv-button
-        :is-loading="stre.isLoading"
+        :is-loading="store.isLoading"
         @clicked="insert"
       >
         Enviar

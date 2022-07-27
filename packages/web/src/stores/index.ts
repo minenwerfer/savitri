@@ -15,6 +15,7 @@ export {
   registerStore,
   getStores
 }
+
 stores.accessProfile = require('./accessProfile').default
 stores.meta = require('./meta').default
 stores.user = require('./user').default

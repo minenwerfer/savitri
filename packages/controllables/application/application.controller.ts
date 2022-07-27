@@ -21,7 +21,7 @@ export class ApplicationController extends Controller<unknown> {
         'index': 'text/html'
       },
       description: {
-        module: 'application'
+        collection: 'application'
       }
     })
   }

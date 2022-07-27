@@ -1,13 +1,20 @@
 <template>
-  <div class="form" v-if="formData">
-    <fieldset class="form__fieldset" v-if="!isReadonly">
+  <div v-if="!isReadonly" class="form">
+    <fieldset
+      v-if="!isReadonly && Object.keys(fields).length > 0"
+      class="form__fieldset"
+    >
       <!-- form -->
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
         :class="`form__field ${fieldClass(field)}`"
         :style="`
-          --field-span: ${field.formSpan || 6};
+          --field-span: ${
+            layout?.[key]?.span
+              ? layout[key].span
+              : field.formSpan || 6
+          };
           grid-column: span var(--field-span) / span var(--field-span);
         `"
 
@@ -99,6 +106,7 @@
         v-model="formData[childCollection]"
         v-bind="{
           field,
+          collection,
           indexes: store.getIndexes({ key: childCollection }),
           propName: childCollection,
           itemIndex: itemIndex != -1 ? itemIndex: 0,
@@ -147,6 +155,10 @@ import { SvInput, SvCheckbox, SvSelect } from '../..'
 const SvSearch = defineAsyncComponent(() => import('../../molecules/sv-search/sv-search.vue'))
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
 
+type LayoutConfig = {
+  span: number
+}
+
 interface Props {
   form: Record<string, any>
   formData: Record<string, any>
@@ -155,6 +167,7 @@ interface Props {
   searchOnly?: boolean
   itemIndex?: number
   fieldIndex?: number
+  layout?: Record<string, LayoutConfig>
 
   // currently unused!
   strict?: boolean

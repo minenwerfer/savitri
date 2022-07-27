@@ -1,11 +1,16 @@
 import * as R from 'ramda'
+import type { CollectionDescription } from '../../../common/types'
 import { commonNames } from '../controller'
 
-export const applyPreset = (description:any, collectionName:string, parentName?:string) => {
+export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(__dirname + `/../../presets/${collectionName}`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
-  return R.mergeAll([description, presetObject])
+  return R.mergeDeepWith(
+    R.concat,
+    description,
+    presetObject
+  )
 }
 
 export const requireCollection = (collectionName:string): any => {
@@ -14,7 +19,7 @@ export const requireCollection = (collectionName:string): any => {
     : require(`${process.cwd()}/collections/${collectionName}/index.json`)
 }
 
-export const preloadCollection = (collection: any) => {
+export const preloadCollection = (collection: Omit<CollectionDescription, 'fields'>) => {
   if( collection.alias ) {
     const _aliasedCollection = requireCollection(collection.alias)
 
@@ -30,9 +35,12 @@ export const preloadCollection = (collection: any) => {
     Object.assign(collection, temp)
   }
 
-  collection.presets?.forEach((presetName: string) => {
-    applyPreset(collection, presetName)
-  })
+  if( collection.presets ) {
+    return collection.presets?.reduce((a: CollectionDescription, presetName: string) => {
+      return applyPreset(a, presetName)
+
+    }, collection as CollectionDescription)
+  }
   
   return collection
 }

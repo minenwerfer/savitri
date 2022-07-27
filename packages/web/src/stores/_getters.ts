@@ -133,6 +133,10 @@ export default {
     return condenseItem(this.item)
   },
 
+  $item<T=any>(this: Pick<CollectionState<T>, 'item'>) {
+    // retur
+  },
+
   /**
    * Normalizes state.items.
    */

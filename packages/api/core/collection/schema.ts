@@ -1,4 +1,7 @@
 import { Schema } from 'mongoose'
+import * as R from 'ramda'
+import * as TypeGuards from './typeguards'
+import type { CollectionDescription, MaybeCollectionDescription } from '../../../common'
 import { applyPreset } from './preload'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
@@ -16,7 +19,16 @@ const typeMapping: Array<[Array<string>, any]> = [
  * @exports @function
  * Converts a description object into a mongoose Schema structure.
  */
-export const descriptionToSchema = <T>({ strict, fields, ...props }: any, options = {}, extra: any = {}) => {
+export const descriptionToSchema = <T>(
+  description: MaybeCollectionDescription,
+  options = {},
+  extra: any = {}
+) => {
+  R.pipe(
+    TypeGuards.presets,
+    TypeGuards.fields
+  )(description)
+
   let hasRefs = false
 
   const convert = (a: any, [key, value]: [string, any]) => {
@@ -31,7 +43,7 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
       select: value.hidden !== true,
       unique: value.unique === true,
       default: value.default,
-      required: value.required || strict,
+      required: value.required || description.strict,
       autopopulate: (typeof collectionName === 'string' && !value.preventPopulate) || false,
     }
 
@@ -81,11 +93,14 @@ export const descriptionToSchema = <T>({ strict, fields, ...props }: any, option
     // }
   }
 
-  props.presets?.forEach((name: string) => {
-    applyPreset(fields, name, 'fields')
-  })
+  if( description.presets ) {
+    description.fields = description.presets?.reduce((a: CollectionDescription, presetName: string) => {
+      return applyPreset(a, presetName, 'fields')
 
-  const schemaStructure = Object.entries(fields||{})
+    }, description.fields as CollectionDescription)
+  }
+
+  const schemaStructure = Object.entries(description.fields||{})
     .filter(([, field]: [unknown, any]) => !field.meta)
     .reduce(convert, { ...extra, ...initial })
 

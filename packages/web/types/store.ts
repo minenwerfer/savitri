@@ -14,6 +14,7 @@ export type Pagination = {
 
 export type CollectionState<Item> = PiniaState & {
   item: Item|object
+  freshItem: Partial<Item>
   items: Array<Item>
   filters: Partial<Item>
 

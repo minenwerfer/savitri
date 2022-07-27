@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { CollectionDescription } from '../../../common/types'
+import { CollectionDescription, ARRAY_TYPES } from '../../../common/types'
 import useHttp from '../http'
 import useUtil from './_util'
 import useCollection from './_collection'
@@ -141,8 +141,25 @@ export default defineStore('meta', {
           getters
         } = useCollection()
 
+        const item: Record<string, any> = Object.entries(description.fields||{})
+          .filter(([, value]: [unknown, any]) => typeof value.collection === 'string' || value.type === 'object')
+          .reduce((a, [key, value]: [string, any]) => ({
+            ...a,
+            [key]:  value.array ? [] : {}
+          }), {})
+
+        Object.entries(description.fields||{})
+          .filter(([, value]: [unknown, any]) => [...ARRAY_TYPES, 'boolean'].includes(value.type))
+          .forEach(([key, value] : [string, any]) => {
+            item[key] = value.type !== 'radio'
+              ? (value.type === 'boolean' ? false : [])
+              : ''
+        })
+
         const store = defineStore(collectionName, {
           state: () => Object.assign(state(), {
+            item,
+            freshItem: item,
             description,
             rawDescription
           }),
@@ -162,19 +179,28 @@ export default defineStore('meta', {
 
     spawnPrompt(props: Omit<MetaState['prompt'], 'isVisible'>) {
       this.$patch({
-        prompt: props
+        prompt: {
+          ...props,
+          isVisible: true
+        }
       })
     },
 
     spawnModal(props: Omit<MetaState['modal'], 'isVisible'>) {
       this.$patch({
-        modal: props
+        modal: {
+          ...props,
+          isVisible: true
+        }
       })
     },
 
     spawnToast(props: Omit<MetaState['toast'], 'isVisible'>) {
       this.$patch({
-        toast: props
+        toast: {
+          ...props,
+          isVisible: true
+        }
       })
     }
   }

@@ -8,6 +8,7 @@
     <div v-if="isExpanded" class="flex flex-col gap-y-2">
       <sv-form
         v-bind="{
+          collection,
           form: store.fields,
           formData: edited,
           itemIndex,
@@ -31,7 +32,7 @@
         @input="lazySearch"
       ></sv-form>
       <sv-button
-        v-if="array"
+        v-if="expanded && array"
         icon="plus"
         @clicked="addItem"
       >
@@ -116,7 +117,6 @@ import {
 
 import { useStore, useParentStore } from '@savitri/web'
 import {
-  SvInput,
   SvButton,
   SvBareButton,
   SvIcon
@@ -128,6 +128,7 @@ const SvForm = defineAsyncComponent(() => import('../../molecules/sv-form/sv-for
 interface Props {
   modelValue: any
   propName: string
+  collection; string
   field: any
   itemIndex?: number
   indexes: any
@@ -145,7 +146,7 @@ const emit = defineEmits<{
 
 const searchOnly = inject<boolean>('searchOnly', props.searchOnly)
 
-const parentStore = useParentStore()
+const parentStore = useParentStore(props.collection)
 const store = useStore(props.field.collection)
 provide('iconReactive', true)
 

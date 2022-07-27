@@ -56,7 +56,6 @@ import { action } from '../../../../../../../common'
 import { SvPicture, SvIcon } from '../../../../..'
 import { results } from '../../stores/search'
 
-// const store = useStore()
 const router = useRouter()
 
 const resultsByModule = computed(() => {

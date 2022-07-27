@@ -145,7 +145,7 @@ const props = withDefaults(defineProps<Props>(), {
   headers: true
 })
 
-const store = useParentStore()
+const store = useParentStore(props.collection)
 
 const selected = computed({
   get: () => store.selected,

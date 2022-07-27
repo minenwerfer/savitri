@@ -97,6 +97,20 @@ export default {
     )
   },
 
+  async insert<T>(
+    this: {
+      item: CollectionState<T>['item']
+      customEffect: (...args: any[]) => Promise<any>
+      setItem: (item: T) => void
+    },
+    payload: { what?: Partial<T> }
+  ): Promise<T> {
+    return this.customEffect(
+      'insert', { ...payload, what: payload.what||this.item },
+      this.setItem
+    )
+  },
+
   filter<T>(
     this: {
       $filters: CollectionGetters['$filters']

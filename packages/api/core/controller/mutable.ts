@@ -1,14 +1,8 @@
 import * as R from 'ramda'
+import * as TypeGuards from '../collection/typeguards'
 import { Model, Query, FilterQuery, UpdateQuery } from '../database'
-import type {
-  CollectionDescription,
-  CollectionField,
-  CollectionFieldType,
-  CollectionPreset
+import type { CollectionDescription, MaybeCollectionDescription } from '../../../common/types'
 
-} from '../../../common/types'
-
-import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../common/types'
 import { fromEntries } from '../../../common/src/helpers'
 import type { MongoDocument } from '../../types'
 
@@ -28,14 +22,6 @@ export const { PAGINATION_LIMIT } = process.env
 export type SingleQuery<T> = Query<(T & { _id: any }), T & { _id: any }, {}, T>
 export type MultipleQuery<T> = Query<(T & { _id: any })[], T & { _id: any }, {}, T>
 
-const isValidPreset = (preset?: string): preset is CollectionPreset => {
-  return COLLECTION_PRESETS.includes(preset as CollectionPreset)
-}
-
-const isValidFieldType = (fieldType?: string): fieldType is CollectionFieldType => {
-  return COLLECTION_FIELD_TYPES.includes(fieldType as CollectionFieldType)
-}
-
 export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
   declare protected readonly description: CollectionDescription
   protected _queryPreset: {
@@ -52,22 +38,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
     description: unknown,
     readonly options:any = {}
   ) {
-    (description as CollectionDescription).presets?.forEach((preset: string) => {
-      if( !isValidPreset(preset) ) {
-        throw TypeError(
-          `invalid preset "${preset}" at "${(description as CollectionDescription).collection}"`
-        )
-      }
-    })
-
-    Object.values((description as CollectionDescription).fields).forEach((_field: unknown) => {
-      const field = _field as Pick<CollectionField, 'type' | 'collection'>
-      if( !isValidFieldType(field.type) && !field.collection ) {
-        throw TypeError(
-          `invalid field type "${field.type} at "${(description as CollectionDescription).collection}"`
-        )
-      }
-    })
+    R.pipe(
+      TypeGuards.presets,
+      TypeGuards.fields
+    )(description as MaybeCollectionDescription)
 
     super({ ...options, description })
 
@@ -80,7 +54,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
    * @method
    * Inserts a single document in the database.
    */
-  public async insert(props: { what: T & { _id?: string } }, response?: unknown, decodedToken?: any): Promise<any> {
+  public async insert(props: { what: T }, response?: unknown, decodedToken?: any): Promise<any> {
     const { _id } = props.what
     const what = prepareInsert(this.description, props.what)
 

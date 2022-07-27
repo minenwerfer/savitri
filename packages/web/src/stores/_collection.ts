@@ -13,6 +13,7 @@ export default () => {
 const state = <T=object>(): CollectionState<T> => {
   return {
     item: {},
+    freshItem: {},
     items: [],
 
     selected: [],

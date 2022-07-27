@@ -4,8 +4,8 @@
 
     <!-- box content -->
     <div
-      @click="$event.stopPropagation()"
       :class="`box__content ${isFloating && 'box__content--floating'}`"
+      @click="$event.stopPropagation()"
     >
       <!-- box head -->
       <div class="box__header" v-if="$slots.title || title">
@@ -42,7 +42,7 @@
       </div>
 
       <!-- box footer -->
-      <div class="box__footer" v-if="$slots.footer">
+      <div v-if="$slots.footer" class="box__footer">
         <slot name="footer"></slot>
       </div>
     </div>

@@ -23,6 +23,11 @@ export const COLLECTION_PRESETS = <const>[
   'view',
 ]
 
+export const ARRAY_TYPES = <const>[
+  'checkbox',
+  'radio'
+]
+
 export type CollectionFieldType = typeof COLLECTION_FIELD_TYPES[number]
 export type CollectionPreset = typeof COLLECTION_PRESETS[number]
 
@@ -30,7 +35,7 @@ export type CollectionField = Readonly<{
   label: string
   type?: CollectionFieldType
   collection?: string
-  mask: string
+  mask?: string
 
   expand?: boolean
   includeHours?: boolean
@@ -55,8 +60,10 @@ export type CollectionActions = Record<string, CollectionAction>
 
 export type CollectionDescription = {
   collection: string
+  alias?: string
 
   // modifiers
+  strict?: boolean // all fields are required
   alwaysAttribute?: boolean
   route?: boolean
 
@@ -72,9 +79,14 @@ export type CollectionDescription = {
 
   searchable?: {
     indexes: Array<string>
-    actions: Record<string, CollectionAction>
+    actions?: Record<string, CollectionAction>
   }
-
 
   fields: Record<string, CollectionField>
 }
+
+export type MaybeCollectionDescription = Omit<CollectionDescription, 'fields' | 'presets'> & {
+  presets?: Array<string>
+  fields?: Record<string, any>
+}
+
