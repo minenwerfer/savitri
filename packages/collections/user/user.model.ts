@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt'
 
-import { Document, model, options } from '../../api/core/database'
+import type { MongoDocument } from '../../api/types'
+import { model, options } from '../../api/core/database'
 import { descriptionToSchema } from '../../api/core/collection'
 import { default as Description } from './index.json'
 
@@ -16,7 +17,7 @@ export interface User {
   access?: AccessProfileDocument
 }
 
-export type UserDocument = User & Document & {
+export type UserDocument = User & MongoDocument & {
   testPassword: (password: string) => boolean
 }
 

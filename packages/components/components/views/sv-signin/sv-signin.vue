@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, provide } from 'vue'
+import { inject, provide } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@savitri/web'
 import { default as webpackVariables } from 'variables'
@@ -59,7 +59,6 @@ const authenticate = async () => {
   router.push({ name: 'dashboard-home' })
 }
 
-const user = computed(() => userStore.currentUser)
 const productName = inject('productName')
 const productLogo = inject('productLogo')
 const productVersion = inject('productVersion')

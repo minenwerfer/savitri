@@ -49,7 +49,11 @@ export class RequestProvider {
       get: (target: any, key: string) => {
         const method = target[key]
 
-        if( !['request', 'post', 'get'].includes(key) )  {
+        if( ![
+            'request',
+            'post',
+            'get'
+        ].includes(key) )  {
            return typeof method === 'function'
              ? (...args: any) => method.apply(target, args)
              : method

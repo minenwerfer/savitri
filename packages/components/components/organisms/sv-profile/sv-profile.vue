@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <sv-picture
-      :file="store.currentUser.picture"
+      :file="store.$currentUser.picture"
       class="profile__picture"
     >
       <template #fallback>
@@ -11,8 +11,8 @@
       </template>
     </sv-picture>
     <div class="flex flex-col gap-y-2 opacity-80 border-b text-center pb-4">
-      <strong class="text-xl">{{ store.currentUser.name }}</strong>
-      <div>Autenticado como: {{ store.currentUser.access?.name }}</div>
+      <strong class="text-xl">{{ store.$currentUser.name }}</strong>
+      <div>Autenticado como: {{ store.$currentUser.access?.name }}</div>
     </div>
 
     <div class="profile__menu">
@@ -42,7 +42,7 @@ const profileSidebarSlot = inject('profileSidebarSlot')
 
 const signout = async () => {
   emit('close')
-  await store.dispatch('user/signout')
+  await store.signout()
   router.push({ name: 'signin' })
 }
 

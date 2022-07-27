@@ -1,6 +1,11 @@
 <template>
   <teleport to="body">
-    <sv-box title="Relatório" :float="true" v-model:visible="visible" @close="onClose">
+    <sv-box
+      v-model:visible="visible" 
+      title="Relatório"
+      :float="true"
+      @close="onClose"
+    >
       <template #body>
         <sv-form
           v-if="!reportStore.item._id"
@@ -10,7 +15,7 @@
         ></sv-form>
 
         <p v-else>
-          Seu relatório foi gerado e retornou {{ item.entries_count }} registros.
+          Seu relatório foi gerado e retornou {{ reportStore.item.entries_count }} registros.
           Clique <a @click="download">aqui</a> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
         </p>
       </template>
@@ -23,9 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { provide, reactive, toRefs } from 'vue'
+import { provide, reactive } from 'vue'
 import { useStore, useParentStore } from '@savitri/web'
-import { SvBox, SvForm, SvButton } from '../../../..'
+import { SvBox, SvForm, SvButton } from '../../../../../..'
 
 interface Props {
   visible: boolean
@@ -40,7 +45,7 @@ const emit = defineEmits<{
 const store = useParentStore()
 const reportStore = useStore('report')
 
-provide('collection', 'report')
+provide('storeId', 'report')
 
 const requestReport = () => {
   return reportStore.insert({
@@ -48,18 +53,18 @@ const requestReport = () => {
       what: {
         ...reportStore.item,
         collection: props.collection,
-        filters: collectionRefs.filters
+        filters: store.filters
       }
     }
   })
 }
 
 const download = () => {
-  reportStore.download({ payload: { filters: reportRefs.item } })
+  reportStore.download({ payload: { filters: reportStore.item } })
 }
 
 const onClose = () => {
-  collectionRefs.setItem({})
+  store.clearItem()
   emit('update:visible', false)
 }
 </script>

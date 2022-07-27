@@ -1,5 +1,5 @@
 import { Module } from '../module'
-import { useFile } from '../../composables'
+// import { useFile } from '../../composables'
 
 const initialItemState = {
   limit: 150
@@ -13,7 +13,7 @@ export class ReportModule extends Module<{}, {}> {
   actions() {
     return {
       download: ({}, { payload }: any) => {
-        window.open(useFile(payload.filters.file).link)
+        // window.open(useFile(payload.filters.file).link)
       }
     }
   }

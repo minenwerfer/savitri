@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import type { CollectionState, CollectionStoreActions } from '../../types/store'
-import type { User } from '../../../collections/user/user.model'
+import type { CollectionState } from '../../types/store'
+import type { UserDocument } from '../../../collections/user/user.model'
 import useCollection from './_collection'
 import useMetaStore from './meta'
 
@@ -15,14 +15,14 @@ type Credentials = {
   password: string
 }
 
-type UserState = CollectionState<User> & {
+type UserState = CollectionState<UserDocument> & {
   credentials: Credentials|object
-  currentUser: User|object
+  currentUser: Partial<UserDocument>
 }
 
 export default defineStore('user', {
   state: (): UserState => ({
-    ...collectionState<User>(),
+    ...collectionState<UserDocument>(),
     currentUser: {},
     credentials: {
       email: '',
@@ -31,25 +31,46 @@ export default defineStore('user', {
   }),
   actions: {
     ...collectionActions,
-    authenticate(this: UserState & CollectionStoreActions, payload: Credentials) {
-      return this.customEffect(
-        'authenticate', payload,
-        async (result: User & { token: string }) => {
-          this.credentials = {}
-          this.currentUser = {
-            ...result
+    authenticate(payload: Credentials) {
+      try {
+        return this.customEffect(
+          'authenticate', payload,
+          async ({ result }: { result: UserDocument & { token: string }}) => {
+            this.credentials = {}
+            this.currentUser = {
+              ...result
+            }
+
+            sessionStorage.setItem('auth:token', result.token)
+            sessionStorage.setItem('auth:currentUser', JSON.stringify(result))
+
+            const metaStore = useMetaStore()
+            await metaStore.describeAll()
           }
+        )
+      } catch( err ) {
+        this.signout()
+        throw err
+      }
+    },
 
-          sessionStorage.setItem('auth:token', result.token)
-          sessionStorage.setItem('auth:currentUser', JSON.stringify(result))
-
-          const metaStore = useMetaStore()
-          await metaStore.describeAll()
-
-          // window.dispatchEvent(new CustomEvent('__storeCreated'))
-        }
-      )
+    signout() {
+      sessionStorage.clear()
+      this.$reset()
     }
   },
-  getters
+  getters: {
+    ...getters,
+    $currentUser(): UserState['currentUser'] {
+      if( !this.currentUser._id ) {
+        const currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
+
+        return currentUser
+      }
+
+      return !this.currentUser._id
+        ? JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
+        : this.currentUser
+    }
+  }
 })

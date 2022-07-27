@@ -28,6 +28,7 @@ const state = <T=object>(): CollectionState<T> => {
     },
 
     pagination: {
+      offset: 0,
       limit: 0,
       recordsCount: 0,
       recordsTotal: 0,

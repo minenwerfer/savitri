@@ -4,6 +4,14 @@ export type PiniaState = {
   readonly $id?: string
 }
 
+export type Pagination = {
+  limit: number
+  offset: number
+  recordsCount: number
+  recordsTotal: number
+  currentPage: number
+}
+
 export type CollectionState<Item> = PiniaState & {
   item: Item|object
   items: Array<Item>
@@ -20,36 +28,11 @@ export type CollectionState<Item> = PiniaState & {
     halt: boolean
   }
 
-  pagination: {
-    limit: number
-    recordsCount: number
-    recordsTotal: number
-    currentPage: number
-  }
+  pagination: Pagination
 }
 
-export type CollectionStoreActions = {
-  setItem<T=any>(
-    this: Pick<CollectionState<T>, 'item'>,
-    item: T
-  ): void
-
-  setItems<T=any>(
-    this: Pick<CollectionState<T>, 'items'>,
-    items: Array<T>
-  ): void
-
-  clearItem<T=any>(
-    this: Pick<CollectionState<T>, 'item'>
-  ): void
-
-  clearItems<T=any>(
-    this: Pick<CollectionState<T>, 'items'>
-  ): void
-
-  customEffect(
-    verb: string,
-    payload: any,
-    fn: (state: any, result: any) => any
-  ): any|void
+export type CollectionGetters = {
+  fields: CollectionDescription['fields']
+  $filters: CollectionState<unknown>['filters']
 }
+

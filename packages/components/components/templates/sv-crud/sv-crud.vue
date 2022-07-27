@@ -2,27 +2,27 @@
   <div class="crud">
     <div class="crud__panel">
       <div class="crud__panel-control">
-        <sv-filter-widget :key="store1.$id"></sv-filter-widget>
+        <sv-filter-widget :key="store.$id"></sv-filter-widget>
         <sv-button
-          v-if="store1.description.report"
+          v-if="store.description.report"
           v-bind="{
             icon: 'export',
             type: 'neutral',
             variant: 'light'
           }"
-          @clicked="store.dispatch('meta/spawnReport')"
+          @clicked="metaStore.report.isVisible = true"
         >
           Exportar
         </sv-button>
       </div>
-      <div class="crud__panel-control" v-if="store1.actions || $slots.actions" :key="collection">
+      <div class="crud__panel-control" v-if="store.actions || $slots.actions" :key="collection">
         <sv-button
-          v-for="([action, actionProps], index) in Object.entries(store1.actions||{})"
+          v-for="([action, actionProps], index) in Object.entries(store.actions||{})"
           :key="`action-${index}`"
           v-bind="{
             type: 'neutral',
             icon: actionProps.unicon,
-            disabled: store1.isLoading || store1.selectedIds.length === 0 && actionProps.selection
+            disabled: store.isLoading || store.selectedIds.length === 0 && actionProps.selection
           }"
           @clicked="callAction()(action, props, { _id: selectedIds })"
         >
@@ -41,18 +41,18 @@
       >
         <template #body>
           <sv-form
-            :key="`${store1.item?._id}-form`"
-            :form="store1.fields"
-            :form-data="store1.item"
+            :key="`${store.item?._id}-form`"
+            :form="store.fields"
+            :form-data="store.item"
 
             :is-readonly="isInsertReadonly"
-            :flex="store1.description.flex"
+            :flex="store.description.flex"
             @add="$e.preventDefault()"
           ></sv-form>
         </template>
         <template #footer v-if="!isInsertReadonly">
           <sv-button
-            :disabled="store1.isLoading"
+            :disabled="store.isLoading"
             @clicked="store.dispatch(`${collection}/deepInsert`, { what: item, __crudClose: true })"
           >
             Salvar
@@ -61,11 +61,11 @@
       </sv-box>
     </teleport>
 
-    <sv-report v-model:visible="isReportVisible"></sv-report>
+    <sv-report v-model:visible="metaStore.report.isVisible"></sv-report>
 
     <sv-box>
       <div class="crud__table-panel">
-        <sv-pagination :collection="collection"></sv-pagination>
+        <sv-pagination></sv-pagination>
         <sv-records-summary
           v-bind="{
             recordsCount,
@@ -79,27 +79,27 @@
 
     <sv-box :fill="true" :transparent="true" classes="overflow-y-visible">
       <sv-table
-        :key="store1.$id"
-        v-if="store1.tableDescription"
+        v-if="store.tableDescription"
+        :key="store.$id"
         :checkbox="hasSelectionActions"
         :columns="{
-          ...store1.tableDescription,
-          ...(store1.individualActions.length > 0
+          ...store.tableDescription,
+          ...(store.individualActions.length > 0
             ? {
               __custom: {
                 label: 'Ações',
-                actions: store1.individualActions
+                actions: store.individualActions
               }
             } : {}
           )
         }"
 
-        :rows="store1.$items"
+        :rows="store.$items"
         :recordsCount="recordsCount"
         :recordsTotal="recordsTotal"
       ></sv-table>
       <div
-        v-if="store1.itemsCount === 0 && !store1.isLoading"
+        v-if="store.itemsCount === 0 && !store.isLoading"
         class="grid place-items-center py-4"
       >
         <div class="opacity-80">
@@ -123,7 +123,7 @@ import {
 } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useModule } from '../../../../web'
+import { useStore } from '@savitri/web'
 import { action } from '../../../../common'
 import {
   SvBox,
@@ -140,16 +140,14 @@ import SvReport from './_internals/components/sv-report/sv-report.vue'
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 
-import { useStore as useStore1 } from '../../../../web'
-
 interface Props {
   collection: string
 }
 
 const props = defineProps<Props>()
 
-const store1 = useStore1(props.collection||'order')
-const metaStore = useStore1('meta')
+const store = useStore(props.collection)
+const metaStore = useStore('meta')
 
 const router = useRouter()
 const { hash } = useRoute()
@@ -157,19 +155,14 @@ const collectionRefs = reactive({})
 
 provide('storeId', computed(() => props.collection))
 
-const isReportVisible = computed({
-  get: () => metaStore.report.isVisible,
-  set: (value: boolean) => store.dispatch(`meta/${value ? 'spawn' : 'close'}Report`)
-})
-
 const hasSelectionActions = computed(() => {
   return Object.values(collectionRefs.actions||{})
     .some((action: any) => !!action.selection)
 })
 
 onMounted(() => {
-  if( store1.itemsCount === 0 ) {
-    store1.getAll()
+  if( store.itemsCount === 0 ) {
+    store.getAll()
   }
 
 })
@@ -181,9 +174,9 @@ onUnmounted(() => {
     return
   }
 
-  const getFilters = () => store1.filters
+  const getFilters = () => store.filters
   const oldFilters = getFilters()
-  store1.clearFilters()
+  store.clearFilters()
 
   if( Object.keys(oldFilters).length > 0 ) {
     const filters = getFilters()
@@ -191,17 +184,17 @@ onUnmounted(() => {
       .some(([key, value]: [string, any]) => filters[key] !== value)
 
     if( changed ) {
-      store1.clearItems()
+      store.clearItems()
     }
   }
 })
 
 // watch(() => [props.collection, hash], async ([collectionName]: [string]) => {
-  // if( store1.itemsCount === 0 ) {
+  // if( store.itemsCount === 0 ) {
     // const filters = collectionRefs.description._filters
 
     // new!
-    // store1.getAll()
+    // store.getAll()
 
 //    store.dispatch(`${collectionName}/getAll`, {
 //      filters: {
@@ -218,14 +211,14 @@ onUnmounted(() => {
 watch(() => metaStore.crud.isInsertVisible, (value: boolean) => {
   if( value === false ) {
     // store.dispatch(`${props.collection}/clear`)
-    store1.clear()
+    store.clear()
   }
 })
 
 const callAction = () => action(props.collection, store, router)
 
 const individualActions = computed(() => {
-  return store1.individualActions
+  return store.individualActions
     .map((action: any) => ({
       click: (filters: any) => callAction()(action.action, action, filters),
       ...action

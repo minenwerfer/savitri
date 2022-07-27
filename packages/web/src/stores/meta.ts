@@ -41,9 +41,11 @@ type MetaState = {
   prompt: {
     isVisible: boolean
     title: string
-    body: string
+    body?: string
     actions: Array<{
+      name: string
       title: string
+      type?: string
     }>
   }
   sidebar: {
@@ -156,6 +158,24 @@ export default defineStore('meta', {
     swapMenu() {
       this.menu.isVisible = !this.menu.isVisible
       localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
+    },
+
+    spawnPrompt(props: Omit<MetaState['prompt'], 'isVisible'>) {
+      this.$patch({
+        prompt: props
+      })
+    },
+
+    spawnModal(props: Omit<MetaState['modal'], 'isVisible'>) {
+      this.$patch({
+        modal: props
+      })
+    },
+
+    spawnToast(props: Omit<MetaState['toast'], 'isVisible'>) {
+      this.$patch({
+        toast: props
+      })
     }
   }
 })

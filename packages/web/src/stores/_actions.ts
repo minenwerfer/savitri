@@ -1,7 +1,16 @@
 import * as Collection from '../../../common/src/collection'
+import { fromEntries } from '../../../common'
 import type { CollectionDescription, CollectionField } from '../../../common/types'
-import type { CollectionState, CollectionStoreActions } from '../../types/store'
+import type {
+  CollectionState,
+  CollectionGetters,
+  PiniaState,
+  Pagination
+
+} from '../../types/store'
+
 import useHttp from '../http'
+import useMetaStore from './meta'
 
 type CollectionStateItem<T> =
   Pick<CollectionState<T>, 'item'>
@@ -50,34 +59,99 @@ const mutations = {
 
 export default {
   ...mutations,
-  async custom(this: any, verb: string, payload: any): Promise<any> {
-    return (await http.post(`${this.$id}/${verb}`, payload)).data?.result
+  async custom<T extends PiniaState>(this: CollectionState<T>, verb: string, payload: any): Promise<any> {
+    return (await http.post(`${this.$id}/${verb}`, payload)).data
   },
 
   async customEffect(
+    this: { custom: (...args: any[]) => Promise<any> },
     verb: string,
-    payload: string,
-    fn: (result: any) => any
+    payload: any,
+    fn: (data: any) => any
   ): Promise<any> {
     return fn(await this.custom(verb, payload))
   },
 
-  async get<T>(this: CollectionStoreActions, payload: ActionFilter): Promise<T> {
+  async get<T>(payload: ActionFilter): Promise<T> {
     return this.customEffect(
       'get', payload,
       this.setItem
     )
   },
 
-  async getAll<T>(this: CollectionStoreActions, payload: ActionFilter): Promise<Array<T>> {
+  async getAll<T>(
+    this: {
+      $patch: (...args: any[]) => void
+      customEffect: (...args: any[]) => Promise<any>
+    },
+    payload: ActionFilter
+  ): Promise<Array<T>> {
     return this.customEffect(
       'getAll', payload,
-      this.setItems
+      ({ result, pagination }: { result: Array<T>, pagination: Pagination }) => {
+        this.$patch({
+          items: result,
+          pagination
+        })
+      }
     )
   },
 
-  clearFilters<T>(this: Pick<CollectionState<T>, 'filters'>) {
+  filter<T>(
+    this: {
+      $filters: CollectionGetters['$filters']
+      pagination: CollectionState<T>['pagination']
+      getAll: (...args: any[]) => Promise<Array<T>>
+    }
+  ) {
+    return this.getAll({
+      filters: this.$filters,
+      limit: this.pagination.limit
+    })
+  },
+
+  clearFilters<T>(
+    this: Pick<CollectionState<T>, 'filters'> & {
+      filter: (...args: any[]) => Promise<Array<T>>
+    }
+  ) {
     this.filters = {}
+    this.filter()
+  },
+
+  async ask(props: {
+    action: (params: any) => unknown, params: any
+    title?: string
+    body?: string
+  }) {
+    const metaStore = useMetaStore()
+    metaStore.spawnPrompt({
+      title: props.title || 'Diálogo de confirmação',
+      body: props.body,
+      actions: [
+        { name: 'cancel', title: 'Cancelar' },
+        { name: 'confirm', title: 'Confirmar', type: 'critical' },
+      ]
+    })
+
+    const { action, params } = props
+    return action(params)
+  },
+
+  useFields(
+    this: Pick<CollectionGetters, 'fields'>,
+    fields: Array<string>,
+  ): Record<string, CollectionField> {
+    return fromEntries(Object.entries(this.fields)
+      .filter(([key]: [string, unknown]) => fields.includes(key)))
+  },
+
+  useFieldsExcept(
+    this: Pick<CollectionGetters, 'fields'>,
+    fields: Array<string>
+  ): Record<string, CollectionField> {
+    return fromEntries(Object.entries(this.fields)
+      .filter(([key]: [string, unknown]) => !fields.includes(key)))
   },
 
   formatValue<T>(

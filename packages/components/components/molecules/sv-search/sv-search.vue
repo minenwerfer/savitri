@@ -7,10 +7,12 @@
     <header class="search__header">{{ collectionName }}</header>
     <div v-if="isExpanded" class="flex flex-col gap-y-2">
       <sv-form
-        :form="store.fields"
-        :form-data="edited"
-        :item-index="itemIndex"
-        :field-index="fieldIndex"
+        v-bind="{
+          form: store.fields,
+          formData: edited,
+          itemIndex,
+          fieldIndex
+        }"
       ></sv-form>
       <div class="flex gap-x-1" v-if="!expand">
         <sv-button @clicked="insert">Salvar</sv-button>
@@ -19,28 +21,22 @@
     </div>
 
     <div v-else class="flex flex-wrap gap-2">
-      <div
-        v-for="([indexName, searchField], index) in indexes.map((i) => [i, field.fields[i]])"
-        :key="`searchField-${index}`"
-        class="flex flex-grow items-end gap-x-2"
+      <!-- field.purge deprecated ? -->
+      <sv-form
+        v-bind="{
+          form: store.useFields(indexes),
+          formData: inputValue,
+          collection: field.collection
+        }"
+        @input="lazySearch"
+      ></sv-form>
+      <sv-button
+        v-if="array"
+        icon="plus"
+        @clicked="addItem"
       >
-        <sv-input
-          @input="lazySearch(indexName, inputValue[indexName])"
-          v-model="inputValue[indexName]"
-          v-if="!field.purge"
-
-          class="flex-grow"
-        >
-            {{ searchField.label }}
-        </sv-input>
-        <sv-button
-          v-if="array"
-          icon="plus"
-          @clicked="addItem"
-        >
-          Novo
-        </sv-button>
-      </div>
+        Novo
+      </sv-button>
     </div>
 
     <div v-if="!isExpanded || array" :key="inputValue">
@@ -301,7 +297,11 @@ declare global {
   }
 }
 
-const lazySearch = (searchField: string, value: string) => {
+const test = (...args: any[]) => {
+  console.log(args)
+}
+
+const lazySearch = () => {
   isTyping.value = true
   window.clearTimeout(window.__lazySearchTimeout)
   window.__lazySearchTimeout = setTimeout(() => {

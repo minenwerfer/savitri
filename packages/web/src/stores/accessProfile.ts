@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import type { Router } from 'vue-router'
-import type { CollectionState, CollectionStoreActions } from '../../types/store'
 import useCollection from './_collection'
 
 declare namespace window {
@@ -17,11 +16,11 @@ export default defineStore('accessProfile', {
   state,
   actions: {
     ...actions,
-    spawnAdd<T=any>(this: CollectionState<T> & CollectionStoreActions) {
+    spawnAdd() {
       this.clearItem()
       window._router.push({ name: 'dashboard-access-edit' })
     },
-    spawnEdit<T=any>(this: CollectionState<T> & CollectionStoreActions) {
+    spawnEdit() {
       window._router.push({ name: 'dashboard-access-edit' })
     }
   },

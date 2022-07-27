@@ -1,7 +1,7 @@
 <template>
   <img
     v-if="file"
-    :src="useFile(file).link"
+    :src="fileLink(file)"
     class="picture"
   />
 
@@ -10,13 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { useFile } from '../../../../web'
-
 interface Props {
   file: any
 }
 
 const props = defineProps<Props>()
+const fileLink = (file: any) =>
+  file.link||file
 </script>
 
 <style scoped src="./sv-picture.scss"></style>

@@ -10,6 +10,8 @@
           --field-span: ${field.formSpan || 6};
           grid-column: span var(--field-span) / span var(--field-span);
         `"
+
+        @input="$emit('input', key)"
       >
         <!-- text -->
         <sv-input
@@ -91,21 +93,20 @@
 
     <div class="form__search-grid" v-if="!isReadonly && collectionFields.length > 0">
       <sv-search
-        v-for="([childModule, field], index) in collectionFields"
+        v-for="([childCollection, field], index) in collectionFields"
         :key="`collectionfield-${index}`"
 
-        v-model="formData[childModule]"
+        v-model="formData[childCollection]"
         v-bind="{
           field,
-          indexes: store.getIndexes(childModule),
-          propName: childModule,
+          indexes: store.getIndexes({ key: childCollection }),
+          propName: childCollection,
           itemIndex: itemIndex != -1 ? itemIndex: 0,
           activeOnly: 'active' in field.fields
         }"
 
         @changed="$emit('change')"
-        >
-      </sv-search>
+      ></sv-search>
     </div>
 
     <div v-if="isReadonly" :class="`grid grid-cols-6 gap-4 w-full`">
@@ -169,14 +170,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'update:formData', value: any): void
+  (e: 'input', value: string): void
+  (e: 'change', value: string): void
 }>()
 
 const store = reactive({})
-const collection = ref<string>(inject('storeId', props.collection))
+const collection = ref<string>(props.collection || inject('storeId'))
 
 watch(
   () => collection,
-  (collectionName: string) => Object.assign(store, useParentStore(collectionName)),
+  (collectionName: string) => Object.assign(store, useStore(collectionName.value)),
   { immediate: true }
 )
 
@@ -204,7 +207,7 @@ const has = (field: string) => {
 }
 
 const fields = filterFields(([key, f]: [string, any]) => {
-  return (!(typeof f.collection === 'string' && (!f.readonly || props.searchOnly)) || f.collection === 'file')
+  return (!(typeof f.collection === 'string' && (!f.readOnly || props.searchOnly)) || f.collection === 'file')
     && !f.meta
     && has(key)
 })

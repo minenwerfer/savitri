@@ -29,12 +29,6 @@ import { SvSelect } from '../../'
 
 const SvBareButton = defineAsyncComponent(() => import('../..//atoms/sv-bare-button/sv-bare-button.vue'))
 
-interface Props {
-  module: string
-}
-
-const props = defineProps<Props>()
-
 const page = ref<number>(1)
 const limit = ref<number>(35)
 

@@ -21,10 +21,12 @@ export const appendPagination = async (
       : +(process.env.PAGINATION_LIMIT || 35)
 
     Object.assign(response, {
-      recordsCount: result.length,
-      recordsTotal,
-      offset: request.payload?.offset || 0,
-      limit
+      pagination: {
+        recordsCount: result.length,
+        recordsTotal,
+        offset: request.payload?.offset || 0,
+        limit
+      }
     })
   }
 
