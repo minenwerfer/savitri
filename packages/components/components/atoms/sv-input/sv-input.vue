@@ -22,6 +22,8 @@
         :value="inputValue || value"
         :placeholder="placeholder"
         :readonly="readonly"
+        :min="min"
+        :max="max"
 
         @input="onInput"
         @change="onChange"
@@ -78,6 +80,8 @@ interface Props {
   icon?: string
   variant?: string
   readonly?: boolean
+  min?: number
+  max?: number
 }
 
 const props = defineProps<Props>()
