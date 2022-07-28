@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { useStore } from './stores'
+import { useStore } from './store'
 
 /**
  * @exports

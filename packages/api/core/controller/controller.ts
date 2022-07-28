@@ -1,9 +1,8 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../common/types'
-import { AuthorizationError } from '../exceptions'
+import { AuthorizationError, PermissionError } from '../exceptions'
 import { Model } from '../database'
 import { TokenService } from '../services'
-import assert from 'assert'
 
 export type HandlerRequest = {
   payload: {
@@ -17,6 +16,7 @@ export type HandlerRequest = {
 export abstract class Controller<T> {
   private _webInterface: Controller<T>
   protected _description?: Partial<CollectionDescription>
+  protected _controllerName?: string
 
   protected _model: Model<T>
 
@@ -42,42 +42,41 @@ export abstract class Controller<T> {
   constructor(
     readonly props: {
       description?: Partial<CollectionDescription>,
+      controller?: string
       forbiddenMethods?: Array<string>,
       publicMethods?: Array<string>,
       rawMethods?: Record<string, string>
     }
   ) {
     this._description = props?.description || {}
+    this._controllerName = this._description.collection || props.controller
     this._publicMethods = props?.publicMethods || this._publicMethods
     this._forbiddenMethods = props?.forbiddenMethods || []
     this._rawMethods = props?.rawMethods || {}
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
-        assert(
-          !this._internal.includes(key),
-          'forbidden method (cannot be called externally)'
-        )
+        if( this._internal.includes(key) ) {
+          throw new PermissionError('forbidden method (cannot be called externally)')
+        }
 
-        assert(
-          !this._forbiddenMethods.includes(key),
-          'forbidden method (explicitly forbidden)'
-        )
+        if( this._forbiddenMethods.includes(key) ) {
+          throw new PermissionError('forbidden method(explicitly forbidden)')
+        }
 
         const method = (target as Record<string, any>)[key]
         const alwaysAttribute = this._description?.alwaysAttribute
 
         return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
-          const { collection: collectionName } = target._description || {}
+          const controllerName = target._description?.collection || target._controllerName
 
-          assert(
-            collectionName,
-            'collection is undefined'
-          )
+          if( !controllerName ) {
+            throw new Error('controller is undefined')
+          }
 
-          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[collectionName]?.includes(key) )) {
+          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[controllerName]?.includes(key) )) {
             if( decodedToken?.access ) {
-              throw new Error('forbidden method (access denied)')
+              throw new PermissionError('forbidden method (access denied)')
             }
 
             throw new AuthorizationError('signed out')

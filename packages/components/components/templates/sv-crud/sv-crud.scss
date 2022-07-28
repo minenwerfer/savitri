@@ -13,6 +13,7 @@ $default-gap: .6rem;
   &__panel-control {
     display: flex;
     justify-content: flex-end;
+    align-items: flex-start;
     flex-wrap: wrap;
     column-gap: $default-gap;
   }

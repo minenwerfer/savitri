@@ -9,9 +9,7 @@ const MAX_ENTRIES = 32
 export class ReleaseController extends Controller<unknown> {
   constructor() {
     super({
-      description: {
-        collection: 'release'
-      },
+      controller: 'release',
       publicMethods: [
         'getAll'
       ]

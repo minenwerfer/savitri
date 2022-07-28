@@ -16,7 +16,7 @@ import { routerInstance as createRouter } from './router'
 // import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
 
-import { useStore } from './stores'
+import { useStore } from './store'
 
 type Plugin = {
   routerExtension?: RouterExtension

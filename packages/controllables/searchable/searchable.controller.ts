@@ -5,10 +5,8 @@ import { getSearchables, buildAggregations } from './searchable.helper'
 export class SearchableController extends Controller<unknown> {
   constructor() {
     super({
+      controller: 'searchable',
       publicMethods: ['search'],
-      description: {
-        collection: 'searchables'
-      }
     })
   }
 

@@ -95,7 +95,7 @@ const grantEverything = () => {
 }
 
 const insert = async () => {
-  await store.dispatch('accessProfile/insert', { payload: { what: item.value } })
+  await store.dispatch('accessProfile/insert', { payload: { what: store.item.value } })
   router.back()
 }
 </script>

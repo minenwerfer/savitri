@@ -4,7 +4,7 @@ import useHttp from '../http'
 import useUtil from './_util'
 import useCollection from './_collection'
 
-import { useStore, hasStore, registerStore } from './'
+import { useStore, hasStore, registerStore } from '../store'
 
 type CollectionName = string
 

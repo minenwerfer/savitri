@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import { SvTabbed } from '../..'
 import { default as SvItem } from './_internals/components/sv-item/sv-item.vue'
 

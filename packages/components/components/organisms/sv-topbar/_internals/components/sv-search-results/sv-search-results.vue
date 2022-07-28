@@ -82,7 +82,7 @@ const getActions = (collectionName: string) => {
 
 const callAction = async (collectionName: string, actionName: string, props: any, filters: any) => {
   results.items = []
-  action(collectionName, store, router)(actionName, props, filters)
+  // action(collectionName, store, router)(actionName, props, filters)
 }
 </script>
 

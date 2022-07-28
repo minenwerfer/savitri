@@ -182,7 +182,7 @@ const selected = computed(() => {
     : (Object.keys(options||{}).length > 0 ? [options] : [])
 
   return selected
-    .filter(({ _id }) => !!_id)
+    .filter((option: { _id: string }) => !!option?._id)
 })
 
 const fieldIndex = ref(0)

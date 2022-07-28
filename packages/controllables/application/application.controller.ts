@@ -10,6 +10,7 @@ const buildConfig = require(path.join(process.cwd(), 'build.json'))
 export class ApplicationController extends Controller<unknown> {
   constructor() {
     super({
+      controller: 'application',
       publicMethods: [
         'manifest',
         'serviceWorker',
@@ -20,9 +21,6 @@ export class ApplicationController extends Controller<unknown> {
         'serviceWorker': 'text/javascript',
         'index': 'text/html'
       },
-      description: {
-        collection: 'application'
-      }
     })
   }
 

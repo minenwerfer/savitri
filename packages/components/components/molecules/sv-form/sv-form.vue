@@ -192,7 +192,7 @@ const collection = ref<string>(props.collection || inject('storeId'))
 
 watch(
   () => collection,
-  (collectionName: string) => Object.assign(store, useStore(collectionName.value)),
+  (collectionName) => Object.assign(store, useStore(collectionName.value)),
   { immediate: true }
 )
 
