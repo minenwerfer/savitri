@@ -80,8 +80,8 @@ interface Props {
   icon?: string
   variant?: string
   readonly?: boolean
-  min?: number | undefined
-  max?: number | undefined
+  min?: number
+  max?: number
 }
 
 const props = defineProps<Props>()
