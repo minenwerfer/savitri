@@ -7,7 +7,7 @@ const { readFile } = require('fs').promises
 
 const buildConfig = require(path.join(process.cwd(), 'build.json'))
 
-export class ApplicationController extends Controller<unknown> {
+export class ApplicationController extends Controller {
   constructor() {
     super({
       controller: 'application',

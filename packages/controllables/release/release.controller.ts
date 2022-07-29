@@ -6,7 +6,7 @@ const { readFile } = require('fs').promises
 
 const MAX_ENTRIES = 32
 
-export class ReleaseController extends Controller<unknown> {
+export class ReleaseController extends Controller {
   constructor() {
     super({
       controller: 'release',

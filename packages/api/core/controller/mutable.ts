@@ -22,19 +22,20 @@ export const { PAGINATION_LIMIT } = process.env
 export type SingleQuery<T> = Query<(T & { _id: any }), T & { _id: any }, {}, T>
 export type MultipleQuery<T> = Query<(T & { _id: any })[], T & { _id: any }, {}, T>
 
-export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
+export abstract class Mutable<T extends MongoDocument> extends Controller {
   declare protected readonly description: CollectionDescription
   protected _queryPreset: {
     filters: any
     sort: any
   }
 
+
   /**
    * @constructor
    * @param {Model<T>} model - a singleton instance of Model<T>
    */
   constructor(
-    model: Model<T>,
+    public readonly model: Model<T>,
     description: unknown,
     readonly options:any = {}
   ) {
@@ -46,7 +47,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
     super({ ...options, description })
 
     this.description = description as CollectionDescription
-    this._model = model
     this._queryPreset = options.queryPreset || {}
   }
 
@@ -59,11 +59,11 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
     const what = prepareInsert(this.description, props.what)
 
     if( typeof _id !== 'string' ) {
-      const newDoc = await this._model.create(what)
-      return this._model.findOne({ _id: newDoc._id })
+      const newDoc = await this.model.create(what)
+      return this.model.findOne({ _id: newDoc._id })
     }
 
-    return this._model.findOneAndUpdate(
+    return this.model.findOneAndUpdate(
       { _id } as FilterQuery<T>,
       what as UpdateQuery<T>,
       { new: true, runValidators: true }
@@ -72,7 +72,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
 
   public count(props?: { filters?: object }) {
     const filters = props?.filters || {}
-    return this._model.countDocuments({ ...filters, ...this._queryPreset.filters||{} })
+    return this.model.countDocuments({ ...filters, ...this._queryPreset.filters||{} })
   }
 
   /**
@@ -85,7 +85,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
       (item: T|null) => item && fill(this.description, item)
     )
 
-    return pipe(await this._model.findOne(props?.filters))
+    return pipe(await this.model.findOne(props?.filters))
   }
 
   /**
@@ -119,7 +119,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
 
     props.filters = fromEntries(entries) || {}
 
-    return this._model.find({ ...props.filters, ...this._queryPreset.filters||{} })
+    return this.model.find({ ...props.filters, ...this._queryPreset.filters||{} })
       .sort({ ...(props.sort || defaultSort), ...this._queryPreset.sort||{} })
       .skip(props.offset || 0)
       .limit(props.limit)
@@ -156,7 +156,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
     if( !props.filters ) {
       throw new Error('no criteria specified')
     }
-    return this._model.findOneAndDelete(props.filters, { strict: 'throw' })
+    return this.model.findOneAndDelete(props.filters, { strict: 'throw' })
   }
 
   /**
@@ -174,7 +174,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
       ...rest
     }
 
-    return this._model.deleteMany(filters as FilterQuery<T>, { strict: 'throw' })
+    return this.model.deleteMany(filters as FilterQuery<T>, { strict: 'throw' })
   }
 
   /**
@@ -183,7 +183,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
  */
   public modify(props: { filters: any, what: any }): any | Promise<any> {
     const what = prepareInsert(this.description, props.what)
-    return this._model.findOneAndUpdate(props.filters as FilterQuery<T>, what, { new: true, runValidators: true })
+    return this.model.findOneAndUpdate(props.filters as FilterQuery<T>, what, { new: true, runValidators: true })
   }
 
   /**
@@ -192,6 +192,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller<T> {
    */
   public modifyAll(props: { filters: Array<any>, what: any }) {
     const what = prepareInsert(this.description, props.what)
-    return this._model.updateMany(props.filters as FilterQuery<T>, what)
+    return this.model.updateMany(props.filters as FilterQuery<T>, what)
   }
 }

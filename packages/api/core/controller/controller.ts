@@ -1,7 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../common/types'
 import { AuthorizationError, PermissionError } from '../exceptions'
-import { Model } from '../database'
 import { TokenService } from '../services'
 
 export type HandlerRequest = {
@@ -13,12 +12,10 @@ export type HandlerRequest = {
   }
 }
 
-export abstract class Controller<T> {
-  private _webInterface: Controller<T>
+export abstract class Controller {
+  private _webInterface: Controller
   protected _description?: Partial<CollectionDescription>
   protected _controllerName?: string
-
-  protected _model: Model<T>
 
   /**
    * @protected @readonly
@@ -74,7 +71,10 @@ export abstract class Controller<T> {
             throw new Error('controller is undefined')
           }
 
-          if( !target._publicMethods?.includes(key) && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[controllerName]?.includes(key) )) {
+          if(
+            !target._publicMethods?.includes(key)
+            && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[controllerName]?.includes(key) )
+          ) {
             if( decodedToken?.access ) {
               throw new PermissionError('forbidden method (access denied)')
             }
@@ -86,7 +86,10 @@ export abstract class Controller<T> {
             ? { filters: {} }
             : req.payload
 
-          if( typeof req.payload?.limit === 'number' && (req.payload.limit > 150 || req.payload.limit <= 0) ) {
+          if(
+            typeof req.payload?.limit === 'number'
+            && (req.payload.limit > 150 || req.payload.limit <= 0)
+          ) {
             req.payload.limit = 150
           }
 
@@ -95,7 +98,7 @@ export abstract class Controller<T> {
             if( payload.filters ) payload.filters.user_id = decodedToken._id
           }
 
-          (req as { -readonly [P in keyof Request]: Request[P] }).payload = payload
+          (req as { payload: Request['payload'] }).payload = payload
 
           const result = method.call(target, payload, res, decodedToken)
           return result
@@ -109,7 +112,7 @@ export abstract class Controller<T> {
     return this._rawMethods[verb]
   }
 
-  get webInterface(): Controller<T> {
+  get webInterface(): Controller {
     return this._webInterface
   }
 

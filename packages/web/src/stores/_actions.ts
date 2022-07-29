@@ -170,7 +170,13 @@ export default {
 
   formatValue<T>(
     this: Pick<CollectionState<T>, 'rawDescription'>,
-    args: { value: string|object, key: string, form: boolean, field: CollectionField }): string
+    args: {
+      value: string|object,
+      key: string,
+      form: boolean,
+      field: CollectionField
+    }
+  ): string
     {
       return Collection.formatValue(
         this.rawDescription as Pick<CollectionDescription, 'fields'>,

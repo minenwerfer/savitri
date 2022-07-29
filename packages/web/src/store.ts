@@ -43,7 +43,6 @@ export const registerStore = async <
 >(fn: F | A): Promise<void> => {
   if( fn instanceof Promise ) {
     return fn.then((store) => {
-      console.log(store.default.$id)
       registerStore(store.default)
     })
   }

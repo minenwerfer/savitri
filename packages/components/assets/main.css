@@ -30,14 +30,6 @@ input, select {
   width: 100% !important;
 }
 
-/* .px-auto { */
-/*   @apply px-2 md:px-6; */
-/* } */
-
-/* .py-auto { */
-/*   @apply py-2 md:py-4; */
-/* } */
-
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
