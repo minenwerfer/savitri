@@ -94,7 +94,7 @@ export class UserController extends Mutable<UserDocument> {
       }
     }
 
-    const user = await this._model.findOne({ email: props.email }).select('+password')
+    const user = await this.model.findOne({ email: props.email }).select('+password')
     if( !user || !await user.testPassword(props.password)  ) {
       throw new Error('invalid username or password')
     }

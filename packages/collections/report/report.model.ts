@@ -1,12 +1,13 @@
-import { Document, model, options } from '../../api/core/database'
+import type { MongoDocument } from '../../api/types'
+import { model, options } from '../../api/core/database'
 import { descriptionToSchema } from '../../api/core/collection'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
-export interface ReportDocument extends Document {
-  user_id: UserDocument | string
+export type ReportDocument = MongoDocument & {
+  user_id: UserDocument | MongoDocument['_id']
   _collection: string
   format: string
   type: string

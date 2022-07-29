@@ -8,7 +8,7 @@ import { default as Description } from './index.json'
 import { AccessProfileDocument } from '../accessProfile/accessProfile.model'
 import '../accessProfile/accessProfile.model'
 
-export interface User {
+export type User = {
   name: string
   first_name: string
   email: string

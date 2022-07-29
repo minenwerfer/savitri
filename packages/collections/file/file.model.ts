@@ -1,11 +1,12 @@
-import { Document, model, options } from '../../api/core/database'
+import type { MongoDocument } from '../../api/types'
+import { model, options } from '../../api/core/database'
 import { descriptionToSchema } from '../../api/core/collection'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
-export interface FileDocument extends Document {
+export type FileDocument = MongoDocument & {
   user_id: UserDocument
   filename: string
   mime: string
