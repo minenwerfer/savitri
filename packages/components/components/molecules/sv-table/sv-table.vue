@@ -29,7 +29,7 @@
       v-for="(row, rindex) in rows"
       :key="`row-${rindex}`"
       :class="`table__row table__row--body`"
-      @click="collectionRefs.setItem(row)"
+      @click="store.setItem(row)"
     >
       <td v-if="collection && checkbox">
         <input

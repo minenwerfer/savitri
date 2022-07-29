@@ -66,14 +66,7 @@
     <sv-box>
       <div class="crud__table-panel">
         <sv-pagination></sv-pagination>
-        <sv-records-summary
-          v-bind="{
-            recordsCount,
-            recordsTotal,
-            currentPage,
-            limit
-          }"
-        ></sv-records-summary>
+        <sv-records-summary></sv-records-summary>
       </div>
     </sv-box>
 
@@ -81,22 +74,22 @@
       <sv-table
         v-if="store.tableDescription"
         :key="store.$id"
-        :checkbox="hasSelectionActions"
-        :columns="{
-          ...store.tableDescription,
-          ...(store.individualActions.length > 0
-            ? {
-              __custom: {
-                label: 'Ações',
-                actions: store.individualActions
-              }
-            } : {}
-          )
-        }"
 
-        :rows="store.$items"
-        :recordsCount="recordsCount"
-        :recordsTotal="recordsTotal"
+        v-bind="{
+          checkbox: hasSelectionActions,
+          columns: {
+            ...store.tableDescription,
+            ...(individualActions.length > 0
+              ? {
+                __custom: {
+                  label: 'Ações',
+                  actions: individualActions
+                }
+              } : {}
+            )
+          },
+          rows: store.$items,
+        }"
       ></sv-table>
       <div
         v-if="store.itemsCount === 0 && !store.isLoading"
@@ -210,7 +203,6 @@ onUnmounted(() => {
 
 watch(() => metaStore.crud.isInsertVisible, (value: boolean) => {
   if( value === false ) {
-    // store.dispatch(`${props.collection}/clear`)
     store.clear()
   }
 })
@@ -220,7 +212,16 @@ const callAction = () => action(props.collection, store, router)
 const individualActions = computed(() => {
   return store.individualActions
     .map((action: any) => ({
-      click: (filters: any) => callAction()(action.action, action, filters),
+      // click: (payload: any) => //callAction()(action.action, action, filters),
+      // store[action.action](payload),
+      click: (() => {
+        if( !(action.action in store) ) {
+          throw new Error(
+            `action ${action.action} doesnt exist on store ${store.$id}`
+          )
+        }
+        return store[action.action]
+      })(),
       ...action
     }))
 })

@@ -1,4 +1,5 @@
 import { RequestProvider } from '../../common'
+import { useStore } from './store'
 
 const SV_API_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:3000/api'
@@ -35,6 +36,8 @@ const httpMethodWrapper = (
   return call
     .then(resolve)
     .catch(async (error: Error) => {
+      const metaStore = useStore('meta')
+
       if( ['TokenExpiredError', 'AuthorizationError'].includes(error.name) ) {
         // ctx.dispatch('user/signout', {}, { root: true })
 
@@ -54,7 +57,11 @@ const httpMethodWrapper = (
         //   body: error
 
         // }, { root: true })
-        alert('uncaught')
+        //alert('uncaught')
+        metaStore.spawnModal({
+          title: 'Erro',
+          body: error
+        })
       }
 
       console.trace(error)

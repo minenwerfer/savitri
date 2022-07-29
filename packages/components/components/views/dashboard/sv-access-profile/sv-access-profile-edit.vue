@@ -11,9 +11,9 @@
       >
       </sv-form>
       <sv-button
-        @clicked="grantEverything"
         variant="light"
         class="self-start"
+        @clicked="grantEverything"
       >
         Marcar tudo
       </sv-button>
@@ -47,7 +47,7 @@ const router = useRouter()
 
 const { capabilities, ...fields } = store.fields
 
-provide('module', 'accessProfile')
+provide('storeId', 'accessProfile')
 
 type AccParams = Pick<
   CollectionDescription,
@@ -57,8 +57,7 @@ type AccParams = Pick<
   | 'extraMethods'
 >
 
-const modules = metaStore.globalDescriptions
-const capabilitiesFields = modules.reduce(
+const capabilitiesFields = Object.values(metaStore.descriptions).reduce(
   (a: any, { module: moduleName, report, methods, extraMethods }: AccParams
 ) => {
   if( !methods ) {

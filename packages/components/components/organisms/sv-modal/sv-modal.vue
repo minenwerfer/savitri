@@ -2,8 +2,7 @@
   <sv-box
     :float="true"
     :close-hint="true"
-    @close="$store.dispatch('meta/closeModal')"
-    classes="lg:w-1/3 xl:w-1/3"
+    @close="metaStore.modal.isVisible = false"
   >
     <template #title>
       <slot name="title"></slot>
@@ -21,6 +20,8 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+import { useStore } from '@savitri/web'
 
 const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
+const metaStore = useStore('meta')
 </script>
