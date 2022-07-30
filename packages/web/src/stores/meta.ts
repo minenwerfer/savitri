@@ -10,7 +10,7 @@ import { useStore, hasStore, registerStore } from '../store'
 type CollectionName = string
 
 const { http } = useHttp()
-const { parseQuery } = useUtil()
+const { hydrateQuery } = useUtil()
 
 type ViewLayout =
   'tabular'
@@ -115,7 +115,7 @@ export default defineStore('meta', {
         const rawDescription = Object.assign({}, description)
         const item = freshItem(description)
 
-        description.fields = await parseQuery(description.fields, false)
+        description.fields = await hydrateQuery(description.fields, false)
 
         if( hasStore(collectionName) ) {
           const store = useStore(collectionName)

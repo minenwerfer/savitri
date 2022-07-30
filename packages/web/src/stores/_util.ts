@@ -4,7 +4,7 @@ import useHttp from '../http'
 
 export default () => {
   return {
-    parseQuery,
+    hydrateQuery,
     condenseItem,
     removeEmpty
   }
@@ -12,44 +12,44 @@ export default () => {
 
 const { http } = useHttp()
 
-const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
+const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
   const userStore = useStore('user')
-  const normalize = (data: any, value: any) => data
+  const normalize = (data: any, query: any) => data
     .reduce((a: any, item: any) => ({
       ...a,
-      [item._id]: item[Array.isArray(value.index)
-        ? value.index[0]
-        : value.index]
+      [item._id]: item[Array.isArray(query.index)
+        ? query.index[0]
+        : query.index]
     }), {})
 
-  const parse = async ([key, value]: [string, any]) => {
+  const hydrate = async ([key, query]: [string, any]) => {
     if( key !== '__query' ) {
       if( array ) {
         return obj
       }
 
       return {
-        [key]: typeof value === 'object'
-          ? await parseQuery(value, Array.isArray(value))
-          : value
+        [key]: typeof query === 'object'
+          ? await hydrateQuery(query, Array.isArray(query))
+          : query
       }
     }
 
-    if( !value.collection ) {
+    if( !query.collection ) {
       throw new TypeError('dynamic query but no collection is specified')
     }
 
-    return withIsomorphicLock(`dynamicQuery:${value.collection}`, async () => {
-      const stored = window._queryCache?.[value.collection]||[]
-      const hasToUpdate = typeof value.limit === 'number'
-        && (value.limit > stored.length || value.limit === 0)
+    return withIsomorphicLock(`dynamicQuery:${query.collection}`, async () => {
+      const stored = window._queryCache?.[query.collection]||[]
+      const hasToUpdate = typeof query.limit === 'number'
+        && (query.limit > stored.length || query.limit === 0)
 
       if( stored?.length > 0 && !hasToUpdate ) {
-        return normalize(stored, value)
+        return normalize(stored, query)
       }
 
       if( hasToUpdate && stored ) {
-        value.offset = stored.length
+        query.offset = stored.length
       }
 
       /**
@@ -63,25 +63,25 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
        * @remarks optimization
        */
       if(
-        !userStore.currentUser.access?.capabilities?.[value.collection]?.includes('getAll')
-          && !value.public
+        !userStore.currentUser.access?.capabilities?.[query.collection]?.includes('getAll')
+          && !query.public
       ) {
         return {}
       }
 
-      const route = `${value.collection}/getAll`
+      const route = `${query.collection}/getAll`
 
       const { data } = await http.post(route, {
-        filters: value.filters || {},
-        project: value.index || {},
-        limit: value.limit,
-        offset: value.offset
+        filters: query.filters || {},
+        project: query.index || {},
+        limit: query.limit,
+        offset: query.offset
       })
 
       const result = normalize([
         ...stored,
         ...data.result
-      ], value)
+      ], query)
 
       return result
     })
@@ -94,11 +94,11 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
   const result: any = array ? [] : {}
 
   for (const pair of entries) {
-    const parsed = await parse(pair)
+    const hydrated = await hydrate(pair)
 
     array
-      ? result.push(parsed)
-      : Object.assign(result, parsed)
+      ? result.push(hydrated)
+      : Object.assign(result, hydrated)
   }
 
   return array
