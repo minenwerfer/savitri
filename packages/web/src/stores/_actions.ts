@@ -36,11 +36,34 @@ const mutations = {
     this.item = item
   },
 
+  $setItem<T>(
+    this: CollectionStateItem<T>,
+    { result }: { result: T }
+  ) {
+    this.item = result
+  },
+
   setItems<T>(
     this: CollectionStateItems<T>,
     items: Array<T>
   ) {
     this.items = items
+  },
+
+  insertItem<T extends { _id: string }>(
+    this: Pick<CollectionState<T>, 'item' | 'items'>,
+    item: T
+  ) {
+    this.item = item
+    const itemIdx = this.items
+      .findIndex(({ _id }: Pick<T, '_id'>) => _id === item._id)
+
+    if( itemIdx === -1 ) {
+      this.items.push(item)
+      return
+    }
+
+    this.items[itemIdx] = item
   },
 
   clearItem<T=any>(this: CollectionStateItem<T>) {
@@ -75,7 +98,7 @@ export default {
   async get<T>(payload: ActionFilter): Promise<T> {
     return this.customEffect(
       'get', payload,
-      this.setItem
+      this.$setItem
     )
   },
 
@@ -134,7 +157,8 @@ export default {
   },
 
   async ask(props: {
-    action: (params: any) => unknown, params: any
+    action: (params: any) => unknown,
+    params: any
     title?: string
     body?: string
   }) {

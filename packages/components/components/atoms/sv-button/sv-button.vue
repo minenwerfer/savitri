@@ -35,7 +35,7 @@ type Variant =
   'normal'
   | 'light'
 
-interface Props {
+type Props = {
   type?: Type
   variant?: Variant
   icon?: string

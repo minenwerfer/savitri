@@ -24,7 +24,7 @@ import {
 
 } from '../../../../..'
 
-interface Props {
+type Props = {
   actions: any
   row: any
 }

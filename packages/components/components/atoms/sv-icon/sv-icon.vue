@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { inject } from 'vue'
 
-interface Props {
+type Props = {
   name: string
   fill?: string
   reactive?: boolean

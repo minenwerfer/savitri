@@ -71,7 +71,7 @@ import {
 
 } from '../../'
 
-interface Props {
+type Props = {
   modelValue?: string
   value?: string|number
   type?: string

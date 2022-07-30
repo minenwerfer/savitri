@@ -25,7 +25,7 @@
           </sv-bare-button>
           <sv-bare-button
             v-else-if="closeHint"
-            @click="$emit('close')"
+            @click="$emit('update:visible', false)"
           >
             <sv-icon
               name="multiply"
@@ -59,7 +59,7 @@ import {
 } from '../../'
 
 // #region props
-interface Props {
+type Props = {
   closeHint?: boolean
   visible?: boolean
   animate?: boolean

@@ -125,7 +125,7 @@ import {
 
 const SvForm = defineAsyncComponent(() => import('../../molecules/sv-form/sv-form.vue'))
 
-interface Props {
+type Props = {
   modelValue: any
   propName: string
   collection; string

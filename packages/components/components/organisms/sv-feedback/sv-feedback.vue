@@ -40,7 +40,7 @@ import { SvForm, SvButton } from '../..'
 
 const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
 
-interface Props {
+type Props = {
   visible: boolean
 }
 

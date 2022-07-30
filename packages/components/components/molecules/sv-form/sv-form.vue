@@ -159,7 +159,7 @@ type LayoutConfig = {
   span: number
 }
 
-interface Props {
+type Props = {
   form: Record<string, any>
   formData: Record<string, any>
   collection?: string

@@ -28,7 +28,7 @@ import { ref, computed } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvBareButton, SvPicture } from '../../'
 
-interface Props {
+type Props = {
   modelValue: any
   context: string
 }

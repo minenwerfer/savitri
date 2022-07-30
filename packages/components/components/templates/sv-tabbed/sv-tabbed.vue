@@ -45,7 +45,7 @@ import { onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { SvBareButton, SvBox } from '../..'
 
-interface Props {
+type Props = {
   tabs: number
   currentTab: number
   titles?: Array<string>

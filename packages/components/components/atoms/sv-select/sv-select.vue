@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
+type Props = {
   modelValue?: any
   values?: any
 }

@@ -17,14 +17,14 @@
       </div>
       <div class="crud__panel-control" v-if="store.actions || $slots.actions" :key="collection">
         <sv-button
-          v-for="([action, actionProps], index) in Object.entries(store.actions||{})"
+          v-for="(actionProps, index) in Object.values(store.actions||{})"
           :key="`action-${index}`"
           v-bind="{
             type: 'neutral',
             icon: actionProps.unicon,
             disabled: store.isLoading || store.selectedIds.length === 0 && actionProps.selection
           }"
-          @clicked="callAction()(action, props, { _id: selectedIds })"
+          @clicked="call(actionProps)({ _id: selectedIds })"
         >
           {{ actionProps.name }}
         </sv-button>
@@ -34,10 +34,9 @@
 
     <teleport to="body">
       <sv-box
-        v-model:visible="metaStore.crud.isInsertVisible"
+        v-model:visible="isInsertVisible"
         :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(collection)}`"
         :float="true"
-        @close="store.dispatch('meta/closeCrud')"
       >
         <template #body>
           <sv-form
@@ -108,16 +107,15 @@
 import {
   onMounted,
   onUnmounted,
+  computed,
+  ref,
   provide,
   watch,
-  computed,
-  reactive,
 
 } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useStore } from '@savitri/web'
-import { action } from '../../../../common'
+import { useStore, useAction, ActionEvent } from '@savitri/web'
 import {
   SvBox,
   SvTable,
@@ -133,7 +131,7 @@ import SvReport from './_internals/components/sv-report/sv-report.vue'
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 
-interface Props {
+type Props = {
   collection: string
 }
 
@@ -144,12 +142,14 @@ const metaStore = useStore('meta')
 
 const router = useRouter()
 const { hash } = useRoute()
-const collectionRefs = reactive({})
+const [call, actionEventBus] = useAction(store, router)
 
 provide('storeId', computed(() => props.collection))
 
+const isInsertVisible = ref<boolean>(false)
+
 const hasSelectionActions = computed(() => {
-  return Object.values(collectionRefs.actions||{})
+  return Object.values(store.actions||{})
     .some((action: any) => !!action.selection)
 })
 
@@ -182,49 +182,36 @@ onUnmounted(() => {
   }
 })
 
-// watch(() => [props.collection, hash], async ([collectionName]: [string]) => {
-  // if( store.itemsCount === 0 ) {
-    // const filters = collectionRefs.description._filters
 
-    // new!
-    // store.getAll()
+watch(() => actionEventBus, (event: ActionEvent) => {
+  if( event.name === 'spawnAdd' ) {
+    store.clearItem()
+    isInsertVisible.value = true
+  }
 
-//    store.dispatch(`${collectionName}/getAll`, {
-//      filters: {
-//        ...filters,
-//        ...collectionRefs.filters,
-//        ...(!Object.values(filters||{}).find((_) => !!_) ? store.state[collectionName].defaultFilters : {}),
-//      },
-//    })
-  // }
+  if( event.name === 'spawnEdit' ) {
+    store.setItem(event.params.filters)
+    isInsertVisible.value = true
+  }
 
-// }, { immediate: true })
+}, { deep: true })
 
 
-watch(() => metaStore.crud.isInsertVisible, (value: boolean) => {
+watch(() => isInsertVisible, (value: boolean) => {
   if( value === false ) {
-    store.clear()
+    store.clearItem()
   }
 })
-
-const callAction = () => action(props.collection, store, router)
 
 const individualActions = computed(() => {
   return store.individualActions
     .map((action: any) => ({
-      // click: (payload: any) => //callAction()(action.action, action, filters),
-      // store[action.action](payload),
-      click: (() => {
-        if( !(action.action in store) ) {
-          throw new Error(
-            `action ${action.action} doesnt exist on store ${store.$id}`
-          )
-        }
-        return store[action.action]
-      })(),
+      click: call(action),
       ...action
     }))
 })
+
+const test = () => alert(12333)
 </script>
 
 <style scoped src="./sv-crud.scss"></style>

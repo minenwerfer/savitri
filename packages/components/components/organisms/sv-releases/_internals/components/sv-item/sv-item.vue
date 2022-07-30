@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
+type Props = {
   items: any
 }
 

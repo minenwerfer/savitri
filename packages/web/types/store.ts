@@ -1,4 +1,6 @@
-import { CollectionDescription } from '../../common/types/collection'
+import type { CollectionDescription } from '../../common/types/collection'
+import collectionActions from '../src/stores/_actions'
+import collectionGetters from '../src/stores/_getters'
 
 export type PiniaState = {
   readonly $id?: string
@@ -37,3 +39,6 @@ export type CollectionGetters = {
   $filters: CollectionState<unknown>['filters']
 }
 
+export type CollectionStore<T> = CollectionState<T>
+  & typeof collectionActions
+  & typeof collectionGetters

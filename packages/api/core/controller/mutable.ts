@@ -54,7 +54,11 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    * @method
    * Inserts a single document in the database.
    */
-  public async insert(props: { what: T }, response?: unknown, decodedToken?: any): Promise<any> {
+  public async insert(
+    props: { what: T },
+    _response?: unknown,
+    _decodedToken?: any
+  ): Promise<any> {
     const { _id } = props.what
     const what = prepareInsert(this.description, props.what)
 
@@ -79,13 +83,18 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    * @method
    * Gets a document from database.
    */
-  public async get(props: { filters?: object, project?: string|Array<string> }, response?: unknown, decodedToken?: any): Promise<Array<T>> {
+  public async get(
+    props: { filters?: object, project?: string|Array<string> },
+    _response?: unknown,
+    _decodedToken?: any
+  ): Promise<Array<T>> {
     const pipe = R.pipe(
+      (item: T & { _doc?: T }) => item._doc||item,
       (item: T|null) => item && project(item, props?.project),
       (item: T|null) => item && fill(this.description, item)
     )
 
-    return pipe(await this.model.findOne(props?.filters))
+    return pipe(await this.model.findOne(props?.filters) as T)
   }
 
   /**
@@ -125,14 +134,17 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       .limit(props.limit)
   }
 
-  public async getAll(props: {
-    filters?: object,
-    offset?: number,
-    limit?: number,
-    sort?: any,
-    project?: string|Array<string>,
-
- }, response?: unknown, decodedToken?: any) {
+  public async getAll(
+    props: {
+      filters?: object,
+      offset?: number,
+      limit?: number,
+      sort?: any,
+      project?: string|Array<string>,
+   },
+   _response?: unknown,
+   _decodedToken?: any
+  ) {
    const result: Array<T> = await this._getAll(props)
 
    const pipe = R.pipe(

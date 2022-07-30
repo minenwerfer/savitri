@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
+type Props = {
   last: number
   text?: string
   modelValue: any

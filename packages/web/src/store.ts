@@ -2,7 +2,7 @@ import { inject } from 'vue'
 
 declare global {
   interface Window {
-    __stores: Record<string, () => any>
+    __stores: Record<string, (() => any) & { $id: string }>
   }
 }
 

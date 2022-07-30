@@ -1,6 +1,6 @@
 {
   "individualActions": {
-    "spawnOpen": {
+    "ui/spawnOpen": {
       "name": "Visualizar",
       "unicon": "search-plus"
     }

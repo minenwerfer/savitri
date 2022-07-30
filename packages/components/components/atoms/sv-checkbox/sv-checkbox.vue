@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue'
 
-interface Props {
+type Props = {
   modelValue?: any
   required?: boolean
   label?: string

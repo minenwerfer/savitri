@@ -30,7 +30,7 @@ import { SvButton } from '../../'
 const SvModal = defineAsyncComponent(() => import('../..//organisms/sv-modal/sv-modal.vue'))
 const metaStore = useStore('meta')
 
-interface Props {
+type Props = {
   actions: Array<any>
 }
 

@@ -1,4 +1,10 @@
-import type { CollectionAction, CollectionField } from '../../../common/types'
+import type {
+  CollectionField,
+  CollectionAction,
+  CollectionActions,
+
+} from '../../../common/types'
+
 import type { CollectionState } from '../../types/store'
 import { fromEntries } from '../../../common'
 
@@ -8,6 +14,16 @@ const {
   removeEmpty
 
 } = useUtil()
+
+const normalizeActions = (actions: CollectionActions) => Object.entries(actions||{})
+  .filter(([key, value]: [string, CollectionAction]) => !!value && !key.startsWith('_'))
+  .reduce((a: Array<object>, [key, value]) => [
+    ...a,
+    {
+      action: key,
+      ...value
+    }
+  ], [])
 
 const normalizeFilters = (filters: Array<any>) => {
   return filters
@@ -104,25 +120,14 @@ export default {
    * @see SvCrud
    */
   actions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
-    const entries = Object.entries(this.description.actions||{})
-      .filter(([, value]: [unknown, CollectionAction]) => !!value)
-
-    return fromEntries(entries)
+    return normalizeActions(this.description.actions!)
   },
 
   /**
    * @see SvCrud
    */
   individualActions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
-    return Object.entries(this.description.individualActions||{})
-      .filter(([, value]: [unknown, CollectionAction]) => !!value)
-      .reduce((a: Array<object>, [key, value]) => [
-        ...a,
-        {
-          action: key,
-          ...value
-        }
-      ], [])
+    return normalizeActions(this.description.individualActions!)
   },
 
   /**

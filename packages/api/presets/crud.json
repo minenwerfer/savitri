@@ -7,17 +7,17 @@
     "delete"
   ],
   "actions": {
-    "spawnAdd": {
+    "ui/spawnAdd": {
       "name": "Adicionar",
       "unicon": "plus"
     }
   },
   "individualActions": {
-    "spawnEdit": {
+    "ui/spawnEdit": {
       "name": "Editar",
       "unicon": "edit"
     },
-    "delete": {
+    "ui/delete": {
       "name": "Remover",
       "unicon": "trash-alt",
       "ask": true

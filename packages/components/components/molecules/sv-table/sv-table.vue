@@ -130,7 +130,7 @@ import {
 import SvDropdownTrigger from './_internals/components/sv-dropdown-trigger/sv-dropdown-trigger.vue'
 import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dropdown-content.vue'
 
-interface Props {
+type Props = {
   columns: any
   rows: any
   collection?: string

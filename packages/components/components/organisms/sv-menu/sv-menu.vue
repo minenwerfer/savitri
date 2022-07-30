@@ -58,7 +58,7 @@ import { Route } from '@savitri/web/router'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
 
-interface Props {
+type Props = {
   entrypoint?: string
   visible: boolean
   schema?: any

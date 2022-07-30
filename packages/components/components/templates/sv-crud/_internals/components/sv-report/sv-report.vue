@@ -32,7 +32,7 @@ import { provide, reactive } from 'vue'
 import { useStore, useParentStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../../../..'
 
-interface Props {
+type Props = {
   visible: boolean
 }
 
