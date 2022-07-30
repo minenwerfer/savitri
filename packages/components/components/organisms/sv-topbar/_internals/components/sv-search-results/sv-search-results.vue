@@ -52,7 +52,7 @@ import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore, useAction } from '@savitri/web'
 import { SvPicture, SvIcon } from '../../../../..'
-import { results } from '../../stores/search'
+import { results } from '../../store'
 
 const router = useRouter()
 const collectionsActions = {}

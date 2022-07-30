@@ -49,7 +49,6 @@ import {
   SvMenu,
   SvTopbar,
   SvBareButton,
-  SvFeedback,
   SvSidebar,
   SvIcon
 
@@ -57,6 +56,9 @@ import {
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
+import SvFeedback from './_internals/components/sv-feedback/sv-feedback.vue'
+
+import { isFeedbackVisible } from './_internals/store'
 
 const metaStore = useStore('meta')
 const menuSchema = inject('menuSchema', {})
@@ -74,7 +76,6 @@ onMounted(() => {
   })
 })
 
-const isFeedbackVisible = ref(false)
 const isReleasesVisible = ref(false)
 </script>
 

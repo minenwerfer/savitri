@@ -1,6 +1,6 @@
 <template>
   <sv-box
-    v-model:visible="visible"
+    v-model:visible="isFeedbackVisible"
     title="Feedback"
     :float="true"
     @close="$emit('update:visible', false)"
@@ -36,15 +36,10 @@
 <script setup lang="ts">
 import { ref, provide, inject, defineAsyncComponent } from 'vue'
 import { useStore } from '@savitri/web'
-import { SvForm, SvButton } from '../..'
+import { SvForm, SvButton } from '../../../../..'
+import { isFeedbackVisible } from '../../stores/widgets'
 
-const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
-
-type Props = {
-  visible: boolean
-}
-
-const props = defineProps<Props>()
+const SvBox = defineAsyncComponent(() => import('../../../../../molecules/sv-box/sv-box.vue'))
 
 const store = useStore('feedback')
 provide('storeId', 'feedback')

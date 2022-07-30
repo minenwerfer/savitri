@@ -13,7 +13,7 @@
 import { ref, watch, provide } from 'vue'
 import { useHttp } from '@savitri/web'
 import { SvInput } from '../../../../..'
-import { results } from '../../stores/search'
+import { results } from '../../store'
 
 const { http } = useHttp()
 const query = ref('')
