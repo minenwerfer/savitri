@@ -38,7 +38,7 @@ import {
   isInsertVisible,
   isInsertReadonly,
 
-} from '../../stores/widgets'
+} from '../../store'
 
 const store = reactive({})
 const metaStore = useStore('meta')

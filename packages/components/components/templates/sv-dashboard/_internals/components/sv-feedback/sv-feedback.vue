@@ -37,7 +37,7 @@
 import { ref, provide, inject, defineAsyncComponent } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvForm, SvButton } from '../../../../..'
-import { isFeedbackVisible } from '../../stores/widgets'
+import { isFeedbackVisible } from '../../store'
 
 const SvBox = defineAsyncComponent(() => import('../../../../../molecules/sv-box/sv-box.vue'))
 

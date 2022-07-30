@@ -31,7 +31,7 @@
 import { provide, reactive } from 'vue'
 import { useStore, useParentStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../../../..'
-import { isReportVisible } from '../../stores/widgets'
+import { isReportVisible } from '../../store'
 
 const store = useParentStore()
 const reportStore = useStore('report')

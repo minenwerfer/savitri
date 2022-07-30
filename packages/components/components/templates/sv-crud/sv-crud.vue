@@ -105,7 +105,7 @@ import {
   isInsertVisible,
   isReportVisible,
 
-} from './_internals/stores/widgets'
+} from './_internals/store'
 
 type Props = {
   collection: string

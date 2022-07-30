@@ -1,4 +1,5 @@
 import { fromEntries, withIsomorphicLock } from '../../../common'
+import { useStore } from '../store'
 import useHttp from '../http'
 
 export default () => {
@@ -12,6 +13,7 @@ export default () => {
 const { http } = useHttp()
 
 const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
+  const userStore = useStore('user')
   const normalize = (data: any, value: any) => data
     .reduce((a: any, item: any) => ({
       ...a,
@@ -60,7 +62,10 @@ const parseQuery = async(obj: any, array: boolean = false): Promise<any> => {
       /**
        * @remarks optimization
        */
-      if( !sessionStorage.getItem('auth:token') && !value.public ) {
+      if(
+        !userStore.currentUser.access?.capabilities?.[value.collection]?.includes('getAll')
+          && !value.public
+      ) {
         return {}
       }
 
