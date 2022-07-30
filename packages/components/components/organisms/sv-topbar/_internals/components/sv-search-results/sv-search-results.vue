@@ -31,14 +31,13 @@
 
             <div class="results__actions">
               <div
-                v-for="([actionName, action]) in getActions(collectionName)"
-                :key="`action-${actionName}`"
+                v-for="(actionProps, index) in getActions(collectionName)"
+                :key="`action-${actionProps.action}`"
                 class="results__action"
-
-                @click="callAction(collectionName, actionName, action, { _id: result._id })"
+                @click="callAction(collectionName, actionProps, { _id: result._id })"
               >
-                <sv-icon :name="action.unicon" class="results__action-icon"></sv-icon>
-                <div class="results__action-name">{{ action.name }}</div>
+                <sv-icon :name="actionProps.unicon" class="results__action-icon"></sv-icon>
+                <div class="results__action-name">{{ actionProps.name }}</div>
               </div>
             </div>
           </div>
@@ -49,14 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '@savitri/web'
-import { action } from '../../../../../../../common'
+import { useStore, useAction } from '@savitri/web'
 import { SvPicture, SvIcon } from '../../../../..'
 import { results } from '../../stores/search'
 
 const router = useRouter()
+const collectionsActions = {}
 
 const resultsByModule = computed(() => {
   return Object.entries(results.items)
@@ -77,13 +76,31 @@ const getEntries = (collectionName: string, result: any) => Object.entries(resul
 
 const getActions = (collectionName: string) => {
   const store = useStore(collectionName)
-  return Object.entries(store.description.searchable.actions||{})
+  return store.searchableActions
 }
 
-const callAction = async (collectionName: string, actionName: string, props: any, filters: any) => {
+const callAction = async (
+  collectionName: string,
+  actionProps: any,
+  filters: any
+) => {
   results.items = []
-  // action(collectionName, store, router)(actionName, props, filters)
+  collectionsActions[collectionName].call(actionProps)(filters)
 }
+
+watch(() => results.items, <T extends { _id: string }>(items: Record<string, T>) => {
+  Object.keys(items).forEach((collectionName: string) => {
+    if( !(collectionName in collectionsActions) ) {
+      const store = useStore(collectionName)
+      const [call, eventBus] = useAction(store, router)
+
+      collectionsActions[collectionName] = {
+        call,
+        eventBus
+      }
+    }
+  })
+}, { immediate: true })
 </script>
 
 <style scoped src="./sv-search-results.scss"></style>

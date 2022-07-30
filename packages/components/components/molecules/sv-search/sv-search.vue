@@ -298,10 +298,6 @@ declare global {
   }
 }
 
-const test = (...args: any[]) => {
-  console.log(args)
-}
-
 const lazySearch = () => {
   isTyping.value = true
   window.clearTimeout(window.__lazySearchTimeout)

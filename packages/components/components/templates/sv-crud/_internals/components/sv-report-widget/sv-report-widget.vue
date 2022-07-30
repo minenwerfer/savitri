@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <sv-box
-      v-model:visible="visible" 
+      v-model:visible="isReportVisible" 
       title="Relatório"
       :float="true"
       @close="onClose"
@@ -31,19 +31,11 @@
 import { provide, reactive } from 'vue'
 import { useStore, useParentStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../../../..'
-
-type Props = {
-  visible: boolean
-}
-
-const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  (e: 'update:visible', value: boolean): void
-}>()
+import { isReportVisible } from '../../stores/widgets'
 
 const store = useParentStore()
 const reportStore = useStore('report')
+const metaStore = useStore('meta')
 
 provide('storeId', 'report')
 
@@ -65,6 +57,6 @@ const download = () => {
 
 const onClose = () => {
   store.clearItem()
-  emit('update:visible', false)
+  isReportVisible.value = false
 }
 </script>

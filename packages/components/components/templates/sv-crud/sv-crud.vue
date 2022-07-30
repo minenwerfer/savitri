@@ -10,7 +10,7 @@
             type: 'neutral',
             variant: 'light'
           }"
-          @clicked="metaStore.report.isVisible = true"
+          @clicked="isReportVisible = true"
         >
           Exportar
         </sv-button>
@@ -32,35 +32,8 @@
       </div>
     </div>
 
-    <teleport to="body">
-      <sv-box
-        v-model:visible="isInsertVisible"
-        :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(collection)}`"
-        :float="true"
-      >
-        <template #body>
-          <sv-form
-            :key="`${store.item?._id}-form`"
-            :form="store.fields"
-            :form-data="store.item"
-
-            :is-readonly="isInsertReadonly"
-            :flex="store.description.flex"
-            @add="$e.preventDefault()"
-          ></sv-form>
-        </template>
-        <template #footer v-if="!isInsertReadonly">
-          <sv-button
-            :disabled="store.isLoading"
-            @clicked="store.dispatch(`${collection}/deepInsert`, { what: item, __crudClose: true })"
-          >
-            Salvar
-          </sv-button>
-        </template>
-      </sv-box>
-    </teleport>
-
-    <sv-report v-model:visible="metaStore.report.isVisible"></sv-report>
+    <sv-insert-widget></sv-insert-widget>
+    <sv-report-widget></sv-report-widget>
 
     <sv-box>
       <div class="crud__table-panel">
@@ -69,7 +42,7 @@
       </div>
     </sv-box>
 
-    <sv-box :fill="true" :transparent="true" classes="overflow-y-visible">
+    <sv-box :fill="true" :transparent="true">
       <sv-table
         v-if="store.tableDescription"
         :key="store.$id"
@@ -90,10 +63,7 @@
           rows: store.$items,
         }"
       ></sv-table>
-      <div
-        v-if="store.itemsCount === 0 && !store.isLoading"
-        class="grid place-items-center py-4"
-      >
+      <div v-if="store.itemsCount === 0 && !store.isLoading">
         <div class="opacity-80">
           Não foram retornados resultados.
         </div>
@@ -108,7 +78,6 @@ import {
   onMounted,
   onUnmounted,
   computed,
-  ref,
   provide,
   watch,
 
@@ -127,9 +96,16 @@ import {
 
 } from '../../'
 
-import SvReport from './_internals/components/sv-report/sv-report.vue'
+import SvReportWidget from './_internals/components/sv-report-widget/sv-report-widget.vue'
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
+import SvInsertWidget from './_internals/components/sv-insert-widget/sv-insert-widget.vue'
+
+import {
+  isInsertVisible,
+  isReportVisible,
+
+} from './_internals/stores/widgets'
 
 type Props = {
   collection: string
@@ -146,14 +122,15 @@ const [call, actionEventBus] = useAction(store, router)
 
 provide('storeId', computed(() => props.collection))
 
-const isInsertVisible = ref<boolean>(false)
-
 const hasSelectionActions = computed(() => {
   return Object.values(store.actions||{})
     .some((action: any) => !!action.selection)
 })
 
 onMounted(() => {
+  metaStore.view.title = props.collection
+  metaStore.view.collection = props.collection
+
   if( store.itemsCount === 0 ) {
     store.getAll()
   }
@@ -161,8 +138,6 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  metaStore.view.title = props.collection
-
   if( !hash.slice(1).split(',').includes('refresh') ) {
     return
   }
@@ -199,6 +174,7 @@ watch(() => actionEventBus, (event: ActionEvent) => {
 
 watch(() => isInsertVisible, (value: boolean) => {
   if( value === false ) {
+    metaStore.view.collection = props.collection
     store.clearItem()
   }
 })
@@ -210,8 +186,6 @@ const individualActions = computed(() => {
       ...action
     }))
 })
-
-const test = () => alert(12333)
 </script>
 
 <style scoped src="./sv-crud.scss"></style>

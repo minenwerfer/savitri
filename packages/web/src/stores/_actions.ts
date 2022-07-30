@@ -66,8 +66,8 @@ const mutations = {
     this.items[itemIdx] = item
   },
 
-  clearItem<T=any>(this: CollectionStateItem<T>) {
-    this.item = {}
+  clearItem<T=any>(this: Pick<CollectionState<T>, 'item' | 'freshItem'>) {
+    this.item = this.freshItem
   },
 
   clearItems<T=any>(this: CollectionStateItems<T>) {

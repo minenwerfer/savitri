@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { CollectionDescription, ARRAY_TYPES } from '../../../common/types'
+import { CollectionDescription } from '../../../common/types'
+import { freshItem } from '../helpers/store'
 import useHttp from '../http'
 import useUtil from './_util'
 import useCollection from './_collection'
@@ -25,6 +26,7 @@ type MetaState = {
   view: {
     title: string
     layout: ViewLayout
+    collection: string
   }
   menu: {
     isVisible: boolean
@@ -58,13 +60,6 @@ type MetaState = {
     isVisible: boolean
     text: string
   }
-  report: {
-    isVisible: boolean
-  }
-  crud: {
-    isInsertVisible: boolean
-    isInsertReadonly: boolean
-  }
 }
 
 export default defineStore('meta', {
@@ -76,7 +71,8 @@ export default defineStore('meta', {
 
     view: {
       title: '',
-      layout: 'tabular'
+      layout: 'tabular',
+      collection: ''
     },
     menu: {
       isVisible: true,
@@ -106,13 +102,6 @@ export default defineStore('meta', {
       isVisible: false,
       text: '',
     },
-    report: {
-      isVisible: false
-    },
-    crud: {
-      isInsertVisible: false,
-      isInsertReadonly: false
-    }
   }),
 
   actions: {
@@ -124,11 +113,15 @@ export default defineStore('meta', {
       // monkeypatchs '@savitri/web/stores' object
       for ( const [collectionName, description] of Object.entries(descriptions) ) {
         const rawDescription = Object.assign({}, description)
+        const item = freshItem(description)
+
         description.fields = await parseQuery(description.fields, false)
 
         if( hasStore(collectionName) ) {
           const store = useStore(collectionName)
           store.$patch({
+            item,
+            freshItem: Object.assign({}, item),
             description,
             rawDescription
           })
@@ -141,25 +134,10 @@ export default defineStore('meta', {
           getters
         } = useCollection()
 
-        const item: Record<string, any> = Object.entries(description.fields||{})
-          .filter(([, value]: [unknown, any]) => typeof value.collection === 'string' || value.type === 'object')
-          .reduce((a, [key, value]: [string, any]) => ({
-            ...a,
-            [key]:  value.array ? [] : {}
-          }), {})
-
-        Object.entries(description.fields||{})
-          .filter(([, value]: [unknown, any]) => [...ARRAY_TYPES, 'boolean'].includes(value.type))
-          .forEach(([key, value] : [string, any]) => {
-            item[key] = value.type !== 'radio'
-              ? (value.type === 'boolean' ? false : [])
-              : ''
-        })
-
         const store = defineStore(collectionName, {
           state: () => Object.assign(state(), {
             item,
-            freshItem: item,
+            freshItem: Object.assign({}, item),
             description,
             rawDescription
           }),

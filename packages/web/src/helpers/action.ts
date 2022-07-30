@@ -4,7 +4,7 @@ import type { CollectionAction } from '../../../common/types'
 import type { ActionEvent } from '../../types/action'
 
 export const useAction = <T extends { $id: string }, F extends { _id: string }>(
-  store: T & Record<string, (...args: any[]) => any>,
+  store: (T & Record<string, (...args: any[]) => any>),
   router: Router
 ) => {
   const eventBus = reactive<ActionEvent>({

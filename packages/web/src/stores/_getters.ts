@@ -130,6 +130,10 @@ export default {
     return normalizeActions(this.description.individualActions!)
   },
 
+  searchableActions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+    return normalizeActions(this.description.searchable?.actions||{})
+  },
+
   /**
    * Converts populated subdocuments back to ObjectIds.
    * @see SvCrud
