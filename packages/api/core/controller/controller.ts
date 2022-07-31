@@ -1,16 +1,8 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../common/types'
+import type { HandlerRequest } from '../../types'
 import { AuthorizationError, PermissionError } from '../exceptions'
 import { TokenService } from '../services'
-
-export type HandlerRequest = {
-  payload: {
-    offset?: number
-    limit?: number
-    filters?: any
-    what?: any
-  }
-}
 
 export abstract class Controller {
   private _webInterface: Controller
@@ -64,7 +56,7 @@ export abstract class Controller {
         const method = (target as Record<string, any>)[key]
         const alwaysAttribute = this._description?.alwaysAttribute
 
-        return function(req: Request & HandlerRequest, res: ResponseToolkit, decodedToken: any) {
+        return function(req: HandlerRequest, res: ResponseToolkit, decodedToken: any) {
           const controllerName = target._description?.collection || target._controllerName
 
           if( !controllerName ) {

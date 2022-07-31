@@ -1,5 +1,5 @@
 import { fromEntries, withIsomorphicLock } from '../../../common'
-import { useStore } from '../store'
+import { useStore } from './'
 import useHttp from '../http'
 
 export default () => {

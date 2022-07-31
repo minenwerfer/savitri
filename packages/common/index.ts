@@ -1,4 +1,4 @@
-export * from './src/http'
-export * from './src/helpers'
-export * from './src/collection'
+export * from './http'
+export * from './helpers'
+export * from './collection'
 export * from './types'

@@ -1,8 +1,8 @@
 const { writeFile } = require('fs').promises
 import path from 'path'
 
-import { fromEntries } from '../../common/src/helpers'
-import * as Collection from '../../common/src/collection'
+import { fromEntries } from '../../common/helpers'
+import * as Collection from '../../common/collection'
 import type { CollectionField } from '../../common/types'
 import { Mutable, getController } from '../../api/core/controller'
 

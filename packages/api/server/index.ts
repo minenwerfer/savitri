@@ -1,6 +1,6 @@
 import * as Hapi from '@hapi/hapi'
 
-import '../../common/src/polyfill'
+import '../../common/polyfill'
 import { routes } from './routes'
 
 declare global {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import type { CollectionState } from '../../types/store'
-import type { UserDocument } from '../../../collections/user/user.model'
-import useCollection from './_collection'
+import type { CollectionState } from '../../../types/store'
+import type { UserDocument } from '../../../../collections/user/user.model'
+import useCollection from '../collection'
 import useMetaStore from './meta'
 
 const {

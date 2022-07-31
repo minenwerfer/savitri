@@ -1,6 +1,6 @@
 import type { CollectionState } from '../../types/store'
-import actions from './_actions'
-import getters from './_getters'
+import actions from './actions'
+import getters from './getters'
 
 export default () => {
   return {

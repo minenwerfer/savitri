@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Router } from 'vue-router'
-import useCollection from './_collection'
+import useCollection from '../collection'
 
 declare namespace window {
   var _router: Router

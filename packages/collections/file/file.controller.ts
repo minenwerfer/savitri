@@ -43,7 +43,7 @@ export class FileController extends Mutable<FileDocument> {
 
       try {
         await unlink(oldFile.absolute_path)
-        await File.deleteOne(oldFile._id)
+        await File.deleteOne({ _id: oldFile._id })
 
       } catch( error ) {
         console.trace(error)
@@ -60,17 +60,17 @@ export class FileController extends Mutable<FileDocument> {
     return super.insert.call(this, { what }, res, decodedToken)
   }
 
-  public override async remove(props: { filters: any }): Promise<SingleQuery<FileDocument>|void> {
+  public override async delete(props: { filters: any }): Promise<SingleQuery<FileDocument>|void> {
     const file = await File.findOne(props.filters)
     if( file ) {
       await unlink(file.absolute_path)
-      return await super.remove.call(this, props)
+      return await super.delete.call(this, props)
     }
 
     return Promise.resolve()
   }
 
-  public async download(_id: string) {
+  public async download(_id: string): Promise<Omit<FileDocument, 'content'> & { content: Buffer }> {
     const file = await File.findOne({ _id }).lean()
     if( !file ) {
       throw new Error('file not found')

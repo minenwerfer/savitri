@@ -1,6 +1,6 @@
-import type { Document, ObjectId } from 'mongoose'
+import type { ObjectId } from 'mongoose'
 
-export type MongoDocument = Omit<Document, '_id'> & {
+export type MongoDocument = {
   _id: ObjectId|string
   created_at?: Date
   update_at?: Date

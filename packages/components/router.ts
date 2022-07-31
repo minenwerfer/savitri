@@ -1,4 +1,4 @@
-import { Route, makeRoutes } from '../web/src/router'
+import { Route, makeRoutes } from '../web/core/router'
 
 /**
  * @exports

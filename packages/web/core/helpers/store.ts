@@ -1,4 +1,5 @@
-import { CollectionDescription, ARRAY_TYPES } from '../../../common/types'
+import type { CollectionDescription } from '../../../common/types'
+import { ARRAY_TYPES } from '../../../common/constants'
 
 export const freshItem = (description: CollectionDescription) => {
   const item: Record<string, any> = Object.entries(description.fields||{})

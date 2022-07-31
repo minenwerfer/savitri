@@ -5,7 +5,8 @@ import type {
   CollectionPreset
 
 } from '../../../common/types'
-import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../common/types'
+
+import { COLLECTION_FIELD_TYPES, COLLECTION_PRESETS } from '../../../common/constants'
 
 const isValidPreset = (preset?: string): preset is CollectionPreset => {
   return COLLECTION_PRESETS.includes(preset as CollectionPreset)

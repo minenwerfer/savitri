@@ -1,4 +1,4 @@
-import * as Collection from '../../../common/src/collection'
+import * as Collection from '../../../common/collection'
 import { fromEntries } from '../../../common'
 import type { CollectionDescription, CollectionField } from '../../../common/types'
 import type {
@@ -10,7 +10,7 @@ import type {
 } from '../../types/store'
 
 import useHttp from '../http'
-import useMetaStore from './meta'
+import useMetaStore from './stores/meta'
 
 type CollectionStateItem<T> =
   Pick<CollectionState<T>, 'item'>
@@ -82,7 +82,10 @@ const mutations = {
 
 export default {
   ...mutations,
-  async custom<T extends PiniaState>(this: CollectionState<T>, verb: string, payload: any): Promise<any> {
+  async custom<T extends PiniaState>(
+    this: CollectionState<T>,
+    verb: string, payload?: any
+  ): Promise<any> {
     return (await http.post(`${this.$id}/${verb}`, payload)).data
   },
 

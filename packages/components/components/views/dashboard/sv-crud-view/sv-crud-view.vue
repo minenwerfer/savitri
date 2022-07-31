@@ -15,6 +15,4 @@ import SvCrud from '../../../templates/sv-crud/sv-crud.vue'
 const route = useRoute()
 const metaStore = useStore('meta')
 const params = reactive({})
-
-metaStore.view.title = 'order'
 </script>

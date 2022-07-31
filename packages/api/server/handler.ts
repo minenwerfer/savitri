@@ -1,6 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import * as R from 'ramda'
-import { HandlerRequest } from '../core/controller'
+import type { HandlerRequest } from '../types'
 
 import { getController } from '../core/controller'
 import { TokenService } from '../core/services/token'
@@ -21,8 +21,8 @@ export const getToken = async (request: Request) => request.headers.authorizatio
   : {} as object
 
 export const safeHandle = (
-  fn: (request: Request & HandlerRequest, h: ResponseToolkit) => object
-) => async (request: Request & HandlerRequest, h: ResponseToolkit) => {
+  fn: (request: HandlerRequest, h: ResponseToolkit) => object
+) => async (request: HandlerRequest, h: ResponseToolkit) => {
   try {
     const response = await fn(request, h)
     if( !response ) {
@@ -47,7 +47,7 @@ export const safeHandle = (
 
 export const customVerbs = (type: 'collections'|'controllables') =>
   async (
-  request: Request & HandlerRequest,
+  request: HandlerRequest,
   h: ResponseToolkit
 ) => {
     const {
@@ -78,7 +78,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     return pipe(result, instance, request)
 }
 
-export const fileDownload = async (request: Request & HandlerRequest, h: ResponseToolkit) => {
+export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {
   const instance = new FileController
 
   const { hash, options } = request.params
@@ -93,7 +93,7 @@ export const fileDownload = async (request: Request & HandlerRequest, h: Respons
 }
 
 export const regularVerb = (verb: RegularVerb) =>
-  async (request: Request & HandlerRequest, h: ResponseToolkit) => {
+  async (request: HandlerRequest, h: ResponseToolkit) => {
   const {
     controller,
     id

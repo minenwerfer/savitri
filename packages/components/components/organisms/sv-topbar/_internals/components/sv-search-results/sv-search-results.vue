@@ -30,7 +30,7 @@
             </div>
 
             <div class="results__actions">
-              <div
+              <a
                 v-for="(actionProps, index) in getActions(collectionName)"
                 :key="`action-${actionProps.action}`"
                 class="results__action"
@@ -38,7 +38,7 @@
               >
                 <sv-icon :name="actionProps.unicon" class="results__action-icon"></sv-icon>
                 <div class="results__action-name">{{ actionProps.name }}</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>

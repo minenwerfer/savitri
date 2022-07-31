@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import { CollectionDescription } from '../../../common/types'
-import { freshItem } from '../helpers/store'
-import useHttp from '../http'
-import useUtil from './_util'
-import useCollection from './_collection'
+import { CollectionDescription } from '../../../../common/types'
+import { freshItem } from '../../helpers/store'
+import useHttp from '../../http'
+import useUtil from '../util'
+import useCollection from '../collection'
 
-import { useStore, hasStore, registerStore } from '../store'
+import { useStore, hasStore, registerStore } from '../use'
 
 type CollectionName = string
 

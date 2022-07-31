@@ -8,7 +8,7 @@ import type {
 import type { CollectionState } from '../../types/store'
 import { fromEntries } from '../../../common'
 
-import useUtil from './_util'
+import useUtil from './util'
 const {
   condenseItem,
   removeEmpty

@@ -1,6 +1,6 @@
 import { Mutable } from '../../api/core/controller'
 import { NotificationDocument, Notification } from './notification.model'
-import { RequestProvider } from '../../common/src/http'
+import { RequestProvider } from '../../common/http'
 import { TokenService } from '../../api/core/services/token.service'
 import { default as Description } from './index.json'
 

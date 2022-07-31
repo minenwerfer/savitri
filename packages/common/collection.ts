@@ -1,4 +1,4 @@
-import type { CollectionDescription, CollectionField } from '../types'
+import type { CollectionDescription, CollectionField } from './types'
 
 export function getIndexes(
   description: Pick<CollectionDescription, 'fields'>,
@@ -101,16 +101,4 @@ export const getItemIndex = <T extends { _id: string }>(item: any, items?: Array
   return (items||[])
     .sort((a: any, b: any) => a._id > b._id ? -1 : 1)
     .findIndex((i: any) => i._id === _id) + 1
-}
-
-export const action = (moduleName: string, store: any, router: any) =>
-  async (action: string, actionProps: any, filters: any) => {
-  if( action.split('/')[0] === 'route' ) {
-    await store.dispatch(`${moduleName}/get`, { filters: { _id: filters._id } })
-    return router.push({ name: action.split('/')[1], params: { id: filters._id } })
-  }
-
-  return actionProps.ask
-    ? store.dispatch(`${moduleName}/ask`, { action, params: { payload: { filters }}})
-    : store.dispatch(`${moduleName}/${action}`, { payload: { filters  }})
 }

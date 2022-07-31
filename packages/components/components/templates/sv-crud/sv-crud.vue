@@ -17,7 +17,7 @@
       </div>
       <div class="crud__panel-control" v-if="store.actions || $slots.actions" :key="collection">
         <sv-button
-          v-for="(actionProps, index) in Object.values(store.actions||{})"
+          v-for="(actionProps, index) in store.actions"
           :key="`action-${index}`"
           v-bind="{
             type: 'neutral',

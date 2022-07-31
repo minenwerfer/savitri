@@ -1,12 +1,12 @@
 <template>
   <div class="dropdown">
-    <div class="dropdown__trigger" @click="visible =  true">
+    <a class="dropdown__trigger" @click="visible =  true">
       <sv-icon
         name="setting"
         fill="gray"
         :reactive="true"
         ></sv-icon>
-    </div>
+    </a>
     <div class="dropdown__content" v-if="visible">
       <div class="overlay" @click="visible = false"></div>
       <slot></slot>

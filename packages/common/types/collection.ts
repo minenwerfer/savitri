@@ -1,32 +1,7 @@
-export const COLLECTION_FIELD_TYPES = <const>[
-  'boolean',
-  'checkbox',
-  'collection',
-  'datetime',
-  'integer',
-  'number',
-  'object',
-  'password',
-  'radio',
-  'select',
-  'text',
-  'textbox',
-]
-
-export const COLLECTION_PRESETS = <const>[
-  'alwaysOwned',
-  'crud',
-  'duplicate',
-  'owned',
-  'removeAll',
-  'toggleActive',
-  'view',
-]
-
-export const ARRAY_TYPES = <const>[
-  'checkbox',
-  'radio'
-]
+import {
+  COLLECTION_FIELD_TYPES,
+  COLLECTION_PRESETS
+} from '../constants'
 
 export type CollectionFieldType = typeof COLLECTION_FIELD_TYPES[number]
 export type CollectionPreset = typeof COLLECTION_PRESETS[number]

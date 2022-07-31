@@ -1,4 +1,4 @@
-import '../../common/src/polyfill'
+import '../../common/polyfill'
 
 import { createApp } from 'vue'
 import Unicon from 'vue-unicons'
@@ -10,17 +10,13 @@ import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
 import { routes } from '@savitri/components'
 import { extendRouter, RouterExtension } from './router'
-import { extendStore, StoreExtension } from './store'
-// import { storeInstance as createStore } from './store'
 import { routerInstance as createRouter } from './router'
-// import { PersistentStorage } from './idb/singleton'
 import { default as webpackVariables } from 'variables'
 
 import { useStore } from './store'
 
 type Plugin = {
   routerExtension?: RouterExtension
-  storeExtension?: StoreExtension
 }
 
 interface AppOptions {
@@ -28,7 +24,6 @@ interface AppOptions {
   i18n?: any
   menuSchema: any
   routerExtension?: RouterExtension
-  storeExtension?: StoreExtension
   modules?: Array<Plugin>
 }
 
@@ -41,7 +36,6 @@ export const useApp = (config: AppOptions): Promise<{
     i18n,
     menuSchema,
     routerExtension,
-    storeExtension,
 
   }: AppOptions = config
 

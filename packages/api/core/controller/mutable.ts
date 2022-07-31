@@ -3,7 +3,7 @@ import * as TypeGuards from '../collection/typeguards'
 import { Model, Query, FilterQuery, UpdateQuery } from '../database'
 import type { CollectionDescription, MaybeCollectionDescription } from '../../../common/types'
 
-import { fromEntries } from '../../../common/src/helpers'
+import { fromEntries } from '../../../common/helpers'
 import type { MongoDocument } from '../../types'
 
 import {

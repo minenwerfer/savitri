@@ -1,8 +1,7 @@
-export * from './src'
-export * from './src/store'
-export * from './src/router'
-export * from './src/helpers'
+export * from './core'
+export * from './core/store'
+export * from './core/router'
+export * from './core/helpers'
 export * from './types'
 
-export { default as useHttp } from './src/http'
-export { default as useCollection } from './src/stores/_collection'
+export { default as useHttp } from './core/http'

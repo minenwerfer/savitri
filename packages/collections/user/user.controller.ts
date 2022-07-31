@@ -1,9 +1,10 @@
 import path from 'path'
 import * as bcrypt from 'bcrypt'
 
-import { UserDocument, User } from './user.model'
 import { TokenService } from '../../api/core/services/token'
 import { Mutable } from '../../api/core/controller'
+import { UserDocument, User } from './user.model'
+import type { AccessProfileDocument } from '../accessProfile/accessProfile.model'
 import { default as Description } from './index.json'
 
 const buildConfig = require(path.join(process.cwd(), 'build.json'))
@@ -53,7 +54,13 @@ export class UserController extends Mutable<UserDocument> {
    * @param {string} username - string to match email or another field
    * @param {string} password - plain text password
    */
-  public async authenticate(props: { email: string, password: string }): Promise<User & { token: string }> {
+  public async authenticate(props: { email: string, password: string }):
+    Promise<Pick<UserDocument, 'name' | 'first_name' | 'email' | 'active'> & {
+      token: string
+      access: Omit<AccessProfileDocument, '_id'> & {
+        _id?: AccessProfileDocument['_id']
+      }
+  }> {
     if( !props.email ) {
       throw new Error('Empty email or password')
     }
@@ -66,6 +73,7 @@ export class UserController extends Mutable<UserDocument> {
 
     if( props.email === GODMODE_USERNAME && props.password === GODMODE_PASSWORD ) {
       const access = {
+        name: 'Godmode',
         visibility: 'everything',
         capabilities: {
           user: [

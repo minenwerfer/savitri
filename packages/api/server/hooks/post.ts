@@ -1,10 +1,10 @@
 import type { Request } from '@hapi/hapi'
 import type { Controller } from '../../core/controller'
-import { HandlerRequest } from '../../core/controller'
+import type { HandlerRequest } from '../../core/controller'
 
 export const appendPagination = async (
   result: object|Array<object>,
-  instance: Controller<any> & { count?: (filter: any) => Promise<number> },
+  instance: Controller & { count?: (filter: any) => Promise<number> },
   request: Request & HandlerRequest
 ) => {
   const response = {

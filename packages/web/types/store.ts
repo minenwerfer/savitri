@@ -1,6 +1,6 @@
 import type { CollectionDescription } from '../../common/types/collection'
-import collectionActions from '../src/stores/_actions'
-import collectionGetters from '../src/stores/_getters'
+import collectionActions from '../core/store/actions'
+import collectionGetters from '../core/store/getters'
 
 export type PiniaState = {
   readonly $id?: string
