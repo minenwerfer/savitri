@@ -14,7 +14,7 @@ export type User = {
   email: string
   password?: string
   active: boolean
-  access?: AccessProfileDocument
+  access: AccessProfileDocument
 }
 
 export type UserDocument = User & MongoDocument & {

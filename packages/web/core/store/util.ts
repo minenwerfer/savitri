@@ -40,23 +40,24 @@ const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
     }
 
     return withIsomorphicLock(`dynamicQuery:${query.collection}`, async () => {
-      const stored = QUERY_CACHE?.[query.collection]||[]
-      const hasToUpdate = typeof query.limit === 'number'
-        && (query.limit > stored.length || query.limit === 0)
+      if( !(query.collection in QUERY_CACHE) ) {
+        QUERY_CACHE[query.collection] = {
+          items: [],
+          satisfied: false
+        }
+      }
 
-      if( stored?.length > 0 && !hasToUpdate ) {
-        return normalize(stored, query)
+      const stored = QUERY_CACHE[query.collection]
+      const hasToUpdate = typeof query.limit === 'number'
+        && (query.limit > stored.items.length || query.limit === 0)
+        && !stored.satisfied
+
+      if( stored.items.length > 0 && !hasToUpdate ) {
+        return normalize(stored.items, query)
       }
 
       if( hasToUpdate && stored ) {
-        query.offset = stored.length
-      }
-
-      /**
-       * @remarks This empty entry will prevent duplicate requests.
-       */
-      if( !QUERY_CACHE ) {
-        QUERY_CACHE = {}
+        query.offset = stored.items.length
       }
 
       /**
@@ -78,14 +79,14 @@ const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
         offset: query.offset
       })
 
-      const result = normalize([
-        ...stored,
-        ...data.result
-      ], query)
+      stored.items.push(...data.result)
+      stored.satisfied = data.pagination.recordsTotal === query.offset
+
+      const result = normalize(stored.items, query)
 
       return result
     })
-  }
+  , true}
 
   const entries = Array.isArray(obj)
     ? obj.map((i) => Object.entries(i)[0])

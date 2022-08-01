@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { CollectionState } from '../../../types/store'
 import type { UserDocument } from '../../../../collections/user/user.model'
+import type { AccessProfileDocument } from '../../../../collections/accessProfile/accessProfile.model'
 import useCollection from '../collection'
 import useMetaStore from './meta'
 
@@ -33,16 +34,21 @@ export default defineStore('user', {
     ...collectionActions,
     authenticate(payload: Credentials) {
       try {
-        return this.customEffect(
+        return this.$customEffect(
           'authenticate', payload,
-          async ({ result }: { result: UserDocument & { token: string }}) => {
+          async ({ user, token, access }: {
+            user: UserDocument
+            access: AccessProfileDocument
+            token: string
+          }) => {
             this.credentials = {}
             this.currentUser = {
-              ...result
+              ...user,
+              access
             }
 
-            sessionStorage.setItem('auth:token', result.token)
-            sessionStorage.setItem('auth:currentUser', JSON.stringify(result))
+            sessionStorage.setItem('auth:token', token)
+            sessionStorage.setItem('auth:currentUser', JSON.stringify(user))
 
             const metaStore = useMetaStore()
             await metaStore.describeAll()

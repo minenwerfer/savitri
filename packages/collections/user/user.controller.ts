@@ -17,7 +17,10 @@ const buildConfig = require(path.join(process.cwd(), 'build.json'))
 export class UserController extends Mutable<UserDocument> {
   constructor() {
     super(User, Description, {
-      publicMethods: ['authenticate', 'getAll']
+      publicMethods: ['authenticate'],
+      rawMethods: {
+        'authenticate': 'application/json'
+      }
     })
   }
 
@@ -55,11 +58,12 @@ export class UserController extends Mutable<UserDocument> {
    * @param {string} password - plain text password
    */
   public async authenticate(props: { email: string, password: string }):
-    Promise<Pick<UserDocument, 'name' | 'first_name' | 'email' | 'active'> & {
-      token: string
+    Promise<{
+      user: Pick<UserDocument, 'name' | 'first_name' | 'email' | 'active'> 
       access: Omit<AccessProfileDocument, '_id'> & {
         _id?: AccessProfileDocument['_id']
       }
+      token: string
   }> {
     if( !props.email ) {
       throw new Error('Empty email or password')
@@ -87,18 +91,17 @@ export class UserController extends Mutable<UserDocument> {
         }
       }
 
-      const token = await TokenService.sign({
-        email: GODMODE_USERNAME,
-        access
-      }) as string
+      const token = await TokenService.sign({ access }) as string
 
       return {
-        name: 'Godmode',
-        first_name: 'Godmode',
-        email: '',
-        active: true,
-        token,
-        access
+        user: {
+          name: 'Godmode',
+          first_name: 'Godmode',
+          email: '',
+          active: true,
+        },
+        access,
+        token
       }
     }
 
@@ -107,11 +110,11 @@ export class UserController extends Mutable<UserDocument> {
       throw new Error('invalid username or password')
     }
 
-    delete user.password
-    const token = await TokenService.sign(user.toObject())
+    const { password, ...leanUser } = user.toObject()
+    const token = await TokenService.sign({ access: leanUser.access }) as string
     return {
-      ...(user as any)._doc,
-      password: undefined,
+      user: leanUser,
+      access: leanUser.access,
       token
     }
   }

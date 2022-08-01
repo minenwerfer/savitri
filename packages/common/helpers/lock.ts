@@ -2,6 +2,9 @@ export const __locks: Record<string, boolean> = {}
 
 export const withIsomorphicLock =
 async (lockName: string, cb: () => void, throwOnLocked: boolean = false) => {
+  console.log(lockName)
+  console.log(__locks)
+
   if( __locks[lockName] ) {
     if( throwOnLocked ) {
       throw new Error(`lock ${lockName} in use`)

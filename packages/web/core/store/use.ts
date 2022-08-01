@@ -1,6 +1,8 @@
 import { inject } from 'vue'
 
-const stores: typeof STORES = STORES = {}
+const stores: typeof STORES = {}
+Object.assign(window, { STORES: stores })
+
 stores.meta = require('./stores/meta').default
 stores.user = require('./stores/user').default
 stores.accessProfile = require('./stores/accessProfile').default

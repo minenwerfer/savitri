@@ -85,6 +85,7 @@ export const useApp = (config: AppOptions): Promise<{
 
   Object.assign(window, {
     ROUTER: router,
+    QUERY_CACHE: {},
     // _store: store,
     _i18n
   })
