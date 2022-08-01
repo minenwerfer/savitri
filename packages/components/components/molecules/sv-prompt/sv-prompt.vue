@@ -27,7 +27,7 @@ import { defineAsyncComponent } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvButton } from '../../'
 
-const SvModal = defineAsyncComponent(() => import('../..//organisms/sv-modal/sv-modal.vue'))
+const SvModal = defineAsyncComponent(() => import('../../organisms/sv-modal/sv-modal.vue'))
 const metaStore = useStore('meta')
 
 type Props = {
@@ -37,6 +37,7 @@ type Props = {
 const props = defineProps<Props>()
 
 const onClick = (action: any) => {
+  console.log('fdjksafjsdanfjak')
   metaStore.fulfillPrompt(action.name)
 }
 </script>

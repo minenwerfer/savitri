@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isReadonly" class="form">
+  <div class="form">
     <fieldset
       v-if="!isReadonly && Object.keys(fields).length > 0"
       class="form__fieldset"
@@ -9,14 +9,7 @@
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
         :class="`form__field ${fieldClass(field)}`"
-        :style="`
-          --field-span: ${
-            layout?.[key]?.span
-              ? layout[key].span
-              : field.formSpan || 6
-          };
-          grid-column: span var(--field-span) / span var(--field-span);
-        `"
+        :style="fieldSpan(field)"
 
         @input="$emit('input', key)"
       >
@@ -26,7 +19,7 @@
           v-model="formData[key]"
           v-bind="{
             ...field,
-            readonly: field.readonly && !searchOnly
+            readOnly: field.readOnly && !searchOnly
           }"
         >
           <template #label>{{ field.label }}</template>
@@ -55,7 +48,7 @@
                 label: field.translate ? $t(value.label) : value.label,
                 description: value.description,
                 isRadio: field.type === 'radio',
-                readonly: field.readonly
+                readonly: field.readOnly
               }"
             ></sv-checkbox>
 
@@ -65,7 +58,7 @@
 
               v-bind="{
                 value: formData[key] == true,
-                readonly: field.readonly,
+                readonly: field.readOnly,
                 label: field.label
               }"
             ></sv-checkbox>
@@ -90,7 +83,12 @@
             ...field,
             readonly: true,
             type: isTextType(field.type) ? field.type : 'text',
-            value: store.formatValue(field.translate ? $t(formData[key]||'') : formData[key], key, true, field)
+            value: store.formatValue({
+              value: field.translate ? $t(formData[key]||'') : formData[key],
+              key,
+              field,
+              form: true
+            })
           }"
         >
           {{ field.label }}
@@ -117,23 +115,29 @@
       ></sv-search>
     </div>
 
-    <div v-if="isReadonly" :class="`grid grid-cols-6 gap-4 w-full`">
+    <fieldset v-if="isReadonly" class="form__fieldset">
       <sv-input
         v-for="([key, field], index) in allInOne"
         :key="`collection-${index}`"
 
         v-bind="{
           ...field,
-          readonly: true,
+          readOnly: true,
           type: isTextType(field.type) ? field.type : 'text',
-          value: store.formatValue(field.translate ? $t(formData[key]||'') : formData[key], key, true, field)
+          value: store.formatValue({
+            value: field.translate ? $t(formData[key]||'') : formData[key],
+            key,
+            field,
+            form: true
+          })
         }"
 
         :class="fieldClass(field)"
+        :style="fieldSpan(field)"
       >
         {{ field.label }}
       </sv-input>
-    </div>
+    </fieldset>
   </div>
 </template>
 
@@ -196,6 +200,7 @@ watch(
   { immediate: true }
 )
 
+provide('storeId', collection)
 provide('searchOnly', props.searchOnly||false)
 
 const filterFields = (condition: (f: any) => boolean) => 
@@ -229,7 +234,7 @@ const collectionFields = filterFields(([key, f]: [string, any]) => {
   return typeof f.collection === 'string'
     && f.collection !== 'file'
     && has(key)
-    && (!f.readonly || props.searchOnly)
+    && (!f.readOnly || props.searchOnly)
 })
   .map(([key, value]: [string, any]) => {
     const store = useStore(value.collection)
@@ -287,6 +292,19 @@ const fieldClass = (field: any) => {
   */
 
   return ''
+}
+
+const fieldSpan = (field: any) => {
+  const span =  props.layout?.[key]?.span
+    ? props.layout[key].span
+    : field.formSpan || 6 
+
+  const style = `
+    --field-span: ${span};
+    grid-column: span var(--field-span) / span var(--field-span);
+  `
+
+  return style
 }
 </script>
 

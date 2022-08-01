@@ -40,7 +40,7 @@ const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
     }
 
     return withIsomorphicLock(`dynamicQuery:${query.collection}`, async () => {
-      const stored = window._queryCache?.[query.collection]||[]
+      const stored = QUERY_CACHE?.[query.collection]||[]
       const hasToUpdate = typeof query.limit === 'number'
         && (query.limit > stored.length || query.limit === 0)
 
@@ -55,15 +55,15 @@ const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
       /**
        * @remarks This empty entry will prevent duplicate requests.
        */
-      if( !window._queryCache ) {
-        window._queryCache = {}
+      if( !QUERY_CACHE ) {
+        QUERY_CACHE = {}
       }
 
       /**
        * @remarks optimization
        */
       if(
-        !userStore.currentUser.access?.capabilities?.[query.collection]?.includes('getAll')
+        !userStore.$currentUser.access?.capabilities?.[query.collection]?.includes('getAll')
           && !query.public
       ) {
         return {}

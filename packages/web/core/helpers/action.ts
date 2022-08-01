@@ -54,7 +54,7 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
 
     if( actionProps.ask ) {
       return (filters: F) => store.ask({
-        actionName: store[actionName],
+        action: store[actionName],
         params: { filters }
       })
     }

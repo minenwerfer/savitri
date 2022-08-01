@@ -162,6 +162,23 @@ export default defineStore('meta', {
           isVisible: true
         }
       })
+
+      return new Promise((resolve) => {
+        const event = ({ detail }: any) => {
+          window.removeEventListener('__prompt', event)
+          this.prompt.isVisible = false
+          resolve(detail.option)
+        }
+
+        window.addEventListener('__prompt', event)
+      })
+    },
+
+    fulfillPrompt(promptName: string) {
+      console.log("eae")
+      window.dispatchEvent(new CustomEvent('__prompt', {
+        detail: { option: { promptName } }
+      }))
     },
 
     spawnModal(props: Omit<MetaState['modal'], 'isVisible'>) {

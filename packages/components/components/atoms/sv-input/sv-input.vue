@@ -14,14 +14,14 @@
           input__input
           input__input--${variant}
           ${icon && 'input__input--icon'}
-          ${readonly && 'input__input--readonly'}
+          ${readOnly && 'input__input--readonly'}
         `"
 
         ref="input"
         :type="type !== 'datetime' ? type : 'text'"
         :value="inputValue || value"
         :placeholder="placeholder"
-        :readonly="readonly"
+        :readonly="readOnly"
         :min="min"
         :max="max"
 
@@ -35,7 +35,7 @@
       ></sv-icon>
 
       <div
-        v-if="readonly"
+        v-if="readOnly"
         class="input__clipboard"
       >
         <sv-info>
@@ -54,7 +54,7 @@
       :placeholder="placeholder"
 
       @input="$emit('update:modelValue', $event.target.value)"
-      :readonly="readonly"
+      :readonly="readOnly"
 
     >{{ inputValue || value }}</textarea>
   </label>
@@ -79,7 +79,7 @@ type Props = {
   mask?: string
   icon?: string
   variant?: string
-  readonly?: boolean
+  readOnly?: boolean
   min?: number
   max?: number
 }

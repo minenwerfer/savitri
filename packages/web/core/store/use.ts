@@ -1,22 +1,16 @@
 import { inject } from 'vue'
 
-declare global {
-  interface Window {
-    __stores: Record<string, (() => any) & { $id: string }>
-  }
-}
-
-const stores: typeof window.__stores = window.__stores = {}
+const stores: typeof STORES = STORES = {}
 stores.meta = require('./stores/meta').default
 stores.user = require('./stores/user').default
 stores.accessProfile = require('./stores/accessProfile').default
 
 export const useStore = (storeId: string) => {
-  if( !(storeId in window.__stores) ) {
+  if( !(storeId in STORES) ) {
     throw new Error(`tried to invoke non existent store "${storeId}"`)
   }
 
-  return window.__stores[storeId]()
+  return STORES[storeId]()
 }
 
 export const useParentStore = (fallback?: string) => {

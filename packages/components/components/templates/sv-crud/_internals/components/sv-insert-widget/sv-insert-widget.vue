@@ -2,10 +2,9 @@
   <teleport to="body">
     <sv-box
       v-model:visible="isInsertVisible"
-      v-if="metaStore.view.collection.length > 0"
       :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
       :float="true"
-      :key="metaStore.view.collection"
+      :key="store.item._id"
     >
       <sv-form
         :key="store.item._id"
@@ -18,12 +17,15 @@
 
         @add="$e.preventDefault()"
       ></sv-form>
-      <template #footer v-if="!isInsertReadonly">
+      <template #footer>
         <sv-button
-          :disabled="store.isLoading"
-          @clicked="store.dispatch(`${collection}/deepInsert`, { what: item, __crudClose: true })"
+          :disabled="store.isLoading || isInsertReadonly"
+          @clicked="insert"
         >
           Salvar
+        </sv-button>
+        <sv-button variant="light" @clicked="isInsertReadonly = !isInsertReadonly">
+          {{ isInsertReadonly ? 'Modificar' : 'Examinar' }}
         </sv-button>
       </template>
     </sv-box>
@@ -31,22 +33,18 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '@savitri/components'
-import {
-  isInsertVisible,
-  isInsertReadonly,
+import { isInsertVisible, isInsertReadonly } from '../../store'
 
-} from '../../store'
-
-const store = reactive({})
 const metaStore = useStore('meta')
+const store = useStore(metaStore.view.collection)
 
-watch(() => metaStore.view.collection, (collection: string) => {
-  if( collection ) {
-    Object.assign(store, useStore(collection))
-  }
+const insert = async () => {
+  await store.deepInsert({
+    what: store.item
+  })
 
-}, { immediate: true })
+  isInsertVisible.value = false
+}
 </script>

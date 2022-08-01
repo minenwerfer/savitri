@@ -27,6 +27,10 @@
       "scripthost"
     ]
   },
+  "include": [
+    "packages/globa.d.ts",
+    "packages/*/**/*.ts"
+  ],
   "ts-node": {
     "compilerOptions": {
       "target": "es2017x",

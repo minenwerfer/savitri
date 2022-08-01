@@ -143,7 +143,7 @@ export default {
   },
 
   $item<T=any>(this: Pick<CollectionState<T>, 'item'>) {
-    // retur
+    //
   },
 
   /**
@@ -171,7 +171,7 @@ export default {
    * Retrieves fields who refeer to a collection (typeof collection === 'string') and have "expanded" set to true.
    * Used internally.
    */
-  expandendSubcollections<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  expandedSubcollections<T=any>(this: Pick<CollectionState<T>, 'description'>) {
     return Object.entries(this.description.fields||{})
       .filter(([, value]: [unknown, CollectionField]) => typeof value.collection === 'string' && value.expand === true)
   },

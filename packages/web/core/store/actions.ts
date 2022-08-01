@@ -11,6 +11,7 @@ import type {
 
 import useHttp from '../http'
 import useMetaStore from './stores/meta'
+import { useStore } from './use'
 
 type CollectionStateItem<T> =
   Pick<CollectionState<T>, 'item'>
@@ -36,13 +37,6 @@ const mutations = {
     this.item = item
   },
 
-  $setItem<T>(
-    this: CollectionStateItem<T>,
-    { result }: { result: T }
-  ) {
-    this.item = result
-  },
-
   setItems<T>(
     this: CollectionStateItems<T>,
     items: Array<T>
@@ -54,16 +48,24 @@ const mutations = {
     this: Pick<CollectionState<T>, 'item' | 'items'>,
     item: T
   ) {
-    this.item = item
-    const itemIdx = this.items
-      .findIndex(({ _id }: Pick<T, '_id'>) => _id === item._id)
+    console.log('CALLLLLLLLLLEEED!!')
+    console.log(item)
 
-    if( itemIdx === -1 ) {
-      this.items.push(item)
+    this.item = item
+    const found = this.items.find(({ _id }: Pick<T, '_id'>) => _id === item._id)
+    if( found ) {
+      Object.assign(found, item)
       return
     }
 
-    this.items[itemIdx] = item
+    this.items = [
+      item,
+      ...this.items
+    ]
+  },
+
+  removeItem<T extends { _id: string }>(this: Pick<CollectionState<T>, 'items'>, item: T) {
+    this.items = this.items.filter(({ _id }: T) => item._id !== _id)
   },
 
   clearItem<T=any>(this: Pick<CollectionState<T>, 'item' | 'freshItem'>) {
@@ -95,24 +97,35 @@ export default {
     payload: any,
     fn: (data: any) => any
   ): Promise<any> {
-    return fn(await this.custom(verb, payload))
+    const response = await this.custom(verb, payload)
+    return fn(response.result)
+  },
+
+  async $customEffect(
+    this: { custom: (...args: any[]) => Promise<any> },
+    verb: string,
+    payload: any,
+    fn: (data: any) => any
+  ): Promise<any> {
+    const response = await this.custom(verb, payload)
+    return fn(response)
   },
 
   async get<T>(payload: ActionFilter): Promise<T> {
     return this.customEffect(
       'get', payload,
-      this.$setItem
+      this.setItem
     )
   },
 
   async getAll<T>(
     this: {
       $patch: (...args: any[]) => void
-      customEffect: (...args: any[]) => Promise<any>
+      $customEffect: (...args: any[]) => Promise<any>
     },
     payload: ActionFilter
   ): Promise<Array<T>> {
-    return this.customEffect(
+    return this.$customEffect(
       'getAll', payload,
       ({ result, pagination }: { result: Array<T>, pagination: Pagination }) => {
         this.$patch({
@@ -124,16 +137,57 @@ export default {
   },
 
   async insert<T>(
-    this: {
+    this: typeof mutations & {
       item: CollectionState<T>['item']
       customEffect: (...args: any[]) => Promise<any>
-      setItem: (item: T) => void
     },
-    payload: { what?: Partial<T> }
+    payload?: { what: Partial<T> }
   ): Promise<T> {
     return this.customEffect(
-      'insert', { ...payload, what: payload.what||this.item },
-      this.setItem
+      'insert', { ...payload, what: payload?.what||this.item },
+      this.insertItem
+    )
+  },
+
+  async deepInsert<T extends Record<string, any>>(
+    this: typeof mutations & {
+      item: CollectionState<T>['item']
+      insert: (...args: any[]) => Promise<T>
+      expandedSubcollections: any
+    },
+    payload?: { what: Partial<T> }
+  ): Promise<T> {
+    const expandedSubcollections = this.expandedSubcollections
+    const newItem = (payload?.what || this.item) as Record<string, any>
+
+    for( const [k, { collection }] of expandedSubcollections ) {
+      if(
+        newItem[k]
+        && typeof newItem[k] === 'object'
+        && Object.keys(newItem).length > 0
+      ) {
+        const helperStore = useStore(collection)
+        newItem[k] = await helperStore.insert({
+          what: newItem[k]
+        })
+      }
+    }
+
+    return this.insert({
+      what: newItem
+    })
+  },
+
+  delete<T extends { _id: string }>(
+    this: typeof mutations & {
+      item: CollectionState<T>['item']
+      customEffect: (...args: any[]) => Promise<any>
+    },
+    payload: { filters?: Pick<T, '_id'> }
+  ): Promise<T> {
+    return this.customEffect(
+      'delete', { _id: payload?.filters?._id },
+      this.removeItem
     )
   },
 
@@ -166,7 +220,7 @@ export default {
     body?: string
   }) {
     const metaStore = useMetaStore()
-    metaStore.spawnPrompt({
+    await metaStore.spawnPrompt({
       title: props.title || 'Diálogo de confirmação',
       body: props.body,
       actions: [

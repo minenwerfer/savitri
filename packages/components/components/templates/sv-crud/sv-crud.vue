@@ -32,7 +32,8 @@
       </div>
     </div>
 
-    <sv-insert-widget></sv-insert-widget>
+    <!-- v-if is used on purpose to force re-rendering -->
+    <sv-insert-widget v-if="isInsertVisible"></sv-insert-widget>
     <sv-report-widget></sv-report-widget>
 
     <sv-box>
@@ -103,6 +104,7 @@ import SvInsertWidget from './_internals/components/sv-insert-widget/sv-insert-w
 
 import {
   isInsertVisible,
+  isInsertReadonly,
   isReportVisible,
 
 } from './_internals/store'
@@ -130,6 +132,7 @@ const hasSelectionActions = computed(() => {
 onMounted(() => {
   metaStore.view.title = props.collection
   metaStore.view.collection = props.collection
+  isInsertReadonly.value = false
 
   if( store.itemsCount === 0 ) {
     store.getAll()
@@ -166,6 +169,14 @@ watch(() => actionEventBus, (event: ActionEvent) => {
 
   if( event.name === 'spawnEdit' ) {
     store.setItem(event.params.filters)
+    isInsertVisible.value = true
+  }
+
+  if( event.name === 'duplicate' ) {
+    const { filters: newItem } = event.params
+    delete newItem._id
+
+    store.setItem(newItem)
     isInsertVisible.value = true
   }
 

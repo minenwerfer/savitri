@@ -1,4 +1,3 @@
-import { useRouter } from 'vue-router'
 import { RequestProvider } from '../../common'
 import { useStore } from './store'
 
@@ -50,8 +49,7 @@ const httpMethodWrapper = (
 
 
         sessionStorage.clear()
-        const router = useRouter()
-        router.push({ name: 'signin' })
+        ROUTER.push({ name: 'signin' })
 
       } else {
         // ctx.commit('meta/MODAL_SPAWN', {

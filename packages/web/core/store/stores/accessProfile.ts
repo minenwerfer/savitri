@@ -1,10 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Router } from 'vue-router'
 import useCollection from '../collection'
-
-declare namespace window {
-  var _router: Router
-}
 
 const {
   state,
@@ -18,10 +13,10 @@ export default defineStore('accessProfile', {
     ...actions,
     spawnAdd() {
       this.clearItem()
-      window._router.push({ name: 'dashboard-access-edit' })
+      ROUTER.push({ name: 'dashboard-access-edit' })
     },
     spawnEdit() {
-      window._router.push({ name: 'dashboard-access-edit' })
+      ROUTER.push({ name: 'dashboard-access-edit' })
     }
   },
   getters
