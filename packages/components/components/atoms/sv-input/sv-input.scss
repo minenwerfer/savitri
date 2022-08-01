@@ -21,6 +21,10 @@
 .input {
   &__label {
     font-size: 10pt;
+
+    &__required {
+      color: red;
+    }
   }
 
   &__description {

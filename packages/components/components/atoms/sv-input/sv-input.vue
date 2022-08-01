@@ -3,6 +3,7 @@
     <strong class="input__label">
       <slot v-if="$slots.default"></slot>
       <slot v-else name="label"></slot>
+      <span v-if="required" class="input__label__required">*</span>
     </strong>
     <div v-if="$slots.description" class="input__description">
       <slot name="description"></slot>
@@ -24,6 +25,7 @@
         :readonly="readonly"
         :min="min"
         :max="max"
+        :required="required"
 
         @input="onInput"
         @change="onChange"
@@ -82,6 +84,7 @@ type Props = {
   readonly?: boolean
   min?: number
   max?: number
+  required?: boolean
 }
 
 const props = defineProps<Props>()
