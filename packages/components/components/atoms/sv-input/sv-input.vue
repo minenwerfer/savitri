@@ -18,7 +18,7 @@
         `"
 
         ref="input"
-        :type="type !== 'datetime' ? type : 'text'"
+        :type="inputType(type)"
         :value="inputValue || value"
         :placeholder="placeholder"
         :readonly="readOnly"
@@ -71,10 +71,18 @@ import {
 
 } from '../../'
 
+type InputType = 
+  | 'text' 
+  | 'password'
+  | 'number'
+  | 'date'
+  | 'datetime' // datetime-local
+  | 'email'
+
 type Props = {
   modelValue?: string
-  value?: string|number
-  type?: string
+  value?: string | number
+  type?: InputType
   placeholder?: string
   mask?: string
   icon?: string
@@ -82,6 +90,13 @@ type Props = {
   readOnly?: boolean
   min?: number
   max?: number
+}
+
+const inputType = (typ: InputType): string => {
+  switch (typ) {
+    case 'datetime': return 'datetime-local'
+    default: return typ
+  }
 }
 
 const props = defineProps<Props>()
@@ -95,53 +110,15 @@ const metaStore = useStore('meta')
 const input = ref<any>(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
 
-const dateToISO = (raw: string) => {
-  if( !raw ) {
-    return ''
-  }
-
-  const numbers = raw.split('T')[0].split('-').join('')
-
-  return [
-    numbers.slice(6, 8),
-    numbers.slice(4, 6),
-    numbers.slice(0, 4)
-
-  ].join('/')
-}
-
-const ISOToDate = (raw: string) => {
-  if( !raw ) {
-    return
-  }
-
-  const numbers = raw.split('/').join('')
-
-  return [
-    numbers.slice(2, 4),
-    numbers.slice(0, 2),
-    numbers.slice(4, 8)
-
-  ].join('/')
-}
-
-const inputValue = ref(props.type === 'datetime'
-  ? dateToISO(props.modelValue)
-  : props.modelValue)
+const inputValue = ref(props.modelValue)
 
 const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {
   inputValue.value = event.target.value
-  const newValue = props.type !== 'datetime'
-    ? event.target.dataset?.maskRawValue || event.target.value
-    : event.target.value
-
-  emit('update:modelValue', newValue)
+  emit('update:modelValue', event.target.dataset?.maskRawValue || event.target.value)
 }
 
 const onChange = (event: { target: { value: string } }) => {
-  if( props.type === 'datetime' ) {
-    emit('update:modelValue', ISOToDate(event.target.value))
-  }
+  emit('update:modelValue', event.target.value)
 }
 
 const copy = (value: string) => {
