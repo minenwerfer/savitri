@@ -22,6 +22,7 @@
   },
   "table": [
     "name",
+    "role",
     "visibility",
     "created_at",
     "updated_at"
