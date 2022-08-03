@@ -9,6 +9,7 @@
       <template #body>
         <sv-form
           v-if="!reportStore.item._id"
+          collection="report"
           :form="reportStore.useFieldsExcept(['user_id', 'collection'])"
           :form-data="reportStore.item"
           :gap-y="8"

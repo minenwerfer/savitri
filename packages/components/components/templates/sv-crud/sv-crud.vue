@@ -125,7 +125,7 @@ const [call, actionEventBus] = useAction(store, router)
 provide('storeId', computed(() => props.collection))
 
 const hasSelectionActions = computed(() => {
-  return Object.values(store.actions||{})
+  return store.actions
     .some((action: any) => !!action.selection)
 })
 

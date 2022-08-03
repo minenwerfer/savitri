@@ -1,12 +1,13 @@
-import { Request, ResponseToolkit } from '@hapi/hapi'
 import * as R from 'ramda'
-import type { HandlerRequest } from '../types'
+import type { Request, ResponseToolkit } from '@hapi/hapi'
+import type { HandlerRequest, DecodedToken } from '../types'
 
 import { getController } from '../core/controller'
 import { TokenService } from '../core/services/token'
 import { FileController } from '../../collections/file/file.controller'
 
 import { appendPagination } from './hooks/post'
+import { prependPagination } from './hooks/pre'
 
 export type RegularVerb =
   'get'
@@ -15,6 +16,14 @@ export type RegularVerb =
   | 'modify'
   | 'delete'
   | 'deleteAll'
+
+const prePipe = R.pipe(
+  prependPagination
+)
+
+const postPipe = R.pipe(
+  appendPagination
+)
 
 export const getToken = async (request: Request) => request.headers.authorization
   ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
@@ -37,18 +46,28 @@ export const safeHandle = (
     }
 
     return {
-      _error: true,
-      name: error.name,
-      code: error.code,
-      message: error.message
-   }
+      error: {
+        name: error.name,
+        code: error.code,
+        message: error.message
+      }
+    }
   }
+}
+
+export const safeHandleProvide = (
+  fn: (request: HandlerRequest, h: ResponseToolkit, provide: Record<string, any>) => object,
+  provide: Record<string, any>
+) => {
+  const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, provide)
+  return safeHandle(fn2)
 }
 
 export const customVerbs = (type: 'collections'|'controllables') =>
   async (
   request: HandlerRequest,
-  h: ResponseToolkit
+  h: ResponseToolkit,
+  provide?: Record<string, any>
 ) => {
     const {
       params: {
@@ -59,10 +78,12 @@ export const customVerbs = (type: 'collections'|'controllables') =>
 
     const Controller = getController(controller, type)
     const instance = new Controller
+    instance.injected = provide
 
-    const token = await getToken(request)
+    const token = await getToken(request) as DecodedToken
     const method = (instance.webInterface||instance)[verb]
 
+    prePipe(request, h, token)
     const result = await method(request, h, token)
 
     const mime = instance.rawType(verb)
@@ -71,29 +92,11 @@ export const customVerbs = (type: 'collections'|'controllables') =>
         .header('Content-Type', mime)
     }
 
-    const pipe = R.pipe(
-      appendPagination
-    )
-
-    return pipe(result, instance, request)
-}
-
-export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {
-  const instance = new FileController
-
-  const { hash, options } = request.params
-  const { filename, content, mime } = await instance.download(hash)
-
-  const parsedOptions = (options||'').split(',')
-  const has = (opt: string) => parsedOptions.includes(opt)
-
-  return h.response(content)
-    .header('Content-Type', mime)
-    .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+    return postPipe(result, instance, request)
 }
 
 export const regularVerb = (verb: RegularVerb) =>
-  async (request: HandlerRequest, h: ResponseToolkit) => {
+  async (request: HandlerRequest, h: ResponseToolkit, provide?: Record<string, any>) => {
   const {
     controller,
     id
@@ -102,8 +105,11 @@ export const regularVerb = (verb: RegularVerb) =>
   const Controller = getController(controller)
   const _instance = new Controller
   const instance = _instance.webInterface
+  instance.injected = provide
 
-  const token = await getToken(request)
+  const token = await getToken(request) as DecodedToken
+
+  prePipe(request, h, token)
   const requestCopy = Object.assign(request, { payload: {} })
 
   if( id ) {
@@ -118,9 +124,19 @@ export const regularVerb = (verb: RegularVerb) =>
   }
 
   const result = await instance[verb](requestCopy, h, token)
-  const pipe = R.pipe(
-    appendPagination
-  )
+  return postPipe(result, _instance, request)
+}
 
-  return pipe(result, _instance, request)
+export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {
+  const instance = new FileController
+
+  const { hash, options } = request.params
+  const { filename, content, mime } = await instance.download(hash)
+
+  const parsedOptions = (options||'').split(',')
+  const has = (opt: string) => parsedOptions.includes(opt)
+
+  return h.response(content)
+    .header('Content-Type', mime)
+    .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }

@@ -2,13 +2,13 @@ import { fromEntries, getIndexes } from '../../../common'
 import type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument } from '../../types'
 
-export const select = <T extends MongoDocument>(item: T, fields: Array<string>) => {
-  if( !item || typeof item !== 'object' || !fields ) {
+export const select = <T extends MongoDocument>(item: T, indexes: Array<string>) => {
+  if( !indexes ) {
     return item
   }
 
-  const sanitizedFields = [ '_id', ...Array.isArray(fields) ? fields : [fields] ]
-  const _select = (what: any) => sanitizedFields.reduce((a: any, c: string) => ({ ...a, [c]: what[c] }), {})
+  const sanitizedIndexes = [ '_id', ...Array.isArray(indexes) ? indexes : [indexes] ]
+  const _select = (what: any) => sanitizedIndexes.reduce((a: any, c: string) => ({ ...a, [c]: what[c] }), {})
 
   return Array.isArray(item)
     ? item.map((o: any) => _select(o))
@@ -24,7 +24,7 @@ export const depopulate = <T extends MongoDocument>(
   const entries = Object.entries(item)
     .map(([key, value]: [string, any]) => ([
       key,
-      !(description.fields[key]||{}).expand
+      !description.fields[key]?.expand && !!value?._id
         ? select(value, getIndexes(description, key))
         : value
     ]))

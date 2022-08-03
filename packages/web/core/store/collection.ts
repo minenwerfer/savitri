@@ -1,3 +1,4 @@
+import { PAGINATION_PER_PAGE_DEFAULT } from '../../../common'
 import type { CollectionState } from '../../types/store'
 import actions from './actions'
 import getters from './getters'
@@ -30,7 +31,7 @@ const state = <T=object>(): CollectionState<T> => {
 
     pagination: {
       offset: 0,
-      limit: 0,
+      limit: PAGINATION_PER_PAGE_DEFAULT,
       recordsCount: 0,
       recordsTotal: 0,
       currentPage: 0

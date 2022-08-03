@@ -2,7 +2,7 @@
   <div class="pagination" @change="paginate">
     <div class="pagination__control">
       <div>Limite</div>
-      <sv-select v-model="limit">
+      <sv-select v-model.number="store.pagination.limit">
         <option
           v-for="limit in PAGINATION_PER_PAGE_DEFAULTS"
           :key="`limit-${limit}`"
@@ -13,8 +13,11 @@
     </div>
     <div class="pagination__control">
       <div>Página</div>
-      <sv-select v-model="page">
-        <option v-for="page in store.pageCount" :key="`page-${page}`">
+      <sv-select v-model.number="page">
+        <option
+          v-for="page in pageCount"
+          :key="`page-${page}`"
+        >
           {{ page }}
         </option>
       </sv-select>
@@ -23,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useParentStore } from '@savitri/web'
 import {
   PAGINATION_PER_PAGE_DEFAULT,
@@ -34,17 +37,20 @@ import {
 import { SvSelect } from '../../'
 
 const SvBareButton = defineAsyncComponent(() => import('../..//atoms/sv-bare-button/sv-bare-button.vue'))
+const store = useParentStore()
 
-const page = ref<number>(1)
-const limit = ref<number>(PAGINATION_PER_PAGE_DEFAULT)
+const page = computed({
+  get: () => Math.floor(store.pagination.offset / store.pagination.limit),
+  set: (page: number) => {
+    store.pagination.offset = (page - 1) * store.pagination.limit
+  }
+})
+
+const pageCount = computed(() => Math.floor(store.pagination.recordsTotal / store.pagination.limit))
 
 const paginate = () => {
-  // store.dispatch(`${props.module}/paginate`, { page: +page.value, limit: +limit.value })
+  store.getAll()
 }
-
-const store = useParentStore()
-// const pageCount = computed(() => store.getters[`${props.module}/pageCount`])
-// const currentPage = computed(() => store.getters[`${props.module}/currentPage`])
 </script>
 
 <style scoped src="./sv-pagination.scss"></style>

@@ -25,7 +25,7 @@ type CrudParameters = {
   offset: number
 }
 
-type ActionFilter = Pick<CrudParameters, 'filters' | 'limit' | 'offset'>
+type ActionFilter = Partial<Pick<CrudParameters, 'filters' | 'limit' | 'offset'>>
 
 const { http } = useHttp()
 
@@ -48,9 +48,6 @@ const mutations = {
     this: Pick<CollectionState<T>, 'item' | 'items'>,
     item: T
   ) {
-    console.log('CALLLLLLLLLLEEED!!')
-    console.log(item)
-
     this.item = item
     const found = this.items.find(({ _id }: Pick<T, '_id'>) => _id === item._id)
     if( found ) {
@@ -119,12 +116,22 @@ export default {
   },
 
   async getAll<T>(
-    this: {
+    this: Pick<CollectionState<T>, 'pagination'> & {
       $patch: (...args: any[]) => void
       $customEffect: (...args: any[]) => Promise<any>
     },
-    payload: ActionFilter
+    _payload: ActionFilter
   ): Promise<Array<T>> {
+    const payload = Object.assign({}, _payload)
+
+    if( !payload.limit ) {
+      payload.limit = this.pagination.limit
+    }
+
+    if( !payload.offset ) {
+      payload.offset = this.pagination.offset
+    }
+
     return this.$customEffect(
       'getAll', payload,
       ({ result, pagination }: { result: Array<T>, pagination: Pagination }) => {
@@ -186,7 +193,7 @@ export default {
     payload: { filters?: Pick<T, '_id'> }
   ): Promise<T> {
     return this.customEffect(
-      'delete', { _id: payload?.filters?._id },
+      'delete', { filters: { _id: payload?.filters?._id } },
       this.removeItem
     )
   },

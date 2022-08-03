@@ -16,7 +16,7 @@ export const useStore = (storeId: string) => {
 }
 
 export const useParentStore = (fallback?: string) => {
-  let parentStoreId = inject<any>('storeId')
+  let parentStoreId = inject<any>('storeId', null)
   if( !parentStoreId ) {
     if( !fallback ) {
       throw new Error('no parent store found')

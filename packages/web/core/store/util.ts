@@ -86,7 +86,7 @@ const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
 
       return result
     })
-  , true}
+  }
 
   const entries = Array.isArray(obj)
     ? obj.map((i) => Object.entries(i)[0])

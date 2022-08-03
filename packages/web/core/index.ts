@@ -33,7 +33,7 @@ export const useApp = (config: AppOptions): Promise<{
 }> => new Promise(async (resolve) => {
   const {
     component,
-    i18n,
+    i18n: i18nConfig,
     menuSchema,
     routerExtension,
 
@@ -43,7 +43,7 @@ export const useApp = (config: AppOptions): Promise<{
   app.use(createPinia())
 
   const router = createRouter(routes)
-  const _i18n = createI18n(i18n)
+  const i18n = createI18n(i18nConfig)
 
   if( routerExtension ) {
     extendRouter(router, routerExtension)
@@ -66,7 +66,7 @@ export const useApp = (config: AppOptions): Promise<{
   }
 
   app.use(router)
-  app.use(_i18n)
+  app.use(i18n)
 
   app.provide('menuSchema', menuSchema)
   app.provide('i18n', i18n)
@@ -87,23 +87,14 @@ export const useApp = (config: AppOptions): Promise<{
     ROUTER: router,
     QUERY_CACHE: {},
     // _store: store,
-    _i18n
+    _i18n: i18n
   })
 
-  // initializes storage singleton
-  // const persistentStorage = new PersistentStorage()
-  // PersistentStorage.instance.switchObjectStore('application')
-  //
   const metaStore = useStore('meta')
   await metaStore.describeAll()
-
-  // store.dispatch('meta/describeAll').then(() => {
-  //   window.dispatchEvent(new CustomEvent('__storeCreated'))
-  // })
 
   resolve({
     app,
     router,
-    // store
   })
 })

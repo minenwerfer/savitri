@@ -25,7 +25,7 @@
           </sv-bare-button>
           <sv-bare-button
             v-else-if="closeHint"
-            @click="$emit('update:visible', false)"
+            @click="close"
           >
             <sv-icon
               name="multiply"
@@ -81,8 +81,18 @@ const props = withDefaults(defineProps<Props>(), {
   animate: true
 })
 
+const emit = defineEmits<{
+  (e: 'update:visible', value: boolean): void
+  (e: 'close'): void
+}>()
+
 const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
+
+const close = () => {
+  emit('update:visible', false)
+  emit('close')
+}
 </script>
 
 <style scoped src="./sv-box.scss"></style>

@@ -8,6 +8,7 @@ export abstract class Controller {
   private _webInterface: Controller
   protected _description?: Partial<CollectionDescription>
   protected _controllerName?: string
+  public injected: Record<string, any>
 
   /**
    * @protected @readonly

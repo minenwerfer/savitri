@@ -1,10 +1,11 @@
 import type { ResponseToolkit } from '@hapi/hapi'
-import type { HandlerRequest } from '../../core/controller'
-import type { DecodedToken } from '../../types'
+import type { HandlerRequest, DecodedToken } from '../../types'
 import { PAGINATION_PER_PAGE_LIMIT } from '../../../common/constants'
 
 export const prependPagination = (
   request: HandlerRequest,
+  _response: ResponseToolkit,
+  _decodedToken: DecodedToken
 ) => {
   if(
     typeof request.payload?.limit === 'number'

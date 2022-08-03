@@ -2,7 +2,7 @@
   <table v-if="Object.keys(columns).length > 0" class="table">
     <tr v-if="headers" class="table__row table__row--header">
       <th
-        v-if="collection && checkbox"
+        v-if="checkbox"
         :class="`
           table__header
           table__header--checkbox
@@ -31,7 +31,7 @@
       :class="`table__row table__row--body`"
       @click="store.setItem(row)"
     >
-      <td v-if="collection && checkbox">
+      <td v-if="checkbox">
         <input
           type="checkbox"
           v-model="selected"

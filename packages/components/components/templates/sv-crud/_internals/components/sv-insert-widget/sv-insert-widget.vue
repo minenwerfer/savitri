@@ -24,7 +24,11 @@
         >
           Salvar
         </sv-button>
-        <sv-button variant="light" @clicked="isInsertReadonly = !isInsertReadonly">
+        <sv-button
+          v-if="store.item._id"
+          variant="light"
+          @clicked="isInsertReadonly = !isInsertReadonly"
+        >
           {{ isInsertReadonly ? 'Modificar' : 'Examinar' }}
         </sv-button>
       </template>

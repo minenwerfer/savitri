@@ -7,7 +7,7 @@ export const applyPreset = (description: CollectionDescription, collectionName:s
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
   return R.mergeDeepWith(
-    R.concat,
+    (a, b) => a && R.concat(a, b),
     description,
     presetObject
   )

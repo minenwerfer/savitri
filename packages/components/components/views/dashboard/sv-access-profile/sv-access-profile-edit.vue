@@ -6,8 +6,9 @@
   >
     <div class="flex flex-col gap-y-6">
       <sv-form
-        :form="store.fields"
+        :form="fields"
         :form-data="store.item"
+        :key="fields.role.values"
       >
       </sv-form>
       <sv-button
@@ -20,6 +21,7 @@
       <sv-form
         :form="capabilitiesFields"
         :form-data="store.item.capabilities"
+        :collection="accessProfile"
         >
       </sv-form>
     </div>
@@ -35,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@savitri/web'
 import type { CollectionDescription } from '@savitri/common'
@@ -45,20 +47,30 @@ const store = useStore('accessProfile')
 const metaStore = useStore('meta')
 const router = useRouter()
 
-const { capabilities, ...fields } = store.fields
-
-provide('storeId', 'accessProfile')
+const { capabilities, ...fieldsRest } = store.fields
+const fields = reactive(fieldsRest)
 
 type AccParams = Pick<
   CollectionDescription,
-  'module'
+  'collection'
   | 'report'
   | 'methods'
   | 'extraMethods'
 >
 
+onMounted(async () => {
+  const { result: roles } = await store.custom('roles')
+  fields.role.values = roles.reduce((a: any, role: string) => ({
+    ...a,
+    [role]: {
+      value: role,
+      label: role
+    }
+  }), {})
+})
+
 const capabilitiesFields = Object.values(metaStore.descriptions).reduce(
-  (a: any, { module: moduleName, report, methods, extraMethods }: AccParams
+  (a: any, { collection: collectionName, report, methods, extraMethods }: AccParams
 ) => {
   if( !methods ) {
     return a
@@ -66,8 +78,8 @@ const capabilitiesFields = Object.values(metaStore.descriptions).reduce(
 
   return {
     ...a,
-    [moduleName]: {
-      label: moduleName,
+    [collectionName]: {
+      label: collectionName,
       type: 'checkbox',
       translate: true,
       values: [
@@ -94,7 +106,7 @@ const grantEverything = () => {
 }
 
 const insert = async () => {
-  await store.dispatch('accessProfile/insert', { payload: { what: store.item.value } })
+  await store.insert({ what: store.item.value })
   router.back()
 }
 </script>

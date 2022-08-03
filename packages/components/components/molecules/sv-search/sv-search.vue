@@ -148,6 +148,7 @@ const searchOnly = inject<boolean>('searchOnly', props.searchOnly)
 
 const parentStore = useParentStore(props.collection)
 const store = useStore(props.field.collection)
+
 provide('iconReactive', true)
 
 onMounted(() => store.clearItems())

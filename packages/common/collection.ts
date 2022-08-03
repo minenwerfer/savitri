@@ -71,16 +71,18 @@ export const formatValue = (
   form: boolean = false,
   field?: CollectionField
 ): string => {
-  const firstValue = value && typeof value === 'object' && !(value instanceof Date)
+  if( !value && !['number', 'boolean'].includes(typeof value) ) {
+    return '-'
+  }
+
+  const firstValue = typeof value === 'object' && !(value instanceof Date)
     ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key, form) : Object.values(value)[0])
     : value
 
   const formatted = (() => {
     switch(true) {
       case field?.type === 'datetime':
-        return firstValue
-          ? (String(firstValue) as any).formatDateTime(field?.includeHours)
-          : '-'
+        return (String(firstValue) as any).formatDateTime(field?.includeHours)
 
       case field?.type === 'boolean': return firstValue ? 'sim' : 'não'
       case [undefined, null].includes(firstValue): return '-'
@@ -88,9 +90,7 @@ export const formatValue = (
     }
   })()
 
-  return ![undefined, null].includes(formatted)
-    ? String(formatted)
-    : '-'
+  return String(formatted)
 }
 
 export const getItemIndex = <T extends { _id: string }>(item: any, items?: Array<T>) => {

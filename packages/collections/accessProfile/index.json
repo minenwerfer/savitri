@@ -6,6 +6,20 @@
     "crud",
     "duplicate"
   ],
+  "actions": {
+    "ui/spawnAdd": null,
+    "route/dashboard-access-edit": {
+      "name": "Adicionar",
+      "unicon": "plus"
+    }
+  },
+  "individualActions": {
+    "ui/spawnEdit": null,
+    "route/dashboard-access-edit": {
+      "name": "Editar",
+      "unicon": "edit"
+    }
+  },
   "table": [
     "name",
     "visibility",
@@ -16,7 +30,8 @@
     "name": {
       "label": "Nome",
       "type": "text",
-      "unique": true
+      "unique": true,
+      "required": true
     },
     "visibility": {
       "label": "Visibilidade",
@@ -27,6 +42,11 @@
         "useronly",
         "everything"
       ]
+    },
+    "role": {
+      "label": "Papel",
+      "type": "select",
+      "values": []
     },
     "capabilities": {
       "label": "Capacidades",

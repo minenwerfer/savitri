@@ -1,13 +1,17 @@
 import * as Hapi from '@hapi/hapi'
 
 import '../../common/polyfill'
-import { routes } from './routes'
+import getRoutes from './routes'
 
 declare global {
   var modules: Array<any>
 }
 
-export const init = async (props?: { port?: number, modules?: Array<any> }): Promise<Hapi.Server> => {
+export const init = async (props?: {
+  port?: number
+  modules?: Array<any>
+  provide?: Record<string, any>
+}): Promise<Hapi.Server> => {
   props = props || {
     port: 3000,
     modules: []
@@ -37,7 +41,7 @@ export const init = async (props?: { port?: number, modules?: Array<any> }): Pro
     }
   })
 
-  // routes.forEach(server.route)
+  const routes = getRoutes(props.provide||{})
   for( const route of routes ) {
     server.route(route)
   }

@@ -48,7 +48,7 @@
                 label: field.translate ? $t(value.label) : value.label,
                 description: value.description,
                 isRadio: field.type === 'radio',
-                readonly: field.readOnly
+                readOnly: field.readOnly
               }"
             ></sv-checkbox>
 
@@ -58,7 +58,7 @@
 
               v-bind="{
                 value: formData[key] == true,
-                readonly: field.readOnly,
+                readOnly: field.readOnly,
                 label: field.label
               }"
             ></sv-checkbox>
@@ -77,26 +77,19 @@
           <sv-file v-model="formData[key]" :context="`${collection}.${itemIndex}.${key}.${fieldIndex}`"></sv-file>
         </div>
 
-        <sv-input
-          v-else-if="field.collection"
-          v-bind="{
-            ...field,
-            readonly: true,
-            type: isTextType(field.type) ? field.type : 'text',
-            value: store.formatValue({
-              value: field.translate ? $t(formData[key]||'') : formData[key],
-              key,
-              field,
-              form: true
-            })
-          }"
-        >
-          {{ field.label }}
-        </sv-input>
+        <!-- <sv-input -->
+        <!--   v-else-if="field.collection" -->
+        <!--   v-bind="inputBind(field, key)" -->
+        <!-- > -->
+        <!--   {{ field.label }} -->
+        <!-- </sv-input> -->
       </div>
     </fieldset>
 
-    <div class="form__search-grid" v-if="!isReadonly && collectionFields.length > 0">
+    <div
+      class="form__search-grid"
+      v-if="!isReadonly && store && collectionFields.length > 0"
+    >
       <sv-search
         v-for="([childCollection, field], index) in collectionFields"
         :key="`collectionfield-${index}`"
@@ -120,17 +113,7 @@
         v-for="([key, field], index) in allInOne"
         :key="`collection-${index}`"
 
-        v-bind="{
-          ...field,
-          readOnly: true,
-          type: isTextType(field.type) ? field.type : 'text',
-          value: store.formatValue({
-            value: field.translate ? $t(formData[key]||'') : formData[key],
-            key,
-            field,
-            form: true
-          })
-        }"
+        v-bind="inputBind(field, key)"
 
         :class="fieldClass(field)"
         :style="fieldSpan(field)"
@@ -142,17 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  defineAsyncComponent,
-  provide,
-  inject,
-  computed,
-  ref,
-  reactive,
-  watch,
-
-} from 'vue'
-
+import { defineAsyncComponent, provide, inject, reactive } from 'vue'
 import { useStore, useParentStore } from '@savitri/web'
 import { SvInput, SvCheckbox, SvSelect } from '../..'
 
@@ -191,16 +164,12 @@ const emit = defineEmits<{
   (e: 'change', value: string): void
 }>()
 
-const store = reactive({})
-const collection = ref<string>(props.collection || inject('storeId'))
+const collectionName = props.collection || inject('storeId')
+const store = collectionName
+  ? useStore(collectionName.value||collectionName)
+  : null
 
-watch(
-  () => collection,
-  (collectionName) => Object.assign(store, useStore(collectionName.value)),
-  { immediate: true }
-)
-
-provide('storeId', collection)
+provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
 
 const filterFields = (condition: (f: any) => boolean) => 
@@ -216,7 +185,7 @@ const filterFields = (condition: (f: any) => boolean) =>
     }])
 
 const has = (field: string) => {
-  if( props.searchOnly || !collection ) {
+  if( props.searchOnly || !collectionName ) {
     return true
   }
 
@@ -256,8 +225,6 @@ const allInOne = filterFields()
   }]
 })
 
-const isSmall = computed(() => Object.keys(allInOne).length < 6)
-
 const isTextType = (type: string) => {
   return [
     'text',
@@ -283,14 +250,6 @@ const fieldClass = (field: any) => {
     return field.formStyle
   }
 
-  /*
-  if( isSelectType(field.type)
-    || field.type === 'textbox'
-    || field.collection === 'file' ) {
-    return 'col-span-6'
-  }
-  */
-
   return ''
 }
 
@@ -299,12 +258,28 @@ const fieldSpan = (field: any) => {
     ? props.layout[key].span
     : field.formSpan || 6 
 
-  const style = `
+  return `
     --field-span: ${span};
     grid-column: span var(--field-span) / span var(--field-span);
   `
+}
 
-  return style
+const inputBind = (field: any, key: string) => {
+  if( !store ) {
+    return props.formData[key]
+  }
+
+  return {
+    ...field,
+    readOnly: true,
+    type: isTextType(field.type) ? field.type : 'text',
+    value: store.formatValue({
+      value: field.translate ? $t(props.formData[key]||'') : props.formData[key],
+      key,
+      field,
+      form: true
+    })
+  }
 }
 </script>
 

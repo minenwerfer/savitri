@@ -20,11 +20,13 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
     if( scopedAction ) {
       if( scopeName === 'route' ) {
         return async (filters: F) => {
-          await store.get({
-            filters: {
-              _id: filters._id 
-            }
-          })
+          if( filters?._id ) {
+            await store.get({
+              filters: {
+                _id: filters._id 
+              }
+            })
+          }
 
           router.push({
             name: actionName.split('/')[1],

@@ -99,12 +99,12 @@ export class RequestProvider {
 
   /**
    * @static @method
-   * Throws an error if request status is 200<=x<304 but _error property is present.
+   * Throws an error if request status is 200<=x<304 but "error" property is present.
    */
   static throwOnError({ data }: AxiosResponse) {
-    if( data._error ) {
-      const error = new Error(data.message)
-      Object.assign(error, data)
+    if( data.error ) {
+      const error = new Error(data.error.message)
+      Object.assign(error, data.error)
       throw error
     }
   }
