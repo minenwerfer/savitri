@@ -58,7 +58,7 @@ export class ReportController extends Mutable<ReportDocument> {
 
     ), columns.join(',') + '\n')
 
-    await writeFile(path.join(process.env.REPORTS_PATH||'', filename), buffer)
+    await writeFile(path.join(process.env.REPORTS_PATH!, filename), buffer)
     return {
       filename,
       mime: 'text/csv'
@@ -115,6 +115,7 @@ export class ReportController extends Mutable<ReportDocument> {
       offset: +(props.what.offset || 0)
     })
 
+    // UGLYYYYYY!
     const rows = result
       .map((r: any) => r._doc || r)
       .map((r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}))
@@ -132,8 +133,6 @@ export class ReportController extends Mutable<ReportDocument> {
         }), {})
     })
 
-    // console.log(rows)
-
     const func = this._formatMap[props.what.format]
     const { filename, mime } = await func.call(this, columns, rows)
 
@@ -143,7 +142,7 @@ export class ReportController extends Mutable<ReportDocument> {
       context: 'report',
       filename,
       mime,
-      absolute_path: path.join(process.env.REPORTS_PATH, filename),
+      absolute_path: path.join(process.env.REPORTS_PATH!, filename),
       immutable: true
     })
 

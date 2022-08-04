@@ -87,11 +87,11 @@
     </fieldset>
 
     <div
+      v-if="!isReadonly && store && referencedFields.length > 0"
       class="form__search-grid"
-      v-if="!isReadonly && store && collectionFields.length > 0"
     >
       <sv-search
-        v-for="([childCollection, field], index) in collectionFields"
+        v-for="([childCollection, field], index) in referencedFields"
         :key="`collectionfield-${index}`"
 
         v-model="formData[childCollection]"
@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, provide, inject, reactive } from 'vue'
-import { useStore, useParentStore } from '@savitri/web'
+import { useStore } from '@savitri/web'
 import { SvInput, SvCheckbox, SvSelect } from '../..'
 
 const SvSearch = defineAsyncComponent(() => import('../../molecules/sv-search/sv-search.vue'))
@@ -199,7 +199,7 @@ const fields = filterFields(([key, f]: [string, any]) => {
     && has(key)
 })
 
-const collectionFields = filterFields(([key, f]: [string, any]) => {
+const referencedFields = filterFields(([key, f]: [string, any]) => {
   return typeof f.collection === 'string'
     && f.collection !== 'file'
     && has(key)
@@ -207,6 +207,7 @@ const collectionFields = filterFields(([key, f]: [string, any]) => {
 })
   .map(([key, value]: [string, any]) => {
     const store = useStore(value.collection)
+    console.log({ [key]: store })
     return [
       key, {
         ...value,
@@ -214,7 +215,6 @@ const collectionFields = filterFields(([key, f]: [string, any]) => {
       }
     ]
   })
-  .filter(([, value]: [unknown, any]) => value.fields)
 
 
 const allInOne = filterFields()

@@ -51,7 +51,6 @@ import { SvBox, SvForm, SvButton } from '../../'
 const userStore = useStore('user')
 const router = useRouter()
 
-provide('storeId', 'user')
 provide('inputVariant', 'bold')
 
 const authenticate = async () => {

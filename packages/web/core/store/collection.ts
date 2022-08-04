@@ -20,17 +20,19 @@ export default (
     getters
   }
 
-  const merge = () =>
-    R.mergeDeepWith(
-      (a: any, b: any) => R.is(Object, a) && R.is(Object, b) && typeof a !== 'function'
-        ? R.concat(a, b)
-        : a,
-      initial,
-      newer
-  )
+  const fn = (key:string, l:any, r:any) => {
+    if( key === 'state' ) {
+      const res = typeof r === 'function' ? r() : r
+      return () => R.mergeAll([l(), res])
+    }
+
+    return R.is(Object, l) && R.is(Object, r)
+      ? R.concat(l, r)
+      : r
+  }
 
   return newer
-    ? merge()
+    ? R.mergeDeepWithKey(fn, initial, newer)
     : initial
 }
 
