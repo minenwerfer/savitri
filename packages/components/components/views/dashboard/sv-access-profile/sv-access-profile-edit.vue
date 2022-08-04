@@ -72,7 +72,7 @@ onMounted(async () => {
 const capabilitiesFields = Object.values(metaStore.descriptions).reduce(
   (a: any, { collection: collectionName, report, methods, extraMethods }: AccParams
 ) => {
-  if( !methods ) {
+  if( !methods && !extraMethods ) {
     return a
   }
 

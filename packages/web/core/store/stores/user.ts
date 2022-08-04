@@ -1,29 +1,21 @@
 import { defineStore } from 'pinia'
-import type { CollectionState } from '../../../types/store'
 import type { UserDocument } from '../../../../collections/user/user.model'
 import type { AccessProfileDocument } from '../../../../collections/accessProfile/accessProfile.model'
 import useCollection from '../collection'
 import useMetaStore from './meta'
-
-const {
-  state: collectionState,
-  actions: collectionActions,
-  getters
-} = useCollection()
 
 type Credentials = {
   email: string
   password: string
 }
 
-type UserState = CollectionState<UserDocument> & {
+type UserState = {
   credentials: Credentials|object
   currentUser: Partial<UserDocument>
 }
 
-export default defineStore('user', {
+const collection = useCollection({
   state: (): UserState => ({
-    ...collectionState<UserDocument>(),
     currentUser: {},
     credentials: {
       email: '',
@@ -31,7 +23,6 @@ export default defineStore('user', {
     }
   }),
   actions: {
-    ...collectionActions,
     authenticate(payload: Credentials) {
       try {
         return this.$customEffect(
@@ -66,7 +57,6 @@ export default defineStore('user', {
     }
   },
   getters: {
-    ...getters,
     $currentUser(): UserState['currentUser'] {
       if( !this.currentUser._id ) {
         const currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
@@ -80,3 +70,5 @@ export default defineStore('user', {
     }
   }
 })
+
+export default defineStore('user', collection)

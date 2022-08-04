@@ -1,13 +1,14 @@
 <template>
-  <sv-box class="xl:w-2/5">
-    <div class="flex flex-col gap-y-6">
+  <div>Mudando a senha de {{ store.item.name }}</div>
+  <sv-box class="passchange">
+    <div class="passchange__content">
       <sv-form
-        :form="store.fields"
+        :form="fields"
         :form-data="store.item"
       ></sv-form>
 
       <sv-button
-        class="self-start"
+        class="passchange__save-button"
         :disabled="(store.item.password?.length||0) < 4 || store.item.password !== store.item.verification"
         @clicked="insert"
       >
@@ -18,13 +19,11 @@
 </template>
 
 <script setup lang="ts">
-import { provide, reactive, toRefs } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../..'
 
 const store = useStore('user')
 const metaStore = useStore('meta')
-provide('storeId', 'user')
 
 const fields = {
   password: {
@@ -52,3 +51,5 @@ const insert = async () => {
   })
 }
 </script>
+
+<style scoped src="./sv-password-change.scss"></style>

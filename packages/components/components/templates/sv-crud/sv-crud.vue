@@ -172,6 +172,12 @@ watch(() => actionEventBus, (event: ActionEvent) => {
     isInsertVisible.value = true
   }
 
+  if( event.name === 'spawnView' ) {
+    store.setItem(event.params.filters)
+    isInsertReadonly.value = true
+    isInsertVisible.value = true
+  }
+
   if( event.name === 'duplicate' ) {
     const { filters: newItem } = event.params
     delete newItem._id

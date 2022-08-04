@@ -171,7 +171,7 @@ export default {
       if(
         newItem[k]
         && typeof newItem[k] === 'object'
-        && Object.keys(newItem).length > 0
+        && Object.keys(newItem[k]).length > 0
       ) {
         const helperStore = useStore(collection)
         newItem[k] = await helperStore.insert({

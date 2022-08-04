@@ -39,6 +39,6 @@ export type CollectionGetters = {
   $filters: CollectionState<unknown>['filters']
 }
 
-export type CollectionStore<T> = CollectionState<T>
+export type CollectionStore<T=any> = CollectionState<T>
   & typeof collectionActions
   & typeof collectionGetters

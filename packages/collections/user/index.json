@@ -7,17 +7,17 @@
     "view"
   ],
   "individualActions": {
-    "spawnEdit": {
+    "ui/spawnEdit": {
       "name": "Editar",
       "unicon": "edit",
       "useronly": true
     },
-    "spawnChangePwd": {
+    "route/dashboard-user-changepass": {
       "name": "Mudar senha",
       "unicon": "key-skeleton",
       "useronly": true
     },
-    "remove": {
+    "delete": {
       "name": "remover",
       "unicon": "trash-alt",
       "useronly": true,
