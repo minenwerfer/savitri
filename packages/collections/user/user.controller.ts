@@ -85,6 +85,7 @@ export class UserController extends Mutable<UserDocument> {
             'insert'
           ],
           accessProfile: [
+            'get',
             'getAll',
             'insert'
           ]

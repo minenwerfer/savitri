@@ -164,10 +164,17 @@ const emit = defineEmits<{
   (e: 'change', value: string): void
 }>()
 
-const collectionName = props.collection || inject('storeId')
+const collectionName = props.collection || inject('storeId', null)
 const store = collectionName
   ? useStore(collectionName.value||collectionName)
   : null
+
+if( !collectionName && process.env.NODE_ENV !== 'production' ) {
+  console.warn(
+    `sv-form was used without providing storeId or specifying
+    collection prop, some features may not work as intended`
+  )
+}
 
 provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)

@@ -1,4 +1,5 @@
 import type { CollectionDescription } from '../../common/types'
+import { getController } from '../../api/core/controller'
 import { MetaController } from '../meta/meta.controller'
 
 const __searchable: Record<string, CollectionDescription> = {}
@@ -32,6 +33,9 @@ export const getSearchables = () => {
           }
         }
       }, {})
+
+      // force model registration
+      getController(key)
 
       return {
         ...a,
