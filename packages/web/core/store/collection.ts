@@ -24,7 +24,7 @@ export default (
     R.mergeDeepWith(
       (a: any, b: any) => R.is(Object, a) && R.is(Object, b) && typeof a !== 'function'
         ? R.concat(a, b)
-        : b,
+        : a,
       initial,
       newer
   )
