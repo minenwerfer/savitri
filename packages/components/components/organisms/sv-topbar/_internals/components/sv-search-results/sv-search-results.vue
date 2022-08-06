@@ -36,8 +36,9 @@
                 class="results__action"
                 @click="callAction(collectionName, actionProps, { _id: result._id })"
               >
-                <sv-icon :name="actionProps.unicon" class="results__action-icon"></sv-icon>
-                <div class="results__action-name">{{ actionProps.name }}</div>
+                <sv-icon :name="actionProps.unicon">
+                  {{ actionProps.name }}
+                </sv-icon>
               </a>
             </div>
           </div>
