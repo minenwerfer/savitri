@@ -25,6 +25,7 @@
       </th>
       <th
         v-if="actions"
+        style="text-align: right;"
         :class="`
           table__header
           table__header--label

@@ -128,7 +128,7 @@ const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-fo
 type Props = {
   modelValue: any
   propName: string
-  collection; string
+  collection: string
   field: any
   itemIndex?: number
   indexes: any

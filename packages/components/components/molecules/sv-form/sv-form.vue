@@ -114,7 +114,15 @@
         v-for="([key, field], index) in allInOne"
         :key="`collection-${index}`"
 
-        v-bind="inputBind(field, key)"
+        v-bind="{
+          ...inputBind(field, key),
+          value: store.formatValue({
+            value: field.translate ? $t(props.formData[key]||'') : props.formData[key],
+            key,
+            field,
+            form: true
+          })
+        }"
 
         :class="fieldClass(field)"
         :style="fieldSpan(field)"
@@ -272,7 +280,7 @@ const fieldSpan = (field: any) => {
   `
 }
 
-const inputBind = (field: any, key: string) => {
+const inputBind = (field: any, key: string, value: any) => {
   if( !store ) {
     return props.formData[key]
   }
@@ -281,12 +289,7 @@ const inputBind = (field: any, key: string) => {
     ...field,
     readOnly: true,
     type: isTextType(field.type) ? field.type : 'text',
-    value: store.formatValue({
-      value: field.translate ? $t(props.formData[key]||'') : props.formData[key],
-      key,
-      field,
-      form: true
-    })
+    value,
   }
 }
 </script>

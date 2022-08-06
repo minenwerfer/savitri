@@ -1,13 +1,16 @@
 .icon {
   display: flex;
-  border-radius: 5px;
   fill: black;
 
-  align-items: center;
-  column-gap: .4rem;
+  :deep(svg) {
+    width: 100%;
+    height: 100%;
+  }
 
   &--reactive {
     padding: 4px;
+    border-radius: 5px;
+
     &:hover {
       background: #eee;
     }
@@ -17,8 +20,8 @@
     }
   }
 
-  :deep(svg) {
-    width: 100%;
-    height: 100%;
+  &--centered {
+    align-items: center;
+    column-gap: .4rem;
   }
 }
