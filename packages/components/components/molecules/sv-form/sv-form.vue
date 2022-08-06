@@ -101,7 +101,8 @@
           indexes: store.getIndexes({ key: childCollection }),
           propName: childCollection,
           itemIndex: itemIndex != -1 ? itemIndex: 0,
-          activeOnly: 'active' in field.fields
+          activeOnly: 'active' in field.fields,
+          searchOnly: !field.inlineEditing
         }"
 
         @changed="$emit('change')"
@@ -129,7 +130,7 @@ import { defineAsyncComponent, provide, inject, reactive } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvInput, SvCheckbox, SvSelect } from '../..'
 
-const SvSearch = defineAsyncComponent(() => import('../../molecules/sv-search/sv-search.vue'))
+import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
 
 type LayoutConfig = {

@@ -15,6 +15,7 @@ export type CollectionField = Readonly<{
   expand?: boolean
   includeHours?: boolean
   readOnly?: boolean
+  inlineEditing?: boolean
 
   values?: Record<string, string> & {
     __query: {
@@ -29,6 +30,10 @@ export type CollectionAction = Readonly<{
   name: string
   unicon?: string
   ask?: boolean
+
+  // route namespace
+  fetchItem?: boolean
+  clearItem?: boolean
 }>
 
 export type CollectionActions = Record<string, CollectionAction>

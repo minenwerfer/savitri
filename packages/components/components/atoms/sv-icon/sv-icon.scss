@@ -3,6 +3,9 @@
   border-radius: 5px;
   fill: black;
 
+  align-items: center;
+  column-gap: .4rem;
+
   &--reactive {
     padding: 4px;
     &:hover {

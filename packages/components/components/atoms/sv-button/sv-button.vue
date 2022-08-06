@@ -3,15 +3,13 @@
     :class="`button button--${variant} button--${type}`"
     :disabled="disabled"
   >
-    <div class="button__content" v-if="icon">
-      <div class="button__icon">
-        <sv-icon
-          v-if="icon"
-          :name="icon"
-        ></sv-icon>
-      </div>
+    <sv-icon
+      v-if="icon"
+      :name="icon"
+      class="button__icon"
+    >
       <slot></slot>
-    </div>
+    </sv-icon>
 
     <slot v-else></slot>
   </sv-bare-button>

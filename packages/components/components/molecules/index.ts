@@ -1,7 +1,6 @@
 export { default as SvBox } from './sv-box/sv-box.vue'
 export { default as SvForm } from './sv-form/sv-form.vue'
 export { default as SvPrompt } from './sv-prompt/sv-prompt.vue'
-export { default as SvSearch } from './sv-search/sv-search.vue'
 export { default as SvTable } from './sv-table/sv-table.vue'
 export { default as SvPagination } from './sv-pagination/sv-pagination.vue'
 export { default as SvFile } from './sv-file/sv-file.vue'

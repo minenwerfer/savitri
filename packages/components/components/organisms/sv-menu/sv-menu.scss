@@ -61,6 +61,8 @@ $icon-size: 1.25rem;
   }
 
   &__icon {
+    column-gap: .8rem;
+
     :deep(svg) {
       width: $icon-size;
       fill: #63b3ed;

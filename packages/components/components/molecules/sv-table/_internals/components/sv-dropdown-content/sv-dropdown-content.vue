@@ -9,9 +9,9 @@
       <sv-icon
         :name="action.unicon"
         v-if="action.unicon"
-        class="dropdown__item-icon"
-        ></sv-icon>
-      <div>{{ action.name }}</div>
+      >
+        {{ action.name }}
+      </sv-icon>
     </sv-bare-button>
   </div>
 </template>
@@ -34,7 +34,7 @@ const userStore = useStore('user')
 
 const filterActions = (actions: Array<any>) => {
   return actions.filter((action: any) =>
-    !action.useronly || userStore.current?.access?.visibility !== 'useronly'
+    !action.userOnly || userStore.current?.access?.visibility !== 'userOnly'
   )
 }
 </script>

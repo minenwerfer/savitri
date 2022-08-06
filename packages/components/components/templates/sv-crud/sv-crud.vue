@@ -50,18 +50,9 @@
 
         v-bind="{
           checkbox: hasSelectionActions,
-          columns: {
-            ...store.tableDescription,
-            ...(individualActions.length > 0
-              ? {
-                __custom: {
-                  label: 'Ações',
-                  actions: individualActions
-                }
-              } : {}
-            )
-          },
+          columns: store.tableDescription,
           rows: store.$items,
+          actions: individualActions
         }"
       ></sv-table>
       <div v-if="store.itemsCount === 0 && !store.isLoading">

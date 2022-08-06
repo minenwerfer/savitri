@@ -52,4 +52,4 @@ const insert = async () => {
 }
 </script>
 
-<style scoped src="./sv-password-change.scss"></style>
+<style scoped src="./password-change.scss"></style>

@@ -14,13 +14,6 @@
       <sv-icon name="bell"></sv-icon>
     </sv-bare-button>
   </sv-info>
-
-  <sv-info where="bottom">
-    <template #text>Menu</template>
-    <sv-bare-button @clicked="spawnSidebar('Usuário', 'sv-profile')">
-      <sv-icon name="user-circle" :reactive="false"></sv-icon>
-    </sv-bare-button>
-  </sv-info>
 </template>
 
 <script setup lang="ts">

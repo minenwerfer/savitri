@@ -28,8 +28,9 @@
     ]
   },
   "include": [
-    "packages/globa.d.ts",
-    "packages/*/**/*.ts"
+    "packages/global.d.ts",
+    "packages/*/**/*.ts",
+    "packages/*/**/*.vue"
   ],
   "ts-node": {
     "compilerOptions": {

@@ -21,11 +21,10 @@
     &:hover {
       background: #ddd;
     }
-  }
 
-  &__item-icon {
-    fill: #555;
-    width: 1.1rem;
-    height: 1.1rem;
+    :deep(svg) {
+      fill: #555;
+      width: 1.2rem;
+    }
   }
 }

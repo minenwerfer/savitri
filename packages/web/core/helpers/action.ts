@@ -20,7 +20,11 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
     if( scopedAction ) {
       if( scopeName === 'route' ) {
         return async (filters: F) => {
-          if( filters?._id ) {
+          if( actionProps.clearItem ) {
+            store.clearItem()
+          }
+
+          if( actionProps.fetchItem && filters?._id ) {
             await store.get({
               filters: {
                 _id: filters._id 

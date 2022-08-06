@@ -1,5 +1,0 @@
-export { default as SvSignin } from './sv-signin/sv-signin.vue'
-export { default as SvCrudView } from './dashboard/sv-crud-view/sv-crud-view.vue'
-export { default as SvAccessProfile } from './dashboard/sv-access-profile/sv-access-profile-edit.vue'
-export { default as SvPasswordChange } from './dashboard/user/sv-password-change/sv-password-change.vue'
-export { default as SvProfile } from './dashboard/user/sv-profile/sv-profile.vue'

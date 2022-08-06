@@ -18,7 +18,7 @@ export type RouteMeta = {
   }
 }
 
-export type RouterExtension = Record<string, Array<Route>>
+export type RouterExtension = Record<string, Record<string, Omit<Route, 'name'>>>
 
 export type Route = RouteMeta & RouteRecordRaw & {
   children?: Array<Route>
@@ -97,8 +97,15 @@ export const routerInstance = (routes: Array<Route>) => {
 }
 
 export const extendRouter = (router: any, routerExtension: RouterExtension) => {
+  const normalize = (routes: Record<string, Omit<Route, 'name'>>) => Object.entries(routes)
+    .map(([routeName, route]) => ({
+      name: routeName,
+      ...route
+    }))
+
   Object.entries(routerExtension)
-    .forEach(([parentName, routes]: [string, Array<Route>]) => {
-      routes.forEach((route: Route) => router.addRoute(parentName, route))
+    .forEach(([parentName, routes]) => {
+      const normalized = normalize(routes)
+      normalized.forEach((route) => router.addRoute(parentName, route))
     })
 }

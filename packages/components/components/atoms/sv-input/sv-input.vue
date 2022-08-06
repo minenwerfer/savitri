@@ -76,7 +76,7 @@ type Props = {
   value?: string|number
   type?: string
   placeholder?: string
-  mask?: string
+  mask?: string|Array<string>
   icon?: string
   variant?: string
   readOnly?: boolean

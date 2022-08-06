@@ -1,12 +1,14 @@
 <template>
-  <img
-    v-if="file"
-    :src="fileLink(file)"
-    class="picture"
-  />
+  <div class="picture">
+    <img
+      v-if="file"
+      :src="fileLink(file)"
+      class="picture__image"
+    />
 
-  <slot v-else-if="$slots.fallback" name="fallback"></slot>
-  <slot v-else></slot>
+    <slot v-else-if="$slots.fallback" name="fallback"></slot>
+    <slot v-else></slot>
+  </div>
 </template>
 
 <script setup lang="ts">

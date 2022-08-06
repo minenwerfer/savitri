@@ -31,10 +31,12 @@
               :name="subroute.meta?.unicon || 'file'"
               :fill="isCurrent(subroute) ? 'blue' : 'gray'"
               class="menu__icon"
-            ></sv-icon>
-            <div class="menu__subroute--title">
+            >
               {{ $tc(subroute.meta.title, 2).capitalize() }}
-            </div>
+            </sv-icon>
+            <!-- <div class="menu__subroute--title"> -->
+            <!--   {{ $tc(subroute.meta.title, 2).capitalize() }} -->
+            <!-- </div> -->
           </sv-bare-button>
         </div>
 

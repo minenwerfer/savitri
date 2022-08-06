@@ -29,17 +29,10 @@ $critical-foreground-color: red;
   }
 
 
-  &__content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    column-gap: .4rem;
-    font-size: 11pt;
-  }
-
   &__icon {
-    width: 1.1em;
-    height: 1.1em;
+    :deep(svg) {
+      width: 1.2em !important;
+    }
   }
 
   &--normal {

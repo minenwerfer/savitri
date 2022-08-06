@@ -23,6 +23,15 @@
       `">
         {{ header.label || header.placeholder }}
       </th>
+      <th
+        v-if="actions"
+        :class="`
+          table__header
+          table__header--label
+          ${border && 'table__header--border'}
+      `">
+        Ações
+      </th>
     </tr>
 
     <tr
@@ -43,7 +52,7 @@
         :key="`column-${rindex}-${cindex}`"
         :class="`
           table__cell
-          ${column !== '__custom' && 'table__cell--padded'}
+          table__cell--padded
           ${border && 'table__cell--border'}
       `">
 
@@ -54,7 +63,7 @@
           </div>
 
           <div
-            v-if="column !== '__custom' && field.type !== 'image'"
+            v-if="field.type !== 'image'"
             :class="`grid gap-y-1 opacity-80 justify-end ${ computedCellStyle(row, field) }`"
           >
             <div :class="cindex === 0 && 'font-semibold opacity-80'">
@@ -92,15 +101,17 @@
             />
           </div>
 
-          <sv-dropdown-trigger v-else>
-            <teleport :to="`#dropdown-${rindex}`">
-              <sv-dropdown-content v-bind="{
-                row,
-                actions: columns.__custom.actions
-              }"></sv-dropdown-content>
-            </teleport>
-          </sv-dropdown-trigger>
         </div>
+      </td>
+      <td v-if="actions">
+        <sv-dropdown-trigger>
+          <teleport :to="`#dropdown-${rindex}`">
+            <sv-dropdown-content v-bind="{
+              row,
+              actions
+            }"></sv-dropdown-content>
+          </teleport>
+        </sv-dropdown-trigger>
       </td>
       <div :id="`dropdown-${rindex}`"></div>
     </tr>
@@ -137,6 +148,7 @@ type Props = {
   checkbox?: boolean
   border?: boolean
   headers?: boolean
+  actions: any
 }
 
 const props = withDefaults(defineProps<Props>(), {

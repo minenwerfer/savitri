@@ -1,6 +1,10 @@
 <template>
   <div v-if="visible" :class="`box ${isFloating && 'box--floating'}`">
-    <sv-overlay v-if="isFloating"></sv-overlay>
+    <sv-overlay
+      v-if="isFloating || overlay"
+      :invisible="invisibleOverlay"
+      @click="$emit('overlayClicked')"
+    ></sv-overlay>
 
     <!-- box content -->
     <div
@@ -66,6 +70,8 @@ type Props = {
   title?: string
   float?: boolean
   floating?: boolean
+  overlay?: boolean
+  invisibleOverlay?: boolean
   collapsed?: boolean
   collapsable?: boolean
   fullWidth?: boolean
@@ -83,6 +89,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
+  (e: 'overlayClicked'): void
   (e: 'close'): void
 }>()
 

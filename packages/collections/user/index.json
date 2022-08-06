@@ -10,17 +10,18 @@
     "ui/spawnEdit": {
       "name": "Editar",
       "unicon": "edit",
-      "useronly": true
+      "userOnly": true
     },
     "route/dashboard-user-changepass": {
       "name": "Mudar senha",
       "unicon": "key-skeleton",
-      "useronly": true
+      "userOnly": true,
+      "fetchItem": true
     },
     "delete": {
       "name": "remover",
       "unicon": "trash-alt",
-      "useronly": true,
+      "userOnly": true,
       "ask": true
     }
   },

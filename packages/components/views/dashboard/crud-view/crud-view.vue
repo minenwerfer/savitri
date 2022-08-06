@@ -10,7 +10,7 @@
 import { watch, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '@savitri/web'
-import SvCrud from '../../../templates/sv-crud/sv-crud.vue'
+import SvCrud from '../../../components/templates/sv-crud/sv-crud.vue'
 
 const route = useRoute()
 const metaStore = useStore('meta')

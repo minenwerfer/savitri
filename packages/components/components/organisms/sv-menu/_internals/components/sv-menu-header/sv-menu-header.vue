@@ -3,14 +3,15 @@
     <sv-picture
       :file="userStore.$currentUser.picture"
       class="header__picture"
-
       @click="editProfile"
-    ></sv-picture>
+    >
+      <sv-icon name="user"></sv-icon>
+    </sv-picture>
 
-    <div class="py-1 text-sm">
-      <div class="font-semibold">{{ userStore.$currentUser.first_name }}</div>
-      <div class="opacity-60">{{ userStore.$currentUser.access?.name }}</div>
-      <div class="font-semibold text-xs opacity-80 mt-1">Sair</div>
+    <div class="header__info">
+      <div class="header__info-name">{{ userStore.$currentUser.first_name }}</div>
+      <div class="header__info-access">{{ userStore.$currentUser.access?.name }}</div>
+      <div class="header__info-signout">Sair</div>
     </div>
   </div>
 </template>
@@ -18,7 +19,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useStore } from '@savitri/web'
-import { SvPicture } from '../../../../../..'
+import { SvPicture, SvIcon } from '../../../../../..'
 
 const userStore = useStore('user')
 const router = useRouter()

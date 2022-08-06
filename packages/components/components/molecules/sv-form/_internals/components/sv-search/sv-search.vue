@@ -64,7 +64,7 @@
             </sv-bare-button>
           </div>
 
-          <div v-else>
+          <div v-else class="search__icons">
             <sv-bare-button @clicked="unselect(item, false)">
               <sv-icon name="minus" fill="gray"></sv-icon>
             </sv-bare-button>
@@ -121,9 +121,9 @@ import {
   SvBareButton,
   SvIcon
 
-} from '../..'
+} from '../../../../..'
 
-const SvForm = defineAsyncComponent(() => import('../../molecules/sv-form/sv-form.vue'))
+const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-form/sv-form.vue'))
 
 type Props = {
   modelValue: any
@@ -144,7 +144,7 @@ const emit = defineEmits<{
 }>()
 
 
-const searchOnly = inject<boolean>('searchOnly', props.searchOnly)
+const searchOnly = props.searchOnly || inject<boolean>('searchOnly', null)
 
 const parentStore = useParentStore(props.collection)
 const store = useStore(props.field.collection)

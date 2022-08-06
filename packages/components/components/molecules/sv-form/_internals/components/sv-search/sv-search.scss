@@ -18,6 +18,7 @@ $icon-size: 1.2rem;
 
   &__icons {
     display: flex;
+    padding: .4rem;
 
     :deep(svg) {
       width: $icon-size;

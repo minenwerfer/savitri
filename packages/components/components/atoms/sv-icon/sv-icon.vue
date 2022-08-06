@@ -1,6 +1,7 @@
 <template>
   <div :class="`icon ${reactive && 'icon--reactive'}`">
     <unicon v-bind="props"></unicon>
+    <slot v-if="$slots.default"></slot>
   </div>
 </template>
 

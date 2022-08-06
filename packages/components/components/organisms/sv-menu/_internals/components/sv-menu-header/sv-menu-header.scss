@@ -4,9 +4,8 @@
   padding: 0 1em;
   column-gap: .8em;
 
-
   &__picture {
-    $size: 4.2em;
+    $size: 4.6em;
     width: $size;
     height: $size;
 
@@ -20,6 +19,15 @@
     &:active {
       filter: brightness(.8);
     }
+
+    :deep(svg) {
+      width: 3.6rem;
+      fill: #dedede;
+    }
+  }
+
+  &__info-name {
+    font-weight: bold;
   }
 }
 

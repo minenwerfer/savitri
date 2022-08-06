@@ -64,4 +64,4 @@ const productVersion = inject('productVersion')
 const baseVersion = inject('baseVersion')
 </script>
 
-<style scoped src="./sv-signin.scss"></style>
+<style scoped src="./signin.scss"></style>

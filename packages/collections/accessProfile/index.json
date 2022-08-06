@@ -10,14 +10,16 @@
     "ui/spawnAdd": null,
     "route/dashboard-access-edit": {
       "name": "Adicionar",
-      "unicon": "plus"
+      "unicon": "plus",
+      "clearItem": true
     }
   },
   "individualActions": {
     "ui/spawnEdit": null,
     "route/dashboard-access-edit": {
       "name": "Editar",
-      "unicon": "edit"
+      "unicon": "edit",
+      "fetchItem": true
     }
   },
   "table": [
@@ -40,7 +42,7 @@
       "required": true,
       "translate": true,
       "values": [
-        "useronly",
+        "userOnly",
         "everything"
       ]
     },

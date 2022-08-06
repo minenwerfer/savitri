@@ -14,7 +14,7 @@ export const publicRoutes: Array<Route> = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import('./components/views/sv-signin/sv-signin.vue'),
+    component: () => import('./views/signin/signin.vue'),
     meta: { title: 'Autenticação', hidden: true, }
   }
 ]
@@ -34,25 +34,25 @@ export const privateRoutes: Array<Route> = [
       {
         path: 'c/:collection?',
         name: 'dashboard-crud',
-        component: () => import('./components/views').then((m: any) => m.SvCrudView),
+        component: () => import('./views').then((m: any) => m.SvCrudView),
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
         path: 'access-edit',
         name: 'dashboard-access-edit',
-        component: () => import('./components/views').then((m: any) => m.SvAccessProfile),
+        component: () => import('./views').then((m: any) => m.SvAccessProfile),
         meta: { title: 'Editar preset de acesso', hidden: true }
       },
       {
         path: 'user-profile',
         name: 'dashboard-user-profile',
-        component: () => import('./components/views').then((m: any) => m.SvProfile),
+        component: () => import('./views').then((m: any) => m.SvProfile),
         meta: { title: 'Meu perfil', hidden: true }
       },
       {
         path: 'user-changepass',
         name: 'dashboard-user-changepass',
-        component: () => import('./components/views').then((m: any) => m.SvPasswordChange),
+        component: () => import('./views').then((m: any) => m.SvPasswordChange),
         meta: { title: 'Mudar senha', hidden: true }
       }
     ]

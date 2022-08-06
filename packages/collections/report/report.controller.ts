@@ -1,5 +1,6 @@
-const { writeFile } = require('fs').promises
+import * as R from 'ramda'
 import path from 'path'
+const { writeFile } = require('fs').promises
 
 import { fromEntries } from '../../common/helpers'
 import * as Collection from '../../common/collection'
@@ -70,7 +71,6 @@ export class ReportController extends Mutable<ReportDocument> {
   }
 
   public override async insert(props: { what: any }, req: unknown, decodedToken: any) {
-
     if( !props.what?.format ) {
       throw new Error('especifique um formato')
     }
@@ -113,14 +113,11 @@ export class ReportController extends Mutable<ReportDocument> {
       filters: props.what.filters,
       limit: +(props.what.limit || 99999999),
       offset: +(props.what.offset || 0)
-    })
+    }).lean()
 
-    // UGLYYYYYY!
-    const rows = result
-      .map((r: any) => r._doc || r)
-      .map((r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}))
-      .map((r: any) => {
-      return Object.entries(r)
+    const pipe = R.pipe(
+      (r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
+      (r: ReportDocument) => Object.entries(r)
         .filter(([key]: [string, any]) => key in fields)
         .reduce((a: any, [key, value]: [string, any]) => ({
           ...a,
@@ -131,7 +128,9 @@ export class ReportController extends Mutable<ReportDocument> {
               : val
           })()
         }), {})
-    })
+    )
+    const rows = result
+      .map(pipe)
 
     const func = this._formatMap[props.what.format]
     const { filename, mime } = await func.call(this, columns, rows)
@@ -147,13 +146,6 @@ export class ReportController extends Mutable<ReportDocument> {
     })
 
     return super.insert.call(this, props)
-  }
-
-  public async download(_id: string) {
-    const file = Report.findOne({ _id }).lean()
-    if( !file ) {
-      throw new Error('report not found')
-    }
   }
 }
  
