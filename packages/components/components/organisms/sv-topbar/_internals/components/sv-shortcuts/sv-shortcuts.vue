@@ -10,9 +10,12 @@
   >
     <div class="shortcuts__options">
       <sv-icon name="house-user">
-        Usuário
+        Perfil de usuário
       </sv-icon>
-      <sv-icon name="signout">
+      <sv-icon
+        name="signout"
+        @click="userStore.signout()"
+      >
         Sair
       </sv-icon>
     </div>
@@ -20,8 +23,11 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from '@savitri/web'
 import { SvBox, SvIcon } from '../../../../..'
 import { isShortcutsVisible } from '../../store'
+
+const userStore = useStore('user')
 </script>
 
 <style scoped src="./sv-shortcuts.scss"></style>

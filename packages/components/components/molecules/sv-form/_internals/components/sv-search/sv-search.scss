@@ -1,19 +1,12 @@
 $icon-size: 1.2rem;
 
 .search {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+
   &__header {
-    margin-bottom: .6rem;
-  }
-
-  &__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    border: 1px solid #dedede;
-    border-width: 0 1px 1px 1px;
-
-    padding-left: .4rem;
+    //
   }
 
   &__icons {

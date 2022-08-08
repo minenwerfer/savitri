@@ -1,5 +1,5 @@
 <template>
-  <div class="form">
+  <form class="form">
     <fieldset
       v-if="!isReadonly && Object.keys(fields).length > 0"
       class="form__fieldset"
@@ -64,7 +64,12 @@
             ></sv-checkbox>
           </div>
 
-          <sv-select v-else v-model="formData[key]" :values="field.values">
+          <sv-select
+            v-else
+            v-model="formData[key]"
+            :values="field.values"
+            style="width: 100%"
+          >
             <option value="">{{ $t('none') }}</option>
             <option v-for="(option, oindex) in field.values" :value="option.value">
               {{ field.translate ? $t(option.label) : option.label }}
@@ -130,7 +135,7 @@
         {{ field.label }}
       </sv-input>
     </fieldset>
-  </div>
+  </form>
 </template>
 
 <script setup lang="ts">
@@ -223,7 +228,6 @@ const referencedFields = filterFields(([key, f]: [string, any]) => {
 })
   .map(([key, value]: [string, any]) => {
     const store = useStore(value.collection)
-    console.log({ [key]: store })
     return [
       key, {
         ...value,

@@ -85,7 +85,11 @@ export default {
     this: CollectionState<T>,
     verb: string, payload?: any
   ): Promise<any> {
-    return (await http.post(`${this.$id}/${verb}`, payload)).data
+    this.meta.isLoading = true
+    const result = (await http.post(`${this.$id}/${verb}`, payload)).data
+
+    this.meta.isLoading = false
+    return result
   },
 
   async customEffect(
@@ -229,7 +233,7 @@ export default {
     const metaStore = useMetaStore()
     await metaStore.spawnPrompt({
       title: props.title || 'Diálogo de confirmação',
-      body: props.body,
+      body: props.body || 'A ação que você está prestes a fazer é irreversível. Tem certeza de que deseja prosseguir?',
       actions: [
         { name: 'cancel', title: 'Cancelar' },
         { name: 'confirm', title: 'Confirmar', type: 'critical' },

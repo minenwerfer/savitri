@@ -26,9 +26,9 @@ body::-webkit-scrollbar-thumb {
   background: #555;
 }
 
-input, select {
-  width: 100% !important;
-}
+/* input, select { */
+/*   width: 100% !important; */
+/* } */
 
 * {
   box-sizing: border-box;

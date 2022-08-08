@@ -10,20 +10,22 @@
     <div v-if="type !== 'textbox'" :class="`input__container input__container--${variant}`">
       <input
         v-maska="mask"
+        ref="input"
+        v-bind="{
+          type: type !== 'datetime' ? type : 'text',
+          value: inputValue || value,
+          readonly: readOnly,
+          placeholder,
+          min,
+          max
+        }"
+
         :class="`
           input__input
           input__input--${variant}
           ${icon && 'input__input--icon'}
           ${readOnly && 'input__input--readonly'}
         `"
-
-        ref="input"
-        :type="type !== 'datetime' ? type : 'text'"
-        :value="inputValue || value"
-        :placeholder="placeholder"
-        :readonly="readOnly"
-        :min="min"
-        :max="max"
 
         @input="onInput"
         @change="onChange"

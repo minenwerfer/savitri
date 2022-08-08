@@ -92,7 +92,10 @@ export class UserController extends Mutable<UserDocument> {
         }
       }
 
-      const token = await TokenService.sign({ access }) as string
+      const token = await TokenService.sign({
+        user: { _id: null },
+        access
+      }) as string
 
       return {
         user: {
@@ -112,7 +115,11 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     const { password, ...leanUser } = user.toObject()
-    const token = await TokenService.sign({ access: leanUser.access }) as string
+    const token = await TokenService.sign({
+      user: { _id: leanUser._id },
+      access: leanUser.access
+    }) as string
+
     return {
       user: leanUser,
       access: leanUser.access,

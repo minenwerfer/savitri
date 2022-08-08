@@ -175,7 +175,6 @@ export default defineStore('meta', {
     },
 
     fulfillPrompt(promptName: string) {
-      console.log("eae")
       window.dispatchEvent(new CustomEvent('__prompt', {
         detail: { option: { promptName } }
       }))

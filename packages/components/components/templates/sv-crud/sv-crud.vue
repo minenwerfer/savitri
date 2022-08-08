@@ -15,7 +15,11 @@
           Exportar
         </sv-button>
       </div>
-      <div class="crud__panel-control" v-if="store.actions || $slots.actions" :key="collection">
+      <div
+        v-if="store.actions || $slots.actions"
+        :key="collection"
+        class="crud__panel-control"
+      >
         <sv-button
           v-for="(actionProps, index) in store.actions"
           :key="`action-${index}`"

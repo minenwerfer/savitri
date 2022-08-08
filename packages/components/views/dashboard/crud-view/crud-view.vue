@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '@savitri/web'
 import SvCrud from '../../../components/templates/sv-crud/sv-crud.vue'

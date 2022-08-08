@@ -17,7 +17,7 @@ export type CollectionField = Readonly<{
   readOnly?: boolean
   inlineEditing?: boolean
 
-  values?: Record<string, string> & {
+  values?: Record<string, string> | Record<number, any> | {
     __query: {
       collection: string
       index: Array<string>|string

@@ -1,11 +1,7 @@
 <template>
-  <div
-    class="search"
-    :key="parentStore.item"
-    @change.prevent.stop=""
-  >
+  <div class="search">
     <header class="search__header">{{ collectionName }}</header>
-    <div v-if="isExpanded" class="flex flex-col gap-y-2">
+    <div v-if="isExpanded">
       <sv-form
         v-bind="{
           collection,
@@ -15,13 +11,13 @@
           fieldIndex
         }"
       ></sv-form>
-      <div class="flex gap-x-1" v-if="!expand">
+      <div v-if="!expand">
         <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
     </div>
 
-    <div v-else class="flex flex-wrap gap-2">
+    <div v-else>
       <!-- field.purge deprecated ? -->
       <sv-form
         v-bind="{
@@ -41,59 +37,36 @@
     </div>
 
     <div v-if="!isExpanded || array" :key="inputValue">
-      <div v-if="selected.length > 0">
-        <div
-          v-for="(item, index) in selected"
-          :key="`item-${index}`"
-          class="search__item"
-        >
-          <div class="flex-1">{{ item[indexes[0]] }}</div>
+      <sv-search-selected v-bind="{
+        selected,
+        searchOnly,
+        indexes
+      }"></sv-search-selected>
 
-          <div v-if="!searchOnly" class="search__icons">
-            <sv-bare-button @clicked="edit(item)">
-              <sv-icon
-                name="edit"
-                fill="gray"
-              ></sv-icon>
-            </sv-bare-button>
-            <sv-bare-button @clicked="unselect(item)">
-              <sv-icon
-                name="trash"
-                fill="gray"
-              ></sv-icon>
-            </sv-bare-button>
-          </div>
-
-          <div v-else class="search__icons">
-            <sv-bare-button @clicked="unselect(item, false)">
-              <sv-icon name="minus" fill="gray"></sv-icon>
-            </sv-bare-button>
-          </div>
-        </div>
-      </div>
-
-      <div :class="`select-none ${store.isLoading ? 'opacity-30' : 'opacity-60'}`" v-if="!isExpanded">
+      <div v-if="!isExpanded">
         <div v-if="store.items.length || selected.length">
-          <div
+          <sv-search-item
             v-for="(item, index) in store.items"
+            v-bind="{
+              item,
+              indexes
+            }"
+
             :key="`item-${index}`"
-            class="search__item"
             @click="select(item)"
           >
-            <div>{{ item[indexes[0]] }}</div>
-            <div class="search__icons">
-              <sv-icon
-                name="plus"
-                fill="gray"
-              ></sv-icon>
-            </div>
-          </div>
+            <sv-icon
+              name="plus"
+              fill="gray"
+            ></sv-icon>
+          </sv-search-item>
+
         </div>
-        <div v-else class="p-2 text-sm">
+        <div v-else>
           <div v-if="isTyping">
             Pesquisando...
           </div>
-          <div v-else-if="!store.isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
+          <div v-else-if="!store.meta.isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
             Não há resultados
           </div>
         </div>
@@ -116,12 +89,10 @@ import {
 } from 'vue'
 
 import { useStore, useParentStore } from '@savitri/web'
-import {
-  SvButton,
-  SvBareButton,
-  SvIcon
+import { SvButton, SvIcon } from '../../../../..'
 
-} from '../../../../..'
+import SvSearchSelected from '../sv-search-selected/sv-search-selected.vue'
+import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-form/sv-form.vue'))
 
@@ -142,6 +113,11 @@ const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
   (e: 'changed'): void
 }>()
+
+const boxProps = reactive({
+  float: false,
+  fill: true
+})
 
 
 const searchOnly = props.searchOnly || inject<boolean>('searchOnly', null)
@@ -268,12 +244,12 @@ const addItem = () => {
 }
 
 const search = () => {
-  if( Object.values(inputValue).every((v: string) => v.length === 0) ) {
+  if( Object.values(inputValue).every((v: string) => !(String(v).length > 0)) ) {
     store.clearItems()
     return
   }
 
-  if( store.isLoading ) {
+  if( store.meta.isLoading ) {
     return
   }
 

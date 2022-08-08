@@ -6,6 +6,7 @@ $section-gap: 2rem;
   width: 100%;
   row-gap: $section-gap;
 
+
   &__fieldset {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -15,6 +16,7 @@ $section-gap: 2rem;
 
     border: none;
     padding: 0;
+    margin: 0;
   }
 
   &__options-grid {

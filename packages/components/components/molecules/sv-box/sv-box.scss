@@ -56,7 +56,7 @@ $section-padding: .8rem;
 
   &__body {
     // max-height: 90vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     &--padded {
       padding: $section-padding;

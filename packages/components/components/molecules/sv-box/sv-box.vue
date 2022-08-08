@@ -1,5 +1,10 @@
 <template>
-  <div v-if="visible" :class="`box ${isFloating && 'box--floating'}`">
+  <div
+    v-if="visible"
+    :class="`
+      box
+      ${isFloating && 'box--floating'}
+  `">
     <sv-overlay
       v-if="isFloating || overlay"
       :invisible="invisibleOverlay"
@@ -8,7 +13,10 @@
 
     <!-- box content -->
     <div
-      :class="`box__content ${isFloating && 'box__content--floating'}`"
+      :class="`
+        box__content
+        ${isFloating && 'box__content--floating'}
+      `"
       @click="$event.stopPropagation()"
     >
       <!-- box head -->

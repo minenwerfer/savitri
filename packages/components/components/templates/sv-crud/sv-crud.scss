@@ -16,6 +16,10 @@ $default-gap: .6rem;
     align-items: flex-start;
     flex-wrap: wrap;
     column-gap: $default-gap;
+
+    &>* {
+      height: 100%;
+    }
   }
 
   &__table-panel {

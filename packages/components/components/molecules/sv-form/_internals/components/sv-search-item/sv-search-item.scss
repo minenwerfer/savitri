@@ -1,0 +1,30 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  // border: 1px solid #dedede;
+  //
+  border: 1px solid #888;
+  border-radius: 5px;
+
+  padding: .4rem;
+
+  :deep(svg) {
+    width: 1.2rem;
+  }
+
+  &__values {
+    display: flex;
+    flex-direction: column;
+    row-gap: .4rem;
+  }
+
+  &__value {
+    display: flex;
+
+    &:first-child {
+      font-weight: bold;
+    }
+  }
+}
