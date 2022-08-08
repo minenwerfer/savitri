@@ -157,7 +157,9 @@ type Action = {
 }
 
 type Columns = Record<string, ColumnProps> & {
-  __custom: ColumnProps & { actions: Array<Action> }
+  __custom: { 
+    actions: Array<Action> 
+  }
 }
 
 type RowProps = Record<string, any> & {
