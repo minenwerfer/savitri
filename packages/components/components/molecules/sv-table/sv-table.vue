@@ -21,7 +21,7 @@
           table__header--label
           ${border && 'table__header--border'}
       `">
-        {{ header.label || header.placeholder }}
+        {{ header.label }}
       </th>
       <th
         v-if="actions"
@@ -76,7 +76,7 @@
               <div v-else>
                 {{
                   store.formatValue({
-                    value: field.translate ? $t(row[column]||'-') : row[column],
+                    value: field.translate ? $t(row[column] || '-') : row[column],
                     key: column,
                     form: false,
                     field
@@ -130,7 +130,7 @@ import {
 
 } from 'vue'
 
-import { useParentStore, useFile } from '@savitri/web'
+import { useParentStore } from '@savitri/web'
 
 import {
   SvBareButton,
@@ -142,9 +142,34 @@ import {
 import SvDropdownTrigger from './_internals/components/sv-dropdown-trigger/sv-dropdown-trigger.vue'
 import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dropdown-content.vue'
 
+type ColumnProps = {
+  label: string
+  type?: string
+  collection?: string
+  translate?: string
+}
+
+type Action = {
+  name: string 
+  unicon: string
+  useronly?: boolean
+  click: (data: Record<string, any>) => void
+}
+
+type Columns = Record<string, ColumnProps> & {
+  __custom: ColumnProps & { actions: Array<Action> }
+}
+
+type RowProps = Record<string, any> & {
+  _id?: string
+  src?: string
+}
+
+type Rows = Array<RowProps>
+
 type Props = {
-  columns: any
-  rows: any
+  columns: Columns
+  rows: Rows
   collection?: string
   checkbox?: boolean
   border?: boolean

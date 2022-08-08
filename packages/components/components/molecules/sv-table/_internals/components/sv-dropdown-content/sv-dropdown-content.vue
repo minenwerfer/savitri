@@ -2,7 +2,7 @@
   <div class="dropdown">
     <sv-bare-button
       v-for="(action, aindex) in filterActions(actions)"
-      :key="`action-${rindex}-${aindex}`"
+      :key="`action-${aindex}`"
       class="dropdown__item"
       @clicked="action.click(row)"
     >
@@ -24,17 +24,24 @@ import {
 
 } from '../../../../..'
 
+type Action = {
+  name: string 
+  unicon: string 
+  useronly?: boolean
+  click: (data: Record<string, any>) => void
+}
+
 type Props = {
-  actions: any
-  row: any
+  actions: Array<Action>
+  row: Record<string, any>
 }
 
 const props = defineProps<Props>()
 const userStore = useStore('user')
 
-const filterActions = (actions: Array<any>) => {
-  return actions.filter((action: any) =>
-    !action.userOnly || userStore.current?.access?.visibility !== 'userOnly'
+const filterActions = (actions: Array<Action>) => {
+  return actions.filter((action) =>
+    !action.useronly || userStore.current?.access?.visibility !== 'useronly'
   )
 }
 </script>
