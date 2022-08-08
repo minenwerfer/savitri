@@ -149,17 +149,11 @@ type ColumnProps = {
   translate?: string
 }
 
-type Action = {
-  name: string 
+type ActionProps = {
+  name: string
   unicon: string
-  useronly?: boolean
+  userOnly?: boolean
   click: (data: Record<string, any>) => void
-}
-
-type Columns = Record<string, ColumnProps> & {
-  __custom: { 
-    actions: Array<Action> 
-  }
 }
 
 type RowProps = Record<string, any> & {
@@ -167,16 +161,20 @@ type RowProps = Record<string, any> & {
   src?: string
 }
 
+type Columns = Record<string, ColumnProps>
+
 type Rows = Array<RowProps>
 
+type Actions = Array<ActionProps>
+
 type Props = {
-  columns: Columns
   rows: Rows
+  columns: Columns
+  actions: Actions
   collection?: string
   checkbox?: boolean
   border?: boolean
   headers?: boolean
-  actions: any
 }
 
 const props = withDefaults(defineProps<Props>(), {

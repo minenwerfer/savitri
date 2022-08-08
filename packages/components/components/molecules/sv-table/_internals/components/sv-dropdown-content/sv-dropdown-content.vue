@@ -27,7 +27,7 @@ import {
 type Action = {
   name: string 
   unicon: string 
-  useronly?: boolean
+  userOnly?: boolean
   click: (data: Record<string, any>) => void
 }
 
@@ -41,7 +41,7 @@ const userStore = useStore('user')
 
 const filterActions = (actions: Array<Action>) => {
   return actions.filter((action) =>
-    !action.useronly || userStore.current?.access?.visibility !== 'useronly'
+    !action.userOnly || userStore.current?.access?.visibility !== 'userOnly'
   )
 }
 </script>
