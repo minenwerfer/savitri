@@ -8,6 +8,7 @@ import useCollection from '../collection'
 import { useStore, hasStore, registerStore } from '../use'
 
 type CollectionName = string
+type PromptAnswer = { name: string }
 
 const { http } = useHttp()
 const { hydrateQuery } = useUtil()
@@ -155,7 +156,7 @@ export default defineStore('meta', {
       localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
     },
 
-    spawnPrompt(props: Omit<MetaState['prompt'], 'isVisible'>) {
+    spawnPrompt(props: Omit<MetaState['prompt'], 'isVisible'>): Promise<PromptAnswer> {
       this.$patch({
         prompt: {
           ...props,
@@ -174,9 +175,9 @@ export default defineStore('meta', {
       })
     },
 
-    fulfillPrompt(promptName: string) {
+    fulfillPrompt(answer: PromptAnswer) {
       window.dispatchEvent(new CustomEvent('__prompt', {
-        detail: { option: { promptName } }
+        detail: { option: answer }
       }))
     },
 

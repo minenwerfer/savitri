@@ -1,6 +1,7 @@
 <template>
-  <div v-if="visible">
-    <sv-overlay @click="close"></sv-overlay>
+  <div v-if="visible" v-overlay="{
+    click: close
+  }">
     <div class="sidebar">
       <div class="sidebar__header">
         <strong class="text-xl">
@@ -31,13 +32,11 @@
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
 import {
-  SvOverlay,
   SvBareButton,
   SvReleases,
   SvProfile,
   SvNotifications,
   SvIcon
-
 
 } from '../../'
 

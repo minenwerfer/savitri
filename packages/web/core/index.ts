@@ -14,6 +14,7 @@ import { routerInstance as createRouter } from './router'
 import { default as webpackVariables } from 'variables'
 
 import { useStore } from './store'
+import registerDirectives from './directives'
 
 type Plugin = {
   routerExtension?: RouterExtension
@@ -41,6 +42,7 @@ export const useApp = (config: AppOptions): Promise<{
 
   const app = createApp(component)
   app.use(createPinia())
+  registerDirectives(app)
 
   const router = createRouter(routes)
   const i18n = createI18n(i18nConfig)

@@ -1,5 +1,5 @@
 <template>
-  <sv-modal :close-hint="false">
+  <sv-modal>
     <template #title>
       <slot name="title"></slot>
     </template>
@@ -36,8 +36,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const onClick = (action: any) => {
-  console.log('fdjksafjsdanfjak')
-  metaStore.fulfillPrompt(action.name)
+const onClick = (answer: any) => {
+  metaStore.fulfillPrompt(answer)
 }
 </script>

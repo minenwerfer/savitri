@@ -36,10 +36,9 @@
     </tr>
 
     <tr
-      v-for="(row, rindex) in rows"
-      :key="`row-${rindex}`"
+      v-for="row in rows"
+      :key="row._id"
       :class="`table__row table__row--body`"
-      @click="store.setItem(row)"
     >
       <td v-if="checkbox">
         <input
@@ -50,7 +49,7 @@
       </td>
       <td
         v-for="([column, field], cindex) in Object.entries(columns)"
-        :key="`column-${rindex}-${cindex}`"
+        :key="`column-${row._id}-${cindex}`"
         :class="`
           table__cell
           table__cell--padded
@@ -84,7 +83,7 @@
                 }}
               </div>
             </div>
-            <div v-if="store.getIndexes({ key: column })?.length > 1" class="hidden lg:flex gap-x-2">
+            <div v-if="store.getIndexes({ key: column })?.length > 1">
               <div
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
@@ -106,7 +105,7 @@
       </td>
       <td v-if="actions">
         <sv-dropdown-trigger>
-          <teleport :to="`#dropdown-${rindex}`">
+          <teleport :to="`#dropdown-${row._id}`">
             <sv-dropdown-content v-bind="{
               row,
               actions
@@ -114,7 +113,7 @@
           </teleport>
         </sv-dropdown-trigger>
       </td>
-      <div :id="`dropdown-${rindex}`"></div>
+      <div :id="`dropdown-${row._id}`"></div>
     </tr>
   </table>
 </template>

@@ -1,16 +1,16 @@
 <template>
   <div
     v-if="visible"
+    v-overlay="{
+      condition: overlay || isFloating,
+      invisible: invisibleOverlay,
+      click: $emit('overlayClicked')
+    }"
+
     :class="`
       box
       ${isFloating && 'box--floating'}
   `">
-    <sv-overlay
-      v-if="isFloating || overlay"
-      :invisible="invisibleOverlay"
-      @click="$emit('overlayClicked')"
-    ></sv-overlay>
-
     <!-- box content -->
     <div
       :class="`
@@ -28,27 +28,27 @@
         <div class="box__header-icons" v-if="closeHint || collapsable">
           <sv-bare-button
             v-if="collapsable"
-            @click="isCollapsed = !isCollapsed"
+            @clicked="isCollapsed = !isCollapsed"
           >
             <sv-icon
+              reactive
               :name="!isCollapsed ? 'minus' : 'plus'"
-              :reactive="true"
             />
           </sv-bare-button>
           <sv-bare-button
             v-else-if="closeHint"
-            @click="close"
+            @clicked="close"
           >
             <sv-icon
+              reactive
               name="multiply"
-              :reactive="true"
             />
           </sv-bare-button>
         </div>
       </div>
 
       <!-- box body -->
-      <div :class="`box__body ${fill || 'box__body--padded'}`">
+      <div v-if="!isCollapsed" :class="`box__body ${fill || 'box__body--padded'}`">
         <slot v-if="$slots.default"></slot>
         <slot v-else name="body"></slot>
       </div>
@@ -63,12 +63,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import {
-  SvBareButton,
-  SvOverlay,
-  SvIcon
-
-} from '../../'
+import { SvBareButton, SvIcon } from '../../'
 
 // #region props
 type Props = {
@@ -90,17 +85,19 @@ type Props = {
 // #endregion props
 
 const props = withDefaults(defineProps<Props>(), {
-  closeHint: true,
+  closeHint: false,
   visible: true,
   animate: true
 })
 
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
+  (e: 'update:closeHint', value: boolean): void
   (e: 'overlayClicked'): void
   (e: 'close'): void
 }>()
 
+const closeHint = computed(() => closeHint || props.visible)
 const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
 

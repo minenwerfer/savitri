@@ -1,14 +1,7 @@
 import { RequestProvider } from '../../common'
+import { SV_API_URL } from '../../common/constants'
 import { useStore } from './store'
 
-const SV_API_URL = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:3000/api'
-  : '/api'
-
-// const SV_API_URL_2 = process.env.NODE_ENV === 'development'
-//   ? 'http://localhost:3001/api'
-//   : '/api2'
-  //
 export default () => {
   return {
     http: proxiedHttp

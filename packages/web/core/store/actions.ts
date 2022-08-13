@@ -35,6 +35,7 @@ const mutations = {
     item: T
   ) {
     this.item = item
+    return item
   },
 
   setItems<T>(
@@ -42,6 +43,7 @@ const mutations = {
     items: Array<T>
   ) {
     this.items = items
+    return items
   },
 
   insertItem<T extends { _id: string }>(
@@ -59,14 +61,19 @@ const mutations = {
       item,
       ...this.items
     ]
+
+    return item
   },
 
   removeItem<T extends { _id: string }>(this: Pick<CollectionState<T>, 'items'>, item: T) {
     this.items = this.items.filter(({ _id }: T) => item._id !== _id)
+    return item
   },
 
   clearItem<T=any>(this: Pick<CollectionState<T>, 'item' | 'freshItem'>) {
+    const item = Object.assign({}, this.item)
     this.item = this.freshItem
+    return item
   },
 
   clearItems<T=any>(this: CollectionStateItems<T>) {
@@ -178,9 +185,11 @@ export default {
         && Object.keys(newItem[k]).length > 0
       ) {
         const helperStore = useStore(collection)
-        newItem[k] = await helperStore.insert({
+        const result = await helperStore.insert({
           what: newItem[k]
         })
+
+        newItem[k] = result._id
       }
     }
 
@@ -231,7 +240,7 @@ export default {
     body?: string
   }) {
     const metaStore = useMetaStore()
-    await metaStore.spawnPrompt({
+    const answer = await metaStore.spawnPrompt({
       title: props.title || 'Diálogo de confirmação',
       body: props.body || 'A ação que você está prestes a fazer é irreversível. Tem certeza de que deseja prosseguir?',
       actions: [
@@ -240,8 +249,10 @@ export default {
       ]
     })
 
-    const { action, params } = props
-    return action(params)
+    if( answer.name === 'confirm' ) {
+      const { action, params } = props
+      return action(params)
+    }
   },
 
   useFields(

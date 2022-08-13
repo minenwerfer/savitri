@@ -48,12 +48,7 @@
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import {
-  SvBareButton,
-  SvOverlay,
-  SvIcon,
-
-} from '../../'
+import { SvBareButton, SvIcon } from '../../'
 
 import { useStore } from '@savitri/web'
 import { Route } from '@savitri/web/router'

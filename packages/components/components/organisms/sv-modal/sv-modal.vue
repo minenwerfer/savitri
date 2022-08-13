@@ -1,7 +1,7 @@
 <template>
   <sv-box
-    :float="true"
-    :close-hint="true"
+    float
+    close-hint
     @close="metaStore.modal.isVisible = false"
   >
     <template #title>

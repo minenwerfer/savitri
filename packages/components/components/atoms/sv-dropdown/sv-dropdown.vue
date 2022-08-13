@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { SvOverlay } from '../../'
 
 const visible = ref(false)
 </script>
