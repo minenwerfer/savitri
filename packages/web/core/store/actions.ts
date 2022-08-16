@@ -126,7 +126,7 @@ export default {
     )
   },
 
-  async getAll<T>(
+  getAll<T>(
     this: Pick<CollectionState<T>, 'pagination'> & {
       $patch: (...args: any[]) => void
       $customEffect: (...args: any[]) => Promise<any>
@@ -154,7 +154,7 @@ export default {
     )
   },
 
-  async insert<T>(
+  insert<T>(
     this: typeof mutations & {
       item: CollectionState<T>['item']
       customEffect: (...args: any[]) => Promise<any>

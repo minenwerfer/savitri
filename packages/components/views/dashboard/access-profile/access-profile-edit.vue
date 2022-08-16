@@ -4,7 +4,7 @@
     :float="true"
     @close="$router.back()"
   >
-    <div class="flex flex-col gap-y-6">
+    <div class="access">
       <sv-form
         :form="fields"
         :form-data="store.item"
@@ -13,7 +13,6 @@
       </sv-form>
       <sv-button
         variant="light"
-        class="self-start"
         @clicked="grantEverything"
       >
         Marcar tudo
@@ -110,3 +109,5 @@ const insert = async () => {
   router.back()
 }
 </script>
+
+<style scoped src="./access-profile-edit.scss"></style>

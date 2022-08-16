@@ -89,7 +89,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     _decodedToken?: any
   ): Promise<Array<T>> {
     const pipe = R.pipe(
-      (item: T & { _doc?: T }) => item._doc||item,
+      (item: T & { _doc?: T }) => {
+        if( !item ) {
+          throw new Error('item not found')
+        }
+
+        return item._doc||item
+      },
       (item: T|null) => item && project(item, props?.project),
       (item: T|null) => item && fill(this.description, item)
     )
