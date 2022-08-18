@@ -120,7 +120,6 @@ const routes = ref<Array<Route>>(getRoutes())
 
 watch(() => metaStore.descriptions, () => {
   routes.value = getRoutes()
-    .sort((a, b) => (a.meta?.order||0) < (b.meta?.order||0) ? -1 : 1)
 })
 </script>
 

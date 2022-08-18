@@ -8,13 +8,11 @@
 
     <sv-modal v-model:visible="metaStore.modal.isVisible" style="z-index: 60">
       <template #title>{{ metaStore.modal.title }}</template>
-      <template #body>
-        <div class="flex flex-col sm:flex-row justify-between">
-            <p v-if="metaStore.modal.body" v-html="metaStore.modal.body" class="opacity-80"></p>
-            <img v-if="metaStore.modal.image" :src="metaStore.modal.image" class="w-52 object-contain" />
-            <component v-if="metaStore.modal.component" :is="metaStore.modal.component"></component>
-        </div>
-      </template>
+      <div>
+          <p v-if="metaStore.modal.body" v-html="metaStore.modal.body"></p>
+          <img v-if="metaStore.modal.image" :src="metaStore.modal.image" />
+          <component v-if="metaStore.modal.component" :is="metaStore.modal.component"></component>
+      </div>
     </sv-modal>
 
     <sv-prompt :actions="metaStore.prompt.actions" v-if="metaStore.prompt.isVisible">
@@ -31,6 +29,7 @@ import { useStore } from '../../../../web'
 import { SvModal, SvPrompt, SvToast } from '../../'
 
 const metaStore = useStore('meta')
+const userStore = useStore('user')
 const router = useRouter()
 
 /**
@@ -41,7 +40,12 @@ watch(() => metaStore.descriptions, descriptions => {
   if( descriptions?.length === 0 ) return;
 
   Object.values(descriptions).forEach((description: any) => {
-    if( description.route ) {
+    const routeVisibility = description.route
+    if( routeVisibility ) {
+      if( Array.isArray(routeVisibility) && !routeVisibility.includes(userStore.$currentUser.access.role)  ) {
+        return
+      }
+
       const routeName = `dashboard-${description.collection}`
       if( router.hasRoute(routeName) ) {
         return

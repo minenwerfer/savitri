@@ -45,7 +45,7 @@ export type CollectionDescription = {
   // modifiers
   strict?: boolean // all fields are required
   alwaysAttribute?: boolean
-  route?: boolean
+  route?: Array<string>|boolean
 
   // takes an array of something
   presets?: Array<CollectionPreset>
