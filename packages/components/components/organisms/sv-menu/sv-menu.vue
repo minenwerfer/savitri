@@ -56,9 +56,15 @@ type Props = {
   schema?: any
 }
 
+type SchemaNode = {
+  roles: Array<string>
+  children?: Route
+}
+
 const props = defineProps<Props>()
 
 const metaStore = useStore('meta')
+const userStore = useStore('user')
 const router = useRouter()
 
 const tick = ref(0)
@@ -86,7 +92,7 @@ const getSchema = (schema: any, routes: Array<Route>) => {
   })
 }
 
-const getRoutes = (children?: Route): Array<Route> => {
+const getRoutes = ({ roles, children }: SchemaNode = {}): Array<Route> => {
   const routes = children || typeof props.entrypoint === 'string'
     ? router.getRoutes().filter((route) => (route.name ||'').startsWith(`${props.entrypoint}-`))
     : router.getRoutes()
@@ -95,16 +101,29 @@ const getRoutes = (children?: Route): Array<Route> => {
   const entries: Record<string, Route> = {}
 
   Object.entries(schema)
-    .filter(([, value]) => !!value)
-    .forEach(([key, value]) => {
-      const { children, ...route } = value
+    .forEach(([key, node]) => {
+      if( !node ) {
+        return
+      }
+
+      const {
+        roles,
+        children,
+        ...route
+
+      } = node
+
+      if( roles && !roles.includes(userStore.$currentUser.access?.role) ) {
+        return
+      }
+
       entries[key] = route
       entries[key].meta = route.meta || {
         title: key
       }
 
       if( children ) {
-        entries[key].children = getRoutes(children)
+        entries[key].children = getRoutes(node)
       }
     })
 
