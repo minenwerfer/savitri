@@ -14,7 +14,7 @@ import { routerInstance as createRouter } from './router'
 import { default as webpackVariables } from 'variables'
 
 import { useStore } from './store'
-import registerDirectives from './directives'
+import registerDirectives from '../../components/directives'
 
 type Plugin = {
   routerExtension?: RouterExtension
@@ -89,7 +89,7 @@ export const useApp = (config: AppOptions): Promise<{
     ROUTER: router,
     QUERY_CACHE: {},
     // _store: store,
-    _i18n: i18n
+    I18N: i18n
   })
 
   const metaStore = useStore('meta')

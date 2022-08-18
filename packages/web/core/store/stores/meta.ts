@@ -60,6 +60,7 @@ type MetaState = {
   toast: {
     isVisible: boolean
     text: string
+    itr: Date|null
   }
 }
 
@@ -102,6 +103,7 @@ export default defineStore('meta', {
     toast: {
       isVisible: false,
       text: '',
+      itr: null
     },
   }),
 
@@ -194,7 +196,8 @@ export default defineStore('meta', {
       this.$patch({
         toast: {
           ...props,
-          isVisible: true
+          isVisible: true,
+          itr: new Date
         }
       })
     }

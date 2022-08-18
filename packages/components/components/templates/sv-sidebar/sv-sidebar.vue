@@ -7,13 +7,12 @@
         <strong class="text-xl">
           {{ metaStore.sidebar.title }}
         </strong>
-        <sv-bare-button @clicked="close">
-          <sv-icon
-            name="arrow-to-right"
-            fill="black"
-            :reactive="true"
-          ></sv-icon>
-        </sv-bare-button>
+        <sv-icon
+          v-clickable
+          name="arrow-to-right"
+          :reactive="true"
+          @click="close"
+        ></sv-icon>
       </div>
 
       <div class="sidebar__content">
@@ -32,7 +31,6 @@
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
 import {
-  SvBareButton,
   SvReleases,
   SvProfile,
   SvNotifications,

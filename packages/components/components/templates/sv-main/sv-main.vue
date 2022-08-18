@@ -1,5 +1,5 @@
 <template>
-  <sv-toast v-if="metaStore.toast.isVisible" :key="toast.itr">
+  <sv-toast v-if="metaStore.toast.isVisible" :key="metaStore.toast.itr">
     {{ metaStore.toast.text }}
   </sv-toast>
 

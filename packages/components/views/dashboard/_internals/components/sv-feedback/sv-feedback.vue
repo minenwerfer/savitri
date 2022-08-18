@@ -5,22 +5,22 @@
     :float="true"
     @close="$emit('update:visible', false)"
   >
-    <template #body>
-      <div v-if="!inserted">
-        <p class="opacity-60 mb-8">
-          Envie absolutamente qualquer coisa.
-        </p>
+    <div v-if="!inserted">
+      <p class="opacity-60 mb-8">
+        Envie absolutamente qualquer coisa.
+      </p>
 
-        <sv-form
-          :form="store.useFieldsExcept(['user_id'])"
-          :form-data="store.item"
-        />
-      </div>
-      <div v-else class="flex justify-between">
-        <p>Obrigado por contribuir. Você pode enviar um feedback por sessão.</p>
-        <img :src="derpImage" class="w-52 object-contain"/>
-      </div>
-    </template>
+      <sv-form
+        v-bind="{
+          collection: 'feedback',
+          form: store.useFieldsExcept(['user_id']),
+          formData: store.item
+        }"
+      />
+    </div>
+    <p v-else>
+      Obrigado por contribuir. Você pode enviar um feedback por sessão.
+    </p>
 
     <template #footer v-if="!inserted">
       <sv-button
@@ -34,23 +34,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide, inject, defineAsyncComponent } from 'vue'
+import { ref, inject } from 'vue'
 import { useStore } from '@savitri/web'
-import { SvForm, SvButton } from '../../../../..'
+import { SvBox, SvForm, SvButton } from '../../../../../components'
 import { isFeedbackVisible } from '../../store'
 
-const SvBox = defineAsyncComponent(() => import('../../../../../molecules/sv-box/sv-box.vue'))
-
 const store = useStore('feedback')
-provide('storeId', 'feedback')
 
 const inserted = ref(false)
 const productVersion = inject('productVersion')
 const baseVersion = inject('baseVersion')
-
-const derpImage = ''
-const img = new Image()
-img.src = derpImage
 
 const insert = async () => {
   await store.insert({

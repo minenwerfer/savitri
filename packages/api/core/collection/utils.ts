@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import { fromEntries, getIndexes } from '../../../common'
 import type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument } from '../../types'
@@ -119,11 +120,12 @@ export const prepareInsert = (
   const what = typeof _id === 'string' ? Object.entries(rest)
     .filter(([key]: [string, unknown]) => !forbidden(key))
     .reduce((a: any, [key, value]: [string, any]) => {
-      const append = [undefined, null].includes(value)
-        || (typeof value === 'object' ? Object.keys(value||{}).length : String(value).length ) === 0
-        ? '$unset' : '$set'
+      if( [undefined, null].includes(value) || R.isEmpty(value)) {
+        a.$unset[key] = 1
+        return a
+      }
 
-      a[append][key] = append === '$set' ? value : 1
+      a.$set[key] = value
       return a
 
     }, {
@@ -132,7 +134,7 @@ export const prepareInsert = (
     }) : rest
 
   Object.keys(what)
-    .filter(k => (typeof what[k] !== 'boolean' && !what[k]) || typeof what[k] === 'object' && Object.keys(what[k]).length === 0)
+    .filter(k => R.isEmpty(what[k]))
     .forEach(k => delete what[k])
 
   return what

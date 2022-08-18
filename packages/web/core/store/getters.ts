@@ -1,6 +1,5 @@
 import type {
   CollectionField,
-  CollectionAction,
   CollectionActions,
 
 } from '../../../common/types'
@@ -16,7 +15,7 @@ const {
 } = useUtil()
 
 const normalizeActions = (actions: CollectionActions) => Object.entries(actions||{})
-  .filter(([key, value]: [string, CollectionAction]) => !!value && !key.startsWith('_'))
+  .filter(([key, value]) => !!value && !key.startsWith('_'))
   .reduce((a: Array<object>, [key, value]) => [
     ...a,
     {

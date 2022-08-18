@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest, DecodedToken } from '../types'
+import { Error as MongooseError } from 'mongoose'
 
 import { getController } from '../core/controller'
 import { TokenService } from '../core/services/token'
@@ -45,13 +46,29 @@ export const safeHandle = (
       console.trace(error)
     }
 
-    return {
+    const response: { error: any, validation?: any } = {
       error: {
         name: error.name,
         code: error.code,
         message: error.message
       }
     }
+
+    if( error instanceof MongooseError.ValidationError ) {
+      const errors = Object.values(error.errors)
+      response.error.silent = true
+      response.error.validation = errors.reduce((a: any, error: any) => {
+        return {
+          ...a,
+          [error.path]: {
+            type: error.kind,
+            detail: null
+          },
+        }
+      }, {})
+    }
+
+    return response
   }
 }
 

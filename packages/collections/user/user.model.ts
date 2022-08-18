@@ -9,8 +9,8 @@ import { AccessProfileDocument } from '../accessProfile/accessProfile.model'
 import '../accessProfile/accessProfile.model'
 
 export type User = {
-  name: string
   first_name: string
+  last_name: string
   email: string
   password?: string
   active: boolean
@@ -32,9 +32,9 @@ UserSchema.methods.testPassword = async function(candidate: string) {
   return bcrypt.compare(candidate, this.password || '')
 }
 
-UserSchema.post('init', function(this: UserDocument) {
-  this.first_name = this.name?.split(' ')[0]
-})
+// UserSchema.post('init', function(this: UserDocument) {
+//   this.first_name = this.name?.split(' ')[0]
+// })
 
 /**
  * @exports

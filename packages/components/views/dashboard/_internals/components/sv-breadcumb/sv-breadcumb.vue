@@ -1,10 +1,10 @@
 <template>
   <div class="breadcumb">
     <router-link
-      class="breadcumb__link"
       v-for="(route, index) in routes"
       :key="`route-${index}`"
       :to="{ name: route.name, params: $route.params }"
+      class="breadcumb__link"
     >
       {{ $tc(getTitle(route), 2).capitalize() }}
     </router-link>
@@ -16,8 +16,6 @@ import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '@savitri/web'
 import { Route } from '@savitri/web/router'
-
-const SvBareButton = defineAsyncComponent(() => import('../../../../../atoms/sv-bare-button/sv-bare-button.vue'))
 
 const metaStore = useStore('meta')
 const getRoute = () => {

@@ -8,14 +8,33 @@ export const publicRoutes: Array<Route> = [
   {
     path: '/',
     name: 'landing',
-    redirect: '/signin',
+    redirect: '/user/signin',
     meta: { title: 'Página inicial', hidden: true, }
   },
   {
-    path: '/signin',
-    name: 'signin',
-    component: () => import('./views/signin/signin.vue'),
-    meta: { title: 'Autenticação', hidden: true, }
+    path: '/user',
+    name: 'user',
+    component: () => import('./views/user/template.vue'),
+    children: [
+      {
+        path: 'signin',
+        name: 'user-signin',
+        component: () => import('./views/user/signin/signin.vue'),
+        meta: { title: 'Autenticação', hidden: true, }
+      },
+      {
+        path: 'signup',
+        name: 'user-signup',
+        component: () => import('./views/user/signup/signup.vue'),
+        meta: { title: 'Registro', hidden: true, }
+      },
+      {
+        path: 'onboarding',
+        name: 'user-onboarding',
+        component: () => import('./views/user/onboarding/onboarding.vue'),
+        meta: { title: 'Registro', hidden: true, }
+      }
+    ]
   }
 ]
 
@@ -27,7 +46,7 @@ export const privateRoutes: Array<Route> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('./components/templates').then((m: any) => m.SvDashboard),
+    component: () => import('./views/dashboard/template.vue'),
     redirect: { name: 'dashboard-home' },
     meta: { title: 'Dashboard' },
     children: [

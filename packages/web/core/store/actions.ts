@@ -92,11 +92,18 @@ export default {
     this: CollectionState<T>,
     verb: string, payload?: any
   ): Promise<any> {
+    this.validationErrors = {}
     this.meta.isLoading = true
-    const result = (await http.post(`${this.$id}/${verb}`, payload)).data
+
+    const promise = http.post(`${this.$id}/${verb}`, payload)
+      .catch((err: any) => {
+        if( err.validation ) {
+          this.validationErrors = err.validation
+        }
+      })
 
     this.meta.isLoading = false
-    return result
+    return (await promise)?.data
   },
 
   async customEffect(

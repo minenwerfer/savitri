@@ -48,27 +48,23 @@ $critical-foreground-color: red;
     background: transparent;
   }
 
-  &--normal#{&}--neutral {
+  &--big {
+    border: 1px solid red;
+    padding: 1.2rem 0;
+
+    font-size: 1.05rem;
+    color: #fff;
+  }
+
+  &--neutral {
     @include normal-style($color: $neutral-foreground-color);
   }
 
-  &--normal#{&}--success {
+  &--success {
     @include normal-style($color: $success-foreground-color);
   }
   
-  &--normal#{&}--critical {
+  &--critical {
     @include normal-style($color: $critical-foreground-color);
-  }
-
-  &--light#{&}--neutral {
-    @include light-style($color: $neutral-foreground-color);
-  }
-
-  &--light#{&}--success {
-    @include light-style($color: $success-foreground-color);
-  }
-  
-  &--light#{&}--critical {
-    @include light-style($color: $critical-foreground-color);
   }
 }

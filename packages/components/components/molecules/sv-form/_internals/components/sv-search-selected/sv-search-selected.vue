@@ -10,31 +10,31 @@
       class="item"
     >
       <div v-if="!searchOnly" class="selected__icons">
-        <sv-bare-button @clicked="edit(item)">
-          <sv-icon
-            name="edit"
-            fill="gray"
-          ></sv-icon>
-        </sv-bare-button>
-        <sv-bare-button @clicked="unselect(item)">
-          <sv-icon
-            name="trash"
-            fill="gray"
-          ></sv-icon>
-        </sv-bare-button>
+        <sv-icon
+          v-clickable
+          name="edit"
+          @click="edit(item)"
+        ></sv-icon>
+        <sv-icon
+          v-clickable
+          name="trash"
+          @click="unselect(item)"
+        ></sv-icon>
       </div>
 
       <div v-else class="selected__icons">
-        <sv-bare-button @clicked="unselect(item, false)">
-          <sv-icon name="minus" fill="gray"></sv-icon>
-        </sv-bare-button>
+        <sv-icon
+          v-clickable
+          name="minus"
+          @click="unselect(item, false)"
+        ></sv-icon>
       </div>
     </sv-search-item>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SvBareButton, SvIcon } from '../../../../..'
+import { SvIcon } from '../../../../..'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 type Props = {

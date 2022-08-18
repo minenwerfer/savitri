@@ -10,7 +10,7 @@ $section-gap: 2rem;
   &__fieldset {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    align-items: end;
+    align-items: start;
     width: 100%;
     gap: .6rem;
 
@@ -28,5 +28,11 @@ $section-gap: 2rem;
   &__search-grid {
     display: grid;
     gap: $section-gap;
+  }
+
+  &__validation-error {
+    font-size: .9rem;
+    padding: .4rem 0;
+    color: red;
   }
 }

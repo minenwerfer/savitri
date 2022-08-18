@@ -1,4 +1,4 @@
-.signin {
+.template {
   display: grid;
   place-items: center;
   height: 100vh;
@@ -18,18 +18,15 @@
     align-self: center;
   }
 
-  &__form-container {
+  &__view {
     display: flex;
     flex-direction: column;
-    row-gap: 1rem;
+    row-gap: 1.6rem;
     padding: 1rem;
   }
 
-  &__form-button {
-    padding: .8rem 0;
-  }
-
-  &__form-button-text {
-    width: 100%;
+  &__version {
+    align-self: center;
+    opacity: .6;
   }
 }

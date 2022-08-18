@@ -1,6 +1,7 @@
 {
   "collection": "feedback",
   "route": true,
+  "strict": true,
   "unicon": "comment-alt-dots",
   "presets": [
     "owned",

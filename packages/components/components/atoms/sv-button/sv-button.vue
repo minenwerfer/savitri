@@ -3,15 +3,17 @@
     :class="`button button--${variant} button--${type}`"
     :disabled="disabled"
   >
-    <sv-icon
-      v-if="icon"
-      :name="icon"
-      class="button__icon"
-    >
-      <slot></slot>
-    </sv-icon>
+    <div style="width: 100%">
+      <sv-icon
+        v-if="icon"
+        :name="icon"
+        class="button__icon"
+      >
+        <slot></slot>
+      </sv-icon>
 
-    <slot v-else></slot>
+      <slot v-else></slot>
+    </div>
   </sv-bare-button>
 </template>
 
@@ -32,6 +34,7 @@ type Type =
 type Variant =
   'normal'
   | 'light'
+  | 'big'
 
 type Props = {
   type?: Type

@@ -4,7 +4,7 @@
     v-overlay="{
       condition: overlay || isFloating,
       invisible: invisibleOverlay,
-      click: $emit('overlayClicked')
+      click: emit('overlayClick')
     }"
 
     :class="`
@@ -25,25 +25,24 @@
           <slot v-if="$slots.title" name="title"></slot>
           <div v-else-if="title">{{ title }}</div>
         </div>
-        <div class="box__header-icons" v-if="closeHint || collapsable">
-          <sv-bare-button
+        <div
+          v-if="closeHint || collapsable"
+          class="box__header-icons"
+        >
+          <sv-icon
             v-if="collapsable"
-            @clicked="isCollapsed = !isCollapsed"
-          >
-            <sv-icon
-              reactive
-              :name="!isCollapsed ? 'minus' : 'plus'"
-            />
-          </sv-bare-button>
-          <sv-bare-button
+            v-clickable
+            reactive
+            :name="!isCollapsed ? 'minus' : 'plus'"
+            @click="isCollapsed = !isCollapsed"
+          />
+          <sv-icon
             v-else-if="closeHint"
-            @clicked="close"
-          >
-            <sv-icon
-              reactive
-              name="multiply"
-            />
-          </sv-bare-button>
+            v-clickable
+            reactive
+            name="multiply"
+            @click="close"
+          />
         </div>
       </div>
 
@@ -63,7 +62,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { SvBareButton, SvIcon } from '../../'
+import { SvIcon } from '../../'
 
 // #region props
 type Props = {
@@ -93,7 +92,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
   (e: 'update:closeHint', value: boolean): void
-  (e: 'overlayClicked'): void
+  (e: 'overlayClick'): void
   (e: 'close'): void
 }>()
 

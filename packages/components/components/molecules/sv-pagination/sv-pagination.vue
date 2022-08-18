@@ -36,7 +36,6 @@ import {
 
 import { SvSelect } from '../../'
 
-const SvBareButton = defineAsyncComponent(() => import('../..//atoms/sv-bare-button/sv-bare-button.vue'))
 const store = useParentStore()
 
 const page = computed({

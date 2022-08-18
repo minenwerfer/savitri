@@ -28,7 +28,7 @@ const httpMethodWrapper = (
 
   return call
     .then(resolve)
-    .catch(async (error: Error) => {
+    .catch(async (error: any) => {
       const metaStore = useStore('meta')
 
       if( ['TokenExpiredError', 'AuthorizationError'].includes(error.name) ) {
@@ -42,7 +42,7 @@ const httpMethodWrapper = (
 
 
         sessionStorage.clear()
-        ROUTER.push({ name: 'signin' })
+        ROUTER.push({ name: 'user-signin' })
 
       } else {
         // ctx.commit('meta/MODAL_SPAWN', {
@@ -51,14 +51,16 @@ const httpMethodWrapper = (
 
         // }, { root: true })
         //alert('uncaught')
-        metaStore.spawnModal({
-          title: 'Erro',
-          body: error
-        })
+        if( !error.silent! ) {
+          metaStore.spawnModal({
+            title: 'Erro',
+            body: error
+          })
+        }
       }
 
       console.trace(error)
-      reject(error.message)
+      reject(error)
     })
 })
 

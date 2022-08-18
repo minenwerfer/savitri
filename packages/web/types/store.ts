@@ -14,6 +14,13 @@ export type Pagination = {
   currentPage: number
 }
 
+export type ValidationError = {
+  type: string
+  detail: string
+}
+
+export type ValidationErrors = Record<string, ValidationError>
+
 export type CollectionState<Item> = PiniaState & {
   item: Item|object
   freshItem: Partial<Item>
@@ -25,6 +32,8 @@ export type CollectionState<Item> = PiniaState & {
   queryCache: Record<string, any>
   description: Readonly<Partial<CollectionDescription>>
   rawDescription: Readonly<Partial<CollectionDescription>>
+
+  validationErrors: ValidationErrors
 
   meta: {
     isLoading: boolean

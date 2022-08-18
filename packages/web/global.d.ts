@@ -20,6 +20,7 @@ declare module 'vue-unicons/dist/icons' {
 
 // web core
 declare var ROUTER: any
+declare var I18N: any
 declare var STORES: Record<string, any>
 declare var QUERY_CACHE: Record<string, {
   items: Array<any>

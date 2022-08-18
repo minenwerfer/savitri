@@ -1,41 +1,42 @@
 <template>
   <component :is="runonceSlot" v-if="runonceSlot"></component>
 
-  <div class="dashboard">
-    <sv-bare-button
-      class="dashboard__feedback-button"
+  <div class="template">
+    <sv-icon
+      v-clickable
       v-if="webpackVariables.feedback"
-      @clicked="isFeedbackVisible = true"
+      name="comment-dots"
+      class="template__feedback-button"
+      @click="isFeedbackVisible = true"
     >
-        <sv-icon name="comment-dots" fill="white"></sv-icon>
-        <div>Feedback</div>
-    </sv-bare-button>
+      Feedback
+    </sv-icon>
 
     <sv-topbar v-if="!$route.meta?.notopbar">
       <component :is="topbarSlot" v-if="topbarSlot"></component>
       <sv-utilities></sv-utilities>
     </sv-topbar>
 
-    <div class="dashboard__main">
+    <div class="template__main">
       <sv-menu
         entrypoint="dashboard"
         v-model:visible="metaStore.menu.isVisible"
         :schema="menuSchema"
       ></sv-menu>
 
-      <div class="dashboard__content">
-        <div class="dashboard__notice" v-if="notice">
+      <div class="template__content">
+        <div class="template__notice" v-if="notice">
           {{ notice }}
         </div>
 
-        <div class="dashboard__view">
+        <div class="template__view">
           <sv-breadcumb></sv-breadcumb>
           <router-view />
         </div>
       </div>
     </div>
 
-    <sv-feedback v-model:visible="isFeedbackVisible"></sv-feedback>
+    <sv-feedback></sv-feedback>
     <sv-sidebar v-model:visible="metaStore.sidebar.isVisible"></sv-sidebar>
   </div>
 </template>
@@ -48,11 +49,10 @@ import { default as webpackVariables } from 'variables'
 import {
   SvMenu,
   SvTopbar,
-  SvBareButton,
   SvSidebar,
   SvIcon
 
-} from '../../'
+} from '../..'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
@@ -79,4 +79,4 @@ onMounted(() => {
 const isReleasesVisible = ref(false)
 </script>
 
-<style scoped src="./sv-dashboard.scss"></style>
+<style scoped src="./template.scss"></style>

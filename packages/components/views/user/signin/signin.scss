@@ -1,0 +1,13 @@
+.signin {
+  &__action {
+    align-self: center;
+    color: blue;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    row-gap: .6rem;
+  }
+}
+

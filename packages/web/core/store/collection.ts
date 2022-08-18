@@ -49,6 +49,8 @@ const state = <T=object>(): CollectionState<T> => {
     description: {},
     rawDescription: {},
 
+    validationErrors: {},
+
     meta: {
       isLoading: false,
       halt: false

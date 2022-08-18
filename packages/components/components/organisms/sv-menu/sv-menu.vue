@@ -18,26 +18,21 @@
 
         <!-- subroutes -->
         <div>
-          <sv-bare-button
+          <sv-icon
+            v-clickable
             v-for="(subroute, index) in route.children"
             :key="`subroute-${index}`"
             :class="`
               menu__subroute
               ${isCurrent(subroute) && 'menu__subroute--current'}
             `"
-            @clicked="onEntryClick(subroute)"
+
+            :name="subroute.meta?.unicon || 'file'"
+            :fill="isCurrent(subroute) ? 'blue' : 'gray'"
+            @click="onEntryClick(subroute)"
           >
-            <sv-icon
-              :name="subroute.meta?.unicon || 'file'"
-              :fill="isCurrent(subroute) ? 'blue' : 'gray'"
-              class="menu__icon"
-            >
-              {{ $tc(subroute.meta.title, 2).capitalize() }}
-            </sv-icon>
-            <!-- <div class="menu__subroute--title"> -->
-            <!--   {{ $tc(subroute.meta.title, 2).capitalize() }} -->
-            <!-- </div> -->
-          </sv-bare-button>
+            {{ $tc(subroute.meta.title, 2).capitalize() }}
+          </sv-icon>
         </div>
 
       </div>
@@ -48,7 +43,7 @@
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { SvBareButton, SvIcon } from '../../'
+import { SvIcon } from '../../'
 
 import { useStore } from '@savitri/web'
 import { Route } from '@savitri/web/router'

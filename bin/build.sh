@@ -4,10 +4,12 @@ COMMAND=$(expr "$1" \| "")
 BUILD_COMPONENTS=
 
 PACKAGES=(
-  "web"
-  "api"
-  "common"
-  "components"
+  api
+  collections
+  common
+  components
+  controllables
+  web
 )
 
 npm run build || true && \
@@ -19,7 +21,6 @@ npm run build || true && \
 
 [ "$COMMAND" == "pack" ] && {
   cp tsconfig.json dist/web
-  cp packages/web/tailwind.config.js dist/web
   cp -r packages/web/public dist/web
 
   for package in ${PACKAGES[*]}; do

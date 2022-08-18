@@ -1,6 +1,13 @@
-import { ref, reactive } from 'vue'
+import { ref, computed,reactive } from 'vue'
 
-export const isShortcutsVisible = ref(false)
+const shortcutsVisible = ref(false)
+const isShortcutsVisible = computed(() => shortcutsVisible.value)
+
+export {
+  shortcutsVisible,
+  isShortcutsVisible
+}
+
 export const results = reactive({
   items: []
 })

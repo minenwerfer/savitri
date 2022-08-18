@@ -1,8 +1,7 @@
 <template>
   <sv-box
-    v-model:visible="isShortcutsVisible"
+    v-if="isShortcutsVisible"
     class="shortcuts"
-    @overlay-clicked="isShortcutsVisible = false"
   >
     <div class="shortcuts__options">
       <sv-icon
@@ -33,7 +32,7 @@ const userStore = useStore('user')
 
 const signout = () => {
   userStore.signout()
-  router.push({ name: 'signin' })
+  router.push({ name: 'user-signin' })
 }
 </script>
 

@@ -1,18 +1,23 @@
 <template>
   <sv-info v-if="webpackVariables.releases" where="bottom">
     <template #text>Notas de atualização</template>
-    <sv-bare-button @clicked="spawnSidebar('Querido diário', 'sv-releases', { updateRoute: false })">
-      <sv-new :last="lastRelease" v-model="lastReadRelease">
-        <sv-icon name="newspaper"></sv-icon>
-      </sv-new>
-    </sv-bare-button>
+    <sv-new
+      v-clickable
+      v-model="lastReadRelease"
+      :last="lastRelease"
+      @clicked="spawnSidebar('Querido diário', 'sv-releases', { updateRoute: false })"
+    >
+      <sv-icon name="newspaper"></sv-icon>
+    </sv-new>
   </sv-info>
 
   <sv-info v-if="webpackVariables.notification" where="bottom">
     <template #text>Notificações</template>
-    <sv-bare-button @clicked="spawnSidebar('Notificações', 'sv-notifications')">
-      <sv-icon name="bell"></sv-icon>
-    </sv-bare-button>
+    <sv-icon
+      v-clickable
+      name="bell"
+      @clicked="spawnSidebar('Notificações', 'sv-notifications')"
+    ></sv-icon>
   </sv-info>
 </template>
 
@@ -26,14 +31,8 @@ import {
 
 } from 'vue'
 
-import { useHttp } from '../../../../../../../web'
-import {
-  SvBareButton,
-  SvInfo,
-  SvIcon,
-  SvNew
-
-} from '../../../../..'
+import { useHttp } from '../../../../../../web'
+import { SvInfo, SvIcon, SvNew } from '../../../../..'
 
 import { default as webpackVariables } from 'variables'
 

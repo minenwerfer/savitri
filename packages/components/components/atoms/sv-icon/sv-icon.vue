@@ -1,12 +1,12 @@
 <template>
-  <div :class="`
+  <a :class="`
     icon
     ${reactive && 'icon--reactive'}
     ${$slots.default && 'icon--centered'}
   `">
     <unicon v-bind="props"></unicon>
     <slot v-if="$slots.default"></slot>
-  </div>
+  </a>
 </template>
 
 <script setup lang="ts">

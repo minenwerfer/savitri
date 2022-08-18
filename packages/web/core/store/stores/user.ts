@@ -53,7 +53,7 @@ const collection = useCollection({
 
     signout() {
       sessionStorage.clear()
-      this.$reset()
+      this.currentUser = {}
     }
   },
   getters: {

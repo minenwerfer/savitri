@@ -15,6 +15,7 @@
       <div class="checkbox__label">
         <slot name="label" v-if="$slots.label"></slot>
         <div v-else-if="label" v-html="label"></div>
+        <slot v-else></slot>
       </div>
       <div class="checkbox__description">
         <slot name="description" v-if="$slots.description"></slot>

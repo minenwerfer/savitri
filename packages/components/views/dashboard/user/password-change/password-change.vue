@@ -1,15 +1,21 @@
 <template>
-  <div>Mudando a senha de {{ store.item.name }}</div>
+  <div>Mudando a senha de {{ userStore.item.name }}</div>
   <sv-box class="passchange">
     <div class="passchange__content">
       <sv-form
-        :form="fields"
-        :form-data="store.item"
+        v-bind="{
+          form: passwordForm,
+          formData: password
+        }"
       ></sv-form>
+
+      <div>
+        {{ passwordError || 'Senhas conferem' }}
+      </div>
 
       <sv-button
         class="passchange__save-button"
-        :disabled="(store.item.password?.length||0) < 4 || store.item.password !== store.item.verification"
+        :disabled="passwordError"
         @clicked="insert"
       >
         Salvar
@@ -19,37 +25,54 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from '@savitri/web'
+import { reactive, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore, passwordPolicy } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../..'
 
-const store = useStore('user')
+const router = useRouter()
+const userStore = useStore('user')
 const metaStore = useStore('meta')
 
-const fields = {
+const password = reactive({
+  password: '',
+  confirmation: ''
+})
+
+const passwordForm = {
   password: {
     label: 'Senha',
     type: 'password'
   },
-  verification: {
-    label: 'Confirme a senha',
+  confirmation: {
+    label: 'Confirmação da senha',
     type: 'password'
   }
 }
 
 const insert = async () => {
-  const { password } = store.item
-  await store.insert({
+  const { password } = userStore.item
+  await userStore.insert({
     what: {
-      _id: store.item._id,
+      _id: userStore.item._id,
       password
     }
   })
 
-  metaStore.spawnModal({
+  await metaStore.spawnModal({
     title: 'Feito!',
     body: 'A senha foi atualizada'
   })
+
+  router.back()
 }
+
+const passwordError = computed(() => {
+  return passwordPolicy(
+    password.password,
+    password.confirmation,
+  )
+})
 </script>
 
 <style scoped src="./password-change.scss"></style>

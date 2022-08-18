@@ -34,21 +34,22 @@
     ]
   },
   "fields": {
-    "name": {
+    "first_name": {
       "label": "Nome",
       "type": "text",
-      "required": true
+      "required": true,
+      "formSpan": 3
+    },
+    "last_name": {
+      "label": "Sobrenome",
+      "type": "text",
+      "required": true,
+      "formSpan": 3
     },
     "active": {
       "label": "Ativo",
       "type": "boolean",
       "default": true
-    },
-    "first_name": {
-      "label": "Nome",
-      "type": "text",
-      "notable": true,
-      "noform": true
     },
     "access": {
       "label": "Preset de acesso",

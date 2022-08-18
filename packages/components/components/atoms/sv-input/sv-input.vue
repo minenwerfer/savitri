@@ -42,9 +42,11 @@
       >
         <sv-info>
           <template #text>Copiar</template>
-          <sv-bare-button @clicked="copy(inputValue || value)">
-            <sv-icon name="clipboard" fill="gray"></sv-icon>
-          </sv-bare-button>
+          <sv-icon
+            v-clickable
+            name="clipboard"
+            @click="copy(inputValue || value)"
+          ></sv-icon>
         </sv-info>
       </div>
     </div>
@@ -66,12 +68,7 @@
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
 import { useStore, copyToClipboard } from '@savitri/web'
-import {
-  SvBareButton,
-  SvInfo,
-  SvIcon
-
-} from '../../'
+import { SvInfo, SvIcon } from '../../'
 
 type Props = {
   modelValue?: string

@@ -49,6 +49,11 @@ $icon-size: 1.25rem;
       background: #6060ee;
     }
 
+    :deep(svg) {
+      width: $icon-size;
+      fill: #63b3ed;
+    }
+
     &--current {
       border-color: #2060fe;
       background: #2060fa;
@@ -58,14 +63,5 @@ $icon-size: 1.25rem;
   &__subroute-title {
     white-space: nowrap;
     opacity: .8;
-  }
-
-  &__icon {
-    column-gap: .8rem;
-
-    :deep(svg) {
-      width: $icon-size;
-      fill: #63b3ed;
-    }
   }
 }

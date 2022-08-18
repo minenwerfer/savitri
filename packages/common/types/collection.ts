@@ -36,7 +36,7 @@ export type CollectionAction = Readonly<{
   clearItem?: boolean
 }>
 
-export type CollectionActions = Record<string, CollectionAction>
+export type CollectionActions = Record<string, CollectionAction | null>
 
 export type CollectionDescription = {
   collection: string

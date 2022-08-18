@@ -6,18 +6,22 @@
     </div>
     <div class="filter__icons">
       <sv-bare-button
-        type="neutral"
         :disabled="Object.keys(store.availableFilters).length === 0"
         @clicked="isFilterVisible = true"
       >
-        <sv-icon name="filter" :reactive="true"></sv-icon>
+        <sv-icon
+          name="filter"
+          :reactive="true"
+        ></sv-icon>
       </sv-bare-button>
       <sv-bare-button
-        type="neutral"
         :disabled="Object.keys(store.availableFilters).length === 0"
         @clicked="store.clearFilters"
       >
-        <sv-icon name="trash" :reactive="true"></sv-icon>
+        <sv-icon
+          name="trash"
+          :reactive="true"
+        ></sv-icon>
       </sv-bare-button>
     </div>
   </div>

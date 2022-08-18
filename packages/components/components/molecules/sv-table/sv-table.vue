@@ -148,7 +148,7 @@ type Props = {
   checkbox?: boolean
   border?: boolean
   headers?: boolean
-  actions: any
+  actions?: any
 }
 
 const props = withDefaults(defineProps<Props>(), {
