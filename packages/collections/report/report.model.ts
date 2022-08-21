@@ -7,7 +7,7 @@ import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
 export type ReportDocument = MongoDocument & {
-  user_id: UserDocument | MongoDocument['_id']
+  owner: UserDocument | MongoDocument['_id']
   _collection: string
   format: string
   type: string

@@ -13,59 +13,8 @@ type PromptAnswer = { name: string }
 const { http } = useHttp()
 const { hydrateQuery } = useUtil()
 
-type ViewLayout =
-  'tabular'
-  | 'grid'
-  | 'list'
-
-type MetaState = {
-  descriptions: Array<CollectionDescription>
-
-  isLoading: boolean
-  globalIsLoading: boolean
-
-  view: {
-    title: string
-    layout: ViewLayout
-    collection: string
-  }
-  menu: {
-    isVisible: boolean
-    isMobileVisible: boolean
-  }
-  modal: {
-    isVisible: boolean
-    title: string
-    body: string
-    image?: string
-    component?: string
-    details: {}
-  }
-  prompt: {
-    isVisible: boolean
-    title: string
-    body?: string
-    actions: Array<{
-      name: string
-      title: string
-      type?: string
-    }>
-  }
-  sidebar: {
-    isVisible: boolean
-    title: string
-    component: string
-    componentProps: any
-  }
-  toast: {
-    isVisible: boolean
-    text: string
-    itr: Date|null
-  }
-}
-
 export default defineStore('meta', {
-  state: (): MetaState => ({
+  state: () => ({
     descriptions: [],
 
     isLoading: false,
@@ -103,7 +52,7 @@ export default defineStore('meta', {
     toast: {
       isVisible: false,
       text: '',
-      itr: null
+      itr: new Date
     },
   }),
 
@@ -158,12 +107,18 @@ export default defineStore('meta', {
       localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
     },
 
-    spawnPrompt(props: Omit<MetaState['prompt'], 'isVisible'>): Promise<PromptAnswer> {
+    spawnPrompt(props: Omit<typeof this['prompt'], 'isVisible' | 'actions'> & {
+      actions: Array<{
+        name: string
+        title: string
+        type?: string
+      }>
+    }): Promise<PromptAnswer> {
       this.$patch({
         prompt: {
           ...props,
           isVisible: true
-        }
+        } as any
       })
 
       return new Promise((resolve) => {
@@ -183,7 +138,7 @@ export default defineStore('meta', {
       }))
     },
 
-    spawnModal(props: Omit<MetaState['modal'], 'isVisible'>) {
+    spawnModal(props: Omit<typeof this['modal'], 'isVisible'>) {
       this.$patch({
         modal: {
           ...props,
@@ -192,7 +147,7 @@ export default defineStore('meta', {
       })
     },
 
-    spawnToast(props: Omit<MetaState['toast'], 'isVisible'>) {
+    spawnToast(props: Omit<typeof this['toast'], 'isVisible'>) {
       this.$patch({
         toast: {
           ...props,

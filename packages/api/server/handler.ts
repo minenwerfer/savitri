@@ -100,8 +100,8 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     const token = await getToken(request) as DecodedToken
     const method = (instance.webInterface||instance)[verb]
 
-    prePipe(request, h, token)
-    const result = await method(request, h, token)
+    prePipe(request, token, h)
+    const result = await method(request, token, h)
 
     const mime = instance.rawType(verb)
     if( mime ) {
@@ -126,7 +126,7 @@ export const regularVerb = (verb: RegularVerb) =>
 
   const token = await getToken(request) as DecodedToken
 
-  prePipe(request, h, token)
+  prePipe(request, token, h)
   const requestCopy = Object.assign(request, { payload: {} })
 
   if( id ) {
@@ -140,7 +140,7 @@ export const regularVerb = (verb: RegularVerb) =>
     }
   }
 
-  const result = await instance[verb](requestCopy, h, token)
+  const result = await instance[verb](requestCopy, token, h)
   return postPipe(result, _instance, request)
 }
 

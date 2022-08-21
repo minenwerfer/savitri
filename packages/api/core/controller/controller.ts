@@ -55,9 +55,9 @@ export abstract class Controller {
         }
 
         const method = (target as Record<string, any>)[key]
-        const alwaysAttribute = this._description?.alwaysAttribute
+        // const alwaysAttribute = this._description?.alwaysAttribute
 
-        return function(req: HandlerRequest, res: ResponseToolkit, decodedToken: any) {
+        return function(req: HandlerRequest, decodedToken: any, res?: ResponseToolkit) {
           const controllerName = target._description?.collection || target._controllerName
 
           if( !controllerName ) {
@@ -86,14 +86,14 @@ export abstract class Controller {
             req.payload.limit = 150
           }
 
-          if( decodedToken.access?.visibility !== 'everything' || alwaysAttribute ) {
-            if( payload.what ) payload.what.user_id = decodedToken._id
-            if( payload.filters ) payload.filters.user_id = decodedToken._id
-          }
+          // if( decodedToken.access?.visibility !== 'everything' || alwaysAttribute ) {
+          //   if( payload.what ) payload.what.user_id = decodedToken._id
+          //   if( payload.filters ) payload.filters.user_id = decodedToken._id
+          // }
 
           (req as { payload: Request['payload'] }).payload = payload
 
-          const result = method.call(target, payload, res, decodedToken)
+          const result = method.call(target, payload, decodedToken, res)
           return result
         }
       }

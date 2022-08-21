@@ -1,7 +1,7 @@
 <template>
-  <div v-if="selected.length > 0" class="selected">
+  <div v-if="modelValue.length > 0" class="selected">
     <sv-search-item
-      v-for="item in selected"
+      v-for="item in modelValue"
       v-bind="{
         item,
         indexes
@@ -38,12 +38,32 @@ import { SvIcon } from '../../../../..'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 type Props = {
-  selected: Array<any>
+  modelValue: Array<any>
   indexes: Array<string>
   searchOnly: boolean
+  field: any
+  array: boolean
+}
+
+type Emits = {
+  (e: 'update:modelValue', value: typeof Props['modelValue']): void
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const unselect = async (item: any, purge=true) => {
+  if( props.field.purge && purge ) {
+    const { _id } = item
+    await store.remove({ filter: { _id } })
+  }
+
+  emit('update:modelValue', props.array
+      ? props.modelValue.filter((option: any) => option._id !== item._id)
+      : undefined
+  )
+}
+
 </script>
 
 <style scoped src="./sv-search-selected.scss"></style>

@@ -7,7 +7,7 @@ import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
 export type FileDocument = MongoDocument & {
-  user_id: UserDocument
+  owner: UserDocument
   filename: string
   mime: string
   size: number

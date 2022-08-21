@@ -1,6 +1,6 @@
 {
   "fields": {
-    "user_id": {
+    "owner": {
       "collection": "user",
       "label": "Usuário",
       "index": "email"

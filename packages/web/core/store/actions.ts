@@ -54,7 +54,7 @@ const mutations = {
     const found = this.items.find(({ _id }: Pick<T, '_id'>) => _id === item._id)
     if( found ) {
       Object.assign(found, item)
-      return
+      return item
     }
 
     this.items = [
@@ -100,6 +100,8 @@ export default {
         if( err.validation ) {
           this.validationErrors = err.validation
         }
+
+        throw err
       })
 
     this.meta.isLoading = false
@@ -113,7 +115,9 @@ export default {
     fn: (data: any) => any
   ): Promise<any> {
     const response = await this.custom(verb, payload)
-    return fn(response.result)
+    return response?.result
+      ? fn(response.result)
+      : {}
   },
 
   async $customEffect(
@@ -262,19 +266,19 @@ export default {
     }
   },
 
-  useFields(
-    this: Pick<CollectionGetters, 'fields'>,
+  useFields<T>(
+    this: Pick<CollectionState<T>, 'description'>,
     fields: Array<string>,
   ): Record<string, CollectionField> {
-    return fromEntries(Object.entries(this.fields)
+    return fromEntries(Object.entries(this.description.fields!)
       .filter(([key]: [string, unknown]) => fields.includes(key)))
   },
 
-  useFieldsExcept(
-    this: Pick<CollectionGetters, 'fields'>,
-    fields: Array<string>
+  useFieldsExcept<T>(
+    this: Pick<CollectionState<T>, 'description'>,
+    fields: Array<string>,
   ): Record<string, CollectionField> {
-    return fromEntries(Object.entries(this.fields)
+    return fromEntries(Object.entries(this.description.fields!)
       .filter(([key]: [string, unknown]) => !fields.includes(key)))
   },
 

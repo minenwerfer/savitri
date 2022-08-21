@@ -137,7 +137,7 @@ export class ReportController extends Mutable<ReportDocument> {
 
     props.what.entries_count = rows.length
     props.what.file = await File.create({
-      user_id: decodedToken._id,
+      owner: decodedToken.user._id,
       context: 'report',
       filename,
       mime,

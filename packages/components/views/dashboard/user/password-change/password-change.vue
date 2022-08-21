@@ -51,11 +51,10 @@ const passwordForm = {
 }
 
 const insert = async () => {
-  const { password } = userStore.item
   await userStore.insert({
     what: {
       _id: userStore.item._id,
-      password
+      password: password.password
     }
   })
 

@@ -9,7 +9,8 @@
     </template>
     <template #body>
       <div class="whitespace-pre-wrap">
-        <slot name="body"></slot>
+        <slot name="body" v-if="$slots.body"></slot>
+        <slot v-else></slot>
       </div>
     </template>
     <template #footer v-if="$slots.footer">

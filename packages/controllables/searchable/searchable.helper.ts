@@ -19,7 +19,11 @@ export const getSearchables = () => {
     .reduce((a: any, [key, description]: [string, any]) => {
       const indexes = description.searchable.indexes.reduce((a: any, index: string) => {
         const field = description.fields[index]
-        if( field.module || field.values?.[0]?.__query ) {
+        if( !field ) {
+          return a
+        }
+
+        if( field.collection || field.values?.[0]?.__query ) {
           throw new Error('searchable index cannot be a reference')
         }
 
@@ -53,7 +57,7 @@ export const getSearchables = () => {
 export const buildAggregations = (searchables: any, query: Array<string>) => {
   const aggregations: Record<string, any> = {}
 
-  Object.entries(searchables).forEach(([moduleName, config]: [string, any]) => {
+  Object.entries(searchables).forEach(([collectionName, config]: [string, any]) => {
     const matches = Object.entries(config.indexes).reduce((a: any, [indexName, index]: [string, any]) => {
       const getType: any = (q: any) => {
         switch(index.type) {
@@ -84,7 +88,7 @@ export const buildAggregations = (searchables: any, query: Array<string>) => {
       project._picture = `$${config.picture}`
     }
 
-    aggregations[moduleName] = [
+    aggregations[collectionName] = [
       { $match: matches },
       { $limit: 5 },
       { $project: project }

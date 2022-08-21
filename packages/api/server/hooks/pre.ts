@@ -4,8 +4,8 @@ import { PAGINATION_PER_PAGE_LIMIT } from '../../../common/constants'
 
 export const prependPagination = (
   request: HandlerRequest,
-  _response: ResponseToolkit,
-  _decodedToken: DecodedToken
+  _decodedToken: DecodedToken,
+  _response: ResponseToolkit
 ) => {
   if(
     typeof request.payload?.limit === 'number'
@@ -16,9 +16,9 @@ export const prependPagination = (
 }
 
 export const prependGuards = (
-  request: HandlerRequest,
-  response: ResponseToolkit,
-  decodedToken: DecodedToken
+  _request: HandlerRequest,
+  _decodedToken: DecodedToken,
+  _response: ResponseToolkit
 ) => {
   //
 }

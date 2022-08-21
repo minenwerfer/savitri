@@ -25,7 +25,7 @@
           Salvar
         </sv-button>
         <sv-button
-          v-if="store.item._id"
+          v-if="store.item._id && store.description.methods.includes('insert')"
           variant="light"
           @clicked="isInsertReadonly = !isInsertReadonly"
         >

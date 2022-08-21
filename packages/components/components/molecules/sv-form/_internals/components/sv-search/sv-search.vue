@@ -37,14 +37,18 @@
     </div>
 
     <div v-if="!isExpanded || array" :key="inputValue">
-      <sv-search-selected v-bind="{
-        selected,
-        searchOnly,
-        indexes
-      }"></sv-search-selected>
+      <sv-search-selected
+        v-model="modelValue"
+        v-bind="{
+          searchOnly,
+          indexes,
+          field,
+          array
+        }"
+      ></sv-search-selected>
 
       <div v-if="!isExpanded">
-        <div v-if="store.items.length || selected.length">
+        <div v-if="store.items.length || modelValue.length">
           <sv-search-item
             v-for="(item, index) in store.items"
             v-bind="{
@@ -119,7 +123,6 @@ const boxProps = reactive({
   fill: true
 })
 
-
 const searchOnly = props.searchOnly || inject<boolean>('searchOnly', null)
 
 const parentStore = useParentStore(props.collection)
@@ -152,15 +155,15 @@ const rawItem = computed(() => {
 const isTyping = ref(false)
 const inputValue = reactive({})
 
-const selected = computed(() => {
-  const options = props.modelValue
-  const selected = field.array
-    ? Array.isArray(options) ? options : [options]
-    : (Object.keys(options||{}).length > 0 ? [options] : [])
-
-  return selected
-    .filter((option: { _id: string }) => !!option?._id)
-})
+//const selected = computed(() => {
+//  const options = props.modelValue
+//  const selected = field.array
+//    ? Array.isArray(options) ? options : [options]
+//    : (Object.keys(options||{}).length > 0 ? [options] : [])
+//
+//  return selected
+//    .filter((option: { _id: string }) => !!option?._id)
+//})
 
 const fieldIndex = ref(0)
 
@@ -195,7 +198,7 @@ const insert = async () => {
 
 const edit = (item: any) => {
   const itemsCount = rawItem.value.length
-  fieldIndex.value = parentStore.getItemIndex(item._id, selected.value)
+  fieldIndex.value = parentStore.getItemIndex(item._id, props.modelValue)
 
   edited.value = item
   expanded.value = true
@@ -224,20 +227,8 @@ const select = (item: any) => {
   emit('changed')
 }
 
-const unselect = async (item: any, purge=true) => {
-  if( props.field.purge && purge ) {
-    const { _id } = item
-    await store.remove({ payload: { filter: { _id } }})
-  }
-
-  emit('update:modelValue', array.value
-      ? props.modelValue.filter((option: any) => option._id !== item._id)
-      : undefined
-  )
-}
-
 const addItem = () => {
-  fieldIndex.value = selected.value.length + 1
+  fieldIndex.value = props.modelValue.length + 1
 
   edited.value = {}
   expanded.value = true

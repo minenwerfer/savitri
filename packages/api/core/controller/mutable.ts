@@ -55,9 +55,9 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    * Inserts a single document in the database.
    */
   public async insert(
-    props: { what: T },
-    _response?: unknown,
-    _decodedToken?: any
+    props: { what: Partial<T> },
+    _decodedToken?: any,
+    _response?: unknown
   ): Promise<any> {
     const { _id } = props.what
     const what = prepareInsert(this.description, props.what)
@@ -85,8 +85,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    */
   public async get(
     props: { filters?: object, project?: string|Array<string> },
-    _response?: unknown,
-    _decodedToken?: any
+    _decodedToken?: any,
+    _response?: unknown
   ): Promise<Array<T>> {
     const pipe = R.pipe(
       (item: T & { _doc?: T }) => {
@@ -148,8 +148,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       sort?: any,
       project?: string|Array<string>,
    },
-   _response?: unknown,
-   _decodedToken?: any
+   _decodedToken?: any,
+   _response?: unknown
   ) {
    const result: Array<T> = await this._getAll(props)
 

@@ -4,7 +4,8 @@
   "unicon": "user-circle",
   "presets": [
     "crud",
-    "view"
+    "view",
+    "duplicate"
   ],
   "individualActions": {
     "ui/spawnEdit": {
@@ -33,6 +34,13 @@
       "email"
     ]
   },
+  "table": [
+    "full_name",
+    "access",
+    "picture",
+    "active",
+    "updated_at"
+  ],
   "fields": {
     "first_name": {
       "label": "Nome",
@@ -45,6 +53,11 @@
       "type": "text",
       "required": true,
       "formSpan": 3
+    },
+    "full_name": {
+      "label": "Nome completo",
+      "type": "text",
+      "noform": true
     },
     "active": {
       "label": "Ativo",
@@ -59,8 +72,7 @@
           "collection": "accessProfile",
           "index": "name"
         }
-      },
-      "required": true
+      }
     },
     "email": {
       "label": "Email",
@@ -71,9 +83,9 @@
     "password": {
       "label": "Senha",
       "type": "password",
+      "required": true,
       "hidden": true,
-      "noform": true,
-      "notable": true
+      "noform": true
     },
     "phone": {
       "label": "Telefone",
@@ -89,8 +101,11 @@
     "group": {
       "label": "Grupo",
       "type": "text",
-      "noform": true,
-      "notable": true
+      "noform": true
+    },
+    "self_registered": {
+      "label": "Autoregistrado",
+      "type": "boolean"
     },
     "updated_at": {
       "label": "Atualizado em",

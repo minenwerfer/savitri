@@ -64,24 +64,13 @@ export const routerInstance = (routes: Array<Route>) => {
   const userStore = useStore('user')
 
   // eslint-disable-next-line
-  router.beforeEach(async (to:Route, from:Route, next: (props?: any) => void) => {
-    // if( !(store.state.meta.globalDescriptions?.length > 0) ) {
-    //   await new Promise((resolve) => {
-    //     /**
-    //      * @event __storeCreated
-    //      * Will fire as soon as collections are dinamically registered.
-    //      */
-    //     window.removeEventListener('__storeCreated', resolve)
-    //     window.addEventListener('__storeCreated', resolve)
-    //   })
-    // }
-
-    metaStore.view.title = to.meta.title
+  router.beforeEach(async (to, _from, next) => {
+    metaStore.view.title = to.meta?.title
     if( process.env.NODE_ENV === 'development' ) {
       return next()
     }
 
-    if( to.meta.isPrivate && !userStore.token ) {
+    if( to.meta?.isPrivate && !userStore.token ) {
       next({ name: 'signin' })
     }
 

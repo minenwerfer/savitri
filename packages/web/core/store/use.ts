@@ -8,7 +8,7 @@ stores.user = require('./stores/user').default
 
 export const useStore = (storeId: string) => {
   if( !(storeId in STORES) ) {
-    throw new Error(`tried to invoke non existent store "${storeId}"`)
+    throw new Error(`tried to invoke unregistered store "${storeId}"`)
   }
 
   return STORES[storeId]()

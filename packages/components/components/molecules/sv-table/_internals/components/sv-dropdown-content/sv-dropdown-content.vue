@@ -34,7 +34,8 @@ const userStore = useStore('user')
 
 const filterActions = (actions: Array<any>) => {
   return actions.filter((action: any) =>
-    !action.userOnly || userStore.current?.access?.visibility !== 'userOnly'
+    (action.click && !action.userOnly)
+      || userStore.current?.access?.visibility !== 'userOnly'
   )
 }
 </script>

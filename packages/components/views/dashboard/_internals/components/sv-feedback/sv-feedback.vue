@@ -6,14 +6,14 @@
     @close="$emit('update:visible', false)"
   >
     <div v-if="!inserted">
-      <p class="opacity-60 mb-8">
+      <p>
         Envie absolutamente qualquer coisa.
       </p>
 
       <sv-form
         v-bind="{
           collection: 'feedback',
-          form: store.useFieldsExcept(['user_id']),
+          form: store.useFieldsExcept(['owner']),
           formData: store.item
         }"
       />

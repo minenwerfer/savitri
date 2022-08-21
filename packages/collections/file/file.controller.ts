@@ -12,7 +12,16 @@ export class FileController extends Mutable<FileDocument> {
     super(File, Description)
   }
 
-  public override async insert(props: { what: any }, res:unknown, decodedToken: any) {
+  public override async insert(
+    props: { what: Pick<FileDocument,
+      'filename'
+      | 'owner'
+      | 'context'
+      | 'content'
+      | 'absolute_path'
+      > },
+    decodedToken: any
+  ) {
     if( !STORAGE_PATH ) {
       throw new Error('STORAGE_PATH is not set in the environment')
     }
@@ -22,16 +31,16 @@ export class FileController extends Mutable<FileDocument> {
     }
 
     const what = Object.assign({}, props.what)
-    what.user_id = decodedToken.access._id
+    what.owner = decodedToken.access._id
 
-    const extension = what.filename.split('.').pop()
+    const extension = what.filename?.split('.').pop()
     if( !extension ) {
       throw new Error('filename lacks extension')
     }
 
     const oldFile = await File.findOne({
       $and: [
-        { user_id: what.user_id },
+        { owner: what.owner },
         { context: what.context }
       ]
     }).sort({ created_at: -1 })
@@ -55,9 +64,9 @@ export class FileController extends Mutable<FileDocument> {
       .digest('hex')
 
     what.absolute_path = `${STORAGE_PATH}/${filenameHash}.${extension}`
-    await writeFile(what.absolute_path, Buffer.from(what.content.split(',').pop(), 'base64'))
+    await writeFile(what.absolute_path, Buffer.from(what.content.split(',').pop()!, 'base64'))
 
-    return super.insert.call(this, { what }, res, decodedToken)
+    return super.insert.call(this, { what }, decodedToken)
   }
 
   public override async delete(props: { filters: any }): Promise<SingleQuery<FileDocument>|void> {

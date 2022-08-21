@@ -130,6 +130,11 @@ const inputValue = ref(props.type === 'datetime'
 
 const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {
   inputValue.value = event.target.value
+  if( !inputValue.value ) {
+    emit('update:modelValue', '')
+    return
+  }
+
   const newValue = props.type !== 'datetime'
     ? event.target.dataset?.maskRawValue || event.target.value
     : event.target.value

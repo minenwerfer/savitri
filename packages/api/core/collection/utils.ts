@@ -133,9 +133,11 @@ export const prepareInsert = (
       $unset: {}
     }) : rest
 
-  Object.keys(what)
-    .filter(k => R.isEmpty(what[k]))
-    .forEach(k => delete what[k])
+  Object.keys(what).forEach(k => {
+    if( R.isEmpty(what[k]) ) {
+      delete what[k]
+    }
+  })
 
   return what
 }

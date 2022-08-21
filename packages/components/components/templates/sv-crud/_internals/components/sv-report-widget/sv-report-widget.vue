@@ -9,10 +9,14 @@
       <template #body>
         <sv-form
           v-if="!reportStore.item._id"
-          collection="report"
-          :form="reportStore.useFieldsExcept(['user_id', 'collection'])"
-          :form-data="reportStore.item"
-          :gap-y="8"
+          v-bind="{
+            collection: 'report',
+            form: reportStore.useFieldsExcept([
+              'owner',
+              'collection'
+            ]),
+            formData: reportStore.item
+          }"
         ></sv-form>
 
         <p v-else>
@@ -29,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useStore, useParentStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../../../..'
 import { isReportVisible } from '../../store'
@@ -37,8 +41,6 @@ import { isReportVisible } from '../../store'
 const store = useParentStore()
 const reportStore = useStore('report')
 const metaStore = useStore('meta')
-
-provide('storeId', 'report')
 
 const requestReport = () => {
   return reportStore.insert({

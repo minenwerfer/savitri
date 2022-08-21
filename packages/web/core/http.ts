@@ -32,17 +32,13 @@ const httpMethodWrapper = (
       const metaStore = useStore('meta')
 
       if( ['TokenExpiredError', 'AuthorizationError'].includes(error.name) ) {
-        // ctx.dispatch('user/signout', {}, { root: true })
-
-//         await ctx.dispatch('meta/spawnModal', {
-//           title: 'Sua sessão expirou',
-//           body: 'Você será redirecionado para a página de login.',
-
-//         }, { root: true });
-
-
         sessionStorage.clear()
         ROUTER.push({ name: 'user-signin' })
+
+        metaStore.spawnModal({
+          title: 'Erro',
+          body: 'Você não tem permissão para acessar essa página'
+        })
 
       } else {
         // ctx.commit('meta/MODAL_SPAWN', {

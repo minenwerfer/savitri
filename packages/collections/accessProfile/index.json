@@ -25,7 +25,6 @@
   "table": [
     "name",
     "role",
-    "visibility",
     "created_at",
     "updated_at"
   ],
@@ -36,20 +35,11 @@
       "unique": true,
       "required": true
     },
-    "visibility": {
-      "label": "Visibilidade",
-      "type": "select",
-      "required": true,
-      "translate": true,
-      "values": [
-        "userOnly",
-        "everything"
-      ]
-    },
     "role": {
       "label": "Papel",
       "type": "select",
-      "values": []
+      "values": [],
+      "required": true
     },
     "capabilities": {
       "label": "Capacidades",

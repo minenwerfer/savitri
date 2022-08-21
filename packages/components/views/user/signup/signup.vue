@@ -20,7 +20,7 @@
       }"
     ></sv-form>
 
-    <sv-button @clicked="$router.push({ name: 'user-onboarding' })">
+    <sv-button @clicked="$router.push({ name: 'user-signupExtra' })">
       Próximo
     </sv-button>
   </div>

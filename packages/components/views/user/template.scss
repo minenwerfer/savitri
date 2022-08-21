@@ -1,4 +1,11 @@
 .template {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+
   display: grid;
   place-items: center;
   height: 100vh;
@@ -9,6 +16,8 @@
     flex-direction: column;
     row-gap: 1.6rem;
     width: 30rem;
+
+    padding: 2rem 0;
   }
 
   &__logo {

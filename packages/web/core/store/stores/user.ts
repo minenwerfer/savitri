@@ -39,7 +39,7 @@ const collection = useCollection({
             }
 
             sessionStorage.setItem('auth:token', token)
-            sessionStorage.setItem('auth:currentUser', JSON.stringify(user))
+            sessionStorage.setItem('auth:currentUser', JSON.stringify({ ...user, access }))
 
             const metaStore = useMetaStore()
             await metaStore.describeAll()

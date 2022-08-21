@@ -5,7 +5,7 @@ import { default as Description } from './index.json'
 
 export type AccessProfileDocument = MongoDocument & {
   name: string
-  visibility: string
+  role: string
   capabilities: Record<string, Array<string>>
 }
 

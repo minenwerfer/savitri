@@ -7,7 +7,7 @@ import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
 export type FeedbackDocument = MongoDocument & {
-  user_id: UserDocument
+  owner: UserDocument
   comment: string
 }
 

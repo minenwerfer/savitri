@@ -7,7 +7,7 @@ import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
 export type NotificationDocument = MongoDocument & {
-  user_id: UserDocument | MongoDocument['_id']
+  owner: UserDocument | MongoDocument['_id']
   destination: UserDocument | MongoDocument['_id']
   title: string
   content: string

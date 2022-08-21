@@ -11,10 +11,11 @@ import '../accessProfile/accessProfile.model'
 export type User = {
   first_name: string
   last_name: string
+  full_name: string
   email: string
   password?: string
   active: boolean
-  access: AccessProfileDocument
+  access: AccessProfileDocument|object
 }
 
 export type UserDocument = User & MongoDocument & {
@@ -32,9 +33,9 @@ UserSchema.methods.testPassword = async function(candidate: string) {
   return bcrypt.compare(candidate, this.password || '')
 }
 
-// UserSchema.post('init', function(this: UserDocument) {
-//   this.first_name = this.name?.split(' ')[0]
-// })
+UserSchema.post('init', function(this: UserDocument) {
+  this.full_name = `${this.first_name} ${this.last_name||''}`
+})
 
 /**
  * @exports

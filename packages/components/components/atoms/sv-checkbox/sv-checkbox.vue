@@ -30,10 +30,10 @@ import { onMounted, computed, ref } from 'vue'
 
 type Props = {
   modelValue?: any
+  value?: string|boolean
   required?: boolean
   label?: string
   description?: string
-  value: string|boolean
   array?: boolean
   isRadio?: boolean
   readonly?: boolean

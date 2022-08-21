@@ -29,9 +29,9 @@ export const publicRoutes: Array<Route> = [
         meta: { title: 'Registro', hidden: true, }
       },
       {
-        path: 'onboarding',
-        name: 'user-onboarding',
-        component: () => import('./views/user/onboarding/onboarding.vue'),
+        path: 'signupExtra',
+        name: 'user-signupExtra',
+        component: () => import('./views/user/signupExtra/signupExtra.vue'),
         meta: { title: 'Registro', hidden: true, }
       }
     ]

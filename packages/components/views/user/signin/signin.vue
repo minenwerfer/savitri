@@ -37,6 +37,7 @@
     </div>
 
     <div
+      v-if="webpackVariables.signupForm"
       v-clickable
       class="signin__action"
       @click="router.push({ name: 'user-signup' })"
