@@ -12,11 +12,11 @@ export const getSearchables = () => {
   const descriptions = new MetaController().describeAll()
 
   const searchable = Object.entries(descriptions)
-    .filter(([, description]: [string, any]) => (
-      !!description.searchable?.indexes
-      && !description.alias
-    ))
     .reduce((a: any, [key, description]: [string, any]) => {
+      if( !description.searchable?.indexes || description.alias ) {
+        return a
+      }
+
       const indexes = description.searchable.indexes.reduce((a: any, index: string) => {
         const field = description.fields[index]
         if( !field ) {
@@ -54,7 +54,11 @@ export const getSearchables = () => {
   return searchable
 }
 
-export const buildAggregations = (searchables: any, query: Array<string>) => {
+export const buildAggregations = (
+  searchables: any,
+  query: Array<string>,
+  queryFilters: any
+) => {
   const aggregations: Record<string, any> = {}
 
   Object.entries(searchables).forEach(([collectionName, config]: [string, any]) => {
@@ -83,9 +87,15 @@ export const buildAggregations = (searchables: any, query: Array<string>) => {
 
     }, { $or: [] })
 
-    const project = Object.keys(config.indexes).reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {})
+    const project = Object.keys(config.indexes)
+      .reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {})
+
     if( config.picture ) {
       project._picture = `$${config.picture}`
+    }
+
+    if( queryFilters ) {
+      Object.assign(matches, queryFilters(collectionName))
     }
 
     aggregations[collectionName] = [

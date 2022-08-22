@@ -33,10 +33,13 @@ const props = defineProps<Props>()
 const userStore = useStore('user')
 
 const filterActions = (actions: Array<any>) => {
-  return actions.filter((action: any) =>
-    (action.click && !action.userOnly)
-      || userStore.current?.access?.visibility !== 'userOnly'
-  )
+  return actions.filter((action: any) => {
+    if( action.roles ) {
+      return action.roles.include(userStore.$currentUser.access.role)
+    }
+
+    return !!action.click
+  })
 }
 </script>
 

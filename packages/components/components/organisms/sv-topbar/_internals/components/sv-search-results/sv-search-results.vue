@@ -1,5 +1,11 @@
 <template>
-  <div :class="`results ${resultsByModule.length === 0 && 'results--hidden'}`">
+  <div
+    v-overlay.invisible="{
+      click: clearResults
+    }"
+    v-if="resultsByModule.length > 0"
+    class="results"
+  >
     <div class="results__collections">
       <div
         v-for="([collectionName, results], index) in resultsByModule"
@@ -62,6 +68,10 @@ const resultsByModule = computed(() => {
   return Object.entries(results.items)
     .filter(([, results]: [unknown, Array<any>]) => results.length > 0)
 })
+
+const clearResults = () => {
+  results.items = []
+}
 
 const getEntries = (collectionName: string, result: any) => Object.entries(result)
   .filter(([key]: [string, unknown]) => !['_id', '_picture'].includes(key))

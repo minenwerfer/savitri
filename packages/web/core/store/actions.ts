@@ -266,19 +266,19 @@ export default {
     }
   },
 
-  useFields<T>(
-    this: Pick<CollectionState<T>, 'description'>,
+  useFields(
+    this: Pick<CollectionGetters, 'fields'>,
     fields: Array<string>,
   ): Record<string, CollectionField> {
-    return fromEntries(Object.entries(this.description.fields!)
+    return fromEntries(Object.entries(this.fields)
       .filter(([key]: [string, unknown]) => fields.includes(key)))
   },
 
-  useFieldsExcept<T>(
-    this: Pick<CollectionState<T>, 'description'>,
+  useFieldsExcept(
+    this: Pick<CollectionGetters, 'fields'>,
     fields: Array<string>,
   ): Record<string, CollectionField> {
-    return fromEntries(Object.entries(this.description.fields!)
+    return fromEntries(Object.entries(this.fields)
       .filter(([key]: [string, unknown]) => !fields.includes(key)))
   },
 

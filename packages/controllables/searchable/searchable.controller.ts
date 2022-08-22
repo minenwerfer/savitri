@@ -11,7 +11,7 @@ export class SearchableController extends Controller {
     })
   }
 
-  public async search(props: { query: Array<string> }, _: unknown, decodedToken: any) {
+  public async search(props: { query: Array<string> }, decodedToken: any) {
     if( !decodedToken?.access?.capabilities ) {
       throw new AuthorizationError('signed out')
     }
@@ -23,12 +23,26 @@ export class SearchableController extends Controller {
 
     const { capabilities } = decodedToken.access
     const searchables = Object.entries(getSearchables())
-      .reduce((a: any, [key, value]: [string, any]) => ({
-        ...a,
-        ...(capabilities[key].includes('getAll') ? { [key]: value } : {})
-      }), {})
+      .reduce((a: any, [key, value]: [string, any]) => {
+        if( !capabilities[key].includes('getAll') ) {
+          return a
+        }
 
-    const aggregations = buildAggregations(searchables, props.query)
+        return {
+          ...a,
+          [key]: value
+        }
+      }, {})
+
+    const queryFilters = this.apiConfig.queryFilters
+      ? (collectionName: string) => this.apiConfig.queryFilters(decodedToken, collectionName)
+      : null
+
+    const aggregations = buildAggregations(
+      searchables,
+      props.query,
+      queryFilters
+    )
     const result: Record<string, any> = {}
 
     for (const [collectionName, aggregation] of Object.entries(aggregations)) {

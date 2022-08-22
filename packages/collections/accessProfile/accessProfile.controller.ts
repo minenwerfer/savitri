@@ -10,6 +10,6 @@ export class AccessProfileController extends Mutable<AccessProfileDocument> {
   }
 
   roles(): Array<string> {
-    return this.injected.roles||[]
+    return this.apiConfig.roles||[]
   }
 }

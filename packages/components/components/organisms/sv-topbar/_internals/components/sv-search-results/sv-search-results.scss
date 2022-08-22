@@ -27,11 +27,11 @@ $picture-size: 3.6rem;
     padding-bottom: 0;
   }
 
-  &--hidden {
-    max-height: 0;
-    border: none;
-    padding-bottom: 0;
-  }
+  // &--hidden {
+  //   max-height: 0;
+  //   border: none;
+  //   padding-bottom: 0;
+  // }
 
   &__collections {
     display: grid;

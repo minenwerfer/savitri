@@ -1,5 +1,6 @@
 import type { Request } from '@hapi/hapi'
 import type { UserDocument } from '../../collections/user/user.model'
+import type { AccessProfileDocument } from '../../collections/accessProfile/accessProfile.model'
 
 export type HandlerRequest = Request & {
   payload: {
@@ -10,18 +11,23 @@ export type HandlerRequest = Request & {
   }
 }
 
-export type DecodedToken = UserDocument
-
+export type DecodedToken = {
+  user: UserDocument
+  access: AccessProfileDocument
+  extra: any
+}
 
 export type ProvidedParams = Record<string, any> & {
-  config?: {
+  apiConfig: {
     group?: string
     roles?: Array<string>
     allowSignup?: boolean
     signupDefaults?: {
-      role?: string
-      active?: boolean
+      role: string
+      active: boolean
     }
+    populateUserExtra?: Array<string>
+    queryFilters: (token: DecodedToken, collectionName: string) => Record<string, any>
   }
 }
 

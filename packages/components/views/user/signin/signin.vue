@@ -28,8 +28,8 @@
       </sv-button>
 
       <sv-button
-        v-if="userStore.$currentUser._id"
-        :disabled="userStore.isLoading"
+        v-if="userStore.$currentUser._id && !metaStore.isLoading"
+        :disabled="userStore.isLoading || metaStore.isLoading"
         @clicked="router.push({ name: 'dashboard-home' })"
       >
         Continuar como {{ userStore.$currentUser.first_name }}
@@ -50,12 +50,13 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import { useRouter } from 'vue-router'
-import { useParentStore } from '@savitri/web'
+import { useStore, useParentStore } from '@savitri/web'
 import { default as webpackVariables } from 'variables'
 import { SvForm, SvButton } from '../../..'
 
-const userStore = useParentStore()
 const router = useRouter()
+const userStore = useParentStore()
+const metaStore = useStore('meta')
 
 provide('inputVariant', 'bold')
 

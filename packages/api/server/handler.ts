@@ -1,6 +1,12 @@
 import * as R from 'ramda'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
-import type { HandlerRequest, DecodedToken } from '../types'
+import type {
+  HandlerRequest,
+  DecodedToken,
+  ProvidedParams
+
+} from '../types'
+
 import { Error as MongooseError } from 'mongoose'
 
 import { getController } from '../core/controller'
@@ -74,7 +80,7 @@ export const safeHandle = (
 
 export const safeHandleProvide = (
   fn: (request: HandlerRequest, h: ResponseToolkit, provide: Record<string, any>) => object,
-  provide: Record<string, any>
+  provide: ProvidedParams
 ) => {
   const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, provide)
   return safeHandle(fn2)
@@ -95,7 +101,12 @@ export const customVerbs = (type: 'collections'|'controllables') =>
 
     const Controller = getController(controller, type)
     const instance = new Controller
-    instance.injected = provide
+    
+    if( provide ) {
+      const { apiConfig, ...provided } = provide
+      instance.injected = provided
+      instance.apiConfig = apiConfig||{}
+    }
 
     const token = await getToken(request) as DecodedToken
     const method = (instance.webInterface||instance)[verb]
@@ -113,7 +124,11 @@ export const customVerbs = (type: 'collections'|'controllables') =>
 }
 
 export const regularVerb = (verb: RegularVerb) =>
-  async (request: HandlerRequest, h: ResponseToolkit, provide?: Record<string, any>) => {
+  async (
+    request: HandlerRequest,
+    h: ResponseToolkit,
+    provide?: Record<string, any>
+) => {
   const {
     controller,
     id

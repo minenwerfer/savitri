@@ -1,14 +1,15 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../common/types'
-import type { HandlerRequest } from '../../types'
+import type { HandlerRequest, ProvidedParams } from '../../types'
 import { AuthorizationError, PermissionError } from '../exceptions'
 import { TokenService } from '../services'
 
 export abstract class Controller {
   private _webInterface: Controller
-  protected _description?: Partial<CollectionDescription>
-  protected _controllerName?: string
-  public injected: Record<string, any>
+  // protected _description?: Partial<CollectionDescription>
+
+  public injected: Omit<ProvidedParams, 'apiConfig'>
+  public apiConfig: ProvidedParams['apiConfig']
 
   /**
    * @protected @readonly
@@ -16,12 +17,12 @@ export abstract class Controller {
    */
   protected readonly _internal: Array<string> = []
 
-  protected _publicMethods: Array<string> = [
-    'describe'
-  ]
+  // protected _publicMethods: Array<string> = [
+  //   'describe'
+  // ]
 
-  protected _rawMethods: Record<string, string> = {}
-  protected _forbiddenMethods: Array<string> = []
+  // protected _rawMethods: Record<string, string> = {}
+  // protected _forbiddenMethods: Array<string> = []
 
   /**
    * @constructor
@@ -35,14 +36,13 @@ export abstract class Controller {
       controller?: string
       forbiddenMethods?: Array<string>,
       publicMethods?: Array<string>,
-      rawMethods?: Record<string, string>
+      rawMethods?: Record<string, string>,
+      provide?: Record<string, any>
     }
   ) {
-    this._description = props?.description || {}
-    this._controllerName = this._description.collection || props.controller
-    this._publicMethods = props?.publicMethods || this._publicMethods
-    this._forbiddenMethods = props?.forbiddenMethods || []
-    this._rawMethods = props?.rawMethods || {}
+    if( props.provide ) {
+      Object.assign(this.injected, props.provide)
+    }
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
@@ -50,22 +50,22 @@ export abstract class Controller {
           throw new PermissionError('forbidden method (cannot be called externally)')
         }
 
-        if( this._forbiddenMethods.includes(key) ) {
+        if( this.props.forbiddenMethods?.includes(key) ) {
           throw new PermissionError('forbidden method(explicitly forbidden)')
         }
 
         const method = (target as Record<string, any>)[key]
-        // const alwaysAttribute = this._description?.alwaysAttribute
+        // const alwaysAttribute = this.props.description?.alwaysAttribute
 
         return function(req: HandlerRequest, decodedToken: any, res?: ResponseToolkit) {
-          const controllerName = target._description?.collection || target._controllerName
+          const controllerName = props.controller || target.props.description?.collection
 
           if( !controllerName ) {
             throw new Error('controller is undefined')
           }
 
           if(
-            !target._publicMethods?.includes(key)
+            !target.props.publicMethods?.includes(key)
             && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[controllerName]?.includes(key) )
           ) {
             if( decodedToken?.access ) {
@@ -102,7 +102,7 @@ export abstract class Controller {
   }
 
   public rawType(verb: string): string|undefined {
-    return this._rawMethods[verb]
+    return this.props.rawMethods?.[verb]
   }
 
   get webInterface(): Controller {
@@ -110,7 +110,7 @@ export abstract class Controller {
   }
 
   public describe(): Partial<CollectionDescription>|object {
-    return this._description||{}
+    return this.props.description||{}
   }
 
   public async forward(this: any, route: string, props: any, decodedToken: any) {

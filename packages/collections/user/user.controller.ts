@@ -1,5 +1,5 @@
-import path from 'path'
 import * as bcrypt from 'bcrypt'
+import * as R from 'ramda'
 
 import { TokenService } from '../../api/core/services/token'
 import { Mutable } from '../../api/core/controller'
@@ -33,7 +33,7 @@ export class UserController extends Mutable<UserDocument> {
   }
 
   public override async insert(props: { what: any }, decodedToken: any) {
-    props.what.group = this.injected.group
+    props.what.group = this.apiConfig.group
 
     // user is being inserted by a non-root user
     if( decodedToken?.access?.role !== 'root' ) {
@@ -42,7 +42,7 @@ export class UserController extends Mutable<UserDocument> {
 
       // a new user is being created
       if( !userId ) {
-        if( !this.injected.allowSignup ) {
+        if( !this.apiConfig.allowSignup ) {
           throw new Error(
             `signup is not allowed`
           )
@@ -50,12 +50,11 @@ export class UserController extends Mutable<UserDocument> {
 
         props.what.self_registered = true
 
-        // signupDefaults was set
-        if( this.injected.signupDefaults ) {
+        if( this.apiConfig.signupDefaults ) {
           const {
             role,
             ...signupDefaults
-          } = this.injected.signupDefaults
+          } = this.apiConfig.signupDefaults
 
           // if there is a role, retrieve first access profile matching it
           if( role ) {
@@ -63,7 +62,7 @@ export class UserController extends Mutable<UserDocument> {
 
             if( !accessProfile ) {
               throw new Error(
-                `${signupDefaults.role} was set as a default role but no matching access profile was found`
+                `${role} was set as a default role but no matching access profile was found`
               )
             }
 
@@ -112,10 +111,11 @@ export class UserController extends Mutable<UserDocument> {
         | 'full_name'
         | 'email'
         | 'active'
-        > 
+        >
       access: Omit<AccessProfileDocument, '_id'> & {
         _id?: AccessProfileDocument['_id']
       }|object
+      extra: any
       token: string
   }> {
     if( !props.email ) {
@@ -153,6 +153,7 @@ export class UserController extends Mutable<UserDocument> {
           active: true,
         },
         access,
+        extra: {},
         token
       }
     }
@@ -167,17 +168,40 @@ export class UserController extends Mutable<UserDocument> {
       leanUser.access = {}
     }
 
-    const token = await TokenService.sign({
-      user: { _id: leanUser._id },
-      access: leanUser.access
-    }) as string
+    const tokenContent = {
+      user: R.pick(['_id'], leanUser),
+      access: R.pick([
+        'role',
+        'capabilities'
+      ], leanUser.access),
+      extra: {}
+    }
 
     const response = {
       user: leanUser,
       access: leanUser.access,
-      token
+      extra: {},
     }
 
-    return response
+    if( this.apiConfig.populateUserExtra ) {
+      const { UserExtra } = require(`${process.cwd()}/collections/userExtra/userExtra.model`)
+      const projection = this.apiConfig.populateUserExtra
+        .reduce((a, f) => ({ ...a, [f]: 1 }), {})
+
+      const userExtra = await UserExtra
+        .findOne({ owner: leanUser._id }, projection)
+        .lean()
+
+      tokenContent.extra = userExtra
+      response.extra = userExtra
+    }
+
+
+    const token = await TokenService.sign(tokenContent) as string
+
+    return {
+      ...response,
+      token
+    }
   }
 }

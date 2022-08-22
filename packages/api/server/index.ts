@@ -1,6 +1,7 @@
 import * as Hapi from '@hapi/hapi'
 
 import '../../common/polyfill'
+import  type { ProvidedParams } from '../types'
 import getRoutes from './routes'
 
 declare global {
@@ -10,7 +11,7 @@ declare global {
 export const init = async (props?: {
   port?: number
   modules?: Array<any>
-  provide?: Record<string, any>
+  provide?: ProvidedParams
 }): Promise<Hapi.Server> => {
   props = props || {
     port: 3000,

@@ -28,10 +28,10 @@
 
         <!-- checkbox, radio, boolean, select -->
         <div v-else-if="isSelectType(field.type)">
-          <strong class="text-xs uppercase">
+          <strong>
             {{ field.translate ? $t(field.label) : field.label }}
           </strong>
-          <div class="text-sm opacity-50">
+          <div>
             {{ field.description }}
           </div>
 
@@ -45,7 +45,7 @@
               v-bind="{
                 array: true,
                 value: value.value,
-                label: field.translate ? $t(value.label) : value.label,
+                label: field.translate ? $t(value.label||'') : value.label,
                 description: value.description,
                 isRadio: field.type === 'radio',
                 readOnly: field.readOnly

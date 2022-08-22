@@ -50,6 +50,20 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     this._queryPreset = options.queryPreset || {}
   }
 
+  private queryPreset(decodedToken: any) {
+    const preset = this._queryPreset
+    preset.filters ??= {}
+
+    if( this.apiConfig.queryFilters && decodedToken ) {
+      Object.assign(
+        preset.filters,
+        this.apiConfig.queryFilters(decodedToken, this.description.collection)
+      )
+    }
+
+    return preset
+  }
+
   /**
    * @method
    * Inserts a single document in the database.
@@ -74,9 +88,12 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     )
   }
 
-  public count(props?: { filters?: object }) {
+  public count(props?: { filters?: object }, decodedToken?: any) {
     const filters = props?.filters || {}
-    return this.model.countDocuments({ ...filters, ...this._queryPreset.filters||{} })
+    return this.model.countDocuments({
+      ...filters,
+      ...this.queryPreset(decodedToken).filters
+    })
   }
 
   /**
@@ -114,7 +131,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     sort?: any,
     project?: string|Array<string>,
 
-  }) {
+  }, decodedToken?: any) {
 
     const defaultSort = {
       date_updated: -1,
@@ -133,9 +150,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       ])
 
     props.filters = fromEntries(entries) || {}
+    const queryPreset = this.queryPreset(decodedToken)
 
-    return this.model.find({ ...props.filters, ...this._queryPreset.filters||{} })
-      .sort({ ...(props.sort || defaultSort), ...this._queryPreset.sort||{} })
+    return this.model.find({
+      ...props.filters,
+      ...queryPreset.filters
+    })
+      .sort({ ...(props.sort || defaultSort), ...queryPreset.sort||{} })
       .skip(props.offset || 0)
       .limit(props.limit)
   }
@@ -148,10 +169,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       sort?: any,
       project?: string|Array<string>,
    },
-   _decodedToken?: any,
+   decodedToken?: any,
    _response?: unknown
   ) {
-   const result: Array<T> = await this._getAll(props)
+   const result: Array<T> = await this._getAll(props, decodedToken)
 
    const pipe = R.pipe(
      (item: T & { _doc?: T }) => item._doc || item,

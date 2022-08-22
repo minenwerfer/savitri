@@ -58,6 +58,7 @@ export default defineStore('meta', {
 
   actions: {
     async describeAll() {
+      this.isLoading = true
       const response = await http.get('_/meta/describeAll')
       const descriptions: Record<CollectionName, CollectionDescription> =
         this.descriptions = response.data?.result
@@ -100,6 +101,8 @@ export default defineStore('meta', {
 
         registerStore(store)
       }
+
+      this.isLoading = false
     },
 
     swapMenu() {
