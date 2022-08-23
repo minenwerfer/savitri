@@ -17,17 +17,19 @@ export type DecodedToken = {
   extra: any
 }
 
-export type ProvidedParams = Record<string, any> & {
-  apiConfig: {
-    group?: string
-    roles?: Array<string>
-    allowSignup?: boolean
-    signupDefaults?: {
-      role: string
-      active: boolean
-    }
-    populateUserExtra?: Array<string>
-    queryFilters: (token: DecodedToken, collectionName: string) => Record<string, any>
+export type ApiConfig = {
+  group?: string
+  roles?: Array<string>
+  allowSignup?: boolean
+  signupDefaults?: {
+    role: string
+    active: boolean
   }
+  populateUserExtra?: Array<string>
+  queryFilters: (token: DecodedToken, collectionName: string) => Record<string, any>
+}
+
+export type ProvidedParams = Record<string, any> & {
+  apiConfig: ApiConfig
 }
 

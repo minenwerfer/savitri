@@ -59,8 +59,6 @@ const metaStore = useStore('meta')
 
 const productName = inject('productName')
 const productLogo = inject('productLogo')
-
-const test = () => alert(123)
 </script>
 
 <style scoped src="./sv-topbar.scss"></style>

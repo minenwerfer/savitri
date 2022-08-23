@@ -1,5 +1,5 @@
 <template>
-  <sv-header>Editar perfil</sv-header>
+  <strong>Editar perfil</strong>
   <sv-box :key="store.fields" class="flex-grow">
     <sv-form
       :form="store.useFieldsExcept(['access', 'password'])"

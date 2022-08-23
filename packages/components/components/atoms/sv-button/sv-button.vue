@@ -1,6 +1,10 @@
 <template>
   <sv-bare-button
-    :class="`button button--${variant} button--${type}`"
+    :class="`
+      button
+      button--${variant}
+      button--${type}
+    `"
     :disabled="disabled"
   >
     <div style="width: 100%">

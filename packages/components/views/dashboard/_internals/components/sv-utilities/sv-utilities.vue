@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import {
-  onMounted,
+  //onMounted,
   provide,
   computed,
   reactive,
@@ -40,11 +40,11 @@ const { http } = useHttp()
 const release = reactive({})
 provide('release', release)
 
-onMounted(async () => {
-  if( webpackVariables.releases ) {
-    Object.assign(release, await http.get('_/release/getAll').data?.result)
-  }
-})
+//onMounted(async () => {
+//  if( webpackVariables.releases ) {
+//    Object.assign(release, await http.get('_/release/getAll').data?.result)
+//  }
+//})
 
 const spawnSidebar = (title: string, component: string, componentProps: any = {}) => {
 //  store.dispatch('meta/spawnSidebar', {
