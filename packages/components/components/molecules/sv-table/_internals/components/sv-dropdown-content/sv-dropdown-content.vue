@@ -2,7 +2,7 @@
   <div class="dropdown">
     <sv-bare-button
       v-for="(action, aindex) in filterActions(actions)"
-      :key="`action-${rindex}-${aindex}`"
+      :key="`action-${aindex}`"
       class="dropdown__item"
       @clicked="action.click(row)"
     >
