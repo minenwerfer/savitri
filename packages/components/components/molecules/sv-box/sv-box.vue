@@ -84,6 +84,7 @@ type Props = {
 // #endregion props
 
 const props = withDefaults(defineProps<Props>(), {
+  collapsable: false,
   closeHint: false,
   visible: true,
   animate: true
@@ -96,7 +97,6 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const closeHint = computed(() => closeHint || props.visible)
 const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
 
