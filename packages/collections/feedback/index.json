@@ -15,6 +15,14 @@
       "ask": true
     }
   },
+  "formLayout": {
+    "section": {
+      "span": 4
+    },
+    "type": {
+      "span": 2
+    }
+  },
   "fields": {
     "product_version": {
       "label": "Versão do produto",
@@ -34,8 +42,7 @@
     },
     "section": {
       "label": "Seção",
-      "type": "text",
-      "formSpan": 4
+      "type": "text"
     },
     "type": {
       "label": "Tipo",
@@ -47,8 +54,7 @@
         "Elogio",
         "Bug report",
         "Outra coisa"
-      ],
-      "formSpan": 2
+      ]
     },
     "comment": {
       "label": "Comentário",

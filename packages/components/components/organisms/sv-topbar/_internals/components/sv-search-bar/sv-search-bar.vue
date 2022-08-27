@@ -1,9 +1,12 @@
 <template>
   <div class="searchbar">
     <sv-input
-      icon="search"
-      placeholder="Buscar"
       v-model.lazy="query"
+      v-bind="{
+        icon: 'search',
+        placeholder: 'Buscar',
+        type: 'search'
+      }"
       class="searchbar__input"
     ></sv-input>
   </div>

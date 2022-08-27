@@ -21,9 +21,10 @@
       <!-- field.purge deprecated ? -->
       <sv-form
         v-bind="{
+          collection: field.collection,
           form: store.useFields(indexes),
           formData: inputValue,
-          collection: field.collection
+          layout: store.formLayout
         }"
         @input="lazySearch"
       ></sv-form>

@@ -75,6 +75,12 @@ export class UserController extends Mutable<UserDocument> {
       }
     }
 
+    if( !decodedToken?.user?._id && !props.what.password ) {
+      throw new Error(
+        `password is required`
+      )
+    }
+
     if( props.what.password ) {
       props.what.password = await bcrypt.hash(props.what.password, 10)
     }

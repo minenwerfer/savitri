@@ -42,7 +42,10 @@ export const init = async (props?: {
     }
   })
 
-  const routes = getRoutes(props.provide||{})
+  const routes = getRoutes(props.provide||{
+    apiConfig: {}
+  })
+
   for( const route of routes ) {
     server.route(route)
   }

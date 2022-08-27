@@ -26,7 +26,9 @@ export type ApiConfig = {
     active: boolean
   }
   populateUserExtra?: Array<string>
-  queryFilters: (token: DecodedToken, collectionName: string) => Record<string, any>
+
+  beforeRead?: (token: DecodedToken, collectionName: string) => Record<string, any>
+  beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>
 }
 
 export type ProvidedParams = Record<string, any> & {

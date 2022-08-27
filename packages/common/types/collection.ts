@@ -38,6 +38,11 @@ export type CollectionAction = Readonly<{
 
 export type CollectionActions = Record<string, CollectionAction | null>
 
+export type FormLayout = {
+  span: number
+  verticalSpacing: number
+}
+
 export type CollectionDescription = {
   collection: string
   alias?: string
@@ -52,6 +57,8 @@ export type CollectionDescription = {
   table?: Array<string>
   form?: Array<string>
   filters?: Array<string>
+
+  formLayout?: Record<string, Partial<FormLayout>>|object
 
   // actions
   actions?: CollectionActions

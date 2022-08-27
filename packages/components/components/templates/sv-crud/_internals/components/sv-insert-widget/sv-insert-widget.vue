@@ -1,6 +1,7 @@
 <template>
   <teleport to="body">
     <sv-box
+      close-hint
       v-model:visible="isInsertVisible"
       :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
       :float="true"
@@ -12,7 +13,8 @@
           collection: metaStore.view.collection,
           form: store.fields,
           formData: store.item,
-          isReadonly: isInsertReadonly
+          isReadonly: isInsertReadonly,
+          layout: store.formLayout
         }"
 
         @add="$e.preventDefault()"

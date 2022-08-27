@@ -2,16 +2,15 @@ import { defineStore } from 'pinia'
 import { CollectionDescription } from '../../../../common/types'
 import { freshItem } from '../../helpers/store'
 import useHttp from '../../http'
-import useUtil from '../util'
 import useCollection from '../collection'
 
 import { useStore, hasStore, registerStore } from '../use'
+import { hydrateQuery } from '../helpers'
 
 type CollectionName = string
 type PromptAnswer = { name: string }
 
 const { http } = useHttp()
-const { hydrateQuery } = useUtil()
 
 export default defineStore('meta', {
   state: () => ({

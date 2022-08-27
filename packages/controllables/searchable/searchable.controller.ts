@@ -32,17 +32,18 @@ export class SearchableController extends Controller {
           ...a,
           [key]: value
         }
-      }, {})
+    }, {})
 
-    const queryFilters = this.apiConfig.queryFilters
-      ? (collectionName: string) => this.apiConfig.queryFilters(decodedToken, collectionName)
+    const beforeRead = this.apiConfig.beforeRead
+      ? (collectionName: string) => this.apiConfig.beforeRead!(decodedToken, collectionName)
       : null
 
     const aggregations = buildAggregations(
       searchables,
       props.query,
-      queryFilters
+      beforeRead
     )
+
     const result: Record<string, any> = {}
 
     for (const [collectionName, aggregation] of Object.entries(aggregations)) {

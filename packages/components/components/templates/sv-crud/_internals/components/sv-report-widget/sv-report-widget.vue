@@ -1,9 +1,10 @@
 <template>
   <teleport to="body">
     <sv-box
+      float
+      close-hint
       v-model:visible="isReportVisible" 
       title="Relatório"
-      :float="true"
       @close="onClose"
     >
       <template #body>

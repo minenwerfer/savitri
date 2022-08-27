@@ -9,7 +9,7 @@
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
         :class="`form__field ${fieldClass(field)}`"
-        :style="fieldSpan(field)"
+        :style="fieldStyle(key, field)"
 
         @input="$emit('input', key)"
       >
@@ -35,33 +35,26 @@
             {{ field.description }}
           </div>
 
-          <div v-if="field.type !== 'select'" class="form__options-grid">
-            <sv-checkbox
+          <div v-if="field.type !== 'select'">
+            <sv-options
               v-if="['checkbox', 'radio'].includes(field.type)"
-              v-for="(value, vindex) in field.values"
-              :key="`value-${vindex}`"
-
               v-model="formData[key]"
               v-bind="{
-                array: true,
-                value: value.value,
-                label: field.translate ? $t(value.label||'') : value.label,
-                description: value.description,
-                isRadio: field.type === 'radio',
-                readOnly: field.readOnly
+                ...field,
+                columns: layout?.[key]?.optionsColumns
+                  || layout?.$default?.optionsColumns
               }"
-            ></sv-checkbox>
+            ></sv-options>
 
-            <sv-checkbox
+            <sv-switch
               v-else-if="field.type === 'boolean'"
               v-model="formData[key]"
+              v-slot="{ label }"
 
-              v-bind="{
-                value: formData[key] == true,
-                readOnly: field.readOnly,
-                label: field.label
-              }"
-            ></sv-checkbox>
+              v-bind="field"
+            >
+              {{ label }}
+            </sv-switch>
           </div>
 
           <sv-select
@@ -81,13 +74,6 @@
           <strong class="text-xs uppercase">{{ field.label }}</strong>
           <sv-file v-model="formData[key]" :context="`${collection}.${itemIndex}.${key}.${fieldIndex}`"></sv-file>
         </div>
-
-        <!-- <sv-input -->
-        <!--   v-else-if="field.collection" -->
-        <!--   v-bind="inputBind(field, key)" -->
-        <!-- > -->
-        <!--   {{ field.label }} -->
-        <!-- </sv-input> -->
 
         <div v-if="store?.validationErrors[key]" class="form__validation-error">
           <span>{{ $t(`validation_error.${store.validationErrors[key].type}`) }}</span>
@@ -137,7 +123,7 @@
         }"
 
         :class="fieldClass(field)"
-        :style="fieldSpan(field)"
+        :style="fieldStyle(field)"
       >
         {{ field.label }}
       </sv-input>
@@ -148,7 +134,13 @@
 <script setup lang="ts">
 import { defineAsyncComponent, provide, inject, reactive } from 'vue'
 import { useStore } from '@savitri/web'
-import { SvInput, SvCheckbox, SvSelect } from '../..'
+import {
+  SvInput,
+  SvOptions,
+  SvSwitch,
+  SvSelect
+
+} from '../..'
 
 import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
@@ -166,8 +158,6 @@ type Props = {
   itemIndex?: number
   fieldIndex?: number
   layout?: Record<string, LayoutConfig>
-
-  // currently unused!
   strict?: boolean
 }
 
@@ -213,7 +203,11 @@ const filterFields = (condition: (f: any) => boolean) =>
     }])
 
 const has = (field: string) => {
-  if( props.searchOnly || !collectionName ) {
+  if(
+    props.searchOnly
+    || !props.strict
+    || !collectionName
+  ) {
     return true
   }
 
@@ -280,15 +274,31 @@ const fieldClass = (field: any) => {
   return ''
 }
 
-const fieldSpan = (field: any) => {
-  const span =  props.layout?.[key]?.span
-    ? props.layout[key].span
-    : field.formSpan || 6 
+const fieldStyle = (key:string, field: any) => {
+  const style = []
+  const layout = props.layout?.[key] || props.layout?.$default
 
-  return `
-    --field-span: ${span};
+  style.push(`
+    --field-span: ${layout?.span || 6};
     grid-column: span var(--field-span) / span var(--field-span);
-  `
+  `)
+
+  if( isSelectType(field.type) ) {
+    style.push('padding: .6rem 0;')
+  }
+
+  if( !layout ) {
+    return style.join('')
+  }
+
+  if( layout.verticalSpacing ) {
+    style.push(`
+      --vertical-spacing: ${layout.verticalSpacing};
+      padding: var(--vertical-spacing) 0;
+    `)
+  }
+
+  return style.join('')
 }
 
 const inputBind = (field: any, key: string, value: any) => {

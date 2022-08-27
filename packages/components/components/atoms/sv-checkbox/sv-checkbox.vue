@@ -1,16 +1,23 @@
 <template>
-  <div :class="`checkbox ${readonly && 'checkbox--readonly'}`" >
-    <div class="checkbox__square">
-      <input
-        ref="checkbox"
-        type="checkbox"
-        v-model="bindVal"
-        @input="onInput"
-      />
-    </div>
+  <label :class="`
+    checkbox
+    ${readOnly && 'checkbox--readOnly'}
+  `">
+    <input
+      v-model="bindVal"
+      ref="checkbox"
+      v-bind="{
+        type,
+        readOnly,
+        checked: bindVal
+      }"
+
+      class="checkbox__input"
+      @change.stop="$emit('change', value)"
+    />
     <div
+      v-clickable
       class="checkbox__text"
-      @click="onClick"
     >
       <div class="checkbox__label">
         <slot name="label" v-if="$slots.label"></slot>
@@ -22,7 +29,7 @@
         <div v-else-if="description" v-html="description"></div>
       </div>
     </div>
-  </div>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -31,15 +38,16 @@ import { onMounted, computed, ref } from 'vue'
 type Props = {
   modelValue?: any
   value?: string|boolean
-  required?: boolean
   label?: string
   description?: string
-  array?: boolean
-  isRadio?: boolean
-  readonly?: boolean
+  type?: string
+  required?: boolean
+  readOnly?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  type: 'checkbox'
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', event: string|Array<string>|boolean): void
@@ -48,14 +56,14 @@ const emit = defineEmits<{
 const checkbox = ref<any>(null)
 
 const onClick = () => {
-  if( !props.required && !props.readonly ) {
+  if( !props.required && !props.readOnly ) {
     checkbox.value.click()
   }
 }
 
 onMounted(() => {
   if( !props.modelValue ) {
-    emit('update:modelValue', props.array ? [] : false)
+    emit('update:modelValue', props.type === 'checkbox' ? [] : null)
   }
 })
 
@@ -73,7 +81,7 @@ const bindVal = computed({
       return false
     }
 
-    if( props.isRadio ) {
+    if( props.type === 'radio' ) {
       return props.modelValue === props.value
     }
 
@@ -83,28 +91,25 @@ const bindVal = computed({
   },
 
   set: (newVal: boolean) => {
-    if( props.readonly ) {
+    if( props.readOnly ) {
       return
     }
 
-    if( props.isRadio ) {
-      emit('update:modelValue', props.value)
+    if( props.type === 'radio' ) {
+      emit('update:modelValue', value)
       return
     }
 
-    if( props.isBoolean ) {
-      emit('update:modelValue', newVal)
-      return
-    }
-
-    if( props.array || Array.isArray(props.modelValue) ) {
+    if( props.type === 'checkbox' || Array.isArray(props.modelValue) ) {
       emit('update:modelValue', !selectedValues(props.modelValue||[]).includes(value)
         ? [ ...props.modelValue||[], value ]
         : selectedValues(props.modelValue).filter((v: any) => v !== value))
 
-    } else {
-      emit('update:modelValue', !(props.modelValue === true))
+      return
+
     }
+
+    emit('update:modelValue', !(props.modelValue === true))
   }
 })
 </script>

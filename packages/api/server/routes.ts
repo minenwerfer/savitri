@@ -8,7 +8,9 @@ import {
 
 } from './handler'
 
-export default (provide: Record<string, any>): Array<ServerRoute> => {
+import type { ProvidedParams } from '../types'
+
+export default (provide: ProvidedParams): Array<ServerRoute> => {
   const defaultHandler = (...args: Parameters<typeof safeHandle>) => {
     return safeHandleProvide(args[0], provide)
   }

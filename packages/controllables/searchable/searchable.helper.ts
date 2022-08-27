@@ -57,7 +57,7 @@ export const getSearchables = () => {
 export const buildAggregations = (
   searchables: any,
   query: Array<string>,
-  queryFilters: any
+  beforeRead: any
 ) => {
   const aggregations: Record<string, any> = {}
 
@@ -94,8 +94,8 @@ export const buildAggregations = (
       project._picture = `$${config.picture}`
     }
 
-    if( queryFilters ) {
-      Object.assign(matches, queryFilters(collectionName))
+    if( beforeRead ) {
+      Object.assign(matches, beforeRead(collectionName))
     }
 
     aggregations[collectionName] = [

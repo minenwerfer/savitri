@@ -2,7 +2,7 @@ import { createHash } from 'crypto'
 const { writeFile, readFile, unlink } = require('fs').promises
 
 import { FileDocument, File } from './file.model'
-import { Mutable, SingleQuery } from '../../api/core/controller'
+import { Mutable } from '../../api/core/controller'
 import { default as Description } from './index.json'
 
 const { STORAGE_PATH } = process.env
@@ -69,7 +69,7 @@ export class FileController extends Mutable<FileDocument> {
     return super.insert.call(this, { what }, decodedToken)
   }
 
-  public override async delete(props: { filters: any }): Promise<SingleQuery<FileDocument>|void> {
+  public override async delete(props: { filters: any }) {
     const file = await File.findOne(props.filters)
     if( file ) {
       await unlink(file.absolute_path)

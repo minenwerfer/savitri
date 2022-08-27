@@ -1,6 +1,6 @@
 {
   "name": "@savitri/api",
-  "version": "1.0.304",
+  "version": "1.0.306",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

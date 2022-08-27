@@ -1,7 +1,8 @@
 <template>
   <sv-box
+    float
+    close-hint
     title="Editar preset de acesso"
-    :float="true"
     @close="$router.back()"
   >
     <div class="access">
@@ -18,9 +19,16 @@
         Marcar tudo
       </sv-button>
       <sv-form
-        :form="capabilitiesFields"
-        :form-data="store.item.capabilities"
-        :collection="accessProfile"
+        v-bind="{
+          collection: 'accessProfile',
+          form: capabilitiesFields,
+          formData: store.item.capabilities,
+          layout: {
+            $default: {
+              optionsColumns: 2
+            }
+          }
+        }"
         >
       </sv-form>
     </div>

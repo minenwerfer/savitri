@@ -46,18 +46,24 @@
     "active",
     "updated_at"
   ],
+  "formLayout": {
+    "first_name": {
+      "span": 3
+    },
+    "last_name": {
+      "span": 3
+    }
+  },
   "fields": {
     "first_name": {
       "label": "Nome",
       "type": "text",
-      "required": true,
-      "formSpan": 3
+      "required": true
     },
     "last_name": {
       "label": "Sobrenome",
       "type": "text",
-      "required": true,
-      "formSpan": 3
+      "required": true
     },
     "full_name": {
       "label": "Nome completo",
@@ -67,7 +73,11 @@
     "active": {
       "label": "Ativo",
       "type": "boolean",
-      "default": true
+      "default": true,
+      "values": [
+        "Sim",
+        "Não"
+      ]
     },
     "access": {
       "label": "Preset de acesso",
@@ -88,7 +98,6 @@
     "password": {
       "label": "Senha",
       "type": "password",
-      "required": true,
       "hidden": true,
       "noform": true
     },
@@ -100,8 +109,7 @@
     "picture": {
       "collection": "file",
       "label": "Foto de perfil",
-      "index": "filename",
-      "cellStyle": "(row) => '_id' in row.picture && `border rounded-full overflow-hidden`"
+      "index": "filename"
     },
     "group": {
       "label": "Grupo",
@@ -110,7 +118,8 @@
     },
     "self_registered": {
       "label": "Autoregistrado",
-      "type": "boolean"
+      "type": "boolean",
+      "readOnly": true
     },
     "updated_at": {
       "label": "Atualizado em",

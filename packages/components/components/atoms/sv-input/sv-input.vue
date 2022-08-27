@@ -12,7 +12,7 @@
         v-maska="mask"
         ref="input"
         v-bind="{
-          type: type !== 'datetime' ? type : 'text',
+          type: type || 'text',
           value: inputValue || value,
           readonly: readOnly,
           placeholder,

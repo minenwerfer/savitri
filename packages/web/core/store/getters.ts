@@ -1,80 +1,19 @@
-import type {
-  CollectionField,
-  CollectionActions,
-
-} from '../../../common/types'
-
+import type { CollectionField } from '../../../common/types'
 import type { CollectionState } from '../../types/store'
 import { fromEntries } from '../../../common'
 
-import useUtil from './util'
-const {
+import  {
   condenseItem,
-  removeEmpty
+  removeEmpty,
+  normalizeFields,
+  normalizeFilters,
+  normalizeActions
 
-} = useUtil()
-
-const normalizeActions = (actions: CollectionActions) => Object.entries(actions||{})
-  .filter(([key, value]) => !!value && !key.startsWith('_'))
-  .reduce((a: Array<object>, [key, value]) => [
-    ...a,
-    {
-      action: key,
-      ...value
-    }
-  ], [])
-
-const normalizeFilters = (filters: Array<any>) => {
-  return filters
-  .reduce((a: any, b: any) => {
-    const filter = typeof b !== 'string'
-      ? { [b.field]: b.default||'' }
-      : { [b]: '' }
-
-      return {
-        ...a,
-        ...filter
-      }
-  }, {})
-}
-
-const normalizeValues = (values: any|Array<any>) => {
-  if( Array.isArray(values) ) {
-    return values.reduce((a, value) => ({
-      ...a,
-      [value]: {
-        value,
-        label: value
-      }
-    }), {})
-  }
-
-  return Object.entries(values)
-  .reduce((a, [key, value]: [string, any]) => ({
-    ...a,
-    [key]: {
-      value: key,
-      ...(typeof value === 'string'
-        ? { label: value }
-        : value)
-    }
-  }), {})
-}
+} from './helpers'
 
 export default {
   fields<T=any>(this: Pick<CollectionState<T>, 'description'>) {
-    return Object.entries(this.description?.fields||{})
-      .reduce((a: object, [key, value]: [string, any]) => ({
-        ...a,
-        [key]: {
-          ...value,
-          type: ![undefined].includes(value.type)
-            ? value.type : typeof value.collection === 'string'
-            ? 'collection' : 'text',
-
-          ...(!!value.values ? { values: normalizeValues(value.values) } : {})
-        }
-      }), {})
+    return normalizeFields(this.description.fields!)
   },
 
   /**
@@ -131,6 +70,10 @@ export default {
 
   searchableActions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
     return normalizeActions(this.description.searchable?.actions||{})
+  },
+
+  formLayout<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+    return this.description.formLayout||{}
   },
 
   /**

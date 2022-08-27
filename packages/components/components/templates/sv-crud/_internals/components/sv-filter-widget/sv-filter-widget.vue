@@ -27,11 +27,10 @@
   </div>
 
   <sv-box
+    float
+    close-hint
     v-model:visible="isFilterVisible"
-    v-bind="{
-      title: 'Filtrar por',
-      float: true
-    }"
+    title="Filtrar por"
     @close="isFilterVisible = false"
   >
     <sv-form

@@ -62,10 +62,7 @@
             {{ field.label }}
           </div>
 
-          <div
-            v-if="field.type !== 'image'"
-            :class="`grid gap-y-1 opacity-80 justify-end ${ computedCellStyle(row, field) }`"
-          >
+          <div v-if="field.type !== 'image'">
             <div :class="cindex === 0 && 'font-semibold opacity-80'">
               <sv-picture
                 v-if="field.collection === 'file' && row[column]._id" 
@@ -170,15 +167,6 @@ const rowCtx = {
     date.setHours(0, 0, 0, 0)
     return date
   })()
-}
-
-const computedCellStyle = (row: any, field: any) => {
-  if( !field.cellStyle ) {
-    return
-  }
-
-  const cellStyle = eval(field.cellStyle)
-  return cellStyle(row)
 }
 </script>
 

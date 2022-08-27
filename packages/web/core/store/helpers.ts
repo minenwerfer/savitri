@@ -2,17 +2,16 @@ import { fromEntries, withIsomorphicLock } from '../../../common'
 import { useStore } from './'
 import useHttp from '../http'
 
-export default () => {
-  return {
-    hydrateQuery,
-    condenseItem,
-    removeEmpty
-  }
-}
+import type {
+  CollectionActions,
+  CollectionDescription
 
-const { http } = useHttp()
+} from '../../../common/types'
 
-const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
+
+export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
+  const { http } = useHttp()
+
   const userStore = useStore('user')
   const normalize = (data: any, query: any) => data
     .reduce((a: any, item: any) => ({
@@ -107,7 +106,7 @@ const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
     : result
 }
 
-const condenseItem = (item: any) => {
+export const condenseItem = (item: any) => {
   return Object.entries(item||{})
   .reduce((a:any, [key, value]: [string, any]) => ({
     ...a,
@@ -115,9 +114,77 @@ const condenseItem = (item: any) => {
   }), {})
 }
 
-const removeEmpty = (item: any) => {
+export const removeEmpty = (item: any) => {
   const entries = Object.entries(item)
   .filter(([_, value]: [unknown, any]) => value && !(typeof value === 'string' && value.length === 0))
 
   return fromEntries(entries)
+}
+
+
+export const normalizeActions = (actions: CollectionActions) => Object.entries(actions||{})
+  .filter(([key, value]) => !!value && !key.startsWith('_'))
+  .reduce((a: Array<object>, [key, value]) => [
+    ...a,
+    {
+      action: key,
+      ...value
+    }
+  ], [])
+
+export const normalizeFilters = (filters: Array<any>) => {
+  return filters
+  .reduce((a: any, b: any) => {
+    const filter = typeof b !== 'string'
+      ? { [b.field]: b.default||'' }
+      : { [b]: '' }
+
+      return {
+        ...a,
+        ...filter
+      }
+  }, {})
+}
+
+export const normalizeValues = (values: any|Array<any>) => {
+  if( Array.isArray(values) ) {
+    return values.reduce((a, value) => ({
+      ...a,
+      [value]: {
+        value,
+        label: value
+      }
+    }), {})
+  }
+
+  return Object.entries(values)
+  .reduce((a, [key, value]: [string, any]) => ({
+    ...a,
+    [key]: {
+      value: key,
+      ...(typeof value === 'string'
+        ? { label: value }
+        : value)
+    }
+  }), {})
+}
+
+export const normalizeFields = (fields: CollectionDescription['fields']) => {
+  return Object.entries(fields||{})
+    .reduce((a: object, [fieldName, field]: [string, any]) => {
+      if( field.values && field.type !== 'boolean' ) {
+        field.values = normalizeValues(field.values)
+      }
+
+      if( typeof field.collection === 'string' ) {
+        field.type = 'collection'
+      }
+
+      field.type ??= 'text'
+
+      return {
+        ...a,
+        [fieldName]: field
+      }
+    }, {})
 }
