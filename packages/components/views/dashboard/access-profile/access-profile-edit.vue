@@ -7,9 +7,12 @@
   >
     <div class="access">
       <sv-form
-        :form="fields"
-        :form-data="store.item"
-        :key="fields.role.values"
+        v-bind="{
+          collection: 'accessProfile',
+          form,
+          formData: store.item,
+        }"
+        :key="form.role.values"
       >
       </sv-form>
       <sv-button
@@ -29,8 +32,7 @@
             }
           }
         }"
-        >
-      </sv-form>
+      ></sv-form>
     </div>
     <template #footer>
       <sv-button
@@ -55,7 +57,7 @@ const metaStore = useStore('meta')
 const router = useRouter()
 
 const { capabilities, ...fieldsRest } = store.fields
-const fields = reactive(fieldsRest)
+const form = reactive(fieldsRest)
 
 type AccParams = Pick<
   CollectionDescription,
@@ -67,7 +69,7 @@ type AccParams = Pick<
 
 onMounted(async () => {
   const { result: roles } = await store.custom('roles')
-  fields.role.values = roles.reduce((a: any, role: string) => ({
+  form.role.values = roles.reduce((a: any, role: string) => ({
     ...a,
     [role]: {
       value: role,

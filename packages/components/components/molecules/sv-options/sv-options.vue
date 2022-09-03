@@ -24,12 +24,13 @@
         ${modelValue && 'options__checkbox--selected'}
       `"
 
-      @change="updateValue"
+      @update:modelValue="updateValue"
     ></sv-checkbox>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { SvCheckbox } from '../../..'
 
 type Props = {
@@ -50,13 +51,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+const modelValue = computed(() => props.modelValue)
 
 const updateValue = (value: any) => {
-  const newValue = props.type !== 'radio'
-    ? props.modelValue
-    : value
-
-  emit('update:modelValue', newValue)
+  emit('update:modelValue', value)
 }
 </script>
 

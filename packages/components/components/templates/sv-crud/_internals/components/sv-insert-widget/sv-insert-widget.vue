@@ -1,41 +1,39 @@
 <template>
-  <teleport to="body">
-    <sv-box
-      close-hint
-      v-model:visible="isInsertVisible"
-      :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
-      :float="true"
+  <sv-box
+    close-hint
+    v-model:visible="isInsertVisible"
+    :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
+    :float="true"
+    :key="store.item._id"
+  >
+    <sv-form
       :key="store.item._id"
-    >
-      <sv-form
-        :key="store.item._id"
-        v-bind="{
-          collection: metaStore.view.collection,
-          form: store.fields,
-          formData: store.item,
-          isReadonly: isInsertReadonly,
-          layout: store.formLayout
-        }"
+      v-bind="{
+        collection: metaStore.view.collection,
+        form: store.fields,
+        formData: store.item,
+        isReadonly: isInsertReadonly,
+        layout: store.formLayout
+      }"
 
-        @add="$e.preventDefault()"
-      ></sv-form>
-      <template #footer>
-        <sv-button
-          :disabled="store.isLoading || isInsertReadonly"
-          @clicked="insert"
-        >
-          Salvar
-        </sv-button>
-        <sv-button
-          v-if="store.item._id && store.description.methods?.includes('insert')"
-          variant="light"
-          @clicked="isInsertReadonly = !isInsertReadonly"
-        >
-          {{ isInsertReadonly ? 'Modificar' : 'Examinar' }}
-        </sv-button>
-      </template>
-    </sv-box>
-  </teleport>
+      @add="$e.preventDefault()"
+    ></sv-form>
+    <template #footer>
+      <sv-button
+        :disabled="store.isLoading || isInsertReadonly"
+        @clicked="insert"
+      >
+        Salvar
+      </sv-button>
+      <sv-button
+        v-if="store.item._id && store.description.methods?.includes('insert')"
+        variant="light"
+        @clicked="isInsertReadonly = !isInsertReadonly"
+      >
+        {{ isInsertReadonly ? 'Modificar' : 'Examinar' }}
+      </sv-button>
+    </template>
+  </sv-box>
 </template>
 
 <script setup lang="ts">

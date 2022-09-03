@@ -36,6 +36,7 @@
           </div>
 
           <div v-if="field.type !== 'select'">
+            d: {{ formData[key] }}
             <sv-options
               v-if="['checkbox', 'radio'].includes(field.type)"
               v-model="formData[key]"

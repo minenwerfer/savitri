@@ -12,7 +12,7 @@ export const getSearchables = () => {
   const descriptions = new MetaController().describeAll()
 
   const searchable = Object.entries(descriptions)
-    .reduce((a: any, [key, description]: [string, any]) => {
+    .reduce((a: any, [collectionName, description]: [string, any]) => {
       if( !description.searchable?.indexes || description.alias ) {
         return a
       }
@@ -24,7 +24,9 @@ export const getSearchables = () => {
         }
 
         if( field.collection || field.values?.[0]?.__query ) {
-          throw new Error('searchable index cannot be a reference')
+          throw new Error(
+            `searchable index cannot be a reference: ${index} @ ${collectionName}`
+          )
         }
 
         const { label, type } = field
@@ -39,11 +41,11 @@ export const getSearchables = () => {
       }, {})
 
       // force model registration
-      getController(key)
+      getController(collectionName)
 
       return {
         ...a,
-        [key]: {
+        [collectionName]: {
           ...description.searchable,
           indexes
         }

@@ -30,15 +30,15 @@
           class="box__header-icons"
         >
           <sv-icon
-            v-if="collapsable"
             v-clickable
+            v-if="collapsable"
             reactive
             :name="!isCollapsed ? 'minus' : 'plus'"
             @click="isCollapsed = !isCollapsed"
           />
           <sv-icon
-            v-else-if="closeHint"
             v-clickable
+            v-else-if="closeHint"
             reactive
             name="multiply"
             @click="close"

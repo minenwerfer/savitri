@@ -20,10 +20,15 @@ type Plugin = {
   routerExtension?: RouterExtension
 }
 
+type MenuSchema = Record<string, {
+  roles?: Array<string>
+  children: Array<string>
+}>
+
 interface AppOptions {
   component: any
   i18n?: any
-  menuSchema: any
+  menuSchema: MenuSchema
   routerExtension?: RouterExtension
   modules?: Array<Plugin>
 }

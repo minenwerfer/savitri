@@ -75,7 +75,7 @@ export class UserController extends Mutable<UserDocument> {
       }
     }
 
-    if( !decodedToken?.user?._id && !props.what.password ) {
+    if( !decodedToken?.user && !props.what.password ) {
       throw new Error(
         `password is required`
       )
@@ -134,6 +134,7 @@ export class UserController extends Mutable<UserDocument> {
         role: 'root',
         capabilities: {
           user: [
+            'get',
             'getAll',
             'insert'
           ],

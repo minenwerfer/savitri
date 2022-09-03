@@ -13,7 +13,6 @@
       }"
 
       class="checkbox__input"
-      @change.stop="$emit('change', value)"
     />
     <div
       v-clickable
@@ -33,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 type Props = {
   modelValue?: any
@@ -50,7 +49,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', event: string|Array<string>|boolean): void
+  (e: 'update:modelValue', value: string|Array<string>|boolean): void
+  (e: 'change', value: string): void
 }>()
 
 const checkbox = ref<any>(null)
@@ -60,12 +60,6 @@ const onClick = () => {
     checkbox.value.click()
   }
 }
-
-onMounted(() => {
-  if( !props.modelValue ) {
-    emit('update:modelValue', props.type === 'checkbox' ? [] : null)
-  }
-})
 
 const value = typeof props.value === 'object'
   ? (props.value?._id || props.value)
@@ -100,16 +94,11 @@ const bindVal = computed({
       return
     }
 
-    if( props.type === 'checkbox' || Array.isArray(props.modelValue) ) {
-      emit('update:modelValue', !selectedValues(props.modelValue||[]).includes(value)
-        ? [ ...props.modelValue||[], value ]
-        : selectedValues(props.modelValue).filter((v: any) => v !== value))
+    const values = props.modelValue||[]
 
-      return
-
-    }
-
-    emit('update:modelValue', !(props.modelValue === true))
+    emit('update:modelValue', !selectedValues(values).includes(value)
+      ? [ ...values, value ]
+      : selectedValues(props.modelValue).filter((v: any) => v !== value))
   }
 })
 </script>

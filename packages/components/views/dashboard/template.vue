@@ -1,5 +1,5 @@
 <template>
-  <component :is="runonceSlot" v-if="runonceSlot"></component>
+  <component v-if="runonceSlot" :is="runonceSlot"></component>
 
   <div class="template">
     <sv-icon
@@ -19,13 +19,13 @@
 
     <div class="template__main">
       <sv-menu
-        entrypoint="dashboard"
         v-model:visible="metaStore.menu.isVisible"
+        entrypoint="dashboard"
         :schema="menuSchema"
       ></sv-menu>
 
       <div class="template__content">
-        <div class="template__notice" v-if="notice">
+        <div v-if="notice" class="template__notice">
           {{ notice }}
         </div>
 

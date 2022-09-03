@@ -6,7 +6,7 @@
   <div class="main">
     <router-view></router-view>
 
-    <sv-modal v-model:visible="metaStore.modal.isVisible" style="z-index: 60">
+    <sv-modal v-model:visible="metaStore.modal.isVisible">
       <template #title>{{ metaStore.modal.title }}</template>
       <div>
           <p v-if="metaStore.modal.body" v-html="metaStore.modal.body"></p>

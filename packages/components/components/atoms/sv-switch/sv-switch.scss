@@ -4,6 +4,8 @@ $slider-radius: 1.4rem;
   display: flex;
   align-items: center;
   column-gap: .6rem;
+
+  min-height: 3rem;
 }
 
 .switch {

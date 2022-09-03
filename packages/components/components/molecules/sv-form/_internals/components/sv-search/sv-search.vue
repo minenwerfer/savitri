@@ -18,7 +18,6 @@
     </div>
 
     <div v-else>
-      <!-- field.purge deprecated ? -->
       <sv-form
         v-bind="{
           collection: field.collection,
@@ -113,11 +112,11 @@ type Props = {
 }
 
 const props = defineProps<Props>()
-
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
   (e: 'changed'): void
 }>()
+
 
 const boxProps = reactive({
   float: false,
@@ -155,16 +154,6 @@ const rawItem = computed(() => {
 
 const isTyping = ref(false)
 const inputValue = reactive({})
-
-//const selected = computed(() => {
-//  const options = props.modelValue
-//  const selected = field.array
-//    ? Array.isArray(options) ? options : [options]
-//    : (Object.keys(options||{}).length > 0 ? [options] : [])
-//
-//  return selected
-//    .filter((option: { _id: string }) => !!option?._id)
-//})
 
 const fieldIndex = ref(0)
 

@@ -1,6 +1,11 @@
 <template>
   <table v-if="Object.keys(columns).length > 0" class="table">
-    <tr v-if="headers" class="table__row table__row--header">
+    <tr
+      v-if="headers"
+      class="
+        table__row
+        table__row--header
+    ">
       <th
         v-if="checkbox"
         :class="`
@@ -67,7 +72,6 @@
               <sv-picture
                 v-if="field.collection === 'file' && row[column]._id" 
                 :file="row[column]"
-                class="w-20 h-20 object-cover mb-4 lg:mb-0 border"
               ></sv-picture>
               <div v-else>
                 {{
@@ -84,7 +88,6 @@
               <div
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
-                class="text-sm text-blue-500"
               >
                 {{ row[column]?.[subvalue] }}
               </div>

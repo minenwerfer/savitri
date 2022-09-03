@@ -3,7 +3,6 @@ $horizontal-padding: .8rem;
 .table {
   width: 100%;
   border-collapse: collapse;
-  overflow-y: hidden;
 
   @media screen and (min-width: 1024px) {
     transform: scale(.998);

@@ -1,5 +1,9 @@
 import type { Directive } from 'vue'
 
+const __layer = {
+  last: 50
+}
+
 export default {
   mounted: (el, binding) => {
     if( binding.value?.condition === false ) {
@@ -11,13 +15,17 @@ export default {
     }
 
     const overlayElem = document.createElement('div')
+    const zIndex = __layer.last
+
+    __layer.last += 10
+
     overlayElem.setAttribute('style', `
       position: fixed;
       display: block;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 50;
+      z-index: ${zIndex};
 
       width: 100vw;
       height: 100vh;
@@ -32,7 +40,7 @@ export default {
       overlayElem.onclick = binding.value.click
     }
 
-    el.setAttribute('style', 'z-index: 60;')
+    el.setAttribute('style', `z-index: ${zIndex+10};`)
     el.parentNode.insertBefore(overlayElem, el)
   },
 
@@ -42,5 +50,6 @@ export default {
     }
 
     el.previousElementSibling?.remove()
+    __layer.last -= 10
   }
 } as Directive

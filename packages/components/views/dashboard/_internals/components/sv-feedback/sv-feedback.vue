@@ -1,5 +1,6 @@
 <template>
   <sv-box
+    close-hint
     v-model:visible="isFeedbackVisible"
     title="Feedback"
     :float="true"
