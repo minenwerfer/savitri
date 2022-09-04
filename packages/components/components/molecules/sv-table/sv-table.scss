@@ -1,4 +1,5 @@
 $horizontal-padding: .8rem;
+$picture-diameter: 4rem;
 
 .table {
   width: 100%;
@@ -92,4 +93,15 @@ $horizontal-padding: .8rem;
     }
   }
 
+  &__picture {
+    height: $picture-diameter;
+    width: $picture-diameter;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+
+    :deep(img) {
+      object-fit: cover;
+    }
+  }
 }

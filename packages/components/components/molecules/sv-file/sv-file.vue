@@ -3,30 +3,43 @@
     <div>
       <sv-picture
         v-if="isImage"
-        :file="modelValue"
+        :file="previewURL"
         class="file__image"
       ></sv-picture>
-      <sv-bare-button
-        v-if="(modelValue||{})._id"
+      <div
+        v-clickable
+        v-if="modelValue?._id"
         class="file__name"
-        @clicked="download(modelValue._id)"
+        @click="download(modelValue._id)"
       >
         {{ modelValue.filename }}
-      </sv-bare-button>
+      </div>
     </div>
-    <input
-      type="file"
-      ref="file"
-      @click="onClick"
-      @change="onChange"
-    />
+    <div class="file__actions">
+      <input
+        type="file"
+        ref="file"
+        @change="changePreview"
+      />
+      <div
+        v-if="preview"
+        class="file__buttons"
+      >
+        <sv-button @clicked="insert">
+          Enviar
+        </sv-button>
+        <sv-button @clicked="clearPreview">
+          Limpar
+        </sv-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useStore } from '@savitri/web'
-import { SvBareButton, SvPicture } from '../../'
+import { SvPicture, SvButton } from '../..'
 
 type Props = {
   modelValue: any
@@ -36,17 +49,27 @@ type Props = {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', result: any): void
+  (e: 'update:modelValue', value: any): void
 }>()
 
-const store = useStore('file')
-const file = ref(null)
+const fileStore = useStore('file')
 
-const isImage = computed(() => /^image\//.test((props.modelValue||{}).mime))
+const preview = ref(null)
+const previewURL = computed(() =>
+  preview.value
+    ? URL.createObjectURL(preview.value)
+    : props.modelValue
+)
 
-const readFile = (event: any): Promise<any> => new Promise((resolve) => {
+const isImage = computed(() => 
+  [
+    preview.value?.type,
+    props.modelValue?.mime
+  ].some((type: string) => /^image\//.test(type))
+)
+
+const readFile = (file: any): Promise<any> => new Promise((resolve) => {
   const fr = new FileReader()
-  const [file] = event.target.files
 
   fr.onload = () => resolve({
     filename: file.name,
@@ -59,19 +82,24 @@ const readFile = (event: any): Promise<any> => new Promise((resolve) => {
   fr.readAsDataURL(file)
 })
 
-const onClick = () => {
-  file.value = null
+const changePreview = (event) => {
+  preview.value = event.target.files[0]
 }
 
-const onChange = async (event: any) => {
-  const file = await readFile(event)
-  const result = await store.insert({
+const clearPreview = () => {
+  preview.value = null
+}
+
+const insert = async () => {
+  const file = await readFile(preview.value)
+  const result = await fileStore.insert({
     what: {
-      ...file,
-      context: props.context
+      _id: props.modelValue?._id,
+      ...file
     }
   })
 
+  clearPreview()
   emit('update:modelValue', result)
 }
 

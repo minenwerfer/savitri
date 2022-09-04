@@ -94,14 +94,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     const what = prepareInsert(this.description, props.what)
     const readyWhat = this.beforeWrite(what, decodedToken)
 
-    if( typeof _id !== 'string' ) {
+    if( !_id ) {
       const newDoc = await this.model.create(readyWhat)
       return this.model.findOne({ _id: newDoc._id })
     }
 
     return this.model.findOneAndUpdate(
-      { _id },
-      readyWhat,
+      { _id }, readyWhat,
       { new: true, runValidators: true }
     )
   }

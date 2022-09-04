@@ -70,8 +70,9 @@
           <div v-if="field.type !== 'image'">
             <div :class="cindex === 0 && 'font-semibold opacity-80'">
               <sv-picture
-                v-if="field.collection === 'file' && row[column]._id" 
+                v-if="field.collection === 'file'" 
                 :file="row[column]"
+                class="table__picture"
               ></sv-picture>
               <div v-else>
                 {{

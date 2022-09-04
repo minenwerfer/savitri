@@ -14,9 +14,9 @@ export class FileController extends Mutable<FileDocument> {
 
   public override async insert(
     props: { what: Pick<FileDocument,
-      'filename'
+      '_id'
+      | 'filename'
       | 'owner'
-      | 'context'
       | 'content'
       | 'absolute_path'
       > },
@@ -26,25 +26,15 @@ export class FileController extends Mutable<FileDocument> {
       throw new Error('STORAGE_PATH is not set in the environment')
     }
 
-    if( !props.what.context ) {
-      throw new Error('context is not set')
-    }
-
     const what = Object.assign({}, props.what)
-    what.owner = decodedToken.access._id
+    what.owner = decodedToken.user._id
 
     const extension = what.filename?.split('.').pop()
     if( !extension ) {
       throw new Error('filename lacks extension')
     }
 
-    const oldFile = await File.findOne({
-      $and: [
-        { owner: what.owner },
-        { context: what.context }
-      ]
-    }).sort({ created_at: -1 })
-
+    const oldFile = await File.findOne({ _id: props.what._id })
     if( oldFile ) {
       if( oldFile.immutable === true ) {
         throw new Error('você não pode mais editar esse arquivo')
@@ -52,7 +42,6 @@ export class FileController extends Mutable<FileDocument> {
 
       try {
         await unlink(oldFile.absolute_path)
-        await File.deleteOne({ _id: oldFile._id })
 
       } catch( error ) {
         console.trace(error)

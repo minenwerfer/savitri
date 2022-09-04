@@ -4,7 +4,8 @@ import { useStore } from './store'
 
 export default () => {
   return {
-    http: proxiedHttp
+    http: proxiedHttp,
+    apiUrl: SV_API_URL
   }
 }
 

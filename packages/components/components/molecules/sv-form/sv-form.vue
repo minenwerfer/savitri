@@ -36,7 +36,6 @@
           </div>
 
           <div v-if="field.type !== 'select'">
-            d: {{ formData[key] }}
             <sv-options
               v-if="['checkbox', 'radio'].includes(field.type)"
               v-model="formData[key]"
@@ -72,8 +71,8 @@
         </div>
 
         <div v-if="field.collection === 'file'">
-          <strong class="text-xs uppercase">{{ field.label }}</strong>
-          <sv-file v-model="formData[key]" :context="`${collection}.${itemIndex}.${key}.${fieldIndex}`"></sv-file>
+          <strong>{{ field.label }}</strong>
+          <sv-file v-model="formData[key]"></sv-file>
         </div>
 
         <div v-if="store?.validationErrors[key]" class="form__validation-error">
@@ -284,8 +283,11 @@ const fieldStyle = (key:string, field: any) => {
     grid-column: span var(--field-span) / span var(--field-span);
   `)
 
-  if( isSelectType(field.type) ) {
-    style.push('padding: .6rem 0;')
+  if(
+    isSelectType(field?.type)
+    || field.collection === 'file'
+  ) {
+    style.push('padding: .8rem 0;')
   }
 
   if( !layout ) {

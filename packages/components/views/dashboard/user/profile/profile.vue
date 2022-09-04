@@ -1,14 +1,24 @@
 <template>
   <strong>Editar perfil</strong>
-  <sv-box :key="store.fields" class="flex-grow">
+  <sv-box :key="userStore.fields" class="profile">
     <sv-form
-      :form="store.useFieldsExcept(['access', 'password'])"
-      :form-data="store.item"
+      v-bind="{
+        collection: 'user',
+        form: userStore.useFields([
+          'first_name',
+          'last_name',
+          'email',
+          'phone',
+          'picture'
+        ]),
+        formData: userStore.item,
+        layout: userStore.formLayout
+      }"
     ></sv-form>
 
     <template #footer>
       <sv-button
-        :disabled="store.isLoading"
+        :disabled="userStore.isLoading"
         @clicked="insert"
       >
         Salvar
@@ -34,15 +44,14 @@ import {
 
 } from '../../../..'
 
-const store = useStore('user')
+const userStore = useStore('user')
 const metaStore = useStore('meta')
-provide('storeId', 'user')
 
-// store.commit('user/CURRENT_UPDATE')
+userStore.setItem(userStore.$currentUser)
 
 const insert = async () => {
-  await store.insert({ what: store.item })
-  sessionStorage.setItem('auth:currentUser', JSON.stringify(store.item))
+  await userStore.insert({ what: userStore.item })
+  sessionStorage.setItem('auth:currentUser', JSON.stringify(userStore.item))
 
   metaStore.spawnModal({
     title: 'Feito!',
@@ -50,3 +59,5 @@ const insert = async () => {
   })
 }
 </script>
+
+<style scoped src="./profile.scss"></style>
