@@ -9,9 +9,9 @@ $section-padding: .8rem;
   }
 
   &__content {
-    background: #fff;
     border: 1px solid #dedede;
     border-radius: 5px;
+    background: #fff;
 
     &--floating {
       position: absolute;
@@ -26,6 +26,20 @@ $section-padding: .8rem;
 
       .box__body {
         max-height: 80vh;
+      }
+    }
+
+    &--transparent {
+      border: none;
+      border-radius: none;
+      background: none;
+    }
+
+    &--transparent-mobile {
+      @media screen and (max-width: 600px) {
+        border: none;
+        border-radius: none;
+        background: none;
       }
     }
   }

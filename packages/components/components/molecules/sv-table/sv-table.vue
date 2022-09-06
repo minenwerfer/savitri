@@ -68,7 +68,7 @@
           </div>
 
           <div v-if="field.type !== 'image'">
-            <div :class="cindex === 0 && 'font-semibold opacity-80'">
+            <div>
               <sv-picture
                 v-if="field.collection === 'file'" 
                 :file="row[column]"

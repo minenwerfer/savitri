@@ -47,7 +47,7 @@
       </div>
     </sv-box>
 
-    <sv-box :fill="true" :transparent="true">
+    <sv-box :fill="true" :transparent-mobile="true">
       <sv-table
         v-if="store.tableDescription"
         :key="store.$id"
@@ -130,9 +130,8 @@ onMounted(() => {
   isInsertReadonly.value = false
 
   if( store.itemsCount === 0 ) {
-    store.getAll()
+    store.filter()
   }
-
 })
 
 onUnmounted(() => {

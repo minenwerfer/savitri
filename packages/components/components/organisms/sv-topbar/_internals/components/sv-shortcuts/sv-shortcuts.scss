@@ -20,9 +20,5 @@
     align-items: center;
     column-gap: .2rem;
     width: 100%;
-
-    @media screen and (min-width: 600px) {
-      cursor: pointer;
-    }
   }
 }

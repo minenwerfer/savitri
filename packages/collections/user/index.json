@@ -108,7 +108,7 @@
     },
     "picture": {
       "collection": "file",
-      "label": "Foto de perfil",
+      "label": "Foto",
       "index": "filename"
     },
     "group": {

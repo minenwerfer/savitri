@@ -1,11 +1,11 @@
 $horizontal-padding: .8rem;
-$picture-diameter: 4rem;
+$picture-diameter: 3.6rem;
 
 .table {
   width: 100%;
   border-collapse: collapse;
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 600px) {
     transform: scale(.998);
   }
 
@@ -18,13 +18,12 @@ $picture-diameter: 4rem;
       text-align: left;
       border-bottom: 1px solid #dedede;
 
-      @media screen and (min-width: 1024px) {
+      @media screen and (min-width: 600px) {
         display: table-row;
       }
     }
 
     &--body {
-      display: block;
       margin-bottom: 1.2rem;
       padding: .6rem;
       line-height: 2.25rem;
@@ -37,8 +36,11 @@ $picture-diameter: 4rem;
         background: #eee;
       }
 
-      @media screen and (min-width: 1024px) {
-        display: table-row;
+      @media screen and (max-width: 600px) {
+        display: block;
+        background: #fff;
+        border: 1px solid #dedede;
+        border-radius: 5px;
       }
     }
 
@@ -61,7 +63,7 @@ $picture-diameter: 4rem;
       white-space: nowrap;
     }
 
-    @media screen and (min-width: 1024px) {
+    @media screen and (min-width: 600px) {
       display: table-cell;
       padding: .2rem $horizontal-padding;
     }
@@ -75,7 +77,7 @@ $picture-diameter: 4rem;
       border: 1px solid #dedede;
     }
 
-    @media screen and (min-width: 1024px) {
+    @media screen and (min-width: 600px) {
       display: table-cell;
       padding: 0 $horizontal-padding;
       &--padded {
@@ -99,9 +101,5 @@ $picture-diameter: 4rem;
     border: 1px solid #ccc;
     border-radius: 50%;
     overflow: hidden;
-
-    :deep(img) {
-      object-fit: cover;
-    }
   }
 }

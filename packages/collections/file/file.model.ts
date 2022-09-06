@@ -12,7 +12,6 @@ export type FileDocument = MongoDocument & {
   mime: string
   size: number
   content: string
-  context: string
   absolute_path: string
   relative_path: string
   last_modified: Date

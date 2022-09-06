@@ -1,5 +1,5 @@
 <template>
-  <div :key="file" class="picture">
+  <div class="picture">
     <img
       v-if="fileLink"
       :src="fileLink"
@@ -23,12 +23,15 @@ const props = defineProps<Props>()
 const { apiUrl } = useHttp()
 
 const fileLink = computed(() => {
-  if( typeof props.file === 'object' && !props.file?._id ) {
+  if( !props.file || (typeof props.file === 'object' && !props.file._id) ) {
     return
   }
 
+  const timestamp = new Date(props.file.last_modified)?.getTime()
+    || 'fresh'
+
   return props.file._id
-    ? `${apiUrl}/file/${props.file._id}`
+    ? `${apiUrl}/file/${props.file._id}?${timestamp}`
     : props.file
 })
 </script>

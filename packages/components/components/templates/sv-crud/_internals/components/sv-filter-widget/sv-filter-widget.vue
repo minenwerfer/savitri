@@ -34,10 +34,12 @@
     @close="isFilterVisible = false"
   >
     <sv-form
-      :form="store.availableFilters"
-      :form-data="store.filters"
-      :flex="true"
-      :search-only="true"
+      v-bind="{
+        form: store.availableFilters,
+        formData: store.filters,
+        searchOnly: true,
+        layout: store.formLayout
+      }"
     ></sv-form>
     <template #footer>
       <sv-button

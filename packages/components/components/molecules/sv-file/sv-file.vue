@@ -3,7 +3,7 @@
     <div>
       <sv-picture
         v-if="isImage"
-        :file="previewURL"
+        :file="previewFile"
         class="file__image"
       ></sv-picture>
       <div
@@ -43,7 +43,6 @@ import { SvPicture, SvButton } from '../..'
 
 type Props = {
   modelValue: any
-  context: string
 }
 
 const props = defineProps<Props>()
@@ -55,7 +54,7 @@ const emit = defineEmits<{
 const fileStore = useStore('file')
 
 const preview = ref(null)
-const previewURL = computed(() =>
+const previewFile = computed(() =>
   preview.value
     ? URL.createObjectURL(preview.value)
     : props.modelValue

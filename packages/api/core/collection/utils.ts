@@ -113,13 +113,16 @@ export const prepareInsert = (
   } = payload
 
   const forbidden = (key: string) => {
-    return (description.fields[key]||{}).readOnly
+    return description.fields[key]?.readOnly
       || (description.form && !description.form.includes(key))
   }
 
   const what = typeof _id === 'string' ? Object.entries(rest)
-    .filter(([key]: [string, unknown]) => !forbidden(key))
     .reduce((a: any, [key, value]: [string, any]) => {
+      if( forbidden(key) ) {
+        return a
+      }
+
       if( [undefined, null].includes(value) || R.isEmpty(value)) {
         a.$unset[key] = 1
         return a

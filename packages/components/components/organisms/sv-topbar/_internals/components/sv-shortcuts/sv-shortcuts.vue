@@ -3,17 +3,21 @@
     v-if="isShortcutsVisible"
     class="shortcuts"
   >
-    <div class="shortcuts__options">
+    <div
+      v-clickable
+      class="shortcuts__options"
+    >
       <sv-icon
         name="house-user"
         class="shortcuts__option"
+        @click="router.push({ name: 'dashboard-user-profile' })"
       >
         Perfil de usuário
       </sv-icon>
       <sv-icon
         name="signout"
-        @click="signout"
         class="shortcuts__option"
+        @click="signout"
       >
         Sair
       </sv-icon>

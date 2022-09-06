@@ -16,6 +16,8 @@
       :class="`
         box__content
         ${isFloating && 'box__content--floating'}
+        ${transparent && 'box__content--transparent'}
+        ${transparentMobile && 'box__content--transparent-mobile'}
       `"
       @click="$event.stopPropagation()"
     >
@@ -80,6 +82,7 @@ type Props = {
   classes?: string
   fill?: boolean
   transparent?: boolean
+  transparentMobile?: boolean
 }
 // #endregion props
 

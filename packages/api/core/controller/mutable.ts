@@ -166,8 +166,12 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     const filters = fromEntries(entries) || {}
     const query = this.beforeRead({ filters }, decodedToken)
 
+    const sort = query.sort
+      ? query.sort
+      : props.sort || defaultSort
+
     return this.model.find(query.filters)
-      .sort({ ...(props.sort || defaultSort), ...query.sort })
+      .sort(sort)
       .skip(props.offset || 0)
       .limit(props.limit)
   }

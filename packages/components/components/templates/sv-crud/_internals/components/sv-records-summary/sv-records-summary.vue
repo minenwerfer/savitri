@@ -1,11 +1,9 @@
 <template>
-  <div class="summary">
-    <div v-if="pagination">
-      Mostrando
-      {{ pagination.offset }} a
-      {{ pagination.offset + pagination.recordsCount }} de
-      {{ pagination.recordsTotal }} registros
-    </div>
+  <div v-if="pagination" class="summary">
+    Mostrando
+    {{ pagination.offset }} a
+    {{ pagination.offset + pagination.recordsCount }} de
+    {{ pagination.recordsTotal }} registros
   </div>
 </template>
 
