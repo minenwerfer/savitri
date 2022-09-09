@@ -7,23 +7,19 @@ export default (params: any) => {
   // dev, prod or lib
   const { webpackConfig } = require(`./webpack.config.${params.mode||'dev'}`)
 
-  params.externals = {
-    ...(params.externals||{}),
-    variables: {
-      ...(params.externals.variables||{}),
+  params.externals ??= {}
+  params.externals.variables ??= {}
+
+  Object.assign(params.externals.variables, {
       workingDir: oldCwd,
       bundleName: params.name,
       productVersion: require(`${oldCwd}/package.json`).version,
-      // productLogoFile: productLogo
-      //   && readFileSync(`${oldCwd}/assets/${productLogo}`, { encoding: 'base64' })
-    }
-  }
+  })
 
   const config = merge(webpackConfig, {
-    externals: {
-      ...Object.entries(params.externals||{}).reduce((a, [key, value]) => ({ ...a, [key]: JSON.stringify(value) }), {}),
-
-    },
+    ...params,
+    externals: Object.entries(params.externals||{})
+      .reduce((a, [key, value]) => ({ ...a, [key]: JSON.stringify(value) }), {}),
 
    // resolve: {
    //    alias: {

@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-const { readFileSync } = require('fs')
-
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import makeConfig from './make-config'
@@ -10,13 +8,12 @@ declare namespace global {
   let appDir: string
 }
 
-const filename = 'build.json'
+const relpath = 'build'
 const mode = process.argv[2];
 
 (() => {
   try {
-    const content = JSON.parse( readFileSync(filename) )
-    
+    const content = require(`${process.cwd()}/${relpath}`)
     const buildConfig = Object.assign(content, {
       mode,
       name: process.cwd().split('/').pop(),

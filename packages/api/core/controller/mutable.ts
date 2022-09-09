@@ -41,7 +41,11 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     )(description as MaybeCollectionDescription)
 
     super({ ...options, description })
+
     this.description = description as CollectionDescription
+
+    if( this.description.options ) {
+    }
   }
 
   private beforeRead(payload: any, decodedToken: any) {
