@@ -1,13 +1,9 @@
 $horizontal-padding: .8rem;
-$picture-diameter: 3.6rem;
+$picture-size: 3.6rem;
 
 .table {
   width: 100%;
   border-collapse: collapse;
-
-  @media screen and (min-width: 600px) {
-    transform: scale(.998);
-  }
 
   &__row {
     &--header {
@@ -17,6 +13,8 @@ $picture-diameter: 3.6rem;
       text-transform: uppercase;
       text-align: left;
       border-bottom: 1px solid #dedede;
+
+      background: #eee;
 
       @media screen and (min-width: 600px) {
         display: table-row;
@@ -96,10 +94,10 @@ $picture-diameter: 3.6rem;
   }
 
   &__picture {
-    height: $picture-diameter;
-    width: $picture-diameter;
+    height: $picture-size;
+    width: $picture-size;
     border: 1px solid #ccc;
-    border-radius: 50%;
+    border-radius: 10px;
     overflow: hidden;
   }
 }

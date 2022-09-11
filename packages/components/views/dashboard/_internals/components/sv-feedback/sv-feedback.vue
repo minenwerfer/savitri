@@ -15,7 +15,8 @@
         v-bind="{
           collection: 'feedback',
           form: store.useFieldsExcept(['owner']),
-          formData: store.item
+          formData: store.item,
+          layout: store.formLayout
         }"
       />
     </div>

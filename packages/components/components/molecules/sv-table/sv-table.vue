@@ -7,7 +7,7 @@
         table__row--header
     ">
       <th
-        v-if="checkbox"
+        v-if="checkbox && store"
         :class="`
           table__header
           table__header--checkbox
@@ -35,17 +35,16 @@
           table__header
           table__header--label
           ${border && 'table__header--border'}
-      `">
-        Ações
-      </th>
+      `"></th>
     </tr>
 
     <tr
       v-for="row in rows"
       :key="row._id"
       :class="`table__row table__row--body`"
+      @click="$emit('itemClick', row)"
     >
-      <td v-if="checkbox">
+      <td v-if="store && checkbox">
         <input
           type="checkbox"
           v-model="selected"
@@ -74,7 +73,7 @@
                 :file="row[column]"
                 class="table__picture"
               ></sv-picture>
-              <div v-else>
+              <div v-else-if="store">
                 {{
                   store.formatValue({
                     value: field.translate ? $t(row[column]||'-') : row[column],
@@ -84,8 +83,11 @@
                   })
                 }}
               </div>
+              <div v-else>
+                {{ row[column] || '-' }}
+              </div>
             </div>
-            <div v-if="store.getIndexes({ key: column })?.length > 1">
+            <div v-if="store && store.getIndexes({ key: column })?.length > 1">
               <div
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
@@ -130,7 +132,7 @@ import {
 
 } from 'vue'
 
-import { useParentStore, useFile } from '@savitri/web'
+import { useStore, useFile } from '@savitri/web'
 
 import {
   SvBareButton,
@@ -153,12 +155,14 @@ type Props = {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  checkbox: true,
   border: false,
   headers: true
 })
 
-const store = useParentStore(props.collection)
+const collectionName = props.collection || inject('storeId', null)
+const store = collectionName
+  ? useStore(collectionName.value||collectionName)
+  : null
 
 const selected = computed({
   get: () => store.selected,

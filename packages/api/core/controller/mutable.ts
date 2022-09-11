@@ -51,7 +51,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
   private beforeRead(payload: any, decodedToken: any) {
     const newPayload = Object.assign({}, {
       filters: payload?.filters||{},
-      sort: payload?.sort||{}
+      sort: payload?.sort
     })
 
     if( this.options.queryPreset ) {
@@ -132,7 +132,9 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
         return item._doc||item
       },
       (item: T|null) => item && project(item, props?.project),
-      (item: T|null) => item && fill(this.description, item)
+      (item: T|null) => item && fill(this.description, item),
+      (item: T) => depopulate(this.description, item),
+      depopulateChildren
     )
 
     return pipe(await this.model.findOne(props?.filters) as T)

@@ -1,3 +1,5 @@
+$picture-size: 4rem;
+
 .header {
   display: flex;
   width: 15em;
@@ -5,12 +7,11 @@
   column-gap: .8em;
 
   &__picture {
-    $size: 4.6em;
-    width: $size;
-    height: $size;
+    width: $picture-size;
+    height: $picture-size;
 
     border: 1px solid #dedede;
-    border-radius: 100%;
+    border-radius: 10px;
     overflow: hidden;
 
     transition: filter .35s;
