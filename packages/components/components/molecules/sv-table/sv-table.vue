@@ -107,11 +107,11 @@
         </div>
       </td>
       <td v-if="actions">
-        <sv-dropdown-trigger>
+        <sv-dropdown-trigger :id="row._id">
           <teleport :to="`#dropdown-${row._id}`">
             <sv-dropdown-content v-bind="{
               row,
-              actions
+              actions,
             }"></sv-dropdown-content>
           </teleport>
         </sv-dropdown-trigger>

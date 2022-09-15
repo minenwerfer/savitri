@@ -4,7 +4,7 @@
       v-for="(action, aindex) in filterActions(actions)"
       :key="`action-${aindex}`"
       class="dropdown__item"
-      @clicked="action.click(row)"
+      @clicked="onClick(action, row)"
     >
       <sv-icon
         :name="action.unicon"
@@ -18,11 +18,8 @@
 
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
-import {
-  SvBareButton,
-  SvIcon
-
-} from '../../../../..'
+import { SvBareButton, SvIcon } from '../../../../..'
+import { dropdownVisible } from '../../store'
 
 type Props = {
   actions: any
@@ -40,6 +37,11 @@ const filterActions = (actions: Array<any>) => {
 
     return !!action.click
   })
+}
+
+const onClick = (action, row) => {
+  action.click(row)
+  dropdownVisible.value = false
 }
 </script>
 
