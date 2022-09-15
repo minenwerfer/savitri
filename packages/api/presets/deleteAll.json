@@ -1,6 +1,6 @@
 {
   "actions": {
-    "removeAll": {
+    "deleteAll": {
       "name": "Remover",
       "ask": true,
       "selection": true

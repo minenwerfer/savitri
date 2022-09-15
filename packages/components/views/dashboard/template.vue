@@ -37,7 +37,6 @@
     </div>
 
     <sv-feedback></sv-feedback>
-    <sv-sidebar v-model:visible="metaStore.sidebar.isVisible"></sv-sidebar>
   </div>
 </template>
 
@@ -49,7 +48,6 @@ import { default as webpackVariables } from 'variables'
 import {
   SvMenu,
   SvTopbar,
-  SvSidebar,
   SvIcon
 
 } from '../..'

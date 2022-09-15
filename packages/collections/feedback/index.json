@@ -5,7 +5,7 @@
   "unicon": "comment-alt-dots",
   "presets": [
     "owned",
-    "removeAll",
+    "deleteAll",
     "view"
   ],
   "individualActions": {

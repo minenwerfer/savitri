@@ -25,7 +25,10 @@ export type CollectionDescription = {
   presets?: Array<CollectionPreset>
   table?: Array<string>
   form?: Array<string>
-  filters?: Array<string>
+  filters?: Array<string|{
+    field: string
+    default: string
+  }>
 
   formLayout?: Record<string, Partial<FormLayout>>|object
 

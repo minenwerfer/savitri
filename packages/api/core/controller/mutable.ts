@@ -2,9 +2,10 @@ import * as R from 'ramda'
 import * as TypeGuards from '../collection/typeguards'
 import type { Model } from '../database'
 import type { CollectionDescription, MaybeCollectionDescription } from '../../../common/types'
+import type { MongoDocument } from '../../types'
 
 import { fromEntries } from '../../../common/helpers'
-import type { MongoDocument } from '../../types'
+import { ItemNotFound } from '../exceptions'
 
 import {
   depopulate,
@@ -126,7 +127,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     const pipe = R.pipe(
       (item: T & { _doc?: T }) => {
         if( !item ) {
-          throw new Error('item not found')
+          throw new ItemNotFound('item not found')
         }
 
         return item._doc||item

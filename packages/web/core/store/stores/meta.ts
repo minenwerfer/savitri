@@ -42,12 +42,6 @@ export default defineStore('meta', {
       body: '',
       actions: [],
     },
-    sidebar: {
-      isVisible: false,
-      title: '',
-      component: '',
-      componentProps: {}
-    },
     toast: {
       isVisible: false,
       text: '',
