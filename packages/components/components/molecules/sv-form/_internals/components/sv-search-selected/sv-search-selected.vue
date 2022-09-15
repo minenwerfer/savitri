@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selected.length > 0" class="selected">
+  <div v-if="selected?.length > 0" class="selected">
     <sv-search-item
       v-for="item in selected"
       v-bind="{

@@ -1,5 +1,17 @@
 $section-padding: .8rem;
 
+@keyframes fixed-fadein {
+  from {
+    transform: translateX(10rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .box {
   &--floating {
     position: fixed;
@@ -8,7 +20,14 @@ $section-padding: .8rem;
     transform: translate(-50%, -50%);
   }
 
+  &--fixed {
+    position: absolute;
+  }
+
   &__content {
+    display: flex;
+    flex-direction: column;
+
     border: 1px solid #dedede;
     border-radius: 5px;
     background: #fff;
@@ -27,6 +46,20 @@ $section-padding: .8rem;
       .box__body {
         max-height: 80vh;
       }
+    }
+
+    &--fixed-left {
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 50;
+      width: 35rem;
+      height: 100vh;
+
+      animation: fixed-fadein .35s forwards;
+      overscroll-behavior: contain;
+      border: none;
+      border-radius: none;
     }
 
     &--transparent {
@@ -76,5 +109,6 @@ $section-padding: .8rem;
     display: flex;
     gap: .4rem;
     padding: $section-padding;
+    margin-top: auto;
   }
 }

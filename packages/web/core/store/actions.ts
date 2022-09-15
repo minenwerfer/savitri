@@ -270,8 +270,17 @@ export default {
     this: Pick<CollectionGetters, 'fields'>,
     fields: Array<string>,
   ): Record<string, CollectionField> {
-    return fromEntries(Object.entries(this.fields)
-      .filter(([key]: [string, unknown]) => fields.includes(key)))
+    return fields.reduce((a: any, field: string) => {
+      if( !(field in this.fields) ) {
+        return a
+      }
+
+      return {
+        ...a,
+        [field]: this.fields[field]
+      }
+
+    }, {})
   },
 
   useFieldsExcept(

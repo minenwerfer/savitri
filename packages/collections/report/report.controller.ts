@@ -118,16 +118,21 @@ export class ReportController extends Mutable<ReportDocument> {
     const pipe = R.pipe(
       (r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
       (r: ReportDocument) => Object.entries(r)
-        .filter(([key]: [string, any]) => key in fields)
-        .reduce((a: any, [key, value]: [string, any]) => ({
-          ...a,
-          [key]: (() => {
-            const val = Collection.formatValue(description, value, key, false, fields[key])
-            return val.includes(',') && props.what.format === 'csv'
-              ? `"${val}"`
-              : val
-          })()
-        }), {})
+        .reduce((a: any, [key, value]: [string, any]) => {
+          if( !(key in fields) ) {
+            return a
+          }
+
+          return {
+            ...a,
+            [key]: (() => {
+              const val = Collection.formatValue(description, value, key, false, fields[key])
+              return val.includes(',') && props.what.format === 'csv'
+                ? `"${val}"`
+                : val
+            })()
+          }
+        }, {})
     )
     const rows = result
       .map(pipe)

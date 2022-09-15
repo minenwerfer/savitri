@@ -5,15 +5,20 @@ const oldCwd = process.cwd()
 
 export default (params: any) => {
   // dev, prod or lib
-  const { webpackConfig } = require(`./webpack.config.${params.mode||'dev'}`)
+  const modes: Record<string, string> = {
+    production: 'prod',
+    development: 'dev'
+  }
+
+  const { webpackConfig } = require(`./webpack.config.${modes[params.mode]||'dev'}`)
 
   params.externals ??= {}
   params.externals.variables ??= {}
 
   Object.assign(params.externals.variables, {
-      workingDir: oldCwd,
-      bundleName: params.name,
-      productVersion: require(`${oldCwd}/package.json`).version,
+    workingDir: oldCwd,
+    bundleName: params.name,
+    productVersion: require(`${oldCwd}/package.json`).version,
   })
 
   const config = merge(webpackConfig, {
@@ -27,7 +32,7 @@ export default (params: any) => {
    //    },
    //  },
 
-    output: params.mode === 'prod'
+    output: params.mode === 'production'
       ? { path: `/var/www/html/${params.name}` }
       : {}
   })

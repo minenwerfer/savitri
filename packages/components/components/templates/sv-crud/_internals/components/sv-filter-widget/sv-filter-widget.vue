@@ -27,8 +27,8 @@
   </div>
 
   <sv-box
-    float
     close-hint
+    fixed-left
     v-model:visible="isFilterVisible"
     title="Filtrar por"
     @close="isFilterVisible = false"

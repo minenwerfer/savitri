@@ -41,10 +41,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     )(description as MaybeCollectionDescription)
 
     super({ ...options, description })
-
     this.description = description as CollectionDescription
 
     if( this.description.options ) {
+      Object.assign(this.options, this.description.options)
     }
   }
 
@@ -122,7 +122,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     props: { filters?: object, project?: string|Array<string> },
     _decodedToken?: any,
     _response?: unknown
-  ): Promise<Array<T>> {
+  ): Promise<T> {
     const pipe = R.pipe(
       (item: T & { _doc?: T }) => {
         if( !item ) {
@@ -134,7 +134,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       (item: T|null) => item && project(item, props?.project),
       (item: T|null) => item && fill(this.description, item),
       (item: T) => depopulate(this.description, item),
-      depopulateChildren
+      (item: T) => depopulateChildren(item, 1)
     )
 
     return pipe(await this.model.findOne(props?.filters) as T)

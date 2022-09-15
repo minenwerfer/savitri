@@ -16,6 +16,7 @@
           value: inputValue || value,
           readonly: readOnly,
           placeholder,
+          name,
           min,
           max
         }"
@@ -27,6 +28,7 @@
           ${readOnly && 'input__input--readonly'}
         `"
 
+        @maska="onInput($event, true)"
         @input="onInput"
         @change="onChange"
       />
@@ -72,6 +74,7 @@ import { SvInfo, SvIcon } from '../../'
 
 type Props = {
   modelValue?: string
+  name?: string
   value?: string|number
   type?: string
   placeholder?: string
@@ -128,16 +131,23 @@ const inputValue = ref(props.type === 'datetime'
   ? dateToISO(props.modelValue)
   : props.modelValue)
 
-const onInput = (event: { target: { value: string, dataset?: { maskRawValue: string } } }) => {
-  inputValue.value = event.target.value
-  if( !inputValue.value ) {
-    emit('update:modelValue', '')
+const onInput = (
+  event: { target: { value: string, dataset?: { maskRawValue: string } } },
+  masked:boolean
+) => {
+  if( !masked && event.target.dataset?.maskRawValue ) {
     return
   }
 
-  const newValue = props.type !== 'datetime'
-    ? event.target.dataset?.maskRawValue || event.target.value
+  inputValue.value = event.target.value
+  const newValue = masked
+    ? event.target.dataset.maskRawValue
     : event.target.value
+    
+  if( !newValue ) {
+    emit('update:modelValue', '')
+    return
+  }
 
   emit('update:modelValue', newValue)
 }

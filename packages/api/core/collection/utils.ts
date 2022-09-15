@@ -36,29 +36,54 @@ export const depopulate = <T extends MongoDocument>(
   }
 }
 
-export const depopulateChildren = <T extends { _id: string  }>(item: T) => {
-  const depopulate = (item: any) => {
-    if( !item || typeof item !== 'object' || !('_id' in item) ) {
+export const depopulateChildren = <T extends MongoDocument>(item: T, minDepth:number=1) => {
+  const depopulate = (_item:any) => {
+    const item = _item?._doc||_item
+    if( !item || !item._id ) {
       return item
     }
 
-    return fromEntries(Object.entries(item._doc || item)
-      .map(([key, value]: [string, any]) => [key, value?._id ? value._id : value]))
+    return fromEntries(Object.entries(item)
+      .map(([key, value]: [string, any]) => [
+        key,
+        value?._id ? value._id : value
+      ]))
   }
 
-  const { _id, ...doc } = item
-  const entries = Object.entries(doc)
-    .map(([key, value]: [string, any]) => [
-      key,
-      !Array.isArray(value)
-        ? depopulate(value)
-        : value.map((v: any) => depopulate(v))
-    ])
+  const recurse = (_item:any, depth:number=0): any => {
+    const item = _item?._doc||_item//
+    if( depth >= minDepth ) {
+      if( !item || !item._id ) {
+        return item
+      }
 
-  return {
-    _id,
-    ...fromEntries(entries)
+      const { _id, ...doc } = item
+      const entries = Object.entries(doc)
+        .map(([key, value]: [string, any]) => [
+          key,
+          Array.isArray(value)
+            ? value.map((v: any) => depopulate(v))
+            : depopulate(value)
+        ])
+
+      return {
+        _id,
+        ...fromEntries(entries)
+      }
+    }
+
+    const { _id, ...doc } = item
+    return Object.entries(doc).reduce((a, [key, value]) => {
+      return {
+        ...a,
+        [key]: Array.isArray(value)
+          ? value.map((v: any) => recurse(v, depth+1))
+          : recurse(value, depth+1)
+      }
+    }, { _id: item._id })
   }
+
+  return recurse(item)
 }
 
 export const project = <T extends MongoDocument>(

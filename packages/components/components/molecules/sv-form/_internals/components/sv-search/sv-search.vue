@@ -5,8 +5,11 @@
       <sv-form
         v-bind="{
           collection,
-          form: store.fields,
+          form: field.form
+            ? store.useFields(field.form)
+            : store.fields,
           formData: edited,
+          layout: store.formLayout,
           itemIndex,
           fieldIndex
         }"
@@ -48,9 +51,9 @@
       ></sv-search-selected>
 
       <div v-if="!isExpanded">
-        <div v-if="store.items.length || modelValue?.length">
+        <div v-if="matchingItems.length || modelValue?.length">
           <sv-search-item
-            v-for="(item, index) in store.items"
+            v-for="(item, index) in matchingItems"
             v-bind="{
               item,
               indexes
@@ -88,7 +91,6 @@ import {
   ref,
   reactive,
   defineAsyncComponent,
-  onMounted
 
 } from 'vue'
 
@@ -130,11 +132,10 @@ const store = useStore(props.field.collection)
 
 provide('iconReactive', true)
 
-onMounted(() => store.clearItems())
-
 const field = props.field
-const expanded = ref<boolean>(false)
-const edited = ref<any>(parentStore.item[props.propName])
+const expanded = ref(false)
+const edited = ref(parentStore.item[props.propName])
+const matchingItems = ref([])
 
 const collection = computed(() => field.collection)
 const expand = computed(() => field.expand === true)
@@ -182,7 +183,7 @@ const insert = async () => {
   })
 
   emit('update:modelValue', parentResult[props.propName])
-  store.clearItems()
+  matchingItems.value = []
   expanded.value = false
 }
 
@@ -196,7 +197,7 @@ const edit = (item: any) => {
 
 const clear = () => {
   expanded.value = false
-  store.clearItems()
+  matchingItems.value = []
   if( array.value ) {
     rawItem.value = rawItem.value.slice(0, -1)
   }
@@ -208,7 +209,7 @@ const select = (item: any) => {
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
-  store.clearItems()
+  matchingItems.value = []
   emit('update:modelValue', array.value
     ? [ ...modelValue, item ]
     : item
@@ -224,9 +225,9 @@ const addItem = () => {
   expanded.value = true
 }
 
-const search = () => {
+const search = async () => {
   if( Object.values(inputValue).every((v: string) => !(String(v).length > 0)) ) {
-    store.clearItems()
+    matchingItems.value = []
     return
   }
 
@@ -234,7 +235,7 @@ const search = () => {
     return
   }
 
-  store.getAll({
+  matchingItems.value = (await store.custom('getAll', {
     limit: 5,
     filters: {
       ...(props.activeOnly ? { active: true } : {}),
@@ -247,7 +248,7 @@ const search = () => {
         }
       }))
     }
-  })
+  })).result
 }
 
 declare global {

@@ -27,7 +27,7 @@ $icon-size: 1.25rem;
 
   &__entries {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     overscroll-behavior: contain;
     height: 80vh;
     padding: 0 1rem;

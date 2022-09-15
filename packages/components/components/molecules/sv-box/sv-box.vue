@@ -2,20 +2,22 @@
   <div
     v-if="visible"
     v-overlay="{
-      condition: overlay || isFloating,
+      condition: overlay || fixedLeft || isFloating,
       invisible: invisibleOverlay,
-      click: emit('overlayClick')
+      click: overlayClick
     }"
 
     :class="`
       box
       ${isFloating && 'box--floating'}
+      ${fixedLeft && 'box--fixed'}
   `">
     <!-- box content -->
     <div
       :class="`
         box__content
         ${isFloating && 'box__content--floating'}
+        ${fixedLeft && 'box__content--fixed-left'}
         ${transparent && 'box__content--transparent'}
         ${transparentMobile && 'box__content--transparent-mobile'}
       `"
@@ -73,6 +75,7 @@ type Props = {
   animate?: boolean
   title?: string
   float?: boolean
+  fixedLeft?: boolean
   floating?: boolean
   overlay?: boolean
   invisibleOverlay?: boolean
@@ -106,6 +109,14 @@ const isCollapsed = ref(props.collapsed)
 const close = () => {
   emit('update:visible', false)
   emit('close')
+}
+
+const overlayClick = () => {
+  if( props.fixedLeft ) {
+    close()
+  }
+
+  emit('overlayClick')
 }
 </script>
 

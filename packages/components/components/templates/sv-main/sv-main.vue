@@ -28,6 +28,9 @@ import { useRouter } from 'vue-router'
 import { useStore } from '../../../../web'
 import { SvModal, SvPrompt, SvToast } from '../../'
 
+import '../../../assets/main.css'
+import '../../../scss/main.scss'
+
 const metaStore = useStore('meta')
 const userStore = useStore('user')
 const router = useRouter()

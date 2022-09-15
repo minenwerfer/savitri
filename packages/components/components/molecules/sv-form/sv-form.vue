@@ -8,9 +8,9 @@
       <div
         v-for="([key, field], index) in fields"
         :key="`field-${index}`"
-        :class="`form__field ${fieldClass(field)}`"
         :style="fieldStyle(key, field)"
 
+        class="form__field"
         @input="$emit('input', key)"
       >
         <!-- text -->
@@ -19,6 +19,7 @@
           v-model="formData[key]"
           v-bind="{
             ...field,
+            name: key,
             readOnly: field.readOnly && !searchOnly
           }"
         >
@@ -122,8 +123,8 @@
           })
         }"
 
-        :class="fieldClass(field)"
-        :style="fieldStyle(field)"
+        :style="fieldStyle(key, field)"
+        class="form__field"
       >
         {{ field.label }}
       </sv-input>
@@ -266,14 +267,6 @@ const isSelectType = (type: string) => {
   ].includes(type)
 }
 
-const fieldClass = (field: any) => {
-  if( field.formStyle ) {
-    return field.formStyle
-  }
-
-  return ''
-}
-
 const fieldStyle = (key:string, field: any) => {
   const style = []
   const layout = props.layout?.[key] || props.layout?.$default
@@ -285,7 +278,7 @@ const fieldStyle = (key:string, field: any) => {
 
   if(
     isSelectType(field?.type)
-    || field.collection === 'file'
+    || field?.collection === 'file'
   ) {
     style.push('padding: .8rem 0;')
   }

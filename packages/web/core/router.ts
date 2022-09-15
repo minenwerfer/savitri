@@ -20,24 +20,9 @@ export type RouteMeta = {
 
 export type RouterExtension = Record<string, Record<string, Omit<Route, 'name'>>>
 
-export type Route = RouteMeta & RouteRecordRaw & {
-  children?: Array<Route>
+export type Route = RouteMeta & Omit<RouteRecordRaw, 'children'> & {
+  children?: Record<string, any>
   components?: any
-}
-
-/**
- * @function
- * Recursively labels routes.
- */
-const labelRoute = (target: Route, meta: any): Route => {
-  const route = Object.assign({}, target)
-  Object.assign(route, meta)
-
-  if( route.children && Array.isArray(route.children) ) {
-    route.children = route.children.map((child: Route) => labelRoute(child, meta))
-  }
-
-  return route
 }
 
 /**
@@ -45,8 +30,8 @@ const labelRoute = (target: Route, meta: any): Route => {
  */
 export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Route>) => {
   return [
-    ...publicRoutes.map((route: Route) => labelRoute(route, { isPrivate: false })),
-    ...privateRoutes.map((route: Route) => labelRoute(route, { isPrivate: true })),
+    ...publicRoutes,
+    ...privateRoutes
   ]
 }
 
@@ -54,7 +39,7 @@ export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Rout
  * @exports
  * The router instance.
  */
-export const routerInstance = (routes: Array<Route>) => {
+export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   const router = createRouter({
     history: createWebHistory(),
     routes
@@ -86,10 +71,11 @@ export const routerInstance = (routes: Array<Route>) => {
 }
 
 export const extendRouter = (router: any, routerExtension: RouterExtension) => {
-  const normalize = (routes: Record<string, Omit<Route, 'name'>>) => Object.entries(routes)
+  const normalize = (routes: Record<string, Omit<Route, 'name'>>): Array<any> => Object.entries(routes)
     .map(([routeName, route]) => ({
+      ...route,
       name: routeName,
-      ...route
+      children: route.children && normalize(route.children)
     }))
 
   Object.entries(routerExtension)

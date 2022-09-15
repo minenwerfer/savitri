@@ -27,7 +27,6 @@ export const preloadCollection = (collection: Omit<CollectionDescription, 'field
 
     const {
       collection: collectionName,
-      route,
       strict,
       ...aliasedCollection
 

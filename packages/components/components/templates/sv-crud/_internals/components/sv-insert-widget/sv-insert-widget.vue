@@ -1,9 +1,9 @@
 <template>
   <sv-box
     close-hint
+    fixed-left
     v-model:visible="isInsertVisible"
     :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
-    :float="true"
     :key="store.item._id"
   >
     <sv-form

@@ -1,7 +1,7 @@
 {
   "name": "@savitri/web",
   "public": true,
-  "version": "1.1.208",
+  "version": "1.1.211",
   "description": "## Project setup ``` npm install ```",
   "main": "main.ts",
   "scripts": {

@@ -25,7 +25,7 @@ const mode = process.argv[2];
     const config = makeConfig(buildConfig)
     const compiler = webpack(config)
 
-    if( ['prod', 'lib'].includes(mode) ) {
+    if( ['production', 'lib'].includes(mode) ) {
       compiler.run((err: any, stats: any) => console.log((err || stats).toString()))
       return
     }

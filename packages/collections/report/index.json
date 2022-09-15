@@ -4,14 +4,14 @@
   "unicon": "bag-alt",
   "presets": [
     "alwaysOwned",
-    "removeAll"
+    "deleteAll"
   ],
   "individualActions": {
     "download": {
       "name": "Baixar",
       "unicon": "cloud-download"
     },
-    "remove": {
+    "delete": {
       "name": "Remover",
       "unicon": "trash-alt",
       "ask": true
