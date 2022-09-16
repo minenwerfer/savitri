@@ -113,7 +113,7 @@ const getRoutes = ({ roles, children }: SchemaNode = {}): Array<Route> => {
 
       } = node
 
-      if( roles && !roles.includes(userStore.$currentUser.access?.role) ) {
+      if( roles && !roles.includes(userStore.$currentUser.role) ) {
         return
       }
 

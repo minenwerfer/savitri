@@ -11,6 +11,9 @@ export class MetaController extends Controller {
 
   public describeAll() {
     const descriptions = getDescriptions()
-    return descriptions
+    return {
+      descriptions,
+      roles: this.apiConfig.roles
+    }
   }
 }

@@ -2,16 +2,6 @@
   <component v-if="runonceSlot" :is="runonceSlot"></component>
 
   <div class="template">
-    <sv-icon
-      v-clickable
-      v-if="webpackVariables.feedback"
-      name="comment-dots"
-      class="template__feedback-button"
-      @click="isFeedbackVisible = true"
-    >
-      Feedback
-    </sv-icon>
-
     <sv-topbar v-if="!$route.meta?.notopbar">
       <component :is="topbarSlot" v-if="topbarSlot"></component>
       <sv-utilities></sv-utilities>
@@ -35,28 +25,17 @@
         </div>
       </div>
     </div>
-
-    <sv-feedback></sv-feedback>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, inject, ref } from 'vue'
+import { onMounted, inject, ref } from 'vue'
 import { useStore } from '@savitri/web'
 import { default as webpackVariables } from 'variables'
-
-import {
-  SvMenu,
-  SvTopbar,
-  SvIcon
-
-} from '../..'
+import { SvMenu, SvTopbar } from '../..'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
-import SvFeedback from './_internals/components/sv-feedback/sv-feedback.vue'
-
-import { isFeedbackVisible } from './_internals/store'
 
 const metaStore = useStore('meta')
 const menuSchema = inject('menuSchema', {})

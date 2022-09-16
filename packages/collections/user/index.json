@@ -37,11 +37,11 @@
   "filters": [
     "first_name",
     "last_name",
-    "access"
+    "role"
   ],
   "table": [
     "full_name",
-    "access",
+    "role",
     "picture",
     "active",
     "updated_at"
@@ -79,15 +79,11 @@
         "Não"
       ]
     },
-    "access": {
-      "label": "Preset de acesso",
+    "role": {
+      "label": "Papel",
       "type": "select",
-      "values": {
-        "__query": {
-          "collection": "accessProfile",
-          "index": "name"
-        }
-      }
+      "values": [],
+      "required": true
     },
     "email": {
       "label": "Email",
@@ -109,7 +105,10 @@
     "picture": {
       "collection": "file",
       "label": "Foto",
-      "index": "filename"
+      "index": [
+        "filename",
+        "mime"
+      ]
     },
     "group": {
       "label": "Grupo",

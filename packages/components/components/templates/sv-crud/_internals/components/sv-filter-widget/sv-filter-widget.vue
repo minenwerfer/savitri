@@ -10,8 +10,8 @@
         @clicked="isFilterVisible = true"
       >
         <sv-icon
+          reactive
           name="filter"
-          :reactive="true"
         ></sv-icon>
       </sv-bare-button>
       <sv-bare-button
@@ -19,8 +19,8 @@
         @clicked="store.clearFilters"
       >
         <sv-icon
+          reactive
           name="trash"
-          :reactive="true"
         ></sv-icon>
       </sv-bare-button>
     </div>
@@ -28,7 +28,7 @@
 
   <sv-box
     close-hint
-    fixed-left
+    fixed-right
     v-model:visible="isFilterVisible"
     title="Filtrar por"
     @close="isFilterVisible = false"

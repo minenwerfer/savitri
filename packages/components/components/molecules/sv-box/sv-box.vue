@@ -2,7 +2,7 @@
   <div
     v-if="visible"
     v-overlay="{
-      condition: overlay || fixedLeft || isFloating,
+      condition: overlay || fixedRight || isFloating,
       invisible: invisibleOverlay,
       click: overlayClick
     }"
@@ -10,14 +10,14 @@
     :class="`
       box
       ${isFloating && 'box--floating'}
-      ${fixedLeft && 'box--fixed'}
+      ${fixedRight && 'box--fixed'}
   `">
     <!-- box content -->
     <div
       :class="`
         box__content
         ${isFloating && 'box__content--floating'}
-        ${fixedLeft && 'box__content--fixed-left'}
+        ${fixedRight && 'box__content--fixed-right'}
         ${transparent && 'box__content--transparent'}
         ${transparentMobile && 'box__content--transparent-mobile'}
       `"
@@ -75,7 +75,7 @@ type Props = {
   animate?: boolean
   title?: string
   float?: boolean
-  fixedLeft?: boolean
+  fixedRight?: boolean
   floating?: boolean
   overlay?: boolean
   invisibleOverlay?: boolean
@@ -112,7 +112,7 @@ const close = () => {
 }
 
 const overlayClick = () => {
-  if( props.fixedLeft ) {
+  if( props.fixedRight ) {
     close()
   }
 

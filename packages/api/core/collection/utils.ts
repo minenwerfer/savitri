@@ -17,8 +17,8 @@ export const select = <T extends MongoDocument>(item: T, indexes: Array<string>)
 }
 
 export const depopulate = <T extends MongoDocument>(
-  description: Pick<CollectionDescription, 'fields'>,
-  _item: T
+  _item: T,
+  description: Pick<CollectionDescription, 'fields'>
 ) => {
   const { _id, ...item } = _item
 
@@ -107,8 +107,8 @@ export const project = <T extends MongoDocument>(
 }
 
 export const fill = <T extends MongoDocument>(
-  description: Pick<CollectionDescription, 'fields'>,
-  item: T & Record<string, any>
+  item: T & Record<string, any>,
+  description: Pick<CollectionDescription, 'fields'>
 ) => {
   if( !item ) {
     return {}
@@ -126,8 +126,8 @@ export const fill = <T extends MongoDocument>(
 }
 
 export const prepareInsert = (
-  description: Pick<CollectionDescription, 'fields' | 'form'>,
-  payload: any
+  payload: any,
+  description: Pick<CollectionDescription, 'fields' | 'form'>
 ) => {
   const {
     _id,

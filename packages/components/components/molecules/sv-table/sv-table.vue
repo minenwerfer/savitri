@@ -66,7 +66,14 @@
             {{ field.label }}
           </div>
 
-          <div v-if="field.type !== 'image'">
+          <div v-if="field.type === 'image'">
+            <img
+              :src="row[column].src"
+              v-if="row[column]?.src"
+            />
+          </div>
+
+          <div v-else>
             <div>
               <sv-picture
                 v-if="field.collection === 'file'" 
@@ -87,7 +94,7 @@
                 {{ row[column] || '-' }}
               </div>
             </div>
-            <div v-if="store && store.getIndexes({ key: column })?.length > 1">
+            <div v-if="store?.getIndexes({ key: column })?.length > 1 && field.collection !== 'file'">
               <div
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
@@ -95,13 +102,6 @@
                 {{ row[column]?.[subvalue] }}
               </div>
             </div>
-          </div>
-
-          <div v-else-if="field.type === 'image'">
-            <img
-              :src="row[column].src"
-              v-if="row[column]?.src"
-            />
           </div>
 
         </div>

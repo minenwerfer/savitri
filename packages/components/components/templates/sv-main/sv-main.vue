@@ -45,7 +45,7 @@ watch(() => metaStore.descriptions, descriptions => {
   Object.values(descriptions).forEach((description: any) => {
     const routeVisibility = description.route
     if( routeVisibility ) {
-      if( Array.isArray(routeVisibility) && !routeVisibility.includes(userStore.$currentUser.access?.role)  ) {
+      if( Array.isArray(routeVisibility) && !routeVisibility.includes(userStore.$currentUser.role)  ) {
         return
       }
 

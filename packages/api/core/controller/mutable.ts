@@ -96,7 +96,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     _response?: unknown
   ): Promise<any> {
     const { _id } = props.what
-    const what = prepareInsert(this.description, props.what)
+
+    const what = prepareInsert(props.what, this.description)
     const readyWhat = this.beforeWrite(what, decodedToken)
 
     if( !_id ) {
@@ -133,8 +134,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
         return item._doc||item
       },
       (item: T|null) => item && project(item, props?.project),
-      (item: T|null) => item && fill(this.description, item),
-      (item: T) => depopulate(this.description, item),
+      (item: T|null) => item && fill(item, this.description),
+      (item: T) => depopulate(item, this.description),
       (item: T) => depopulateChildren(item, 1)
     )
 
@@ -199,10 +200,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    const pipe = R.pipe(
      (item: T & { _doc?: T }) => item._doc || item,
      (item: T) => project(item, props.project),
-     (item: T) => depopulate(this.description, item),
+     (item: T) => depopulate(item, this.description),
      depopulateChildren,
      (item: T) => !props.project
-      ? fill(this.description, item)
+      ? fill(item, this.description)
       : item
    )
 

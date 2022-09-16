@@ -1,18 +1,9 @@
 import * as bcrypt from 'bcrypt'
-import * as R from 'ramda'
 
 import { TokenService } from '../../api/core/services/token'
 import { Mutable } from '../../api/core/controller'
 import { UserDocument, User } from './user.model'
-import { AccessProfileDocument, AccessProfile } from '../accessProfile/accessProfile.model'
 import { default as Description } from './index.json'
-
-const {
-  GODMODE_USERNAME,
-  GODMODE_PASSWORD
-
-} = process.env
-
 
 /**
  * @exports
@@ -36,9 +27,9 @@ export class UserController extends Mutable<UserDocument> {
     props.what.group = this.apiConfig.group
 
     // user is being inserted by a non-root user
-    if( decodedToken?.access?.role !== 'root' ) {
+    if( decodedToken?.user?.role !== 'root' ) {
       const userId = props.what._id = decodedToken.user?._id
-      delete props.what.access
+      delete props.what.role
 
       // a new user is being created
       if( !userId ) {
@@ -51,26 +42,7 @@ export class UserController extends Mutable<UserDocument> {
         props.what.self_registered = true
 
         if( this.apiConfig.signupDefaults ) {
-          const {
-            role,
-            ...signupDefaults
-          } = this.apiConfig.signupDefaults
-
-          // if there is a role, retrieve first access profile matching it
-          if( role ) {
-            const accessProfile = await AccessProfile.findOne({ role }, { _id: 1 })
-
-            if( !accessProfile ) {
-              throw new Error(
-                `${role} was set as a default role but no matching access profile was found`
-              )
-            }
-
-            props.what.access = accessProfile._id
-          }
-
-          // directly assign everything else
-          Object.assign(props.what, signupDefaults)
+          Object.assign(props.what, this.apiConfig.signupDefaults)
         }
       }
     }
@@ -116,11 +88,9 @@ export class UserController extends Mutable<UserDocument> {
         | 'last_name'
         | 'full_name'
         | 'email'
+        | 'role'
         | 'active'
         >
-      access: Omit<AccessProfileDocument, '_id'> & {
-        _id?: AccessProfileDocument['_id']
-      }|object
       extra: any
       token: string
   }> {
@@ -128,27 +98,15 @@ export class UserController extends Mutable<UserDocument> {
       throw new Error('Empty email or password')
     }
 
-    if( props.email === GODMODE_USERNAME && props.password === GODMODE_PASSWORD ) {
-      const access = {
-        name: 'Godmode',
-        role: 'root',
-        capabilities: {
-          user: [
-            'get',
-            'getAll',
-            'insert'
-          ],
-          accessProfile: [
-            'get',
-            'getAll',
-            'insert'
-          ]
-        }
-      }
-
+    if(
+      props.email === process.env.GODMODE_USERNAME
+        && props.password === process.env.GODMODE_PASSWORD
+    ) {
       const token = await TokenService.sign({
-        user: { _id: null },
-        access
+        user: {
+          _id: null,
+          role: 'root'
+        },
       }) as string
 
       return {
@@ -157,9 +115,9 @@ export class UserController extends Mutable<UserDocument> {
           last_name: 'Mode',
           full_name: 'God mode',
           email: '',
+          role: 'root',
           active: true,
         },
-        access,
         extra: {},
         token
       }
@@ -171,22 +129,20 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     const { password, ...leanUser } = user.toObject()
-    if( !user.active ) {
-      leanUser.access = {}
-    }
+    // do a better job, motherfucker
+    // if( !user.active ) {
+    //   leanUser.access = {}
+    // }
 
     const tokenContent = {
-      user: R.pick(['_id'], leanUser),
-      access: R.pick([
-        'role',
-        'capabilities'
-      ], leanUser.access),
+      user: {
+        _id: leanUser._id
+      },
       extra: {}
     }
 
     const response = {
       user: leanUser,
-      access: leanUser.access,
       extra: {},
     }
 

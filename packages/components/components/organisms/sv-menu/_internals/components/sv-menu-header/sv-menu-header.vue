@@ -10,7 +10,7 @@
 
     <div class="header__info">
       <div class="header__info-name">{{ userStore.$currentUser.first_name }}</div>
-      <div class="header__info-access">{{ userStore.$currentUser.access?.name }}</div>
+      <div class="header__info-access">{{ userStore.$currentUser.role }}</div>
     </div>
   </div>
 </template>

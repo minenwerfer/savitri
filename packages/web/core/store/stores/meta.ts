@@ -7,6 +7,8 @@ import useCollection from '../collection'
 import { useStore, hasStore, registerStore } from '../use'
 import { hydrateQuery } from '../helpers'
 
+import { Roles } from '../../../../api/types'
+
 type CollectionName = string
 type PromptAnswer = { name: string }
 
@@ -15,6 +17,7 @@ const { http } = useHttp()
 export default defineStore('meta', {
   state: () => ({
     descriptions: [],
+    roles: {},
 
     isLoading: false,
     globalIsLoading: false,
@@ -54,7 +57,9 @@ export default defineStore('meta', {
       this.isLoading = true
       const response = await http.get('_/meta/describeAll')
       const descriptions: Record<CollectionName, CollectionDescription> =
-        this.descriptions = response.data?.result
+        this.descriptions = response.data.result.descriptions
+
+      this.roles = response.data.result.roles
 
       // monkeypatchs '@savitri/web/stores' object
       for ( const [collectionName, description] of Object.entries(descriptions) ) {
@@ -151,6 +156,12 @@ export default defineStore('meta', {
           itr: new Date
         }
       })
+    }
+  },
+
+  getters: {
+    rolesNames(this: { roles: Roles }) {
+      return Object.keys(this.roles)
     }
   }
 })

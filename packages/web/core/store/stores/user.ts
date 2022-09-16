@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { UserDocument } from '../../../../collections/user/user.model'
-import type { AccessProfileDocument } from '../../../../collections/accessProfile/accessProfile.model'
 import useCollection from '../collection'
+import { normalizeFields, normalizeValues } from '../helpers'
 import useMetaStore from './meta'
 
 type Credentials = {
@@ -27,19 +27,15 @@ const collection = useCollection({
       try {
         return this.$customEffect(
           'authenticate', payload,
-          async ({ user, token, access }: {
+          async ({ user, token }: {
             user: UserDocument
-            access: AccessProfileDocument
             token: string
           }) => {
             this.credentials = {}
-            this.currentUser = {
-              ...user,
-              access
-            }
+            this.currentUser = { ...user }
 
             sessionStorage.setItem('auth:token', token)
-            sessionStorage.setItem('auth:currentUser', JSON.stringify({ ...user, access }))
+            sessionStorage.setItem('auth:currentUser', JSON.stringify(user))
 
             const metaStore = useMetaStore()
             await metaStore.describeAll()
@@ -57,6 +53,14 @@ const collection = useCollection({
     }
   },
   getters: {
+    fields() {
+      const fields = normalizeFields(this.description.fields!)
+      const metaStore = useMetaStore()
+      fields.role.values = normalizeValues(metaStore.rolesNames)
+
+      return fields
+    },
+
     $currentUser(): UserState['currentUser'] {
       if( !this.currentUser?._id ) {
         const currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')

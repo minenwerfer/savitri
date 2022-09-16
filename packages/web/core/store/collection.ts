@@ -26,6 +26,10 @@ export default (
       return () => R.mergeAll([l(), res])
     }
 
+    if( R.is(Function, r) ) {
+      return r
+    }
+
     return R.is(Object, l) && R.is(Object, r)
       ? R.concat(l, r)
       : r

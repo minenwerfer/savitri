@@ -64,10 +64,7 @@ export abstract class Controller {
             throw new Error('controller is undefined')
           }
 
-          if(
-            !target.props.publicMethods?.includes(key)
-            && ( !decodedToken?.access?.capabilities || !decodedToken.access.capabilities[controllerName]?.includes(key) )
-          ) {
+          if( !target.props.publicMethods?.includes(key) && target.isGranted(key)) {
             if( decodedToken?.access ) {
               throw new PermissionError('forbidden method (access denied)')
             }
@@ -124,5 +121,17 @@ export abstract class Controller {
 
     const { data: { result } } = await this.http.post(route, props)
     return result
+  }
+
+  public isGranted(method:string) {
+    const subject = this.injected.roles?.[this.props.controller!]
+    if( !subject ) {
+      return false
+    }
+
+    return (
+      subject.grantEverything
+      || subject.methods.includes(method)
+    )
   }
 }

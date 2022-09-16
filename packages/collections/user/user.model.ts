@@ -5,17 +5,14 @@ import { model, options } from '../../api/core/database'
 import { descriptionToSchema } from '../../api/core/collection'
 import { default as Description } from './index.json'
 
-import { AccessProfileDocument } from '../accessProfile/accessProfile.model'
-import '../accessProfile/accessProfile.model'
-
 export type User = {
   first_name: string
   last_name: string
   full_name: string
   email: string
   password?: string
-  active: boolean
-  access: AccessProfileDocument|object
+  active?: boolean
+  role: string
 }
 
 export type UserDocument = User & MongoDocument & {
