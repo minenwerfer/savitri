@@ -29,9 +29,9 @@ export const publicRoutes: Array<Route> = [
         meta: { title: 'Registro', hidden: true, }
       },
       {
-        path: 'signupExtra',
-        name: 'user-signupExtra',
-        component: () => import('./views/user/signupExtra/signupExtra.vue'),
+        path: 'signup-extra',
+        name: 'user-signup-extra',
+        component: () => import('./views/user/signup-extra/signup-extra.vue'),
         meta: { title: 'Registro', hidden: true, }
       }
     ]
@@ -68,22 +68,24 @@ export const privateRoutes: Array<Route> = [
         meta: { title: '%viewTitle%', hidden: true, }
       },
       {
-        path: 'access-edit',
-        name: 'dashboard-access-edit',
-        component: () => import('./views').then((m: any) => m.SvAccessProfile),
-        meta: { title: 'Editar preset de acesso', hidden: true }
-      },
-      {
-        path: 'user-profile',
-        name: 'dashboard-user-profile',
-        component: () => import('./views').then((m: any) => m.SvProfile),
-        meta: { title: 'Meu perfil', hidden: true }
-      },
-      {
-        path: 'user-changepass',
-        name: 'dashboard-user-changepass',
-        component: () => import('./views').then((m: any) => m.SvPasswordChange),
-        meta: { title: 'Mudar senha', hidden: true }
+        path: 'user',
+        name: 'dashboard-user2',
+        meta: { title: 'Usuário' },
+        redirect: { name: 'dashboard-user' },
+        children: [
+          {
+            path: 'user-profile',
+            name: 'dashboard-user-profile',
+            component: () => import('./views').then((m: any) => m.SvProfile),
+            meta: { title: 'Meu perfil', hidden: true }
+          },
+          {
+            path: 'user-changepass',
+            name: 'dashboard-user-changepass',
+            component: () => import('./views').then((m: any) => m.SvPasswordChange),
+            meta: { title: 'Mudar senha', hidden: true }
+          }
+        ]
       }
     ]
   }

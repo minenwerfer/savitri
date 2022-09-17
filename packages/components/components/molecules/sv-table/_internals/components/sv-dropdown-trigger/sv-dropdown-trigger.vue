@@ -2,9 +2,9 @@
   <div class="dropdown">
     <a class="dropdown__trigger" @click="dropdownVisible = id">
       <sv-icon
+        reactive
         name="setting"
         fill="gray"
-        :reactive="true"
         ></sv-icon>
     </a>
     <div class="dropdown__content" v-if="dropdownVisible === id">

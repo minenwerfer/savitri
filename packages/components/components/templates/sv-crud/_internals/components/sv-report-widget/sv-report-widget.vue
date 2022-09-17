@@ -1,30 +1,28 @@
 <template>
   <teleport to="body">
     <sv-box
-      float
       close-hint
+      fixed-right
       v-model:visible="isReportVisible" 
       title="Relatório"
       @close="onClose"
     >
-      <template #body>
-        <sv-form
-          v-if="!reportStore.item._id"
-          v-bind="{
-            collection: 'report',
-            form: reportStore.useFieldsExcept([
-              'owner',
-              'collection'
-            ]),
-            formData: reportStore.item
-          }"
-        ></sv-form>
+      <sv-form
+        v-if="!reportStore.item._id"
+        v-bind="{
+          collection: 'report',
+          form: reportStore.useFieldsExcept([
+            'owner',
+            'collection'
+          ]),
+          formData: reportStore.item
+        }"
+      ></sv-form>
 
-        <p v-else>
-          Seu relatório foi gerado e retornou {{ reportStore.item.entries_count }} registros.
-          Clique <a @click="download">aqui</a> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
-        </p>
-      </template>
+      <p v-else>
+        Seu relatório foi gerado e retornou {{ reportStore.item.entries_count }} registros.
+        Clique <a @click="download">aqui</a> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
+      </p>
       <template #footer>
         <sv-button v-if="!reportStore.item._id" @clicked="requestReport">Solicitar</sv-button>
         <sv-button v-else @clicked="download">Baixar</sv-button>

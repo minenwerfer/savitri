@@ -7,7 +7,12 @@
     <div v-if="$slots.description" class="input__description">
       <slot name="description"></slot>
     </div>
-    <div v-if="type !== 'textbox'" :class="`input__container input__container--${variant}`">
+    <div
+      v-if="type !== 'textbox'"
+      :class="`
+        input__container
+        input__container--${variant}`
+    ">
       <input
         v-maska="mask"
         ref="input"
@@ -35,7 +40,10 @@
       <sv-icon 
         v-if="icon"
         :name="icon"
-        :class="`input__icon input__icon--${variant}`"
+        :class="`
+          input__icon
+          input__icon--${variant}
+        `"
       ></sv-icon>
 
       <div
@@ -56,12 +64,15 @@
 
     <textarea
       v-else
-      :class="`input__textarea input__input--${variant}`"
       :placeholder="placeholder"
-
-      @input="$emit('update:modelValue', $event.target.value)"
       :readonly="readOnly"
 
+      :class="`
+        input__textarea
+        input__input--${variant}
+      `"
+
+      @input="$emit('update:modelValue', $event.target.value)"
     >{{ inputValue || value }}</textarea>
   </label>
 </template>
@@ -70,7 +81,7 @@
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
 import { useStore, copyToClipboard } from '@savitri/web'
-import { SvInfo, SvIcon } from '../../'
+import { SvInfo, SvIcon } from '../..'
 
 type Props = {
   modelValue?: string

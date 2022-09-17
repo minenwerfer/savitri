@@ -56,7 +56,7 @@ const collection = useCollection({
     fields() {
       const fields = normalizeFields(this.description.fields!)
       const metaStore = useMetaStore()
-      fields.role.values = normalizeValues(metaStore.rolesNames)
+      fields.role.values = normalizeValues(Object.keys(metaStore.roles))
 
       return fields
     },

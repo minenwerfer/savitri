@@ -6,6 +6,7 @@
     <div
       v-clickable
       class="shortcuts__options"
+      @click="shortcutsVisible = false"
     >
       <sv-icon
         name="house-user"
@@ -29,7 +30,7 @@
 import { useRouter } from 'vue-router'
 import { useStore } from '@savitri/web'
 import { SvBox, SvIcon } from '../../../../..'
-import { isShortcutsVisible } from '../../store'
+import { shortcutsVisible, isShortcutsVisible } from '../../store'
 
 const router = useRouter()
 const userStore = useStore('user')

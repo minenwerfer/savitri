@@ -9,6 +9,8 @@ $image-size: 20rem;
   &__image {
     width: $image-size;
     height: $image-size;
+    border-radius: 5px;
+    overflow: hidden;
   }
 
   &__name {

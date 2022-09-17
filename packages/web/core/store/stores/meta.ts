@@ -158,10 +158,4 @@ export default defineStore('meta', {
       })
     }
   },
-
-  getters: {
-    rolesNames(this: { roles: Roles }) {
-      return Object.keys(this.roles)
-    }
-  }
 })
