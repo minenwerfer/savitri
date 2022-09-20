@@ -62,10 +62,7 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
       /**
        * @remarks optimization
        */
-      if(
-        !userStore.$currentUser.access?.capabilities?.[query.collection]?.includes('getAll')
-          && !query.public
-      ) {
+      if( !userStore.$currentUser.role || !query.public ) {
         return {}
       }
 

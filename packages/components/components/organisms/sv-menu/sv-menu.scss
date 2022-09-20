@@ -12,11 +12,11 @@ $icon-size: 1.25rem;
   row-gap: 1rem;
   flex-shrink: 0;
 
-  z-index: 20;
-  overflow: hidden;
-
-  background: #fff;
   padding: 1rem 0;
+  z-index: 20;
+
+  overflow: hidden;
+  background: #fff;
   border-right: 1px solid #dedede;
 
   transition: width .35s;

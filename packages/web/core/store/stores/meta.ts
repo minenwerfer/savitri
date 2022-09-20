@@ -7,8 +7,6 @@ import useCollection from '../collection'
 import { useStore, hasStore, registerStore } from '../use'
 import { hydrateQuery } from '../helpers'
 
-import { Roles } from '../../../../api/types'
-
 type CollectionName = string
 type PromptAnswer = { name: string }
 

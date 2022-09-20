@@ -26,6 +26,10 @@ $picture-size: 3.6rem;
       padding: .6rem;
       line-height: 2.25rem;
 
+      &:not(:last-child) {
+        border-bottom: 1px solid #dedede;
+      }
+
       &:last-child {
         margin-bottom: 0;
       }
@@ -48,7 +52,8 @@ $picture-size: 3.6rem;
     display: hidden;
 
     &--border {
-      border: 1px solid #dedede;
+      // border: 1px solid #dedede;
+      // border-width: 1px 1px 1px 0;
     }
 
     &--checkbox {
@@ -71,13 +76,10 @@ $picture-size: 3.6rem;
     display: block;
     line-height: 1.3rem;
 
-    &--border {
-      border: 1px solid #dedede;
-    }
-
     @media screen and (min-width: 600px) {
       display: table-cell;
       padding: 0 $horizontal-padding;
+
       &--padded {
         padding: $horizontal-padding;
       }

@@ -44,7 +44,12 @@
       :class="`table__row table__row--body`"
       @click="$emit('itemClick', row)"
     >
-      <td v-if="store && checkbox">
+      <td
+        v-if="store && checkbox"
+        :class="`
+          table__cell
+          table__cell--padded
+      `">
         <input
           type="checkbox"
           v-model="selected"
@@ -57,7 +62,6 @@
         :class="`
           table__cell
           table__cell--padded
-          ${border && 'table__cell--border'}
       `">
 
         <div class="table__cell-grid">
@@ -106,7 +110,10 @@
 
         </div>
       </td>
-      <td v-if="actions?.length > 0">
+      <td
+        v-if="actions?.length > 0"
+        class="table__cell"
+      >
         <sv-dropdown-trigger :id="row._id">
           <teleport :to="`#dropdown-${row._id}`">
             <sv-dropdown-content v-bind="{
@@ -155,7 +162,7 @@ type Props = {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  border: false,
+  border: true,
   headers: true
 })
 
