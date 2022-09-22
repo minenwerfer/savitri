@@ -1,18 +1,11 @@
 <template>
   <sv-box
     float
-    close-hint
+    v-bind="props"
     @close="metaStore.modal.isVisible = false"
   >
-    <template #title>
-      <slot name="title"></slot>
-    </template>
-    <template #body>
-      <div class="whitespace-pre-wrap">
-        <slot name="body" v-if="$slots.body"></slot>
-        <slot v-else></slot>
-      </div>
-    </template>
+    <slot name="body" v-if="$slots.body"></slot>
+    <slot v-else></slot>
     <template #footer v-if="$slots.footer">
       <slot name="footer"></slot>
     </template>
@@ -25,4 +18,9 @@ import { useStore } from '@savitri/web'
 
 const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
 const metaStore = useStore('meta')
+
+const props = withDefaults(
+  defineProps<{ closeHint?: boolean }>(),
+  { closeHint: true }
+)
 </script>

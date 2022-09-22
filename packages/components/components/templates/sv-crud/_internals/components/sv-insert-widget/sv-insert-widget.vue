@@ -7,7 +7,6 @@
     :key="store.item._id"
   >
     <sv-form
-      :key="store.item._id"
       v-bind="{
         collection: metaStore.view.collection,
         form: store.fields,

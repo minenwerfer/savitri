@@ -1,4 +1,4 @@
-$slider-radius: 1.4rem;
+$slider-radius: 1.2rem;
 
 .switch-wrapper {
   display: flex;
@@ -19,7 +19,7 @@ $slider-radius: 1.4rem;
   background: #ddd;
   transition: background .4s;
 
-  width: 3.8rem;
+  width: 3.4rem;
 
   &--active {
     background: blue;

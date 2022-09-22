@@ -6,8 +6,10 @@
   <div class="main">
     <router-view></router-view>
 
-    <sv-modal v-model:visible="metaStore.modal.isVisible">
-      <template #title>{{ metaStore.modal.title }}</template>
+    <sv-modal
+      v-model:visible="metaStore.modal.isVisible"
+      v-bind="metaStore.modal"
+    >
       <div>
           <p v-if="metaStore.modal.body" v-html="metaStore.modal.body"></p>
           <img v-if="metaStore.modal.image" :src="metaStore.modal.image" />
@@ -15,9 +17,11 @@
       </div>
     </sv-modal>
 
-    <sv-prompt :actions="metaStore.prompt.actions" v-if="metaStore.prompt.isVisible">
-      <template #title>{{ metaStore.prompt.title }}</template>
-      <template #body>{{ metaStore.prompt.body }}</template>
+    <sv-prompt
+      v-if="metaStore.prompt.isVisible"
+      v-bind="metaStore.prompt"
+    >
+      {{ metaStore.prompt.body }}
     </sv-prompt>
   </div>
 </template>

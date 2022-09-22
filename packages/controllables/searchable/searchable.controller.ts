@@ -12,7 +12,7 @@ export class SearchableController extends Controller {
   }
 
   public async search(props: { query: Array<string> }, decodedToken: any) {
-    if( !decodedToken?.access?.capabilities ) {
+    if( !decodedToken?.user?.role ) {
       throw new AuthorizationError('signed out')
     }
 
@@ -21,10 +21,9 @@ export class SearchableController extends Controller {
       throw new Error('no query provided')
     }
 
-    const { capabilities } = decodedToken.access
     const searchables = Object.entries(getSearchables())
       .reduce((a: any, [key, value]: [string, any]) => {
-        if( !capabilities[key].includes('getAll') ) {
+        if( !this.isGranted('getAll', key) ) {
           return a
         }
 

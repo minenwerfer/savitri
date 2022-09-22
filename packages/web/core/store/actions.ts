@@ -252,7 +252,6 @@ export default {
   }) {
     const metaStore = useMetaStore()
     const answer = await metaStore.spawnPrompt({
-      title: props.title || 'Diálogo de confirmação',
       body: props.body || 'A ação que você está prestes a fazer é irreversível. Tem certeza de que deseja prosseguir?',
       actions: [
         { name: 'cancel', title: 'Cancelar' },

@@ -29,7 +29,7 @@
 import { computed } from 'vue'
 
 type Props = {
-  modelValue: boolean
+  modelValue?: boolean
   values?: Array<string>
   readOnly?: boolean
 }

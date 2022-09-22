@@ -28,6 +28,7 @@ export class UserController extends Mutable<UserDocument> {
 
     // user is being inserted by a non-root user
     if( decodedToken?.user?.role !== 'root' ) {
+      console.log(decodedToken)
       const userId = props.what._id = decodedToken.user?._id
       delete props.what.role
 
@@ -47,11 +48,11 @@ export class UserController extends Mutable<UserDocument> {
       }
     }
 
-    if( !decodedToken?.user && !props.what.password ) {
-      throw new Error(
-        `password is required`
-      )
-    }
+    // if( !decodedToken?.user && !props.what.password ) {
+    //   throw new Error(
+    //     `password is required`
+    //   )
+    // }
 
     if( props.what.password ) {
       props.what.password = await bcrypt.hash(props.what.password, 10)
@@ -136,7 +137,8 @@ export class UserController extends Mutable<UserDocument> {
 
     const tokenContent = {
       user: {
-        _id: leanUser._id
+        _id: leanUser._id,
+        role: leanUser.role
       },
       extra: {}
     }

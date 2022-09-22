@@ -123,8 +123,10 @@ export abstract class Controller {
     return result
   }
 
-  public isGranted(method:string) {
-    const subject = this.injected.roles?.[this.props.controller!]
+  public isGranted(method:string, controller?: string) {
+    const controllerName = controller || this.props.controller!
+    const subject = this.injected.roles?.[controllerName]
+
     if( !subject ) {
       return false
     }

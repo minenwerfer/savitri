@@ -106,7 +106,8 @@ export default defineStore('meta', {
       localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
     },
 
-    spawnPrompt(props: Omit<typeof this['prompt'], 'isVisible' | 'actions'> & {
+    spawnPrompt(props: Omit<typeof this['prompt'], 'isVisible' | 'actions' | 'title'> & {
+      title?: string
       actions: Array<{
         name: string
         title: string

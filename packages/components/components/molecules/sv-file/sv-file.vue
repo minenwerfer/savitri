@@ -1,6 +1,6 @@
 <template>
   <div class="file">
-    <div>
+    <div v-if="preview || modelValue?._id">
       <sv-picture
         v-if="isImage"
         :file="previewFile"
@@ -30,6 +30,14 @@
         </sv-button>
         <sv-button @clicked="clearPreview">
           Limpar
+        </sv-button>
+      </div>
+      <div
+        v-else-if="modelValue?._id"
+        class="file__buttons"
+      >
+        <sv-button @clicked="remove">
+          Remover
         </sv-button>
       </div>
     </div>
@@ -100,6 +108,16 @@ const insert = async () => {
 
   clearPreview()
   emit('update:modelValue', result)
+}
+
+const remove = async () => {
+  await fileStore.delete({
+    filters: {
+      _id: props.modelValue._id
+    }
+  })
+
+  emit('update:modelValue', {})
 }
 
 const download = (filename: string) => {

@@ -1,12 +1,7 @@
 <template>
-  <sv-modal>
-    <template #title>
-      <slot name="title"></slot>
-    </template>
-
-    <template #body>
-      <slot name="body"></slot>
-    </template>
+  <sv-modal :close-hint="false" :title="title">
+    <slot v-if="$slots.body" name="body"></slot>
+    <slot v-else></slot>
 
     <template #footer>
       <sv-button

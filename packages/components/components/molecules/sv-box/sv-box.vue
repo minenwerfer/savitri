@@ -51,13 +51,27 @@
       </div>
 
       <!-- box body -->
-      <div v-if="!isCollapsed" :class="`box__body ${fill || 'box__body--padded'}`">
+      <div
+        v-if="!isCollapsed"
+        :class="`
+          box__body
+          ${fill || 'box__body--padded'}
+      `"
+        ref="body"
+        @scroll="updateScroll"
+      >
         <slot v-if="$slots.default"></slot>
         <slot v-else name="body"></slot>
       </div>
 
       <!-- box footer -->
-      <div v-if="$slots.footer" class="box__footer">
+      <div
+        v-if="$slots.footer"
+        :class="`
+          box__footer
+          ${reachedEnd || 'box__footer--shadowed'}
+        `"
+      >
         <slot name="footer"></slot>
       </div>
     </div>
@@ -65,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { watch, computed, ref } from 'vue'
 import { SvIcon } from '../../'
 
 // #region props
@@ -105,6 +119,23 @@ const emit = defineEmits<{
 
 const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
+
+const body = ref(null)
+const reachedEnd = ref(true)
+
+const updateScroll = () => {
+  const { value: bodyElem } = body
+  reachedEnd.value = bodyElem
+    ? bodyElem.scrollTop + bodyElem.offsetHeight >= bodyElem.scrollHeight
+    : true
+}
+
+watch(() => body.value, (bodyElem) => {
+  if( bodyElem ) {
+    const ob = new ResizeObserver(updateScroll)
+    ob.observe(bodyElem)
+  }
+})
 
 const close = () => {
   emit('update:visible', false)

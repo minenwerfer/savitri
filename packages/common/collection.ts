@@ -84,7 +84,7 @@ export const formatValue = (
       case field?.type === 'datetime':
         return (String(firstValue) as any).formatDateTime(field?.includeHours)
 
-      case field?.type === 'boolean': return firstValue ? 'sim' : 'não'
+      case field?.type === 'boolean': return firstValue ? 'true' : 'false'
       case [undefined, null].includes(firstValue): return '-'
       default: return firstValue
     }

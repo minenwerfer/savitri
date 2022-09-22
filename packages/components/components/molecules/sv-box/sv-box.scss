@@ -32,6 +32,16 @@ $section-padding: .8rem;
     border-radius: 5px;
     background: #fff;
 
+    overflow: hidden;
+
+    &--floating, &--fixed-right {
+      .box__header,
+      .box__body,
+      .box__footer {
+        padding: 1.8rem 2.4rem;
+      }
+    }
+
     &--floating {
       position: absolute;
       top: 50%;
@@ -53,7 +63,7 @@ $section-padding: .8rem;
       right: 0;
       top: 0;
       z-index: 50;
-      width: 38rem;
+      width: 40rem;
       height: 100vh;
 
       animation: fixed-fadein .35s forwards;
@@ -99,6 +109,7 @@ $section-padding: .8rem;
   &__body {
     // max-height: 90vh;
     overflow-y: auto;
+    overscroll-behavior: contain;
 
     &--padded {
       padding: $section-padding;
@@ -110,5 +121,13 @@ $section-padding: .8rem;
     gap: .4rem;
     padding: $section-padding;
     margin-top: auto;
+
+    border-top: 1px solid #dedede;
+    transition: box-shadow .3s;
+
+    &--shadowed {
+      box-shadow: 0 -10px 80px #ccc;
+      z-index: 10;
+    }
   }
 }

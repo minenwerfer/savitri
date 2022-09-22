@@ -77,6 +77,14 @@
             />
           </div>
 
+          <div v-else-if="field.type === 'boolean'">
+            <sv-switch
+              v-bind="field"
+              v-model="row[column]"
+              @update:model-value="toggle($event, row._id, column)"
+            ></sv-switch>
+          </div>
+
           <div v-else>
             <div>
               <sv-picture
@@ -143,8 +151,9 @@ import { useStore, useFile } from '@savitri/web'
 
 import {
   SvBareButton,
+  SvIcon,
   SvPicture,
-  SvIcon
+  SvSwitch
 
 } from '../..'
 
@@ -176,12 +185,23 @@ const selected = computed({
   set: (items: Array<any>) => store.selectMany({ items, value: true })
 })
 
-const rowCtx = {
-  date: (() => {
-    const date = new Date()
-    date.setHours(0, 0, 0, 0)
-    return date
-  })()
+//const rowCtx = {
+//  date: (() => {
+//    const date = new Date()
+//    date.setHours(0, 0, 0, 0)
+//    return date
+//  })()
+//}
+
+const toggle = (value, rowId, key) => {
+  if( store ) {
+    store.insert({
+      what: {
+        _id: rowId,
+        [key]: value
+      }
+    })
+  }
 }
 </script>
 

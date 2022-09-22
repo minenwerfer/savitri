@@ -13,6 +13,15 @@
         class="form__field"
         @input="$emit('input', key)"
       >
+        <label>
+          <strong>
+            {{ field.translate ? $t(field.label) : field.label }}
+          </strong>
+          <div>
+            {{ field.description }}
+          </div>
+        </label>
+
         <!-- text -->
         <sv-input
           v-if="isTextType(field.type)"
@@ -22,20 +31,10 @@
             name: key,
             readOnly: field.readOnly && !searchOnly
           }"
-        >
-          <template #label>{{ field.label }}</template>
-          <template #description v-if="field.description">{{ field.description }}</template>
-        </sv-input>
+        ></sv-input>
 
         <!-- checkbox, radio, boolean, select -->
         <div v-else-if="isSelectType(field.type)">
-          <strong>
-            {{ field.translate ? $t(field.label) : field.label }}
-          </strong>
-          <div>
-            {{ field.description }}
-          </div>
-
           <div v-if="field.type !== 'select'">
             <sv-options
               v-if="['checkbox', 'radio'].includes(field.type)"
@@ -71,10 +70,10 @@
           </sv-select>
         </div>
 
-        <div v-if="field.collection === 'file'">
-          <strong>{{ field.label }}</strong>
-          <sv-file v-model="formData[key]"></sv-file>
-        </div>
+        <sv-file
+          v-if="field.collection === 'file'"
+          v-model="formData[key]"
+        ></sv-file>
 
         <div v-if="store?.validationErrors[key]" class="form__validation-error">
           <span>{{ $t(`validation_error.${store.validationErrors[key].type}`) }}</span>
@@ -280,7 +279,7 @@ const fieldStyle = (key:string, field: any) => {
     isSelectType(field?.type)
     || field?.collection === 'file'
   ) {
-    style.push('padding: .8rem 0;')
+    style.push('padding-bottom: .6rem;')
   }
 
   if( !layout ) {

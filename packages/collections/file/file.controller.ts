@@ -65,7 +65,7 @@ export class FileController extends Mutable<FileDocument> {
       return await super.delete.call(this, props)
     }
 
-    return Promise.resolve()
+    return true
   }
 
   public async download(_id: string): Promise<Omit<FileDocument, 'content'> & { content: Buffer }> {

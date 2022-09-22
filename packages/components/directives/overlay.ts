@@ -31,8 +31,7 @@ export default {
       height: 100vh;
 
       ${!binding.modifiers?.invisible && `
-        background: #555;
-        opacity: .6;
+        background: rgba(65, 82, 105, .25);
       `}
     `)
 
