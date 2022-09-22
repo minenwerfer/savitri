@@ -94,16 +94,14 @@ $section-padding: .8rem;
     padding: 0 $section-padding;
     height: 3rem;
     background: #ddd;
+
+    :deep(svg) {
+      width: 1.2rem;
+    }
   }
 
   &__header-title {
     flex: 1;
-  }
-
-  &__header-icons {
-    :deep(svg) {
-      width: 1.2rem;
-    }
   }
 
   &__body {
@@ -126,7 +124,7 @@ $section-padding: .8rem;
     transition: box-shadow .3s;
 
     &--shadowed {
-      box-shadow: 0 -10px 80px #ccc;
+      box-shadow: 0 -4px 20px #ccc;
       z-index: 10;
     }
   }

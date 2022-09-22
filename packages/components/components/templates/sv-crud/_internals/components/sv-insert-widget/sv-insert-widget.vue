@@ -1,6 +1,5 @@
 <template>
   <sv-box
-    close-hint
     fixed-right
     v-model:visible="isInsertVisible"
     :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
@@ -17,6 +16,13 @@
 
       @add="$e.preventDefault()"
     ></sv-form>
+    <template #extra>
+      <sv-icon
+        v-clickable
+        reactive
+        name="ellipsis-h"
+      ></sv-icon>
+    </template>
     <template #footer>
       <sv-button
         :disabled="store.isLoading || isInsertReadonly"
@@ -37,7 +43,14 @@
 
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
-import { SvBox, SvForm, SvButton } from '@savitri/components'
+import {
+  SvBox,
+  SvForm,
+  SvButton,
+  SvIcon
+  
+} from '@savitri/components'
+
 import { isInsertVisible, isInsertReadonly } from '../../store'
 
 const metaStore = useStore('meta')

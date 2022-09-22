@@ -29,25 +29,23 @@
           <slot v-if="$slots.title" name="title"></slot>
           <div v-else-if="title">{{ title }}</div>
         </div>
-        <div
-          v-if="closeHint || collapsable"
-          class="box__header-icons"
-        >
-          <sv-icon
-            v-clickable
-            v-if="collapsable"
-            reactive
-            :name="!isCollapsed ? 'minus' : 'plus'"
-            @click="isCollapsed = !isCollapsed"
-          />
-          <sv-icon
-            v-clickable
-            v-else-if="closeHint"
-            reactive
-            name="multiply"
-            @click="close"
-          />
-        </div>
+
+        <slot v-if="$slots.extra" name="extra"></slot>
+
+        <sv-icon
+          v-clickable
+          v-if="collapsable"
+          reactive
+          :name="!isCollapsed ? 'minus' : 'plus'"
+          @click="isCollapsed = !isCollapsed"
+        />
+        <sv-icon
+          v-clickable
+          v-else-if="closeHint"
+          reactive
+          name="multiply"
+          @click="close"
+        />
       </div>
 
       <!-- box body -->
