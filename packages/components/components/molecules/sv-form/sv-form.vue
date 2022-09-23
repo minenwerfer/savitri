@@ -17,9 +17,10 @@
           <strong>
             {{ field.translate ? $t(field.label) : field.label }}
           </strong>
-          <div>
-            {{ field.description }}
-          </div>
+          <div
+            v-if="field.description"
+            v-html="field.description"
+          ></div>
         </label>
 
         <!-- text -->
