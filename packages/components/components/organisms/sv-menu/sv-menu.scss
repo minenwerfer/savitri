@@ -4,7 +4,7 @@ $icon-size: 1.25rem;
   position: sticky;
   top: 3.2rem;
   left: 0;
-  width: 16rem;
+  width: var(--menu-width);
   height: calc(100vh - 3.2rem);
 
   display: flex;
@@ -17,7 +17,7 @@ $icon-size: 1.25rem;
 
   overflow: hidden;
   background: #fff;
-  border-right: 1px solid #dedede;
+  border-right: 1px solid var(--default-border-color);
 
   transition: width .35s;
 
@@ -38,7 +38,7 @@ $icon-size: 1.25rem;
   }
 
   &__entry-name {
-    font-size: 8.5pt;
+    font-size: .8rem;
     font-weight: bold;
     text-transform: uppercase;
   }
@@ -48,24 +48,25 @@ $icon-size: 1.25rem;
     column-gap: .6rem;
     width: 100%;
     align-items: center;
+    line-height: 100%;
+
     padding: .3rem .5rem;
-    font-size: .98rem;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     border-radius: 5px;
     white-space: nowrap;
 
     &:hover {
-      background: #6060ee;
+      background: #dedede;
     }
 
     :deep(svg) {
       width: $icon-size;
-      fill: #63b3ed;
+      fill: #000;
     }
 
     &--current {
-      border-color: #2060fe;
-      background: #2060fa;
+      border-color: #000;
+      // background: #2060fa;
     }
   }
 

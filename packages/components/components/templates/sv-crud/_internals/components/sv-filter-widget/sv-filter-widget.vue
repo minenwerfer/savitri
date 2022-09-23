@@ -1,12 +1,14 @@
 <template>
-  <div class="filter">
+  <div
+    v-if="Object.keys(store.availableFilters).length > 0"
+    class="filter"
+  >
     <div class="filter__count">
       <div>Filtros</div>
       <div>({{ store.filtersCount }})</div>
     </div>
     <div class="filter__icons">
       <sv-bare-button
-        :disabled="Object.keys(store.availableFilters).length === 0"
         @clicked="isFilterVisible = true"
       >
         <sv-icon

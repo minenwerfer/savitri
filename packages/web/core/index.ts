@@ -1,7 +1,8 @@
 import '../../common/polyfill'
 
 import { createApp } from 'vue'
-import Unicon from 'vue-unicons'
+import VueLazyLoad from 'vue3-lazyload'
+import VueUnicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
 import type { Router } from 'vue-router'
 export * from 'vue'
@@ -81,8 +82,9 @@ export const useApp = (config: AppOptions): Promise<{
   app.provide('baseVersion', require('../package.json').version)
   // app.provide('productVersion', require(`./package.json`).version)
 
-  Unicon.add([ ...Object.values(Icons) ] as Array<string>)
-  app.use(Unicon as any)
+  VueUnicon.add([ ...Object.values(Icons) ] as Array<string>)
+  app.use(VueUnicon as any)
+  app.use(VueLazyLoad)
 
   app.mixin({
     provide: {

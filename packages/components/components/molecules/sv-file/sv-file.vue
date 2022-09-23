@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { provide, ref, computed } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvPicture, SvButton } from '../..'
 
@@ -60,6 +60,7 @@ const emit = defineEmits<{
 }>()
 
 const fileStore = useStore('file')
+provide('buttonSize', 'small')
 
 const preview = ref(null)
 const previewFile = computed(() =>

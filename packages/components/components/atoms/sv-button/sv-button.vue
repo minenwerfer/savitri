@@ -3,7 +3,7 @@
     :class="`
       button
       button--${variant}
-      button--${type}
+      button--${size}
     `"
     :disabled="disabled"
   >
@@ -30,18 +30,18 @@ import {
 } from '..'
 
 // #region props
-type Type = 
-  'neutral'
-  | 'success'
-  | 'critical'
+type Size = 
+  'small'
+  | 'medium'
+  | 'large'
 
 type Variant =
   'normal'
   | 'light'
-  | 'big'
+  | 'transparent'
 
 type Props = {
-  type?: Type
+  size?: Size
   variant?: Variant
   icon?: string
   disabled?: boolean
@@ -51,7 +51,7 @@ type Props = {
 const props = defineProps<Props>()
 
 const variant = inject('buttonVariant', props.variant) || 'normal'
-const type = props.type || 'success'
+const size = inject('buttonSize', props.size) || 'medium'
 </script>
 
 <style scoped src="./sv-button.scss"></style>

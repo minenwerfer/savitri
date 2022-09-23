@@ -1,18 +1,16 @@
-$border-color: #ccc;
-
 .options {
   display: grid;
 
-  border: 1px solid $border-color;
+  border: 1px solid var(--default-border-color);
   border-width: 1px 1px 1px 0;
   border-radius: 5px;
 
   &__checkbox {
     padding: .8rem;
-    border-left: 1px solid $border-color;
+    border-left: 1px solid var(--default-border-color);
 
     &:not(:last-child) {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid var(--default-border-color);
     }
   }
 }

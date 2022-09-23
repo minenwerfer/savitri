@@ -2,15 +2,16 @@
   <sv-box
     fixed-right
     v-model:visible="isInsertVisible"
-    :title="`${isInsertReadonly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
+    :title="`${isInsertReadOnly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
     :key="store.item._id"
+    @overlay-click="cancel"
   >
     <sv-form
       v-bind="{
         collection: metaStore.view.collection,
         form: store.fields,
         formData: store.item,
-        isReadonly: isInsertReadonly,
+        isReadOnly: isInsertReadOnly,
         layout: store.formLayout
       }"
 
@@ -19,23 +20,24 @@
     <template #extra>
       <sv-icon
         v-clickable
+        v-if="store.item._id"
         reactive
         name="ellipsis-h"
       ></sv-icon>
     </template>
     <template #footer>
       <sv-button
-        :disabled="store.isLoading || isInsertReadonly"
+        variant="transparent"
+        size="small"
+        @clicked="cancel"
+      >
+        Cancelar
+      </sv-button>
+      <sv-button
+        :disabled="store.isLoading || isInsertReadOnly"
         @clicked="insert"
       >
         Salvar
-      </sv-button>
-      <sv-button
-        v-if="store.item._id && store.description.methods?.includes('insert')"
-        variant="light"
-        @clicked="isInsertReadonly = !isInsertReadonly"
-      >
-        {{ isInsertReadonly ? 'Modificar' : 'Examinar' }}
       </sv-button>
     </template>
   </sv-box>
@@ -51,7 +53,7 @@ import {
   
 } from '@savitri/components'
 
-import { isInsertVisible, isInsertReadonly } from '../../store'
+import { isInsertVisible, isInsertReadOnly } from '../../store'
 
 const metaStore = useStore('meta')
 const store = useStore(metaStore.view.collection)
@@ -62,5 +64,15 @@ const insert = async () => {
   })
 
   isInsertVisible.value = false
+}
+
+const cancel = () => {
+  store.ask({
+    action: () => {
+      store.clearItem()
+      isInsertVisible.value = false
+    },
+    body: 'Deseja mesmo fechar o painel sem salvar as suas alterações?'
+  })
 }
 </script>

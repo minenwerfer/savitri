@@ -254,8 +254,16 @@ export default {
     const answer = await metaStore.spawnPrompt({
       body: props.body || 'A ação que você está prestes a fazer é irreversível. Tem certeza de que deseja prosseguir?',
       actions: [
-        { name: 'cancel', title: 'Cancelar' },
-        { name: 'confirm', title: 'Confirmar', type: 'critical' },
+        {
+          name: 'cancel',
+          title: 'Cancelar',
+          variant: 'transparent',
+          size: 'small'
+        },
+        {
+          name: 'confirm',
+          title: 'Confirmar'
+        },
       ]
     })
 

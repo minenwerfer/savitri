@@ -30,7 +30,7 @@
           input__input
           input__input--${variant}
           ${icon && 'input__input--icon'}
-          ${readOnly && 'input__input--readonly'}
+          ${readOnly && 'input__input--readOnly'}
         `"
 
         @maska="onInput($event, true)"

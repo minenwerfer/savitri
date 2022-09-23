@@ -1,1 +1,14 @@
-$default-border-color: #dedede;
+:root {
+  --body-color: #f8f9fa;
+  --menu-width: 18rem;
+  --default-border-color: #dedede;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:visited {
+  color: #000;
+
+}

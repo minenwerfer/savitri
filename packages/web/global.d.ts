@@ -18,6 +18,10 @@ declare module 'variables' {
 declare module 'vue-unicons/dist/icons' {
 }
 
+declare module '@savitri/components' {
+  const routes: any
+}
+
 // web core
 declare var ROUTER: any
 declare var I18N: any

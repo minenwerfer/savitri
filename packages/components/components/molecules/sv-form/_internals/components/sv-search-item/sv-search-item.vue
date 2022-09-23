@@ -4,7 +4,6 @@
       <div
         v-for="(index, idx) in indexes"
         :key="`index-${item._id}-${idx}`"
-        class="item__value"
       >
         {{ item[index] }}
       </div>

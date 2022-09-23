@@ -1,5 +1,6 @@
 .icon {
   display: flex;
+  line-height: 100%;
   fill: black;
 
   :deep(svg) {
@@ -23,5 +24,15 @@
   &--centered {
     align-items: center;
     column-gap: .4rem;
+  }
+
+  &__icon {
+    &--small {
+      width: 16px;
+    }
+
+    &--medium {
+      width: 25px;
+    }
   }
 }

@@ -1,33 +1,10 @@
-$success-foreground-color: green;
-$neutral-foreground-color: blue;
-$critical-foreground-color: red;
-
-@mixin normal-style($color) {
-  background: $color;
-  border: 1px solid $color;
-}
-
-@mixin light-style($color) {
-  color: $color;
-  border: 1px solid $color;
-  :deep(svg) {
-    fill: $color;
-  }
-}
-
 .button {
-  transition: all;
+  transition: all .2s;
   padding: .35em 1em;
   text-align: center;
   border-radius: 4px;
   outline: none;
   
-  &:hover {
-    :deep(.button__icon) {
-      fill: white;
-    }
-  }
-
   &__icon {
     :deep(svg) {
       width: 1.2em !important;
@@ -36,6 +13,8 @@ $critical-foreground-color: red;
 
   &--normal {
     color: white;
+    background: #000;
+
     font-size: .9rem;
     font-weight: bold;
     :deep(svg) {
@@ -44,26 +23,43 @@ $critical-foreground-color: red;
   }
 
   &--light {
-    background: transparent !important;
+    background: #fff;
+    border: 2px solid #000;
+
+    &:hover {
+      background: #ddd;
+    }
   }
 
-  &--big {
-    border: 1px solid red;
-    padding: 1.2rem 1.4rem;
+  &--transparent {
+    background: transparent;
 
-    font-size: 1.05rem;
-    color: #fff;
+    &:hover {
+      background: #ddd;
+    }
   }
 
-  &--neutral {
-    @include normal-style($color: $neutral-foreground-color);
+  &--small {
+    padding: .4rem 1.4rem;
   }
 
-  &--success {
-    @include normal-style($color: $success-foreground-color);
+  &--medium {
+    padding: .6rem 2.2rem;
   }
+
+  &--large {
+    padding: 1.2rem 2.6rem;
+  }
+
+  // &--neutral {
+  //   @include normal-style($color: $neutral-foreground-color);
+  // }
+
+  // &--success {
+  //   @include normal-style($color: $success-foreground-color);
+  // }
   
-  &--critical {
-    @include normal-style($color: $critical-foreground-color);
-  }
+  // &--critical {
+  //   @include normal-style($color: $critical-foreground-color);
+  // }
 }

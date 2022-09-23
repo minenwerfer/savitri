@@ -4,7 +4,12 @@
     ${reactive && 'icon--reactive'}
     ${$slots.default && 'icon--centered'}
   `">
-    <unicon v-bind="props"></unicon>
+    <div :class="`
+      icon__icon
+      icon__icon--${size}
+    `">
+      <unicon v-bind="props"></unicon>
+    </div>
     <slot v-if="$slots.default"></slot>
   </a>
 </template>
@@ -12,9 +17,14 @@
 <script setup lang="ts">
 import { inject } from 'vue'
 
+type Size =
+  'small'
+  | 'medium'
+
 type Props = {
   name: string
   fill?: string
+  size?: Size
   reactive?: boolean
 }
 
@@ -22,6 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
   reactive: false
 })
 
+const size = inject('iconSize', props.size) || 'medium'
 const reactive = inject('iconReactive', props.reactive)
 </script>
 

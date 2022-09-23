@@ -1,8 +1,4 @@
 <template>
-  <sv-toast v-if="metaStore.toast.isVisible" :key="metaStore.toast.itr">
-    {{ metaStore.toast.text }}
-  </sv-toast>
-
   <div class="main">
     <router-view></router-view>
 
@@ -24,6 +20,23 @@
       {{ metaStore.prompt.body }}
     </sv-prompt>
   </div>
+
+  <transition-group
+    name="pop"
+    tag="div"
+    class="main__toasts"
+  >
+    <sv-toast
+      v-for="toast in metaStore.toasts"
+      v-html="
+        Array.isArray(toast.text)
+          ? $t(...toast.text)
+          : toast.text
+      "
+      :key="`toast-${toast.itr}`"
+      :itr="toast.itr"
+    ></sv-toast>
+  </transition-group>
 </template>
 
 <script setup lang="ts">

@@ -18,8 +18,6 @@ import {
 
 import { Controller } from './controller'
 
-export const { PAGINATION_LIMIT } = process.env
-
 export abstract class Mutable<T extends MongoDocument> extends Controller {
   declare protected readonly description: CollectionDescription
   protected _queryPreset: {
@@ -97,8 +95,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
   ): Promise<any> {
     const { _id } = props.what
 
-    const what = prepareInsert(props.what, this.description)
-    const readyWhat = this.beforeWrite(what, decodedToken)
+    const { what } = this.beforeWrite(props, decodedToken)
+    const readyWhat = prepareInsert(what, this.description)
 
     if( !_id ) {
       const newDoc = await this.model.create(readyWhat)
@@ -162,7 +160,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     }
 
     if( typeof props.limit !== 'number' ) {
-      props.limit = +(PAGINATION_LIMIT||35)
+      props.limit = +(process.env.PAGINATION_LIMIT||35)
     }
 
     const entries = Object.entries(props.filters||{})

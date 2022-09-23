@@ -7,7 +7,6 @@
         indexes
       }"
       :key="item._id"
-      class="item"
     >
       <div v-if="!searchOnly" class="selected__icons">
         <sv-icon

@@ -1,7 +1,7 @@
 <template>
   <form class="form">
     <fieldset
-      v-if="!isReadonly && Object.keys(fields).length > 0"
+      v-if="!isReadOnly && Object.keys(fields).length > 0"
       class="form__fieldset"
     >
       <!-- form -->
@@ -85,7 +85,7 @@
     </fieldset>
 
     <div
-      v-if="!isReadonly && store && referencedFields.length > 0"
+      v-if="!isReadOnly && store && referencedFields.length > 0"
       class="form__search-grid"
     >
       <sv-search
@@ -107,7 +107,7 @@
       ></sv-search>
     </div>
 
-    <fieldset v-if="isReadonly" class="form__fieldset">
+    <fieldset v-if="isReadOnly" class="form__fieldset">
       <sv-input
         v-for="([key, field], index) in allInOne"
         :key="`collection-${index}`"
@@ -153,7 +153,7 @@ type Props = {
   form: Record<string, any>
   formData: Record<string, any>
   collection?: string
-  isReadonly?: boolean
+  isReadOnly?: boolean
   searchOnly?: boolean
   itemIndex?: number
   fieldIndex?: number
@@ -162,7 +162,7 @@ type Props = {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isReadonly: false,
+  isReadOnly: false,
   searchony: false,
   strict: true,
   itemIndex: 0,

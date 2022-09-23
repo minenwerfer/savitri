@@ -141,10 +141,10 @@ const close = () => {
 }
 
 const overlayClick = () => {
-  if( props.fixedRight ) {
-    close()
-  }
-
+//  if( props.fixedRight ) {
+//    close()
+//  }
+//
   emit('overlayClick')
 }
 </script>

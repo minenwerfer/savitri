@@ -16,7 +16,7 @@
   z-index: 30;
 
   background: #fff;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid var(--default-border-color);
 
   @media screen and (min-width: 600px) {
     width: auto;
@@ -28,7 +28,7 @@
     place-items: center;
     cursor: pointer;
 
-    width: 16em;
+    width: var(--menu-width);
     // border-right: 1px solid #dedede;
 
     @media screen and (min-width: 600px) {

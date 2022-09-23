@@ -125,7 +125,7 @@
         <sv-dropdown-trigger :id="row._id">
           <teleport :to="`#dropdown-${row._id}`">
             <sv-dropdown-content v-bind="{
-              row,
+              subject: row,
               actions,
             }"></sv-dropdown-content>
           </teleport>

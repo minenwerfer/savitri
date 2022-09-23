@@ -43,11 +43,7 @@ export default defineStore('meta', {
       body: '',
       actions: [],
     },
-    toast: {
-      isVisible: false,
-      text: '',
-      itr: new Date
-    },
+    toasts: [],
   }),
 
   actions: {
@@ -106,12 +102,14 @@ export default defineStore('meta', {
       localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
     },
 
-    spawnPrompt(props: Omit<typeof this['prompt'], 'isVisible' | 'actions' | 'title'> & {
+    spawnPrompt(props: {
       title?: string
+      body?: string
       actions: Array<{
         name: string
         title: string
-        type?: string
+        size?: string
+        variant?: string
       }>
     }): Promise<PromptAnswer> {
       this.$patch({
@@ -147,14 +145,18 @@ export default defineStore('meta', {
       })
     },
 
-    spawnToast(props: Omit<typeof this['toast'], 'isVisible'>) {
-      this.$patch({
-        toast: {
-          ...props,
-          isVisible: true,
-          itr: new Date
-        }
+    spawnToast(
+      this: { toasts: Array<any> },
+      props: { text?: string }
+    ) {
+      this.toasts.push({
+        ...props,
+        itr: this.toasts.length
       })
+    },
+
+    popToast(this: { toasts: Array<any> }) {
+      this.toasts.shift()
     }
   },
 })

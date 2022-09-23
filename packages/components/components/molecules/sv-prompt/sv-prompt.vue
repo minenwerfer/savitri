@@ -6,8 +6,8 @@
     <template #footer>
       <sv-button
         v-for="(action, index) in actions"
+        v-bind="action"
         :key="`action-${index}`"
-        :type="action.type"
 
         @clicked="onClick(action)"
       >

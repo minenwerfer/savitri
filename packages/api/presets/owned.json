@@ -3,7 +3,8 @@
     "owner": {
       "collection": "user",
       "label": "Usuário",
-      "index": "email"
+      "index": "email",
+      "noform": true
     }
   }
 }

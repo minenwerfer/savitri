@@ -3,11 +3,22 @@
     <div class="crud__panel">
       <div class="crud__panel-control">
         <sv-filter-widget :key="store.$id"></sv-filter-widget>
+        <sv-info>
+          <template #text>
+            Atualizar
+          </template>
+          <sv-icon
+            v-clickable
+            reactive
+            name="refresh"
+            @click="store.filter"
+          ></sv-icon>
+        </sv-info>
         <sv-button
           v-if="store.description.report"
           v-bind="{
+            size: 'small',
             icon: 'export',
-            type: 'neutral',
             variant: 'light'
           }"
           @clicked="isReportVisible = true"
@@ -24,7 +35,7 @@
           v-for="(actionProps, index) in store.actions"
           :key="`action-${index}`"
           v-bind="{
-            type: 'neutral',
+            size: 'small',
             icon: actionProps.unicon,
             disabled: store.isLoading || store.selectedIds.length === 0 && actionProps.selection
           }"
@@ -88,6 +99,7 @@ import {
   SvButton,
   SvPagination,
   SvBareButton,
+  SvInfo,
   SvIcon
 
 } from '../../'

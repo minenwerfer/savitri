@@ -28,7 +28,7 @@ $section-padding: .8rem;
     display: flex;
     flex-direction: column;
 
-    border: 1px solid #dedede;
+    border: 1px solid var(--default-border-color);
     border-radius: 5px;
     background: #fff;
 
@@ -90,6 +90,7 @@ $section-padding: .8rem;
   &__header {
     display: flex;
     align-items: center;
+    line-height: 100%;
 
     padding: 0 $section-padding;
     height: 3rem;
@@ -116,11 +117,12 @@ $section-padding: .8rem;
 
   &__footer {
     display: flex;
-    gap: .4rem;
+    justify-content: flex-end;
+    column-gap: .8rem;
     padding: $section-padding;
     margin-top: auto;
 
-    border-top: 1px solid #dedede;
+    border-top: 1px solid var(--default-border-color);
     transition: box-shadow .3s;
 
     &--shadowed {

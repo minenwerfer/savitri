@@ -1,14 +1,25 @@
 <template>
-  <div class="info" @mouseleave="visible = false">
-    <div :class="`info__bubble info__bubble--${where}`" v-if="visible">
+  <div
+    class="info"
+    @mouseleave="visible = false
+  ">
+    <div
+      v-if="visible"
+      :class="`
+        info__bubble
+        info__bubble--${where}
+    `">
       <div class="info__content">
         <slot name="text"></slot>
       </div>
-      <div :class="`info__arrow info__arrow--${where}`"></div>
+      <div :class="`
+        info__arrow
+        info__arrow--${where}
+      `"></div>
     </div>
     <div class="info__trigger">
       <div @mouseover="visible = true">
-        <slot name="default" v-if="$slots.default"></slot>
+        <slot v-if="$slots.default" name="default"></slot>
         <slot v-else></slot>
       </div>
     </div>

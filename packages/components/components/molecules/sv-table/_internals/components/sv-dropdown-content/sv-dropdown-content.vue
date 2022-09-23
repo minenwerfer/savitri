@@ -4,7 +4,7 @@
       v-for="(action, aindex) in filterActions(actions)"
       :key="`action-${aindex}`"
       class="dropdown__item"
-      @clicked="onClick(action, row)"
+      @clicked="onClick(action, subject)"
     >
       <sv-icon
         :name="action.unicon"
@@ -23,7 +23,7 @@ import { dropdownVisible } from '../../store'
 
 type Props = {
   actions: any
-  row: any
+  subject: any
 }
 
 const props = defineProps<Props>()
@@ -32,15 +32,15 @@ const userStore = useStore('user')
 const filterActions = (actions: Array<any>) => {
   return actions.filter((action: any) => {
     if( action.roles ) {
-      return action.roles.include(userStore.$currentUser.access.role)
+      return action.roles.include(userStore.$currentUser.role)
     }
 
     return !!action.click
   })
 }
 
-const onClick = (action, row) => {
-  action.click(row)
+const onClick = (action, subject) => {
+  action.click(subject)
   dropdownVisible.value = false
 }
 </script>

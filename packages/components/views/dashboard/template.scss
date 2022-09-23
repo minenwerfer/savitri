@@ -1,5 +1,5 @@
 .template {
-  background: #f7fafc;
+  background: var(--body-color);
 
   &__main {
     display: flex;

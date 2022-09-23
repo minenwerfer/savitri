@@ -2,7 +2,7 @@
   <div class="picture">
     <img
       v-if="fileLink"
-      :src="fileLink"
+      v-lazy="fileLink"
       class="picture__image"
     />
 

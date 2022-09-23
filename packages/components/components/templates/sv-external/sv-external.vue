@@ -20,7 +20,7 @@ import { provide, inject } from 'vue'
 import { SvBox } from '@savitri/components'
 
 provide('storeId', 'user')
-provide('buttonVariant', 'big')
+provide('buttonSize', 'large')
 
 const productName = inject('productName')
 const productLogo = inject('productLogo')
