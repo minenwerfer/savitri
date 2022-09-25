@@ -53,7 +53,7 @@
     }
 
     &--normal {
-      padding: .55rem .6rem;
+      padding: var(--normal-input-padding);
     }
 
     &--bold {
@@ -110,4 +110,14 @@
 
     padding: 0 .6em;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button, {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

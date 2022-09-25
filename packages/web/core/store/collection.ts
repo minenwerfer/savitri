@@ -55,10 +55,8 @@ const state = <T=object>(): CollectionState<T> => {
 
     validationErrors: {},
 
-    meta: {
-      isLoading: false,
-      halt: false
-    },
+    isLoading: false,
+    halt: false,
 
     pagination: {
       offset: 0,

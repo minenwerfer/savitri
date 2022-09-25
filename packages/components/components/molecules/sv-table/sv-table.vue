@@ -200,6 +200,8 @@ const toggle = (value, rowId, key) => {
         _id: rowId,
         [key]: value
       }
+    }, {
+      skipLoading: true
     })
   }
 }

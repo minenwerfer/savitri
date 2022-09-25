@@ -77,7 +77,9 @@
         ></sv-file>
 
         <div v-if="store?.validationErrors[key]" class="form__validation-error">
-          <span>{{ $t(`validation_error.${store.validationErrors[key].type}`) }}</span>
+          <span v-if="store.validationErrors[key].type">
+            {{ $t(`validation_error.${store.validationErrors[key].type}`) }}
+          </span>
           <span v-if="store.validationErrors[key].detail">
             {{ $t(store.validationErrors[key].detail) }}
           </span>

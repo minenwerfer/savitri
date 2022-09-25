@@ -25,7 +25,15 @@ type CrudParameters = {
   offset: number
 }
 
-type ActionFilter = Partial<Pick<CrudParameters, 'filters' | 'limit' | 'offset'>>
+type ActionOptions = {
+  skipLoading?: boolean
+}
+
+type ActionFilter = Partial<Pick<CrudParameters,
+  'filters'
+  | 'limit'
+  | 'offset'>
+>
 
 const { http } = useHttp()
 
@@ -90,10 +98,14 @@ export default {
   ...mutations,
   async custom<T extends PiniaState>(
     this: CollectionState<T>,
-    verb: string, payload?: any
+    verb: string,
+    payload?: any,
+    options?: ActionOptions
   ): Promise<any> {
     this.validationErrors = {}
-    this.meta.isLoading = true
+    if( !options?.skipLoading ) {
+      this.isLoading = true
+    }
 
     const promise = http.post(`${this.$id}/${verb}`, payload)
       .catch((err: any) => {
@@ -103,8 +115,12 @@ export default {
 
         throw err
       })
+      .finally(() => {
+        if( !options?.skipLoading ) {
+          this.isLoading = false
+        }
+      })
 
-    this.meta.isLoading = false
     return (await promise)?.data
   },
 
@@ -112,9 +128,10 @@ export default {
     this: { custom: (...args: any[]) => Promise<any> },
     verb: string,
     payload: any,
-    fn: (data: any) => any
+    fn: (data: any) => any,
+    options?: ActionOptions
   ): Promise<any> {
-    const response = await this.custom(verb, payload)
+    const response = await this.custom(verb, payload, options)
     return response?.result
       ? fn(response.result)
       : {}
@@ -170,11 +187,13 @@ export default {
       item: CollectionState<T>['item']
       customEffect: (...args: any[]) => Promise<any>
     },
-    payload?: { what: Partial<T> }
+    payload?: { what: Partial<T> },
+    options?: ActionOptions
   ): Promise<T> {
     return this.customEffect(
       'insert', { ...payload, what: payload?.what||this.item },
-      this.insertItem
+      this.insertItem,
+      options
     )
   },
 

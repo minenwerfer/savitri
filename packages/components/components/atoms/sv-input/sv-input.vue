@@ -15,16 +15,9 @@
     ">
       <input
         v-maska="mask"
+        v-bind="inputBind"
         ref="input"
-        v-bind="{
-          type: type || 'text',
-          value: inputValue || value,
-          readonly: readOnly,
-          placeholder,
-          name,
-          min,
-          max
-        }"
+        :value="inputValue"
 
         :class="`
           input__input
@@ -43,8 +36,7 @@
         :class="`
           input__icon
           input__icon--${variant}
-        `"
-      ></sv-icon>
+      `"></sv-icon>
 
       <div
         v-if="readOnly"
@@ -55,7 +47,7 @@
           <sv-icon
             v-clickable
             name="clipboard"
-            @click="copy(inputValue || value)"
+            @click="copyToCipboard(modelValue)"
           ></sv-icon>
         </sv-info>
       </div>
@@ -72,78 +64,85 @@
         input__input--${variant}
       `"
 
-      @input="$emit('update:modelValue', $event.target.value)"
-    >{{ inputValue || value }}</textarea>
+      @input="$emit('update:modelValue', $event.target.modelValue)"
+    >{{ modelValue }}</textarea>
   </label>
 </template>
 
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
-import { useStore, copyToClipboard } from '@savitri/web'
+import { copyToClipboard } from '@savitri/web'
 import { SvInfo, SvIcon } from '../..'
 
 type Props = {
-  modelValue?: string
   name?: string
-  value?: string|number
   type?: string
-  placeholder?: string
+  modelValue?: string|number
   mask?: string|Array<string>
   icon?: string
   variant?: string
   readOnly?: boolean
+  placeholder?: string
   min?: number
   max?: number
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  type: 'text'
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
 }>()
 
-const metaStore = useStore('meta')
-
-const input = ref<any>(null)
+const input = ref(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
 
-const dateToISO = (raw: string) => {
-  if( !raw ) {
-    return ''
-  }
+const {
+  modelValue,
+  ...inputBind
 
-  const numbers = raw.split('T')[0].split('-').join('')
+} = props
 
-  return [
-    numbers.slice(6, 8),
-    numbers.slice(4, 6),
-    numbers.slice(0, 4)
+const inputValue = ref(props.modelValue||'')
 
-  ].join('/')
-}
+// const dateToISO = (raw: string) => {
+//   if( !raw ) {
+//     return ''
+//   }
+// 
+//   const numbers = raw.split('T')[0].split('-').join('')
+// 
+//   return [
+//     numbers.slice(6, 8),
+//     numbers.slice(4, 6),
+//     numbers.slice(0, 4)
+// 
+//   ].join('/')
+// }
+// 
+// const ISOToDate = (raw: string) => {
+//   if( !raw ) {
+//     return
+//   }
+// 
+//   const numbers = raw.split('/').join('')
+// 
+//   return [
+//     numbers.slice(2, 4),
+//     numbers.slice(0, 2),
+//     numbers.slice(4, 8)
+// 
+//   ].join('/')
+// }
 
-const ISOToDate = (raw: string) => {
-  if( !raw ) {
-    return
-  }
-
-  const numbers = raw.split('/').join('')
-
-  return [
-    numbers.slice(2, 4),
-    numbers.slice(0, 2),
-    numbers.slice(4, 8)
-
-  ].join('/')
-}
-
-const inputValue = ref(props.type === 'datetime'
-  ? dateToISO(props.modelValue)
-  : props.modelValue)
+// const inputValue = ref(props.type === 'datetime'
+//   ? dateToISO(props.modelValue)
+//   : props.modelValue)
 
 const onInput = (
-  event: { target: { value: string, dataset?: { maskRawValue: string } } },
+  event: { target: { modelValue: string, dataset?: { maskRawValue: string } } },
   masked:boolean
 ) => {
   if( !masked && event.target.dataset?.maskRawValue ) {
@@ -163,17 +162,10 @@ const onInput = (
   emit('update:modelValue', newValue)
 }
 
-const onChange = (event: { target: { value: string } }) => {
+const onChange = (event: { target: { modelValue: string } }) => {
   if( props.type === 'datetime' ) {
-    emit('update:modelValue', ISOToDate(event.target.value))
+    emit('update:modelValue', ISOToDate(event.target.modelValue))
   }
-}
-
-const copy = (value: string) => {
-  copyToClipboard(value)
-  metaStore.spawnToast({
-    text: 'Copiado!'
-  })
 }
 </script>
 

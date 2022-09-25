@@ -5,7 +5,8 @@
       fixed-right
       v-model:visible="isReportVisible" 
       title="Relatório"
-      @close="onClose"
+      @close="isReportVisible = false"
+      @overlay-click="isReportVisible = false"
     >
       <sv-form
         v-if="!reportStore.item._id"
@@ -55,10 +56,5 @@ const requestReport = () => {
 
 const download = () => {
   reportStore.download({ payload: { filters: reportStore.item } })
-}
-
-const onClose = () => {
-  store.clearItem()
-  isReportVisible.value = false
 }
 </script>

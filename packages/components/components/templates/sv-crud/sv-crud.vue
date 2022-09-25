@@ -1,5 +1,5 @@
 <template>
-  <div class="crud">
+  <div v-if="store" class="crud">
     <div class="crud__panel">
       <div class="crud__panel-control">
         <sv-filter-widget :key="store.$id"></sv-filter-widget>
@@ -58,9 +58,10 @@
       </div>
     </sv-box>
 
-    <sv-box :fill="true" :transparent-mobile="true">
+    <sv-box fill transparent-mobile>
       <sv-table
         v-if="store.tableDescription"
+        v-loading="store.isLoading"
         :key="store.$id"
 
         v-bind="{
@@ -71,9 +72,7 @@
         }"
       ></sv-table>
       <div v-if="store.itemsCount === 0 && !store.isLoading">
-        <div class="opacity-80">
           Não foram retornados resultados.
-        </div>
       </div>
     </sv-box>
 
@@ -121,14 +120,19 @@ type Props = {
 }
 
 const props = defineProps<Props>()
-
-const store = useStore(props.collection)
+let store
 const metaStore = useStore('meta')
 
 const router = useRouter()
+
+try {
+  store = useStore(props.collection)
+} catch( e ) {
+  router.push({ name: 'not-found' })
+}
+
 const { hash } = useRoute()
 const [call, actionEventBus] = useAction(store, router)
-
 provide('storeId', computed(() => props.collection))
 
 const hasSelectionActions = computed(() => {

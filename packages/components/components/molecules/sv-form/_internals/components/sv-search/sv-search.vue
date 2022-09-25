@@ -73,7 +73,7 @@
           <div v-if="isTyping">
             Pesquisando...
           </div>
-          <div v-else-if="!store.meta.isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
+          <div v-else-if="!store.isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
             Não há resultados
           </div>
         </div>
@@ -231,7 +231,7 @@ const search = async () => {
     return
   }
 
-  if( store.meta.isLoading ) {
+  if( store.isLoading ) {
     return
   }
 

@@ -28,14 +28,15 @@
   >
     <sv-toast
       v-for="toast in metaStore.toasts"
-      v-html="
-        Array.isArray(toast.text)
-          ? $t(...toast.text)
-          : toast.text
-      "
+      v-bind="toast"
       :key="`toast-${toast.itr}`"
-      :itr="toast.itr"
-    ></sv-toast>
+    >
+      <div v-html="
+      Array.isArray(toast.text)
+        ? $t(...toast.text)
+        : toast.text
+      "></div>
+    </sv-toast>
   </transition-group>
 </template>
 

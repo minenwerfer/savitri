@@ -34,6 +34,7 @@
     v-model:visible="isFilterVisible"
     title="Filtrar por"
     @close="isFilterVisible = false"
+    @overlay-click="isFilterVisible = false"
   >
     <sv-form
       v-bind="{

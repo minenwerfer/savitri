@@ -63,13 +63,10 @@ const collection = useCollection({
 
     $currentUser(): UserState['currentUser'] {
       if( !this.currentUser?._id ) {
-        const currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
-        return currentUser
+        this.currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
       }
 
-      return !this.currentUser._id
-        ? JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
-        : this.currentUser
+      return this.currentUser
     }
   }
 })

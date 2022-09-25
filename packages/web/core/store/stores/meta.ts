@@ -147,7 +147,10 @@ export default defineStore('meta', {
 
     spawnToast(
       this: { toasts: Array<any> },
-      props: { text?: string }
+      props: {
+        text: string
+        icon?: string
+      }
     ) {
       this.toasts.push({
         ...props,
