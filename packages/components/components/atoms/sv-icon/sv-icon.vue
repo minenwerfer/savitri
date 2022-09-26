@@ -29,11 +29,13 @@ type Props = {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  reactive: false
+  reactive: null
 })
 
-const size = inject('iconSize', props.size) || 'medium'
-const reactive = inject('iconReactive', props.reactive)
+const size = props.size || inject('iconSize', 'medium')
+const reactive = typeof props.reactive === 'boolean'
+  ? props.reactive
+  : inject('iconReactive')
 </script>
 
 <style scoped src="./sv-icon.scss"></style>

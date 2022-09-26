@@ -30,7 +30,6 @@
           <sv-icon
             v-clickable
             name="user-circle"
-            :reactive="false"
             @click="shortcutsVisible = true"
           ></sv-icon>
         </sv-info>

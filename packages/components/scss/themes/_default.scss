@@ -11,5 +11,10 @@ a {
 
 a:visited {
   color: #000;
-
 }
+
+$themes: (
+  default: (
+    test: red
+  ),
+);

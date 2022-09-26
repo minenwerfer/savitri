@@ -36,16 +36,19 @@
             </div>
 
             <div class="results__actions">
-              <a
+              <sv-button
                 v-for="(actionProps, index) in getActions(collectionName)"
+                v-bind="{
+                  icon: actionProps.unicon,
+                  size: 'small',
+                  variant: 'light'
+                }"
+
                 :key="`action-${actionProps.action}`"
-                class="results__action"
                 @click="callAction(collectionName, actionProps, { _id: result._id })"
               >
-                <sv-icon :name="actionProps.unicon">
-                  {{ actionProps.name }}
-                </sv-icon>
-              </a>
+                {{ actionProps.name }}
+              </sv-button>
             </div>
           </div>
         </div>
@@ -58,7 +61,7 @@
 import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore, useAction } from '@savitri/web'
-import { SvPicture, SvIcon } from '../../../../..'
+import { SvPicture, SvButton } from '../../../../..'
 import { results } from '../../store'
 
 const router = useRouter()
@@ -74,16 +77,22 @@ const clearResults = () => {
 }
 
 const getEntries = (collectionName: string, result: any) => Object.entries(result)
-  .filter(([key]: [string, unknown]) => !['_id', '_picture'].includes(key))
-  .map(([key, value]: [string, string]) => {
+  .reduce((a: Array<any>, [key, value]: [string, string]) => {
+    if( ['_id', '_picture'].includes(key) ) {
+      return a
+    }
+
     const store = useStore(collectionName)
     const field = store.description.fields[key]
-    return {
-      key,
-      field,
-      value
-    }
-  })
+    return [
+      ...a,
+      {
+        key,
+        field,
+        value
+      }
+    ]
+  }, [])
 
 const getActions = (collectionName: string) => {
   const store = useStore(collectionName)

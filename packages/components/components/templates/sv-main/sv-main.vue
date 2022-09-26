@@ -1,5 +1,8 @@
 <template>
-  <div class="main">
+  <div :class="`
+    main
+    main--${metaStore.$theme}
+  `">
     <router-view></router-view>
 
     <sv-modal

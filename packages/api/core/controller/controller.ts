@@ -64,8 +64,8 @@ export abstract class Controller {
             throw new Error('controller is undefined')
           }
 
-          if( !target.props.publicMethods?.includes(key) && target.isGranted(key)) {
-            if( decodedToken?.access ) {
+          if( !target.props.publicMethods?.includes(key) && !target.isGranted(decodedToken, key)) {
+            if( decodedToken?.user?.role ) {
               throw new PermissionError('forbidden method (access denied)')
             }
 
@@ -123,17 +123,19 @@ export abstract class Controller {
     return result
   }
 
-  public isGranted(method:string, controller?: string) {
-    const controllerName = controller || this.props.controller!
-    const subject = this.injected.roles?.[controllerName]
-
-    if( !subject ) {
+  public isGranted(token: { user?: { role?: string } }, method:string, controller?: string) {
+    if( !token?.user?.role ) {
       return false
     }
 
+    const controllerName = controller || this.props.controller!
+    const role = this.apiConfig.roles?.[token.user.role]
+    const subject = role?.capabilities?.[controllerName]
+
     return (
-      subject.grantEverything
-      || subject.methods.includes(method)
+      role?.grantEverything
+      || subject?.grantEverything
+      || subject?.methods?.includes(method)
     )
   }
 }

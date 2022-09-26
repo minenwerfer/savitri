@@ -1,6 +1,6 @@
 import type { CollectionDescription } from '../../common/types'
 import { getController } from '../../api/core/controller'
-import { MetaController } from '../meta/meta.controller'
+import { getDescriptions } from '../meta/meta.helper'
 
 const __searchable: Record<string, CollectionDescription> = {}
 
@@ -9,7 +9,7 @@ export const getSearchables = () => {
     return __searchable
   }
 
-  const descriptions = new MetaController().describeAll()
+  const descriptions = getDescriptions()
 
   const searchable = Object.entries(descriptions)
     .reduce((a: any, [collectionName, description]: [string, any]) => {

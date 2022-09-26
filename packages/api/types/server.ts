@@ -17,10 +17,10 @@ export type DecodedToken = {
 
 export type Roles = Record<string, {
   grantEverything?: boolean
-  capabilities?: {
+  capabilities?: Record<string, {
     grantEverything?: boolean
     methods?: Array<string>
-  }
+  }>
 }>
 
 

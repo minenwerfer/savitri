@@ -1,3 +1,5 @@
+@import 'style/themes';
+
 .mobile-only {
   display: none;
   @media screen and (max-width: 600px) {
@@ -15,8 +17,11 @@
   padding: 0 .4rem;
   z-index: 30;
 
-  background: #fff;
-  border-bottom: 1px solid var(--default-border-color);
+  @include themed() {
+    color: t(test-color);
+    border-bottom: 1px solid t(border-color);
+    background: t(background-color);
+  }
 
   @media screen and (min-width: 600px) {
     width: auto;
@@ -28,7 +33,7 @@
     place-items: center;
     cursor: pointer;
 
-    width: var(--menu-width);
+    width: $menu-width;
     // border-right: 1px solid #dedede;
 
     @media screen and (min-width: 600px) {

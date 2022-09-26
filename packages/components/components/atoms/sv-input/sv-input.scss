@@ -1,3 +1,5 @@
+@import 'style/themes';
+
 @mixin focus {
   .input {
     &__container {
@@ -33,8 +35,10 @@
     display: flex;
 
     &--normal, &--bold {
-      border: 1px solid var(--default-border-color);
       border-radius: 3px;
+      @include themed() {
+        border: 1px solid t(border-color);
+      }
     }
 
     &--light {
@@ -53,7 +57,7 @@
     }
 
     &--normal {
-      padding: var(--normal-input-padding);
+      padding: $default-input-padding;
     }
 
     &--bold {
@@ -110,14 +114,4 @@
 
     padding: 0 .6em;
   }
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button, {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
 }

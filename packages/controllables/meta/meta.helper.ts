@@ -21,11 +21,16 @@ export const getDescriptions = (): Record<string, CollectionDescription> => {
     .reduce((a: Record<string, any>, dir: string) => ({
       ...a,
       ...readdirSync(dir)
-        .filter((d: string) => !d.startsWith('_') && existsSync(`${dir}/${d}/index.json`))
-        .reduce((a: any, d: string) => ({
-          ...a,
-          [d]: preloadCollection(require(`${dir}/${d}/index.json`))
-        }), {})
+        .reduce((a: any, d: string) => {
+          if( d.startsWith('_') || !existsSync(`${dir}/${d}/index.json`) ) {
+            return a
+          }
+
+          return {
+            ...a,
+            [d]: preloadCollection(require(`${dir}/${d}/index.json`))
+          }
+        }, {})
   }), {})
 
   Object.assign(__cachedDescriptions, descriptions)

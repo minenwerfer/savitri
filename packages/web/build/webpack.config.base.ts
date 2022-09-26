@@ -27,6 +27,8 @@ const baseWebpackConfig = {
       // shorthand for application directory
       // or the current working dir
       '@': global.appDir,
+      '~': path.resolve(__dirname, '..'),
+      'style': path.resolve(__dirname, '../../components/scss'),
     }
   },
 

@@ -1,5 +1,9 @@
+@import 'style/themes';
+
 .template {
-  background: var(--body-color);
+  @include themed() {
+    background: t(body-color);
+  }
 
   &__main {
     display: flex;

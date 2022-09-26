@@ -1,3 +1,5 @@
+@import 'style/themes';
+
 $horizontal-padding: 1rem;
 $picture-size: 3.6rem;
 
@@ -6,9 +8,6 @@ $picture-size: 3.6rem;
   z-index: 50;
   left: 0;
   width: 100vw;
-
-  background: #fff;
-  border: 1px solid #dedede;
 
   transform: translate(-1px, -1px);
 
@@ -19,11 +18,16 @@ $picture-size: 3.6rem;
 
   padding-bottom: 2.8rem;
 
+  @include themed() {
+    background: t(background-color);
+    border: 1px solid t(border-color);
+  }
+
   @media screen and (min-width: 600px) {
-    left: calc(16rem);
+    left: $menu-width;
     height: auto;
     max-height: 28rem;
-    width: 40rem;
+    width: min-content;
     padding-bottom: 0;
   }
 
@@ -103,25 +107,5 @@ $picture-size: 3.6rem;
     align-self: center;
     margin-left: auto;
     column-gap: .4rem;
-  }
-
-  &__action {
-    display: flex;
-    align-items: center;
-    padding: .2rem .4rem;
-    background: white;
-    border: 1px solid #dedede;
-    border-radius: 2px;
-    user-select: none;
-
-    font-size: .8rem;
-
-    :deep(svg) {
-      width: 1rem;
-    }
-
-    @media screen and (min-width: 600px) {
-      cursor: pointer;
-    }
   }
 }

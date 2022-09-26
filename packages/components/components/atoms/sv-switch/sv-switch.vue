@@ -10,7 +10,7 @@
         ${modelValue && 'switch--active'}
         ${readOnly && 'switch--readOnly'}
       `"
-      @click="toggle"
+      @click.stop="toggle"
     >
       <div class="switch__slider"></div>
       <div :class="`
@@ -22,6 +22,7 @@
     <div v-if="values">
       <slot :label="valueLabel"></slot>
     </div>
+    <slot v-else-if="$slots.default"></slot>
   </div>
 </template>
 
@@ -35,6 +36,7 @@ type Props = {
 }
 
 type Emits = {
+  (e: 'change', value: boolean): void
   (e: 'update:modelValue', value: boolean): void
 }
 
@@ -45,6 +47,7 @@ const valueLabel = computed(() => props.values?.[props.modelValue?0:1])
 
 const toggle = () => {
   if( !props.readOnly ) {
+    emit('change', !props.modelValue)
     emit('update:modelValue', !props.modelValue)
   }
 }

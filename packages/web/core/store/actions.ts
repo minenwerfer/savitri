@@ -255,11 +255,12 @@ export default {
   },
 
   clearFilters<T>(
-    this: Pick<CollectionState<T>, 'filters'> & {
+    this: Pick<CollectionState<T>, 'filters' | 'pagination'> & {
       filter: (...args: any[]) => Promise<Array<T>>
     }
   ) {
     this.filters = {}
+    this.pagination.offset = 0
     this.filter()
   },
 

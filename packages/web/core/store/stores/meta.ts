@@ -19,6 +19,7 @@ export default defineStore('meta', {
 
     isLoading: false,
     globalIsLoading: false,
+    theme: '',
 
     view: {
       title: '',
@@ -160,6 +161,29 @@ export default defineStore('meta', {
 
     popToast(this: { toasts: Array<any> }) {
       this.toasts.shift()
+    },
+
+    setTheme(theme: string) {
+      this.theme = theme
+      localStorage.setItem('meta:theme', theme)
+    },
+
+    toggleDarkMode() {
+      const newTheme = this.theme === 'dark'
+        ? 'default'
+        : 'dark'
+
+      this.setTheme(newTheme)
     }
   },
+
+  getters: {
+    $theme(): string {
+      if( !this.theme ) {
+        this.theme = localStorage.getItem('meta:theme') || 'default'
+      }
+
+      return this.theme
+    }
+  }
 })

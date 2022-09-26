@@ -1,10 +1,11 @@
+@import 'style/themes';
 $icon-size: 1.25rem;
 
 .menu {
   position: sticky;
   top: 3.2rem;
   left: 0;
-  width: var(--menu-width);
+  width: $menu-width;
   height: calc(100vh - 3.2rem);
 
   display: flex;
@@ -16,10 +17,17 @@ $icon-size: 1.25rem;
   z-index: 20;
 
   overflow: hidden;
-  background: #fff;
-  border-right: 1px solid var(--default-border-color);
-
   transition: width .35s;
+
+  @include themed() {
+    border-right: 1px solid t(border-color);
+    color: t(foreground-color);
+    background: t(background-color);
+
+    :deep(svg) {
+      fill: t(foreground-color);
+    }
+  }
 
   &--hidden {
     width: 0;

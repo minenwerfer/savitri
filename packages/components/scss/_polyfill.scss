@@ -3,3 +3,14 @@
 .tw-border-t { border-top: 1px solid var(--default-border-color); }
 .tw-border-l { border-left: 1px solid var(--default-border-color); }
 .tw-border-r { border-left: 1px solid var(--default-border-color); }
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button, {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

@@ -1,0 +1,43 @@
+$menu-width: 18rem;
+$default-input-padding: .6rem;
+
+$themes: (
+  default: (
+    test-color: red,
+    border-color: #dedede,
+    foreground-color: #000,
+    background-color: #fff,
+    body-color: #f8f9fa
+  ),
+  dark: (
+    test-color: red,
+    border-color: #aaa,
+    foreground-color: #fff,
+    background-color: #555,
+    body-color: #000
+  )
+);
+
+/**
+ * Eu não faço ideia do que está rolando aqui, peguei o código abaixo de um
+ * artigo do medium
+ */
+
+@mixin themed() {
+  @each $theme, $map in $themes {
+    .main--#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function t($key) {
+  @return map-get($theme-map, $key);
+}

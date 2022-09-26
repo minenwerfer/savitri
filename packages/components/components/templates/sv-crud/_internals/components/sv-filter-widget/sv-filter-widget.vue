@@ -54,7 +54,7 @@
       <sv-button
         icon="filter"
         :disabled="!store.hasActiveFilters"
-        @clicked="store.filter"
+        @clicked="filter"
       >
         Filtrar
       </sv-button>
@@ -76,6 +76,11 @@ import {
 
 const store = useParentStore()
 const isFilterVisible = ref(false)
+
+const filter = () => {
+  store.pagination.offset = 0
+  store.filter()
+}
 </script>
 
 <style scoped src="./sv-filter-widget.scss"></style>

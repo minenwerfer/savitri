@@ -93,7 +93,7 @@ const limit = computed({
   }
 })
 
-const pageInput = ref(1)
+const pageInput = ref(page.value ? page.value + 1 : 1)
 const pageCount = computed(
   () => Math.floor(store.pagination.recordsTotal / store.pagination.limit)
 )

@@ -23,7 +23,8 @@ export class SearchableController extends Controller {
 
     const searchables = Object.entries(getSearchables())
       .reduce((a: any, [key, value]: [string, any]) => {
-        if( !this.isGranted('getAll', key) ) {
+        if( !this.isGranted(decodedToken, 'getAll', key) ) {
+          console.log(key)
           return a
         }
 

@@ -11,6 +11,7 @@
       <sv-icon
         v-if="icon"
         :name="icon"
+        :reactive="false"
         class="button__icon"
       >
         <slot></slot>

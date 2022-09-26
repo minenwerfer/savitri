@@ -22,18 +22,35 @@
       >
         Sair
       </sv-icon>
+
+      <sv-switch
+        v-model="darkMode"
+        @change="metaStore.toggleDarkMode"
+      >
+        Modo noturno
+      </sv-switch>
     </div>
   </sv-box>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@savitri/web'
-import { SvBox, SvIcon } from '../../../../..'
+import {
+  SvBox,
+  SvIcon,
+  SvSwitch
+
+} from '../../../../..'
+
 import { shortcutsVisible, isShortcutsVisible } from '../../store'
 
 const router = useRouter()
 const userStore = useStore('user')
+const metaStore = useStore('meta')
+
+const darkMode = ref(metaStore.theme === 'dark')
 
 const signout = () => {
   userStore.signout()

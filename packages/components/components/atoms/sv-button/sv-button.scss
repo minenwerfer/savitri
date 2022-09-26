@@ -1,41 +1,36 @@
+@import 'style/themes';
+
 .button {
   transition: all .2s;
   padding: .35em 1em;
   text-align: center;
   border-radius: 4px;
   outline: none;
+
+  @include themed() {
+    color: t(foreground-color);
+
+    &--light,
+    &--normal {
+      border: 1px solid t(border-color);
+    }
+
+    &--normal {
+      color: t(background-color);
+      background: t(foreground-color);
+
+      :deep(svg) {
+        fill: t(background-color);
+      }
+
+      font-size: .9rem;
+      font-weight: bold;
+    }
+  }
   
   &__icon {
     :deep(svg) {
       width: 1.2em !important;
-    }
-  }
-
-  &--normal {
-    color: white;
-    background: #000;
-
-    font-size: .9rem;
-    font-weight: bold;
-    :deep(svg) {
-      fill: white;
-    }
-  }
-
-  &--light {
-    background: #fff;
-    border: 2px solid #000;
-
-    &:hover {
-      background: #ddd;
-    }
-  }
-
-  &--transparent {
-    background: transparent;
-
-    &:hover {
-      background: #ddd;
     }
   }
 
