@@ -122,14 +122,25 @@
         v-if="actions?.length > 0"
         class="table__cell"
       >
-        <sv-dropdown-trigger :id="row._id">
-          <teleport :to="`#dropdown-${row._id}`">
-            <sv-dropdown-content v-bind="{
-              subject: row,
-              actions,
-            }"></sv-dropdown-content>
-          </teleport>
-        </sv-dropdown-trigger>
+        <sv-dropdown v-bind="{
+          subject: row,
+          actions
+        }">
+          <sv-icon
+            v-clickable
+            reactive
+            name="setting"
+            fill="gray"
+          ></sv-icon>
+        </sv-dropdown>
+        <!-- <sv-dropdown-trigger :id="row._id"> -->
+        <!--   <teleport :to="`#dropdown-${row._id}`"> -->
+        <!--     <sv-dropdown-content v-bind="{ -->
+        <!--       subject: row, -->
+        <!--       actions, -->
+        <!--     }"></sv-dropdown-content> -->
+        <!--   </teleport> -->
+        <!-- </sv-dropdown-trigger> -->
       </td>
       <div :id="`dropdown-${row._id}`"></div>
     </tr>
@@ -153,12 +164,13 @@ import {
   SvBareButton,
   SvIcon,
   SvPicture,
+  SvDropdown,
   SvSwitch
 
 } from '../..'
 
-import SvDropdownTrigger from './_internals/components/sv-dropdown-trigger/sv-dropdown-trigger.vue'
-import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dropdown-content.vue'
+// import SvDropdownTrigger from './_internals/components/sv-dropdown-trigger/sv-dropdown-trigger.vue'
+// import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dropdown-content.vue'
 
 type Props = {
   columns: any

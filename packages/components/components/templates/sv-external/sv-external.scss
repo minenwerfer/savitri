@@ -1,3 +1,5 @@
+@import 'style/themes';
+
 .external {
   position: fixed;
   top: 0;
@@ -9,7 +11,9 @@
   display: grid;
   place-items: center;
   height: 100vh;
-  background: #ddd4;
+  @include themed() {
+    background: t(body-color);
+  }
 
   &__content {
     display: flex;

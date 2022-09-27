@@ -88,7 +88,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    * @method
    * Inserts a single document in the database.
    */
-  public async insert(
+  public async _insert(
     props: { what: Partial<T> },
     decodedToken?: any,
     _response?: unknown
@@ -107,6 +107,11 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       { _id }, readyWhat,
       { new: true, runValidators: true }
     )
+  }
+
+  public async insert(props: { what: Partial<T> }, decodedToken?: any) {
+    const result = await this._insert(props, decodedToken)
+    return fill(result?._doc||result, this.description)
   }
 
   public count(props?: { filters?: object }, decodedToken?: any) {

@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
 const size = props.size || inject('iconSize', 'medium')
 const reactive = typeof props.reactive === 'boolean'
   ? props.reactive
-  : inject('iconReactive')
+  : inject('iconReactive', false)
 </script>
 
 <style scoped src="./sv-icon.scss"></style>

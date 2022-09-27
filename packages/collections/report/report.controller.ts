@@ -70,7 +70,7 @@ export class ReportController extends Mutable<ReportDocument> {
     throw new Error('not implemented')
   }
 
-  public override async insert(props: { what: any }, req: unknown, decodedToken: any) {
+  public override async insert(props: { what: any }, decodedToken: any) {
     if( !props.what?.format ) {
       throw new Error('especifique um formato')
     }

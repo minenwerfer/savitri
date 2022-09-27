@@ -64,7 +64,7 @@
         input__input--${variant}
       `"
 
-      @input="$emit('update:modelValue', $event.target.modelValue)"
+      @input="updateValue($event.target.modelValue)"
     >{{ modelValue }}</textarea>
   </label>
 </template>
@@ -93,7 +93,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', event: any): void
+  (e: 'input', value: string|number): void
+  (e: 'update:modelValue', value: string|number): void
 }>()
 
 const input = ref(null)
@@ -141,6 +142,11 @@ const inputValue = ref(props.modelValue||'')
 //   ? dateToISO(props.modelValue)
 //   : props.modelValue)
 
+const updateValue = (value: string|number) => {
+  emit('input', value)
+  emit('update:modelValue', value)
+}
+
 const onInput = (
   event: { target: { modelValue: string, dataset?: { maskRawValue: string } } },
   masked:boolean
@@ -155,11 +161,11 @@ const onInput = (
     : event.target.value
     
   if( !newValue ) {
-    emit('update:modelValue', '')
+    updateValue('')
     return
   }
 
-  emit('update:modelValue', newValue)
+  updateValue(newValue)
 }
 
 const onChange = (event: { target: { modelValue: string } }) => {

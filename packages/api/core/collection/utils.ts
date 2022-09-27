@@ -115,12 +115,16 @@ export const fill = <T extends MongoDocument>(
   }
 
   const missing = Object.entries(description.fields)
-      .filter(([key, value]: [string, any]) => !item[key] && !value.meta)
-      .map(([key, ]: [string, unknown]) => key)
-      .reduce((a: any, b: string) => ({
+    .reduce((a: any, [key, value]: [string, any]) => {
+      if( item[key] && !value.meta ) {
+        return a
+      }
+
+      return {
         ...a,
-        [b]: null
-      }), {})
+        [key]: null
+      }
+    }, {})
 
   return Object.assign(missing, item)
 }

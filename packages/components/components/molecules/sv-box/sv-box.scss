@@ -129,7 +129,7 @@ $section-padding: .8rem;
     transition: box-shadow .3s;
 
     @include themed() {
-      border-top: 1px solid t(border);
+      border-top: 1px solid t(border-color);
     }
 
     &--shadowed {

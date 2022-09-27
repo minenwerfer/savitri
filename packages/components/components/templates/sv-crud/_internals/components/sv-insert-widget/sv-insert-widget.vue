@@ -18,12 +18,18 @@
       @add="$e.preventDefault()"
     ></sv-form>
     <template #extra>
-      <sv-icon
-        v-clickable
-        v-if="store.item._id"
-        reactive
-        name="ellipsis-h"
-      ></sv-icon>
+      <sv-dropdown v-bind="{
+        subject: store.item,
+        actions: individualActions
+          .filter(({ action }) => action !== 'ui/spawnEdit')
+      }">
+        <sv-icon
+          v-clickable
+          v-if="store.item._id"
+          reactive
+          name="ellipsis-h"
+        ></sv-icon>
+      </sv-dropdown>
     </template>
     <template #footer>
       <sv-button
@@ -44,11 +50,13 @@
 </template>
 
 <script setup lang="ts">
+import { inject, watch } from 'vue'
 import { useStore } from '@savitri/web'
 import {
   SvBox,
   SvForm,
   SvButton,
+  SvDropdown,
   SvIcon
   
 } from '@savitri/components'
@@ -57,6 +65,8 @@ import { isInsertVisible, isInsertReadOnly } from '../../store'
 
 const metaStore = useStore('meta')
 const store = useStore(metaStore.view.collection)
+
+const individualActions = inject('individualActions')
 
 const insert = async () => {
   await store.deepInsert({
@@ -75,4 +85,11 @@ const cancel = () => {
     body: 'Deseja mesmo fechar o painel sem salvar as suas alterações?'
   })
 }
+
+watch(() => store.item._id, (_id: string|null) => {
+  if( _id === null ) {
+    isInsertVisible.value = false
+    store.clearItem()
+  }
+})
 </script>

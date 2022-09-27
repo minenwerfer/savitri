@@ -20,7 +20,7 @@
       "fetchItem": true
     },
     "delete": {
-      "name": "remover",
+      "name": "Remover",
       "unicon": "trash-alt",
       "userOnly": true,
       "ask": true

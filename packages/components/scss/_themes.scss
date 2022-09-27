@@ -1,4 +1,4 @@
-$menu-width: 18rem;
+$menu-width: 16.8rem;
 $default-input-padding: .6rem;
 
 $themes: (
@@ -17,11 +17,6 @@ $themes: (
     body-color: #000
   )
 );
-
-/**
- * Eu não faço ideia do que está rolando aqui, peguei o código abaixo de um
- * artigo do medium
- */
 
 @mixin themed() {
   @each $theme, $map in $themes {

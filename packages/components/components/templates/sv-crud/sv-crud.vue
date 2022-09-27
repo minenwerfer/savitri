@@ -133,7 +133,6 @@ try {
 
 const { hash } = useRoute()
 const [call, actionEventBus] = useAction(store, router)
-provide('storeId', computed(() => props.collection))
 
 const hasSelectionActions = computed(() => {
   return store.actions
@@ -213,6 +212,9 @@ const individualActions = computed(() => {
       ...action
     }))
 })
+
+provide('storeId', computed(() => props.collection))
+provide('individualActions', individualActions)
 </script>
 
 <style scoped src="./sv-crud.scss"></style>

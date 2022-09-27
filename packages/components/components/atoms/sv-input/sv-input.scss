@@ -54,6 +54,10 @@
 
     &--normal, &--bold {
       border-radius: 3px;
+      @include themed() {
+        color: t(foreground-color);
+        background: t(background-color);
+      }
     }
 
     &--normal {

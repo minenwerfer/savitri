@@ -73,8 +73,15 @@ const mutations = {
     return item
   },
 
-  removeItem<T extends { _id: string }>(this: Pick<CollectionState<T>, 'items'>, item: T) {
+  removeItem<T extends { _id: string|null }>(
+    this: Pick<CollectionState<T>, 'items'> & { item: T },
+    item: T
+  ) {
     this.items = this.items.filter(({ _id }: T) => item._id !== _id)
+    if( this.item._id === item._id ) {
+      this.item._id = null
+    }
+
     return item
   },
 

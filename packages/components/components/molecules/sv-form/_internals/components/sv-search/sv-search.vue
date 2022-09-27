@@ -48,6 +48,7 @@
           field,
           array
         }"
+        @update:model-value="emit('update:modelValue', $event)"
       ></sv-search-selected>
 
       <div v-if="!isExpanded">
@@ -251,16 +252,11 @@ const search = async () => {
   })).result
 }
 
-declare global {
-  interface Window {
-    __lazySearchTimeout: any
-  }
-}
-
+let lazySearchTimeout
 const lazySearch = () => {
   isTyping.value = true
-  window.clearTimeout(window.__lazySearchTimeout)
-  window.__lazySearchTimeout = setTimeout(() => {
+  window.clearTimeout(lazySearchTimeout)
+  lazySearchTimeout = setTimeout(() => {
     search()
     isTyping.value = false
   }, 800)

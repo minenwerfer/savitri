@@ -2,6 +2,7 @@
 
 .template {
   @include themed() {
+    color: t(foreground-color);
     background: t(body-color);
   }
 
