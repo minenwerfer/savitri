@@ -64,7 +64,7 @@
         input__input--${variant}
       `"
 
-      @input="updateValue($event.target.modelValue)"
+      @input="updateValue($event.target.value)"
     >{{ modelValue }}</textarea>
   </label>
 </template>
