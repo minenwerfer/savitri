@@ -50,7 +50,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
   private beforeRead(payload: any, decodedToken: any) {
     const newPayload = Object.assign({}, {
       filters: payload?.filters||{},
-      sort: payload?.sort
+      sort: payload?.sort,
+      limit: payload?.limit
     })
 
     if( this.options.queryPreset ) {
@@ -65,6 +66,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
         newPayload.filters,
         this.apiConfig.beforeRead(decodedToken, this.description.collection)
       )
+    }
+
+    if( newPayload.limit > 150 ) {
+      newPayload.limit = 150
     }
 
     return newPayload
@@ -250,10 +255,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    * Modify a single document.
  */
   public modify(props: { filters: any, what: any }, decodedToken?: any): any | Promise<any> {
-    const what = prepareInsert(this.description, props.what)
-    const query = this.beforeWrite(props, decodedToken)
+    const { what, filters } = this.beforeWrite(props, decodedToken)
+    const readyWhat = prepareInsert(what, this.description)
 
-    return this.model.findOneAndUpdate(query.filters, what, { new: true, runValidators: true })
+    return this.model.findOneAndUpdate(filters, readyWhat, { new: true, runValidators: true })
   }
 
   /**

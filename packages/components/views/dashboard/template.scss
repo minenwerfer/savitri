@@ -1,8 +1,8 @@
-@import 'style/themes';
+@import 'style/theming';
 
 .template {
   @include themed() {
-    color: t(foreground-color);
+    color: t(foreground-color-alt);
     background: t(body-color);
   }
 

@@ -1,4 +1,4 @@
-@import 'style/themes';
+@import 'style/theming';
 $icon-size: 1.25rem;
 
 .menu {
@@ -34,15 +34,26 @@ $icon-size: 1.25rem;
   }
 
   &__entries {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.2rem;
+
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     height: 80vh;
     padding: 0 1rem;
+    margin-top: 1rem;
   }
 
   &__entry {
-    padding: .4rem 0;
+    // padding: .4rem 0;
+    @include themed() {
+      &:not(:last-child) {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid t(border-color);
+      }
+    }
   }
 
   &__entry-name {
@@ -63,6 +74,13 @@ $icon-size: 1.25rem;
     border-radius: 5px;
     white-space: nowrap;
 
+    @include themed() {
+      &--current {
+        border-color: t(foreground-color);
+        // background: #2060fa;
+      }
+    }
+
     &:hover {
       background: #dedede;
     }
@@ -70,11 +88,6 @@ $icon-size: 1.25rem;
     :deep(svg) {
       width: $icon-size;
       fill: #000;
-    }
-
-    &--current {
-      border-color: #000;
-      // background: #2060fa;
     }
   }
 

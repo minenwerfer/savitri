@@ -1,4 +1,4 @@
-@import 'style/themes';
+@import 'style/theming';
 
 .breadcumb {
   display: flex;
@@ -11,16 +11,16 @@
     text-decoration: none;
 
     @include themed() {
-      color: t(foreground-color);
+      color: t(foreground-color-alt);
     }
 
     &:not(:last-child):after {;
       content: '/';
-      margin: 0 .5em;
+      margin: 0 .4em;
     }
 
     &:first-child {;
-      opacity: .4;
+      opacity: .6;
     }
   }
 }

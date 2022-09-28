@@ -74,14 +74,14 @@ export abstract class Controller {
 
           const payload = Object.keys(req.payload||{}).length === 0
             ? { filters: {} }
-            : req.payload
+            : req.payload;
 
-          if(
-            typeof req.payload?.limit === 'number'
-            && (req.payload.limit > 150 || req.payload.limit <= 0)
-          ) {
-            req.payload.limit = 150
-          }
+          // if(
+          //   typeof req.payload?.limit === 'number'
+          //   && (req.payload.limit > 150 || req.payload.limit <= 0)
+          // ) {
+          //   req.payload.limit = 150
+          // }
 
           // if( decodedToken.access?.visibility !== 'everything' || alwaysAttribute ) {
           //   if( payload.what ) payload.what.user_id = decodedToken._id

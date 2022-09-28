@@ -1,10 +1,10 @@
-$picture-size: 4rem;
+$picture-size: 3.6rem;
 
 .header {
   display: flex;
   width: 15em;
   padding: 0 1em;
-  column-gap: .8em;
+  column-gap: 1rem;
 
   &__picture {
     width: $picture-size;

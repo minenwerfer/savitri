@@ -73,11 +73,7 @@
     "active": {
       "label": "Ativo",
       "type": "boolean",
-      "default": true,
-      "values": [
-        "Sim",
-        "Não"
-      ]
+      "default": true
     },
     "role": {
       "label": "Papel",

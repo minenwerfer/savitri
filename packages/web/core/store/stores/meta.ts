@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { default as webpackVariables } from 'variables'
 import { CollectionDescription } from '../../../../common/types'
 import { freshItem } from '../../helpers/store'
 import useHttp from '../../http'
@@ -171,7 +172,8 @@ export default defineStore('meta', {
   getters: {
     $theme(): string {
       if( !this.theme ) {
-        this.theme = localStorage.getItem('meta:theme') || 'default'
+        const defaultTheme = webpackVariables.defaultTheme || 'default'
+        this.theme = localStorage.getItem('meta:theme') || defaultTheme
       }
 
       return this.theme

@@ -19,10 +19,7 @@
       `"></div>
     </a>
 
-    <div v-if="values">
-      <slot :label="valueLabel"></slot>
-    </div>
-    <slot v-else-if="$slots.default"></slot>
+    <slot :label="valueLabel"></slot>
   </div>
 </template>
 

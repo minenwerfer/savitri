@@ -1,14 +1,16 @@
-@import 'style/themes';
+@import 'style/theming';
 
 @mixin focus {
   .input {
-    &__container {
-      border: 1px solid #000;
-    }
+    @include themed() {
+      &__container {
+        border: 1px solid t(foreground-color);
+      }
 
-    &__icon {
-      :deep(svg) {
-        fill: #000;
+      &__icon {
+        :deep(svg) {
+          fill: t(foreground-color);
+        }
       }
     }
   }

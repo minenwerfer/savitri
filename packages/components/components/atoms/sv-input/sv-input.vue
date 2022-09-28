@@ -160,8 +160,8 @@ const onInput = (
     ? event.target.dataset.maskRawValue
     : event.target.value
     
-  if( !newValue ) {
-    updateValue('')
+  if( props.type === 'number' && !newValue ) {
+    updateValue(0)
     return
   }
 

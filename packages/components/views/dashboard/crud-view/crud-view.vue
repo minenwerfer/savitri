@@ -1,8 +1,5 @@
 <template>
   <sv-crud
-    fetch
-    refresh
-    controls
     v-if="route.params.collection"
     :collection="route.params.collection"
     :key="route.params.collection"

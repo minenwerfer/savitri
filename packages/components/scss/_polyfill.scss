@@ -1,8 +1,18 @@
-.tw-border { border: 1px solid #dedede; }
-.tw-border-b { border-bottom: 1px solid #dedede; }
-.tw-border-t { border-top: 1px solid #dedede; }
-.tw-border-l { border-left: 1px solid #dedede; }
-.tw-border-r { border-right: 1px solid #dedede; }
+@import 'theming';
+
+* {
+  @include themed() {
+    .tw-border { border: 1px solid t(border-color); }
+    .tw-border-b { border-bottom: 1px solid t(border-color); }
+    .tw-border-t { border-top: 1px solid t(border-color); }
+    .tw-border-l { border-left: 1px solid t(border-color); }
+    .tw-border-r { border-right: 1px solid t(border-color); }
+
+    ::-webkit-scrollbar-track { background: t(background-color); }
+    ::-webkit-scrollbar-thumb { background: lighten(t(foreground-color), 40%); }
+    ::-webkit-scrollbar-thumb:hover { background: t(foreground-color); }
+  }
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button, {
@@ -12,4 +22,8 @@ input::-webkit-inner-spin-button, {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
 }

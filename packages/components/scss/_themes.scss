@@ -4,43 +4,32 @@ $default-input-padding: .6rem;
 $themes: (
   default: (
     border-color: #dedede,
-    foreground-color: #000,
+    button-color: #000,
+    switch-color: #000,
+    foreground-color: #444,
+    foreground-color-alt: #000,
     background-color: #fff,
     background-color-alt: darken(#fff, 10%),
     body-color: #f8f9fa
   ),
   dark: (
-    border-color: #999,
-    foreground-color: #fff,
-    background-color: #555,
-    background-color-alt: lighten(#555, 20%),
-    body-color: #222
+    border-color: #888,
+    button-color: #fff,
+    switch-color: blue,
+    foreground-color: #eee,
+    foreground-color-alt: #fff,
+    background-color: #50505b,
+    background-color-alt: lighten(#50505b, 20%),
+    body-color: #333
   ),
   contrast: (
     border-color: #222,
-    foreground-color: #000,
     button-color: linear-gradient(45deg, darkblue, magenta),
+    switch-color: linear-gradient(45deg, darkblue, magenta),
+    foreground-color: #000,
+    foreground-color-alt: #fff,
     background-color: #fff,
     background-color-alt: lighten(#555, 20%),
-    body-color: #222
+    body-color: #444
   )
 );
-
-@mixin themed() {
-  @each $theme, $map in $themes {
-    .main--#{$theme} & {
-      $theme-map: () !global;
-      @each $key, $submap in $map {
-        $value: map-get(map-get($themes, $theme), '#{$key}');
-        $theme-map: map-merge($theme-map, ($key: $value)) !global;
-      }
-
-      @content;
-      $theme-map: null !global;
-    }
-  }
-}
-
-@function t($key) {
-  @return map-get($theme-map, $key);
-}

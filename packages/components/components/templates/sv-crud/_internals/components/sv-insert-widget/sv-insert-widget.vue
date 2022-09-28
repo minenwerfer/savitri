@@ -108,4 +108,10 @@ const cancel = () => {
     body: 'Deseja mesmo fechar o painel sem salvar as suas alterações?'
   })
 }
+
+watch(() => store.item._id, (_id) => {
+  if( _id === null ) {
+    isInsertVisible.value = false
+  }
+})
 </script>

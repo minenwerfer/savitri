@@ -3,6 +3,7 @@
     icon
     ${reactive && 'icon--reactive'}
     ${selected && 'icon--selected'}
+    ${alt && 'icon--alt'}
     ${$slots.default && 'icon--centered'}
   `">
     <div :class="`
@@ -26,6 +27,7 @@ type Props = {
   name: string
   fill?: string
   small?: boolean
+  alt?: boolean
   reactive?: boolean
   selected?: boolean
 }

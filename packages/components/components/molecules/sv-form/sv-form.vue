@@ -13,7 +13,7 @@
         class="form__field"
         @input="$emit('input', key)"
       >
-        <label>
+        <label v-if="field.type !== 'boolean'">
           <strong>
             {{ field.translate ? $t(field.label) : field.label }}
           </strong>
@@ -54,7 +54,11 @@
 
               v-bind="field"
             >
-              {{ label }}
+              {{
+                field.values
+                  ? label
+                  : field.label
+              }}
             </sv-switch>
           </div>
 
@@ -273,14 +277,19 @@ const fieldStyle = (key:string, field: any) => {
   const style = []
   const layout = props.layout?.[key] || props.layout?.$default
 
+  if( !field ) {
+    return
+  }
+
   style.push(`
     --field-span: ${layout?.span || 6};
     grid-column: span var(--field-span) / span var(--field-span);
   `)
 
   if(
-    isSelectType(field?.type)
-    || field?.collection === 'file'
+    isSelectType(field.type)
+    && field.type !== 'boolean'
+    || field.collection === 'file'
   ) {
     style.push('padding-bottom: .6rem;')
   }

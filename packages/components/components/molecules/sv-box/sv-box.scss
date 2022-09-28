@@ -1,4 +1,4 @@
-@import 'style/themes';
+@import 'style/theming';
 $section-padding: .8rem;
 
 @keyframes fixed-fadein {
@@ -97,7 +97,10 @@ $section-padding: .8rem;
 
     padding: 0 $section-padding;
     height: 3rem;
-    background: #ddd;
+
+    @include themed() {
+      background: t(background-color-alt);
+    }
 
     :deep(svg) {
       width: 1.2rem;
@@ -129,11 +132,10 @@ $section-padding: .8rem;
 
     @include themed() {
       border-top: 1px solid t(border-color);
-    }
-
-    &--shadowed {
-      box-shadow: 0 -4px 20px #ccc;
-      z-index: 10;
+      &--shadowed {
+        box-shadow: 0 -4px 20px t(border-color);
+        z-index: 10;
+      }
     }
   }
 }

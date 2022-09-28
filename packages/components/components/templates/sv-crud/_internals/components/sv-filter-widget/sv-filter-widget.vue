@@ -12,6 +12,7 @@
         @clicked="isFilterVisible = true"
       >
         <sv-icon
+          alt
           reactive
           name="filter"
         ></sv-icon>
@@ -21,6 +22,7 @@
         @clicked="store.clearFilters"
       >
         <sv-icon
+          alt
           reactive
           name="trash"
         ></sv-icon>

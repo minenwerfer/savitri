@@ -1,4 +1,4 @@
-@import 'style/themes';
+@import 'style/theming';
 
 @mixin selected {
   background: #eee;
@@ -15,6 +15,10 @@
 
   @include themed() {
     fill: t(foreground-color);
+
+    &--alt {
+      fill: t(foreground-color-alt);
+    }
   }
 
   &--selected {

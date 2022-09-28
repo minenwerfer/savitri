@@ -1,4 +1,4 @@
-@import 'style/themes';
+@import 'style/theming';
 
 .button {
   transition: all .2s;
@@ -10,13 +10,27 @@
   @include themed() {
     color: t(foreground-color);
 
+    &--alt,
+    &--transparent {
+      &:hover {
+        background: #eee;
+      }
+    }
+
     &--alt {
-      border: 2px solid t(border-color);
+      color: t(foreground-color-alt);
+      background: t(button-color-alt);
+      border: 1px solid t(foreground-color-alt);
+
+      :deep(svg) {
+        fill: t(foreground-color-alt);
+      }
     }
 
     &--normal {
       color: t(background-color);
       background: t(button-color);
+      border: 1px solid t(background-color);
 
       :deep(svg) {
         fill: t(background-color);

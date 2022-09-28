@@ -1,17 +1,18 @@
 <template>
   <div v-if="store" class="crud">
     <div
-      v-if="controls"
+      v-if="!noControls"
       class="crud__panel"
     >
       <div class="crud__panel-control">
         <sv-filter-widget :key="store.$id"></sv-filter-widget>
-        <sv-info v-if="refresh">
+        <sv-info v-if="!noRefresh">
           <template #text>
             Atualizar
           </template>
           <sv-icon
             v-clickable
+            alt
             reactive
             name="refresh"
             @click="fetchItems"
@@ -22,7 +23,7 @@
           v-bind="{
             size: 'small',
             icon: 'export',
-            variant: 'light'
+            variant: 'alt'
           }"
           @clicked="isReportVisible = true"
         >
@@ -40,7 +41,7 @@
           v-bind="{
             size: 'small',
             icon: actionProps.unicon,
-            disabled: store.isLoading || store.selectedIds.length === 0 && actionProps.selection
+            disabled: store.selectedIds.length === 0 && actionProps.selection
           }"
           @clicked="call(actionProps)({ _id: selectedIds })"
         >
@@ -50,7 +51,6 @@
       </div>
     </div>
 
-    <!-- v-if is used on purpose to force re-rendering -->
     <sv-insert-widget
       v-if="isInsertVisible"
       v-bind="{
@@ -80,7 +80,10 @@
           actions: individualActions
         }"
       ></sv-table>
-      <div v-if="store.itemsCount === 0 && !store.isLoading">
+      <div
+        v-if="store.itemsCount === 0 && !store.isLoading"
+        class="crud__table-empty"
+      >
           Não foram retornados resultados.
       </div>
     </sv-box>
@@ -133,9 +136,9 @@ import {
 
 type Props = {
   collection: string
-  controls?: boolean
-  fetch?: boolean
-  refresh?: boolean
+  noControls?: boolean
+  noFetch?: boolean
+  noRefresh?: boolean
   parentCollection?: string
   parentField?: string
 }
@@ -166,7 +169,6 @@ const hasSelectionActions = computed(() => {
 
 const fetchItems = async () => {
   if( props.parentField ) {
-    console.log("jfdbsahbjfbdsahjfbdashjfbdshajfbdhjsab")
     store.setItems(parentStore.item[props.parentField]||[])
     return
   }
@@ -180,7 +182,7 @@ onMounted(() => {
   isInsertReadonly.value = false
 
   if(
-    props.fetch && (props.parentField || store.itemsCount === 0) ) {
+    !props.noFetch && (props.parentField || store.itemsCount === 0) ) {
     fetchItems()
   }
 })

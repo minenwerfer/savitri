@@ -44,4 +44,10 @@
       align-items: center;
     }
   }
+
+  &__table-empty {
+    display: grid;
+    place-items: center;
+    padding: 1.6rem 0;
+  }
 }
