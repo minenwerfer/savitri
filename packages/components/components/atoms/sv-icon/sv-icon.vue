@@ -2,6 +2,7 @@
   <a :class="`
     icon
     ${reactive && 'icon--reactive'}
+    ${selected && 'icon--selected'}
     ${$slots.default && 'icon--centered'}
   `">
     <div :class="`
@@ -26,6 +27,7 @@ type Props = {
   fill?: string
   small?: boolean
   reactive?: boolean
+  selected?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

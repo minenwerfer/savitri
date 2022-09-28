@@ -1,3 +1,4 @@
+@import 'style/themes';
 $slider-radius: 1rem;
 
 .switch-wrapper {
@@ -21,8 +22,10 @@ $slider-radius: 1rem;
 
   width: 3rem;
 
-  &--active {
-    background: #000;
+  @include themed() {
+    &--active {
+      background: t(button-color);
+    }
   }
 
   &--readOnly {

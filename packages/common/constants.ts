@@ -40,6 +40,7 @@ export const COLLECTION_PRESETS = <const>[
   'crud',
   'duplicate',
   'owned',
+  'delete',
   'deleteAll',
   'toggleActive',
   'view',

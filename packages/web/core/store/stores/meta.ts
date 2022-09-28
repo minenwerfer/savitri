@@ -163,18 +163,9 @@ export default defineStore('meta', {
       this.toasts.shift()
     },
 
-    setTheme(theme: string) {
-      this.theme = theme
-      localStorage.setItem('meta:theme', theme)
+    saveTheme() {
+      localStorage.setItem('meta:theme', this.theme)
     },
-
-    toggleDarkMode() {
-      const newTheme = this.theme === 'dark'
-        ? 'default'
-        : 'dark'
-
-      this.setTheme(newTheme)
-    }
   },
 
   getters: {

@@ -1,9 +1,12 @@
 <template>
   <div v-if="store" class="crud">
-    <div class="crud__panel">
+    <div
+      v-if="controls"
+      class="crud__panel"
+    >
       <div class="crud__panel-control">
         <sv-filter-widget :key="store.$id"></sv-filter-widget>
-        <sv-info>
+        <sv-info v-if="refresh">
           <template #text>
             Atualizar
           </template>
@@ -11,7 +14,7 @@
             v-clickable
             reactive
             name="refresh"
-            @click="store.filter"
+            @click="fetchItems"
           ></sv-icon>
         </sv-info>
         <sv-button
@@ -43,12 +46,18 @@
         >
           {{ actionProps.name }}
         </sv-button>
-        <slot name="actions"></slot>
+        <slot v-if="$slots.actions" name="actions"></slot>
       </div>
     </div>
 
     <!-- v-if is used on purpose to force re-rendering -->
-    <sv-insert-widget v-if="isInsertVisible"></sv-insert-widget>
+    <sv-insert-widget
+      v-if="isInsertVisible"
+      v-bind="{
+        parentCollection,
+        parentField
+      }"
+    ></sv-insert-widget>
     <sv-report-widget></sv-report-widget>
 
     <sv-box>
@@ -85,12 +94,19 @@ import {
   onUnmounted,
   computed,
   provide,
-  watch,
+  watch
 
 } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useStore, useAction, ActionEvent } from '@savitri/web'
+import {
+  useStore,
+  useParentStore,
+  useAction,
+  ActionEvent
+
+} from '@savitri/web'
+
 import {
   SvBox,
   SvTable,
@@ -117,18 +133,27 @@ import {
 
 type Props = {
   collection: string
+  controls?: boolean
+  fetch?: boolean
+  refresh?: boolean
+  parentCollection?: string
+  parentField?: string
 }
 
 const props = defineProps<Props>()
-let store
-const metaStore = useStore('meta')
-
 const router = useRouter()
+
+let store, parentStore
+const metaStore = useStore('meta')
 
 try {
   store = useStore(props.collection)
 } catch( e ) {
   router.push({ name: 'not-found' })
+}
+
+if( props.parentField ) {
+  parentStore = useParentStore(props.parentCollection)
 }
 
 const { hash } = useRoute()
@@ -139,13 +164,24 @@ const hasSelectionActions = computed(() => {
     .some((action: any) => !!action.selection)
 })
 
+const fetchItems = async () => {
+  if( props.parentField ) {
+    console.log("jfdbsahbjfbdsahjfbdashjfbdshajfbdhjsab")
+    store.setItems(parentStore.item[props.parentField]||[])
+    return
+  }
+
+  return store.filter()
+}
+
 onMounted(() => {
   metaStore.view.title = props.collection
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
 
-  if( store.itemsCount === 0 ) {
-    store.filter()
+  if(
+    props.fetch && (props.parentField || store.itemsCount === 0) ) {
+    fetchItems()
   }
 })
 
@@ -215,6 +251,7 @@ const individualActions = computed(() => {
 
 provide('storeId', computed(() => props.collection))
 provide('individualActions', individualActions)
+provide('parentStore', parentStore)
 </script>
 
 <style scoped src="./sv-crud.scss"></style>

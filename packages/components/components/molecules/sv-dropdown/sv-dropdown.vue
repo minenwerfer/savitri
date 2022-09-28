@@ -47,9 +47,14 @@ type Props = {
   subject?: any
 }
 
-const props = defineProps<Props>()
-const userStore = useStore('user')
+type Emits = {
+  (e: 'actionClicked', event: { action: any, subject: any }): void
+}
 
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const userStore = useStore('user')
 const dropdownVisible = ref(false)
 
 const filterActions = (actions: Array<any>) => {
@@ -64,6 +69,8 @@ const filterActions = (actions: Array<any>) => {
 
 const onClick = (action, subject) => {
   action.click(subject)
+  emit('actionClicked', { action, subject })
+
   dropdownVisible.value = false
 }
 </script>

@@ -10,14 +10,13 @@
   @include themed() {
     color: t(foreground-color);
 
-    &--light,
-    &--normal {
-      border: 1px solid t(border-color);
+    &--alt {
+      border: 2px solid t(border-color);
     }
 
     &--normal {
       color: t(background-color);
-      background: t(foreground-color);
+      background: t(button-color);
 
       :deep(svg) {
         fill: t(background-color);

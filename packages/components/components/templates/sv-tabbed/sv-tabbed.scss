@@ -1,3 +1,5 @@
+@import 'style/themes';
+
 .tabbed {
   display: flex;
   flex-direction: column;
@@ -17,6 +19,7 @@
 
     &--vertical {
       flex-direction: column;
+      min-width: 15rem;
     }
   }
 
@@ -24,6 +27,9 @@
     display: flex;
     width: 100%;
     padding: .6rem;
+    @include themed() {
+      color: t(foreground-color);
+    }
 
     &--active {
       background: lightblue;

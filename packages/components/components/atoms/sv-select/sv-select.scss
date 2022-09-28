@@ -12,11 +12,6 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  background-image:
-    linear-gradient(45deg, transparent 50%, #fff 50%),
-    linear-gradient(135deg, #fff 50%, transparent 50%),
-    linear-gradient(to right, #000, #000);
-
   background-position:
     calc(100% - (2.5rem/2)) 50%,
     calc(100% - (2.5rem/2) + 5px) 50%,
@@ -31,6 +26,11 @@
 
   @include themed() {
     border: 1px solid t(border-color);
+    
+    background-image:
+      linear-gradient(45deg, transparent 50%, #fff 50%),
+      linear-gradient(135deg, #fff 50%, transparent 50%),
+      linear-gradient(to right, #000, #000);
   }
 
   &:focus {

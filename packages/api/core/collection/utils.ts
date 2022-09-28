@@ -131,7 +131,7 @@ export const fill = <T extends MongoDocument>(
 
 export const prepareInsert = (
   payload: any,
-  description: Pick<CollectionDescription, 'fields' | 'form'>
+  description: Pick<CollectionDescription, 'fields' | 'form' | 'writable'>
 ) => {
   const {
     _id,
@@ -142,8 +142,10 @@ export const prepareInsert = (
   } = payload
 
   const forbidden = (key: string) => {
-    return description.fields[key]?.readOnly
+    return !description.writable?.includes(key) && (
+      description.fields[key]?.readOnly
       || (description.form && !description.form.includes(key))
+    )
   }
 
   const what = typeof _id === 'string' ? Object.entries(rest)

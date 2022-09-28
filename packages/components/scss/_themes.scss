@@ -3,18 +3,26 @@ $default-input-padding: .6rem;
 
 $themes: (
   default: (
-    test-color: red,
     border-color: #dedede,
     foreground-color: #000,
     background-color: #fff,
+    background-color-alt: darken(#fff, 10%),
     body-color: #f8f9fa
   ),
   dark: (
-    test-color: red,
-    border-color: #aaa,
+    border-color: #999,
     foreground-color: #fff,
     background-color: #555,
-    body-color: #000
+    background-color-alt: lighten(#555, 20%),
+    body-color: #222
+  ),
+  contrast: (
+    border-color: #222,
+    foreground-color: #000,
+    button-color: linear-gradient(45deg, darkblue, magenta),
+    background-color: #fff,
+    background-color-alt: lighten(#555, 20%),
+    body-color: #222
   )
 );
 

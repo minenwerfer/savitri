@@ -5,7 +5,7 @@
       <div
         v-clickable
         class="notfound__back"
-        @click="goToMainPage"
+        @click="goBack"
       >
         Voltar
       </div>
@@ -17,7 +17,14 @@
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const goToMainPage = () => router.push('/')
+const goBack = () => {
+  if( router.options.history.state.back ) {
+    router.back()
+    return
+  }
+
+  router.push('/')
+}
 </script>
 
 <style scoped src="./not-found.scss"></style>

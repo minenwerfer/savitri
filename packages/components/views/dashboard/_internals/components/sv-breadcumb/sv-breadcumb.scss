@@ -1,3 +1,5 @@
+@import 'style/themes';
+
 .breadcumb {
   display: flex;
   place-items: center;
@@ -6,6 +8,12 @@
   white-space: nowrap;
 
   &__link {
+    text-decoration: none;
+
+    @include themed() {
+      color: t(foreground-color);
+    }
+
     &:not(:last-child):after {;
       content: '/';
       margin: 0 .5em;

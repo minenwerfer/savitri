@@ -25,6 +25,7 @@ export type CollectionDescription = {
   presets?: Array<CollectionPreset>
   table?: Array<string>
   form?: Array<string>
+  writable?: Array<string>
   filters?: Array<string|{
     field: string
     default: string

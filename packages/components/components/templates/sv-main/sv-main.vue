@@ -2,6 +2,7 @@
   <div :class="`
     main
     main--${metaStore.$theme}
+    ${metaStore.$theme === 'dark' && 'tw-dark'}
   `">
     <router-view></router-view>
 

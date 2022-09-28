@@ -5,6 +5,7 @@
 
     :key="modelValue"
     :value="getValue(modelValue)"
+    @click.stop="void"
     @change="$emit('update:modelValue', $event.target.value)"
   >
     <slot></slot>

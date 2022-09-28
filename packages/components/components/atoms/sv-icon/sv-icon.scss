@@ -1,5 +1,9 @@
 @import 'style/themes';
 
+@mixin selected {
+  background: #eee;
+}
+
 .icon {
   display: flex;
   line-height: 100%;
@@ -13,12 +17,16 @@
     fill: t(foreground-color);
   }
 
+  &--selected {
+    @include selected;
+  }
+
   &--reactive {
     padding: 4px;
     border-radius: 5px;
 
     &:hover {
-      background: #eee;
+      @include selected;
     }
 
     &:active {

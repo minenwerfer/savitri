@@ -28,7 +28,6 @@ $section-padding: .8rem;
   &__content {
     display: flex;
     flex-direction: column;
-
     border-radius: 5px;
     overflow: hidden;
 
@@ -72,8 +71,8 @@ $section-padding: .8rem;
 
       animation: fixed-fadein .35s forwards;
       overscroll-behavior: contain;
-      border: none;
-      border-radius: none;
+      border: 0;
+      border-radius: 0;
     }
 
     &--transparent {

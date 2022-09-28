@@ -14,9 +14,9 @@ $picture-size: 3.6rem;
       font-size: 8.5pt;
       text-transform: uppercase;
       text-align: left;
-      background: #eee;
 
       @include themed() {
+        background: t(background-color-alt);
         border-bottom: 1px solid t(border-color);
       }
 

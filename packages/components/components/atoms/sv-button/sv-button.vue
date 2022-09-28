@@ -38,7 +38,7 @@ type Size =
 
 type Variant =
   'normal'
-  | 'light'
+  | 'alt'
   | 'transparent'
 
 type Props = {

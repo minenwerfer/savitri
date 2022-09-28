@@ -18,7 +18,7 @@
   z-index: 30;
 
   @include themed() {
-    color: t(test-color);
+    color: t(foreground-color);
     border-bottom: 1px solid t(border-color);
     background: t(background-color);
   }

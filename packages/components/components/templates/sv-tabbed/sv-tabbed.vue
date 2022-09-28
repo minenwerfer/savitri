@@ -1,23 +1,30 @@
 <template>
-  <div :class="`tabbed ${vertical && 'tabbed--vertical'}`">
+  <div :class="`
+    tabbed
+    ${vertical && 'tabbed--vertical'}
+  `">
     <sv-box
+      fill
       v-if="titles && titles.length > 0"
-      :fill="true"
     >
-      <div :class="`tabbed__menu ${vertical && 'tabbed__menu--vertical'}`">
+      <div :class="`
+        tabbed__menu
+        ${vertical && 'tabbed__menu--vertical'}
+      `">
         <slot
           v-if="$slots.menu && vertical"
           name="menu"
           class="hidden xl:block"
         ></slot>
         <sv-bare-button
+          v-for="(title, index) in titles"
+          :key="`tabtitle-${index}`"
+
           :class="`
             tabbed__menu-button
             ${currentTab === index && 'tabbed__menu-button--active'}
             ${vertical && 'tabbed__menu-button--vertical'}
           `"
-          v-for="(title, index) in titles"
-          :key="`tabtitle-${index}`"
 
           @clicked="$emit('update:currentTab', index)"
         >
@@ -46,7 +53,6 @@ import { useRouter, useRoute } from 'vue-router'
 import { SvBareButton, SvBox } from '../..'
 
 type Props = {
-  tabs: number
   currentTab: number
   titles?: Array<string>
   vertical?: boolean

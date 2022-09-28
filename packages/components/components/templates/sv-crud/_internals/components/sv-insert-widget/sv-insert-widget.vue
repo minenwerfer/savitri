@@ -18,11 +18,14 @@
       @add="$e.preventDefault()"
     ></sv-form>
     <template #extra>
-      <sv-dropdown v-bind="{
-        subject: store.item,
-        actions: individualActions
-          .filter(({ action }) => action !== 'ui/spawnEdit')
-      }">
+      <sv-dropdown
+        v-bind="{
+          subject: store.item,
+          actions: individualActions
+            .filter(({ action }) => action !== 'ui/spawnEdit')
+        }"
+        @action-clicked="isInsertVisible = false"
+      >
         <sv-icon
           v-clickable
           v-if="store.item._id"
@@ -51,7 +54,7 @@
 
 <script setup lang="ts">
 import { inject, watch } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore, useParentStore } from '@savitri/web'
 import {
   SvBox,
   SvForm,
@@ -63,15 +66,35 @@ import {
 
 import { isInsertVisible, isInsertReadOnly } from '../../store'
 
+const props = defineProps<{
+  parentCollection?: string
+  parentField?: string
+}>()
+
 const metaStore = useStore('meta')
 const store = useStore(metaStore.view.collection)
-
 const individualActions = inject('individualActions')
 
+const parentStore = inject('parentStore')
+
 const insert = async () => {
-  await store.deepInsert({
+  const result = await store.deepInsert({
     what: store.item
   })
+
+  if( props.parentField ) {
+    const newSet = parentStore.item[props.parentField] ||= []
+    if( newSet.findIndex(({ _id }) => _id === result._id) === -1 ) {
+      newSet.push(result._id)
+    }
+
+    await parentStore.insert({
+      what: {
+        _id: parentStore.item._id,
+        [props.parentField]: newSet
+      }
+    })
+  }
 
   isInsertVisible.value = false
 }
@@ -85,11 +108,4 @@ const cancel = () => {
     body: 'Deseja mesmo fechar o painel sem salvar as suas alterações?'
   })
 }
-
-watch(() => store.item._id, (_id: string|null) => {
-  if( _id === null ) {
-    isInsertVisible.value = false
-    store.clearItem()
-  }
-})
 </script>
