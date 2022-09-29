@@ -13,7 +13,7 @@
         collection: 'report',
         form: reportStore.useFieldsExcept([
           'owner',
-          'collection'
+          '_collection'
         ]),
         formData: reportStore.item
       }"
@@ -24,8 +24,15 @@
       Clique <a @click="download">aqui</a> para baixá-lo agora ou faça-o mais tarde através da seção "Relatórios".
     </p>
     <template #footer>
-      <sv-button v-if="!reportStore.item._id" @clicked="requestReport">Solicitar</sv-button>
-      <sv-button v-else @clicked="download">Baixar</sv-button>
+      <sv-button
+        v-if="!reportStore.item._id"
+        @clicked="requestReport"
+      >
+        Solicitar
+      </sv-button>
+      <sv-button v-else @clicked="reportStore.download">
+        Baixar
+      </sv-button>
     </template>
   </sv-box>
 </template>
@@ -36,23 +43,22 @@ import { useStore, useParentStore } from '@savitri/web'
 import { SvBox, SvForm, SvButton } from '../../../../../..'
 import { isReportVisible } from '../../store'
 
+const props = defineProps<{
+  collection: string
+}>()
+
 const store = useParentStore()
+
 const reportStore = useStore('report')
 const metaStore = useStore('meta')
 
 const requestReport = () => {
   return reportStore.insert({
-    payload: {
-      what: {
-        ...reportStore.item,
-        collection: props.collection,
-        filters: store.filters
-      }
+    what: {
+      ...reportStore.item,
+      _collection: props.collection,
+      filters: store.filters
     }
   })
-}
-
-const download = () => {
-  reportStore.download({ payload: { filters: reportStore.item } })
 }
 </script>

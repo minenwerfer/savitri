@@ -10,7 +10,7 @@ import type {
 
 
 export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
-  const { http } = useHttp()
+  const { nonProxiedHttp: http } = useHttp()
 
   const userStore = useStore('user')
   const normalize = (data: any, query: any) => data
@@ -68,19 +68,24 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
 
       const route = `${query.collection}/getAll`
 
-      const { data } = await http.post(route, {
-        filters: query.filters || {},
-        project: query.index || {},
-        limit: query.limit,
-        offset: query.offset
-      })
+      try {
+        const { data } = await http.post(route, {
+          filters: query.filters || {},
+          project: query.index || {},
+          limit: query.limit,
+          offset: query.offset
+        })
 
-      stored.items.push(...data.result)
-      stored.satisfied = data.pagination.recordsTotal === query.offset
+        stored.items.push(...data.result)
+        stored.satisfied = data.pagination.recordsTotal === query.offset
 
-      const result = normalize(stored.items, query)
+        const result = normalize(stored.items, query)
+        return result
 
-      return result
+      } catch(e) {
+        return stored.items
+      }
+
     })
   }
 

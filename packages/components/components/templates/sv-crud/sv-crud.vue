@@ -58,7 +58,7 @@
         parentField
       }"
     ></sv-insert-widget>
-    <sv-report-widget></sv-report-widget>
+    <sv-report-widget :collection="collection"></sv-report-widget>
 
     <sv-box>
       <div class="crud__table-panel">

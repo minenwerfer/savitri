@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import useCollection from '../collection'
+import { SV_API_URL } from '../../../../common/constants'
 
 const collection = useCollection({
   state: {
@@ -7,7 +8,8 @@ const collection = useCollection({
   },
   actions: {
     download(payload: any) {
-      window.open(payload.filters.file)
+      const item = payload || this.item
+      window.open(`${SV_API_URL}/file/${item.file?._id}/download`)
     }
   }
 })

@@ -21,6 +21,10 @@ $picture-size: 3.6rem;
   @include themed() {
     background: t(background-color);
     border: 1px solid t(border-color);
+
+    &__collection-name {
+      background: t(background-color-alt);
+    }
   }
 
   @media screen and (min-width: 600px) {
@@ -49,7 +53,6 @@ $picture-size: 3.6rem;
 
   &__collection-name {
     padding: .6rem $horizontal-padding;
-    background: #eee;
   }
 
   &__results {

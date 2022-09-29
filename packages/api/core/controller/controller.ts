@@ -1,15 +1,12 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../common/types'
-import type { HandlerRequest, ProvidedParams } from '../../types'
+import type { HandlerRequest, ProvidedParams, ApiConfig } from '../../types'
 import { AuthorizationError, PermissionError } from '../exceptions'
 import { TokenService } from '../services'
 
 export abstract class Controller {
   private _webInterface: Controller
-  // protected _description?: Partial<CollectionDescription>
-
   public injected: Omit<ProvidedParams, 'apiConfig'>
-  public apiConfig: ProvidedParams['apiConfig']
 
   /**
    * @protected @readonly
@@ -42,6 +39,10 @@ export abstract class Controller {
   ) {
     if( props.provide ) {
       Object.assign(this.injected, props.provide)
+    }
+
+    if( !props.controller ) {
+      props.controller = props.description?.collection
     }
 
     this._webInterface = new Proxy(this, {
@@ -100,6 +101,10 @@ export abstract class Controller {
 
   public rawType(verb: string): string|undefined {
     return this.props.rawMethods?.[verb]
+  }
+
+  get apiConfig(): ApiConfig {
+    return this.injected.apiConfig||{}
   }
 
   get webInterface(): Controller {

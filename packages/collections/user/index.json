@@ -37,7 +37,9 @@
   "filters": [
     "first_name",
     "last_name",
-    "role"
+    "role",
+    "email",
+    "phone"
   ],
   "table": [
     "full_name",

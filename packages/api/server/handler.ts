@@ -102,11 +102,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     const Controller = getController(controller, type)
     const instance = new Controller
     
-    if( provide ) {
-      const { apiConfig, ...provided } = provide
-      instance.injected = provided
-      instance.apiConfig = apiConfig||{}
-    }
+    instance.injected = provide||{}
 
     const token = await getToken(request) as DecodedToken
     const method = (instance.webInterface||instance)[verb]

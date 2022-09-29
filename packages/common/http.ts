@@ -94,7 +94,7 @@ export class RequestProvider {
   }
 
   get instance(): AxiosInstance {
-    return this._proxiedInstance;
+    return this._proxiedInstance
   }
 
   /**

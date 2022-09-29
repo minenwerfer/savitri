@@ -71,32 +71,38 @@ export class ReportController extends Mutable<ReportDocument> {
   }
 
   public override async insert(props: { what: any }, decodedToken: any) {
-    if( !props.what?.format ) {
-      throw new Error('especifique um formato')
-    }
+    const {
+      _collection: collectionName,
+      type,
+      format,
 
-    if( !(props.what?.format in this._formatMap) ) {
+    } = props.what||{}
+
+    if(
+      !collectionName
+      || !type
+      || !format
+    ) {
+      throw new Error(
+        `Please fill in all required props`
+      )
+    }
+    
+    if( !(format in this._formatMap) ) {
       throw new Error('formato inválido')
     }
 
-    if( !props.what?.type ) {
-      throw new Error('especifique um tipo')
+    if( !this.isGranted(decodedToken, 'report', collectionName) ) {
+      throw new Error('forbidden method (hasnt report granted)')
     }
 
-    if( props.what?.limit <= 0 ) {
-      throw new Error('limite inválido')
-    }
-
-    if( !decodedToken.access?.capabilities[props.what?.module].includes('report') ) {
-      throw new Error('forbidden method')
-    }
-
-    props.what.filters = props.what.type !== 'everything'
+    props.what.filters = type !== 'everything'
       ? (props.what.filters || {})
       : {}
 
-    const Controller = getController(props.what.module)
+    const Controller = getController(collectionName)
     const instance = new Controller
+    instance.injected = this.injected
 
     const description = instance.describe()
 
@@ -113,7 +119,7 @@ export class ReportController extends Mutable<ReportDocument> {
       filters: props.what.filters,
       limit: +(props.what.limit || 99999999),
       offset: +(props.what.offset || 0)
-    }).lean()
+    })
 
     const pipe = R.pipe(
       (r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
@@ -127,7 +133,7 @@ export class ReportController extends Mutable<ReportDocument> {
             ...a,
             [key]: (() => {
               const val = Collection.formatValue(description, value, key, false, fields[key])
-              return val.includes(',') && props.what.format === 'csv'
+              return val.includes(',') && format === 'csv'
                 ? `"${val}"`
                 : val
             })()
@@ -137,7 +143,7 @@ export class ReportController extends Mutable<ReportDocument> {
     const rows = result
       .map(pipe)
 
-    const func = this._formatMap[props.what.format]
+    const func = this._formatMap[format]
     const { filename, mime } = await func.call(this, columns, rows)
 
     props.what.entries_count = rows.length
