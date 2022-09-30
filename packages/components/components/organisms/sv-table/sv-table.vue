@@ -89,7 +89,7 @@
             <div v-else>
               <sv-picture
                 v-if="field.collection === 'file'" 
-                v-model="row[column]"
+                v-model="row[column].link"
                 class="table__picture"
               ></sv-picture>
               <div v-else-if="store">
