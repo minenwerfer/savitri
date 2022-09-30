@@ -32,7 +32,7 @@ export const fields = (description: MaybeCollectionDescription): MaybeCollection
     const field = _field as Pick<CollectionField, 'type' | 'collection'>
     if( !isValidFieldType(field.type) && !field.collection ) {
       throw TypeError(
-        `invalid field type "${field.type} at "${(description as MaybeCollectionDescription).collection}"`
+        `invalid field type "${field.type}" at "${(description as MaybeCollectionDescription).collection}"`
       )
     }
   })

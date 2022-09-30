@@ -80,12 +80,6 @@
           actions: individualActions
         }"
       ></sv-table>
-      <div
-        v-if="store.itemsCount === 0 && !store.isLoading"
-        class="crud__table-empty"
-      >
-          Não foram retornados resultados.
-      </div>
     </sv-box>
 
   </div>

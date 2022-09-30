@@ -38,7 +38,7 @@ import { SvIcon } from '../../../../..'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 type Props = {
-  modelValue?: Array<any>
+  modelValue?: any
   indexes: Array<string>
   field: any
   searchOnly?: boolean

@@ -79,10 +79,10 @@ $icon-size: 1.25rem;
         border-color: t(foreground-color);
         // background: #2060fa;
       }
-    }
 
-    &:hover {
-      background: #dedede;
+      &:hover {
+        background: t(background-color-alt);
+      }
     }
 
     :deep(svg) {

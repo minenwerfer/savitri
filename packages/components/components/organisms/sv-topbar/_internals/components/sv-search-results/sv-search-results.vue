@@ -41,7 +41,7 @@
                 v-bind="{
                   icon: actionProps.unicon,
                   size: 'small',
-                  variant: 'light'
+                  variant: 'alt'
                 }"
 
                 :key="`action-${actionProps.action}`"

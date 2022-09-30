@@ -34,14 +34,14 @@ $picture-size: 3.6rem;
         &:not(:last-child) {
           border-bottom: 1px solid t(border-color);
         }
+
+        &:hover {
+          background: t(background-color-alt);
+        }
       }
 
       &:last-child {
         margin-bottom: 0;
-      }
-
-      &:hover {
-        background: #eee;
       }
 
       @media screen and (max-width: 600px) {
@@ -110,5 +110,11 @@ $picture-size: 3.6rem;
     border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
+  }
+
+  &__empty {
+    display: grid;
+    place-items: center;
+    padding: 1.6rem 0;
   }
 }
