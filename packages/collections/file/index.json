@@ -45,13 +45,11 @@
     },
     "absolute_path": {
       "label": "Caminho absoluto",
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "relative_path": {
       "label": "Caminho relativo",
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "immutable": {
       "label": "Imutável",
