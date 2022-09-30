@@ -3,7 +3,7 @@
     <div v-if="preview || modelValue?._id">
       <sv-picture
         v-if="isImage"
-        :file="previewFile"
+        v-model="previewFile"
         class="file__image"
       ></sv-picture>
       <div
@@ -66,7 +66,7 @@ const preview = ref(null)
 const previewFile = computed(() =>
   preview.value
     ? URL.createObjectURL(preview.value)
-    : props.modelValue
+    : props.modelValue?.link
 )
 
 const isImage = computed(() => 

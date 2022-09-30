@@ -1,8 +1,8 @@
 <template>
   <div class="picture">
     <img
-      v-if="fileLink"
-      v-lazy="fileLink"
+      v-if="url"
+      v-lazy="url"
       class="picture__image"
     />
 
@@ -13,27 +13,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useHttp } from '../../../../web'
 
 type Props = {
-  file: any
+  url?: string
+  modelValue?: string
 }
 
 const props = defineProps<Props>()
-const { apiUrl } = useHttp()
-
-const fileLink = computed(() => {
-  if( !props.file || (typeof props.file === 'object' && !props.file._id) ) {
-    return
-  }
-
-  const timestamp = new Date(props.file.last_modified)?.getTime()
-    || 'fresh'
-
-  return props.file._id
-    ? `${apiUrl}/file/${props.file._id}?${timestamp}`
-    : props.file
-})
+const url = computed(() => props.url || props.modelValue)
 </script>
 
 <style scoped src="./sv-picture.scss"></style>

@@ -87,36 +87,33 @@
             </div>
 
             <div v-else>
-              <div>
-                <sv-picture
-                  v-if="field.collection === 'file'" 
-                  :file="row[column]"
-                  class="table__picture"
-                ></sv-picture>
-                <div v-else-if="store">
-                  {{
-                    store.formatValue({
-                      value: field.translate ? $t(row[column]||'-') : row[column],
-                      key: column,
-                      form: false,
-                      field
-                    })
-                  }}
-                </div>
-                <div v-else>
-                  {{ row[column] || '-' }}
-                </div>
+              <sv-picture
+                v-if="field.collection === 'file'" 
+                v-model="row[column]"
+                class="table__picture"
+              ></sv-picture>
+              <div v-else-if="store">
+                {{
+                  store.formatValue({
+                    value: field.translate ? $t(row[column]||'-') : row[column],
+                    key: column,
+                    form: false,
+                    field
+                  })
+                }}
               </div>
-              <div v-if="store?.getIndexes({ key: column })?.length > 1 && field.collection !== 'file'">
-                <div
-                  v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
-                  :key="`subvalue-${index}`"
-                >
-                  {{ row[column]?.[subvalue] }}
-                </div>
+              <div v-else>
+                {{ row[column] || '-' }}
               </div>
             </div>
-
+            <div v-if="store?.getIndexes({ key: column })?.length > 1 && field.collection !== 'file'">
+              <div
+                v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
+                :key="`subvalue-${index}`"
+              >
+                {{ row[column]?.[subvalue] }}
+              </div>
+            </div>
           </div>
         </td>
         <td

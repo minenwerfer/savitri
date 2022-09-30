@@ -23,8 +23,14 @@ export type FileDocument = MongoDocument & {
 
 export const FileSchema = descriptionToSchema<FileDocument>(Description, options)
 FileSchema.post('init', async function() {
-  this.link = `${process.env.API_URL}/file/${this._id}`
-  this.download_link = `${process.env.API_URL}/file/${this._id}/download`
+  const timestamp = this.last_modified
+    ? new Date(this.last_modified).getTime()
+    : 'fresh'
+
+  const link = `${process.env.API_URL}/file/${this._id}`
+
+  this.link = `${link}?${timestamp}`
+  this.download_link = `${link}/download/${timestamp}`
 })
 
 export const File = model<FileDocument>('file', FileSchema)

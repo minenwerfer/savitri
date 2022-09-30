@@ -105,7 +105,8 @@
       "label": "Foto",
       "index": [
         "filename",
-        "mime"
+        "mime",
+        "link"
       ]
     },
     "group": {

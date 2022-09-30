@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <sv-picture
-      :file="userStore.$currentUser.picture"
+      :url="userStore.$currentUser.picture.link"
       class="header__picture"
       @click="editProfile"
     >
