@@ -65,7 +65,7 @@ const baseWebpackConfig = {
         ]
       },
       {
-        test: /\.(svg|png)/,
+        test: /\.(svg|png|jpg)/,
         use: 'file-loader'
       },
     ]
