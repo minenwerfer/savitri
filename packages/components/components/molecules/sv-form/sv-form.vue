@@ -11,7 +11,7 @@
         :style="fieldStyle(key, field)"
 
         class="form__field"
-        @input="$emit('input', key)"
+        @input="emit('input', key)"
       >
         <label v-if="field.type !== 'boolean'">
           <strong>
@@ -110,7 +110,7 @@
           searchOnly: !field.inlineEditing
         }"
 
-        @changed="$emit('change')"
+        @changed="emit('change')"
       ></sv-search>
     </div>
 
@@ -199,17 +199,33 @@ provide('searchOnly', props.searchOnly||false)
 
 const filterFields = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
-    .filter(([key, field]: [string, any]) => (
-      field
-        && (!field.noform || props.searchOnly)
-        && (!condition || condition([key, field]))
-    ))
-    .map(([key, field]: [string, any]) => [key, {
-      ...field,
-      hidden: undefined,
-    }])
+    .reduce((a: Array<any>, [key, field]: [string, any]) => {
+      if(
+        !(field
+          && (!field.noform || props.searchOnly)
+          && (!condition || condition([key, field]))
+      )) {
+        return a
+      }
 
-const has = (field: string) => {
+      return [
+        ...a,
+        [
+          key,
+          {
+            ...field,
+            hidden: undefined
+          }
+        ]
+      ]
+    }, [])
+
+
+const has = (fieldName: string) => {
+  if( fieldName === 'cvv' ) {
+    console.log(store.description?.form)
+  }
+
   if(
     props.searchOnly
     || !props.strict
@@ -219,7 +235,7 @@ const has = (field: string) => {
   }
 
   const formFields = store.description?.form
-  return !formFields || formFields.includes(field)
+  return !formFields || formFields.includes(fieldName)
 }
 
 const fields = filterFields(([key, f]: [string, any]) => {
