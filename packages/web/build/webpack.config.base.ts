@@ -28,7 +28,7 @@ const baseWebpackConfig = {
       // or the current working dir
       '@': global.appDir,
       '~': path.resolve(__dirname, '..'),
-      'style': path.resolve(__dirname, '../../components/scss'),
+      'style': path.resolve(__dirname, '../../ui/scss'),
     }
   },
 
@@ -76,7 +76,7 @@ const baseWebpackConfig = {
     new VueLoaderPlugin(),
     // new WatchExternalFilesPlugin({
     //   files: [
-    //     '../../components/**/*.vue'
+    //     '../../ui/**/*.vue'
     //   ]
     // }),
     // new CircularDependencyPlugin({

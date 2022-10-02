@@ -9,13 +9,13 @@ export * from 'vue'
 
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
-import { routes } from '@savitri/components'
+import { routes } from '@savitri/ui'
 import { extendRouter, RouterExtension } from './router'
 import { routerInstance as createRouter } from './router'
 import { default as webpackVariables } from 'variables'
 
 import { useStore } from './store'
-import registerDirectives from '../../components/directives'
+import registerDirectives from '../../ui/directives'
 
 type Plugin = {
   routerExtension?: RouterExtension

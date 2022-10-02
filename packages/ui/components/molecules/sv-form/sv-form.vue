@@ -1,5 +1,8 @@
 <template>
   <form class="form">
+    <header v-if="$slots.header" class="form__header">
+      <slot name="header"></slot>
+    </header>
     <fieldset
       v-if="!isReadOnly && Object.keys(fields).length > 0"
       class="form__fieldset"
@@ -135,6 +138,10 @@
         {{ field.label }}
       </sv-input>
     </fieldset>
+
+    <div v-if="$slots.footer" class="form__footer">
+      <slot name="footer"></slot>
+    </div>
   </form>
 </template>
 
@@ -295,6 +302,22 @@ const fieldStyle = (key:string, field: any) => {
 
   if( !field ) {
     return
+  }
+
+  if( layout?.if ) {
+    const term1 = props.formData[layout.if.term1]
+    const term2 = layout.if.term2
+
+    const result = (() => {switch( layout.if.operator ) {
+      case 'equal': return term1 === term2
+      case 'unequal': return term1 !== term2
+      case 'in': return term2.includes(term1)
+    }})()
+
+    if( !result ) {
+      props.formData[key] = undefined
+      style.push(`display: none;`)
+    }
   }
 
   style.push(`

@@ -1,8 +1,12 @@
 <template>
   <div
-    class="toast"
-    :style="`animation-delay: ${3+itr*2}s;`"
-    @animationend="metaStore.popToast"
+    v-clickable
+    :class="{
+      'toast': true,
+      'toast--animate': metaStore.toasts[0].itr === itr
+    }"
+    @animationend="metaStore.popToast()"
+    @click="metaStore.popToast(itr)"
   >
     <sv-icon
       v-if="icon"
@@ -21,6 +25,7 @@ import { useStore } from '../../../../web'
 import { SvIcon } from '../'
 
 const props = defineProps<{
+  idx: number
   itr: number
   icon?: string
 }>()

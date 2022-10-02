@@ -25,11 +25,7 @@
     </sv-prompt>
   </div>
 
-  <transition-group
-    name="pop"
-    tag="div"
-    class="main__toasts"
-  >
+  <div class="main__toasts">
     <sv-toast
       v-for="toast in metaStore.toasts"
       v-bind="toast"
@@ -41,7 +37,7 @@
         : toast.text
       "></div>
     </sv-toast>
-  </transition-group>
+  </div>
 </template>
 
 <script setup lang="ts">

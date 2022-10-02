@@ -6,11 +6,18 @@ $section-gap: 2rem;
   width: 100%;
   row-gap: $section-gap;
 
+  &__header {
+    margin-bottom: -8px;
+  }
+
+  &__footer {
+    margin-top: -8px;
+  }
 
   &__fieldset {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     gap: .8rem;
 

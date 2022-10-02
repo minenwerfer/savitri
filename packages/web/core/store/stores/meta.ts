@@ -156,12 +156,19 @@ export default defineStore('meta', {
     ) {
       this.toasts.push({
         ...props,
-        itr: this.toasts.length
+        itr: Math.random(),
+        idx: this.toasts.length
       })
     },
 
-    popToast(this: { toasts: Array<any> }) {
-      this.toasts.shift()
+    popToast(this: { toasts: Array<any> }, itr?: Date) {
+      if( !itr ) {
+        const r = this.toasts.shift()
+        return
+      }
+
+      this.toasts = this.toasts
+        .filter((toast) => toast.itr !== itr)
     },
 
     saveTheme() {

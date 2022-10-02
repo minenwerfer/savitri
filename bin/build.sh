@@ -7,7 +7,7 @@ PACKAGES=(
   api
   collections
   common
-  components
+  ui
   controllables
   web
 )
@@ -15,7 +15,7 @@ PACKAGES=(
 npm run build || true && \
   cp -r packages/api/resources/* dist/api/resources && \
   cp -r packages/api/presets dist/api && \
-  cp -r packages/components/assets dist/components && \
+  cp -r packages/ui/assets dist/ui && \
   cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
   [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
 
@@ -27,7 +27,7 @@ npm run build || true && \
     cp "packages/${package}/package.json" "dist/${package}/package.json"
   done
 
-  for component in $(find packages/components -type f); do
+  for component in $(find packages/ui -type f); do
     new_path=$(echo -n "$component" | sed -r 's/^packages/dist/')
     directory=$(echo -n "$new_path" | sed -r 's/\/([^\.\/]+)\.(\w+)$//')
 

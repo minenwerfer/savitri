@@ -13,7 +13,9 @@
       v-bind="{
         collection: 'userExtra',
         formData: userExtraStore.item,
-        form: userExtraStore.useFieldsExcept(['owner'])
+        form: webpackVariables.signupExtraFields
+          ? userExtraStore.useFields(webpackVariables.signupExtraFields)
+          : userExtraStore.useFieldsExcept(['owner'])
       }"
     ></sv-form>
 
@@ -22,22 +24,27 @@
         form: passwordForm,
         formData: password
       }"
-    ></sv-form>
-
-    <div>
-      {{ passwordError || 'Senhas conferem' }}
-    </div>
-
-    <sv-checkbox v-model="tosAccepted">
-      Declaro que li e aceito os termos de uso
-    </sv-checkbox>
-
-    <sv-button
-      :disabled="passwordError || !tosAccepted"
-      @clicked="insert"
     >
-      Criar conta
-    </sv-button>
+      <template #header>
+        Senha
+      </template>
+      <template #footer>
+        {{ passwordError || 'Senhas conferem' }}
+      </template>
+    </sv-form>
+
+    <div class="userExtra__footer">
+      <sv-checkbox v-model="tosAccepted">
+        Declaro que li e aceito os termos de uso
+      </sv-checkbox>
+
+      <sv-button
+        :disabled="passwordError || !tosAccepted"
+        @clicked="insert"
+      >
+        Criar conta
+      </sv-button>
+    </div>
   </div>
 </template>
 
@@ -58,7 +65,9 @@ import {
   SvCheckbox,
   SvButton,
 
-} from '@savitri/components'
+} from '@savitri/ui'
+
+import { default as webpackVariables } from 'variables'
 
 const router = useRouter()
 const userStore = useParentStore()
@@ -121,3 +130,5 @@ const insert = async () => {
   router.push({ name: 'user-signin' })
 }
 </script>
+
+<style scoped src="./signup-extra.scss"></style>

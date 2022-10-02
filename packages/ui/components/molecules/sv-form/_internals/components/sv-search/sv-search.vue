@@ -1,6 +1,5 @@
 <template>
   <div class="search">
-    <header class="search__header">{{ collectionName }}</header>
     <div v-if="isExpanded">
       <sv-form
         v-bind="{
@@ -13,7 +12,11 @@
           itemIndex,
           fieldIndex
         }"
-      ></sv-form>
+      >
+        <template #header>
+          {{ collectionName }}
+        </template>
+      </sv-form>
       <div v-if="!expand">
         <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
@@ -74,7 +77,11 @@
           <div v-if="isTyping">
             Pesquisando...
           </div>
-          <div v-else-if="!store.isLoading && Object.values(inputValue).filter((v) => !!v).length > 0">
+          <div v-else-if="
+            !store.isLoading
+              && Object.values(inputValue).filter((v) => !!v).length > 0
+              && !((array && modelValue.length) || modelValue._id)
+          ">
             Não há resultados
           </div>
         </div>

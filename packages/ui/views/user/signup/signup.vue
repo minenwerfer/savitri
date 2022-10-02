@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useParentStore } from '@savitri/web'
-import { SvForm, SvIcon, SvButton } from '@savitri/components'
+import { SvForm, SvIcon, SvButton } from '@savitri/ui'
 
 const userStore = useParentStore()
 </script>

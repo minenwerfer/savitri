@@ -62,7 +62,7 @@ import {
   SvDropdown,
   SvIcon
   
-} from '@savitri/components'
+} from '@savitri/ui'
 
 import { isInsertVisible, isInsertReadOnly } from '../../store'
 

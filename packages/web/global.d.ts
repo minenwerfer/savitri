@@ -19,7 +19,7 @@ declare module 'variables' {
 declare module 'vue-unicons/dist/icons' {
 }
 
-declare module '@savitri/components' {
+declare module '@savitri/ui' {
   const routes: any
 }
 

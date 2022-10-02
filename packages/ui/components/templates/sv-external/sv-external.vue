@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { provide, inject } from 'vue'
-import { SvBox } from '@savitri/components'
+import { SvBox } from '@savitri/ui'
 
 provide('storeId', 'user')
 provide('buttonSize', 'large')
