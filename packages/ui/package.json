@@ -1,6 +1,6 @@
 {
-  "name": "@savitri/components",
-  "version": "1.0.71",
+  "name": "@savitri/ui",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {

@@ -3,7 +3,7 @@ import type { CollectionDescription } from '../../../common/types'
 import { commonNames } from '../controller'
 
 export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
-  const preset = require(__dirname + `/../../presets/${collectionName}`)
+  const preset = require(`${__dirname}/../../presets/${collectionName}`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
   return R.mergeDeepWith(

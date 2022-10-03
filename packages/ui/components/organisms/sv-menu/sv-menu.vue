@@ -5,7 +5,7 @@
     <!-- menu entries -->
     <div class="menu__entries">
       <div
-        v-for="(route, index) in routes"
+        v-for="(route, index) in routesWithChildren"
         :key="`route-${index}`"
         class="menu__entry"
       >
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, inject } from 'vue'
+import { ref, computed, watch, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { SvIcon } from '../../'
 
@@ -92,7 +92,7 @@ const getSchema = (schema: any, routes: Array<Route>) => {
   })
 }
 
-const getRoutes = ({ roles, children }: SchemaNode = {}): Array<Route> => {
+const getRoutes = ({ children }: SchemaNode = {}): Array<Route> => {
   const routes = children || typeof props.entrypoint === 'string'
     ? router.getRoutes().filter((route) => (route.name ||'').startsWith(`${props.entrypoint}-`))
     : router.getRoutes()
@@ -107,12 +107,12 @@ const getRoutes = ({ roles, children }: SchemaNode = {}): Array<Route> => {
       }
 
       const {
-        roles,
         children,
         ...route
 
       } = node
 
+      const roles = route?.meta?.roles || node.roles
       if( roles && !roles.includes(userStore.$currentUser.role) ) {
         return
       }
@@ -136,6 +136,9 @@ const isCurrent = (subroute: any) => {
 }
 
 const routes = ref<Array<Route>>(getRoutes())
+const routesWithChildren = computed(() => (
+  routes.value.filter((route) => route.children?.length > 0)
+))
 
 watch(() => metaStore.descriptions, () => {
   routes.value = getRoutes()

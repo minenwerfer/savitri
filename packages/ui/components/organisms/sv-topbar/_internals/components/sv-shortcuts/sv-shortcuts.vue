@@ -8,6 +8,15 @@
       class="shortcuts__options"
       @click="shortcutsVisible = false"
     >
+      <sv-select
+        v-model="metaStore.theme"
+        @change="metaStore.saveTheme"
+      >
+        <option value="default">Padrão</option>
+        <option value="dark">Escuro</option>
+        <option value="contrast">Contraste</option>
+      </sv-select>
+
       <sv-icon
         name="house-user"
         class="shortcuts__option"
@@ -22,15 +31,6 @@
       >
         Sair
       </sv-icon>
-
-      <sv-select
-        v-model="metaStore.theme"
-        @change="metaStore.saveTheme"
-      >
-        <option value="default">Padrão</option>
-        <option value="dark">Escuro</option>
-        <option value="contrast">Contraste</option>
-      </sv-select>
     </div>
   </sv-box>
 </template>

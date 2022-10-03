@@ -71,11 +71,7 @@ export const formatValue = (
   form: boolean = false,
   field?: CollectionField
 ): string => {
-  if( !value && !['number', 'boolean'].includes(typeof value) ) {
-    return '-'
-  }
-
-  const firstValue = typeof value === 'object' && !(value instanceof Date)
+  const firstValue = value && typeof value === 'object' && !(value instanceof Date)
     ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key, form) : Object.values(value)[0])
     : value
 

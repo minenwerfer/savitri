@@ -43,12 +43,6 @@ const httpMethodWrapper = (
         })
 
       } else {
-        // ctx.commit('meta/MODAL_SPAWN', {
-        //   title: 'Erro',
-        //   body: error
-
-        // }, { root: true })
-        //alert('uncaught')
         if( !error.silent! ) {
           metaStore.spawnModal({
             title: 'Erro',

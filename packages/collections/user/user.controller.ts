@@ -28,7 +28,6 @@ export class UserController extends Mutable<UserDocument> {
 
     // user is being inserted by a non-root user
     if( decodedToken?.user?.role !== 'root' ) {
-      console.log(decodedToken)
       const userId = props.what._id = decodedToken.user?._id
       delete props.what.role
 
@@ -130,10 +129,9 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     const { password, ...leanUser } = user.toObject()
-    // do a better job, motherfucker
-    // if( !user.active ) {
-    //   leanUser.access = {}
-    // }
+    if( !user.active ) {
+      throw new Error('this user is inactive')
+    }
 
     const tokenContent = {
       user: {

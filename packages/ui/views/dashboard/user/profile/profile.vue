@@ -18,18 +18,18 @@
 
     <template #footer>
       <sv-button
-        :disabled="userStore.isLoading"
-        @clicked="insert"
-      >
-        Salvar
-      </sv-button>
-      <sv-button
-        variant="light"
+        variant="alt"
         @clicked="$router.push({ name: 'dashboard-user-changepass' })"
       >
         Mudar senha
       </sv-button>
     </template>
+      <sv-button
+        :disabled="userStore.isLoading"
+        @clicked="insert"
+      >
+        Salvar
+      </sv-button>
   </sv-box>
 </template>
 
