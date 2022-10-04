@@ -7,7 +7,6 @@ export class SearchableController extends Controller {
   constructor() {
     super({
       controller: 'searchable',
-      publicMethods: ['search'],
     })
   }
 

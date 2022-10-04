@@ -13,10 +13,6 @@ import { default as Description } from './index.json'
 export class UserController extends Mutable<UserDocument> {
   constructor() {
     super(User, Description, {
-      publicMethods: [
-        'authenticate',
-        'insert'
-      ],
       rawMethods: {
         'authenticate': 'application/json'
       }

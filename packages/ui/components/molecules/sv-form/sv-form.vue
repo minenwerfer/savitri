@@ -1,5 +1,8 @@
 <template>
-  <form class="form">
+  <form
+    class="form"
+    :style="`row-gap: ${omitFormHeader ? '.8rem' : '2rem'};`"
+  >
     <header v-if="$slots.header" class="form__header">
       <slot name="header"></slot>
     </header>
@@ -16,7 +19,11 @@
         class="form__field"
         @input="emit('input', key)"
       >
-        <label v-if="field.type !== 'boolean'">
+        <label v-if="
+          field.type !== 'boolean'
+            && (!field.collection || field.collection === 'file')
+            && !omitInputLabels
+        ">
           <strong>
             {{ field.translate ? $t(field.label) : field.label }}
           </strong>
@@ -26,62 +33,87 @@
           ></div>
         </label>
 
+        <div v-if="layout?.[key]?.component">
+          <component
+            :is="formComponents[layout[key].component]"
+            v-model="formData[key]"
+            v-bind="{
+              ...field,
+              name: key,
+              readOnly: field.readOnly && !searchOnly,
+              placeholder: field.translate ? $t(field.label) : field.label
+            }"
+          />
+        </div>
+
         <!-- text -->
         <sv-input
-          v-if="isTextType(field.type)"
+          v-else-if="isTextType(field.type)"
           v-model="formData[key]"
           v-bind="{
             ...field,
             name: key,
-            readOnly: field.readOnly && !searchOnly
+            readOnly: field.readOnly && !searchOnly,
+            placeholder: field.placeholder || (field.translate ? $t(field.label) : field.label)
           }"
         ></sv-input>
 
-        <!-- checkbox, radio, boolean, select -->
-        <div v-else-if="isSelectType(field.type)">
-          <div v-if="field.type !== 'select'">
-            <sv-options
-              v-if="['checkbox', 'radio'].includes(field.type)"
-              v-model="formData[key]"
-              v-bind="{
-                ...field,
-                columns: layout?.[key]?.optionsColumns
-                  || layout?.$default?.optionsColumns
-              }"
-            ></sv-options>
+        <sv-options
+          v-else-if="['checkbox', 'radio'].includes(field.type)"
+          v-model="formData[key]"
+          v-bind="{
+            ...field,
+            columns: layout?.[key]?.optionsColumns
+              || layout?.$default?.optionsColumns
+          }"
+        ></sv-options>
 
-            <sv-switch
-              v-else-if="field.type === 'boolean'"
-              v-model="formData[key]"
-              v-slot="{ label }"
+        <sv-switch
+          v-else-if="field.type === 'boolean'"
+          v-model="formData[key]"
+          v-slot="{ label }"
 
-              v-bind="field"
-            >
-              {{
-                field.values
-                  ? label
-                  : field.label
-              }}
-            </sv-switch>
-          </div>
+          v-bind="field"
+        >
+          {{
+            field.values
+              ? label
+              : field.label
+          }}
+        </sv-switch>
 
-          <sv-select
-            v-else
-            v-model="formData[key]"
-            :values="field.values"
-            style="width: 100%"
-          >
-            <option value="">{{ $t('none') }}</option>
-            <option v-for="(option, oindex) in field.values" :value="option.value">
-              {{ field.translate ? $t(option.label) : option.label }}
-            </option>
-          </sv-select>
-        </div>
+        <sv-select
+          v-else-if="field.type === 'select'"
+          v-model="formData[key]"
+          :values="field.values"
+          style="width: 100%"
+        >
+          <option value="">{{ $t('none') }}</option>
+          <option v-for="(option, oindex) in field.values" :value="option.value">
+            {{ field.translate ? $t(option.label) : option.label }}
+          </option>
+        </sv-select>
 
         <sv-file
-          v-if="field.collection === 'file'"
+          v-else-if="field.collection === 'file'"
           v-model="formData[key]"
         ></sv-file>
+
+        <sv-search
+          v-else-if="field.collection"
+          :key="`collectionfield-${index}`"
+
+          v-model="formData[key]"
+          v-bind="{
+            field,
+            fieldName: key,
+            collection
+          }"
+
+          :style="fieldStyle(key, field)"
+          @changed="emit('change')"
+        ></sv-search>
+
 
         <div v-if="store?.validationErrors[key]" class="form__validation-error">
           <span v-if="store.validationErrors[key].type">
@@ -94,32 +126,9 @@
       </div>
     </fieldset>
 
-    <div
-      v-if="!isReadOnly && store && referencedFields.length > 0"
-      class="form__search-grid"
-    >
-      <sv-search
-        v-for="([childCollection, field], index) in referencedFields"
-        :key="`collectionfield-${index}`"
-
-        v-model="formData[childCollection]"
-        v-bind="{
-          field,
-          collection,
-          indexes: store.getIndexes({ key: childCollection }),
-          propName: childCollection,
-          itemIndex: itemIndex != -1 ? itemIndex: 0,
-          activeOnly: 'active' in field.fields,
-          searchOnly: !field.inlineEditing
-        }"
-
-        @changed="emit('change')"
-      ></sv-search>
-    </div>
-
     <fieldset v-if="isReadOnly" class="form__fieldset">
       <sv-input
-        v-for="([key, field], index) in allInOne"
+        v-for="([key, field], index) in fields"
         :key="`collection-${index}`"
 
         v-bind="{
@@ -146,7 +155,14 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, provide, inject, reactive } from 'vue'
+import {
+  defineAsyncComponent,
+  provide,
+  inject,
+  reactive
+
+} from 'vue'
+
 import { useStore } from '@savitri/web'
 import {
   SvInput,
@@ -169,17 +185,18 @@ type Props = {
   collection?: string
   isReadOnly?: boolean
   searchOnly?: boolean
-  itemIndex?: number
   fieldIndex?: number
   layout?: Record<string, LayoutConfig>
   strict?: boolean
+  formComponents?: any
+  omitFormHeader?: boolean
+  omitInputLabels?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isReadOnly: false,
   searchony: false,
   strict: true,
-  itemIndex: 0,
   fieldIndex: 0
 })
 
@@ -200,6 +217,19 @@ if( !collectionName && process.env.NODE_ENV !== 'production' ) {
     collection prop, some features may not work as intended`
   )
 }
+
+const passAhead = (propName: string) => {
+  const value = inject(propName, props[propName])
+  if( props[propName] ) {
+    provide(propName, props[propName])
+  }
+
+  return value
+}
+
+const formComponents = passAhead('formComponents')
+const omitFormHeader = passAhead('omitFormHeader')
+const omitInputLabels = passAhead('omitInputLabels')
 
 provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
@@ -229,10 +259,6 @@ const filterFields = (condition: (f: any) => boolean) =>
 
 
 const has = (fieldName: string) => {
-  if( fieldName === 'cvv' ) {
-    console.log(store.description?.form)
-  }
-
   if(
     props.searchOnly
     || !props.strict
@@ -246,35 +272,11 @@ const has = (fieldName: string) => {
 }
 
 const fields = filterFields(([key, f]: [string, any]) => {
-  return (!(typeof f.collection === 'string' && (!f.readOnly || props.searchOnly)) || f.collection === 'file')
+  return (!f.readOnly || props.searchOnly)
     && !f.meta
     && has(key)
 })
 
-const referencedFields = filterFields(([key, f]: [string, any]) => {
-  return typeof f.collection === 'string'
-    && f.collection !== 'file'
-    && has(key)
-    && (!f.readOnly || props.searchOnly)
-})
-  .map(([key, value]: [string, any]) => {
-    const store = useStore(value.collection)
-    return [
-      key, {
-        ...value,
-        ...store.description
-      }
-    ]
-  })
-
-
-const allInOne = filterFields()
-  .sort((a: any, b: any) => typeof a.collection === typeof b.collection ? 1 : -1)
-  .map(([key, field]: [string, any]) => {
-    return [key, {
-    ...field,
-  }]
-})
 
 const isTextType = (type: string) => {
   return [

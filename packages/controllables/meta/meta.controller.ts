@@ -5,7 +5,6 @@ export class MetaController extends Controller {
   constructor() {
     super({
       controller: 'meta',
-      publicMethods: ['describeAll'],
     })
   }
 

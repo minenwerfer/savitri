@@ -118,7 +118,7 @@ const insert = async () => {
 
   if( userExtraStore ) {
     userExtraStore.item.owner = userId
-    await userExtraStore.insert()
+    await userExtraStore.deepInsert()
   }
 
   const metaStore = useStore('meta')

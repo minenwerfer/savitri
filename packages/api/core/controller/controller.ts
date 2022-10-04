@@ -1,8 +1,15 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import type { CollectionDescription } from '../../../common/types'
-import type { HandlerRequest, ProvidedParams, ApiConfig } from '../../types'
+import type {
+  HandlerRequest,
+  ProvidedParams,
+  ApiConfig,
+  Role
+} from '../../types'
+
 import { AuthorizationError, PermissionError } from '../exceptions'
 import { TokenService } from '../services'
+import baseRole from '../baseRole'
 
 export abstract class Controller {
   private _webInterface: Controller
@@ -13,10 +20,6 @@ export abstract class Controller {
    * Supposed to contain method names as strings.
    */
   protected readonly _internal: Array<string> = []
-
-  // protected _publicMethods: Array<string> = [
-  //   'describe'
-  // ]
 
   // protected _rawMethods: Record<string, string> = {}
   // protected _forbiddenMethods: Array<string> = []
@@ -32,7 +35,6 @@ export abstract class Controller {
       description?: Partial<CollectionDescription>,
       controller?: string
       forbiddenMethods?: Array<string>,
-      publicMethods?: Array<string>,
       rawMethods?: Record<string, string>,
       provide?: Record<string, any>
     }
@@ -65,7 +67,7 @@ export abstract class Controller {
             throw new Error('controller is undefined')
           }
 
-          if( !target.props.publicMethods?.includes(key) && !target.isGranted(decodedToken, key)) {
+          if( !target.isGranted(decodedToken, key)) {
             if( decodedToken?.user?.role ) {
               throw new PermissionError('forbidden method (access denied)')
             }
@@ -128,13 +130,20 @@ export abstract class Controller {
     return result
   }
 
-  public isGranted(token: { user?: { role?: string } }, method:string, controller?: string) {
-    if( !token?.user?.role ) {
+  private _isGranted(
+    token: { user?: { role?: string } },
+    method:string,
+    controller?: string,
+    targetRole?: Role
+  ) {
+    const currentRole = token?.user?.role || 'guest'
+    const role = targetRole || this.apiConfig.roles?.[currentRole]
+
+    if( !role ) {
       return false
     }
 
     const controllerName = controller || this.props.controller!
-    const role = this.apiConfig.roles?.[token.user.role]
     const subject = role?.capabilities?.[controllerName]
 
     return (
@@ -142,5 +151,14 @@ export abstract class Controller {
       || subject?.grantEverything
       || subject?.methods?.includes(method)
     )
+  }
+
+  public isGranted(
+    token: { user?: { role?: string } },
+    method:string,
+    controller?: string
+  ) {
+    return this._isGranted(token, method, controller)
+      || this._isGranted(token, method, controller, baseRole)
   }
 }

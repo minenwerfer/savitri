@@ -1,10 +1,7 @@
-$section-gap: 2rem;
-
 .form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  row-gap: $section-gap;
 
   &__header {
     margin-bottom: -8px;
@@ -28,7 +25,7 @@ $section-gap: 2rem;
 
   &__search-grid {
     display: grid;
-    gap: $section-gap;
+    gap: 2rem;
   }
 
   &__validation-error {

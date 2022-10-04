@@ -23,13 +23,13 @@
       >
         Mudar senha
       </sv-button>
-    </template>
       <sv-button
         :disabled="userStore.isLoading"
         @clicked="insert"
       >
         Salvar
       </sv-button>
+    </template>
   </sv-box>
 </template>
 

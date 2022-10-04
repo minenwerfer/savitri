@@ -9,11 +9,10 @@
             : store.fields,
           formData: edited,
           layout: store.formLayout,
-          itemIndex,
           fieldIndex
         }"
       >
-        <template #header>
+        <template #header v-if="!omitFormHeader">
           {{ collectionName }}
         </template>
       </sv-form>
@@ -80,7 +79,7 @@
           <div v-else-if="
             !store.isLoading
               && Object.values(inputValue).filter((v) => !!v).length > 0
-              && !((array && modelValue.length) || modelValue._id)
+              && !((array && modelValue?.length) || modelValue?._id)
           ">
             Não há resultados
           </div>
@@ -112,12 +111,9 @@ const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-fo
 
 type Props = {
   modelValue: any
-  propName: string
+  fieldName: string
   collection?: string
   field: any
-  itemIndex?: number
-  indexes: any
-  activeOnly?: boolean
   searchOnly?: boolean
 }
 
@@ -133,7 +129,8 @@ const boxProps = reactive({
   fill: true
 })
 
-const searchOnly = props.searchOnly || inject<boolean>('searchOnly', null)
+const searchOnly = !props.field.inlineEditing || inject<boolean>('searchOnly', null)
+const omitFormHeader = inject('omitFormHeader', false)
 
 const parentStore = useParentStore(props.collection)
 const store = useStore(props.field.collection)
@@ -141,8 +138,12 @@ const store = useStore(props.field.collection)
 provide('iconReactive', true)
 
 const field = props.field
+const indexes = parentStore.getIndexes({
+  key: props.fieldName
+})
+
 const expanded = ref(false)
-const edited = ref(parentStore.item[props.propName])
+const edited = ref(parentStore.item[props.fieldName])
 const matchingItems = ref([])
 
 const collection = computed(() => field.collection)
@@ -153,7 +154,7 @@ const collectionName = computed(() => (field.label||'').capitalize())
 const isExpanded = computed(() => expanded.value || field.expand)
 
 const rawItem = computed(() => {
-  const item = parentStore.item[props.propName]
+  const item = parentStore.item[props.fieldName]
   const items = field.array
     ? (Array.isArray(item) ? item : [item])
     : item
@@ -186,11 +187,11 @@ const insert = async () => {
   const parentResult = await parentStore.insert({
     what: {
       ...(parentStore.item._id ? { _id: parentStore.item._id } : parentStore.item),
-      [props.propName]: value
+      [props.fieldName]: value
     }
   })
 
-  emit('update:modelValue', parentResult[props.propName])
+  emit('update:modelValue', parentResult[props.fieldName])
   matchingItems.value = []
   expanded.value = false
 }
@@ -246,7 +247,6 @@ const search = async () => {
   matchingItems.value = (await store.custom('getAll', {
     limit: 5,
     filters: {
-      ...(props.activeOnly ? { active: true } : {}),
       $or: props.indexes
       .filter((i: string) => inputValue[i]?.length > 0)
       .map((i: string) => ({

@@ -96,7 +96,7 @@ $section-padding: .8rem;
     line-height: 100%;
 
     padding: 0 $section-padding;
-    height: 3rem;
+    min-height: 3rem;
 
     @include themed() {
       background: t(background-color-alt);

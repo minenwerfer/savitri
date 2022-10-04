@@ -11,11 +11,6 @@ export class ApplicationController extends Controller {
   constructor() {
     super({
       controller: 'application',
-      publicMethods: [
-        'manifest',
-        'serviceWorker',
-        'index'
-      ],
       rawMethods: {
         'manifest': 'application/json',
         'serviceWorker': 'text/javascript',

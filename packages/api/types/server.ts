@@ -15,14 +15,15 @@ export type DecodedToken = {
   extra: any
 }
 
-export type Roles = Record<string, {
+export type Role = {
   grantEverything?: boolean
   capabilities?: Record<string, {
     grantEverything?: boolean
     methods?: Array<string>
   }>
-}>
+}
 
+export type Roles = Record<string, Role>
 
 export type ApiConfig = {
   group?: string

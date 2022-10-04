@@ -10,9 +10,6 @@ export class ReleaseController extends Controller {
   constructor() {
     super({
       controller: 'release',
-      publicMethods: [
-        'getAll'
-      ]
     })
   }
 
