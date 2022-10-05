@@ -52,11 +52,11 @@ export const depopulateChildren = <T extends MongoDocument>(item: T, minDepth:nu
 
   const recurse = (_item:any, depth:number=0): any => {
     const item = _item?._doc||_item//
-    if( depth >= minDepth ) {
-      if( !item || !item._id ) {
-        return item
-      }
+    if( !item || !item._id ) {
+      return item
+    }
 
+    if( depth >= minDepth ) {
       const { _id, ...doc } = item
       const entries = Object.entries(doc)
         .map(([key, value]: [string, any]) => [

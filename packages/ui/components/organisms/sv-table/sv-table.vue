@@ -97,7 +97,6 @@
                   store.formatValue({
                     value: field.translate ? $t(row[column]||'-') : row[column],
                     key: column,
-                    form: false,
                     field
                   })
                 }}
@@ -111,7 +110,9 @@
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
               >
-                {{ row[column]?.[subvalue] }}
+                <div v-if="typeof row[column]?.[subvalue] !== 'object'">
+                  {{ row[column]?.[subvalue] }}
+                </div>
               </div>
             </div>
           </div>

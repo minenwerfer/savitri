@@ -13,10 +13,8 @@
       v-model="modelValue"
       v-bind="{
         ...option,
-        label: translate ? $t(option.label||'') : option.label,
-        type,
+        field,
         value: option.value,
-        readOnly
       }"
 
       :class="`
@@ -35,11 +33,13 @@ import { SvCheckbox } from '../../..'
 
 type Props = {
   modelValue: any
-  values: any
-  translate?: boolean
-  type?: string
-  readOnly?: boolean
   columns?: number
+  field?: {
+    values: any
+    translate?: boolean
+    type?: string
+    readOnly?: boolean
+  }
 }
 
 type Emits = {

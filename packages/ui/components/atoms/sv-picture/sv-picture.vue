@@ -3,7 +3,10 @@
     <img
       v-if="url"
       v-lazy="url"
-      class="picture__image"
+      :class="`
+        picture__image
+        ${contain && 'picture__image--contain'}
+      `"
     />
 
     <slot v-else-if="$slots.fallback" name="fallback"></slot>
@@ -17,6 +20,7 @@ import { computed } from 'vue'
 type Props = {
   url?: string
   modelValue?: string
+  contain?: boolean
 }
 
 const props = defineProps<Props>()

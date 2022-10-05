@@ -38,7 +38,10 @@ $section-padding: .8rem;
     }
 
     &--floating, &--fixed-right {
-      .box__header,
+      .box__header {
+        padding: 1.2rem 2.4rem;
+      }
+
       .box__body,
       .box__footer {
         padding: 1.8rem 2.4rem;
@@ -95,7 +98,6 @@ $section-padding: .8rem;
     align-items: center;
     line-height: 100%;
 
-    padding: 0 $section-padding;
     min-height: 3rem;
 
     @include themed() {

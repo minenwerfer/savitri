@@ -33,26 +33,24 @@
           ></div>
         </label>
 
-        <div v-if="layout?.[key]?.component">
-          <component
-            :is="formComponents[layout[key].component]"
-            v-model="formData[key]"
-            v-bind="{
-              ...field,
-              name: key,
-              readOnly: field.readOnly && !searchOnly,
-              placeholder: field.translate ? $t(field.label) : field.label
-            }"
-          />
-        </div>
+        <component
+          v-if="layout?.[key]?.component && formComponents[layout[key].component?.name]"
+          :is="formComponents[layout[key].component.name]"
+          v-model="formData[key]"
+          v-bind="{
+            field,
+            fieldName: key,
+            ...layout[key].component.props||{},
+          }"
+        />
 
         <!-- text -->
         <sv-input
           v-else-if="isTextType(field.type)"
           v-model="formData[key]"
           v-bind="{
-            ...field,
-            name: key,
+            field,
+            fieldName: key,
             readOnly: field.readOnly && !searchOnly,
             placeholder: field.placeholder || (field.translate ? $t(field.label) : field.label)
           }"
@@ -62,7 +60,7 @@
           v-else-if="['checkbox', 'radio'].includes(field.type)"
           v-model="formData[key]"
           v-bind="{
-            ...field,
+            field,
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns
           }"
@@ -73,7 +71,9 @@
           v-model="formData[key]"
           v-slot="{ label }"
 
-          v-bind="field"
+          v-bind="{
+            field
+          }"
         >
           {{
             field.values
@@ -85,14 +85,11 @@
         <sv-select
           v-else-if="field.type === 'select'"
           v-model="formData[key]"
-          :values="field.values"
+          v-bind="{
+            field
+          }"
           style="width: 100%"
-        >
-          <option value="">{{ $t('none') }}</option>
-          <option v-for="(option, oindex) in field.values" :value="option.value">
-            {{ field.translate ? $t(option.label) : option.label }}
-          </option>
-        </sv-select>
+        ></sv-select>
 
         <sv-file
           v-else-if="field.collection === 'file'"
@@ -107,7 +104,7 @@
           v-bind="{
             field,
             fieldName: key,
-            collection
+            parentCollection: collection
           }"
 
           :style="fieldStyle(key, field)"
@@ -126,27 +123,27 @@
       </div>
     </fieldset>
 
-    <fieldset v-if="isReadOnly" class="form__fieldset">
-      <sv-input
-        v-for="([key, field], index) in fields"
-        :key="`collection-${index}`"
+    <!-- <fieldset v-if="isReadOnly" class="form__fieldset"> -->
+    <!--   <sv-input -->
+    <!--     v-for="([key, field], index) in fields" -->
+    <!--     :key="`collection-${index}`" -->
 
-        v-bind="{
-          ...inputBind(field, key),
-          value: store.formatValue({
-            value: field.translate ? $t(props.formData[key]||'') : props.formData[key],
-            key,
-            field,
-            form: true
-          })
-        }"
+    <!--     v-bind="{ -->
+    <!--       ...inputBind(field, key), -->
+    <!--       value: store.formatValue({ -->
+    <!--         value: field.translate ? $t(props.formData[key]||'') : props.formData[key], -->
+    <!--         key, -->
+    <!--         field, -->
+    <!--         form: true -->
+    <!--       }) -->
+    <!--     }" -->
 
-        :style="fieldStyle(key, field)"
-        class="form__field"
-      >
-        {{ field.label }}
-      </sv-input>
-    </fieldset>
+    <!--     :style="fieldStyle(key, field)" -->
+    <!--     class="form__field" -->
+    <!--   > -->
+    <!--     {{ field.label }} -->
+    <!--   </sv-input> -->
+    <!-- </fieldset> -->
 
     <div v-if="$slots.footer" class="form__footer">
       <slot name="footer"></slot>

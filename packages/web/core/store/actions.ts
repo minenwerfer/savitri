@@ -86,8 +86,7 @@ const mutations = {
   },
 
   clearItem<T=any>(this: Pick<CollectionState<T>, 'item' | 'freshItem'>) {
-    const item = Object.assign({}, this.item)
-    this.item = this.freshItem
+    const item = this.item = Object.assign({}, this.freshItem)
     return item
   },
 

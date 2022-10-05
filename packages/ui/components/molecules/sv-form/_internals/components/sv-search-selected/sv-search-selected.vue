@@ -42,7 +42,6 @@ type Props = {
   indexes: Array<string>
   field: any
   searchOnly?: boolean
-  array?: boolean
 }
 
 type Emits = {
@@ -53,7 +52,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const selected = computed(() => {
-  if( props.array ) {
+  if( props.field.array ) {
     return props.modelValue
   }
 
@@ -68,7 +67,7 @@ const unselect = async (item: any, purge=true) => {
     await store.remove({ filter: { _id } })
   }
 
-  emit('update:modelValue', props.array
+  emit('update:modelValue', props.field.array
       ? props.modelValue.filter((option: any) => option._id !== item._id)
       : {}
   )

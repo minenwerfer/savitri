@@ -144,7 +144,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       (item: T|null) => item && project(item, props?.project),
       (item: T|null) => item && fill(item, this.description),
       (item: T) => depopulate(item, this.description),
-      (item: T) => depopulateChildren(item, 1)
+      (item: T) => depopulateChildren(item, 2)
     )
 
     return pipe(await this.model.findOne(props?.filters) as T)

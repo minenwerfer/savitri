@@ -176,7 +176,7 @@ onMounted(() => {
   isInsertReadonly.value = false
 
   if(
-    !props.noFetch && (props.parentField || store.itemsCount === 0) ) {
+    !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
     fetchItems()
   }
 })

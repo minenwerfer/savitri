@@ -8,7 +8,7 @@
       <slot name="description"></slot>
     </div>
     <div
-      v-if="type !== 'textbox'"
+      v-if="field.type !== 'textbox'"
       :class="`
         input__container
         input__container--${variant}`
@@ -22,8 +22,8 @@
         :class="`
           input__input
           input__input--${variant}
-          ${icon && 'input__input--icon'}
-          ${readOnly && 'input__input--readOnly'}
+          ${field.icon && 'input__input--icon'}
+          ${field.readOnly && 'input__input--readOnly'}
         `"
 
         @maska="onInput($event, true)"
@@ -31,15 +31,15 @@
         @change="onChange"
       />
       <sv-icon 
-        v-if="icon"
-        :name="icon"
+        v-if="field.icon"
+        :name="field.icon"
         :class="`
           input__icon
           input__icon--${variant}
       `"></sv-icon>
 
       <div
-        v-if="readOnly"
+        v-if="field.readOnly"
         class="input__clipboard"
       >
         <sv-info>
@@ -57,7 +57,7 @@
     <textarea
       v-else
       :placeholder="placeholder"
-      :readonly="readOnly"
+      :readonly="field.readOnly"
 
       :class="`
         input__textarea
@@ -76,22 +76,27 @@ import { copyToClipboard } from '@savitri/web'
 import { SvInfo, SvIcon } from '../..'
 
 type Props = {
-  name?: string
-  type?: string
   modelValue?: string|number
-  mask?: string|Array<string>
-  icon?: string
-  variant?: string
-  readOnly?: boolean
-  placeholder?: string
-  min?: number
-  max?: number
+  fieldName?: string
+  field: {
+    type?: string
+    mask?: string|Array<string>
+    icon?: string
+    variant?: string
+    readOnly?: boolean
+    placeholder?: string
+    min?: number
+    max?: number
+  }
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'text'
+  field: {
+    type: 'text'
+  }
 })
 
+const name = props.fieldName
 const emit = defineEmits<{
   (e: 'input', value: string|number): void
   (e: 'update:modelValue', value: string|number): void
@@ -101,11 +106,14 @@ const input = ref(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
 
 const {
-  modelValue,
+  icon,
+  mask,
+  variant: _variant,
   ...inputBind
 
-} = props
+} = props.field
 
+inputBind.name = props.fieldName
 const inputValue = ref(props.modelValue||'')
 
 // const dateToISO = (raw: string) => {

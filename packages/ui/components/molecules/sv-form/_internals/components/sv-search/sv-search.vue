@@ -3,7 +3,7 @@
     <div v-if="isExpanded">
       <sv-form
         v-bind="{
-          collection,
+          collection: field.collection,
           form: field.form
             ? store.useFields(field.form)
             : store.fields,
@@ -13,10 +13,10 @@
         }"
       >
         <template #header v-if="!omitFormHeader">
-          {{ collectionName }}
+          {{ $t(field.collection||'').capitalize() }}
         </template>
       </sv-form>
-      <div v-if="!expand">
+      <div v-if="!field.expand">
         <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
@@ -31,9 +31,13 @@
           layout: store.formLayout
         }"
         @input="lazySearch"
-      ></sv-form>
+      >
+        <template #header v-if="!omitFormHeader">
+          {{ $t(field.collection||'').capitalize() }}
+        </template>
+      </sv-form>
       <sv-button
-        v-if="expanded && array"
+        v-if="expanded && field.array"
         icon="plus"
         @clicked="addItem"
       >
@@ -41,14 +45,13 @@
       </sv-button>
     </div>
 
-    <div v-if="!isExpanded || array" :key="inputValue">
+    <div v-if="!isExpanded || field.array" :key="inputValue">
       <sv-search-selected
         v-model="modelValue"
         v-bind="{
           searchOnly,
           indexes,
           field,
-          array
         }"
         @update:model-value="emit('update:modelValue', $event)"
       ></sv-search-selected>
@@ -56,13 +59,13 @@
       <div v-if="!isExpanded">
         <div v-if="matchingItems.length || modelValue?.length">
           <sv-search-item
-            v-for="(item, index) in matchingItems"
+            v-for="item in matchingItems"
             v-bind="{
               item,
               indexes
             }"
 
-            :key="`item-${index}`"
+            :key="`matching-${item._id}`"
             @click="select(item)"
           >
             <sv-icon
@@ -79,7 +82,7 @@
           <div v-else-if="
             !store.isLoading
               && Object.values(inputValue).filter((v) => !!v).length > 0
-              && !((array && modelValue?.length) || modelValue?._id)
+              && !((field.array && modelValue?.length) || modelValue?._id)
           ">
             Não há resultados
           </div>
@@ -112,9 +115,17 @@ const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-fo
 type Props = {
   modelValue: any
   fieldName: string
-  collection?: string
-  field: any
+  parentCollection?: string
   searchOnly?: boolean
+
+  field: {
+    array?: boolean
+    collection?: string
+    expand?: boolean
+    form?: any
+    inlineEditing?: boolean
+    label?: string
+  }
 }
 
 const props = defineProps<Props>()
@@ -123,6 +134,7 @@ const emit = defineEmits<{
   (e: 'changed'): void
 }>()
 
+provide('iconReactive', true)
 
 const boxProps = reactive({
   float: false,
@@ -132,12 +144,9 @@ const boxProps = reactive({
 const searchOnly = !props.field.inlineEditing || inject<boolean>('searchOnly', null)
 const omitFormHeader = inject('omitFormHeader', false)
 
-const parentStore = useParentStore(props.collection)
+const parentStore = useParentStore(props.parentCollection)
 const store = useStore(props.field.collection)
 
-provide('iconReactive', true)
-
-const field = props.field
 const indexes = parentStore.getIndexes({
   key: props.fieldName
 })
@@ -146,16 +155,11 @@ const expanded = ref(false)
 const edited = ref(parentStore.item[props.fieldName])
 const matchingItems = ref([])
 
-const collection = computed(() => field.collection)
-const expand = computed(() => field.expand === true)
-const array = computed(() => field.array)
-
-const collectionName = computed(() => (field.label||'').capitalize())
-const isExpanded = computed(() => expanded.value || field.expand)
+const isExpanded = computed(() => expanded.value || props.field.expand)
 
 const rawItem = computed(() => {
   const item = parentStore.item[props.fieldName]
-  const items = field.array
+  const items = props.field.array
     ? (Array.isArray(item) ? item : [item])
     : item
 
@@ -171,7 +175,7 @@ const insert = async () => {
   const result: any = await store.insert({ what: edited.value })
 
   const value = (() => {
-    if( !array.value ) {
+    if( !props.field.array ) {
       return result
     }
 
@@ -207,19 +211,19 @@ const edit = (item: any) => {
 const clear = () => {
   expanded.value = false
   matchingItems.value = []
-  if( array.value ) {
+  if( props.field.array ) {
     rawItem.value = rawItem.value.slice(0, -1)
   }
 }
 
 const select = (item: any) => {
   const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
-  const modelValue = array.value
+  const modelValue = props.field.array
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
   matchingItems.value = []
-  emit('update:modelValue', array.value
+  emit('update:modelValue', props.field.array
     ? [ ...modelValue, item ]
     : item
   )
@@ -247,7 +251,7 @@ const search = async () => {
   matchingItems.value = (await store.custom('getAll', {
     limit: 5,
     filters: {
-      $or: props.indexes
+      $or: indexes
       .filter((i: string) => inputValue[i]?.length > 0)
       .map((i: string) => ({
         [i]: {

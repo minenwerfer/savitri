@@ -103,6 +103,7 @@ const cancel = () => {
   store.ask({
     action: () => {
       store.clearItem()
+      store.validationErrors = {}
       isInsertVisible.value = false
     },
     body: 'Deseja mesmo fechar o painel sem salvar as suas alterações?'

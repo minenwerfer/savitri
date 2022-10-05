@@ -2,7 +2,7 @@
   <div class="searchbar">
     <sv-input
       v-model.lazy="query"
-      v-bind="{
+      :field="{
         icon: 'search',
         placeholder: 'Buscar',
         type: 'search'
