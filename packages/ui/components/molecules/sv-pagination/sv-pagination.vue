@@ -23,9 +23,12 @@
 
       <sv-input
         v-model="pageInput"
-        type="number"
         :key="page"
-        :min="1"
+        :field="{
+          type: 'number',
+          min: 1
+        }"
+
         class="pagination__page-input"
         @change="page = pageInput"
       ></sv-input>

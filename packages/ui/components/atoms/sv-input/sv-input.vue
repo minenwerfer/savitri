@@ -23,7 +23,7 @@
           input__input
           input__input--${variant}
           ${field.icon && 'input__input--icon'}
-          ${field.readOnly && 'input__input--readOnly'}
+          ${readOnly && 'input__input--readOnly'}
         `"
 
         @maska="onInput($event, true)"
@@ -39,7 +39,7 @@
       `"></sv-icon>
 
       <div
-        v-if="field.readOnly"
+        v-if="readOnly"
         class="input__clipboard"
       >
         <sv-info>
@@ -57,7 +57,7 @@
     <textarea
       v-else
       :placeholder="placeholder"
-      :readonly="field.readOnly"
+      :readonly="readOnly"
 
       :class="`
         input__textarea
@@ -97,6 +97,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const name = props.fieldName
+const readOnly = !inject('searchOnly', false) && props.readOnly
 const emit = defineEmits<{
   (e: 'input', value: string|number): void
   (e: 'update:modelValue', value: string|number): void
@@ -109,11 +110,14 @@ const {
   icon,
   mask,
   variant: _variant,
+  readOnly: _readOnly,
   ...inputBind
 
 } = props.field
 
 inputBind.name = props.fieldName
+inputBind.readonly = readOnly
+
 const inputValue = ref(props.modelValue||'')
 
 // const dateToISO = (raw: string) => {

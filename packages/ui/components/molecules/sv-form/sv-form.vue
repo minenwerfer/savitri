@@ -51,7 +51,6 @@
           v-bind="{
             field,
             fieldName: key,
-            readOnly: field.readOnly && !searchOnly,
             placeholder: field.placeholder || (field.translate ? $t(field.label) : field.label)
           }"
         ></sv-input>

@@ -6,6 +6,7 @@ import type { MongoDocument } from '../../types'
 
 import { fromEntries } from '../../../common/helpers'
 import { ItemNotFound } from '../exceptions'
+import * as baseControl from '../access/baseControl'
 
 import {
   depopulate,
@@ -63,10 +64,15 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
 
     if( this.apiConfig.beforeRead && decodedToken ) {
       Object.assign(
-        newPayload.filters,
+        newPayload,
         this.apiConfig.beforeRead(decodedToken, this.description.collection)
       )
     }
+
+    Object.assign(
+      newPayload,
+      baseControl.beforeRead!(payload, decodedToken)
+    )
 
     if( newPayload.limit > 150 ) {
       newPayload.limit = 150
@@ -85,6 +91,11 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
         this.apiConfig.beforeWrite(decodedToken, this.description.collection)
       )
     }
+
+    Object.assign(
+      filters,
+      baseControl.beforeWrite!(payload, decodedToken)
+    )
 
     return newPayload
   }

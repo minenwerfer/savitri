@@ -9,7 +9,7 @@ import type {
 
 import { AuthorizationError, PermissionError } from '../exceptions'
 import { TokenService } from '../services'
-import baseRole from '../baseRole'
+import baseRole from '../access/baseRole'
 
 export abstract class Controller {
   private _webInterface: Controller

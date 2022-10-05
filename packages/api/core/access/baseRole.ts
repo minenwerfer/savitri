@@ -7,6 +7,11 @@ export default {
         'describeAll'
       ]
     },
+    file: {
+      methods: [
+        'insert'
+      ]
+    },
     user: {
       methods: [
         'insert',
