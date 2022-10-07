@@ -1,7 +1,7 @@
 import { Mutable } from '../../api/core/controller'
 import { NotificationDocument, Notification } from './notification.model'
 import { RequestProvider } from '../../common/http'
-import { TokenService } from '../../api/core/services/token'
+import { TokenService } from '../../api/core/token'
 import { default as Description } from './index.json'
 
 const path = require('path')
@@ -13,12 +13,7 @@ export interface NotificationController {
 
 export class NotificationController extends Mutable<NotificationDocument> {
   constructor() {
-    super(Notification, Description, {
-      publicMethods: [
-        'ping'
-      ]
-    })
-
+    super(Notification, Description)
     this.http = new RequestProvider({ baseURL: process.env.DOMAIN_API_URL })
   }
 

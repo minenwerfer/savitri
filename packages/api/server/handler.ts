@@ -10,7 +10,7 @@ import type {
 import { Error as MongooseError } from 'mongoose'
 
 import { getController } from '../core/controller'
-import { TokenService } from '../core/services/token'
+import { TokenService } from '../core/token'
 import { FileController } from '../../collections/file/file.controller'
 
 import { appendPagination } from './hooks/post'

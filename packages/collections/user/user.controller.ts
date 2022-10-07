@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 
-import { TokenService } from '../../api/core/services/token'
+import { TokenService } from '../../api/core/token'
 import { Mutable } from '../../api/core/controller'
 import { UserDocument, User } from './user.model'
 import { default as Description } from './index.json'

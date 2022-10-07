@@ -69,7 +69,7 @@ const unselect = async (item: any, purge=true) => {
 
   emit('update:modelValue', props.field.array
       ? props.modelValue.filter((option: any) => option._id !== item._id)
-      : {}
+      : undefined
   )
 }
 
