@@ -22,7 +22,6 @@
     "savitri-bundle": "./frontend/build/compile.js"
   },
   "dependencies": {
-    "@savitri/backend": "file:dist/backend",
     "autoprefixer": "^10.4.8",
     "pinia": "^2.0.16",
     "postcss": "^8.4.14",

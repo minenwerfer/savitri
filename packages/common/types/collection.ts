@@ -57,7 +57,7 @@ export type CollectionField = Readonly<{
   collection?: string
   mask?: string
 
-  expand?: boolean
+  inline?: boolean
   includeHours?: boolean
   readOnly?: boolean
   inlineEditing?: boolean

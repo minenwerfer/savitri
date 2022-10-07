@@ -16,7 +16,7 @@
           {{ $t(field.collection||'').capitalize() }}
         </template>
       </sv-form>
-      <div v-if="!field.expand">
+      <div v-if="!field.inline">
         <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
@@ -121,7 +121,7 @@ type Props = {
   field: {
     array?: boolean
     collection?: string
-    expand?: boolean
+    inline?: boolean
     form?: any
     inlineEditing?: boolean
     label?: string
@@ -155,7 +155,7 @@ const expanded = ref(false)
 const edited = ref(parentStore.item[props.fieldName])
 const matchingItems = ref([])
 
-const isExpanded = computed(() => expanded.value || props.field.expand)
+const isExpanded = computed(() => expanded.value || props.field.inline)
 
 const rawItem = computed(() => {
   const item = parentStore.item[props.fieldName]

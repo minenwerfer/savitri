@@ -207,14 +207,14 @@ export default {
     this: typeof mutations & {
       item: CollectionState<T>['item']
       insert: (...args: any[]) => Promise<T>
-      expandedSubcollections: any
+      inlineReferences: any
     },
     payload?: { what: Partial<T> }
   ): Promise<T> {
-    const expandedSubcollections = this.expandedSubcollections
+    const inlineReferences = this.inlineReferences
     const newItem = (payload?.what || this.item) as Record<string, any>
 
-    for( const [k, { collection }] of expandedSubcollections ) {
+    for( const [k, { collection }] of inlineReferences ) {
       if(
         newItem[k]
         && typeof newItem[k] === 'object'

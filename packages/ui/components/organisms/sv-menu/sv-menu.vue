@@ -28,7 +28,6 @@
             `"
 
             :name="subroute.meta?.unicon || 'file'"
-            :fill="isCurrent(subroute) ? 'blue' : 'gray'"
             @click="onEntryClick(subroute)"
           >
             {{ $tc(subroute.meta.title, 2).capitalize() }}

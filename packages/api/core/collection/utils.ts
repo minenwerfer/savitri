@@ -25,7 +25,7 @@ export const depopulate = <T extends MongoDocument>(
   const entries = Object.entries(item)
     .map(([key, value]: [string, any]) => ([
       key,
-      !description.fields[key]?.expand && !!value?._id
+      !description.fields[key]?.inline && !!value?._id
         ? select(value, getIndexes(description, key))
         : value
     ]))
@@ -98,10 +98,9 @@ export const project = <T extends MongoDocument>(
     _id: item._id
   };
 
-  (Array.isArray(props) ? props : [props])
-    .forEach((field: string) => {
-      obj[field] = item[field]
-    })
+  (Array.isArray(props) ? props : [props]).forEach((field: string) => {
+    obj[field] = item[field]
+  })
 
   return obj
 }

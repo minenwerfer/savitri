@@ -8,7 +8,7 @@ import type {
 } from '../../types'
 
 import { AuthorizationError, PermissionError } from '../exceptions'
-import { TokenService } from '../services'
+import { TokenService } from '../token'
 import baseRole from '../access/baseRole'
 
 export abstract class Controller {

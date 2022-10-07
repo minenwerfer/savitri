@@ -95,8 +95,16 @@ export default {
     if( !Array.isArray(this.items) ) return []
 
     const collections = Object.entries(this.description?.fields||{})
-      .filter(([, value]: [unknown, CollectionField]) => typeof value.collection === 'string')
-      .map(([key, ]) => key)
+      .reduce((a: Array<any>, [key, field]: [string, CollectionField]) => {
+        if( typeof field.collection !== 'string' ) {
+          return a
+        }
+
+        return [
+          ...a,
+          key
+        ]
+      }, [])
 
     return this.items
       .map((item: any) => ({
@@ -110,12 +118,12 @@ export default {
   },
 
   /**
-   * Retrieves fields who refeer to a collection (typeof collection === 'string') and have "expanded" set to true.
+   * Retrieves fields who refeer to a collection (typeof collection === 'string') and have "inline" set to true.
    * Used internally.
    */
-  expandedSubcollections<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  inlineReferences<T=any>(this: Pick<CollectionState<T>, 'description'>) {
     return Object.entries(this.description.fields||{})
-      .filter(([, value]: [unknown, CollectionField]) => typeof value.collection === 'string' && value.expand === true)
+      .filter(([, field]: [unknown, CollectionField]) => typeof field.collection === 'string' && field.inline === true)
   },
 
   /**
@@ -158,8 +166,16 @@ export default {
     }
 
     const entries = Object.entries(filters)
-      .filter(([_, value]: [unknown, any]) => value && !(typeof value === 'string' &&  value.length === 0))
-      .map(([key, value]) => [key, expr(key, value)])
+      .reduce((a: Array<any>, [key, filter]) => {
+        if( !filter || (typeof filter === 'string' && filter.length === 0) ) {
+          return a
+        }
+
+        return [
+          ...a,
+          expr(key, filter)
+        ]
+      }, [])
 
 
     return condenseItem(fromEntries(entries))

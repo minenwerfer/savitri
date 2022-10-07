@@ -144,6 +144,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     _decodedToken?: any,
     _response?: unknown
   ): Promise<T> {
+    if( !props?.filters ) {
+      throw new Error('no filter specified')
+    }
+
     const pipe = R.pipe(
       (item: T & { _doc?: T }) => {
         if( !item ) {
@@ -152,13 +156,18 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
 
         return item._doc||item
       },
-      (item: T|null) => item && project(item, props?.project),
-      (item: T|null) => item && fill(item, this.description),
+      // (item: T|null) => {
+      //   return props.project && item
+      //     ? project(item, props.project)
+      //     : item
+      // },
+      (item: T) => project(item, props.project),
+      (item: T) => item && fill(item, this.description),
       (item: T) => depopulate(item, this.description),
       (item: T) => depopulateChildren(item, 2)
     )
 
-    return pipe(await this.model.findOne(props?.filters) as T)
+    return pipe(await this.model.findOne(props.filters) as T)
   }
 
   /**
