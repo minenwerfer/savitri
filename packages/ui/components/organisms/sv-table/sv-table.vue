@@ -87,11 +87,23 @@
             </div>
 
             <div v-else>
-              <sv-picture
-                v-if="field.collection === 'file'" 
-                v-model="row[column].link"
-                class="table__picture"
-              ></sv-picture>
+              <div v-if="field.collection === 'file'">
+                <sv-picture
+                  v-if="/^image/.test(row[column].mime)" 
+                  v-model="row[column].link"
+                  class="table__picture"
+                ></sv-picture>
+                <a
+                  v-else-if="row[column].link"
+                  :href="row[column].link"
+                  style="font-size: 10pt"
+                >
+                  {{ row[column].filename }}
+                </a>
+                <div v-else>
+                  -
+                </div>
+              </div>
               <div v-else-if="store">
                 {{
                   store.formatValue({
@@ -121,24 +133,30 @@
           v-if="actions?.length > 0"
           class="table__cell"
         >
-          <sv-dropdown v-bind="{
-            subject: row,
-            actions
-          }">
-            <sv-icon
-              v-clickable
-              reactive
-              name="setting"
-            ></sv-icon>
-          </sv-dropdown>
-          <!-- <sv-dropdown-trigger :id="row._id"> -->
-          <!--   <teleport :to="`#dropdown-${row._id}`"> -->
-          <!--     <sv-dropdown-content v-bind="{ -->
-          <!--       subject: row, -->
-          <!--       actions, -->
-          <!--     }"></sv-dropdown-content> -->
-          <!--   </teleport> -->
-          <!-- </sv-dropdown-trigger> -->
+          <div class="table__cell-actions">
+            <sv-button
+              small
+              v-for="action in buttonActions"
+              :key="`action-${action.action}`"
+              variant="alt"
+              :icon="action.unicon"
+              @clicked="action.click(row)"
+            >
+              {{ action.name }}
+            </sv-button>
+            <sv-dropdown
+              v-if="dropdownActions.length > 0"
+              v-bind="{
+                subject: row,
+                actions: dropdownActions
+            }">
+              <sv-icon
+                v-clickable
+                reactive
+                name="setting"
+              ></sv-icon>
+            </sv-dropdown>
+          </div>
         </td>
         <div :id="`dropdown-${row._id}`"></div>
       </tr>
@@ -169,6 +187,7 @@ import {
 import { useStore, useFile } from '@savitri/web'
 
 import {
+  SvButton,
   SvBareButton,
   SvIcon,
   SvPicture,
@@ -188,6 +207,7 @@ type Props = {
   border?: boolean
   headers?: boolean
   actions?: any
+  layout?: any
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -204,6 +224,14 @@ const selected = computed({
   get: () => store.selected,
   set: (items: Array<any>) => store.selectMany({ items, value: true })
 })
+
+const buttonActions = computed(() => (
+  props.actions.filter((action: any) => props.layout?.actions?.[action.action]?.button)
+))
+
+const dropdownActions = computed(() => (
+  props.actions.filter((action: any) => !props.layout?.actions?.[action.action]?.button)
+))
 
 //const rowCtx = {
 //  date: (() => {

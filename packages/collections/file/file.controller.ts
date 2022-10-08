@@ -62,7 +62,7 @@ export class FileController extends Mutable<FileDocument> {
     const file = await File.findOne(props.filters)
     if( file ) {
       await unlink(file.absolute_path)
-      return await super.delete.call(this, props)
+      return super.delete.call(this, props)
     }
 
     return true

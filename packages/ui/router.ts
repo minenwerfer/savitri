@@ -69,7 +69,7 @@ export const privateRoutes: Array<Route> = [
       },
       {
         path: 'user',
-        name: 'dashboard-user2',
+        name: 'dashboard-user-group',
         meta: { title: 'Usuário' },
         redirect: { name: 'dashboard-user' },
         children: [

@@ -24,10 +24,8 @@
       width: 20px;
     }
 
-    @media screen and (min-width: 600px) {
-      &>* {
-        height: 100%;
-      }
+    &--custom {
+      align-items: stretch;
     }
   }
 

@@ -3,10 +3,8 @@ Object.assign(String.prototype, {
     return this.charAt(0).toUpperCase() + this.slice(1)
   },
 
-  formatDateTime: function(this: string, hours: boolean = false, locale = 'pt-BR'): string {
-    return hours
-      ? new Date(this).toLocaleString(locale, { timeZone: 'UTC' }).split(':').slice(0, -1).join(':')
-      : new Date(this).toLocaleDateString(locale, { timeZone: 'UTC' })
+  formatDateTime: function(this: string, hours: boolean = false): string {
+    return (new Date(this) as any).formatToString(hours)
   },
 
   formatDocument: function(this: string) {

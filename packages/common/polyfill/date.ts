@@ -1,6 +1,8 @@
 Object.assign(Date.prototype, {
   formatToString: function(this: Date, hours: boolean = false, locale = 'pt-BR'): string {
-    return this.toLocaleDateString(locale, { timeZone: 'UTC' })
+    return hours
+      ? this.toLocaleString(locale).split(':').slice(0, -1).join(':')
+      : this.toLocaleDateString(locale)
   },
 
   daysAgo: function(this: Date, days: number): Date {

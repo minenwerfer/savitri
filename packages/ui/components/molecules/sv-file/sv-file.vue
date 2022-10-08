@@ -70,10 +70,8 @@ const previewFile = computed(() =>
 )
 
 const isImage = computed(() => 
-  [
-    preview.value?.type,
-    props.modelValue?.mime
-  ].some((type: string) => /^image\//.test(type))
+  (/^image\//.test(props.modelValue?.mime) && !preview.value?.type)
+    || /^image\//.test(preview.value?.type)
 )
 
 const readFile = (file: any): Promise<any> => new Promise((resolve) => {

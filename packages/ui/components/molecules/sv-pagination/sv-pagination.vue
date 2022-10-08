@@ -15,7 +15,7 @@
 
     <div class="pagination__control">
       <sv-button
-        size="small"
+        small
         icon="angle-left"
         :disabled="store.isLoading || page === 0"
         @clicked="page -= 1"
@@ -37,7 +37,7 @@
       </div>
 
       <sv-button
-        size="small"
+        small
         icon="angle-right"
         :disabled="store.isLoading || page === pageCount"
         @clicked="page += 1"

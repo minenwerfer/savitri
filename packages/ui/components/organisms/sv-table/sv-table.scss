@@ -104,6 +104,15 @@ $picture-size: 3.6rem;
     }
   }
 
+  &__cell-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: .8rem;
+    margin-left: auto;
+
+  }
+
   &__picture {
     height: $picture-size;
     width: $picture-size;

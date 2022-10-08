@@ -76,6 +76,10 @@ export default {
     return this.description.formLayout||{}
   },
 
+  tableLayout<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+    return this.description.tableLayout||{}
+  },
+
   /**
    * Converts populated subdocuments back to ObjectIds.
    * @see SvCrud
@@ -173,7 +177,7 @@ export default {
 
         return [
           ...a,
-          expr(key, filter)
+          [key, expr(key, filter)]
         ]
       }, [])
 

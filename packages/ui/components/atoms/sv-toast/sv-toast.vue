@@ -8,15 +8,21 @@
     @animationend="metaStore.popToast()"
     @click="metaStore.popToast(itr)"
   >
-    <sv-icon
-      v-if="icon"
-      small
-      :name="icon"
-    >
-      <slot></slot>
-    </sv-icon>
+    <div>
+      <sv-icon
+        v-if="icon"
+        small
+        :name="icon"
+      >
+        <slot></slot>
+      </sv-icon>
 
-    <slot v-else></slot>
+      <slot v-else></slot>
+    </div>
+
+    <div>
+      {{ date.formatToString(true) }}
+    </div>
   </div>
 </template>
 
@@ -27,6 +33,7 @@ import { SvIcon } from '../'
 const props = defineProps<{
   idx: number
   itr: number
+  date: Date
   icon?: string
 }>()
 

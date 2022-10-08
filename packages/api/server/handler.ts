@@ -37,7 +37,7 @@ export const getToken = async (request: Request) => request.headers.authorizatio
   : {} as object
 
 export const safeHandle = (
-  fn: (request: HandlerRequest, h: ResponseToolkit) => object
+  fn: (request: HandlerRequest, h: ResponseToolkit) => any|Promise<any>
 ) => async (request: HandlerRequest, h: ResponseToolkit) => {
   try {
     const response = await fn(request, h)
@@ -79,7 +79,7 @@ export const safeHandle = (
 }
 
 export const safeHandleProvide = (
-  fn: (request: HandlerRequest, h: ResponseToolkit, provide: Record<string, any>) => object,
+  fn: (request: HandlerRequest, h: ResponseToolkit, provide: ProvidedParams) => object,
   provide: ProvidedParams
 ) => {
   const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, provide)
@@ -90,7 +90,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
   async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  provide?: Record<string, any>
+  provide?: ProvidedParams
 ) => {
     const {
       params: {
@@ -123,7 +123,7 @@ export const regularVerb = (verb: RegularVerb) =>
   async (
     request: HandlerRequest,
     h: ResponseToolkit,
-    provide?: Record<string, any>
+    provide?: ProvidedParams
 ) => {
   const {
     controller,
@@ -138,7 +138,8 @@ export const regularVerb = (verb: RegularVerb) =>
   const token = await getToken(request) as DecodedToken
 
   prePipe(request, token, h)
-  const requestCopy = Object.assign(request, { payload: {} })
+  const requestCopy = Object.assign({}, request)
+  requestCopy.payload ||= {}
 
   if( id ) {
     requestCopy.payload.filters = {
@@ -167,4 +168,17 @@ export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) 
   return h.response(content)
     .header('Content-Type', mime)
     .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+}
+
+export const fileInsert = async (
+  request: HandlerRequest,
+  _h: ResponseToolkit,
+  provide?: ProvidedParams
+) => {
+  const instance = new FileController
+  const token = await getToken(request) as DecodedToken
+  instance.injected = provide!
+
+  const result = await instance.insert(request.payload as any, token)
+  return { result }
 }

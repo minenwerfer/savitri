@@ -43,6 +43,8 @@ type Variant =
 
 type Props = {
   size?: Size
+  small?: boolean
+  large?: boolean
   variant?: Variant
   icon?: string
   disabled?: boolean
@@ -52,7 +54,14 @@ type Props = {
 const props = defineProps<Props>()
 
 const variant = inject('buttonVariant', props.variant) || 'normal'
-const size = inject('buttonSize', props.size) || 'medium'
+const size = (() => {
+  switch( true ) {
+    case props.small: return 'small'
+    case props.large: return 'large'
+  }
+
+  return inject('buttonSize', props.size) || 'medium'
+})()
 </script>
 
 <style scoped src="./sv-button.scss"></style>

@@ -4,7 +4,8 @@ import {
   safeHandleProvide,
   regularVerb,
   customVerbs,
-  fileDownload
+  fileDownload,
+  fileInsert
 
 } from './handler'
 
@@ -28,7 +29,7 @@ export default (provide: ProvidedParams): Array<ServerRoute> => {
     },
     {
       method: 'POST',
-      path: '/api/{controller}/new',
+      path: '/api/{controller}',
       handler: defaultHandler(regularVerb('insert'))
     },
     {
@@ -55,6 +56,16 @@ export default (provide: ProvidedParams): Array<ServerRoute> => {
       method: 'GET',
       path: '/api/file/{hash}/{options?}',
       handler: defaultHandler(fileDownload)
+    },
+    {
+      method: 'POST',
+      path: '/api/file',
+      handler: defaultHandler(fileInsert),
+      options: {
+        payload: {
+          maxBytes: 2*(100*(1024**2))
+        }
+      }
     }
   ]
 }

@@ -7,7 +7,7 @@
     `"
   >
     <sv-checkbox
-      v-for="(option, index) in values"
+      v-for="(option, index) in field?.values"
       :key="`option-${index}`"
 
       v-model="modelValue"
@@ -22,7 +22,7 @@
         ${modelValue && 'options__checkbox--selected'}
       `"
 
-      @update:modelValue="updateValue"
+      @update:model-value="updateValue"
     ></sv-checkbox>
   </div>
 </template>

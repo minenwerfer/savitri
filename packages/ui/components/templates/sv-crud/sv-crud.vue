@@ -19,12 +19,10 @@
           ></sv-icon>
         </sv-info>
         <sv-button
+          small
           v-if="store.description.report"
-          v-bind="{
-            size: 'small',
-            icon: 'export',
-            variant: 'alt'
-          }"
+          icon="export"
+          variant="alt"
           @clicked="isReportVisible = true"
         >
           Exportar
@@ -33,16 +31,16 @@
       <div
         v-if="store.actions || $slots.actions"
         :key="collection"
-        class="crud__panel-control"
+        class="
+          crud__panel-control
+          crud__panel-control--custom
+        "
       >
         <sv-button
           v-for="(actionProps, index) in store.actions"
           :key="`action-${index}`"
-          v-bind="{
-            size: 'small',
-            icon: actionProps.unicon,
-            disabled: store.selectedIds.length === 0 && actionProps.selection
-          }"
+          :icon="actionProps.unicon"
+          :disabled="store.selectedIds.length === 0 && actionProps.selection"
           @clicked="call(actionProps)({ _id: selectedIds })"
         >
           {{ actionProps.name }}
@@ -77,7 +75,8 @@
           checkbox: hasSelectionActions,
           columns: store.tableDescription,
           rows: store.$items,
-          actions: individualActions
+          actions: individualActions,
+          layout: store.tableLayout
         }"
       ></sv-table>
     </sv-box>

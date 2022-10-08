@@ -11,7 +11,7 @@
         readOnly,
         checked: bindVal
       }"
-
+io
       class="checkbox__input"
     />
     <div

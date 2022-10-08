@@ -156,11 +156,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
 
         return item._doc||item
       },
-      // (item: T|null) => {
-      //   return props.project && item
-      //     ? project(item, props.project)
-      //     : item
-      // },
       (item: T) => project(item, props.project),
       (item: T) => item && fill(item, this.description),
       (item: T) => depopulate(item, this.description),

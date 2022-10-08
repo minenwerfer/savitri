@@ -25,12 +25,17 @@
     </p>
     <template #footer>
       <sv-button
+        large
         v-if="!reportStore.item._id"
         @clicked="requestReport"
       >
         Solicitar
       </sv-button>
-      <sv-button v-else @clicked="reportStore.download">
+      <sv-button
+        v-else
+        large
+        @clicked="reportStore.download"
+      >
         Baixar
       </sv-button>
     </template>

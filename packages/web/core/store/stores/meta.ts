@@ -157,7 +157,8 @@ export default defineStore('meta', {
       this.toasts.push({
         ...props,
         itr: Math.random(),
-        idx: this.toasts.length
+        idx: this.toasts.length,
+        date: new Date()
       })
     },
 

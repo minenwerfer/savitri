@@ -37,12 +37,12 @@
     <template #footer>
       <sv-button
         variant="transparent"
-        size="small"
         @clicked="cancel"
       >
         Cancelar
       </sv-button>
       <sv-button
+        large
         :disabled="store.isLoading || isInsertReadOnly"
         @clicked="insert"
       >

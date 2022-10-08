@@ -26,6 +26,11 @@ type CrudParameters = {
 }
 
 type ActionOptions = {
+  method?:
+    'GET'
+    | 'POST'
+    | 'PUT'
+    | 'DELETE'
   skipLoading?: boolean
 }
 
@@ -113,7 +118,12 @@ export default {
       this.isLoading = true
     }
 
-    const promise = http.post(`${this.$id}/${verb}`, payload)
+    const method = options?.method || 'POST'
+    const route = verb
+      ? `${this.$id}/${verb}`
+      : this.$id
+
+    const promise = http[method.toLowerCase()](route, payload)
       .catch((err: any) => {
         if( err.validation ) {
           this.validationErrors = err.validation
@@ -197,7 +207,7 @@ export default {
     options?: ActionOptions
   ): Promise<T> {
     return this.customEffect(
-      'insert', { ...payload, what: payload?.what||this.item },
+      null, { ...payload, what: payload?.what||this.item },
       this.insertItem,
       options
     )
@@ -283,12 +293,12 @@ export default {
         {
           name: 'cancel',
           title: 'Cancelar',
-          variant: 'transparent',
-          size: 'small'
+          variant: 'transparent'
         },
         {
           name: 'confirm',
-          title: 'Confirmar'
+          title: 'Confirmar',
+          size: 'large'
         },
       ]
     })
