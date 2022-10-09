@@ -13,6 +13,7 @@
           dropdownVisible = false
         }
       }"
+
       class="dropdown__content"
     >
       <slot v-if="$slots.extra" name="extra"></slot>

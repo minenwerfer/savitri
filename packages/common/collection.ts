@@ -29,8 +29,17 @@ export function getIndexes(
     return []
   }
 
-  const field = (form ? (formIndex || index) : index) || Object.keys(description.fields)[0]
-  return Array.isArray(field) ? field : [field]
+  const indexes = form
+    ? (formIndex || index)
+    : index
+
+  if( !indexes ) {
+    return []
+  }
+
+  return Array.isArray(indexes)
+    ? indexes
+    : [indexes]
 }
 
 export const getFirstIndex = (

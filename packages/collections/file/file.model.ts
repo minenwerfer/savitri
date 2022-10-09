@@ -30,7 +30,7 @@ FileSchema.post('init', async function() {
   const link = `${process.env.API_URL}/file/${this._id}`
 
   this.link = `${link}?${timestamp}`
-  this.download_link = `${link}/download/${timestamp}`
+  this.download_link = `${link}/download?${timestamp}`
 })
 
 export const File = model<FileDocument>('file', FileSchema)

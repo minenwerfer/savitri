@@ -93,6 +93,9 @@
         <sv-file
           v-else-if="field.collection === 'file'"
           v-model="formData[key]"
+          v-bind="{
+            field
+          }"
         ></sv-file>
 
         <sv-search
@@ -167,6 +170,8 @@ import {
   SvSelect
 
 } from '../..'
+
+import useCondition from '../../../composables/use-condition'
 
 import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
@@ -303,16 +308,12 @@ const fieldStyle = (key:string, field: any) => {
   }
 
   if( layout?.if ) {
-    const term1 = props.formData[layout.if.term1]
-    const term2 = layout.if.term2
+    const result = useCondition(
+      props.formData,
+      layout.if
+    )
 
-    const result = (() => {switch( layout.if.operator ) {
-      case 'equal': return term1 === term2
-      case 'unequal': return term1 !== term2
-      case 'in': return term2.includes(term1)
-    }})()
-
-    if( !result ) {
+    if( !result.satisfied ) {
       props.formData[key] = undefined
       style.push(`display: none;`)
     }

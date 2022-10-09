@@ -6,19 +6,18 @@
         v-model="previewFile"
         class="file__image"
       ></sv-picture>
-      <div
-        v-clickable
+      <a
         v-if="modelValue?._id"
-        class="file__name"
-        @click="download(modelValue._id)"
+        :href="modelValue.download_link"
       >
         {{ modelValue.filename }}
-      </div>
+      </a>
     </div>
     <div class="file__actions">
       <input
         type="file"
         ref="file"
+        :accept="field?.accept?.join(',')"
         @change="changePreview"
       />
       <div
@@ -51,9 +50,16 @@ import { SvPicture, SvButton } from '../..'
 
 type Props = {
   modelValue: any
+  field?: {
+    accept?: Array<string>
+  }
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  accept: [
+    '*/*'
+  ]
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
@@ -117,10 +123,6 @@ const remove = async () => {
   })
 
   emit('update:modelValue', {})
-}
-
-const download = (filename: string) => {
-  window.open(`${fileUrl.value}/download`)
 }
 </script>
 

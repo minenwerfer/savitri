@@ -68,6 +68,9 @@ export type CollectionField = Readonly<{
   readOnly?: boolean
   inlineEditing?: boolean
 
+  /** @see SvFile */
+  accept?: Array<string>
+
   values?: Record<string, string> | Record<number, any> | {
     __query: {
       collection: string

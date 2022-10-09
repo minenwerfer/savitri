@@ -9,11 +9,8 @@
       ">
         <th
           v-if="checkbox && store"
-          :class="`
-            table__header
-            table__header--checkbox
-            ${border && 'table__header--border'}
-        `">
+          class="table__header"
+        >
           <input
             type="checkbox"
             @change="store.selectAll($event.target.checked)"
@@ -80,10 +77,19 @@
 
             <div v-else-if="field.type === 'boolean'">
               <sv-switch
+                v-if="!field.readOnly"
                 v-bind="field"
                 v-model="row[column]"
                 @update:model-value="toggle($event, row._id, column)"
               ></sv-switch>
+              <sv-icon
+                v-else
+                small
+                :name="row[column] ? 'check' : 'times'"
+                :fill="row[column] ? 'green' : 'red'"
+              >
+                {{ $t(row[column] ? 'yes' : 'no') }}
+              </sv-icon>
             </div>
 
             <div v-else>
@@ -140,6 +146,8 @@
               :key="`action-${action.action}`"
               variant="alt"
               :icon="action.unicon"
+
+              :style="buttonStyle(row, action)"
               @clicked="action.click(row)"
             >
               {{ action.name }}
@@ -196,8 +204,7 @@ import {
 
 } from '../..'
 
-// import SvDropdownTrigger from './_internals/components/sv-dropdown-trigger/sv-dropdown-trigger.vue'
-// import SvDropdownContent from './_internals/components/sv-dropdown-content/sv-dropdown-content.vue'
+import useCondition from '../../../composables/use-condition'
 
 type Props = {
   columns: any
@@ -233,14 +240,6 @@ const dropdownActions = computed(() => (
   props.actions.filter((action: any) => !props.layout?.actions?.[action.action]?.button)
 ))
 
-//const rowCtx = {
-//  date: (() => {
-//    const date = new Date()
-//    date.setHours(0, 0, 0, 0)
-//    return date
-//  })()
-//}
-
 const toggle = (value, rowId, key) => {
   if( store ) {
     store.insert({
@@ -252,6 +251,24 @@ const toggle = (value, rowId, key) => {
       skipLoading: true
     })
   }
+}
+
+const buttonStyle = (subject, action) => {
+  const style = []
+  const layout = props.layout?.actions?.[action.action]
+
+  if( layout?.if ) {
+    const result = useCondition(
+      subject,
+      layout.if
+    )
+
+    if( !result.satisfied ) {
+      style.push(`display: none;`)
+    }
+  }
+
+  return style.join('')
 }
 </script>
 

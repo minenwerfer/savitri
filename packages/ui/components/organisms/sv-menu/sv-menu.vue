@@ -5,32 +5,42 @@
     <!-- menu entries -->
     <div class="menu__entries">
       <div
-        v-for="(route, index) in routesWithChildren"
-        :key="`route-${index}`"
+        v-for="(entry, index) in routesWithChildren"
+        :key="`entry-${index}`"
         class="menu__entry"
       >
-        <a
-          class="menu__entry-name"
-          @click="onEntryClick(route)"
+        <sv-icon
+          v-clickable
+          name="angle-up"
+          :class="`
+            menu__entry-title
+            ${shrink[index] && 'menu__entry-title--shrinked'}
+          `"
+
+          @click="shrink[index] = !shrink[index]"
         >
-          {{ $tc(route.meta.title, 2).capitalize() }}
-        </a>
+          {{ $tc(entry.meta.title, 2).capitalize() }}
+        </sv-icon>
+
 
         <!-- subroutes -->
-        <div>
+        <div :class="`
+          menu__routes
+          ${shrink[index] && 'menu__routes--shrinked'}
+        `">
           <sv-icon
             v-clickable
-            v-for="(subroute, index) in route.children"
-            :key="`subroute-${index}`"
+            v-for="(route, index) in entry.children"
+            :key="`route-${index}`"
             :class="`
-              menu__subroute
-              ${isCurrent(subroute) && 'menu__subroute--current'}
+              menu__route
+              ${isCurrent(route) && 'menu__route--current'}
             `"
 
-            :name="subroute.meta?.unicon || 'file'"
-            @click="onEntryClick(subroute)"
+            :name="route.meta?.unicon || 'file'"
+            @click="onEntryClick(route)"
           >
-            {{ $tc(subroute.meta.title, 2).capitalize() }}
+            {{ $tc(route.meta.title, 2).capitalize() }}
           </sv-icon>
         </div>
 
@@ -66,9 +76,17 @@ const metaStore = useStore('meta')
 const userStore = useStore('user')
 const router = useRouter()
 
-const tick = ref(0)
 const productName = inject('productName')
 const productLogo = inject('productLogo', undefined)
+
+const shrink = ref(
+  Object.values(props.schema).reduce((a: any, route: [string, any], i) => {
+    return {
+      ...a,
+      [i]: !!route.shrink
+    }
+  }, {})
+)
 
 const onEntryClick = (route: Route & { meta: any }) => {
   if( route.name ) {

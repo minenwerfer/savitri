@@ -60,15 +60,6 @@ $picture-size: 3.6rem;
   &__header {
     display: hidden;
 
-    &--border {
-      // border: 1px solid var(--default-border-color);
-      // border-width: 1px 1px 1px 0;
-    }
-
-    &--checkbox {
-      // width: 2rem;
-    }
-
     &--label {
       overflow: hidden;
       text-overflow: ellipsis;

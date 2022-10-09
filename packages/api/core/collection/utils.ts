@@ -23,12 +23,16 @@ export const depopulate = <T extends MongoDocument>(
   const { _id, ...item } = _item
 
   const entries = Object.entries(item)
-    .map(([key, value]: [string, any]) => ([
-      key,
-      !description.fields[key]?.inline && !!value?._id
-        ? select(value, getIndexes(description, key))
-        : value
-    ]))
+    .map(([key, value]: [string, any]) => {
+      const indexes = getIndexes(description, key)
+
+      return [
+        key,
+        indexes.length > 0 && !description.fields[key]?.inline && !!value?._id
+          ? select(value, indexes)
+          : value
+      ]
+    })
 
   return {
     _id,

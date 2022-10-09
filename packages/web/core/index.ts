@@ -24,6 +24,7 @@ type Plugin = {
 type MenuSchema = Record<string, {
   roles?: Array<string>
   children: Array<string>
+  shrink?: boolean
 }>
 
 interface AppOptions {
