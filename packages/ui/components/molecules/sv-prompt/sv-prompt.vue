@@ -1,7 +1,11 @@
 <template>
-  <sv-modal :close-hint="false" :title="title">
+  <sv-modal :close-hint="false">
     <slot v-if="$slots.body" name="body"></slot>
     <slot v-else></slot>
+
+    <template #title v-if="title">
+      {{ title }}
+    </template>
 
     <template #footer>
       <sv-button
@@ -26,6 +30,7 @@ const SvModal = defineAsyncComponent(() => import('../../organisms/sv-modal/sv-m
 const metaStore = useStore('meta')
 
 type Props = {
+  title?: string
   actions: Array<any>
 }
 

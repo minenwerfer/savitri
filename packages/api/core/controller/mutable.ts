@@ -19,6 +19,14 @@ import {
 
 import { Controller } from './controller'
 
+const mergeDeep = (left: any, right: any) => Object.assign(left, R.mergeDeepWith(
+  (l, r) => R.is(Object, l) && R.is(Object, r)
+    ? R.concat(l, r)
+    : l,
+  left,
+  right
+))
+
 export abstract class Mutable<T extends MongoDocument> extends Controller {
   declare protected readonly description: CollectionDescription
   protected _queryPreset: {
@@ -56,20 +64,20 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     })
 
     if( this.options.queryPreset ) {
-      Object.assign(
+      mergeDeep(
         newPayload,
         this.options.queryPreset
       )
     }
 
     if( this.apiConfig.beforeRead && decodedToken ) {
-      Object.assign(
+      mergeDeep(
         newPayload,
         this.apiConfig.beforeRead(decodedToken, this.description.collection)
       )
     }
 
-    Object.assign(
+    mergeDeep(
       newPayload,
       baseControl.beforeRead!(payload, decodedToken)
     )
@@ -86,13 +94,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     const filters = newPayload.what || {}
 
     if( this.apiConfig.beforeWrite && decodedToken ) {
-      Object.assign(
+      mergeDeep(
         filters,
         this.apiConfig.beforeWrite(decodedToken, this.description.collection)
       )
     }
 
-    Object.assign(
+    mergeDeep(
       filters,
       baseControl.beforeWrite!(payload, decodedToken)
     )

@@ -34,7 +34,7 @@ export default {
     const findField = (fieldName: string) =>
       Object.entries(this.description.fields||{}).find(([key]: [string, unknown]) => fieldName === key)
 
-    if( !!this.description.table ) {
+    if( this.description.table ) {
       return this.description.table
         .reduce((a:object, fieldName: string) => {
           const field = findField(fieldName)
@@ -208,14 +208,14 @@ export default {
       .some((value: any) => !!value)
   },
 
-  availableFilters<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  availableFilters<T=any>(this: Pick<CollectionState<T>, 'description'> & { fields: Record<string, CollectionField> }) {
     if( !this.description?.filters || !this.description?.fields ) {
       return {}
     }
 
     return Object.keys(normalizeFilters(this.description.filters))
       .reduce((a: object, k: string) => {
-        const field = normalizeFields(this.description.fields!)[k]
+        const field = this.fields[k]
 
         return {
           ...a,

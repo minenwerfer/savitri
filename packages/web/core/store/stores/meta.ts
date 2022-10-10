@@ -56,14 +56,12 @@ export default defineStore('meta', {
         this.descriptions = response.data.result.descriptions
 
       this.roles = response.data.result.roles
-      const clone = (_: object) => JSON.parse(JSON.stringify(_))
 
       // monkeypatchs '@savitri/web/stores' object
       for ( const [collectionName, description] of Object.entries(descriptions) ) {
         const rawDescription = Object.assign({}, description)
         const item = freshItem(description)
         const filters = freshFilters(description)
-
 
         description.fields = await hydrateQuery(description.fields, false)
 

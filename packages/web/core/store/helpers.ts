@@ -3,7 +3,6 @@ import { ARRAY_TYPES } from '../../../common/constants'
 import { useStore } from './'
 import useHttp from '../http'
 
-
 import type {
   CollectionActions,
   CollectionDescription

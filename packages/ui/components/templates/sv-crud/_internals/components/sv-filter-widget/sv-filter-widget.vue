@@ -18,7 +18,7 @@
         ></sv-icon>
       </sv-bare-button>
       <sv-bare-button
-        :disabled="Object.keys(store.availableFilters).length === 0"
+        :disabled="Object.keys(store.$filters).length === 0"
         @clicked="store.clearFilters"
       >
         <sv-icon

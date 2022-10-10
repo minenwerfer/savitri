@@ -366,10 +366,6 @@ const fieldStyle = (key:string, field: any) => {
 }
 
 const inputBind = (field: any, key: string, value: any) => {
-  if( !store ) {
-    return props.formData[key]
-  }
-
   return {
     ...field,
     readOnly: true,
