@@ -7,10 +7,10 @@ import * as Collection from '../../common/collection'
 import type { CollectionField } from '../../common/types'
 import { Mutable, getController } from '../../api/core/controller'
 
-import { ReportDocument, Report } from './report.model'
+import { ReportDocument, default as Report } from './report.model'
 import { default as Description } from './index.json'
 
-import { File } from '../file/file.model'
+import File from '../file/file.model'
 
 export class ReportController extends Mutable<ReportDocument> {
   private readonly _formatMap: any = {

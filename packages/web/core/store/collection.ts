@@ -45,10 +45,11 @@ const state = <T=object>(): CollectionState<T> => {
     item: {},
     freshItem: {},
     items: [],
+    filters: {},
+    freshFilters: {},
 
     selected: [],
 
-    filters: {},
     queryCache: {},
     description: {},
     rawDescription: {},

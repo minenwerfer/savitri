@@ -1,6 +1,8 @@
 import { fromEntries, withIsomorphicLock } from '../../../common'
+import { ARRAY_TYPES } from '../../../common/constants'
 import { useStore } from './'
 import useHttp from '../http'
+
 
 import type {
   CollectionActions,
@@ -187,6 +189,59 @@ export const normalizeFields = (fields: CollectionDescription['fields']) => {
       return {
         ...a,
         [fieldName]: field
+      }
+    }, {})
+}
+
+export const freshItem = (description: CollectionDescription) => {
+  const isObject = (field: any) =>
+    typeof field.collection === 'string'
+      || field.type === 'object'
+      || field.values?.[0]?.__query
+      || field.values?.__query
+
+  const item: Record<string, any> = Object.entries(description.fields||{})
+    .reduce((a: any, [key, field]: [string, any]) => {
+      if( !isObject(field) ) {
+        return a
+      }
+
+      const isArray = field.array
+        || Array.isArray(field.values)
+
+      return {
+        ...a,
+        [key]: isArray ? [] : {}
+      }
+    }, {})
+
+  Object.entries(description.fields||{})
+    .forEach(([key, field] : [string, any]) => {
+      if( ![...ARRAY_TYPES, 'boolean'].includes(field.type) ) {
+        return
+      }
+
+      item[key] = field.type !== 'radio'
+        ? (field.type === 'boolean' ? false : [])
+        : ''
+    })
+
+  return item
+}
+
+export const freshFilters = (description: CollectionDescription) => {
+  return Object.entries(description.fields||{})
+    .reduce((a: any, [key, field]: [string, any]) => {
+      if( field.type !== 'datetime' ) {
+        return a
+      }
+
+      return {
+        ...a,
+        [key]: {
+          $gte: '',
+          $lte: ''
+        }
       }
     }, {})
 }

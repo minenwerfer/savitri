@@ -1,6 +1,6 @@
 import type { CollectionField } from '../../../common/types'
 import type { CollectionState } from '../../types/store'
-import { fromEntries } from '../../../common'
+import { fromEntries, deepClone } from '../../../common'
 
 import  {
   condenseItem,
@@ -89,7 +89,7 @@ export default {
   },
 
   $item<T=any>(this: Pick<CollectionState<T>, 'item'>) {
-    //
+    return this.item
   },
 
   /**
@@ -134,19 +134,17 @@ export default {
    * @see SvTable
    */
   selectedIds(this: Pick<CollectionState<{ _id: string }>, 'selected'>) {
-    return this.selected.map((s) => s._id)
+    return this.selected.map((_) => _._id)
   },
 
   /**
    * @see SvCrud
    */
   $filters<T=any>(this: Pick<CollectionState<T>, 'filters' | 'description'>) {
-    const filters = removeEmpty(this.filters||{})
+    const filters = removeEmpty(deepClone(this.filters||{}))
 
     const expr = (key: string, value: any) => {
       const field = ((this.description).fields||{})[key]
-
-      // TODO: debug this
       if( !field ) {
         return
       }
@@ -170,8 +168,16 @@ export default {
     }
 
     const entries = Object.entries(filters)
-      .reduce((a: Array<any>, [key, filter]) => {
-        if( !filter || (typeof filter === 'string' && filter.length === 0) ) {
+      .reduce((a: Array<any>, [key, filter]: [string, any]) => {
+        if( filter && typeof filter === 'object' && !Array.isArray(filter) ) {
+          Object.keys(filter).forEach((key) => {
+            if( !filter[key] || Object.values(filter[key]).every((_) => !_) ) {
+              delete filter[key]
+            }
+          })
+        }
+
+        if( !filter || Object.keys(filter).length === 0 ) {
           return a
         }
 
@@ -188,8 +194,8 @@ export default {
   /**
    * @see SvCrud
    */
-  filtersCount<T=any>(this: Pick<CollectionState<T>, 'filters'>) {
-    return Object.values(this.filters)
+  filtersCount() {
+    return Object.values(this.$filters)
       .filter((_) => !!_)
       .length
   },
@@ -202,19 +208,18 @@ export default {
       .some((value: any) => !!value)
   },
 
-  availableFilters<T=any>(this: { fields(state: CollectionState<T>): T } & Pick<CollectionState<T>, 'description'>) {
-    if( !this.description?.filters ) {
+  availableFilters<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+    if( !this.description?.filters || !this.description?.fields ) {
       return {}
     }
 
     return Object.keys(normalizeFilters(this.description.filters))
       .reduce((a: object, k: string) => {
-        const field = Object.entries(this.fields)
-          .find(([key]: [string, unknown]) => key === k)
+        const field = normalizeFields(this.description.fields!)[k]
 
         return {
           ...a,
-          ...(field ? { [k]: field[1] } : {})
+          ...(field ? { [k]: field } : {})
         }
       }, {})
   }

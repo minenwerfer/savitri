@@ -1,7 +1,8 @@
-import { Schema } from 'mongoose'
+import { model as mongooseModel, Schema } from 'mongoose'
 import * as R from 'ramda'
 import * as TypeGuards from './typeguards'
 import type { CollectionDescription, MaybeCollectionDescription } from '../../../common'
+import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
@@ -110,4 +111,18 @@ export const descriptionToSchema = <T>(
   }
 
   return schema
+}
+
+export const createModel = <T=any>(
+  modelName: string,
+  description: MaybeCollectionDescription,
+  options?: any,
+  cb?: (schema: Schema) => void
+) => {
+  const schema = descriptionToSchema<T>(description, options || defaultOptions)
+  if( cb ) {
+    cb(schema)
+  }
+
+  return mongooseModel<T>(modelName, schema)
 }

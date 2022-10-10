@@ -44,6 +44,26 @@
           }"
         />
 
+        <div
+          v-else-if="field.type === 'datetime' && searchOnly"
+          style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 1rem;"
+        >
+          <sv-input
+            v-model="formData[key].$gte"
+            v-bind="{
+              field,
+              fieldName: key
+            }"
+          ></sv-input>
+          <sv-input
+            v-model="formData[key].$lte"
+            v-bind="{
+              field,
+              fieldName: key
+            }"
+          ></sv-input>
+        </div>
+
         <!-- text -->
         <sv-input
           v-else-if="isTextType(field.type)"
@@ -277,7 +297,6 @@ const fields = filterFields(([key, f]: [string, any]) => {
     && !f.meta
     && has(key)
 })
-
 
 const isTextType = (type: string) => {
   return [

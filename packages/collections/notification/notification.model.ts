@@ -1,6 +1,4 @@
-import type { MongoDocument } from '../../api/types'
-import { model, options } from '../../api/core/database'
-import { descriptionToSchema } from '../../api/core/collection'
+import { createModel, MongoDocument } from '../../api'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'
@@ -16,5 +14,4 @@ export type NotificationDocument = MongoDocument & {
 }
 
 
-export const NotificationSchema = descriptionToSchema<NotificationDocument>(Description, options)
-export const Notification = model<NotificationDocument>('notification', NotificationSchema)
+export default createModel<NotificationDocument>('notification', Description)

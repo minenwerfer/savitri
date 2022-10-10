@@ -1,5 +1,5 @@
 import * as Collection from '../../../common/collection'
-import { fromEntries } from '../../../common'
+import { fromEntries, deepClone } from '../../../common'
 import type { CollectionDescription, CollectionField } from '../../../common/types'
 import type {
   CollectionState,
@@ -91,7 +91,7 @@ const mutations = {
   },
 
   clearItem<T=any>(this: Pick<CollectionState<T>, 'item' | 'freshItem'>) {
-    const item = this.item = Object.assign({}, this.freshItem)
+    const item = this.item = deepClone(this.freshItem)
     return item
   },
 
@@ -271,13 +271,15 @@ export default {
   },
 
   clearFilters<T>(
-    this: Pick<CollectionState<T>, 'filters' | 'pagination'> & {
+    this: Pick<CollectionState<T>, 'filters' | 'freshFilters' | 'pagination'> & {
       filter: (...args: any[]) => Promise<Array<T>>
     }
   ) {
-    this.filters = {}
+    const filters = this.filters = deepClone(this.freshFilters)
     this.pagination.offset = 0
     this.filter()
+
+    return filters
   },
 
   async ask(props: {

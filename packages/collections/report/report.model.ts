@@ -1,6 +1,4 @@
-import type { MongoDocument } from '../../api/types'
-import { model, options } from '../../api/core/database'
-import { descriptionToSchema } from '../../api/core/collection'
+import { createModel, MongoDocument } from '../../api'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'
@@ -18,5 +16,4 @@ export type ReportDocument = MongoDocument & {
 }
 
 
-export const ReportSchema = descriptionToSchema<ReportDocument>(Description, options)
-export const Report = model<ReportDocument>('report', ReportSchema)
+export default createModel<ReportDocument>('report', Description)

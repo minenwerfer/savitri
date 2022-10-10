@@ -76,7 +76,7 @@ import { copyToClipboard } from '@savitri/web'
 import { SvInfo, SvIcon } from '../..'
 
 type Props = {
-  modelValue?: string|number
+  modelValue?: string|number|Date
   fieldName?: string
   field: {
     type?: string
@@ -97,7 +97,9 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const name = props.fieldName
-const readOnly = !inject('searchOnly', false) && props.readOnly
+const searchOnly = inject('searchOnly', false)
+const readOnly = !searchOnly && props.readOnly
+
 const emit = defineEmits<{
   (e: 'input', value: string|number): void
   (e: 'update:modelValue', value: string|number): void
@@ -118,50 +120,39 @@ const {
 inputBind.name = props.fieldName
 inputBind.readonly = readOnly
 
-const inputValue = ref(props.modelValue||'')
+if( inputBind.type === 'datetime' ) {
+  inputBind.type = !searchOnly && props.field?.includeHours
+    ? 'datetime-local'
+    : 'date'
+}
 
-// const dateToISO = (raw: string) => {
-//   if( !raw ) {
-//     return ''
-//   }
-// 
-//   const numbers = raw.split('T')[0].split('-').join('')
-// 
-//   return [
-//     numbers.slice(6, 8),
-//     numbers.slice(4, 6),
-//     numbers.slice(0, 4)
-// 
-//   ].join('/')
-// }
-// 
-// const ISOToDate = (raw: string) => {
-//   if( !raw ) {
-//     return
-//   }
-// 
-//   const numbers = raw.split('/').join('')
-// 
-//   return [
-//     numbers.slice(2, 4),
-//     numbers.slice(0, 2),
-//     numbers.slice(4, 8)
-// 
-//   ].join('/')
-// }
+const _getDatetimeString = () => {
+  return props.field?.includeHours
+    ? props.modelValue.toISOString().split('T')[0]
+    : props.modelValue
+}
 
-// const inputValue = ref(props.type === 'datetime'
-//   ? dateToISO(props.modelValue)
-//   : props.modelValue)
+const inputValue = ref(
+  props.modelValue instanceof Date
+    ? _getDatetimeString()
+    : props.modelValue || ''
+)
 
 const updateValue = (value: string|number) => {
-  emit('input', value)
-  emit('update:modelValue', value)
+  const newVal = (() => {
+    switch( props.field?.type ) {
+      case 'datetime': return new Date(value)
+      default: return value
+    }
+  })()
+
+  emit('input', newVal)
+  emit('update:modelValue', newVal)
 }
 
 const onInput = (
   event: { target: { modelValue: string, dataset?: { maskRawValue: string } } },
-  masked:boolean
+  masked: boolean
 ) => {
   if( !masked && event.target.dataset?.maskRawValue ) {
     return

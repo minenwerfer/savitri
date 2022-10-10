@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { default as webpackVariables } from 'variables'
+import { deepClone } from '../../../../common'
 import { CollectionDescription } from '../../../../common/types'
-import { freshItem } from '../../helpers/store'
 import useHttp from '../../http'
 import useCollection from '../collection'
 
 import { useStore, hasStore, registerStore } from '../use'
-import { hydrateQuery } from '../helpers'
+import { hydrateQuery, freshItem, freshFilters } from '../helpers'
 
 type CollectionName = string
 type PromptAnswer = { name: string }
@@ -56,11 +56,14 @@ export default defineStore('meta', {
         this.descriptions = response.data.result.descriptions
 
       this.roles = response.data.result.roles
+      const clone = (_: object) => JSON.parse(JSON.stringify(_))
 
       // monkeypatchs '@savitri/web/stores' object
       for ( const [collectionName, description] of Object.entries(descriptions) ) {
         const rawDescription = Object.assign({}, description)
         const item = freshItem(description)
+        const filters = freshFilters(description)
+
 
         description.fields = await hydrateQuery(description.fields, false)
 
@@ -68,7 +71,9 @@ export default defineStore('meta', {
           const store = useStore(collectionName)
           store.$patch({
             item,
-            freshItem: Object.assign({}, item),
+            filters,
+            freshItem: deepClone(item),
+            freshFilters: deepClone(filters),
             description,
             rawDescription
           })
@@ -84,7 +89,9 @@ export default defineStore('meta', {
         const store = defineStore(collectionName, {
           state: () => Object.assign(state(), {
             item,
-            freshItem: Object.assign({}, item),
+            filters,
+            freshItem: deepClone(item),
+            freshFilters: deepClone(filters),
             description,
             rawDescription
           }),
@@ -164,7 +171,7 @@ export default defineStore('meta', {
 
     popToast(this: { toasts: Array<any> }, itr?: Date) {
       if( !itr ) {
-        const r = this.toasts.shift()
+        this.toasts.shift()
         return
       }
 

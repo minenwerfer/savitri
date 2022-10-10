@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt'
 
 import { TokenService } from '../../api/core/token'
 import { Mutable } from '../../api/core/controller'
-import { UserDocument, User } from './user.model'
+import { UserDocument, default as User } from './user.model'
 import { default as Description } from './index.json'
 
 /**
@@ -143,7 +143,7 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     if( this.apiConfig.populateUserExtra ) {
-      const { UserExtra } = require(`${process.cwd()}/collections/userExtra/userExtra.model`)
+      const { default: UserExtra } = require(`${process.cwd()}/collections/userExtra/userExtra.model`)
       const projection = this.apiConfig.populateUserExtra
         .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 

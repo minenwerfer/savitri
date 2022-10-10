@@ -26,6 +26,7 @@ export type CollectionState<Item> = PiniaState & {
   freshItem: Partial<Item>
   items: Array<Item>
   filters: Partial<Item>
+  freshFilters: any
 
   selected: Array<Item>
 

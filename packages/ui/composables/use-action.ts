@@ -1,9 +1,9 @@
 import { reactive } from 'vue'
 import type { Router } from 'vue-router'
-import type { CollectionAction } from '../../../common/types'
-import type { ActionEvent } from '../../types/action'
+import type { CollectionAction } from '../../common/types'
+import type { ActionEvent } from '../../web/types/action'
 
-export const useAction = <T extends { $id: string }, F extends { _id: string }>(
+export default <T extends { $id: string }, F extends { _id: string }>(
   store: (T & Record<string, (...args: any[]) => any>),
   router: Router
 ) => {
@@ -44,7 +44,7 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
       if( scopeName === 'ui' ) {
         return (filters: F) => {
           Object.assign(eventBus, {
-            id: (new Date()).getTime(),
+            id: Math.random(),
             name: scopedAction,
             params: { filters }
           })
@@ -65,7 +65,7 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
       })
     }
 
-    return store[actionName]
+    return (filters: F) => store[actionName]({ filters })
   }
 
   return [
