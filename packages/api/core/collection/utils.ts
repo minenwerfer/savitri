@@ -3,23 +3,12 @@ import * as R from 'ramda'
 import type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument } from '../../types'
 
-export const project = <T extends MongoDocument>(
-  item: Record<string, any> & T,
-  props: any
-) => {
-  if( !props ) {
-    return item
+export const normalizeProjection = (projection?: string|Array<string>|Record<string, number>) => {
+  if( Array.isArray(projection) ) {
+    return projection.reduce((a, key: string) => ({ ...a, [key]: 1 }), {})
   }
 
-  const obj: any = {
-    _id: item._id
-  };
-
-  (Array.isArray(props) ? props : [props]).forEach((field: string) => {
-    obj[field] = item[field]
-  })
-
-  return obj
+  return projection
 }
 
 export const fill = <T extends MongoDocument>(
