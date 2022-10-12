@@ -97,7 +97,7 @@ export const buildAggregations = (
     }
 
     if( beforeRead ) {
-      Object.assign(matches, beforeRead(collectionName))
+      Object.assign(matches, beforeRead(collectionName).filters)
     }
 
     aggregations[collectionName] = [

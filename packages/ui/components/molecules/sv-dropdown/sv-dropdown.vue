@@ -1,5 +1,8 @@
 <template>
-  <div class="dropdown">
+  <div
+    v-if="actions.length > 0"
+    class="dropdown"
+  >
     <a
       class="dropdown__trigger"
       @click="dropdownVisible = true"

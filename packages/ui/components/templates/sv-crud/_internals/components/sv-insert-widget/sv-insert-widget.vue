@@ -73,7 +73,7 @@ const props = defineProps<{
 
 const metaStore = useStore('meta')
 const store = useStore(metaStore.view.collection)
-const individualActions = inject('individualActions')
+const individualActions = inject('individualActions', [])
 
 const parentStore = inject('parentStore')
 

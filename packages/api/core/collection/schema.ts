@@ -32,23 +32,32 @@ export const descriptionToSchema = <T>(
 
   let hasRefs = false
 
-  const convert = (a: any, [key, value]: [string, any]) => {
-    const query = Array.isArray(value.values||[])
-      ? (value.values||[{}])[0]?.__query
-      : value.values?.__query
+  const convert = (a: any, [key, field]: [string, any]) => {
+    const query = Array.isArray(field.values||[])
+      ? (field.values||[{}])[0]?.__query
+      : field.values?.__query
 
-    const collectionName = query?.collection || value.collection
+    const {
+      collection: collectionName,
+      ...reference
+    } = query || field
 
     const result: any = {
       type: String,
-      select: value.hidden !== true,
-      unique: value.unique === true,
-      default: value.default,
-      required: value.required || description.strict,
-      autopopulate: (typeof collectionName === 'string' && !value.preventPopulate) || false,
+      select: field.hidden !== true,
+      unique: field.unique === true,
+      default: field.default,
+      required: field.required || description.strict,
     }
 
-    const typeMatch = typeMapping.find( ([keys, _]: [Array<string>, any]) => keys.includes(value.type) )
+    if( typeof collectionName === 'string' && !field.preventPopulate ) {
+      result.autopopulate = {
+        maxDepth: reference.maxDepth || 2,
+        select: reference.select?.join(' ')
+      }
+    }
+
+    const typeMatch = typeMapping.find( ([keys, _]: [Array<string>, any]) => keys.includes(field.type) )
 
     if( typeMatch ) {
       result.type = typeMatch[1]
@@ -58,22 +67,22 @@ export const descriptionToSchema = <T>(
       hasRefs = true
 
       result.ref = collectionName
-      result.type = value.array || Array.isArray(value.values)
+      result.type = field.array || Array.isArray(field.values)
         ? [ObjectId]
         : ObjectId
 
-      if( value._id === false ) {
-        result.type = value.array
+      if( field._id === false ) {
+        result.type = field.array
           ? [Object]
           : Object
       }
     }
 
-    if( ['checkbox', 'radio', 'select'].includes(value.type) ) {
-      result.validator = (v: string) => value.values.include(v)
+    if( ['checkbox', 'radio', 'select'].includes(field.type) ) {
+      result.validator = (v: string) => field.values.include(v)
     }
 
-    if( ['text'].includes(value.type) && value.required ) {
+    if( ['text'].includes(field.type) && field.required ) {
       result.validator = (v: string) => !!v && v.length > 0
     }
 

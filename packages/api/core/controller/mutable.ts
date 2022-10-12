@@ -4,13 +4,13 @@ import type { Model } from '../database'
 import type { CollectionDescription, MaybeCollectionDescription } from '../../../common/types'
 import type { MongoDocument } from '../../types'
 
-import { fromEntries } from '../../../common/helpers'
+import { fromEntries, deepMerge } from '../../../common/helpers'
 import { ItemNotFound } from '../exceptions'
 import * as baseControl from '../access/baseControl'
 
 import {
-  depopulate,
-  depopulateChildren,
+  // depopulate,
+  // depopulateChildren,
   project,
   fill,
   prepareInsert
@@ -18,14 +18,6 @@ import {
 } from '../collection'
 
 import { Controller } from './controller'
-
-const mergeDeep = (left: any, right: any) => Object.assign(left, R.mergeDeepWith(
-  (l, r) => R.is(Object, l) && R.is(Object, r)
-    ? R.concat(l, r)
-    : l,
-  left,
-  right
-))
 
 export abstract class Mutable<T extends MongoDocument> extends Controller {
   declare protected readonly description: CollectionDescription
@@ -64,20 +56,20 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     })
 
     if( this.options.queryPreset ) {
-      mergeDeep(
+      deepMerge(
         newPayload,
         this.options.queryPreset
       )
     }
 
     if( this.apiConfig.beforeRead && decodedToken ) {
-      mergeDeep(
+      deepMerge(
         newPayload,
         this.apiConfig.beforeRead(decodedToken, this.description.collection)
       )
     }
 
-    mergeDeep(
+    deepMerge(
       newPayload,
       baseControl.beforeRead!(payload, decodedToken)
     )
@@ -94,13 +86,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     const filters = newPayload.what || {}
 
     if( this.apiConfig.beforeWrite && decodedToken ) {
-      mergeDeep(
+      deepMerge(
         filters,
         this.apiConfig.beforeWrite(decodedToken, this.description.collection)
       )
     }
 
-    mergeDeep(
+    deepMerge(
       filters,
       baseControl.beforeWrite!(payload, decodedToken)
     )
@@ -166,8 +158,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       },
       (item: T) => project(item, props.project),
       (item: T) => item && fill(item, this.description),
-      (item: T) => depopulate(item, this.description),
-      (item: T) => depopulateChildren(item, 2)
+      // (item: T) => depopulate(item, this.description),
+      // (item: T) => depopulateChildren(item, 2)
     )
 
     return pipe(await this.model.findOne(props.filters) as T)
@@ -231,8 +223,8 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    const pipe = R.pipe(
      (item: T & { _doc?: T }) => item._doc || item,
      (item: T) => project(item, props.project),
-     (item: T) => depopulate(item, this.description),
-     depopulateChildren,
+     // (item: T) => depopulate(item, this.description),
+     // depopulateChildren,
      (item: T) => !props.project
       ? fill(item, this.description)
       : item

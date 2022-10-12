@@ -1,5 +1,4 @@
 @import 'style/theming';
-$icon-size: 1.25rem;
 
 .menu {
   position: sticky;
@@ -84,12 +83,7 @@ $icon-size: 1.25rem;
   }
 
   &__route {
-    display: flex;
-    column-gap: .6rem;
-    width: 100%;
-    align-items: center;
-    line-height: 100%;
-
+    column-gap: .5rem;
     padding: .3rem .5rem;
     border: 2px solid transparent;
     border-radius: 5px;
@@ -107,7 +101,7 @@ $icon-size: 1.25rem;
     }
 
     :deep(svg) {
-      width: $icon-size;
+      width: 1.25rem;
       fill: #000;
     }
   }

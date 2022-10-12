@@ -194,6 +194,8 @@ export default {
           items: result,
           pagination
         })
+
+        return result
       }
     )
   },
