@@ -8,8 +8,7 @@
             ? store.useFields(field.form)
             : store.fields,
           formData: edited,
-          layout: store.formLayout,
-          fieldIndex
+          layout: store.formLayout
         }"
       >
         <template #header v-if="!omitFormHeader">
@@ -169,8 +168,6 @@ const rawItem = computed(() => {
 const isTyping = ref(false)
 const inputValue = reactive({})
 
-const fieldIndex = ref(0)
-
 const insert = async () => {
   const result: any = await store.insert({ what: edited.value })
 
@@ -202,8 +199,6 @@ const insert = async () => {
 
 const edit = (item: any) => {
   const itemsCount = rawItem.value.length
-  fieldIndex.value = parentStore.getItemIndex(item._id, props.modelValue)
-
   edited.value = item
   expanded.value = true
 }
@@ -232,8 +227,6 @@ const select = (item: any) => {
 }
 
 const addItem = () => {
-  fieldIndex.value = props.modelValue.length + 1
-
   edited.value = {}
   expanded.value = true
 }

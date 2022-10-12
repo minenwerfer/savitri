@@ -97,13 +97,3 @@ export const formatValue = (
 
   return String(formatted)
 }
-
-export const getItemIndex = <T extends { _id: string }>(item: any, items?: Array<T>) => {
-  const _id = typeof item === 'object'
-    ? item._id
-    : item
-
-  return (items||[])
-    .sort((a: any, b: any) => a._id > b._id ? -1 : 1)
-    .findIndex((i: any) => i._id === _id) + 1
-}

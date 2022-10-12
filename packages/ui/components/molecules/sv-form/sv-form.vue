@@ -206,7 +206,6 @@ type Props = {
   collection?: string
   isReadOnly?: boolean
   searchOnly?: boolean
-  fieldIndex?: number
   layout?: Record<string, LayoutConfig>
   strict?: boolean
   formComponents?: any
@@ -218,7 +217,6 @@ const props = withDefaults(defineProps<Props>(), {
   isReadOnly: false,
   searchony: false,
   strict: true,
-  fieldIndex: 0
 })
 
 const emit = defineEmits<{
