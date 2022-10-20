@@ -1,2 +1,2 @@
 export * from './components'
-export { routes } from './router'
+export { default as routes } from './router'

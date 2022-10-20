@@ -126,6 +126,10 @@ if( inputBind.type === 'datetime' ) {
     : 'date'
 }
 
+if( inputBind.type === 'text' && searchOnly ) {
+  inputBind.type = 'search'
+}
+
 const _getDatetimeString = () => {
   return props.field?.includeHours
     ? props.modelValue.toISOString().split('T')[0]

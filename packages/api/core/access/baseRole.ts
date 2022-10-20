@@ -7,6 +7,11 @@ export default {
         'describeAll'
       ]
     },
+    searchable: {
+      methods: [
+        'search'
+      ]
+    },
     file: {
       methods: [
         'insert'

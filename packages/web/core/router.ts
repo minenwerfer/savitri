@@ -25,15 +25,15 @@ export type Route = RouteMeta & Omit<RouteRecordRaw, 'children'> & {
   components?: any
 }
 
-/**
- * @exports
- */
-export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Route>) => {
-  return [
-    ...publicRoutes,
-    ...privateRoutes
-  ]
-}
+// /**
+//  * @exports
+//  */
+// export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Route>) => {
+//   return [
+//     ...publicRoutes,
+//     ...privateRoutes
+//   ]
+// }
 
 /**
  * @exports
@@ -70,17 +70,17 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   return router
 }
 
-export const extendRouter = (router: any, routerExtension: RouterExtension) => {
-  const normalize = (routes: Record<string, Omit<Route, 'name'>>): Array<any> => Object.entries(routes)
-    .map(([routeName, route]) => ({
-      ...route,
-      name: routeName,
-      children: route.children && normalize(route.children)
-    }))
+export const normalizeRoutes = (routes: Record<string, Omit<Route, 'name'>>): Array<any> => Object.entries(routes)
+  .map(([routeName, route]) => ({
+    ...route,
+    name: routeName,
+    children: route.children && normalizeRoutes(route.children)
+}))
 
+export const extendRouter = (router: any, routerExtension: RouterExtension) => {
   Object.entries(routerExtension)
     .forEach(([parentName, routes]) => {
-      const normalized = normalize(routes)
+      const normalized = normalizeRoutes(routes)
       normalized.forEach((route) => router.addRoute(parentName, route))
     })
 }

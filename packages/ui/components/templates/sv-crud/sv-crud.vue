@@ -161,7 +161,12 @@ const fetchItems = async () => {
     return
   }
 
-  return store.filter()
+  return store.filter({
+    project: [
+      ...Object.keys(store.tableDescription),
+      ...store.tableMeta
+    ]
+  })
 }
 
 onMounted(() => {
@@ -196,28 +201,40 @@ onUnmounted(() => {
 })
 
 
-watch(() => actionEventBus, (event: ActionEvent) => {
+watch(() => actionEventBus, async (event: ActionEvent) => {
+  if (
+    [
+      'spawnEdit',
+      'spawnView',
+      'duplicate',
+    ].includes(event.name)
+  ) {
+    await store.get({
+      filters: {
+        _id: event.params.filters._id
+      }
+    })
+  }
+
   if( event.name === 'spawnAdd' ) {
     store.clearItem()
     isInsertVisible.value = true
   }
 
   if( event.name === 'spawnEdit' ) {
-    store.setItem(event.params.filters)
     isInsertVisible.value = true
   }
 
   if( event.name === 'spawnView' ) {
-    store.setItem(event.params.filters)
     isInsertReadonly.value = true
     isInsertVisible.value = true
   }
 
   if( event.name === 'duplicate' ) {
-    const { filters: newItem } = event.params
-    delete newItem._id
-
-    store.setItem(newItem)
+    store.setItem({
+      ...store.item,
+      _id: undefined
+    })
     isInsertVisible.value = true
   }
 
@@ -232,11 +249,10 @@ watch(() => isInsertVisible, (value: boolean) => {
 })
 
 const individualActions = computed(() => {
-  return store.individualActions
-    .map((action: any) => ({
-      click: call(action),
-      ...action
-    }))
+  return store.individualActions.map((action: any) => ({
+    click: call(action),
+    ...action
+  }))
 })
 
 provide('storeId', computed(() => props.collection))

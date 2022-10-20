@@ -29,6 +29,8 @@ export type CollectionDescription = {
   // takes an array of something
   presets?: Array<CollectionPreset>
   table?: Array<string>
+  tableMeta?: Array<string>
+
   form?: Array<string>
   writable?: Array<string>
   filters?: Array<string|{

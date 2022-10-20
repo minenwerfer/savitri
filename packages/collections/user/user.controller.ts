@@ -43,11 +43,11 @@ export class UserController extends Mutable<UserDocument> {
       }
     }
 
-    // if( !decodedToken?.user && !props.what.password ) {
-    //   throw new Error(
-    //     `password is required`
-    //   )
-    // }
+    if( !decodedToken?.user && !props.what.password ) {
+      throw new Error(
+        `password is required`
+      )
+    }
 
     if( props.what.password ) {
       props.what.password = await bcrypt.hash(props.what.password, 10)
@@ -64,7 +64,7 @@ export class UserController extends Mutable<UserDocument> {
     return super.getAll.call(this, {
       ...props,
       sort: {
-        access: 1
+        role: 1
       }
     })
   }
@@ -82,7 +82,6 @@ export class UserController extends Mutable<UserDocument> {
       user: Pick<UserDocument,
         'first_name'
         | 'last_name'
-        | 'full_name'
         | 'email'
         | 'role'
         | 'active'
@@ -109,7 +108,6 @@ export class UserController extends Mutable<UserDocument> {
         user: {
           first_name: 'God',
           last_name: 'Mode',
-          full_name: 'God mode',
           email: '',
           role: 'root',
           active: true,

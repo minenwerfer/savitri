@@ -1,10 +1,6 @@
-import { Route, makeRoutes } from '../web/core/router'
+import { Route } from '../web/core/router'
 
-/**
- * @exports
- * Non authenticated routes.
- */
-export const publicRoutes: Array<Route> = [
+const publicRoutes: Array<Route> = [
   {
     path: '/',
     name: 'landing',
@@ -49,11 +45,7 @@ export const publicRoutes: Array<Route> = [
   }
 ]
 
-/**
- * @exports
- * Authenticated routes.
- */
-export const privateRoutes: Array<Route> = [
+const privateRoutes: Array<Route> = [
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -91,8 +83,7 @@ export const privateRoutes: Array<Route> = [
   }
 ]
 
-/**
- * @exports
- * All routes. You may () => import it for using in whatever component.
- */
-export const routes = makeRoutes(publicRoutes, privateRoutes)
+export default [
+  ...publicRoutes,
+  ...privateRoutes
+]

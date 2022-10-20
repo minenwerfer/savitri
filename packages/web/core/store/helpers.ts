@@ -9,6 +9,15 @@ import type {
 
 } from '../../../common/types'
 
+const isObject = (field: any) =>
+  typeof field.collection === 'string'
+    || field.type === 'object'
+    || field.values?.[0]?.__query
+    || field.values?.__query
+
+const isArray = (field: any) => field.array
+  || Array.isArray(field.values)
+
 
 export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
   const { nonProxiedHttp: http } = useHttp()
@@ -193,37 +202,26 @@ export const normalizeFields = (fields: CollectionDescription['fields']) => {
 }
 
 export const freshItem = (description: CollectionDescription) => {
-  const isObject = (field: any) =>
-    typeof field.collection === 'string'
-      || field.type === 'object'
-      || field.values?.[0]?.__query
-      || field.values?.__query
-
   const item: Record<string, any> = Object.entries(description.fields||{})
     .reduce((a: any, [key, field]: [string, any]) => {
       if( !isObject(field) ) {
         return a
       }
 
-      const isArray = field.array
-        || Array.isArray(field.values)
+      if( [...ARRAY_TYPES, 'boolean'].includes(field.type) ) {
+        return {
+          ...a,
+          [key]: field.type !== 'radio'
+            ? (field.type === 'boolean' ? false : [])
+            : ''
+        }
+      }
 
       return {
         ...a,
-        [key]: isArray ? [] : {}
+        [key]: isArray(field) ? [] : {}
       }
     }, {})
-
-  Object.entries(description.fields||{})
-    .forEach(([key, field] : [string, any]) => {
-      if( ![...ARRAY_TYPES, 'boolean'].includes(field.type) ) {
-        return
-      }
-
-      item[key] = field.type !== 'radio'
-        ? (field.type === 'boolean' ? false : [])
-        : ''
-    })
 
   return item
 }
@@ -231,16 +229,23 @@ export const freshItem = (description: CollectionDescription) => {
 export const freshFilters = (description: CollectionDescription) => {
   return Object.entries(description.fields||{})
     .reduce((a: any, [key, field]: [string, any]) => {
-      if( field.type !== 'datetime' ) {
-        return a
-      }
-
-      return {
-        ...a,
-        [key]: {
-          $gte: '',
-          $lte: ''
+      if( isObject(field) ) {
+        return {
+          ...a,
+          [key]: isArray(field) ? [] : {}
         }
       }
+
+      if( field.type === 'datetime' ) {
+        return {
+          ...a,
+          [key]: {
+            $gte: '',
+            $lte: ''
+          }
+        }
+      }
+
+      return a
     }, {})
 }

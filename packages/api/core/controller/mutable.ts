@@ -140,7 +140,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    * Gets a document from database.
    */
   public async get(
-    props: { filters?: object, project?: string|Array<string> },
+    props: {
+      filters?: object,
+      project?: string|Array<string>
+    },
     _decodedToken?: any,
     _response?: unknown
   ): Promise<T> {
@@ -161,7 +164,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       // (item: T) => depopulateChildren(item, 2)
     )
 
-    const result = await this.model.findOne( props.filters, normalizeProjection(props.project))
+    const result = await this.model.findOne(props.filters, normalizeProjection(props.project))
     return pipe(result as T)
   }
 
@@ -201,7 +204,7 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
       ? query.sort
       : props.sort || defaultSort
 
-    return this.model.find(query.filters)
+    return this.model.find(query.filters, normalizeProjection(props.project))
       .sort(sort)
       .skip(props.offset || 0)
       .limit(props.limit)

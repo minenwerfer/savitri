@@ -264,11 +264,15 @@ export default {
       $filters: CollectionGetters['$filters']
       pagination: CollectionState<T>['pagination']
       getAll: (...args: any[]) => Promise<Array<T>>
+    },
+    props: {
+      project: Array<string>
     }
   ) {
     return this.getAll({
       filters: this.$filters,
-      limit: this.pagination.limit
+      limit: this.pagination.limit,
+      ...props||{}
     })
   },
 

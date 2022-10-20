@@ -13,8 +13,8 @@ import { getController } from '../core/controller'
 import { TokenService } from '../core/token'
 import { FileController } from '../../collections/file/file.controller'
 
+import { sanitizeRequest, prependPagination } from './hooks/pre'
 import { appendPagination } from './hooks/post'
-import { prependPagination } from './hooks/pre'
 
 export type RegularVerb =
   'get'
@@ -25,6 +25,7 @@ export type RegularVerb =
   | 'deleteAll'
 
 const prePipe = R.pipe(
+  sanitizeRequest,
   prependPagination
 )
 
@@ -107,7 +108,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     const token = await getToken(request) as DecodedToken
     const method = (instance.webInterface||instance)[verb]
 
-    prePipe(request, token, h)
+    prePipe({ request, token, response: h })
     const result = await method(request, token, h)
 
     const mime = instance.rawType(verb)
@@ -116,7 +117,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
         .header('Content-Type', mime)
     }
 
-    return postPipe(result, instance, request)
+    return postPipe({result, instance, request})
 }
 
 export const regularVerb = (verb: RegularVerb) =>
@@ -137,7 +138,7 @@ export const regularVerb = (verb: RegularVerb) =>
 
   const token = await getToken(request) as DecodedToken
 
-  prePipe(request, token, h)
+  prePipe({ request, token, response: h })
   const requestCopy = Object.assign({}, request)
   requestCopy.payload ||= {}
 
@@ -153,7 +154,7 @@ export const regularVerb = (verb: RegularVerb) =>
   }
 
   const result = await instance[verb](requestCopy, token, h)
-  return postPipe(result, _instance, request)
+  return postPipe({result, instance, request})
 }
 
 export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {

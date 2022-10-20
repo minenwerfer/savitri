@@ -2,11 +2,19 @@ import type { Request } from '@hapi/hapi'
 import type { Controller } from '../../core/controller'
 import type { HandlerRequest } from '../../types'
 
-export const appendPagination = async (
+type PostHookParams = {
   result: object|Array<object>,
   instance: Controller & { count?: (filter: any) => Promise<number> },
   request: Request & HandlerRequest
-) => {
+}
+
+export const appendPagination = async (params: PostHookParams) => {
+  const {
+    result,
+    instance,
+    request
+  } = params
+
   const response = {
     result
   }

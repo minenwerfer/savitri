@@ -43,18 +43,6 @@
         @clicked="page += 1"
       ></sv-button>
     </div>
-
-    <!-- <div class="pagination__control"> -->
-    <!--   <div>Página</div> -->
-    <!--   <sv-select v-model.number="page"> -->
-    <!--     <option -->
-    <!--       v-for="page in pageCount" -->
-    <!--       :key="`page-${page}`" -->
-    <!--     > -->
-    <!--       {{ page }} -->
-    <!--     </option> -->
-    <!--   </sv-select> -->
-    <!-- </div> -->
   </div>
 </template>
 
@@ -103,7 +91,12 @@ const pageCount = computed(
 
 watch(() => page.value, (newVal: number) => {
   pageInput.value = newVal + 1
-  store.filter()
+  store.filter({
+    project: [
+      ...Object.keys(store.tableDescription),
+      ...store.tableMeta
+    ]
+  })
 })
 </script>
 

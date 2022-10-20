@@ -50,8 +50,12 @@ export default {
     }
 
     return fromEntries(Object.entries(this.description.fields)
-      .filter(([, value]: [unknown, any]) => !value.hidden && !value.notable)
+      .filter(([, field]: [unknown, any]) => !field.hidden && !field.notable)
       .slice(0, 8))
+  },
+
+  tableMeta<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+    return this.description.tableMeta||[]
   },
 
   /**

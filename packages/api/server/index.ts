@@ -4,6 +4,8 @@ import '../../common/polyfill'
 import  type { ProvidedParams } from '../types'
 import getRoutes from './routes'
 
+export { getToken } from './handler'
+
 declare global {
   var modules: Array<any>
 }

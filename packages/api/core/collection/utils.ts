@@ -8,7 +8,7 @@ export const normalizeProjection = (projection?: string|Array<string>|Record<str
     return projection.reduce((a, key: string) => ({ ...a, [key]: 1 }), {})
   }
 
-  return projection
+  return projection || {}
 }
 
 export const fill = <T extends MongoDocument>(

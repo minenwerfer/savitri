@@ -48,6 +48,10 @@
     "active",
     "updated_at"
   ],
+  "tableMeta": [
+    "first_name",
+    "last_name"
+  ],
   "formLayout": {
     "first_name": {
       "span": 3
@@ -103,10 +107,8 @@
     "picture": {
       "collection": "file",
       "label": "Foto",
-      "index": [
-        "filename",
-        "mime",
-        "link"
+      "accept": [
+        "image/*"
       ]
     },
     "group": {

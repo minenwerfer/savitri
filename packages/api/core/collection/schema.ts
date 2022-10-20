@@ -8,8 +8,22 @@ import { applyPreset } from './preload'
 const { ObjectId } = Schema.Types
 
 const typeMapping: Array<[Array<string>, any]> = [
-  [ ['text', 'password', 'radio', 'select'], String ],
-  [ ['number', 'integer'], Number ],
+  [
+    [
+      'text',
+      'password',
+      'radio',
+      'select'
+    ],
+    String
+  ],
+  [
+    [
+      'number',
+      'integer'
+    ],
+    Number
+  ],
   [ ['checkbox'], [String] ],
   [ ['object'], Object ],
   [ ['boolean'], Boolean ],
@@ -33,6 +47,10 @@ export const descriptionToSchema = <T>(
   let hasRefs = false
 
   const convert = (a: any, [key, field]: [string, any]) => {
+    if( field.meta ) {
+      return a
+    }
+
     const query = Array.isArray(field.values||[])
       ? (field.values||[{}])[0]?.__query
       : field.values?.__query
@@ -44,21 +62,31 @@ export const descriptionToSchema = <T>(
 
     const result: any = {
       type: String,
-      select: field.hidden !== true,
       unique: field.unique === true,
       default: field.default,
-      required: field.required || description.strict,
+      required: field.required !== false
+        ? field.required || description.strict
+        : false
+    }
+
+    if( field.hidden ) {
+      result.select = false
     }
 
     if( typeof collectionName === 'string' && !field.preventPopulate ) {
+      const join = (value: string|Array<string>) => Array.isArray(value)
+        ? value.join(' ')
+        : value
+
       result.autopopulate = {
         maxDepth: reference.maxDepth || 2,
-        select: reference.select?.join(' ')
+        select: reference.select
+          ? join(reference.select)
+          : join(reference.index)
       }
     }
 
-    const typeMatch = typeMapping.find( ([keys, _]: [Array<string>, any]) => keys.includes(field.type) )
-
+    const typeMatch = typeMapping.find(([keys, _]) => keys.includes(field.type) )
     if( typeMatch ) {
       result.type = typeMatch[1]
     }
@@ -111,7 +139,6 @@ export const descriptionToSchema = <T>(
   }
 
   const schemaStructure = Object.entries(description.fields||{})
-    .filter(([, field]: [unknown, any]) => !field.meta)
     .reduce(convert, { ...extra, ...initial })
 
   const schema = new Schema<T>(schemaStructure, options)
