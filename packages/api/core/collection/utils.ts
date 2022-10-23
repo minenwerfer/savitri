@@ -1,5 +1,4 @@
 import * as R from 'ramda'
-// import { fromEntries, getIndexes } from '../../../common'
 import type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument } from '../../types'
 
@@ -52,25 +51,38 @@ export const prepareInsert = (
       || (description.form && !description.form.includes(key))
     )
   }
-
-  const what = typeof _id === 'string' ? Object.entries(rest)
-    .reduce((a: any, [key, value]: [string, any]) => {
-      if( forbidden(key) ) {
-        return a
-      }
-
-      if( [undefined, null].includes(value) || R.isEmpty(value)) {
-        a.$unset[key] = 1
-        return a
-      }
-
-      a.$set[key] = value
+  const prepareUpdate = () => Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
+    if( forbidden(key) ) {
       return a
+    }
 
-    }, {
-      $set: {},
-      $unset: {}
-    }) : rest
+    if( [undefined, null].includes(value) || R.isEmpty(value)) {
+      a.$unset[key] = 1
+      return a
+    }
+
+    a.$set[key] = value
+    return a
+
+  }, {
+    $set: {},
+    $unset: {}
+  })
+
+  const prepareCreate = () => Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
+    if( forbidden(key) ) {
+      return a
+    }
+
+    return {
+      ...a,
+      [key]: value
+    }
+  }, {})
+
+  const what = typeof _id === 'string'
+    ? prepareUpdate()
+    : prepareCreate()
 
   Object.keys(what).forEach(k => {
     if( R.isEmpty(what[k]) ) {

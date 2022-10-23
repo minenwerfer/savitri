@@ -231,8 +231,19 @@ watch(() => actionEventBus, async (event: ActionEvent) => {
   }
 
   if( event.name === 'duplicate' ) {
+    const newItem = Object.entries(store.item).reduce((a: any, [key, value]: [string, any]) => {
+      if( store.fields[key]?.collection === 'file' ) {
+        return a
+      }
+
+      return {
+        ...a,
+        [key]: value
+      }
+    }, {})
+
     store.setItem({
-      ...store.item,
+      ...newItem,
       _id: undefined
     })
     isInsertVisible.value = true

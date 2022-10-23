@@ -4,7 +4,12 @@ Object.assign(String.prototype, {
   },
 
   formatDateTime: function(this: string, hours: boolean = false): string {
-    return (new Date(this) as any).formatToString(hours)
+    const d = new Date()
+    if( isNaN(d.getDate()) ) {
+      return '-'
+    }
+
+    return (d as any).formatToString(hours)
   },
 
   formatDocument: function(this: string) {
