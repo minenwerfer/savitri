@@ -1,6 +1,6 @@
-import Overlay from './overlay'
-import Loading from './loading'
-import Clickable from './clickable'
+import Overlay from './v-overlay'
+import Loading from './v-loading'
+import Clickable from './v-clickable'
 
 export default (app: any) => {
   app.directive('overlay', Overlay)
