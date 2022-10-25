@@ -173,6 +173,13 @@ export default {
 
     const entries = Object.entries(filters)
       .reduce((a: Array<any>, [key, filter]: [string, any]) => {
+        if( key.startsWith('$') ) {
+          return [
+            ...a,
+            [key, filter]
+          ]
+        }
+
         if( filter && typeof filter === 'object' && !Array.isArray(filter) ) {
           Object.keys(filter).forEach((key) => {
             if( !filter[key] || Object.values(filter[key]).every((_) => !_) ) {

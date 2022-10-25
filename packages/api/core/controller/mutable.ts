@@ -1,7 +1,6 @@
 import * as R from 'ramda'
-import * as TypeGuards from '../collection/typeguards'
 import type { Model } from '../database'
-import type { CollectionDescription, MaybeCollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument } from '../../types'
 
 import { fromEntries, deepMerge } from '../../../common/helpers'
@@ -35,11 +34,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     description: unknown,
     readonly options:any = {}
   ) {
-    R.pipe(
-      TypeGuards.presets,
-      TypeGuards.fields
-    )(description as MaybeCollectionDescription)
-
     super({ ...options, description })
     this.description = description as CollectionDescription
 
@@ -113,8 +107,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
 
     const { what } = this.beforeWrite(props, decodedToken)
     const readyWhat = prepareInsert(what, this.description)
-
-    console.log(readyWhat)
 
     if( !_id ) {
       const newDoc = await this.model.create(readyWhat)

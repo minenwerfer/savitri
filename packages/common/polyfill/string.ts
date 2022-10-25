@@ -4,7 +4,7 @@ Object.assign(String.prototype, {
   },
 
   formatDateTime: function(this: string, hours: boolean = false): string {
-    const d = new Date()
+    const d = new Date(this)
     if( isNaN(d.getDate()) ) {
       return '-'
     }

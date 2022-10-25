@@ -63,6 +63,12 @@ export default defineStore('meta', {
         const item = freshItem(description)
         const filters = freshFilters(description)
 
+        if( !description.fields ) {
+          throw new Error(
+            `collection ${collectionName} has no fields`
+          )
+        }
+
         description.fields = await hydrateQuery(description.fields, false)
 
         if( hasStore(collectionName) ) {

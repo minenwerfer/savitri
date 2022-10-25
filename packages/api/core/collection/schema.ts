@@ -41,7 +41,8 @@ export const descriptionToSchema = <T>(
 ) => {
   R.pipe(
     TypeGuards.presets,
-    TypeGuards.fields
+    TypeGuards.fields,
+    TypeGuards.actions
   )(description)
 
   let hasRefs = false

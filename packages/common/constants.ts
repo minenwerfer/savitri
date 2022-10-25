@@ -51,3 +51,10 @@ export const ARRAY_TYPES = <const>[
   'radio'
 ]
 
+export const STORE_EFFECTS = {
+  'ITEM_SET': 'setItem',
+  'ITEM_INSERT': 'insertItem',
+  'ITEMS_SET': 'setItems',
+  'ITEMS_UPDATE': 'updateItems',
+}
+

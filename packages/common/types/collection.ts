@@ -1,10 +1,29 @@
 import {
   COLLECTION_FIELD_TYPES,
-  COLLECTION_PRESETS
+  COLLECTION_PRESETS,
+  STORE_EFFECTS
+
 } from '../constants'
 
 export type CollectionFieldType = typeof COLLECTION_FIELD_TYPES[number]
 export type CollectionPreset = typeof COLLECTION_PRESETS[number]
+
+export type StoreEffect = keyof typeof STORE_EFFECTS
+
+export type CollectionAction = Readonly<{
+  name: string
+  unicon?: string
+  ask?: boolean
+  effect?: StoreEffect
+
+  // route namespace
+  fetchItem?: boolean
+  clearItem?: boolean
+}>
+
+export type CollectionActions = Record<string, null|CollectionAction>
+export type MaybeCollectionAction = Omit<CollectionAction, 'effect'> & { effect?: string }
+export type MaybeCollectionActions = Record<string, null|MaybeCollectionAction>
 
 export type FormLayout = {
   span: number
@@ -53,9 +72,16 @@ export type CollectionDescription = {
   fields: Record<string, CollectionField>
 }
 
-export type MaybeCollectionDescription = Omit<CollectionDescription, 'fields' | 'presets'> & {
+export type MaybeCollectionDescription = Omit<CollectionDescription,
+  'fields'
+  | 'presets'
+  | 'actions'
+  | 'individualActions'
+> & {
   presets?: Array<string>
   fields?: Record<string, any>
+  actions?: MaybeCollectionActions
+  individualActions?: MaybeCollectionActions
 }
 
 
@@ -81,15 +107,3 @@ export type CollectionField = Readonly<{
     }
   }
 }>
-
-export type CollectionAction = Readonly<{
-  name: string
-  unicon?: string
-  ask?: boolean
-
-  // route namespace
-  fetchItem?: boolean
-  clearItem?: boolean
-}>
-
-export type CollectionActions = Record<string, CollectionAction | null>

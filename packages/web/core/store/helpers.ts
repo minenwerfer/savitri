@@ -23,13 +23,12 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
   const { nonProxiedHttp: http } = useHttp()
 
   const userStore = useStore('user')
-  const normalize = (data: any, query: any) => data
-    .reduce((a: any, item: any) => ({
-      ...a,
-      [item._id]: item[Array.isArray(query.index)
-        ? query.index[0]
-        : query.index]
-    }), {})
+  const normalize = (data: any, query: any) => data.reduce((a: any, item: any) => ({
+    ...a,
+    [item._id]: item[Array.isArray(query.index)
+      ? query.index[0]
+      : query.index]
+  }), {})
 
   const hydrate = async ([key, query]: [string, any]) => {
     if( key !== '__query' ) {
@@ -135,14 +134,19 @@ export const removeEmpty = (item: any) => {
 
 
 export const normalizeActions = (actions: CollectionActions) => Object.entries(actions||{})
-  .filter(([key, value]) => !!value && !key.startsWith('_'))
-  .reduce((a: Array<object>, [key, value]) => [
-    ...a,
-    {
-      action: key,
-      ...value
+  .reduce((a: Array<object>, [key, value]) => {
+    if( !value || key.startsWith('_') ) {
+      return a
     }
-  ], [])
+
+    return [
+      ...a,
+      {
+        action: key,
+        ...value
+      }
+  ]
+  }, [])
 
 export const normalizeFilters = (filters: Array<any>) => {
   return filters

@@ -21,9 +21,6 @@ export abstract class Controller {
    */
   protected readonly _internal: Array<string> = []
 
-  // protected _rawMethods: Record<string, string> = {}
-  // protected _forbiddenMethods: Array<string> = []
-
   /**
    * @constructor
    * Sets controller metadata and creates a proxy that passes req.payload
@@ -78,18 +75,6 @@ export abstract class Controller {
           const payload = Object.keys(req.payload||{}).length === 0
             ? { filters: {} }
             : req.payload;
-
-          // if(
-          //   typeof req.payload?.limit === 'number'
-          //   && (req.payload.limit > 150 || req.payload.limit <= 0)
-          // ) {
-          //   req.payload.limit = 150
-          // }
-
-          // if( decodedToken.access?.visibility !== 'everything' || alwaysAttribute ) {
-          //   if( payload.what ) payload.what.user_id = decodedToken._id
-          //   if( payload.filters ) payload.filters.user_id = decodedToken._id
-          // }
 
           (req as { payload: Request['payload'] }).payload = payload
 
@@ -155,7 +140,7 @@ export abstract class Controller {
 
   public isGranted(
     token: { user?: { role?: string } },
-    method:string,
+    method: string,
     controller?: string
   ) {
     return this._isGranted(token, method, controller)

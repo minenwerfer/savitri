@@ -265,7 +265,7 @@ export default {
       pagination: CollectionState<T>['pagination']
       getAll: (...args: any[]) => Promise<Array<T>>
     },
-    props: {
+    props?: {
       project: Array<string>
     }
   ) {
@@ -274,6 +274,10 @@ export default {
       limit: this.pagination.limit,
       ...props||{}
     })
+  },
+
+  updateItems(this: { filter: () => void }) {
+    return this.filter()
   },
 
   clearFilters<T>(
