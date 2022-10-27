@@ -131,7 +131,12 @@ type Props = {
   parentField?: string
 }
 
+type Emits = {
+  (e: 'uiEvent', event: any): void
+}
+
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 const router = useRouter()
 
 let store, parentStore
@@ -221,16 +226,16 @@ watch(() => actionEventBus, async (event: ActionEvent) => {
     isInsertVisible.value = true
   }
 
-  if( event.name === 'spawnEdit' ) {
+  else if( event.name === 'spawnEdit' ) {
     isInsertVisible.value = true
   }
 
-  if( event.name === 'spawnView' ) {
+  else if( event.name === 'spawnView' ) {
     isInsertReadonly.value = true
     isInsertVisible.value = true
   }
 
-  if( event.name === 'duplicate' ) {
+  else if( event.name === 'duplicate' ) {
     const newItem = Object.entries(store.item).reduce((a: any, [key, value]: [string, any]) => {
       if( store.fields[key]?.collection === 'file' ) {
         return a
@@ -247,6 +252,10 @@ watch(() => actionEventBus, async (event: ActionEvent) => {
       _id: undefined
     })
     isInsertVisible.value = true
+  }
+
+  else {
+    emit('uiEvent', event)
   }
 
 }, { deep: true })

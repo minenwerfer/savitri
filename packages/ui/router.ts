@@ -5,7 +5,7 @@ const publicRoutes: Array<Route> = [
     path: '/',
     name: 'landing',
     redirect: '/user/signin',
-    meta: { title: 'Página inicial', hidden: true, }
+    meta: { title: 'Página inicial' }
   },
   {
     path: '/user',
@@ -16,19 +16,19 @@ const publicRoutes: Array<Route> = [
         path: 'signin',
         name: 'user-signin',
         component: () => import('./views/user/signin/signin.vue'),
-        meta: { title: 'Autenticação', hidden: true, }
+        meta: { title: 'Autenticação' }
       },
       {
         path: 'signup',
         name: 'user-signup',
         component: () => import('./views/user/signup/signup.vue'),
-        meta: { title: 'Registro', hidden: true, }
+        meta: { title: 'Registro' }
       },
       {
         path: 'signup-extra',
         name: 'user-signup-extra',
         component: () => import('./views/user/signup-extra/signup-extra.vue'),
-        meta: { title: 'Registro', hidden: true, }
+        meta: { title: 'Registro' }
       }
     ]
   },
@@ -56,8 +56,8 @@ const privateRoutes: Array<Route> = [
       {
         path: 'c/:collection?',
         name: 'dashboard-crud',
-        component: () => import('./views').then((m: any) => m.SvCrudView),
-        meta: { title: '%viewTitle%', hidden: true, }
+        component: () => import('./views/dashboard/crud-view/crud-view.vue'),
+        meta: { title: '%viewTitle%' }
       },
       {
         path: 'user',
@@ -66,16 +66,22 @@ const privateRoutes: Array<Route> = [
         redirect: { name: 'dashboard-user' },
         children: [
           {
+            path: '',
+            name: 'dashboard-user',
+            component: () => import('./views/dashboard/user/user.vue'),
+            meta: { title: 'Usuários' }
+          },
+          {
             path: 'user-profile',
             name: 'dashboard-user-profile',
-            component: () => import('./views').then((m: any) => m.SvProfile),
-            meta: { title: 'Meu perfil', hidden: true }
+            component: () => import('./views/dashboard/user/profile/profile.vue'),
+            meta: { title: 'Meu perfil' }
           },
           {
             path: 'user-changepass',
             name: 'dashboard-user-changepass',
-            component: () => import('./views').then((m: any) => m.SvPasswordChange),
-            meta: { title: 'Mudar senha', hidden: true }
+            component: () => import('./views/dashboard/user/password-change/password-change.vue'),
+            meta: { title: 'Mudar senha' }
           }
         ]
       }

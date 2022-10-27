@@ -32,6 +32,7 @@ type ActionOptions = {
     | 'PUT'
     | 'DELETE'
   skipLoading?: boolean
+  unproxied?: boolean
 }
 
 type ActionFilter = Partial<Pick<CrudParameters,
@@ -40,7 +41,7 @@ type ActionFilter = Partial<Pick<CrudParameters,
   | 'offset'>
 >
 
-const { http } = useHttp()
+const { http, nonProxiedHttp } = useHttp()
 
 const mutations = {
   setItem<T>(
@@ -123,7 +124,11 @@ export default {
       ? `${this.$id}/${verb}`
       : this.$id
 
-    const promise = http[method.toLowerCase()](route, payload)
+    const httpInstance = options?.unproxied
+      ? nonProxiedHttp
+      : http
+
+    const promise = httpInstance[method.toLowerCase()](route, payload)
       .catch((err: any) => {
         if( err.validation ) {
           this.validationErrors = err.validation
@@ -163,10 +168,14 @@ export default {
     return fn(response)
   },
 
-  async get<T>(payload: ActionFilter): Promise<T> {
+  async get<T>(
+    payload: ActionFilter,
+    options?: ActionOptions
+  ): Promise<T> {
     return this.customEffect(
       'get', payload,
-      this.setItem
+      this.setItem,
+      options
     )
   },
 

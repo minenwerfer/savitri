@@ -12,7 +12,9 @@
       <div>
         {{ passwordError || 'Senhas conferem' }}
       </div>
+    </div>
 
+    <template #footer>
       <sv-button
         class="passchange__save-button"
         :disabled="passwordError"
@@ -20,7 +22,7 @@
       >
         Salvar
       </sv-button>
-    </div>
+    </template>
   </sv-box>
 </template>
 

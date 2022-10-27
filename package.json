@@ -30,7 +30,6 @@
     "axios": "^0.24.0",
     "circular-dependency-plugin": "^5.2.2",
     "copy-webpack-plugin": "^10.2.0",
-    "gulp": "^4.0.2",
     "pinia": "^2.0.16",
     "postcss": "^8.4.14",
     "postcss-loader": "^7.0.1",
