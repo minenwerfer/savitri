@@ -60,17 +60,17 @@ const privateRoutes: Array<Route> = [
         meta: { title: '%viewTitle%' }
       },
       {
+        path: 'c/user',
+        name: 'dashboard-user',
+        component: () => import('./views/dashboard/user/user.vue'),
+        meta: { title: 'Usuários' }
+      },
+      {
         path: 'user',
         name: 'dashboard-user-group',
         meta: { title: 'Usuário' },
         redirect: { name: 'dashboard-user' },
         children: [
-          {
-            path: '',
-            name: 'dashboard-user',
-            component: () => import('./views/dashboard/user/user.vue'),
-            meta: { title: 'Usuários' }
-          },
           {
             path: 'user-profile',
             name: 'dashboard-user-profile',
