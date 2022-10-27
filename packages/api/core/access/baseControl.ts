@@ -3,12 +3,12 @@ import { ApiConfig } from '../../types'
 export const beforeRead: ApiConfig['beforeRead'] = (token, collectionName) => {
   const preset: any = {}
 
-  if( token.user?.role === 'root' ) {
+  if( token?.user?.role === 'root' ) {
     return preset
   }
 
   if( collectionName === 'userExtra' ) {
-    preset.owner = token.user._id
+    preset.owner = token?.user._id
   }
 
   return preset
