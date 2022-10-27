@@ -1,16 +1,10 @@
 import { reactive } from 'vue'
 import type { Router } from 'vue-router'
-import type { CollectionAction } from '../../common/types'
+import type { CollectionAction, StoreEffect } from '../../common/types'
 import type { ActionEvent } from '../../web/types/action'
 import { STORE_EFFECTS } from '../../common/constants'
 
-const getEffect = (store: any, effectName: keyof typeof STORE_EFFECTS) => {
-  if( !(effectName in STORE_EFFECTS) ) {
-    throw new Error(
-      `${effectName} isnt present in store`
-    )
-  }
-
+const getEffect = (store: any, effectName: StoreEffect) => {
   const effect = STORE_EFFECTS[effectName]
   return store[effect]
 }
@@ -70,8 +64,8 @@ export default <T extends { $id: string }, F extends { _id: string }>(
       }
 
       return actionEffect
-        ? (filters: F) => store.customEffect(actionName, { filters }, getEffect(store, actionEffect))
-        : (filters: F) => store.custom(actionName, { filters })
+        ? (payload: any) => store.customEffect(actionName, payload, getEffect(store, actionEffect))
+        : (payload: any) => store.custom(actionName, payload)
     })()
 
     if( actionProps.ask ) {

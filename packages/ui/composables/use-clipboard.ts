@@ -1,4 +1,4 @@
-export const copyToClipboard = (text: string) => {
+export default () => (text: string) => {
   const textarea = document.createElement('textarea')
   textarea.value = text
 
@@ -12,11 +12,4 @@ export const copyToClipboard = (text: string) => {
 
   document.execCommand('copy')
   document.body.removeChild(textarea)
-}
-
-export const withUniqueLock = async (lockName: string, callback: () => any) => {
-  if( !localStorage.getItem(`lock:${lockName}`) ) {
-    await callback()
-    localStorage.setItem(`lock:${lockName}`, 'true')
-  }
 }

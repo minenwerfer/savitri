@@ -61,7 +61,7 @@
 import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@savitri/web'
-import useAction from '../../../../../../composables/use-action'
+import { useAction } from '../../../../../../composables'
 
 import { SvPicture, SvButton } from '../../../../..'
 import { results } from '../../store'

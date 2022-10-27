@@ -72,7 +72,8 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
-import { copyToClipboard } from '@savitri/web'
+import { useClipboard } from '../../../composables'
+
 import { SvInfo, SvIcon } from '../..'
 
 type Props = {
@@ -99,6 +100,8 @@ const props = withDefaults(defineProps<Props>(), {
 const name = props.fieldName
 const searchOnly = inject('searchOnly', false)
 const readOnly = !searchOnly && props.readOnly
+
+const copyToClipboard = useClipboard()
 
 const emit = defineEmits<{
   (e: 'input', value: string|number): void

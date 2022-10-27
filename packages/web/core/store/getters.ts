@@ -35,18 +35,17 @@ export default {
       Object.entries(this.description.fields||{}).find(([key]: [string, unknown]) => fieldName === key)
 
     if( this.description.table ) {
-      return this.description.table
-        .reduce((a:object, fieldName: string) => {
-          const field = findField(fieldName)
-          if( !field ) {
-            return a
-          }
+      return this.description.table.reduce((a:object, fieldName: string) => {
+        const field = findField(fieldName)
+        if( !field ) {
+          return a
+        }
 
-          return {
-            ...a,
-            [fieldName]: prepare(field[1])
-          }
-        }, {})
+        return {
+          ...a,
+          [fieldName]: prepare(field[1])
+        }
+      }, {})
     }
 
     return fromEntries(Object.entries(this.description.fields)

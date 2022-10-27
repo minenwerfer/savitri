@@ -96,7 +96,7 @@ import {
 
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, useParentStore, ActionEvent } from '@savitri/web'
-import useAction from '../../../composables/use-action'
+import { useAction } from '../../../composables'
 
 import {
   SvBox,

@@ -191,7 +191,7 @@ import {
 
 } from '../..'
 
-import useCondition from '../../../composables/use-condition'
+import { useCondition } from '../../../composables'
 
 import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))

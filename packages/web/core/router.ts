@@ -1,14 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { useStore } from './store'
 
-/**
- * @exports
- * Just a bare template for nested children.
- */
-export const BareTemplate = {
-  template: `<router-view />`
-}
-
 export type RouteMeta = {
   meta?: {
     title: string

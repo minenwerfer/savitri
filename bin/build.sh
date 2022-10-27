@@ -15,7 +15,6 @@ PACKAGES=(
 npm run build || true && \
   cp -r packages/api/resources/* dist/api/resources && \
   cp -r packages/api/presets dist/api && \
-  cp -r packages/ui/assets dist/ui && \
   cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
   [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
 

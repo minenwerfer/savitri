@@ -27,12 +27,15 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, passwordPolicy } from '@savitri/web'
+import { useStore } from '@savitri/web'
+import { usePasswordPolicy } from '../../../../composables'
 import { SvBox, SvForm, SvButton } from '../../../..'
 
 const router = useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
+
+const passwordPolicy = usePasswordPolicy()
 
 const password = reactive({
   password: '',

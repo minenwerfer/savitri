@@ -55,9 +55,10 @@ import {
   hasStore,
   useStore,
   useParentStore,
-  passwordPolicy
 
 } from '@savitri/web'
+
+import { usePasswordPolicy } from '../../../composables'
 
 import {
   SvForm,
@@ -74,6 +75,8 @@ const userStore = useParentStore()
 const userExtraStore = hasStore('userExtra')
   ? useStore('userExtra')
   : null
+
+const passwordPolicy = usePasswordPolicy()
 
 const tosAccepted = ref(false)
 const password = reactive({

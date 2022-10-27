@@ -204,7 +204,7 @@ import {
 
 } from '../..'
 
-import useCondition from '../../../composables/use-condition'
+import { useCondition } from '../../../composables'
 
 type Props = {
   columns: any

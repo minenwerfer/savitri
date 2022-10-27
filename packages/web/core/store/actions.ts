@@ -99,10 +99,10 @@ const mutations = {
     this.items = []
   },
 
-  async describe<T=any>(this: CollectionState<T>) {
-    const t = await http.post(`${this.$id}/describe`)
-    console.log(t)
-  }
+  // async describe<T=any>(this: CollectionState<T>) {
+  //   const t = await http.post(`${this.$id}/describe`)
+  //   console.log(t)
+  // }
 }
 
 export default {
