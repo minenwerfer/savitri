@@ -1,5 +1,5 @@
 export * from './core'
-export * from './core/store'
+export * from './core/state'
 export * from './core/router'
 export * from './types'
 

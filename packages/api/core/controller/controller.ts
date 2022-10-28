@@ -54,16 +54,7 @@ export abstract class Controller {
           throw new PermissionError('forbidden method(explicitly forbidden)')
         }
 
-        const method = (target as Record<string, any>)[key]
-        // const alwaysAttribute = this.props.description?.alwaysAttribute
-
         return function(req: HandlerRequest, decodedToken: any, res?: ResponseToolkit) {
-          const controllerName = props.controller || target.props.description?.collection
-
-          if( !controllerName ) {
-            throw new Error('controller is undefined')
-          }
-
           if( !target.isGranted(decodedToken, key)) {
             if( decodedToken?.user?.role ) {
               throw new PermissionError('forbidden method (access denied)')
@@ -78,6 +69,7 @@ export abstract class Controller {
 
           (req as { payload: Request['payload'] }).payload = payload
 
+          const method = (target as Record<string, any>)[key]
           const result = method.call(target, payload, decodedToken, res)
           return result
         }

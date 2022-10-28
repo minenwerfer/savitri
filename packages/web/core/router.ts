@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { useStore } from './store'
+import { useStore } from './state'
 
 export type RouteMeta = {
   meta?: {

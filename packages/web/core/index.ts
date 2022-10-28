@@ -14,7 +14,7 @@ import { extendRouter, RouterExtension } from './router'
 import { routerInstance as createRouter } from './router'
 import { default as webpackVariables } from 'variables'
 
-import { useStore } from './store'
+import { useStore } from './state'
 import registerDirectives from '../../ui/directives'
 
 type Plugin = {

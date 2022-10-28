@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import { PAGINATION_PER_PAGE_DEFAULT } from '../../../common'
-import type { CollectionState } from '../../types/store'
+import type { CollectionState } from '../../types/state'
 import actions from './actions'
 import getters from './getters'
 

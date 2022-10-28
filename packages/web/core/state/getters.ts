@@ -1,5 +1,5 @@
 import type { CollectionField } from '../../../common/types'
-import type { CollectionState } from '../../types/store'
+import type { CollectionState } from '../../types/state'
 import { fromEntries, deepClone } from '../../../common'
 
 import  {

@@ -7,7 +7,7 @@ import type {
   PiniaState,
   Pagination
 
-} from '../../types/store'
+} from '../../types/state'
 
 import useHttp from '../http'
 import useMetaStore from './stores/meta'

@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStore } from '@savitri/web'
+import { hasStore, useStore } from '@savitri/web'
 import {
   SvCrud,
   SvBox,
@@ -48,14 +48,16 @@ import {
 } from '@savitri/ui'
 
 const userStore = useStore('user')
-const userExtraStore = useStore('userExtra')
+const userExtraStore = hasStore('userExtra')
+  ? useStore('userExtra')
+  : null
 
 const extraPanel = ref(false)
 
 const handleUiEvent = async (event: any) => {
   userStore.setItem(event.params.filters)
 
-  if( event.name === 'spawnExtra' ) {
+  if( event.name === 'spawnExtra' && userExtraStore ) {
     await userExtraStore.get(
       { filters: { owner: event.params.filters._id } },
       { unproxied: true }
