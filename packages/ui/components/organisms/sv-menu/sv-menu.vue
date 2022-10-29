@@ -1,6 +1,6 @@
 <template>
   <div :class="`menu ${!visible && 'menu--hidden'}`">
-    <sv-menu-header></sv-menu-header>
+    <sv-menu-header class="menu__header"></sv-menu-header>
 
     <!-- menu entries -->
     <div class="menu__entries">
@@ -11,6 +11,7 @@
       >
         <sv-icon
           v-clickable
+          v-if="visible"
           name="angle-up"
           :class="`
             menu__entry-title
@@ -26,18 +27,19 @@
         <!-- subroutes -->
         <div :class="`
           menu__routes
-          ${shrink[index] && 'menu__routes--shrinked'}
+          ${(shrink[index] && visible) && 'menu__routes--shrinked'}
         `">
           <sv-icon
             v-clickable
             v-for="(route, index) in entry.children"
-            :key="`route-${index}`"
+            :key="route.name"
             :class="`
               menu__route
               ${isCurrent(route) && 'menu__route--current'}
             `"
 
             :name="route.meta?.unicon || 'file'"
+            :title="$tc(route.meta.title, 2).capitalize()"
             @click="onEntryClick(route)"
           >
             {{ $tc(route.meta.title, 2).capitalize() }}

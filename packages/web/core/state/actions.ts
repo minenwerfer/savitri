@@ -235,18 +235,31 @@ export default {
     const inlineReferences = this.inlineReferences
     const newItem = (payload?.what || this.item) as Record<string, any>
 
-    for( const [k, { collection }] of inlineReferences ) {
+    for( const [k, { collection, array }] of inlineReferences ) {
       if(
         newItem[k]
         && typeof newItem[k] === 'object'
         && Object.keys(newItem[k]).length > 0
       ) {
         const helperStore = useStore(collection)
-        const result = await helperStore.insert({
-          what: newItem[k]
-        })
 
-        newItem[k] = result._id
+        const getInsertedId = async (subject: any) => {
+          if( array && Array.isArray(subject) ) {
+            const ids = []
+            for( const item of subject ) {
+              const result = await helperStore.insert({ what: item })
+              ids.push(result)
+            }
+
+            return ids
+          }
+
+          return helperStore.insert({
+            what: subject
+          })
+        }
+
+        newItem[k] = await getInsertedId(newItem[k])
       }
     }
 
@@ -309,16 +322,16 @@ export default {
   }) {
     const metaStore = useMetaStore()
     const answer = await metaStore.spawnPrompt({
-      body: props.body || 'A ação que você está prestes a fazer é irreversível. Tem certeza de que deseja prosseguir?',
+      body: I18N.global.tc(props.body || 'prompt.default'),
       actions: [
         {
           name: 'cancel',
-          title: 'Cancelar',
+          title: I18N.global.tc('cancel'),
           variant: 'transparent'
         },
         {
           name: 'confirm',
-          title: 'Confirmar',
+          title: I18N.global.tc('confirm'),
           size: 'large'
         },
       ]

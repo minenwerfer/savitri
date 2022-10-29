@@ -63,7 +63,10 @@ const privateRoutes: Array<Route> = [
         path: 'c/user',
         name: 'dashboard-user',
         component: () => import('./views/dashboard/user/user.vue'),
-        meta: { title: 'Usuários' }
+        meta: {
+          title: 'Usuários',
+          unicon: 'user-circle'
+        }
       },
       {
         path: 'user',

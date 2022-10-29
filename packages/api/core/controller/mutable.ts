@@ -8,8 +8,6 @@ import { ItemNotFound } from '../exceptions'
 import * as baseControl from '../access/baseControl'
 
 import {
-  // depopulate,
-  // depopulateChildren,
   normalizeProjection,
   fill,
   prepareInsert
@@ -154,8 +152,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
         return item._doc||item
       },
       (item: T) => item && fill(item, this.description),
-      // (item: T) => depopulate(item, this.description),
-      // (item: T) => depopulateChildren(item, 2)
     )
 
     const result = await this.model.findOne(props.filters, normalizeProjection(props.project))
@@ -219,9 +215,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
 
    const pipe = R.pipe(
      (item: T & { _doc?: T }) => item._doc || item,
-     // (item: T) => project(item, props.project),
-     // (item: T) => depopulate(item, this.description),
-     // depopulateChildren,
      (item: T) => !props.project
       ? fill(item, this.description)
       : item

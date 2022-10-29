@@ -106,7 +106,7 @@ const cancel = () => {
       store.validationErrors = {}
       isInsertVisible.value = false
     },
-    body: 'Deseja mesmo fechar o painel sem salvar as suas alterações?'
+    body: I18N.global.tc('prompt.close_panel')
   })
 }
 

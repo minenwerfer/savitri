@@ -1,10 +1,12 @@
 <template>
-  <a :class="`
-    icon
-    ${reactive && 'icon--reactive'}
-    ${selected && 'icon--selected'}
-    ${alt && 'icon--alt'}
-    ${$slots.default && 'icon--centered'}
+  <a
+    role="icon"
+    :class="`
+      icon
+      ${reactive && 'icon--reactive'}
+      ${selected && 'icon--selected'}
+      ${alt && 'icon--alt'}
+      ${$slots.default && 'icon--centered'}
   `">
     <div :class="`
       icon__icon
@@ -14,9 +16,14 @@
           : 'icon__icon--medium'
       }
     `">
-      <unicon v-bind="props"></unicon>
+      <unicon
+        v-bind="props"
+        role="icon-img"
+      ></unicon>
     </div>
-    <slot v-if="$slots.default"></slot>
+    <div role="icon-label">
+      <slot v-if="$slots.default"></slot>
+    </div>
   </a>
 </template>
 
