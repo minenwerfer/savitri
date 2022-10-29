@@ -11,7 +11,7 @@ import { Error as MongooseError } from 'mongoose'
 
 import { getController } from '../core/controller'
 import { TokenService } from '../core/token'
-import { FileController } from '../../collections/file/file.controller'
+import { FileController } from '../../system/collections/file/file.controller'
 
 import { sanitizeRequest, prependPagination } from './hooks/pre'
 import { appendPagination } from './hooks/post'

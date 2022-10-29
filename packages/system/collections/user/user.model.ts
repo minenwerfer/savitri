@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 
-import { createModel, MongoDocument } from '../../api'
+import { createModel, MongoDocument } from '../../../api'
 import { default as Description } from './index.json'
 
 export type UserDocument = MongoDocument & {

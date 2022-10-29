@@ -81,7 +81,7 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
         const { data } = await http.post(route, {
           filters: query.filters || {},
           project: query.index || {},
-          limit: query.limit,
+          limit: query.limit || 0,
           offset: query.offset
         })
 

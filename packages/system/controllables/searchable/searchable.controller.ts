@@ -1,6 +1,6 @@
-import { mongoose } from '../../api/core/database'
-import { Controller } from '../../api/core/controller'
-import { AuthorizationError } from '../../api/core/exceptions'
+import { mongoose } from '../../../api/core/database'
+import { Controller } from '../../../api/core/controller'
+import { AuthorizationError } from '../../../api/core/exceptions'
 import { getSearchables, buildAggregations } from './searchable.helper'
 
 export class SearchableController extends Controller {

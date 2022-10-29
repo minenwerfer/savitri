@@ -1,15 +1,15 @@
 import { readdirSync } from 'fs'
 
 export const commonNames = [
-  ...readdirSync(`${__dirname}/../../../collections`),
-  ...readdirSync(`${__dirname}/../../../controllables`)
+  ...readdirSync(`${__dirname}/../../../system/collections`),
+  ...readdirSync(`${__dirname}/../../../system/controllables`)
 ]
 
 /**
  * @exports @const
  * Retrieves controller class from alias.
  */
-export const getController = (id:string, type:'collections'|'controllables' = 'collections') => {
+export const getController = (id:string, type:'collections'|'controllables' = 'collections'): (new () => any) => {
   const controllerPath = (() => {
     const moduleProps = (globalThis.modules||[])
       .find(({ exportedCollections }: { exportedCollections: Array<string> }) => {

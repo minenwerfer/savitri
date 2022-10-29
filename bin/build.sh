@@ -5,11 +5,10 @@ BUILD_COMPONENTS=
 
 PACKAGES=(
   api
-  collections
   common
   ui
-  controllables
   web
+  system
 )
 
 npm run build || true && \

@@ -134,12 +134,12 @@
         ></sv-search>
 
 
-        <div v-if="store?.validationErrors[key]" class="form__validation-error">
-          <span v-if="store.validationErrors[key].type">
-            {{ $t(`validation_error.${store.validationErrors[key].type}`) }}
+        <div v-if="validationErrors?.[key]" class="form__validation-error">
+          <span v-if="validationErrors[key].type">
+            {{ $t(`validation_error.${validationErrors[key].type}`) }}
           </span>
-          <span v-if="store.validationErrors[key].detail">
-            {{ $t(store.validationErrors[key].detail) }}
+          <span v-if="validationErrors[key].detail">
+            {{ $t(validationErrors[key].detail) }}
           </span>
         </div>
       </div>
@@ -176,6 +176,7 @@
 <script setup lang="ts">
 import {
   defineAsyncComponent,
+  computed,
   provide,
   inject,
   reactive
@@ -211,12 +212,14 @@ type Props = {
   formComponents?: any
   omitFormHeader?: boolean
   omitInputLabels?: boolean
+  validationErrors?: Record<string, any>
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isReadOnly: false,
   searchony: false,
   strict: true,
+  validationErrors: null
 })
 
 const emit = defineEmits<{
@@ -245,6 +248,10 @@ const passAhead = (propName: string) => {
 
   return value
 }
+
+const validationErrors = computed(() => props.validationErrors !== null
+  ? props.validationErrors
+  : store?.validationErrors)
 
 const formComponents = passAhead('formComponents')
 const omitFormHeader = passAhead('omitFormHeader')

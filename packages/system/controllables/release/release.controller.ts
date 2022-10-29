@@ -1,6 +1,6 @@
 import YAML from 'yaml'
 import path from 'path'
-import { Controller } from '../../api/core/controller'
+import { Controller } from '../../../api/core/controller'
 
 const { readFile } = require('fs').promises
 
@@ -14,7 +14,7 @@ export class ReleaseController extends Controller {
   }
 
   public async getAll() {
-    const baseRelease = await readFile(path.resolve(__dirname, '../../api/RELEASE.yml'), 'utf8')
+    const baseRelease = await readFile(path.resolve(__dirname, '../../../api/RELEASE.yml'), 'utf8')
     const productRelease = await readFile(path.resolve(process.cwd(), './RELEASE.yml'), 'utf8')
 
     const base = YAML.parse(baseRelease).slice(0, MAX_ENTRIES)

@@ -17,20 +17,6 @@ export type Route = RouteMeta & Omit<RouteRecordRaw, 'children'> & {
   components?: any
 }
 
-// /**
-//  * @exports
-//  */
-// export const makeRoutes = (publicRoutes: Array<Route>, privateRoutes: Array<Route>) => {
-//   return [
-//     ...publicRoutes,
-//     ...privateRoutes
-//   ]
-// }
-
-/**
- * @exports
- * The router instance.
- */
 export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   const router = createRouter({
     history: createWebHistory(),

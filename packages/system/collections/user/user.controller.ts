@@ -1,7 +1,8 @@
 import * as bcrypt from 'bcrypt'
+import { Types } from '../../../api/core/database'
 
-import { TokenService } from '../../api/core/token'
-import { Mutable } from '../../api/core/controller'
+import { TokenService } from '../../../api/core/token'
+import { Mutable, getController } from '../../../api/core/controller'
 import { UserDocument, default as User } from './user.model'
 import { default as Description } from './index.json'
 
@@ -17,6 +18,40 @@ export class UserController extends Mutable<UserDocument> {
         'authenticate': 'application/json'
       }
     })
+  }
+
+  private _userExtraModel() {
+    return require(`${process.cwd()}/collections/userExtra/userExtra.model`).default
+  }
+
+  private async _saveWithExtra(props: any) {
+    const { extra } = props.what
+
+    const UserExtra = this._userExtraModel()
+    const userExtra = new UserExtra({
+      ...extra,
+      owner: new Types.ObjectId()
+    })
+
+    await userExtra.validate()
+    const user = await super.insert.call(this, props)
+
+    /**
+     * For the future reference: I decided to call Mutable.insert instead of
+     * Model.create because with the former way user can set userExtra access
+    * control directives
+     */
+    const userExtraInstance = new (getController('userExtra'))
+    userExtraInstance.injected = this.injected
+
+    await userExtraInstance.insert({
+      what: {
+        ...extra,
+        owner: user._id
+      }
+    })
+
+    return user
   }
 
   public override async insert(props: { what: any }, decodedToken: any) {
@@ -57,16 +92,11 @@ export class UserController extends Mutable<UserDocument> {
       delete props.what.password
     }
 
-    return super.insert.call(this, props)
-  }
+    if( props.what.extra ) {
+      return this._saveWithExtra(props)
+    }
 
-  public override getAll(props: { filters: any }) {
-    return super.getAll.call(this, {
-      ...props,
-      sort: {
-        role: 1
-      }
-    })
+    return super.insert.call(this, props)
   }
 
   /**
@@ -141,7 +171,7 @@ export class UserController extends Mutable<UserDocument> {
     }
 
     if( this.apiConfig.populateUserExtra ) {
-      const { default: UserExtra } = require(`${process.cwd()}/collections/userExtra/userExtra.model`)
+      const UserExtra = this._userExtraModel()
       const projection = this.apiConfig.populateUserExtra
         .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 

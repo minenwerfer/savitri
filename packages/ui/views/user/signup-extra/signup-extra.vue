@@ -15,7 +15,8 @@
         formData: userExtraStore.item,
         form: webpackVariables.signupExtraFields
           ? userExtraStore.useFields(webpackVariables.signupExtraFields)
-          : userExtraStore.useFieldsExcept(['owner'])
+          : userExtraStore.useFieldsExcept(['owner']),
+        validationErrors: userStore.validationErrors
       }"
     ></sv-form>
 
@@ -104,25 +105,30 @@ const passwordError = computed(() => {
 
 const insert = async () => {
   userStore.item.password = password.password
-  const user = await userStore.insert()
-
-  if( !user ) {
-    return
-  }
-
-  const { _id: userId, email } = user
-
-  if( !userStore.$currentUser._id ) {
-    await userStore.authenticate({
-      email,
-      password: password.password
-    })
-  }
-
   if( userExtraStore ) {
-    userExtraStore.item.owner = userId
-    await userExtraStore.deepInsert()
+    userStore.item.extra = userExtraStore.item
   }
+
+  const user = await userStore.insert()
+  console.log(user)
+
+//  if( !user ) {
+//    return
+//  }
+//
+//  const { _id: userId, email } = user
+
+//  if( !userStore.$currentUser._id ) {
+//    await userStore.authenticate({
+//      email,
+//      password: password.password
+//    })
+//  }
+
+//  if( userExtraStore ) {
+//    userExtraStore.item.owner = userId
+//    await userExtraStore.deepInsert()
+//  }
 
   const metaStore = useStore('meta')
   await metaStore.spawnModal({
@@ -130,7 +136,7 @@ const insert = async () => {
     body: 'Blabla'
   })
 
-  router.push({ name: 'user-signin' })
+  // router.push({ name: 'user-signin' })
 }
 </script>
 

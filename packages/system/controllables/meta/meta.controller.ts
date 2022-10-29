@@ -1,4 +1,4 @@
-import { Controller } from '../../api/core/controller'
+import { Controller } from '../../../api/core/controller'
 import { getDescriptions } from './meta.helper'
 
 export class MetaController extends Controller {

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { UserDocument } from '../../../../collections/user/user.model'
+import type { UserDocument } from '../../../../system/collections/user/user.model'
 import useCollection from '../collection'
 import { normalizeFields, normalizeValues } from '../helpers'
 import useMetaStore from './meta'

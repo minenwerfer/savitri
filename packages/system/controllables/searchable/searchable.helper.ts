@@ -1,5 +1,5 @@
-import type { CollectionDescription } from '../../common/types'
-import { getController } from '../../api/core/controller'
+import type { CollectionDescription } from '../../../common/types'
+import { getController } from '../../../api/core/controller'
 import { getDescriptions } from '../meta/meta.helper'
 
 const __searchable: Record<string, CollectionDescription> = {}

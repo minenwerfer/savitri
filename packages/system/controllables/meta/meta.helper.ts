@@ -1,6 +1,6 @@
 import { readdirSync, existsSync } from 'fs'
-import type { CollectionDescription } from '../../common/types'
-import { preloadCollection } from '../../api/core/collection'
+import type { CollectionDescription } from '../../../common/types'
+import { preloadCollection } from '../../../api/core/collection'
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
 
@@ -10,10 +10,10 @@ export const getDescriptions = (): Record<string, CollectionDescription> => {
   }
 
   const modulePaths = [
-    `${__dirname}/../../collections`,
+    `${__dirname}/../../../collections`,
     `${process.cwd()}/collections`,
     ...global.modules
-      ? global.modules.map(({ name: moduleName }: { name: string }) => `${process.cwd()}/../../node_modules/${moduleName}/collections`)
+      ? global.modules.map(({ name: moduleName }: { name: string }) => `${process.cwd()}/../../../node_modules/${moduleName}/collections`)
       : []
   ]
 

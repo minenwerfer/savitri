@@ -13,7 +13,7 @@ import baseRole from '../access/baseRole'
 
 export abstract class Controller {
   private _webInterface: Controller
-  public injected: Omit<ProvidedParams, 'apiConfig'>
+  public injected: Omit<ProvidedParams, 'apiConfig'> = {}
 
   /**
    * @protected @readonly

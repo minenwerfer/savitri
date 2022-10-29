@@ -1,7 +1,7 @@
-import { Mutable } from '../../api/core/controller'
+import { Mutable } from '../../../api/core/controller'
 import { NotificationDocument, default as Notification } from './notification.model'
-import { RequestProvider } from '../../common/http'
-import { TokenService } from '../../api/core/token'
+import { RequestProvider } from '../../../common/http'
+import { TokenService } from '../../../api/core/token'
 import { default as Description } from './index.json'
 
 const path = require('path')

@@ -1,4 +1,4 @@
-import { createModel, MongoDocument } from '../../api'
+import { createModel, MongoDocument } from '../../../api'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'

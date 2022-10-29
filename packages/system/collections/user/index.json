@@ -10,7 +10,7 @@
   "individualActions": {
     "ui/spawnEdit": {
       "name": "Editar",
-      "unicon": "edit",
+      "unicon": "edit"
     },
     "ui/spawnExtra": {
       "name": "Editar detalhes",
