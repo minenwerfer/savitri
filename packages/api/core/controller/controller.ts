@@ -9,7 +9,7 @@ import type {
 
 import { AuthorizationError, PermissionError } from '../exceptions'
 import { TokenService } from '../token'
-import baseRole from '../access/baseRole'
+import baseRoles from '../access/baseRoles'
 
 export abstract class Controller {
   private _webInterface: Controller
@@ -131,10 +131,19 @@ export abstract class Controller {
   }
 
   public isGranted(
-    token: { user?: { role?: string } },
+    token: {
+      user?: {
+        _id: string
+        role?: string
+      }
+    },
     method: string,
     controller?: string
   ) {
+    const baseRole = token.user?._id
+      ? baseRoles.authenticated
+      : baseRoles.unauthenticated
+
     return this._isGranted(token, method, controller)
       || this._isGranted(token, method, controller, baseRole)
   }
