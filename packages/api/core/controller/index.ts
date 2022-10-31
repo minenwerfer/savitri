@@ -21,7 +21,7 @@ export const getController = (id:string, type:'collections'|'controllables' = 'c
     }
 
     return commonNames.includes(id)
-      ? `${__dirname}/../../../${type}`
+      ? `${__dirname}/../../../system/${type}`
       : `${process.cwd()}/${type}`
   })()
 

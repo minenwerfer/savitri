@@ -10,7 +10,7 @@ export const getDescriptions = (): Record<string, CollectionDescription> => {
   }
 
   const modulePaths = [
-    `${__dirname}/../../../collections`,
+    `${__dirname}/../../../system/collections`,
     `${process.cwd()}/collections`,
     ...global.modules
       ? global.modules.map(({ name: moduleName }: { name: string }) => `${process.cwd()}/../../../node_modules/${moduleName}/collections`)
