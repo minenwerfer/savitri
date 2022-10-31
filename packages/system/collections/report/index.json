@@ -3,7 +3,7 @@
   "route": true,
   "unicon": "bag-alt",
   "presets": [
-    "alwaysOwned",
+    "owned",
     "deleteAll"
   ],
   "individualActions": {

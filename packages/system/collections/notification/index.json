@@ -2,7 +2,7 @@
   "collection": "notification",
   "route": true,
   "presets": [
-    "alwaysOwned",
+    "owned",
     "crud"
   ],
   "fields": {

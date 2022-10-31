@@ -36,7 +36,6 @@ export const COLLECTION_FIELD_TYPES = <const>[
 ]
 
 export const COLLECTION_PRESETS = <const>[
-  'alwaysOwned',
   'crud',
   'duplicate',
   'owned',
