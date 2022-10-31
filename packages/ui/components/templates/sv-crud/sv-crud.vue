@@ -5,7 +5,6 @@
       class="crud__panel"
     >
       <div class="crud__panel-control">
-        <sv-filter-widget :key="store.$id"></sv-filter-widget>
         <sv-info v-if="!noRefresh">
           <template #text>
             Atualizar
@@ -27,6 +26,7 @@
         >
           Exportar
         </sv-button>
+        <sv-filter-widget :key="store.$id"></sv-filter-widget>
       </div>
       <div
         v-if="store.actions || $slots.actions"

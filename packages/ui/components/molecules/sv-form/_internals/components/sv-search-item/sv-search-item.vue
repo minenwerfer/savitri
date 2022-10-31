@@ -1,9 +1,13 @@
 <template>
-  <div class="item">
+  <div
+    v-clickable
+    class="item"
+  >
     <div class="item__values">
       <div
         v-for="(index, idx) in indexes"
         :key="`index-${item._id}-${idx}`"
+        class="item__value"
       >
         {{ item[index] }}
       </div>

@@ -53,7 +53,6 @@
       </div>
     </div>
 
-
     <textarea
       v-else
       :placeholder="placeholder"
@@ -73,7 +72,6 @@
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
 import { useClipboard } from '../../../composables'
-
 import { SvInfo, SvIcon } from '../..'
 
 type Props = {
@@ -158,7 +156,14 @@ const updateValue = (value: string|number) => {
 }
 
 const onInput = (
-  event: { target: { modelValue: string, dataset?: { maskRawValue: string } } },
+  event: {
+    target: {
+      modelValue: string,
+        dataset?: {
+          maskRawValue: string
+        }
+    }
+  },
   masked: boolean
 ) => {
   if( !masked && event.target.dataset?.maskRawValue ) {

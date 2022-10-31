@@ -83,26 +83,33 @@ export type MaybeCollectionDescription = Omit<CollectionDescription,
   individualActions?: MaybeCollectionActions
 }
 
+export type CollectionReference = {
+  collection: string
+  limit?: number
+  index?: Array<string>|string
+  select?: Array<string>
+  maxDepth?: number
+}
 
-export type CollectionField = Readonly<{
+export type CollectionField = Readonly<Partial<CollectionReference> & {
   label: string
   type?: CollectionFieldType
   collection?: string
+  isReference?: boolean
+  dynamicReference?: boolean
+  referencedCollection?: string
   mask?: string
 
   inline?: boolean
   includeHours?: boolean
   readOnly?: boolean
   inlineEditing?: boolean
+  uniqueValues?: boolean
 
   /** @see SvFile */
   accept?: Array<string>
 
   values?: Record<string, string> | Record<number, any> | {
-    __query: {
-      collection: string
-      index: Array<string>|string
-      limit?: number
-    }
+    __query: CollectionReference
   }
 }>

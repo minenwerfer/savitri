@@ -1,34 +1,25 @@
-import { model as mongooseModel, Schema } from 'mongoose'
+import {
+  model as mongooseModel,
+  models as mongooseModels,
+  Model,
+  Schema
+
+} from 'mongoose'
+
 import * as R from 'ramda'
 import * as TypeGuards from './typeguards'
-import type { CollectionDescription, MaybeCollectionDescription } from '../../../common'
+import {
+  getReferencedCollection,
+  CollectionDescription,
+  MaybeCollectionDescription
+
+} from '../../../common'
+
 import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
+import { typeMapping } from './types'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
-
-const typeMapping: Array<[Array<string>, any]> = [
-  [
-    [
-      'text',
-      'password',
-      'radio',
-      'select'
-    ],
-    String
-  ],
-  [
-    [
-      'number',
-      'integer'
-    ],
-    Number
-  ],
-  [ ['checkbox'], [String] ],
-  [ ['object'], Object ],
-  [ ['boolean'], Boolean ],
-  [ ['datetime'], Date ]
-]
 
 /**
  * @exports @function
@@ -52,14 +43,10 @@ export const descriptionToSchema = <T>(
       return a
     }
 
-    const query = Array.isArray(field.values||[])
-      ? (field.values||[{}])[0]?.__query
-      : field.values?.__query
-
     const {
       collection: collectionName,
       ...reference
-    } = query || field
+    } = getReferencedCollection(field) as any||{}
 
     const result: any = {
       type: String,
@@ -156,6 +143,10 @@ export const createModel = <T=any>(
   options?: any,
   cb?: (schema: Schema) => void
 ) => {
+  if( mongooseModels[modelName] ) {
+    return mongooseModels[modelName] as Model<T>
+  }
+
   const schema = descriptionToSchema<T>(description, options || defaultOptions)
   if( cb ) {
     cb(schema)

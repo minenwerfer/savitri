@@ -39,7 +39,7 @@ export class UserController extends Mutable<UserDocument> {
     /**
      * For the future reference: I decided to call Mutable.insert instead of
      * Model.create because with the former way user can set userExtra access
-     * control rules.
+     * control and guards.
      */
     const userExtraInstance = new (getController('userExtra'))
     userExtraInstance.injected = this.injected

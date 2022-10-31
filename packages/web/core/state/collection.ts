@@ -47,6 +47,7 @@ const state = <T=object>(): CollectionState<T> => {
     items: [],
     filters: {},
     freshFilters: {},
+    activeFilters: {},
 
     selected: [],
 

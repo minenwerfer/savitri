@@ -27,7 +27,8 @@
           collection: field.collection,
           form: store.useFields(indexes),
           formData: inputValue,
-          layout: store.formLayout
+          layout: store.formLayout,
+          searchOnly: true
         }"
         @input="lazySearch"
       >
@@ -52,28 +53,30 @@
           indexes,
           field,
         }"
+
         @update:model-value="emit('update:modelValue', $event)"
+        @push-back="pushBack"
       ></sv-search-selected>
 
       <div v-if="!isExpanded">
-        <div v-if="matchingItems.length || modelValue?.length">
+        <sv-search-container v-if="matchingItems.length || modelValue?.length">
           <sv-search-item
-            v-for="item in matchingItems"
+            v-for="(item, index) in matchingItems"
             v-bind="{
               item,
               indexes
             }"
 
             :key="`matching-${item._id}`"
-            @click="select(item)"
+            @click="select(item, index)"
           >
             <sv-icon
               name="plus"
               fill="gray"
             ></sv-icon>
           </sv-search-item>
+        </sv-search-container>
 
-        </div>
         <div v-else>
           <div v-if="isTyping">
             Pesquisando...
@@ -107,6 +110,7 @@ import { useStore, useParentStore } from '@savitri/web'
 import { SvButton, SvIcon } from '../../../../..'
 
 import SvSearchSelected from '../sv-search-selected/sv-search-selected.vue'
+import SvSearchContainer from '../sv-search-container/sv-search-container.vue'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-form/sv-form.vue'))
@@ -120,10 +124,11 @@ type Props = {
   field: {
     array?: boolean
     collection?: string
-    inline?: boolean
-    form?: any
-    inlineEditing?: boolean
     label?: string
+    form?: any
+    inline?: boolean
+    inlineEditing?: boolean
+    uniqueValues?: boolean
   }
 }
 
@@ -211,19 +216,30 @@ const clear = () => {
   }
 }
 
-const select = (item: any) => {
+const select = (item: any, itemIndex: number) => {
   const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
   const modelValue = props.field.array
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
-  matchingItems.value = []
+  if( props.field.uniqueValues ) {
+    matchingItems.value.splice(itemIndex, 1)
+  }
+
+  if( !props.field.array ) {
+    matchingItems.value = []
+  }
+
   emit('update:modelValue', props.field.array
     ? [ ...modelValue, item ]
     : item
   )
 
   emit('changed')
+}
+
+const pushBack = (item: any) => {
+  matchingItems.value.push(item)
 }
 
 const addItem = () => {

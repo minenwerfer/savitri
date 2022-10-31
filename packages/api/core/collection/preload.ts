@@ -1,6 +1,10 @@
 import * as R from 'ramda'
-import type { CollectionDescription } from '../../../common/types'
+import { getReferencedCollection, CollectionDescription } from '../../../common'
 import { commonNames } from '../controller'
+
+type DeepWritable<T> = {
+  -readonly [P in keyof T]: DeepWritable<T[P]>
+}
 
 export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${collectionName}`)
@@ -21,7 +25,11 @@ export const requireCollection = (collectionName:string): any => {
     : require(`${process.cwd()}/collections/${collectionName}/index.json`)
 }
 
-export const preloadCollection = (collection: Omit<CollectionDescription, 'fields'>) => {
+export const preloadCollection = (
+  collection: Omit<CollectionDescription, 'fields'> & {
+    fields?: DeepWritable<CollectionDescription['fields']>
+  }
+) => {
   if( collection.alias ) {
     const _aliasedCollection = requireCollection(collection.alias)
 
@@ -42,6 +50,25 @@ export const preloadCollection = (collection: Omit<CollectionDescription, 'field
 
     }, collection as CollectionDescription)
   }
-  
+
+  if( collection.fields ) {
+    collection.fields = Object.entries(collection.fields).reduce((a: any, [key, _field]) => {
+      const field = Object.assign({}, _field)
+      const reference = getReferencedCollection(field)
+
+      if( reference ) {
+        field.type ??= 'reference'
+        field.isReference = true
+        field.dynamicReference = !field.collection
+        field.referencedCollection = reference.collection
+      }
+
+      return {
+        ...a,
+        [key]: field
+      }
+    }, {})
+  }
+
   return collection
 }

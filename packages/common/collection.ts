@@ -1,67 +1,65 @@
-import type { CollectionDescription, CollectionField } from './types'
+import type {
+  CollectionDescription,
+  CollectionField,
+  CollectionReference
+
+} from './types'
+
+export const getReferencedCollection = (field: CollectionField): CollectionReference|null => {
+  const query = Array.isArray(field.values||[])
+    ? (field.values||[{}])[0]?.__query
+    : field.values?.__query
+
+  const reference = query || field
+  if( !reference.collection ) {
+    return null
+  }
+
+  return query || Object.assign({}, field)
+}
 
 export function getIndexes(
   description: Pick<CollectionDescription, 'fields'>,
-  key: string,
-  form: boolean = false
+  key: string
 ): Array<string> {
-  const reference = description.fields?.[key]
-  const query:any = {}
-
-  // retrieves index if dynamic querying is used
-  if( reference?.values ) {
-    // values can be either arrays or objects
-    const prop = Array.isArray(reference.values)
-      ? reference.values.find((e: any) => Object.keys(e)[0] === '__query')?.__query
-      : reference.values.__query
-
-    Object.assign(query, prop||{})
-  }
-
+  const field = description.fields?.[key]
   const {
     collection,
     index,
-    formIndex
 
-  } = query.collection ? query : (reference||{})
+  } = getReferencedCollection(field)||{}
 
   if( !collection ) {
     return []
   }
 
-  const indexes = form
-    ? (formIndex || index)
-    : index
-
-  if( !indexes ) {
+  if( !index ) {
     return []
   }
 
-  return Array.isArray(indexes)
-    ? indexes
-    : [indexes]
+  return Array.isArray(index)
+    ? index
+    : [index]
 }
 
 export const getFirstIndex = (
   description: Pick<CollectionDescription, 'fields'>,
-  key: string,
-  form: boolean = false
+  key: string
 ): string => {
-  const fields = getIndexes(description, key, form)||[]
+  const fields = getIndexes(description, key)||[]
   return fields[0]
 }
 
 export const getFirstValue = (
   description: Pick<CollectionDescription, 'fields'>,
   value: any,
-  key: string,
-  form: boolean = false,
+  key: string
 ): string|number|null => {
   if( !value ) {
     return '-'
   }
 
-  const firstField = getFirstIndex(description, key, form)
+  const firstField = getFirstIndex(description, key)
   const extract = (v: any) => typeof v === 'object' || firstField
     ? v[firstField]
     : v
@@ -77,11 +75,10 @@ export const formatValue = (
   description: Pick<CollectionDescription, 'fields'>,
   value: any,
   key: string,
-  form: boolean = false,
   field?: CollectionField
 ): string => {
   const firstValue = value && typeof value === 'object' && !(value instanceof Date)
-    ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key, form) : Object.values(value)[0])
+    ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key) : Object.values(value)[0])
     : value
 
   const formatted = (() => {

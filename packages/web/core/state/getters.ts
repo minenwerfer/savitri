@@ -147,7 +147,7 @@ export default {
     const filters = removeEmpty(deepClone(this.filters||{}))
 
     const expr = (key: string, value: any) => {
-      const field = ((this.description).fields||{})[key]
+      const field = this.description.fields?.[key]
       if( !field ) {
         return
       }
@@ -159,15 +159,7 @@ export default {
         }
       }
 
-      const values = Array.isArray(field.values)
-        ? field.values[0]
-        : field.values
-
-      if( (values as any)?.__query?.collection ) {
-        return { _id: value }
-      }
-
-      return value
+      return value._id || value
     }
 
     const entries = Object.entries(filters)
@@ -187,7 +179,7 @@ export default {
           })
         }
 
-        if( !filter || Object.keys(filter).length === 0 ) {
+        if( !filter || (typeof filter === 'object' && Object.keys(filter).length === 0) ) {
           return a
         }
 

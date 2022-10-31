@@ -3,10 +3,6 @@
     v-if="Object.keys(store.availableFilters).length > 0"
     class="filter"
   >
-    <div class="filter__count">
-      <div>Filtros</div>
-      <div>({{ store.filtersCount }})</div>
-    </div>
     <div class="filter__icons">
       <sv-bare-button
         @clicked="isFilterVisible = true"
@@ -28,6 +24,8 @@
         ></sv-icon>
       </sv-bare-button>
     </div>
+
+    <sv-filter-bubbles></sv-filter-bubbles>
   </div>
 
   <sv-box
@@ -75,6 +73,8 @@ import {
   SvIcon
 
 } from '../../../../..'
+
+import SvFilterBubbles from '../sv-filter-bubbles/sv-filter-bubbles.vue'
 
 const store = useParentStore()
 const isFilterVisible = ref(false)

@@ -256,7 +256,7 @@ export default {
 
           return helperStore.insert({
             what: subject
-          })
+          })?._id
         }
 
         newItem[k] = await getInsertedId(newItem[k])
@@ -283,6 +283,7 @@ export default {
 
   filter<T>(
     this: {
+      activeFilters: CollectionGetters['$filters']
       $filters: CollectionGetters['$filters']
       pagination: CollectionState<T>['pagination']
       getAll: (...args: any[]) => Promise<Array<T>>
@@ -291,6 +292,8 @@ export default {
       project: Array<string>
     }
   ) {
+    this.activeFilters = this.$filters
+
     return this.getAll({
       filters: this.$filters,
       limit: this.pagination.limit,
@@ -382,7 +385,6 @@ export default {
         this.rawDescription as Pick<CollectionDescription, 'fields'>,
         args.value,
         args.key,
-        args.form,
         args.field
       )
   },
@@ -393,8 +395,7 @@ export default {
   ): Array<string> {
     return Collection.getIndexes(
       this.rawDescription as Pick<CollectionDescription, 'fields'>,
-      args.key,
-      args.form
+      args.key
     )
   }
 }

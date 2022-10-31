@@ -30,6 +30,7 @@
           <div
             v-if="field.description"
             v-html="field.description"
+            class="form__field-description"
           ></div>
         </label>
 

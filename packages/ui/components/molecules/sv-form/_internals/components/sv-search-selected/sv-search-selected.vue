@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selected?.length > 0" class="selected">
+  <sv-search-container v-if="selected?.length > 0">
     <sv-search-item
       v-for="item in selected"
       v-bind="{
@@ -29,12 +29,13 @@
         ></sv-icon>
       </div>
     </sv-search-item>
-  </div>
+  </sv-search-container>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { SvIcon } from '../../../../..'
+import SvSearchContainer from '../sv-search-container/sv-search-container.vue'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 type Props = {
@@ -67,12 +68,21 @@ const unselect = async (item: any, purge=true) => {
     await store.remove({ filter: { _id } })
   }
 
+  const deleteFirst = () => {
+    const modelValue = props.modelValue
+    const idx = modelValue.findIndex((option: any) => option._id === item._id)
+
+    modelValue.splice(idx, 1)
+    return modelValue
+  }
+
   emit('update:modelValue', props.field.array
-      ? props.modelValue.filter((option: any) => option._id !== item._id)
+      ? deleteFirst()
       : undefined
   )
+
+  if( props.field.uniqueValues ) {
+    emit('pushBack', item)
+  }
 }
-
 </script>
-
-<style scoped src="./sv-search-selected.scss"></style>

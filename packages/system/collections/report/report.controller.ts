@@ -132,7 +132,7 @@ export class ReportController extends Mutable<ReportDocument> {
           return {
             ...a,
             [key]: (() => {
-              const val = Collection.formatValue(description, value, key, false, fields[key])
+              const val = Collection.formatValue(description, value, key, fields[key])
               return val.includes(',') && format === 'csv'
                 ? `"${val}"`
                 : val

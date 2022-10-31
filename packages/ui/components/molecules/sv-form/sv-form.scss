@@ -23,6 +23,11 @@
     margin: 0;
   }
 
+  &__field-description {
+    font-size: .9rem;
+    opacity: .8;
+  }
+
   &__search-grid {
     display: grid;
     gap: 2rem;

@@ -23,7 +23,7 @@ export const PAGINATION_PER_PAGE_DEFAULT = 35
 export const COLLECTION_FIELD_TYPES = <const>[
   'boolean',
   'checkbox',
-  'collection',
+  'reference',
   'datetime',
   'integer',
   'number',

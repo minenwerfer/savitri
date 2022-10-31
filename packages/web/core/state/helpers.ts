@@ -127,7 +127,7 @@ export const condenseItem = (item: any) => {
 
 export const removeEmpty = (item: any) => {
   const entries = Object.entries(item)
-  .filter(([_, value]: [unknown, any]) => value && !(typeof value === 'string' && value.length === 0))
+  .filter(([_, value]: [unknown, any]) => value)
 
   return fromEntries(entries)
 }
