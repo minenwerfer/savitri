@@ -46,9 +46,8 @@ export const prepareInsert = (
   } = payload
 
   const forbidden = (key: string) => {
-    return !description.writable?.includes(key) && (
-      description.fields[key]?.readOnly
-      || (description.form && !description.form.includes(key))
+    return description.fields[key]?.readOnly
+      || (description.writable && !description.writable.includes(key)
     )
   }
   const prepareUpdate = () => Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {

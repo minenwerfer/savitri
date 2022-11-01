@@ -3,7 +3,7 @@
     <div
       v-clickable
       v-for="filter in printableFilters"
-      :key="`filter-${key}`"
+      :key="`filter-${filter.key}`"
       class="bubble"
       @click="removeFilter(filter.key)"
     >
@@ -46,10 +46,17 @@ const printableFilters = computed(() => {
         return value.slice(-8)
       }
 
-      const value = String(filter.$regex || filter)
-      return field.translate
-        ? I18N.global.tc(value)
-        : value
+      if( field.type === 'datetime' ) {
+        const d1 = filter.$gte.split('T')[0] || ''
+        const d2 = filter.$lte?.split('T')[0] || ''
+        return `${d1} - ${d2}`
+      }
+
+      return store.formatValue({
+        value: filter,
+        key,
+        field
+      })
     })()
 
     const actualKey = isMongoOperation
@@ -65,7 +72,6 @@ const printableFilters = computed(() => {
 })
 
 const removeFilter = (target: string) => {
-  console.log(target)
   store.filters = Object.entries(store.filters).reduce((a: any, [key, filter]) => {
     if( key === target ) {
       return a
@@ -75,7 +81,7 @@ const removeFilter = (target: string) => {
       ...a,
       [key]: filter
     }
-  }, store.freshFilters)
+  }, Object.assign({}, store.freshFilters))
 
   store.filter()
 }

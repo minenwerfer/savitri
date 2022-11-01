@@ -19,9 +19,7 @@ export class ReportController extends Mutable<ReportDocument> {
   }
 
   constructor() {
-    super(Report, Description, {
-      publicMethods: ['getAll']
-    })
+    super(Report, Description)
 
   }
 

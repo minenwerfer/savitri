@@ -113,7 +113,7 @@
               <div v-else-if="store">
                 {{
                   store.formatValue({
-                    value: field.translate ? $t(row[column]||'-') : row[column],
+                    value: row[column],
                     key: column,
                     field
                   })

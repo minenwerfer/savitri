@@ -381,9 +381,13 @@ export default {
     }
   ): string
     {
+      const value = args.field.translate
+        ? I18N.global.tc(args.value)
+        : args.value
+
       return Collection.formatValue(
         this.rawDescription as Pick<CollectionDescription, 'fields'>,
-        args.value,
+        value,
         args.key,
         args.field
       )

@@ -99,6 +99,7 @@ export type CollectionField = Readonly<Partial<CollectionReference> & {
   dynamicReference?: boolean
   referencedCollection?: string
   mask?: string
+  translate?: boolean
 
   inline?: boolean
   includeHours?: boolean

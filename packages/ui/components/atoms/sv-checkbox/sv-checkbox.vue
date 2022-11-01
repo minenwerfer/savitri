@@ -1,14 +1,14 @@
 <template>
   <label :class="`
     checkbox
-    ${readOnly && 'checkbox--readOnly'}
+    ${field.readOnly && 'checkbox--readOnly'}
   `">
     <input
       v-model="bindVal"
       ref="checkbox"
       v-bind="{
-        type,
-        readOnly,
+        type: field.type,
+        readOnly: field.readOnly,
         checked: bindVal
       }"
 io
@@ -39,9 +39,11 @@ type Props = {
   value?: string|boolean
   label?: string
   description?: string
-  type?: string
-  required?: boolean
-  readOnly?: boolean
+  field?: {
+    type?: string
+    required?: boolean
+    readOnly?: boolean
+  }
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -56,7 +58,7 @@ const emit = defineEmits<{
 const checkbox = ref<any>(null)
 
 const onClick = () => {
-  if( !props.required && !props.readOnly ) {
+  if( !props.field?.required && !props.field?.readOnly ) {
     checkbox.value.click()
   }
 }
@@ -75,7 +77,7 @@ const bindVal = computed({
       return false
     }
 
-    if( props.type === 'radio' ) {
+    if( props.field?.type === 'radio' ) {
       return props.modelValue === props.value
     }
 
@@ -85,11 +87,11 @@ const bindVal = computed({
   },
 
   set: (newVal: boolean) => {
-    if( props.readOnly ) {
+    if( props.field?.readOnly ) {
       return
     }
 
-    if( props.type === 'radio' ) {
+    if( props.field?.type === 'radio' ) {
       emit('update:modelValue', value)
       return
     }

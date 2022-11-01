@@ -52,7 +52,7 @@ export const descriptionToSchema = <T>(
       type: String,
       unique: field.unique === true,
       default: field.default,
-      required: field.required !== false
+      required: field.required !== false && field.type !== 'boolean'
         ? field.required || description.strict
         : false
     }
