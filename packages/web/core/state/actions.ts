@@ -248,7 +248,7 @@ export default {
             const ids = []
             for( const item of subject ) {
               const result = await helperStore.insert({ what: item })
-              ids.push(result)
+              ids.push(result._id)
             }
 
             return ids

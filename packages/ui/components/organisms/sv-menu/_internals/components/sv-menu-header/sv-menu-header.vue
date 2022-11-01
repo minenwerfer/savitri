@@ -5,7 +5,10 @@
       class="header__picture"
       @click="editProfile"
     >
-      <sv-icon name="user"></sv-icon>
+      <div>
+        <span>{{ userStore.$currentUser.first_name?.[0] }}</span>
+        <span>{{ userStore.$currentUser.last_name?.[0] }}</span>
+      </div>
     </sv-picture>
 
     <div class="header__info">
