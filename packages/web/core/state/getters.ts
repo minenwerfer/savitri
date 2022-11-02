@@ -25,25 +25,22 @@ export default {
       return
     }
 
-    const prepare = (value: any) => ({
-        ...value,
-        label: value.name?.capitalize() || value.label,
-        type: value.collection ? 'collection' : value.type,
+    const prepare = (field: any) => ({
+      ...field,
+      label: field.name?.capitalize() || field.label,
+      type: field.collection ? 'collection' : field.type,
     })
-
-    const findField = (fieldName: string) =>
-      Object.entries(this.description.fields||{}).find(([key]: [string, unknown]) => fieldName === key)
 
     if( this.description.table ) {
       return this.description.table.reduce((a:object, fieldName: string) => {
-        const field = findField(fieldName)
+        const field = this.description.fields?.[fieldName]
         if( !field ) {
           return a
         }
 
         return {
           ...a,
-          [fieldName]: prepare(field[1])
+          [fieldName]: prepare(field)
         }
       }, {})
     }

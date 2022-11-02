@@ -25,7 +25,7 @@ npm run build || true && \
     cp "packages/${package}/package.json" "dist/${package}/package.json"
   done
 
-  for component in $(find packages/ui -type f); do
+  for component in $(find packages/ui -type f -not -path \*node_modules\*); do
     new_path=$(echo -n "$component" | sed -r 's/^packages/dist/')
     directory=$(echo -n "$new_path" | sed -r 's/\/([^\.\/]+)\.(\w+)$//')
 
