@@ -42,6 +42,14 @@ const printableFilters = computed(() => {
     const field = store.description.fields[key]
     const formatted = (() => {
       if( field.isReference ) {
+        if( field.array ) {
+          return store.formatValue({
+            value: filter,
+            key,
+            field
+          })
+        }
+
         const value = filter
         return value.slice(-8)
       }

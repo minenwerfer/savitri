@@ -2,18 +2,14 @@
   "name": "savitri",
   "version": "0.1.5148",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublishOnly": "npx tsc",
-    "build": "tsc"
+    "build": "./bin/build.sh pack",
+    "watch": "./bin/watch.sh"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bin": {
-    "savitri-bundle": "./frontend/build/compile.js"
-  },
   "devDependencies": {
     "@types/hapi__hapi": "^20.0.10",
     "@types/lodash": "^4.14.181",
@@ -21,6 +17,7 @@
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.8",
     "axios": "^0.24.0",
+    "bcrypt": "^5.1.0",
     "circular-dependency-plugin": "^5.2.2",
     "copy-webpack-plugin": "^10.2.0",
     "pinia": "^2.0.16",
@@ -30,8 +27,5 @@
     "uuid": "^8.3.2",
     "vue-router": "^4.1.2",
     "yaml": "^2.0.1"
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.0"
   }
 }

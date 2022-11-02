@@ -1,5 +1,5 @@
 <template>
-  <div class="searchbar">
+  <div class="searchbar" @focusin="search">
     <sv-input
       v-model.lazy="query"
       :field="{
@@ -23,7 +23,7 @@ const query = ref('')
 
 provide('iconReactive', false)
 
-watch(() => query.value, async () => {
+const search = async () => {
   if( query.value.length === 0 ) {
     results.items = []
     return
@@ -31,11 +31,12 @@ watch(() => query.value, async () => {
 
   results.items = (await http.post('_/searchable/search', {
     query: query.value
-      .replace(/(\(|\))/g, '')
-      .split(',')
-      .map((q: string) => q.trim())
+    .replace(/(\(|\))/g, '')
+    .split(',')
+    .map((q: string) => q.trim())
   })).data.result
-})
+}
+watch(() => query.value, search)
 </script>
 
 <style scoped src="./sv-search-bar.scss"></style>

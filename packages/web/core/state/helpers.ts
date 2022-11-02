@@ -78,12 +78,20 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
       const route = `${query.collection}/getAll`
 
       try {
-        const { data } = await http.post(route, {
+        const options: any = {
           filters: query.filters || {},
-          project: query.index || {},
           limit: query.limit || 0,
-          offset: query.offset
-        })
+          offset: query.offset,
+        }
+
+        if( query.index ) {
+          options.project = query.index
+          options.sort = Array.isArray(query.index)
+            ? query.index.reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {})
+            : { [query.index]: 1 }
+        }
+
+        const { data } = await http.post(route, options)
 
         stored.items.push(...data.result)
         stored.satisfied = data.pagination.recordsTotal === query.offset

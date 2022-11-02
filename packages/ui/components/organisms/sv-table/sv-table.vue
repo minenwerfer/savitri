@@ -120,7 +120,11 @@
                 }}
               </div>
               <div v-else>
-                {{ row[column] || '-' }}
+                {{
+                  Array.isArray(row[column])
+                    ? row[column].filter(_ => !!_).join(', ')
+                    : (row[column] || '-')
+                }}
               </div>
             </div>
             <div v-if="store?.getIndexes({ key: column })?.length > 1 && field.collection !== 'file'">

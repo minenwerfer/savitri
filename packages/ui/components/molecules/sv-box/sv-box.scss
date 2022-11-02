@@ -40,6 +40,7 @@ $section-padding: .8rem;
     &--floating, &--fixed-right {
       .box__header {
         padding: 1.2rem 2.4rem;
+        border-bottom: 0;
       }
 
       .box__body,
@@ -99,13 +100,19 @@ $section-padding: .8rem;
     line-height: 100%;
 
     min-height: 3rem;
+    padding: 1rem;
 
     @include themed() {
       background: t(background-color-alt);
+      border-bottom: 1px solid darken(t(border-color), 10%);
     }
 
     :deep(svg) {
       width: 1.2rem;
+    }
+
+    &--collapsed {
+      border-bottom: 0 !important;
     }
   }
 
@@ -114,7 +121,6 @@ $section-padding: .8rem;
   }
 
   &__body {
-    // max-height: 90vh;
     overflow-y: auto;
     overscroll-behavior: contain;
 

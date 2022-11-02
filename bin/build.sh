@@ -11,7 +11,7 @@ PACKAGES=(
   system
 )
 
-npm run build || true && \
+tsc || true && \
   cp -r packages/api/resources/* dist/api/resources && \
   cp -r packages/api/presets dist/api && \
   cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \

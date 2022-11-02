@@ -24,7 +24,12 @@
       @click="$event.stopPropagation()"
     >
       <!-- box head -->
-      <div class="box__header" v-if="$slots.title || title">
+      <div
+        v-if="$slots.title || title"
+        :class="`
+          box__header
+          ${isCollapsed && 'box__header--collapsed'}
+      `">
         <div class="box__header-title">
           <slot v-if="$slots.title" name="title"></slot>
           <div v-else-if="title">{{ title }}</div>
