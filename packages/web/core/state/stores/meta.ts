@@ -28,6 +28,7 @@ export default defineStore('meta', {
       collection: ''
     },
     wizard: {
+      current: '',
       step: 1
     },
     menu: {

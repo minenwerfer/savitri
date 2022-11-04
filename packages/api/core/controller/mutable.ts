@@ -23,10 +23,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     sort: any
   }
 
-  /**
-   * @constructor
-   * @param {Model<T>} model - a singleton instance of Model<T>
-   */
   constructor(
     public readonly model: Model<T>,
     description: unknown,
@@ -92,10 +88,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     return newPayload
   }
 
-  /**
-   * @method
-   * Inserts a single document in the database.
-   */
   public async _insert(
     props: { what: Partial<T> },
     decodedToken?: any,
@@ -127,10 +119,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     return this.model.countDocuments(query.filters)
   }
 
-  /**
-   * @method
-   * Gets a document from database.
-   */
   public async get(
     props: {
       filters?: object,
@@ -158,10 +146,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     return pipe(result as T)
   }
 
-  /**
-   * @method
-   * Gets a collection of documents from database.
-   */
   protected _getAll(props: {
     filters?: object,
     offset?: number,
@@ -223,10 +207,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
    return result.map(pipe)
   }
 
-  /**
-   * @method
-   * Removes a document from database.
-   */
   public delete(props: { filters: any }, decodedToken?: any): any | Promise<any> {
     if( !props.filters ) {
       throw new Error('no criteria specified')
@@ -236,10 +216,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     return this.model.findOneAndDelete(query.filters, { strict: 'throw' })
   }
 
-  /**
-   * @method
-   * Removing all documents from database matching the criteria.
-   */
   public deleteAll(props: { filters: any }, decodedToken?: any) {
     if( !Array.isArray(props.filters?._id) || props.filters?._id?.length === 0 ) {
       throw new Error('no criteria specified')
@@ -255,10 +231,6 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     return this.model.deleteMany(query.filters, { strict: 'throw' })
   }
 
-  /**
-   * @method
-   * Modify a single document.
- */
   public modify(props: { filters: any, what: any }, decodedToken?: any): any | Promise<any> {
     const { what, filters } = this.beforeWrite(props, decodedToken)
     const readyWhat = prepareInsert(what, this.description)
@@ -266,14 +238,10 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     return this.model.findOneAndUpdate(filters, readyWhat, { new: true, runValidators: true })
   }
 
-  /**
-   * @method
-   * Modify documents matching criteria.
-   */
   public modifyAll(props: { filters: Array<any>, what: any }, decodedToken?: any) {
-    const what = prepareInsert(this.description, props.what)
-    const query = this.beforeWrite(props, decodedToken)
+    const { what, filters } = this.beforeWrite(props, decodedToken)
+    const readyWhat = prepareInsert(what, this.description)
 
-    return this.model.updateMany(query.filters, what)
+    return this.model.updateMany(filters.filters, readyWhat)
   }
 }

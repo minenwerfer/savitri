@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt'
 import { Types } from '../../../api/core/database'
 
+import type { DecodedToken } from '../../../api/types'
 import { TokenService } from '../../../api/core/token'
 import { Mutable, getController } from '../../../api/core/controller'
 import { UserDocument, default as User } from './user.model'
@@ -54,12 +55,12 @@ export class UserController extends Mutable<UserDocument> {
     return user
   }
 
-  public override async insert(props: { what: any }, decodedToken: any) {
+  public override async insert(props: { what: any }, token: DecodedToken) {
     props.what.group = this.apiConfig.group
 
     // user is being inserted by a non-root user
-    if( decodedToken?.user?.role !== 'root' ) {
-      const userId = props.what._id = decodedToken.user?._id
+    if( token?.user?.role !== 'root' ) {
+      const userId = props.what._id = token.user?._id
       delete props.what.role
 
       // a new user is being created
@@ -78,7 +79,7 @@ export class UserController extends Mutable<UserDocument> {
       }
     }
 
-    if( !decodedToken?.user && !props.what.password ) {
+    if( !token?.user && !props.what.password ) {
       throw new Error(
         `password is required`
       )

@@ -15,11 +15,6 @@ export abstract class Controller {
   private _webInterface: Controller
   public injected: Omit<ProvidedParams, 'apiConfig'> = {}
 
-  /**
-   * @protected @readonly
-   * Supposed to contain method names as strings.
-   */
-  protected readonly _internal: Array<string> = []
 
   /**
    * @constructor
@@ -46,7 +41,7 @@ export abstract class Controller {
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
-        if( this._internal.includes(key) ) {
+        if( key.startsWith('_') ) {
           throw new PermissionError('forbidden method (cannot be called externally)')
         }
 

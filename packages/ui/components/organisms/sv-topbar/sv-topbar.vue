@@ -16,6 +16,11 @@
     <div class="topbar__main">
       <sv-icon
         v-clickable
+        v-wizard="{
+          text: 'Alternar menu',
+          version: 'internal-v1',
+          step: 1
+        }"
         name="bars"
         @click="metaStore.swapMenu"
       ></sv-icon>
@@ -30,6 +35,12 @@
           <template #text>Menu</template>
           <sv-icon
             v-clickable
+            v-wizard="{
+              text: 'Atalhos',
+              version: 'internal-v1',
+              step: 2,
+              last: true
+            }"
             name="user-circle"
             @click="shortcutsVisible = true"
           ></sv-icon>

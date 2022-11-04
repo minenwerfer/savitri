@@ -122,9 +122,10 @@
       "type": "boolean",
       "readOnly": true
     },
-    "wizard_version": {
+    "wizard_versions": {
       "label": "Versão do wizard",
-      "type": "text"
+      "type": "text",
+      "array": true
     },
     "updated_at": {
       "label": "Atualizado em",

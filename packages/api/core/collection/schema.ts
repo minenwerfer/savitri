@@ -21,10 +21,6 @@ import { typeMapping } from './types'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
 
-/**
- * @exports @function
- * Converts a description object into a mongoose Schema structure.
- */
 export const descriptionToSchema = <T>(
   description: MaybeCollectionDescription,
   options = {},
@@ -81,17 +77,14 @@ export const descriptionToSchema = <T>(
 
     if( typeof collectionName === 'string' ) {
       hasRefs = true
-
       result.ref = collectionName
-      result.type = field.array || Array.isArray(field.values)
-        ? [ObjectId]
+      result.type = field._id === false
+        ? Object
         : ObjectId
+    }
 
-      if( field._id === false ) {
-        result.type = field.array
-          ? [Object]
-          : Object
-      }
+    if( field.array ) {
+      result.type = [result.type]
     }
 
     if( ['checkbox', 'radio', 'select'].includes(field.type) ) {

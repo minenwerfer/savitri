@@ -52,16 +52,17 @@ export default {
     const metaStore = useStore('meta')
     const userStore = useStore('user')
 
-    if( userStore.$currentUser.wizard_version === options.version ) {
-      return
-    }
-
     watch(() => metaStore.wizard.step, () => {
-      if( metaStore.wizard.step !== options.step ) {
+      if(
+        userStore.$currentUser.wizard_versions?.includes(options.version)
+        || metaStore.wizard.current && metaStore.wizard.current !== options.version
+        || metaStore.wizard.step !== options.step
+      ) {
         return
       }
 
       castOverlay(el, {})
+      metaStore.wizard.current = options.version
 
       const buttonElem = document.createElement('button')
       buttonElem.innerText = 'Ok!'
@@ -114,19 +115,27 @@ export default {
 
       const fulfill = async () => {
         metaStore.wizard.step += 1
-        wizardElem.remove();
+        wizardElem.remove()
+        overlayElem.remove()
 
+        el.style.position = oldPosition
         destroyOverlay(el)
 
         if( options.last ) {
-          const result = await userStore.insert({
-            what: {
-              _id: userStore.$currentUser._id,
-              wizard_version: options.version
-            }
-          })
+          userStore.currentUser = Object.assign({}, userStore.$currentUser)
+          userStore.currentUser.wizard_versions ??= []
+          userStore.currentUser.wizard_versions.push(options.version)
 
-          sessionStorage.setItem('auth:currentUser', JSON.stringify(result))
+           await userStore.insert({
+             what: {
+               _id: userStore.currentUser._id,
+               wizard_versions: userStore.currentUser.wizard_versions
+             }
+           })
+          
+          sessionStorage.setItem('auth:currentUser', JSON.stringify(userStore.currentUser))
+          metaStore.wizard.current = ''
+          metaStore.wizard.step = 1
         }
       }
 
@@ -134,6 +143,7 @@ export default {
       wizardElem.appendChild(textElem)
       wizardElem.appendChild(buttonElem)
 
+      const { position: oldPosition } = el.style
       el.style.position = 'relative'
       el.appendChild(overlayElem)
       el.appendChild(wizardElem)
