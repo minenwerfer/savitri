@@ -131,15 +131,13 @@ if( inputBind.type === 'text' && searchOnly ) {
   inputBind.type = 'search'
 }
 
-const _getDatetimeString = () => {
-  return props.field?.includeHours
-    ? props.modelValue.toISOString().split('T')[0]
-    : props.modelValue
+const getDatetimeString = () => {
+   return props.modelValue.toISOString().split('T').shift()
 }
 
 const inputValue = ref(
   props.modelValue instanceof Date
-    ? _getDatetimeString()
+    ? getDatetimeString()
     : props.modelValue || ''
 )
 

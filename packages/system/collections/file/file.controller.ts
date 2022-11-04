@@ -60,12 +60,14 @@ export class FileController extends Mutable<FileDocument> {
 
   public override async delete(props: { filters: any }) {
     const file = await File.findOne(props.filters)
-    if( file ) {
-      await unlink(file.absolute_path)
-      return super.delete.call(this, props)
+    if( !file ) {
+      throw new Error('file not found')
     }
 
-    return true
+    await unlink(file.absolute_path)
+      .catch(() => null)
+
+    return super.delete.call(this, props)
   }
 
   public async download(_id: string): Promise<Omit<FileDocument, 'content'> & { content: Buffer }> {

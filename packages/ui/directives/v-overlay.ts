@@ -1,11 +1,12 @@
 import type { Directive } from 'vue'
 
 const __layer = {
-  last: 50
+  last: 50,
+  lastIndex: ''
 }
 
 export default {
-  mounted: (el, binding) => {
+  mounted: (el: HTMLDivElement, binding) => {
     if( binding.value?.condition === false ) {
       return
     }
@@ -39,15 +40,17 @@ export default {
       overlayElem.onclick = binding.value.click
     }
 
-    el.setAttribute('style', `z-index: ${zIndex+10};`)
+    __layer.lastIndex = el.style.zIndex
+    el.style.zIndex = `${zIndex+10}`
     el.parentNode.insertBefore(overlayElem, el)
   },
 
-  beforeUnmount: (el, binding) => {
+  beforeUnmount: (el: HTMLDivElement, binding) => {
     if( binding.value?.condition === false ) {
       return
     }
 
+    el.style.zIndex = __layer.lastIndex
     el.previousElementSibling?.remove()
     __layer.last -= 10
   }

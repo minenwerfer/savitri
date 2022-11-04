@@ -1,13 +1,13 @@
 import type { Directive } from 'vue'
 
 export default {
-  mounted: (el, binding) => {
+  mounted: (el: HTMLDivElement, binding) => {
     if( window.matchMedia('(min-width: 600px)').matches ) {
-      const style = binding.value?.blocked
-        ? 'cursor: not-allowed;'
-        : 'cursor: pointer;'
+      const cursor = binding.value?.blocked
+        ? 'not-allowed'
+        : 'pointer'
 
-      el.setAttribute('style', style)
+      el.style.cursor = cursor
     }
   }
 } as Directive

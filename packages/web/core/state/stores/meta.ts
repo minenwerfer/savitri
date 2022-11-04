@@ -27,6 +27,9 @@ export default defineStore('meta', {
       layout: 'tabular',
       collection: ''
     },
+    wizard: {
+      step: 1
+    },
     menu: {
       isVisible: true,
       isMobileVisible: false

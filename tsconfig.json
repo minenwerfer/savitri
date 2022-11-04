@@ -16,9 +16,8 @@
       "common/*": ["./packages/common/src/*"],
       "api/*": ["./packages/api/core/*"],
       "web/*": ["./packages/web/core/*"],
-      "components/*": ["./packages/components/*"],
-      "collections/*": ["./packages/collections/*"],
-      "controllables/*": ["./packages/controllables/*"]
+      "ui/*": ["./packages/ui/*"],
+      "system/*": ["./packages/system/*"]
     },
     "lib": [
       "esnext",

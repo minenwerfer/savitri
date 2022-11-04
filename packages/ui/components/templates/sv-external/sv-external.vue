@@ -4,6 +4,7 @@
       <img
         :src="require(`@/assets/${productLogo}`).default"
         class="external__logo"
+        data-image="logo"
       />
       <sv-box>
         <slot></slot>

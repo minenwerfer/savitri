@@ -9,6 +9,7 @@
         v-else
         :src="require(`@/assets/${productLogo}`).default"
         class="topbar__logo"
+        data-image="logo"
       />
     </div>
 

@@ -40,7 +40,7 @@ $section-padding: .8rem;
     &--floating, &--fixed-right {
       .box__header {
         padding: 1.2rem 2.4rem;
-        border-bottom: 0;
+        border-bottom: 0 !important;
       }
 
       .box__body,
@@ -70,26 +70,32 @@ $section-padding: .8rem;
       right: 0;
       top: 0;
       z-index: 50;
-      width: 40rem;
+      width: 100vw;
       height: 100vh;
 
       animation: fixed-fadein .35s forwards;
       overscroll-behavior: contain;
       border: 0;
       border-radius: 0;
+
+      @media screen and (min-width: 600px) {
+        width: 40rem;
+      }
     }
 
     &--transparent {
-      border: none;
-      border-radius: none;
-      background: none;
+      border: none !important;
+      background: none !important;
     }
 
     &--transparent-mobile {
       @media screen and (max-width: 600px) {
-        border: none;
-        border-radius: none;
-        background: none;
+        border: none !important;
+        background: none !important;
+
+        .box__header {
+          margin-bottom: 1rem;
+        }
       }
     }
   }

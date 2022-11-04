@@ -24,7 +24,7 @@
     &--alt {
       color: t(foreground-color-alt);
       background: t(button-color-alt);
-      border: 2px solid t(foreground-color-alt);
+      border: 1px solid t(foreground-color-alt);
 
       :deep(svg) {
         fill: t(foreground-color-alt);

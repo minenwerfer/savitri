@@ -42,7 +42,7 @@
           v-if="collapsable"
           reactive
           :name="!isCollapsed ? 'minus' : 'plus'"
-          @click="isCollapsed = !isCollapsed"
+          @click="toggleCollapsed(!isCollapsed)"
         />
         <sv-icon
           v-clickable
@@ -115,6 +115,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
+  (e: 'update:collapsed', value: boolean): void
   (e: 'update:closeHint', value: boolean): void
   (e: 'overlayClick'): void
   (e: 'close'): void
@@ -146,11 +147,12 @@ const close = () => {
 }
 
 const overlayClick = () => {
-//  if( props.fixedRight ) {
-//    close()
-//  }
-//
   emit('overlayClick')
+}
+
+const toggleCollapsed = (value: boolean) => {
+  emit('update:collapsed', value)
+  isCollapsed.value = value
 }
 </script>
 
