@@ -134,8 +134,6 @@ export default {
       wizardElem.appendChild(textElem)
       wizardElem.appendChild(buttonElem)
 
-      getQuadrant(el)
-
       el.style.position = 'relative'
       el.appendChild(overlayElem)
       el.appendChild(wizardElem)
