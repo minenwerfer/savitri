@@ -21,28 +21,33 @@ const destroyOverlay = (el: HTMLDivElement) => _destroyOverlay(el, { condition: 
 
 const getQuadrant = (el: HTMLDivElement) => {
   const styles = []
-  const elemTop = el.getBoundingClientRect().top
-    + el.ownerDocument.defaultView?.pageYOffset!
+  const rect = el.getBoundingClientRect()
+  const coords = {
+    top: rect.top + window.scrollY,
+    left: rect.left + window.scrollX,
+    bottom: rect.bottom + window.scrollY,
+    right: rect.right + window.scrollX,
+  }
 
-  const elemBottom = elemTop
-    + el.getBoundingClientRect().height
+  const {
+    height: windowHeight,
+    width: windowWidth
 
-  const elemRight = el.getBoundingClientRect().right
-    + el.ownerDocument.defaultView?.pageXOffset!
+  } = window.visualViewport
 
   styles.push(
-    (elemTop - screen.height/2) < (screen.height/2 - elemBottom)
-      ? 'top: calc(100% + 15px);'
-      : 'bottom: calc(100% + 15px);'
+    (coords.top - windowHeight/2) < (windowHeight/2 - coords.bottom)
+      ? `top: calc(${coords.bottom}px + 15px);`
+      : `bottom: calc(${windowHeight - coords.top}px + 15px);`
   )
 
   styles.push(
-    elemRight < screen.width/2
-      ? 'left: 0;'
-      : 'right: 0;'
+    (coords.left - windowWidth/2) < (windowWidth/2 - coords.right)
+      ? `left: ${coords.left}px;`
+      : `right: ${windowWidth - coords.right}px;`
   )
 
-  return styles.join(' ')
+  return styles.join('')
 }
 
 export default {
@@ -80,9 +85,7 @@ export default {
       textElem.innerHTML = options.text
 
       const overlayElem = document.createElement('div')
-      overlayElem.onclick = (e) => {
-        e.stopPropagation()
-      }
+      overlayElem.onclick = (e) => e.stopPropagation()
       overlayElem.setAttribute('style', `
         position: absolute;
         top: 0;
@@ -98,6 +101,7 @@ export default {
         all: initial;
         position: absolute;
         ${getQuadrant(el)}
+
         min-width: 15rem;
         max-width: 30rem;
         overflow: visible;
@@ -118,8 +122,8 @@ export default {
         wizardElem.remove()
         overlayElem.remove()
 
-        el.style.position = oldPosition
         destroyOverlay(el)
+        el.click()
 
         if( options.last ) {
           userStore.currentUser = Object.assign({}, userStore.$currentUser)
@@ -143,10 +147,8 @@ export default {
       wizardElem.appendChild(textElem)
       wizardElem.appendChild(buttonElem)
 
-      const { position: oldPosition } = el.style
-      el.style.position = 'relative'
       el.appendChild(overlayElem)
-      el.appendChild(wizardElem)
+      document.body.appendChild(wizardElem)
 
     }, { immediate: true })
   }
