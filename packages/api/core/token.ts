@@ -7,10 +7,6 @@ import {
 
 } from 'jsonwebtoken'
 
-if( process.env.MODE !== 'PRODUCTION') {
-  require('dotenv').config()
-}
-
 // interface AsyncJwt {
 //   sign: (payload: any, secret: string, options?: any) => Promise<string>
 //   verify: (payload: any, secret: string, options?: any) => Promise<string>

@@ -1,3 +1,4 @@
+import type { DecodedToken } from '../../../api/types'
 import { mongoose } from '../../../api/core/database'
 import { Controller } from '../../../api/core/controller'
 import { AuthorizationError } from '../../../api/core/exceptions'
@@ -10,8 +11,8 @@ export class SearchableController extends Controller {
     })
   }
 
-  public async search(props: { query: Array<string> }, decodedToken: any) {
-    if( !decodedToken?.user?.role ) {
+  public async search(props: { query: Array<string> }, token: DecodedToken) {
+    if( !token?.user?.role ) {
       throw new AuthorizationError('signed out')
     }
 
@@ -22,7 +23,7 @@ export class SearchableController extends Controller {
 
     const searchables = Object.entries(getSearchables())
       .reduce((a: any, [key, value]: [string, any]) => {
-        if( !this.isGranted(decodedToken, 'getAll', key) ) {
+        if( !this.isGranted(token, 'getAll', key) ) {
           return a
         }
 
@@ -33,7 +34,7 @@ export class SearchableController extends Controller {
     }, {})
 
     const beforeRead = this.apiConfig.beforeRead
-      ? (collectionName: string) => this.apiConfig.beforeRead!(decodedToken, collectionName)
+      ? (collectionName: string) => this.apiConfig.beforeRead!(token, collectionName)
       : null
 
     const aggregations = buildAggregations(

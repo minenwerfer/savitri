@@ -1,11 +1,11 @@
-import { createModel, MongoDocument } from '../../../api'
+import { createModel, MongoDocument, ObjectId } from '../../../api'
 import { default as Description } from './index.json'
 
 import { UserDocument } from '../user/user.model'
 import '../user/user.model'
 
 export type FileDocument = MongoDocument & {
-  owner: UserDocument
+  owner: UserDocument|ObjectId|string
   filename: string
   mime: string
   size: number

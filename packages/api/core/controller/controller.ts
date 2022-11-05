@@ -4,11 +4,11 @@ import type {
   HandlerRequest,
   ProvidedParams,
   ApiConfig,
+  DecodedToken,
   Role
 } from '../../types'
 
 import { AuthorizationError, PermissionError } from '../exceptions'
-import { TokenService } from '../token'
 import baseRoles from '../access/baseRoles'
 
 export abstract class Controller {
@@ -49,9 +49,9 @@ export abstract class Controller {
           throw new PermissionError('forbidden method(explicitly forbidden)')
         }
 
-        return function(req: HandlerRequest, decodedToken: any, res?: ResponseToolkit) {
-          if( !target.isGranted(decodedToken, key)) {
-            if( decodedToken?.user?.role ) {
+        return function(req: HandlerRequest, token: DecodedToken, res?: ResponseToolkit) {
+          if( !target.isGranted(token, key)) {
+            if( token?.user.role ) {
               throw new PermissionError('forbidden method (access denied)')
             }
 
@@ -65,7 +65,7 @@ export abstract class Controller {
           (req as { payload: Request['payload'] }).payload = payload
 
           const method = (target as Record<string, any>)[key]
-          const result = method.call(target, payload, decodedToken, res)
+          const result = method.call(target, payload, token, res)
           return result
         }
       }
@@ -87,19 +87,6 @@ export abstract class Controller {
 
   public describe(): Partial<CollectionDescription>|object {
     return this.props.description||{}
-  }
-
-  public async forward(this: any, route: string, props: any, decodedToken: any) {
-    delete decodedToken.exp
-    delete decodedToken.iap
-    const token = TokenService.sign(decodedToken, this.fwdTokenSecret)
-
-    if( !this.http.token ) {
-      this.http.token = token
-    }
-
-    const { data: { result } } = await this.http.post(route, props)
-    return result
   }
 
   private _isGranted(
@@ -126,12 +113,7 @@ export abstract class Controller {
   }
 
   public isGranted(
-    token: {
-      user?: {
-        _id: string
-        role?: string
-      }
-    },
+    token: DecodedToken,
     method: string,
     controller?: string
   ) {

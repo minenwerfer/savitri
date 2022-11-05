@@ -29,11 +29,7 @@ export function getIndexes(
 
   } = getReferencedCollection(field)||{}
 
-  if( !collection ) {
-    return []
-  }
-
-  if( !index ) {
+  if( !collection || !index ) {
     return []
   }
 

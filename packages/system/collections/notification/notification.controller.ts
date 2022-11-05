@@ -1,10 +1,11 @@
 import { Mutable } from '../../../api/core/controller'
 import { NotificationDocument, default as Notification } from './notification.model'
+import type { DecodedToken } from '../../../api/types'
 import { RequestProvider } from '../../../common/http'
 import { TokenService } from '../../../api/core/token'
 import { default as Description } from './index.json'
 
-const path = require('path')
+import path from 'path'
 const buildConfig = require(path.join(process.cwd(), 'build.json'))
 
 export interface NotificationController {
@@ -17,21 +18,21 @@ export class NotificationController extends Mutable<NotificationDocument> {
     this.http = new RequestProvider({ baseURL: process.env.DOMAIN_API_URL })
   }
 
-  public async ping(props: { last_id: string, localOnly: boolean }, res: unknown, decodedToken: any) {
-    if( !decodedToken?._id ) {
-      return {}
-    }
-
-    const result: { local: any, domain?: any } = {
+  public async ping(
+    props: {
+      last_id: string
+      localOnly: boolean
+    },
+  token: DecodedToken
+  ) {
+    const result = {
       local: [],
       domain: []
     }
 
     if( !props.localOnly && buildConfig.domain && buildConfig.domainNotifications ) {
       if( !this.http.token ) {
-        delete decodedToken.iat
-        delete decodedToken.exp
-        this.http.token = await TokenService.sign(decodedToken, process.env.DOMAIN_SECRET) as string
+        this.http.token = await TokenService.sign(token, process.env.DOMAIN_SECRET) as string
       }
 
       const { data: { result: { local } } } = await this.http.post('/notification/ping', { localOnly: true })
@@ -41,7 +42,7 @@ export class NotificationController extends Mutable<NotificationDocument> {
     result.local = await (super.getAll.call(this, {
       filters: {
         $or: [
-          { destination: decodedToken._id },
+          { destination: token.user._id },
           { destination: null }
         ],
 

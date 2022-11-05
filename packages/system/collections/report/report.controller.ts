@@ -2,6 +2,7 @@ import * as R from 'ramda'
 import path from 'path'
 const { writeFile } = require('fs').promises
 
+import type { DecodedToken } from '../../../api/types'
 import { fromEntries } from '../../../common/helpers'
 import * as Collection from '../../../common/collection'
 import type { CollectionField } from '../../../common/types'
@@ -64,11 +65,11 @@ export class ReportController extends Mutable<ReportDocument> {
     }
   }
 
-  private async _savePDF(columns: Array<string>, rows: Array<any>) {
+  private async _savePDF() {
     throw new Error('not implemented')
   }
 
-  public override async insert(props: { what: any }, decodedToken: any) {
+  public override async insert(props: { what: any }, token: DecodedToken) {
     const {
       _collection: collectionName,
       type,
@@ -90,7 +91,7 @@ export class ReportController extends Mutable<ReportDocument> {
       throw new Error('formato inválido')
     }
 
-    if( !this.isGranted(decodedToken, 'report', collectionName) ) {
+    if( !this.isGranted(token, 'report', collectionName) ) {
       throw new Error('forbidden method (hasnt report granted)')
     }
 
@@ -146,7 +147,7 @@ export class ReportController extends Mutable<ReportDocument> {
 
     props.what.entries_count = rows.length
     props.what.file = await File.create({
-      owner: decodedToken.user._id,
+      owner: token.user._id,
       context: 'report',
       filename,
       mime,

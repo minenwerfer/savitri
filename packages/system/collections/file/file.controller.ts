@@ -1,6 +1,7 @@
 import { createHash } from 'crypto'
 const { writeFile, readFile, unlink } = require('fs').promises
 
+import type { DecodedToken } from '../../../api/types'
 import { FileDocument, default as File } from './file.model'
 import { Mutable } from '../../../api/core/controller'
 import { default as Description } from './index.json'
@@ -20,14 +21,14 @@ export class FileController extends Mutable<FileDocument> {
       | 'content'
       | 'absolute_path'
       > },
-    decodedToken: any
+    token: DecodedToken
   ) {
     if( !STORAGE_PATH ) {
       throw new Error('STORAGE_PATH is not set in the environment')
     }
 
     const what = Object.assign({}, props.what)
-    what.owner = decodedToken.user._id
+    what.owner = token.user._id
 
     const extension = what.filename?.split('.').pop()
     if( !extension ) {
@@ -55,7 +56,7 @@ export class FileController extends Mutable<FileDocument> {
     what.absolute_path = `${STORAGE_PATH}/${filenameHash}.${extension}`
     await writeFile(what.absolute_path, Buffer.from(what.content.split(',').pop()!, 'base64'))
 
-    return super.insert.call(this, { what }, decodedToken)
+    return super.insert.call(this, { what }, token)
   }
 
   public override async delete(props: { filters: any }) {
