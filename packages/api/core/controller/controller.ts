@@ -51,7 +51,7 @@ export abstract class Controller {
 
         return function(req: HandlerRequest, token: DecodedToken, res?: ResponseToolkit) {
           if( !target.isGranted(token, key)) {
-            if( token?.user.role ) {
+            if( token?.user?.role ) {
               throw new PermissionError('forbidden method (access denied)')
             }
 

@@ -12,26 +12,28 @@ export const getDescriptions = (): Record<string, CollectionDescription> => {
   const modulePaths = [
     `${__dirname}/../../../system/collections`,
     `${process.cwd()}/collections`,
-    ...global.modules
-      ? global.modules.map(({ name: moduleName }: { name: string }) => `${process.cwd()}/../../../node_modules/${moduleName}/collections`)
-      : []
+    // ...global.modules
+    //   ? global.modules.map(({ name: moduleName }: { name: string }) => `${process.cwd()}/../../../node_modules/${moduleName}/collections`)
+    //   : []
   ]
 
-  const descriptions = modulePaths
-    .reduce((a: Record<string, any>, dir: string) => ({
-      ...a,
-      ...readdirSync(dir)
-        .reduce((a: any, d: string) => {
-          if( d.startsWith('_') || !existsSync(`${dir}/${d}/index.json`) ) {
-            return a
-          }
+  const descriptions = modulePaths.reduce((a: Record<string, any>, dir: string) => {
+    const collection = readdirSync(dir).reduce((a: any, d: string) => {
+      if( d.startsWith('_') || !existsSync(`${dir}/${d}/index.json`) ) {
+        return a
+      }
 
-          return {
-            ...a,
-            [d]: preloadCollection(require(`${dir}/${d}/index.json`))
-          }
-        }, {})
-  }), {})
+      return {
+        ...a,
+        [d]: preloadCollection(require(`${dir}/${d}/index.json`))
+      }
+    }, {})
+
+    return {
+      ...a,
+      ...collection
+    }
+  }, {})
 
   Object.assign(__cachedDescriptions, descriptions)
   return descriptions
