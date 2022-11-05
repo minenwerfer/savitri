@@ -90,7 +90,7 @@
     },
     "email": {
       "label": "Email",
-      "type": "text",
+      "type": "email",
       "unique": true,
       "required": true
     },
