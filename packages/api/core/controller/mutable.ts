@@ -7,17 +7,15 @@ import { fromEntries, deepMerge } from '../../../common/helpers'
 import { ItemNotFound } from '../exceptions'
 import * as baseControl from '../access/baseControl'
 
-import {
-  normalizeProjection,
-  fill,
-  prepareInsert
-
-} from '../collection'
+import { createModel } from '../collection/schema'
+import { normalizeProjection, fill, prepareInsert } from '../collection'
 
 import { Controller } from './controller'
 
 export abstract class Mutable<T extends MongoDocument> extends Controller {
   declare protected readonly description: CollectionDescription
+  createModel = createModel
+
   protected _queryPreset: {
     filters: any
     sort: any

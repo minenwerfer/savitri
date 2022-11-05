@@ -12,7 +12,12 @@ export const useStore = (storeId: string) => {
     throw new Error(`tried to invoke unregistered store "${storeId}"`)
   }
 
-  return STORES[storeId]()
+  const store = STORES[storeId]()
+  if( store.$controller ) {
+    store.controller = store.$controller()
+  }
+
+  return store
 }
 
 export const useParentStore = (fallback?: string) => {

@@ -1,71 +1,28 @@
 import * as Collection from '../../../common/collection'
 import { fromEntries, deepClone } from '../../../common'
-import type { CollectionDescription, CollectionField } from '../../../common/types'
-import type {
-  CollectionState,
-  CollectionGetters,
-  PiniaState,
-  Pagination
-
-} from '../../types/state'
+import type { CollectionDescription } from '../../../common/types'
 
 import useHttp from '../http'
 import useMetaStore from './stores/meta'
 import { useStore } from './use'
-
-type CollectionStateItem<T> =
-  Pick<CollectionState<T>, 'item'>
-
-type CollectionStateItems<T> =
-  Pick<CollectionState<T>, 'items'>
-
-type CrudParameters = {
-  filters: any
-  limit: number
-  offset: number
-}
-
-type ActionOptions = {
-  method?:
-    'GET'
-    | 'POST'
-    | 'PUT'
-    | 'DELETE'
-  skipLoading?: boolean
-  unproxied?: boolean
-}
-
-type ActionFilter = Partial<Pick<CrudParameters,
-  'filters'
-  | 'limit'
-  | 'offset'>
->
+import type { Actions, Mutations, Item } from './actions.types'
 
 const { http, nonProxiedHttp } = useHttp()
 
-const mutations = {
-  setItem<T>(
-    this: CollectionStateItem<T>,
-    item: T
-  ) {
+const mutations: Mutations = {
+  setItem(item) {
     this.item = item
     return item
   },
 
-  setItems<T>(
-    this: CollectionStateItems<T>,
-    items: Array<T>
-  ) {
+  setItems(items) {
     this.items = items
     return items
   },
 
-  insertItem<T extends { _id: string }>(
-    this: Pick<CollectionState<T>, 'item' | 'items'>,
-    item: T
-  ) {
+  insertItem(item) {
     this.item = item
-    const found = this.items.find(({ _id }: Pick<T, '_id'>) => _id === item._id)
+    const found = this.items.find(({ _id }) => _id === item._id)
     if( found ) {
       Object.assign(found, item)
       return item
@@ -79,11 +36,8 @@ const mutations = {
     return item
   },
 
-  removeItem<T extends { _id: string|null }>(
-    this: Pick<CollectionState<T>, 'items'> & { item: T },
-    item: T
-  ) {
-    this.items = this.items.filter(({ _id }: T) => item._id !== _id)
+  removeItem(item) {
+    this.items = this.items.filter(({ _id }) => item._id !== _id)
     if( this.item._id === item._id ) {
       this.item._id = null
     }
@@ -91,29 +45,28 @@ const mutations = {
     return item
   },
 
-  clearItem<T=any>(this: Pick<CollectionState<T>, 'item' | 'freshItem'>) {
+  clearItem() {
     const item = this.item = deepClone(this.freshItem)
     return item
   },
 
-  clearItems<T=any>(this: CollectionStateItems<T>) {
+  clearItems() {
     this.items = []
   },
-
-  // async describe<T=any>(this: CollectionState<T>) {
-  //   const t = await http.post(`${this.$id}/describe`)
-  //   console.log(t)
-  // }
 }
 
-export default {
+const actionsAndMutations: Actions & Mutations = {
   ...mutations,
-  async custom<T extends PiniaState>(
-    this: CollectionState<T>,
-    verb: string,
-    payload?: any,
-    options?: ActionOptions
-  ): Promise<any> {
+
+  $controller() {
+    return new Proxy(this, {
+      get: (target, verb: string) => {
+        return (...args: any[]) => target.custom(verb, ...args)
+      }
+    })
+  },
+
+  async custom(verb,  payload?, options?) {
     this.validationErrors = {}
     if( !options?.skipLoading ) {
       this.isLoading = true
@@ -142,36 +95,25 @@ export default {
         }
       })
 
-    return (await promise)?.data
+    const data = (await promise)?.data
+    return !options?.fullResponse
+      ? data.result
+      : data
   },
 
-  async customEffect(
-    this: { custom: (...args: any[]) => Promise<any> },
-    verb: string,
-    payload: any,
-    fn: (data: any) => any,
-    options?: ActionOptions
-  ): Promise<any> {
+  async customEffect(verb, payload, fn, options?) {
     const response = await this.custom(verb, payload, options)
-    return response?.result
-      ? fn(response.result)
+    return response
+      ? fn(response)
       : {}
   },
 
-  async $customEffect(
-    this: { custom: (...args: any[]) => Promise<any> },
-    verb: string,
-    payload: any,
-    fn: (data: any) => any
-  ): Promise<any> {
+  async $customEffect(verb, payload, fn) {
     const response = await this.custom(verb, payload)
     return fn(response)
   },
 
-  async get<T>(
-    payload: ActionFilter,
-    options?: ActionOptions
-  ): Promise<T> {
+  async get(payload, options?) {
     return this.customEffect(
       'get', payload,
       this.setItem,
@@ -179,13 +121,7 @@ export default {
     )
   },
 
-  getAll<T>(
-    this: Pick<CollectionState<T>, 'pagination'> & {
-      $patch: (...args: any[]) => void
-      $customEffect: (...args: any[]) => Promise<any>
-    },
-    _payload: ActionFilter
-  ): Promise<Array<T>> {
+  getAll(_payload)  {
     const payload = Object.assign({}, _payload)
 
     if( !payload.limit ) {
@@ -198,7 +134,7 @@ export default {
 
     return this.$customEffect(
       'getAll', payload,
-      ({ result, pagination }: { result: Array<T>, pagination: Pagination }) => {
+      ({ result, pagination }) => {
         this.$patch({
           items: result,
           pagination
@@ -209,14 +145,7 @@ export default {
     )
   },
 
-  insert<T>(
-    this: typeof mutations & {
-      item: CollectionState<T>['item']
-      customEffect: (...args: any[]) => Promise<any>
-    },
-    payload?: { what: Partial<T> },
-    options?: ActionOptions
-  ): Promise<T> {
+  insert(payload?, options?) {
     return this.customEffect(
       null, { ...payload, what: payload?.what||this.item },
       this.insertItem,
@@ -224,16 +153,9 @@ export default {
     )
   },
 
-  async deepInsert<T extends Record<string, any>>(
-    this: typeof mutations & {
-      item: CollectionState<T>['item']
-      insert: (...args: any[]) => Promise<T>
-      inlineReferences: any
-    },
-    payload?: { what: Partial<T> }
-  ): Promise<T> {
+  async deepInsert(payload?) {
     const inlineReferences = this.inlineReferences
-    const newItem = (payload?.what || this.item) as Record<string, any>
+    const newItem = (payload?.what || this.item) as Item
 
     for( const [k, { collection, array }] of inlineReferences ) {
       if(
@@ -268,30 +190,14 @@ export default {
     })
   },
 
-  delete<T extends { _id: string }>(
-    this: typeof mutations & {
-      item: CollectionState<T>['item']
-      customEffect: (...args: any[]) => Promise<any>
-    },
-    payload: { filters?: Pick<T, '_id'> }
-  ): Promise<T> {
+  delete(payload) {
     return this.customEffect(
       'delete', { filters: { _id: payload?.filters?._id } },
       this.removeItem
     )
   },
 
-  filter<T>(
-    this: {
-      activeFilters: CollectionGetters['$filters']
-      $filters: CollectionGetters['$filters']
-      pagination: CollectionState<T>['pagination']
-      getAll: (...args: any[]) => Promise<Array<T>>
-    },
-    props?: {
-      project: Array<string>
-    }
-  ) {
+  filter(props?) {
     this.activeFilters = this.$filters
 
     return this.getAll({
@@ -301,15 +207,11 @@ export default {
     })
   },
 
-  updateItems(this: { filter: () => void }) {
+  updateItems() {
     return this.filter()
   },
 
-  clearFilters<T>(
-    this: Pick<CollectionState<T>, 'filters' | 'freshFilters' | 'pagination'> & {
-      filter: (...args: any[]) => Promise<Array<T>>
-    }
-  ) {
+  clearFilters() {
     const filters = this.filters = deepClone(this.freshFilters)
     this.pagination.offset = 0
     this.filter()
@@ -317,12 +219,7 @@ export default {
     return filters
   },
 
-  async ask(props: {
-    action: (params: any) => unknown,
-    params: any
-    title?: string
-    body?: string
-  }) {
+  async ask(props) {
     const metaStore = useMetaStore()
     const answer = await metaStore.spawnPrompt({
       body: I18N.global.tc(props.body || 'prompt.default'),
@@ -346,10 +243,7 @@ export default {
     }
   },
 
-  useFields(
-    this: Pick<CollectionGetters, 'fields'>,
-    fields: Array<string>,
-  ): Record<string, CollectionField> {
+  useFields(fields) {
     return fields.reduce((a: any, field: string) => {
       if( !(field in this.fields) ) {
         return a
@@ -363,24 +257,12 @@ export default {
     }, {})
   },
 
-  useFieldsExcept(
-    this: Pick<CollectionGetters, 'fields'>,
-    fields: Array<string>,
-  ): Record<string, CollectionField> {
+  useFieldsExcept(fields) {
     return fromEntries(Object.entries(this.fields)
       .filter(([key]: [string, unknown]) => !fields.includes(key)))
   },
 
-  formatValue<T>(
-    this: Pick<CollectionState<T>, 'rawDescription'>,
-    args: {
-      value: string|object,
-      key: string,
-      form: boolean,
-      field: CollectionField
-    }
-  ): string
-    {
+  formatValue(args) {
       const value = args.field.translate
         ? I18N.global.tc(args.value)
         : args.value
@@ -393,13 +275,12 @@ export default {
       )
   },
 
-  getIndexes<T>(
-    this: Pick<CollectionState<T>, 'rawDescription'>,
-    args:  { key: string, form: boolean }
-  ): Array<string> {
+  getIndexes(args) {
     return Collection.getIndexes(
       this.rawDescription as Pick<CollectionDescription, 'fields'>,
       args.key
     )
   }
 }
+
+export default actionsAndMutations
