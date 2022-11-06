@@ -1,6 +1,6 @@
 import type { MongoDocument, ObjectId } from '../../types'
 
-type _Type<T> = T extends 'boolean' ? boolean
+type MapType<T> = T extends 'boolean' ? boolean
   : T extends 'checkbox' ? string
   : T extends 'datetime' ? Date|string
   : T extends 'email' ? string
@@ -15,17 +15,31 @@ type _Type<T> = T extends 'boolean' ? boolean
   : T extends 'textbox' ? string
   : never
 
-type Type<T> = T extends { array: true }
-  ? Array<_Type<Field<T>['type']>>
-  : _Type<Field<T>['type']>
+type MaybeArray<T> = T extends { array: true }
+  ? Array<MapType<Field<T>['type']>>
+  : MapType<Field<T>['type']>
+
+type MaybeReadonly<T> = T extends { readOnly: true }
+  ? Readonly<MaybeArray<T>>
+  : MaybeArray<T>
+
+type Type<T> = MaybeReadonly<T>
 
 type Field<F> = F & {
   type: string
   array?: boolean
+  readOnly?: boolean
 }
 
 type IsRequired<F, Value extends boolean> = keyof {
-  [P in keyof F as F[P] extends { required: Value } ? P : never]: F[P]
+  [
+    P in keyof F as
+    F[P] extends { required: Value }
+      ? P
+      : F[P] extends { readOnly: true }
+      ? P
+      : never
+  ]: F[P]
 }
 
 type RequiredFields<F> = IsRequired<F, true>

@@ -3,11 +3,16 @@ import { Schema, createModel } from '../../../api/core/collection'
 
 export type User = Schema<typeof fields>
 
-const user: Partial<User> = {
+const user: User = {
   first_name: 'oi',
+  last_name: 'teste',
+  role: 'root',
+  email: 'teste',
+  password: 'teste',
   wizard_versions: [
     'teste'
-  ]
+  ],
+  self_registered: true
 }
 
 const fields = {
