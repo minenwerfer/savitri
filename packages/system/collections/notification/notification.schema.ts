@@ -38,7 +38,7 @@ const schema = {
   }
 } as const
 
-export const Description: CollectionDescription = {
+export const NotificationDescription: CollectionDescription = {
   ...schema as SchemaFields<typeof schema>,
   collection: 'notification',
   presets: [

@@ -76,19 +76,10 @@ const schema = {
       type: 'datetime',
       meta: true
     },
-    test: {
-      label: 'Teste',
-      type: 'select',
-      values: [{
-        __query: {
-          collection: 'teste'
-        }
-      }]
-    }
   }
 } as const
 
-export const Description: CollectionDescription = {
+export const UserDescription: CollectionDescription = {
   ...schema as SchemaFields<typeof schema>,
   collection: 'user',
   presets: [

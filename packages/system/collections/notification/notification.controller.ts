@@ -2,7 +2,7 @@ import { Mutable } from '../../../api/core/controller'
 import type { DecodedToken } from '../../../api/types'
 import { RequestProvider } from '../../../common/http'
 import { TokenService } from '../../../api/core/token'
-import { Notification, Description } from './notification.schema'
+import { Notification, NotificationDescription } from './notification.schema'
 import NotificationModel from './notification.model'
 
 import path from 'path'
@@ -12,7 +12,7 @@ export class NotificationController extends Mutable<Notification> {
   private http: RequestProvider
 
   constructor() {
-    super(NotificationModel, Description)
+    super(NotificationModel, NotificationDescription)
     this.http = new RequestProvider({ baseURL: process.env.DOMAIN_API_URL })
   }
 

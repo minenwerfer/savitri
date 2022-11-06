@@ -8,7 +8,7 @@ import * as Collection from '../../../common/collection'
 import type { CollectionField } from '../../../common/types'
 import { Mutable, getController } from '../../../api/core/controller'
 
-import { Report, Description } from './report.schema'
+import { Report, ReportDescription } from './report.schema'
 
 import ReportModel from './report.model'
 import FileModel from '../file/file.model'
@@ -20,7 +20,7 @@ export class ReportController extends Mutable<Report> {
   }
 
   constructor() {
-    super(ReportModel, Description)
+    super(ReportModel, ReportDescription)
 
   }
 

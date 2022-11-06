@@ -48,7 +48,7 @@ const schema = {
   }
 } as const
 
-export const Description: CollectionDescription = {
+export const FileDescription: CollectionDescription = {
   ...schema as SchemaFields<typeof schema>,
   collection: 'file',
   actions: {

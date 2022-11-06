@@ -1,4 +1,4 @@
 import { createModel } from '../../../api/core/collection'
-import { Report, Description } from './report.schema'
+import { Report, ReportDescription } from './report.schema'
 
-export default createModel<Report>(Description)
+export default createModel<Report>(ReportDescription)

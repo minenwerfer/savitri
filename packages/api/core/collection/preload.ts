@@ -1,6 +1,5 @@
 import * as R from 'ramda'
 import { getReferencedCollection, CollectionDescription } from '../../../common'
-import { commonNames } from '../controller'
 
 type DeepWritable<T> = {
   -readonly [P in keyof T]: DeepWritable<T[P]>
@@ -20,9 +19,7 @@ export const applyPreset = (description: CollectionDescription, collectionName:s
 }
 
 export const requireCollection = (collectionName:string): any => {
-  return commonNames.includes(collectionName)
-    ? require(`${__dirname}/../../../collections/${collectionName}/index.json`)
-    : require(`${process.cwd()}/collections/${collectionName}/index.json`)
+  return require(`${process.cwd()}/collections/${collectionName}/${collectionName}.schema.json`)
 }
 
 export const preloadCollection = (

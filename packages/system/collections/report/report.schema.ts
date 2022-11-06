@@ -65,7 +65,7 @@ const schema = {
   }
 } as const
 
-export const Description: CollectionDescription = {
+export const ReportDescription: CollectionDescription = {
   ...schema as SchemaFields<typeof schema>,
   collection: 'report',
   unicon: 'bag-alt',

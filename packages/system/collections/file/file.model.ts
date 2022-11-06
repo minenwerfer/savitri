@@ -1,9 +1,9 @@
 import { createModel } from '../../../api/core/collection'
-import { File, Description } from './file.schema'
+import { File, FileDescription } from './file.schema'
 
 import '../user/user.model'
 
-export default createModel(Description, null, (schema) => {
+export default createModel(FileDescription, null, (schema) => {
   schema.post('init', async function() {
     const timestamp = this.last_modified
       ? new Date(this.last_modified).getTime()

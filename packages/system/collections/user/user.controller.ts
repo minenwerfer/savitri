@@ -4,12 +4,12 @@ import { Types } from '../../../api/core/database'
 import type { DecodedToken } from '../../../api/types'
 import { TokenService } from '../../../api/core/token'
 import { Mutable, getController } from '../../../api/core/controller'
-import { User, Description } from './user.schema'
+import { User, UserDescription } from './user.schema'
 import UserModel from './user.model'
 
 export class UserController extends Mutable<User> {
   constructor() {
-    super(UserModel, Description, {
+    super(UserModel, UserDescription, {
       rawMethods: {
         'authenticate': 'application/json'
       }
