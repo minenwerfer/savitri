@@ -64,6 +64,7 @@ export type CollectionDescription = {
   individualActions?: CollectionActions
 
   searchable?: {
+    picture?: string
     indexes: Array<string>
     actions?: Record<string, CollectionAction>
   }
@@ -103,7 +104,14 @@ export type CollectionField = Readonly<Omit<CollectionReference, 'collection'> &
   referencedCollection?: string
   mask?: string
   translate?: boolean
+  required?: boolean
   meta?: boolean
+
+  noform?: boolean
+  notable?: boolean
+  unique?: boolean
+  hidden?: boolean
+  default?: any
 
   includeHours?: boolean
   readOnly?: boolean

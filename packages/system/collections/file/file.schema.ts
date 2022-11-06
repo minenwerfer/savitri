@@ -1,11 +1,12 @@
 import { CollectionDescription } from '../../../common/types'
 import { Schema, createModel } from '../../../api/core/collection'
-
 import '../user/user.model'
+
 export type File = Schema<typeof ConstDescription>
 
 const file: Partial<File> = {
-  mime: 'oi'
+  mime: 'oi',
+  size: 123
 }
 
 const ConstDescription = {
