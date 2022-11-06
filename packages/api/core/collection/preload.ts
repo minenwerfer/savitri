@@ -44,7 +44,12 @@ export const preloadCollection = (
     Object.assign(collection, temp)
   }
 
-  if( collection.presets ) {
+  const presets = collection.presets || []
+  if( collection.owned ) {
+    presets.push('owned')
+  }
+
+  if( presets.length > 0 ) {
     return collection.presets?.reduce((a: CollectionDescription, presetName: string) => {
       return applyPreset(a, presetName)
 

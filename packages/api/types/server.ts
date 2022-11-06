@@ -1,5 +1,5 @@
 import type { Request } from '@hapi/hapi'
-import type { UserDocument } from '../../system/collections/user/user.model'
+import type { User } from '../../system/collections/user/user.schema'
 
 export type HandlerRequest = Request & {
   payload: {
@@ -11,7 +11,7 @@ export type HandlerRequest = Request & {
 }
 
 export type DecodedToken = {
-  user: UserDocument
+  user: User
   extra: any
 }
 

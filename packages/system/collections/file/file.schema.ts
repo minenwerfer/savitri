@@ -1,38 +1,14 @@
-import { CollectionDescription } from '../../../common/types'
-import { Schema, createModel } from '../../../api/core/collection'
-import '../user/user.model'
+import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/collection'
 
-export type File = Schema<typeof ConstDescription>
+export type File = Schema<typeof schema>
 
 const file: Partial<File> = {
   mime: 'oi',
-  size: 123
+  size: 123,
 }
 
-const ConstDescription = {
-  collection: 'file',
-  route: true,
-  presets: [
-    'owned'
-  ],
-  methods: [
-    'insert',
-    'delete'
-  ],
-  actions: {
-    deleteAll: {
-      name: 'Remover',
-      ask: true,
-      selection: true
-    }
-  },
-  individualActions: {
-    remove: {
-      name: 'Remover',
-      unicon: 'trash-alt',
-      ask: true
-    }
-  },
+const schema = {
+  owned: true,
   fields: {
     mime: {
       label: 'Mime',
@@ -77,16 +53,21 @@ const ConstDescription = {
   }
 } as const
 
-export default createModel(Description, null, (schema) => {
-  schema.post('init', async function() {
-    const timestamp = this.last_modified
-      ? new Date(this.last_modified).getTime()
-      : 'fresh'
-
-    const link = `${process.env.API_URL}/file/${this._id}`
-
-    this.link = `${link}?${timestamp}`
-    this.download_link = `${link}/download?${timestamp}`
-  })
-})
-
+export const Description: CollectionDescription = {
+  ...schema as SchemaFields<typeof schema>,
+  collection: 'file',
+  actions: {
+    deleteAll: {
+      name: 'Remover',
+      ask: true,
+      selection: true
+    }
+  },
+  individualActions: {
+    remove: {
+      name: 'Remover',
+      unicon: 'trash-alt',
+      ask: true
+    }
+  },
+}

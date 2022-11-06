@@ -11,8 +11,12 @@ import  {
 
 } from './helpers'
 
-export default {
-  fields<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+type Getters = Record<string, (this: CollectionState<any> & Record<`$${string}`, any> & {
+  fields: Record<string, CollectionField>
+}) => any>
+
+const getters: Getters = {
+  fields() {
     return normalizeFields(this.description.fields!)
   },
 
@@ -20,7 +24,7 @@ export default {
    * @see SvTable
    * @see SvCrud
    */
-  tableDescription<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  tableDescription() {
     if( !this.description.fields ) {
       return
     }
@@ -50,33 +54,33 @@ export default {
       .slice(0, 8))
   },
 
-  tableMeta<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  tableMeta() {
     return this.description.tableMeta||[]
   },
 
   /**
    * @see SvCrud
    */
-  actions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  actions() {
     return normalizeActions(this.description.actions!)
   },
 
   /**
    * @see SvCrud
    */
-  individualActions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  individualActions() {
     return normalizeActions(this.description.individualActions!)
   },
 
-  searchableActions<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  searchableActions() {
     return normalizeActions(this.description.searchable?.actions||{})
   },
 
-  formLayout<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  formLayout() {
     return this.description.formLayout||{}
   },
 
-  tableLayout<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  tableLayout() {
     return this.description.tableLayout||{}
   },
 
@@ -84,18 +88,18 @@ export default {
    * Converts populated subdocuments back to ObjectIds.
    * @see SvCrud
    */
-  condensedItem<T=any>(this: Pick<CollectionState<T>, 'item'>) {
+  condensedItem() {
     return condenseItem(this.item)
   },
 
-  $item<T=any>(this: Pick<CollectionState<T>, 'item'>) {
+  $item() {
     return this.item
   },
 
   /**
    * Normalizes state.items.
    */
-  $items<T=any>(this: Pick<CollectionState<T>, 'items' | 'description'>) {
+  $items() {
     if( !Array.isArray(this.items) ) return []
 
     const collections = Object.entries(this.description?.fields||{})
@@ -117,7 +121,7 @@ export default {
       }))
   },
 
-  itemsCount<T=any>(this: Pick<CollectionState<T>, 'items'>) {
+  itemsCount() {
     return this.items.length
   },
 
@@ -125,7 +129,7 @@ export default {
    * Retrieves fields who refeer to a collection (typeof collection === 'string') and have "inline" set to true.
    * Used internally.
    */
-  inlineReferences<T=any>(this: Pick<CollectionState<T>, 'description'>) {
+  inlineReferences() {
     return Object.entries(this.description.fields||{})
       .filter(([, field]: [unknown, CollectionField]) => typeof field.collection === 'string' && field.inline === true)
   },
@@ -133,14 +137,14 @@ export default {
   /**
    * @see SvTable
    */
-  selectedIds(this: Pick<CollectionState<{ _id: string }>, 'selected'>) {
+  selectedIds() {
     return this.selected.map((_) => _._id)
   },
 
   /**
    * @see SvCrud
    */
-  $filters<T=any>(this: Pick<CollectionState<T>, 'filters' | 'description'>) {
+  $filters() {
     const filters = removeEmpty(deepClone(this.filters||{}))
 
     const expr = (key: string, value: any) => {
@@ -202,12 +206,12 @@ export default {
   /**
    * @see SvCrud
    */
-  hasActiveFilters<T=any>(this: Pick<CollectionState<T>, 'filters'>) {
+  hasActiveFilters() {
     return Object.values(this.filters)
       .some((value: any) => !!value)
   },
 
-  availableFilters<T=any>(this: Pick<CollectionState<T>, 'description'> & { fields: Record<string, CollectionField> }) {
+  availableFilters() {
     if( !this.description?.filters || !this.description?.fields ) {
       return {}
     }
@@ -224,3 +228,4 @@ export default {
   }
 }
 
+export default getters

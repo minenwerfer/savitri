@@ -1,17 +1,18 @@
-import { createModel, MongoDocument, ObjectId } from '../../../api'
-import { default as Description } from './index.json'
+import { createModel } from '../../../api/core/collection'
+import { File, Description } from './file.schema'
 
-export type FileDocument = MongoDocument & {
-  owner: UserDocument|ObjectId|string
-  filename: string
-  mime: string
-  size: number
-  content: string
-  absolute_path: string
-  relative_path: string
-  last_modified: Date
-  link?: string
-  download_link?: string
-  immutable: boolean
-}
+import '../user/user.model'
+
+export default createModel(Description, null, (schema) => {
+  schema.post('init', async function() {
+    const timestamp = this.last_modified
+      ? new Date(this.last_modified).getTime()
+      : 'fresh'
+
+    const link = `${process.env.API_URL}/file/${this._id}`
+
+    this.link = `${link}?${timestamp}`
+    this.download_link = `${link}/download?${timestamp}`
+  })
+})
 

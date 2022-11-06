@@ -1,6 +1,31 @@
+import type { CollectionField } from '../../../common/types'
+export type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument, ObjectId } from '../../types'
 
-type MapType<T> = T extends 'boolean' ? boolean
+export type Schema<T extends Fields> = CaseOwned<T>
+
+export type SchemaFields<T> = {
+  [
+    P in keyof T as
+    P extends 'strict' | 'fields'
+      ? P
+      : never
+  ]: P extends 'fields'
+    ? Writable<T[P]>
+    : T[P]
+}
+
+type Fields = {
+  presets?: ReadonlyArray<string>
+  fields: Record<string, Field<any>>
+}
+
+type Reference = ObjectId|string|(object & MongoDocument)|undefined
+type Owned = {
+  owner: Reference
+}
+
+type TypeMap<T> = T extends 'boolean' ? boolean
   : T extends 'checkbox' ? string
   : T extends 'datetime' ? Date|string
   : T extends 'email' ? string
@@ -9,21 +34,29 @@ type MapType<T> = T extends 'boolean' ? boolean
   : T extends 'object' ? object
   : T extends 'password' ? string
   : T extends 'radio' ? string
-  : T extends 'reference' ? ObjectId|string
+  : T extends 'reference' ? Reference
   : T extends 'select' ? string
   : T extends 'text' ? string
   : T extends 'textbox' ? string
   : never
 
-type MaybeArray<T> = T extends { array: true }
-  ? Array<MapType<Field<T>['type']>>
-  : MapType<Field<T>['type']>
+type CaseReference<T> = T extends { collection: string }
+  ? Reference
+  : T extends { values: [{ __query: { collection: string } }] }
+  ? Reference
+  : T extends { values: { __query: { collection: string } } }
+  ? Reference
+  : TypeMap<Field<T>['type']>
 
-type MaybeReadonly<T> = T extends { readOnly: true }
-  ? Readonly<MaybeArray<T>>
-  : MaybeArray<T>
+type CaseArray<T> = T extends { array: true } | { type: 'checkbox' }
+  ? Array<CaseReference<T>>
+  : CaseReference<T>
 
-type Type<T> = MaybeReadonly<T>
+type CaseReadonly<T> = T extends { readOnly: true }
+  ? Readonly<CaseArray<T>>
+  : CaseArray<T>
+
+type Type<T> = CaseReadonly<T>
 
 type Field<F> = F & {
   type: string
@@ -55,9 +88,26 @@ type PermissiveMode<F> = MongoDocument &
   { [P in RequiredFields<F>]: Type<F[P]> } &
   { [P in OptionalFields<F>]?: Type<F[P]> }
 
-export type Schema<
-  S extends { fields: Record<string, Field<any>> },
+type CaseOwned<T extends Fields> = T extends { owned: true }
+  ? Owned & MapTypes<T>
+  : MapTypes<T>
+
+type MapTypes<
+  S extends Fields,
   F=S['fields'],
 > = S extends { strict: true }
   ? StrictMode<F>
   : PermissiveMode<F>
+
+
+type F<T> = {
+  -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
+    ? T[P] & Array<K>
+    : P extends keyof CollectionField
+    ? CollectionField[P]
+    : P
+}
+type Writable<T> = {
+  -readonly [P in keyof T]: F<T[P]>
+}
+

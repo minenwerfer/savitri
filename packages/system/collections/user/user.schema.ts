@@ -1,21 +1,10 @@
-import { CollectionDescription, CollectionField } from '../../../common/types'
-import { Schema, createModel } from '../../../api/core/collection'
+import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/collection'
 
-export type User = Schema<typeof fields>
-
-const user: User = {
-  first_name: 'oi',
-  last_name: 'teste',
-  role: 'root',
-  email: 'teste',
-  password: 'teste',
-  wizard_versions: [
-    'teste'
-  ],
-  self_registered: true
+export type User = Schema<typeof schema> & {
+  testPassword?(password: string): boolean
 }
 
-const fields = {
+const schema = {
   fields: {
     first_name: {
       label: 'Nome',
@@ -99,19 +88,8 @@ const fields = {
   }
 } as const
 
-type F<T> = {
-  -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
-    ? T[P] & Array<K>
-    : P extends keyof CollectionField
-    ? CollectionField[P]
-    : P
-}
-type Writable<T> = {
-  -readonly [P in keyof T]: F<T[P]>
-}
-
-const ConstDescription: CollectionDescription = {
-  fields: fields.fields as Writable<typeof fields.fields>,
+export const Description: CollectionDescription = {
+  ...schema as SchemaFields<typeof schema>,
   collection: 'user',
   presets: [
     'crud',
@@ -173,15 +151,3 @@ const ConstDescription: CollectionDescription = {
     }
   }
 }
-
-// import * as bcrypt from 'bcrypt'
-
-// export const UserModel = createModel(Description as CollectionDescription, null, (schema) => { 
-//   schema.methods.testPassword = async function(candidate: string) {
-//     return bcrypt.compare(candidate, this.password || '')
-//   }
-
-//   schema.post('init', function(this: User) {
-//     this.full_name = 'oi'
-//   })
-// })

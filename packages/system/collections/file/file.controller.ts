@@ -2,25 +2,26 @@ import { createHash } from 'crypto'
 const { writeFile, readFile, unlink } = require('fs').promises
 
 import type { DecodedToken } from '../../../api/types'
-import { FileDocument, default as File } from './file.model'
 import { Mutable } from '../../../api/core/controller'
-import { default as Description } from './index.json'
+import { File, Description } from './file.schema'
+import FileModel from './file.model'
 
 const { STORAGE_PATH } = process.env
 
-export class FileController extends Mutable<FileDocument> {
+export class FileController extends Mutable<File> {
   constructor() {
-    super(File, Description)
+    super(FileModel, Description)
   }
 
   public override async insert(
-    props: { what: Pick<FileDocument,
-      '_id'
-      | 'filename'
-      | 'owner'
-      | 'content'
-      | 'absolute_path'
-      > },
+    props: {
+      what: { content: string } & Pick<File,
+        '_id'
+        | 'filename'
+        | 'owner'
+        | 'absolute_path'
+      >
+    },
     token: DecodedToken
   ) {
     if( !STORAGE_PATH ) {
@@ -35,7 +36,7 @@ export class FileController extends Mutable<FileDocument> {
       throw new Error('filename lacks extension')
     }
 
-    const oldFile = await File.findOne({ _id: props.what._id })
+    const oldFile = await FileModel.findOne({ _id: props.what._id })
     if( oldFile ) {
       if( oldFile.immutable === true ) {
         throw new Error('você não pode mais editar esse arquivo')
@@ -60,7 +61,7 @@ export class FileController extends Mutable<FileDocument> {
   }
 
   public override async delete(props: { filters: any }) {
-    const file = await File.findOne(props.filters)
+    const file = await FileModel.findOne(props.filters)
     if( !file ) {
       throw new Error('file not found')
     }
@@ -71,8 +72,8 @@ export class FileController extends Mutable<FileDocument> {
     return super.delete.call(this, props)
   }
 
-  public async download(_id: string): Promise<Omit<FileDocument, 'content'> & { content: Buffer }> {
-    const file = await File.findOne({ _id }).lean()
+  public async download(_id: string): Promise<Omit<File, 'content'> & { content: Buffer }> {
+    const file = await FileModel.findOne({ _id }).lean()
     if( !file ) {
       throw new Error('file not found')
     }

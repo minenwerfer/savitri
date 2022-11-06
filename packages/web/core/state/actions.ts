@@ -108,8 +108,12 @@ const actionsAndMutations: Actions & Mutations = {
       : {}
   },
 
-  async $customEffect(verb, payload, fn) {
-    const response = await this.custom(verb, payload)
+  async $customEffect(verb, payload, fn, options?) {
+    const response = await this.custom(verb, payload, {
+      ...options,
+      fullResponse: true
+    })
+
     return fn(response)
   },
 

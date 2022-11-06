@@ -39,9 +39,9 @@ export const COLLECTION_FIELD_TYPES = <const>[
 export const COLLECTION_PRESETS = <const>[
   'crud',
   'duplicate',
-  'owned',
   'delete',
   'deleteAll',
+  'owned',
   'toggleActive',
   'view',
 ]

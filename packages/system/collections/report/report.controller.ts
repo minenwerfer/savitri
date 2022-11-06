@@ -7,24 +7,20 @@ import { fromEntries } from '../../../common/helpers'
 import * as Collection from '../../../common/collection'
 import type { CollectionField } from '../../../common/types'
 import { Mutable, getController } from '../../../api/core/controller'
-import { Schema, createModel } from '../../../api/core/collection'
 
-// import { ReportDocument, default as Report } from './report.model'
-import { default as Description } from './index.json'
+import { Report, Description } from './report.schema'
 
-import File from '../file/file.model'
+import ReportModel from './report.model'
+import FileModel from '../file/file.model'
 
-export type ReportDocument = Schema<typeof Description>
-export const Report = createModel<ReportDocument>('report', Description)
-
-export class ReportController extends Mutable<ReportDocument> {
+export class ReportController extends Mutable<Report> {
   private readonly _formatMap: any = {
     'csv': this._saveCSV,
     'pdf': this._savePDF
   }
 
   constructor() {
-    super(Report, Description)
+    super(ReportModel, Description)
 
   }
 
@@ -126,7 +122,7 @@ export class ReportController extends Mutable<ReportDocument> {
 
     const pipe = R.pipe(
       (r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
-      (r: ReportDocument) => Object.entries(r)
+      (r: Report) => Object.entries(r)
         .reduce((a: any, [key, value]: [string, any]) => {
           if( !(key in fields) ) {
             return a
@@ -150,7 +146,7 @@ export class ReportController extends Mutable<ReportDocument> {
     const { filename, mime } = await func.call(this, columns, rows)
 
     props.what.entries_count = rows.length
-    props.what.file = await File.create({
+    props.what.file = await FileModel.create({
       owner: token.user._id,
       context: 'report',
       filename,

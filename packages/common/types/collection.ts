@@ -14,6 +14,7 @@ export type CollectionAction = Readonly<{
   name: string
   unicon?: string
   ask?: boolean
+  selection?: boolean
   effect?: StoreEffect
 
   // route namespace
@@ -33,6 +34,7 @@ export type FormLayout = {
 export type CollectionDescription = {
   collection: string
   alias?: string
+  unicon?: string
   options?: {
     queryPreset?: {
       filters?: Record<string, any>
@@ -42,7 +44,8 @@ export type CollectionDescription = {
 
   // modifiers
   strict?: boolean // all fields are required
-  route?: Array<string>|boolean
+  route?: Array<string>
+  owned?: boolean
 
   // takes an array of something
   readonly presets?: Array<CollectionPreset>
@@ -98,6 +101,8 @@ export type CollectionReference = {
 export type CollectionField = Readonly<Omit<CollectionReference, 'collection'> & {
   collection?: CollectionReference['collection']
   label: string
+  placeholder?: string
+  description?: string
   type?: CollectionFieldType
   isReference?: boolean
   dynamicReference?: boolean

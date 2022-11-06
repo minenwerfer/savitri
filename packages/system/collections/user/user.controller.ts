@@ -4,12 +4,8 @@ import { Types } from '../../../api/core/database'
 import type { DecodedToken } from '../../../api/types'
 import { TokenService } from '../../../api/core/token'
 import { Mutable, getController } from '../../../api/core/controller'
-import {
-  User,
-  UserModel,
-  Description
-
-} from './user.schema'
+import { User, Description } from './user.schema'
+import UserModel from './user.model'
 
 export class UserController extends Mutable<User> {
   constructor() {
@@ -141,7 +137,7 @@ export class UserController extends Mutable<User> {
     }
 
     const user = await this.model.findOne({ email: props.email }).select('+password')
-    if( !user || !await user.testPassword(props.password)  ) {
+    if( !user || !await user.testPassword!(props.password) ) {
       throw new Error('invalid username or password')
     }
 

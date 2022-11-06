@@ -1,20 +1,18 @@
 import { Mutable } from '../../../api/core/controller'
-import { NotificationDocument, default as Notification } from './notification.model'
 import type { DecodedToken } from '../../../api/types'
 import { RequestProvider } from '../../../common/http'
 import { TokenService } from '../../../api/core/token'
-import { default as Description } from './index.json'
+import { Notification, Description } from './notification.schema'
+import NotificationModel from './notification.model'
 
 import path from 'path'
 const buildConfig = require(path.join(process.cwd(), 'build.json'))
 
-export interface NotificationController {
-  http: RequestProvider
-}
+export class NotificationController extends Mutable<Notification> {
+  private http: RequestProvider
 
-export class NotificationController extends Mutable<NotificationDocument> {
   constructor() {
-    super(Notification, Description)
+    super(NotificationModel, Description)
     this.http = new RequestProvider({ baseURL: process.env.DOMAIN_API_URL })
   }
 
