@@ -4,17 +4,16 @@ import { Types } from '../../../api/core/database'
 import type { DecodedToken } from '../../../api/types'
 import { TokenService } from '../../../api/core/token'
 import { Mutable, getController } from '../../../api/core/controller'
-import { UserDocument, default as User } from './user.model'
-import { default as Description } from './index.json'
+import {
+  User,
+  UserModel,
+  Description
 
-/**
- * @exports
- * @class
- * User controller. Must provide methods for authentication, access level, etc.
- */
-export class UserController extends Mutable<UserDocument> {
+} from './user.schema'
+
+export class UserController extends Mutable<User> {
   constructor() {
-    super(User, Description, {
+    super(UserModel, Description, {
       rawMethods: {
         'authenticate': 'application/json'
       }
@@ -93,24 +92,17 @@ export class UserController extends Mutable<UserDocument> {
       delete props.what.password
     }
 
-    if( props.what.extra ) {
-      return this._saveWithExtra(props)
-    }
-
-    return super.insert.call(this, props)
+    return props.what.extra
+      ? this._saveWithExtra(props)
+      : super.insert.call(this, props)
   }
 
-  /**
-   * @method
-   * @param {string} username - string to match email or another field
-   * @param {string} password - plain text password
-   */
   public async authenticate(props: {
     email: string
     password: string
   }):
     Promise<{
-      user: Pick<UserDocument,
+      user: Pick<User,
         'first_name'
         | 'last_name'
         | 'email'

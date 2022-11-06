@@ -131,11 +131,11 @@ export const descriptionToSchema = <T>(
 }
 
 export const createModel = <T=any>(
-  modelName: string,
   description: MaybeCollectionDescription,
   options?: any,
   cb?: (schema: Schema) => void
 ) => {
+  const { collection: modelName } = description
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<T>
   }

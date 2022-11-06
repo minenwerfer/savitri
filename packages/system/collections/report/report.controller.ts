@@ -7,11 +7,15 @@ import { fromEntries } from '../../../common/helpers'
 import * as Collection from '../../../common/collection'
 import type { CollectionField } from '../../../common/types'
 import { Mutable, getController } from '../../../api/core/controller'
+import { Schema, createModel } from '../../../api/core/collection'
 
-import { ReportDocument, default as Report } from './report.model'
+// import { ReportDocument, default as Report } from './report.model'
 import { default as Description } from './index.json'
 
 import File from '../file/file.model'
+
+export type ReportDocument = Schema<typeof Description>
+export const Report = createModel<ReportDocument>('report', Description)
 
 export class ReportController extends Mutable<ReportDocument> {
   private readonly _formatMap: any = {

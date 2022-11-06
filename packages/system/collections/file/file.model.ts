@@ -1,9 +1,6 @@
 import { createModel, MongoDocument, ObjectId } from '../../../api'
 import { default as Description } from './index.json'
 
-import { UserDocument } from '../user/user.model'
-import '../user/user.model'
-
 export type FileDocument = MongoDocument & {
   owner: UserDocument|ObjectId|string
   filename: string
@@ -18,16 +15,3 @@ export type FileDocument = MongoDocument & {
   immutable: boolean
 }
 
-
-export default createModel('file', Description, null, (schema) => {
-  schema.post('init', async function() {
-    const timestamp = this.last_modified
-      ? new Date(this.last_modified).getTime()
-      : 'fresh'
-
-    const link = `${process.env.API_URL}/file/${this._id}`
-
-    this.link = `${link}?${timestamp}`
-    this.download_link = `${link}/download?${timestamp}`
-  })
-})

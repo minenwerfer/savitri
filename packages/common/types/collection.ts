@@ -45,7 +45,7 @@ export type CollectionDescription = {
   route?: Array<string>|boolean
 
   // takes an array of something
-  presets?: Array<CollectionPreset>
+  readonly presets?: Array<CollectionPreset>
   table?: Array<string>
   tableMeta?: Array<string>
 
@@ -94,7 +94,8 @@ export type CollectionReference = {
   inlineEditing?: boolean
 }
 
-export type CollectionField = Readonly<CollectionReference & {
+export type CollectionField = Readonly<Omit<CollectionReference, 'collection'> & {
+  collection?: CollectionReference['collection']
   label: string
   type?: CollectionFieldType
   isReference?: boolean
@@ -102,13 +103,14 @@ export type CollectionField = Readonly<CollectionReference & {
   referencedCollection?: string
   mask?: string
   translate?: boolean
+  meta?: boolean
 
   includeHours?: boolean
   readOnly?: boolean
   uniqueValues?: boolean
 
   /** @see SvFile */
-  accept?: Array<string>
+  readonly accept?: Array<string>
 
   values?: Record<string, string> | Record<number, any> | {
     __query: CollectionReference

@@ -1,3 +1,4 @@
-export * from './schema'
-export * from './utils'
 export * from './preload'
+export * from './schema'
+export * from './schema.types'
+export * from './utils'

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { UserDocument } from '../../../../system/collections/user/user.model'
+import type { User } from '../../../../system/collections/user/user.schema'
 import useCollection from '../collection'
 import { normalizeFields, normalizeValues } from '../helpers'
 import useMetaStore from './meta'
@@ -11,7 +11,7 @@ type Credentials = {
 
 type UserState = {
   credentials: Credentials|object
-  currentUser: Partial<UserDocument>
+  currentUser: Partial<User>
 }
 
 const collection = useCollection({
@@ -28,7 +28,7 @@ const collection = useCollection({
         return this.$customEffect(
           'authenticate', payload,
           async ({ user, token }: {
-            user: UserDocument
+            user: User
             token: string
           }) => {
             this.credentials = {}
