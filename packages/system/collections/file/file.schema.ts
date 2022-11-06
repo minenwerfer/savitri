@@ -2,11 +2,6 @@ import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/c
 
 export type File = Schema<typeof schema>
 
-const file: Partial<File> = {
-  mime: 'oi',
-  size: 123,
-}
-
 const schema = {
   owned: true,
   fields: {
