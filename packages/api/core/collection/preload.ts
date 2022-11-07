@@ -47,10 +47,12 @@ export const preloadCollection = (
   }
 
   if( presets.length > 0 ) {
-    return collection.presets?.reduce((a: CollectionDescription, presetName: string) => {
-      return applyPreset(a, presetName)
+    const merge = presets?.reduce(
+      (a, presetName: string) => applyPreset(a, presetName),
+      collection as CollectionDescription
+    )
 
-    }, collection as CollectionDescription)
+    Object.assign(collection, merge)
   }
 
   if( collection.fields ) {
