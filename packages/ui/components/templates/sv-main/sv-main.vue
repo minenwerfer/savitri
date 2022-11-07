@@ -62,28 +62,26 @@ watch(() => metaStore.descriptions, descriptions => {
 
   Object.values(descriptions).forEach((description: any) => {
     const routeVisibility = description.route
-    if( routeVisibility ) {
-      if( Array.isArray(routeVisibility) && !routeVisibility.includes(userStore.$currentUser.role)  ) {
-        return
-      }
-
-      const routeName = `dashboard-${description.collection}`
-      if( router.hasRoute(routeName) ) {
-        return
-      }
-
-      const route = {
-        name: routeName,
-        path: description.collection,
-        redirect: `/dashboard/c/${description.collection}`,
-        meta: {
-          title: description.collection,
-          unicon: description.unicon,
-        }
-      }
-
-      router.addRoute('dashboard', route)
+    if( Array.isArray(routeVisibility) && !routeVisibility.includes(userStore.$currentUser.role)  ) {
+      return
     }
+
+    const routeName = `dashboard-${description.collection}`
+    if( router.hasRoute(routeName) ) {
+      return
+    }
+
+    const route = {
+      name: routeName,
+      path: description.collection,
+      redirect: `/dashboard/c/${description.collection}`,
+      meta: {
+        title: description.collection,
+        unicon: description.unicon,
+      }
+    }
+
+    router.addRoute('dashboard', route)
   })
 
 }, { immediate: true })
