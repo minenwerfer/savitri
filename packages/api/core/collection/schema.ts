@@ -17,7 +17,7 @@ import {
 
 import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
-import { typeMapping } from './types'
+import { typeMapping, arrayedTypes } from './types'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
 
@@ -70,9 +70,13 @@ export const descriptionToSchema = <T>(
       }
     }
 
-    const typeMatch = typeMapping.find(([keys, _]) => keys.includes(field.type) )
+    const typeMatch = Object.entries(typeMapping as Record<string, readonly string[]>)
+      .find(([, types]) => types.includes(field.type))?.[0]
+
     if( typeMatch ) {
-      result.type = typeMatch[1]
+      result.type = arrayedTypes.includes(field.type)
+        ? [eval(typeMatch)]
+        : eval(typeMatch)
     }
 
     if( typeof collectionName === 'string' ) {

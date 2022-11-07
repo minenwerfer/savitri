@@ -34,6 +34,7 @@ export type ApiConfig = {
     active: boolean
   }
   populateUserExtra?: Array<string>
+  dynamicCollections?: boolean
 
   beforeRead?: (token: DecodedToken, collectionName: string) => Record<string, any>
   beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>

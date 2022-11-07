@@ -4,7 +4,7 @@ import * as SystemCollections from '../../collections'
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
 
-const getUserCollections = (dynamic: boolean = true) => {
+const getUserCollections = (dynamic?: boolean) => {
   if( !dynamic ) {
     return require(`${process.cwd()}/collections`)
   }
@@ -34,12 +34,12 @@ const getUserCollections = (dynamic: boolean = true) => {
   }, {})
 }
 
-export const getDescriptions = (): Record<string, CollectionDescription> => {
+export const getDescriptions = (dynamicUserCollections?: boolean): Record<string, CollectionDescription> => {
   if( Object.keys(__cachedDescriptions).length > 0 ) {
     return __cachedDescriptions
   }
 
-  const UserCollections = getUserCollections()
+  const UserCollections = getUserCollections(dynamicUserCollections)
   const target = {
     ...UserCollections,
     ...SystemCollections

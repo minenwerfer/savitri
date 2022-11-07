@@ -9,7 +9,7 @@ export class MetaController extends Controller {
   }
 
   public describeAll() {
-    const descriptions = getDescriptions()
+    const descriptions = getDescriptions(this.apiConfig.dynamicCollections)
     return {
       descriptions,
       roles: this.apiConfig.roles

@@ -1,6 +1,7 @@
 import type { CollectionField } from '../../../common/types'
 export type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument, ObjectId } from '../../types'
+import type { TypeMapping } from './types'
 
 export type Schema<T extends Fields> = CaseOwned<T>
 
@@ -25,20 +26,7 @@ type Owned = {
   owner: Reference
 }
 
-type TypeMap<T> = T extends 'boolean' ? boolean
-  : T extends 'checkbox' ? string
-  : T extends 'datetime' ? Date|string
-  : T extends 'email' ? string
-  : T extends 'integer' ? number
-  : T extends 'number' ? number
-  : T extends 'object' ? object
-  : T extends 'password' ? string
-  : T extends 'radio' ? string
-  : T extends 'reference' ? Reference
-  : T extends 'select' ? string
-  : T extends 'text' ? string
-  : T extends 'textbox' ? string
-  : never
+type MapType<T extends keyof TypeMapping> = TypeMapping[T]
 
 type CaseReference<T> = T extends { collection: string }
   ? Reference
@@ -46,9 +34,9 @@ type CaseReference<T> = T extends { collection: string }
   ? Reference
   : T extends { values: { __query: { collection: string } } }
   ? Reference
-  : TypeMap<Field<T>['type']>
+  : MapType<Field<T>['type']>
 
-type CaseArray<T> = T extends { array: true } | { type: 'checkbox' }
+type CaseArray<T> = T extends { array: true }
   ? Array<CaseReference<T>>
   : CaseReference<T>
 
@@ -59,7 +47,7 @@ type CaseReadonly<T> = T extends { readOnly: true }
 type Type<T> = CaseReadonly<T>
 
 type Field<F> = F & {
-  type: string
+  type: keyof TypeMapping
   array?: boolean
   readOnly?: boolean
 }
