@@ -4,11 +4,6 @@ export type User = Schema<typeof schema> & {
   testPassword?(password: string): boolean
 }
 
-const user: Partial<User> = {
-  first_name: 'teste',
-  active: true
-}
-
 const schema = {
   fields: {
     first_name: {

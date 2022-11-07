@@ -17,7 +17,7 @@ import {
 
 import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
-import { typeMapping, arrayedTypes } from './types'
+import { typeMapping, arrayedTypes } from './typemapping'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
 

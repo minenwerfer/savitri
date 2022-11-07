@@ -1,7 +1,7 @@
 import type { CollectionField } from '../../../common/types'
 export type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument, ObjectId } from '../../types'
-import type { TypeMapping } from './types'
+import type { TypeMapping } from './typemapping'
 
 export type Schema<T extends Fields> = CaseOwned<T>
 
