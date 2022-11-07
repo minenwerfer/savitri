@@ -1,4 +1,4 @@
-import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/collection'
+import { makeDescription, Schema } from '../../../api/core/collection'
 
 export type Notification = Schema<typeof schema>
 
@@ -38,10 +38,9 @@ const schema = {
   }
 } as const
 
-export const NotificationDescription: CollectionDescription = {
-  ...schema as SchemaFields<typeof schema>,
+export const NotificationDescription = makeDescription<typeof schema>(schema, {
   collection: 'notification',
   presets: [
     'crud'
   ],
-}
+})

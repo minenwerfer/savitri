@@ -1,4 +1,4 @@
-import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/collection'
+import { makeDescription, Schema } from '../../../api/core/collection'
 
 export type User = Schema<typeof schema> & {
   testPassword?(password: string): boolean
@@ -79,8 +79,7 @@ const schema = {
   }
 } as const
 
-export const UserDescription: CollectionDescription = {
-  ...schema as SchemaFields<typeof schema>,
+export const UserDescription = makeDescription<typeof schema>(schema, {
   collection: 'user',
   presets: [
     'crud',
@@ -141,4 +140,4 @@ export const UserDescription: CollectionDescription = {
       span: 3
     }
   }
-}
+})

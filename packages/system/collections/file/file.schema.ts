@@ -1,4 +1,4 @@
-import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/collection'
+import { makeDescription, Schema } from '../../../api/core/collection'
 
 export type File = Schema<typeof schema>
 
@@ -48,8 +48,7 @@ const schema = {
   }
 } as const
 
-export const FileDescription: CollectionDescription = {
-  ...schema as SchemaFields<typeof schema>,
+export const FileDescription = makeDescription<typeof schema>(schema, {
   collection: 'file',
   actions: {
     deleteAll: {
@@ -65,4 +64,4 @@ export const FileDescription: CollectionDescription = {
       ask: true
     }
   },
-}
+})

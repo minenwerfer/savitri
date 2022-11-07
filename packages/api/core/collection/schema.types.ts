@@ -8,7 +8,7 @@ export type Schema<T extends Fields> = CaseOwned<T>
 export type SchemaFields<T> = {
   [
     P in keyof T as
-    P extends 'strict' | 'fields'
+    P extends 'fields'
       ? P
       : never
   ]: P extends 'fields'
@@ -90,7 +90,7 @@ type MapTypes<
 
 type F<T> = {
   -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
-    ? T[P] & Array<K>
+    ? T[P] & ReadonlyArray<K>
     : P extends keyof CollectionField
     ? CollectionField[P]
     : P
@@ -98,4 +98,3 @@ type F<T> = {
 type Writable<T> = {
   -readonly [P in keyof T]: F<T[P]>
 }
-

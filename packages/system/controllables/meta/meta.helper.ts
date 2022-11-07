@@ -5,7 +5,7 @@ import * as SystemCollections from '../../collections'
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
 
 const getUserCollections = (dynamic?: boolean) => {
-  if( !dynamic ) {
+  if( dynamic ) {
     return require(`${process.cwd()}/collections`)
   }
 
@@ -40,15 +40,15 @@ export const getDescriptions = (dynamicUserCollections?: boolean): Record<string
   }
 
   const UserCollections = getUserCollections(dynamicUserCollections)
-  const target = {
+  const target: Record<string, CollectionDescription> = {
     ...UserCollections,
     ...SystemCollections
   }
 
-  const descriptions = Object.entries(target).reduce((a: any, [collectionName, collection]) => {
+  const descriptions = Object.entries(target).reduce((a: any, [, collectionSchema]) => {
     return {
       ...a,
-      [collectionName]: preloadCollection(collection as CollectionDescription)
+      [collectionSchema.collection]: preloadCollection(collectionSchema)
     }
   }, {})
 

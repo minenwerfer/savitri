@@ -1,4 +1,4 @@
-import { CollectionDescription, Schema, SchemaFields } from '../../../api/core/collection'
+import { makeDescription, Schema } from '../../../api/core/collection'
 
 export type Report = Schema<typeof schema>
 
@@ -65,8 +65,7 @@ const schema = {
   }
 } as const
 
-export const ReportDescription: CollectionDescription = {
-  ...schema as SchemaFields<typeof schema>,
+export const ReportDescription = makeDescription<typeof schema>(schema, {
   collection: 'report',
   unicon: 'bag-alt',
   presets: [
@@ -83,4 +82,4 @@ export const ReportDescription: CollectionDescription = {
       ask: true
     }
   },
-}
+})
