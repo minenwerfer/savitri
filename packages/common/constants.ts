@@ -20,7 +20,7 @@ export const PAGINATION_PER_PAGE_DEFAULTS = [
 // default value of above
 export const PAGINATION_PER_PAGE_DEFAULT = 35
 
-export const COLLECTION_FIELD_TYPES = <const>[
+export const COLLECTION_FIELD_TYPES = [
   'boolean',
   'checkbox',
   'datetime',
@@ -34,9 +34,9 @@ export const COLLECTION_FIELD_TYPES = <const>[
   'select',
   'text',
   'textbox',
-]
+] as const
 
-export const COLLECTION_PRESETS = <const>[
+export const COLLECTION_PRESETS = [
   'crud',
   'duplicate',
   'delete',
@@ -44,12 +44,12 @@ export const COLLECTION_PRESETS = <const>[
   'owned',
   'toggleActive',
   'view',
-]
+] as const
 
-export const ARRAY_TYPES = <const>[
+export const ARRAY_TYPES = [
   'checkbox',
   'radio'
-]
+] as const
 
 export const STORE_EFFECTS = {
   'ITEM_SET': 'setItem',
