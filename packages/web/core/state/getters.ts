@@ -125,7 +125,7 @@ const getters: Getters = {
   },
 
   /**
-   * Retrieves fields who refeer to a collection (typeof collection === 'string') and have "inline" set to true.
+   * Retrieves fields which refeer to a collection (typeof collection === 'string') and have "inline" set to true.
    * Used internally.
    */
   inlineReferences() {

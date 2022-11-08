@@ -1,9 +1,22 @@
 Savitri
 =======
 
-An agile and declarative bootstrap for fullstack projects.
+Strongely typed, fullstack TypeScript RAD (remote application development) framework.
+It's not a public release yet.
 
-## Why Savitri?
-Savitri enables you to build a project in a fast and reliable way without having to reinvent the wheel everytime. It's based on well-known technologies such as VueJS, Mongoose ODM, and Hapi, so, if you are acquainted with any of these you will feel right at home.
+Built on:
+- Vue3
+- Pinia
+- Hapi
+- TypeScript
+- MongoDB
 
-Used at production at CAPSUL Brasil.
+Features
+- RBAC (role-based access control)
+- In-house set of backoffice components
+- Multilanguage
+- Multitenant
+
+Todo:
+- JSON-schema compliance (http://json-schema.org/)
+- Improve code splitting and lazyloading
