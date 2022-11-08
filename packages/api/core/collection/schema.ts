@@ -87,7 +87,7 @@ export const descriptionToSchema = <T>(
         : ObjectId
     }
 
-    if( field.array ) {
+    if( reference.array ) {
       result.type = [result.type]
     }
 
