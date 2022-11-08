@@ -12,7 +12,9 @@ Built on:
 - MongoDB
 
 Features
-- RBAC (role-based access control)
+- Builtin authentication
+- Builtin file uploading
+- Builtin RBAC (role-based access control)
 - In-house set of backoffice components
 - Multilanguage
 - Multitenant
@@ -20,3 +22,4 @@ Features
 Todo:
 - JSON-schema compliance (http://json-schema.org/)
 - Improve code splitting and lazyloading
+- Whitelabeling support
