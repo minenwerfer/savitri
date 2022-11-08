@@ -36,7 +36,7 @@ const getters: Getters = {
     })
 
     if( this.description.table ) {
-      return this.description.table.reduce((a:object, fieldName: string) => {
+      return this.description.table.reduce((a:object, fieldName) => {
         const field = this.description.fields?.[fieldName]
         if( !field ) {
           return a
@@ -103,7 +103,7 @@ const getters: Getters = {
     if( !Array.isArray(this.items) ) return []
 
     const collections = Object.entries(this.description?.fields||{})
-      .reduce((a: Array<any>, [key, field]: [string, CollectionField]) => {
+      .reduce((a: Array<any>, [key, field]) => {
         if( typeof field.collection !== 'string' ) {
           return a
         }
@@ -114,11 +114,10 @@ const getters: Getters = {
         ]
       }, [])
 
-    return this.items
-      .map((item: any) => ({
-        ...item,
-        ...(fromEntries(collections.map((m) => [m, item[m]||{}])))
-      }))
+    return this.items.map((item: any) => ({
+      ...item,
+      ...(fromEntries(collections.map((m) => [m, item[m]||{}])))
+    }))
   },
 
   itemsCount() {
@@ -131,7 +130,7 @@ const getters: Getters = {
    */
   inlineReferences() {
     return Object.entries(this.description.fields||{})
-      .filter(([, field]: [unknown, CollectionField]) => typeof field.collection === 'string' && field.inline === true)
+      .filter(([, field]) => typeof field.collection === 'string' && field.inline === true)
   },
 
   /**
@@ -163,32 +162,31 @@ const getters: Getters = {
       return value._id || value
     }
 
-    const entries = Object.entries(filters)
-      .reduce((a: Array<any>, [key, filter]: [string, any]) => {
-        if( key.startsWith('$') ) {
-          return [
-            ...a,
-            [key, filter]
-          ]
-        }
-
-        if( filter && typeof filter === 'object' && !Array.isArray(filter) ) {
-          Object.keys(filter).forEach((key) => {
-            if( !filter[key] || Object.values(filter[key]).every((_) => !_) ) {
-              delete filter[key]
-            }
-          })
-        }
-
-        if( !filter || (typeof filter === 'object' && Object.keys(filter).length === 0) ) {
-          return a
-        }
-
+    const entries = Object.entries(filters).reduce((a: Array<any>, [key, filter]: [string, any]) => {
+      if( key.startsWith('$') ) {
         return [
           ...a,
-          [key, expr(key, filter)]
+          [key, filter]
         ]
-      }, [])
+      }
+
+      if( filter && typeof filter === 'object' && !Array.isArray(filter) ) {
+        Object.keys(filter).forEach((key) => {
+          if( !filter[key] || Object.values(filter[key]).every((_) => !_) ) {
+            delete filter[key]
+          }
+        })
+      }
+
+      if( !filter || (typeof filter === 'object' && Object.keys(filter).length === 0) ) {
+        return a
+      }
+
+      return [
+        ...a,
+        [key, expr(key, filter)]
+      ]
+    }, [])
 
 
     return condenseItem(fromEntries(entries))
@@ -208,7 +206,7 @@ const getters: Getters = {
    */
   hasActiveFilters() {
     return Object.values(this.filters)
-      .some((value: any) => !!value)
+      .some((value) => !!value)
   },
 
   availableFilters() {

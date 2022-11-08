@@ -18,17 +18,16 @@ export const fill = <T extends MongoDocument>(
     return {}
   }
 
-  const missing = Object.entries(description.fields)
-    .reduce((a: any, [key, value]: [string, any]) => {
-      if( item[key] && !value.meta ) {
-        return a
-      }
+  const missing = Object.entries(description.fields).reduce((a: any, [key, value]) => {
+    if( item[key] && !value.meta ) {
+      return a
+    }
 
-      return {
-        ...a,
-        [key]: null
-      }
-    }, {})
+    return {
+      ...a,
+      [key]: null
+    }
+  }, {})
 
   return Object.assign(missing, item)
 }
@@ -50,7 +49,7 @@ export const prepareInsert = (
       || (description.writable && !description.writable.includes(key)
     )
   }
-  const prepareUpdate = () => Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
+  const prepareUpdate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
     if( forbidden(key) ) {
       return a
     }
@@ -68,7 +67,7 @@ export const prepareInsert = (
     $unset: {}
   })
 
-  const prepareCreate = () => Object.entries(rest).reduce((a: any, [key, value]: [string, any]) => {
+  const prepareCreate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
     if( forbidden(key) ) {
       return a
     }

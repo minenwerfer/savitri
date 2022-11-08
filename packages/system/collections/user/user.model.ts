@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import { createModel } from '../../../api/core/collection'
-import { User, UserDescription } from './user.schema'
+import { User, UserDescription } from './user.description'
 
 export default createModel(UserDescription, null, (schema) => { 
   schema.methods.testPassword = async function(candidate: string) {

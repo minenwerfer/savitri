@@ -3,7 +3,7 @@ const { writeFile, readFile, unlink } = require('fs').promises
 
 import type { DecodedToken } from '../../../api/types'
 import { Mutable } from '../../../api/core/controller'
-import { File, FileDescription } from './file.schema'
+import { File, FileDescription } from './file.description'
 import FileModel from './file.model'
 
 const { STORAGE_PATH } = process.env

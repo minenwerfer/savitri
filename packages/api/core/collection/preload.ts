@@ -19,7 +19,7 @@ export const applyPreset = (description: CollectionDescription, collectionName:s
 }
 
 export const requireCollection = (collectionName:string): any => {
-  return require(`${process.cwd()}/collections/${collectionName}/${collectionName}.schema.json`)
+  return require(`${process.cwd()}/collections/${collectionName}/${collectionName}.description.json`)
 }
 
 export const preloadCollection = (

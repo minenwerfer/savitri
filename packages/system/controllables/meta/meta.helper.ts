@@ -14,8 +14,8 @@ const getUserCollections = (dynamic?: boolean) => {
     try {
       const
         isValid = !d.startsWith('_'),
-        isJson = isValid && existsSync(`collections/${d}/${d}.schema.json`),
-        path = require.resolve(`${process.cwd()}/collections/${d}/${d}.schema${isJson ? '.json' : ''}`)
+        isJson = isValid && existsSync(`collections/${d}/${d}.description.json`),
+        path = require.resolve(`${process.cwd()}/collections/${d}/${d}.description${isJson ? '.json' : ''}`)
 
 
       if( !isValid ) {

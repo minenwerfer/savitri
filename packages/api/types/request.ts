@@ -1,5 +1,5 @@
 import type { Request } from '@hapi/hapi'
-import type { User } from '../../system/collections/user/user.schema'
+import type { User } from '../../system/collections/user/user.description'
 
 export type HandlerRequest = Request & {
   payload: {

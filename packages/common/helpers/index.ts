@@ -1,4 +1,4 @@
-export * from './utils'
-export * from './lock'
 export * from './deepClone'
 export * from './deepMerge'
+export * from './fromEntries'
+export * from './lock'

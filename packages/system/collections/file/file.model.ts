@@ -1,5 +1,5 @@
 import { createModel } from '../../../api/core/collection'
-import { File, FileDescription } from './file.schema'
+import { File, FileDescription } from './file.description'
 
 import '../user/user.model'
 

@@ -2,7 +2,7 @@ import { Mutable } from '../../../api/core/controller'
 import type { DecodedToken } from '../../../api/types'
 import { RequestProvider } from '../../../common/http'
 import { TokenService } from '../../../api/core/token'
-import { Notification, NotificationDescription } from './notification.schema'
+import { Notification, NotificationDescription } from './notification.description'
 import NotificationModel from './notification.model'
 
 import path from 'path'

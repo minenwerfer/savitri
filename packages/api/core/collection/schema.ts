@@ -117,7 +117,7 @@ export const descriptionToSchema = <T>(
   }
 
   if( description.presets ) {
-    description.fields = description.presets?.reduce((a: CollectionDescription, presetName: string) => {
+    description.fields = description.presets?.reduce((a: CollectionDescription, presetName) => {
       return applyPreset(a, presetName, 'fields')
 
     }, description.fields as CollectionDescription)

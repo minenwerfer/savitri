@@ -125,9 +125,8 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
     : result
 }
 
-export const condenseItem = (item: any) => {
-  return Object.entries(item||{})
-  .reduce((a:any, [key, value]: [string, any]) => ({
+export const condenseItem = (item: Record<string, any>) => {
+  return Object.entries(item||{}).reduce((a:any, [key, value]) => ({
     ...a,
     [key]: value && typeof value === 'object' && '_id' in value ? { _id: value._id } : value
   }), {})
@@ -157,8 +156,7 @@ export const normalizeActions = (actions: CollectionActions) => Object.entries(a
   }, [])
 
 export const normalizeFilters = (filters: Array<any>) => {
-  return filters
-  .reduce((a: any, b: any) => {
+  return filters.reduce((a: any, b) => {
     const filter = typeof b !== 'string'
       ? { [b.field]: b.default||'' }
       : { [b]: '' }
@@ -181,8 +179,7 @@ export const normalizeValues = (values: any|Array<any>) => {
     }), {})
   }
 
-  return Object.entries(values)
-  .reduce((a, [key, value]: [string, any]) => ({
+  return Object.entries(values).reduce((a, [key, value]: [string, any]) => ({
     ...a,
     [key]: {
       value: key,
@@ -194,46 +191,44 @@ export const normalizeValues = (values: any|Array<any>) => {
 }
 
 export const normalizeFields = (fields: CollectionDescription['fields']) => {
-  return Object.entries(fields||{})
-    .reduce((a: object, [fieldName, field]: [string, any]) => {
-      if( field.values && field.type !== 'boolean' ) {
-        field.values = normalizeValues(field.values)
-      }
+  return Object.entries(fields||{}).reduce((a: object, [fieldName, field]: [string, any]) => {
+    if( field.values && field.type !== 'boolean' ) {
+      field.values = normalizeValues(field.values)
+    }
 
-      if( typeof field.collection === 'string' ) {
-        field.type = 'collection'
-      }
+    if( typeof field.collection === 'string' ) {
+      field.type = 'collection'
+    }
 
-      field.type ??= 'text'
+    field.type ??= 'text'
 
-      return {
-        ...a,
-        [fieldName]: field
-      }
-    }, {})
+    return {
+      ...a,
+      [fieldName]: field
+    }
+  }, {})
 }
 
 export const freshItem = (description: CollectionDescription) => {
-  const item: Record<string, any> = Object.entries(description.fields||{})
-    .reduce((a: any, [key, field]: [string, any]) => {
-      if( !isObject(field) ) {
-        return a
-      }
+  const item: Record<string, any> = Object.entries(description.fields||{}).reduce((a: any, [key, field]) => {
+    if( !isObject(field) ) {
+      return a
+    }
 
-      if( [...ARRAY_TYPES, 'boolean'].includes(field.type) ) {
-        return {
-          ...a,
-          [key]: field.type !== 'radio'
-            ? (field.type === 'boolean' ? false : [])
-            : ''
-        }
-      }
-
+    if( [...ARRAY_TYPES, 'boolean'].includes(field.type!) ) {
       return {
         ...a,
-        [key]: isArray(field) ? [] : {}
+        [key]: field.type !== 'radio'
+          ? (field.type === 'boolean' ? false : [])
+          : ''
       }
-    }, {})
+    }
+
+    return {
+      ...a,
+      [key]: isArray(field) ? [] : {}
+    }
+  }, {})
 
   return item
 }

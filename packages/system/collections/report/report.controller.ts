@@ -8,7 +8,7 @@ import * as Collection from '../../../common/collection'
 import type { CollectionField } from '../../../common/types'
 import { Mutable, getController } from '../../../api/core/controller'
 
-import { Report, ReportDescription } from './report.schema'
+import { Report, ReportDescription } from './report.description'
 
 import ReportModel from './report.model'
 import FileModel from '../file/file.model'
@@ -121,9 +121,9 @@ export class ReportController extends Mutable<Report> {
     })
 
     const pipe = R.pipe(
-      (r: any) => fieldsNames.reduce((a: any, b: string) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
+      (r: any) => fieldsNames.reduce((a: any, b) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
       (r: Report) => Object.entries(r)
-        .reduce((a: any, [key, value]: [string, any]) => {
+        .reduce((a: any, [key, value]) => {
           if( !(key in fields) ) {
             return a
           }
