@@ -76,7 +76,6 @@
             ></sv-icon>
           </sv-search-item>
         </sv-search-container>
-
         <div v-else>
           <div v-if="isTyping">
             Pesquisando...
@@ -103,7 +102,6 @@ import {
   ref,
   reactive,
   defineAsyncComponent,
-
 } from 'vue'
 
 import { useStore, useParentStore } from '@savitri/web'
@@ -256,7 +254,6 @@ const search = async () => {
   if( store.isLoading ) {
     return
   }
-
   matchingItems.value = (await store.custom('getAll', {
     limit: 5,
     filters: {
@@ -269,7 +266,7 @@ const search = async () => {
         }
       }))
     }
-  })).result
+  }))
 }
 
 let lazySearchTimeout

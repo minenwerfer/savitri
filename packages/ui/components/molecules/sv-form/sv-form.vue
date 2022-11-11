@@ -118,7 +118,6 @@
             field
           }"
         ></sv-file>
-
         <sv-search
           v-else-if="field.collection"
           :key="`collectionfield-${index}`"
@@ -133,7 +132,6 @@
           :style="fieldStyle(key, field)"
           @changed="emit('change')"
         ></sv-search>
-
 
         <div v-if="validationErrors?.[key]" class="form__validation-error">
           <span v-if="validationErrors[key].type">
@@ -311,6 +309,7 @@ const isTextType = (type: string) => {
     'password',
     'number',
     'integer',
+    'email',
     'datetime'
   ].includes(type)
 }
