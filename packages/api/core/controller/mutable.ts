@@ -48,13 +48,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     if( this.apiConfig.beforeRead && decodedToken ) {
       deepMerge(
         newPayload,
-        this.apiConfig.beforeRead(decodedToken, this.description.collection)
+        this.apiConfig.beforeRead(decodedToken, this.description.$id)
       )
     }
 
     deepMerge(
       newPayload,
-      baseControl.beforeRead!(decodedToken, this.description.collection)
+      baseControl.beforeRead!(decodedToken, this.description.$id)
     )
 
     if( newPayload.limit > 150 ) {
@@ -71,13 +71,13 @@ export abstract class Mutable<T extends MongoDocument> extends Controller {
     if( this.apiConfig.beforeWrite && decodedToken ) {
       deepMerge(
         filters,
-        this.apiConfig.beforeWrite(decodedToken, this.description.collection)
+        this.apiConfig.beforeWrite(decodedToken, this.description.$id)
       )
     }
 
     deepMerge(
       filters,
-      baseControl.beforeWrite!(decodedToken, this.description.collection)
+      baseControl.beforeWrite!(decodedToken, this.description.$id)
     )
 
     return newPayload

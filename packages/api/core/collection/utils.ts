@@ -12,13 +12,13 @@ export const normalizeProjection = (projection?: string|Array<string>|Record<str
 
 export const fill = <T extends MongoDocument>(
   item: T & Record<string, any>,
-  description: Pick<CollectionDescription, 'fields'>
+  description: Pick<CollectionDescription, 'properties'>
 ) => {
   if( !item ) {
     return {}
   }
 
-  const missing = Object.entries(description.fields).reduce((a: any, [key, value]) => {
+  const missing = Object.entries(description.properties).reduce((a: any, [key, value]) => {
     if( item[key] && !value.meta ) {
       return a
     }
@@ -34,7 +34,7 @@ export const fill = <T extends MongoDocument>(
 
 export const prepareInsert = (
   payload: any,
-  description: Pick<CollectionDescription, 'fields' | 'form' | 'writable'>
+  description: Pick<CollectionDescription, 'properties' | 'form' | 'writable'>
 ) => {
   const {
     _id,
@@ -45,7 +45,7 @@ export const prepareInsert = (
   } = payload
 
   const forbidden = (key: string) => {
-    return description.fields[key]?.readOnly
+    return description.properties[key]?.readOnly
       || (description.writable && !description.writable.includes(key)
     )
   }

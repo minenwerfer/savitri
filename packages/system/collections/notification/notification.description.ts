@@ -3,35 +3,38 @@ import { makeDescription, Schema } from '../../../api/core/collection'
 export type Notification = Schema<typeof schema>
 
 const schema = {
+  $id: 'notification',
   owned: true,
-  fields: {
+  required: [
+    'title'
+  ],
+  properties: {
     destination: {
-      collection: 'user',
-      label: 'Destinatário',
+      $ref: '/user',
+      description: 'Destinatário',
       index: 'email',
       array: true
     },
     title: {
-      label: 'Título',
+      description: 'Título',
       type: 'text',
-      required: true
     },
     action: {
-      label: 'Ação',
+      description: 'Ação',
       type: 'text'
     },
     groups: {
-      label: 'Grupos',
+      description: 'Grupos',
       type: 'text',
       placeholder: 'Ex.: logistic,producer',
-      description: 'Separados por vírgula, ou vazio'
+      hint: 'Separados por vírgula, ou vazio'
     },
     subject: {
-      label: 'Sujeito',
+      description: 'Sujeito',
       type: 'text'
     },
     content: {
-      label: 'Conteúdo',
+      description: 'Conteúdo',
       type: 'textbox',
       notable: true
     }
@@ -39,7 +42,6 @@ const schema = {
 } as const
 
 export const NotificationDescription = makeDescription<typeof schema>(schema, {
-  collection: 'notification',
   presets: [
     'crud'
   ],

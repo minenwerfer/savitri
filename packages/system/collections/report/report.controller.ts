@@ -5,7 +5,7 @@ const { writeFile } = require('fs').promises
 import type { DecodedToken } from '../../../api/types'
 import { fromEntries } from '../../../common/helpers'
 import * as Collection from '../../../common/collection'
-import type { CollectionField } from '../../../common/types'
+import type { CollectionProperty } from '../../../common/types'
 import { Mutable, getController } from '../../../api/core/controller'
 
 import { Report, ReportDescription } from './report.description'
@@ -24,23 +24,23 @@ export class ReportController extends Mutable<Report> {
 
   }
 
-  private _getFields(description: any) {
+  private _getProperties(description: any) {
     const filter = (entries: any): any => {
       return fromEntries(entries.filter(([_, value]: [unknown, any]) => !value.noreport))
     }
 
-    const table = description.reportFields || description.table
+    const table = description.reportProperties || description.table
 
     const entries = !table
-      ? Object.entries(description.fields)
-      : Object.entries(description.fields)
+      ? Object.entries(description.properties)
+      : Object.entries(description.properties)
         .filter(([key, _]: [string, unknown]) => table.includes(key))
 
     return filter(entries)
   }
 
-  private _getColumns(fields: Array<CollectionField>) {
-    return Object.values(fields).map((f: { label: string }) => f.label)
+  private _getColumns(properties: Array<CollectionProperty>) {
+    return Object.values(properties).map((f: { description: string }) => f.description)
   }
 
   private _filename(ext: string) {
@@ -109,10 +109,10 @@ export class ReportController extends Mutable<Report> {
       throw new Error('você não pode gerar um relatório desse módulo')
     }
 
-    const fields = this._getFields(description)
-    const columns = this._getColumns(fields)
+    const properties = this._getProperties(description)
+    const columns = this._getColumns(properties)
 
-    const fieldsNames = Object.keys(fields)
+    const propertiesNames = Object.keys(properties)
 
     const result = await instance.getAll({
       filters: props.what.filters,
@@ -121,17 +121,17 @@ export class ReportController extends Mutable<Report> {
     })
 
     const pipe = R.pipe(
-      (r: any) => fieldsNames.reduce((a: any, b) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
+      (r: any) => propertiesNames.reduce((a: any, b) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
       (r: Report) => Object.entries(r)
         .reduce((a: any, [key, value]) => {
-          if( !(key in fields) ) {
+          if( !(key in properties) ) {
             return a
           }
 
           return {
             ...a,
             [key]: (() => {
-              const val = Collection.formatValue(description, value, key, fields[key])
+              const val = Collection.formatValue(description, value, key, properties[key])
               return val.includes(',') && format === 'csv'
                 ? `"${val}"`
                 : val

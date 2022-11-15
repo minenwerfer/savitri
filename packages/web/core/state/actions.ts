@@ -161,7 +161,7 @@ const actionsAndMutations: Actions & Mutations = {
     const inlineReferences = this.inlineReferences
     const newItem = (payload?.what || this.item) as Item
 
-    for( const [k, { collection, array }] of inlineReferences ) {
+    for( const [k, { $ref: collection, array }] of inlineReferences ) {
       if(
         newItem[k]
         && typeof newItem[k] === 'object'
@@ -247,41 +247,41 @@ const actionsAndMutations: Actions & Mutations = {
     }
   },
 
-  useFields(fields) {
-    return fields.reduce((a: any, field: string) => {
-      if( !(field in this.fields) ) {
+  useProperties(properties) {
+    return properties.reduce((a: any, property: string) => {
+      if( !(property in this.properties) ) {
         return a
       }
 
       return {
         ...a,
-        [field]: this.fields[field]
+        [property]: this.properties[property]
       }
 
     }, {})
   },
 
-  useFieldsExcept(fields) {
-    return fromEntries(Object.entries(this.fields)
-      .filter(([key]: [string, unknown]) => !fields.includes(key)))
+  usePropertiesExcept(properties) {
+    return fromEntries(Object.entries(this.properties)
+      .filter(([key]: [string, unknown]) => !properties.includes(key)))
   },
 
   formatValue(args) {
-      const value = args.field.translate
+      const value = args.property.translate
         ? I18N.global.tc(args.value)
         : args.value
 
       return Collection.formatValue(
-        this.rawDescription as Pick<CollectionDescription, 'fields'>,
+        this.rawDescription as Pick<CollectionDescription, 'properties'>,
         value,
         args.key,
-        args.field
+        args.property
       )
   },
 
   getIndexes(args) {
     return Collection.getIndexes(
-      this.rawDescription as Pick<CollectionDescription, 'fields'>,
+      this.rawDescription as Pick<CollectionDescription, 'properties'>,
       args.key
     )
   }

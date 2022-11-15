@@ -18,23 +18,23 @@ export const getSearchables = () => {
       }
 
       const indexes = description.searchable.indexes.reduce((a: any, index: string) => {
-        const field = description.fields[index]
-        if( !field ) {
+        const property = description.properties[index]
+        if( !property ) {
           return a
         }
 
-        if( field.collection || field.values?.[0]?.__query ) {
+        if( property.collection || property.values?.[0]?.__query ) {
           throw new Error(
             `searchable index cannot be a reference: ${index} @ ${collectionName}`
           )
         }
 
-        const { label, type } = field
+        const { description: propertyDescription, type } = property
 
         return {
           ...a,
           [index]: {
-            label,
+            propertyDescription,
             type
           }
         }

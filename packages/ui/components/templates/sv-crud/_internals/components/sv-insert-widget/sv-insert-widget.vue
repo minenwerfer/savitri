@@ -9,7 +9,7 @@
     <sv-form
       v-bind="{
         collection: metaStore.view.collection,
-        form: store.fields,
+        form: store.properties,
         formData: store.item,
         isReadOnly: isInsertReadOnly,
         layout: store.formLayout

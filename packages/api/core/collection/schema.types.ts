@@ -1,24 +1,26 @@
-import type { CollectionField } from '../../../common/types'
+import type { CollectionProperty, ValuesOf } from '../../../common/types'
 export type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument, ObjectId } from '../../types'
 import type { TypeMapping } from './typemapping'
 
-export type Schema<T extends Fields> = CaseOwned<T>
+export type Schema<T extends Properties> = CaseOwned<T>
 
-export type SchemaFields<T> = {
+export type SchemaProperties<T> = T & {
   [
     P in keyof T as
-    P extends 'fields'
+    P extends keyof Properties
       ? P
       : never
-  ]: P extends 'fields'
+  ]: P extends 'properties'
     ? Writable<T[P]>
     : T[P]
 }
 
-type Fields = {
+type Properties = {
+  $id: string
+  required?: ReadonlyArray<string>
   presets?: ReadonlyArray<string>
-  fields: Record<string, Field<any>>
+  properties: Record<string, Property<any>>
 }
 
 type Reference = ObjectId|string|(object & MongoDocument)|undefined
@@ -28,13 +30,11 @@ type Owned = {
 
 type MapType<T extends keyof TypeMapping> = TypeMapping[T]
 
-type CaseReference<T> = T extends { collection: string }
+type CaseReference<T> = T extends { $id: string }
   ? Reference
-  : T extends { values: [{ __query: { collection: string } }] }
+  : T extends { values: [{ __query: { $id: string } }] } | { values: { __query: { $id: string } } }
   ? Reference
-  : T extends { values: { __query: { collection: string } } }
-  ? Reference
-  : MapType<Field<T>['type']>
+  : MapType<Property<T>['type']>
 
 type CaseArray<T> = T extends { array: true }
   ? Array<CaseReference<T>>
@@ -46,54 +46,59 @@ type CaseReadonly<T> = T extends { readOnly: true }
 
 type Type<T> = CaseReadonly<T>
 
-type Field<F> = F & {
+type Property<F> = F & {
   type: keyof TypeMapping
   array?: boolean
   readOnly?: boolean
 }
 
-type IsRequired<F, Value extends boolean> = keyof {
+type IsRequired<
+  F,
+  ExplicitlyRequired,
+  Value extends boolean
+> = keyof {
   [
     P in keyof F as
-    F[P] extends { required: Value }
+    F[P] extends { required: Value } | { readOnly: true }
       ? P
-      : F[P] extends { readOnly: true }
+      : P extends ValuesOf<ExplicitlyRequired>
       ? P
       : never
   ]: F[P]
 }
 
-type RequiredFields<F> = IsRequired<F, true>
-type UnrequiredFields<F> = IsRequired<F, false>
+type RequiredProperties<F, E> = IsRequired<F, E, true>
+type UnrequiredProperties<F> = IsRequired<F, '', false>
 
-type OptionalFields<F> = Exclude<keyof F, RequiredFields<F>>
+type OptionalProperties<F, E> = Exclude<keyof F, RequiredProperties<F, E>>
 
 type StrictMode<F> = MongoDocument &
   { [P in keyof F]: Type<F[P]> } &
-  { [P in UnrequiredFields<F>]?: Type<F[P]> }
+  { [P in UnrequiredProperties<F>]?: Type<F[P]> }
 
-type PermissiveMode<F> = MongoDocument &
-  { [P in RequiredFields<F>]: Type<F[P]> } &
-  { [P in OptionalFields<F>]?: Type<F[P]> }
+type PermissiveMode<F, E> = MongoDocument &
+  { [P in RequiredProperties<F, E>]: Type<F[P]> } &
+  { [P in OptionalProperties<F, E>]?: Type<F[P]> }
 
-type CaseOwned<T extends Fields> = T extends { owned: true }
+type CaseOwned<T extends Properties> = T extends { owned: true }
   ? Owned & MapTypes<T>
   : MapTypes<T>
 
 type MapTypes<
-  S extends Fields,
-  F=S['fields'],
+  S extends Properties,
+  F=S['properties'],
+  ExplicitlyRequired=S['required']
 > = S extends { strict: true }
   ? StrictMode<F>
-  : PermissiveMode<F>
+  : PermissiveMode<F, ExplicitlyRequired>
 
 
 type F<T> = {
   -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
     ? T[P] & ReadonlyArray<K>
-    : P extends keyof CollectionField
-    ? CollectionField[P]
-    : P
+    : P extends keyof CollectionProperty
+    ? CollectionProperty[P]
+    : never
 }
 type Writable<T> = {
   -readonly [P in keyof T]: F<T[P]>

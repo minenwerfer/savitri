@@ -5,10 +5,11 @@ import {
 
 } from '../constants'
 
-export type CollectionFieldType = typeof COLLECTION_FIELD_TYPES[number]
+export type CollectionPropertyType = typeof COLLECTION_FIELD_TYPES[number]
 export type CollectionPreset = typeof COLLECTION_PRESETS[number]
 
 export type StoreEffect = keyof typeof STORE_EFFECTS
+export type CollectionId = `/${string}`
 
 export type CollectionAction = Readonly<{
   name: string
@@ -32,7 +33,8 @@ export type FormLayout = {
 }
 
 export type CollectionDescription = {
-  collection: string
+  $id: CollectionId
+  name: string
   alias?: string
   unicon?: string
   options?: {
@@ -43,19 +45,20 @@ export type CollectionDescription = {
   }
 
   // modifiers
-  strict?: boolean // all fields are required
+  strict?: boolean // all properties are required
   route?: Array<string>
   owned?: boolean
 
   // takes an array of something
   readonly presets?: Array<CollectionPreset>
+  readonly required?: Array<string>
   table?: Array<string>
   tableMeta?: Array<string>
 
   form?: Array<string>
   writable?: Array<string>
   filters?: Array<string|{
-    field: string
+    property: string
     default: string
   }>
 
@@ -72,23 +75,29 @@ export type CollectionDescription = {
     actions?: Record<string, CollectionAction>
   }
 
-  fields: Record<string, CollectionField>
+  properties: Record<string, CollectionProperty>
 }
 
 export type MaybeCollectionDescription = Omit<CollectionDescription,
-  'fields'
+  '$id'
+  | 'name'
+  | 'properties'
+  | 'required'
   | 'presets'
   | 'actions'
   | 'individualActions'
 > & {
-  presets?: Array<string>
-  fields?: Record<string, any>
+  $id: string
+  name?: string
+  required?: ReadonlyArray<string>
+  presets?: ReadonlyArray<string>
+  properties?: Record<string, any>
   actions?: MaybeCollectionActions
   individualActions?: MaybeCollectionActions
 }
 
 export type CollectionReference = {
-  collection: string
+  $ref: CollectionId
   array?: boolean
   limit?: number
   index?: Array<string>|string
@@ -98,15 +107,14 @@ export type CollectionReference = {
   inlineEditing?: boolean
 }
 
-export type CollectionField = Readonly<Omit<CollectionReference, 'collection'> & {
-  collection?: CollectionReference['collection']
-  label: string
+export type CollectionProperty = Readonly<Omit<CollectionReference, '$ref'> & {
+  $ref?: CollectionId
+  description: string
   placeholder?: string
-  description?: string
-  type?: CollectionFieldType
+  hint?: string
+  type?: CollectionPropertyType
   isReference?: boolean
   dynamicReference?: boolean
-  referencedCollection?: string
   mask?: string
   translate?: boolean
   required?: boolean
@@ -125,7 +133,7 @@ export type CollectionField = Readonly<Omit<CollectionReference, 'collection'> &
   /** @see SvFile */
   readonly accept?: Array<string>
 
-  values?: Record<string, string> | Record<number, any> | {
+  values?: Record<string, string> | Array<any> | {
     __query: CollectionReference
   }
 }>

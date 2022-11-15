@@ -1,4 +1,4 @@
-import type { CollectionField } from '../../../common/types'
+import type { CollectionProperty } from '../../../common/types'
 import type { CollectionState, CollectionGetters } from '../../types/state'
 
 type CrudParameters = {
@@ -47,13 +47,13 @@ interface ActionsAux {
     title?: string
     body?: string
   }): Promise<any>
-  useFields(fields: Array<string>): Record<string, CollectionField>
-  useFieldsExcept(fields: Array<string>): Record<string, CollectionField>
+  useProperties(properties: Array<string>): Record<string, CollectionProperty>
+  usePropertiesExcept(properties: Array<string>): Record<string, CollectionProperty>
   formatValue(args: {
       value: string|object,
       key: string,
       form: boolean,
-      field: CollectionField
+      property: CollectionProperty
     }
   ): string
   getIndexes(args: { key: string, form: boolean }): Array<string>

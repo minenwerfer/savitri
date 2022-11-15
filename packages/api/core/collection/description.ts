@@ -1,10 +1,10 @@
-import type { CollectionDescription } from '../../../common/types'
-import type { SchemaFields } from './schema.types'
+import type { MaybeCollectionDescription } from '../../../common/types'
+import type { SchemaProperties } from './schema.types'
 
 export const makeDescription = <
   T,
-  A=SchemaFields<T>,
-  Description=Omit<CollectionDescription, keyof A>
+  A=SchemaProperties<T>,
+  Description=Omit<MaybeCollectionDescription, keyof A>
 >(schema: A, description: Description): A & Description => ({
   ...schema,
   ...description

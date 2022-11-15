@@ -53,10 +53,6 @@ const metaStore = useStore('meta')
 const userStore = useStore('user')
 const router = useRouter()
 
-/**
-  Updates routes based on global descriptions.
-  @see @/../../reusable/organisms/SvMenu/SvMenu.vue
-*/
 watch(() => metaStore.descriptions, descriptions => {
   if( descriptions?.length === 0 ) return;
 
@@ -66,17 +62,17 @@ watch(() => metaStore.descriptions, descriptions => {
       return
     }
 
-    const routeName = `dashboard-${description.collection}`
+    const routeName = `dashboard-${description.name}`
     if( router.hasRoute(routeName) ) {
       return
     }
 
     const route = {
       name: routeName,
-      path: description.collection,
-      redirect: `/dashboard/c/${description.collection}`,
+      path: description.name,
+      redirect: `/dashboard/c/${description.name}`,
       meta: {
-        title: description.collection,
+        title: description.name,
         unicon: description.unicon,
       }
     }

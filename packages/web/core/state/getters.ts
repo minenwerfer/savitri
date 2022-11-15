@@ -1,23 +1,23 @@
-import type { CollectionField } from '../../../common/types'
+import type { CollectionProperty } from '../../../common/types'
 import type { CollectionState } from '../../types/state'
 import { fromEntries, deepClone } from '../../../common'
 
 import  {
   condenseItem,
   removeEmpty,
-  normalizeFields,
+  normalizeProperties,
   normalizeFilters,
   normalizeActions
 
 } from './helpers'
 
 type Getters = Record<string, (this: CollectionState<any> & Record<`$${string}`, any> & {
-  fields: Record<string, CollectionField>
+  properties: Record<string, CollectionProperty>
 }) => any>
 
 const getters: Getters = {
-  fields() {
-    return normalizeFields(this.description.fields!)
+  properties() {
+    return normalizeProperties(this.description.properties!)
   },
 
   /**
@@ -25,32 +25,32 @@ const getters: Getters = {
    * @see SvCrud
    */
   tableDescription() {
-    if( !this.description.fields ) {
+    if( !this.description.properties ) {
       return
     }
 
-    const prepare = (field: any) => ({
-      ...field,
-      label: field.name?.capitalize() || field.label,
-      type: field.collection ? 'collection' : field.type,
+    const prepare = (property: any) => ({
+      ...property,
+      label: property.name?.capitalize() || property.label,
+      type: property.$ref ? 'collection' : property.type,
     })
 
     if( this.description.table ) {
-      return this.description.table.reduce((a:object, fieldName) => {
-        const field = this.description.fields?.[fieldName]
-        if( !field ) {
+      return this.description.table.reduce((a:object, propertyName) => {
+        const property = this.description.properties?.[propertyName]
+        if( !property ) {
           return a
         }
 
         return {
           ...a,
-          [fieldName]: prepare(field)
+          [propertyName]: prepare(property)
         }
       }, {})
     }
 
-    return fromEntries(Object.entries(this.description.fields)
-      .filter(([, field]: [unknown, any]) => !field.hidden && !field.notable)
+    return fromEntries(Object.entries(this.description.properties)
+      .filter(([, property]: [unknown, any]) => !property.hidden && !property.notable)
       .slice(0, 8))
   },
 
@@ -102,9 +102,9 @@ const getters: Getters = {
   $items() {
     if( !Array.isArray(this.items) ) return []
 
-    const collections = Object.entries(this.description?.fields||{})
-      .reduce((a: Array<any>, [key, field]) => {
-        if( typeof field.collection !== 'string' ) {
+    const collections = Object.entries(this.description?.properties||{})
+      .reduce((a: Array<any>, [key, property]) => {
+        if( typeof property.$ref !== 'string' ) {
           return a
         }
 
@@ -125,12 +125,12 @@ const getters: Getters = {
   },
 
   /**
-   * Retrieves fields which refeer to a collection (typeof collection === 'string') and have "inline" set to true.
+   * Retrieves properties which refeer to a collection (typeof collection === 'string') and have "inline" set to true.
    * Used internally.
    */
   inlineReferences() {
-    return Object.entries(this.description.fields||{})
-      .filter(([, field]) => typeof field.collection === 'string' && field.inline === true)
+    return Object.entries(this.description.properties||{})
+      .filter(([, property]) => typeof property.$ref === 'string' && property.inline === true)
   },
 
   /**
@@ -147,12 +147,12 @@ const getters: Getters = {
     const filters = removeEmpty(deepClone(this.filters||{}))
 
     const expr = (key: string, value: any) => {
-      const field = this.description.fields?.[key]
-      if( !field ) {
+      const property = this.description.properties?.[key]
+      if( !property ) {
         return
       }
 
-      if( field.type === 'text' ) {
+      if( property.type === 'text' ) {
         return {
           $regex: value,
           $options: 'i'
@@ -210,17 +210,17 @@ const getters: Getters = {
   },
 
   availableFilters() {
-    if( !this.description?.filters || !this.description?.fields ) {
+    if( !this.description?.filters || !this.description?.properties ) {
       return {}
     }
 
     return Object.keys(normalizeFilters(this.description.filters))
       .reduce((a: object, k: string) => {
-        const field = this.fields[k]
+        const property = this.properties[k]
 
         return {
           ...a,
-          ...(field ? { [k]: field } : {})
+          ...(property ? { [k]: property } : {})
         }
       }, {})
   }

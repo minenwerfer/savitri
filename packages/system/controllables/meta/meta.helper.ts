@@ -46,9 +46,10 @@ export const getDescriptions = (dynamicUserCollections?: boolean): Record<string
   }
 
   const descriptions = Object.entries(target).reduce((a: any, [, collectionSchema]) => {
+    const preloadedCollection = preloadCollection(collectionSchema)
     return {
       ...a,
-      [collectionSchema.collection]: preloadCollection(collectionSchema)
+      [preloadedCollection.name]: preloadedCollection
     }
   }, {})
 

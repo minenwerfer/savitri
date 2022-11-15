@@ -21,11 +21,11 @@
       >
         <label v-if="
           field.type !== 'boolean'
-            && (!field.collection || field.collection === 'file')
+            && (!field.$ref || field.$ref === 'file')
             && !omitInputLabels
         ">
           <strong>
-            {{ field.translate ? $t(field.label) : field.label }}
+            {{ field.translate ? $t(field.description) : field.description }}
           </strong>
           <div
             v-if="field.description"
@@ -35,8 +35,8 @@
         </label>
 
         <component
-          v-if="layout?.[key]?.component && formComponents[layout[key].component?.name]"
-          :is="formComponents[layout[key].component.name]"
+          v-if="layout?.[key]?.component && formComponents[layout[key].component?.$ref]"
+          :is="formComponents[layout[key].component.$ref]"
           v-model="formData[key]"
           v-bind="{
             field,
@@ -72,7 +72,7 @@
           v-bind="{
             field,
             fieldName: key,
-            placeholder: field.placeholder || (field.translate ? $t(field.label) : field.label)
+            placeholder: field.placeholder || field.translate ? $t(field.description) : field.description
           }"
         ></sv-input>
 
@@ -89,7 +89,7 @@
         <sv-switch
           v-else-if="field.type === 'boolean'"
           v-model="formData[key]"
-          v-slot="{ label }"
+          v-slot="{ description }"
 
           v-bind="{
             field
@@ -112,7 +112,7 @@
         ></sv-select>
 
         <sv-file
-          v-else-if="field.collection === 'file'"
+          v-else-if="field.$ref === 'file'"
           v-model="formData[key]"
           v-bind="{
             field
@@ -120,7 +120,7 @@
         ></sv-file>
 
         <sv-search
-          v-else-if="field.collection"
+          v-else-if="field.$ref"
           :key="`collectionfield-${index}`"
 
           v-model="formData[key]"
@@ -229,7 +229,7 @@ const emit = defineEmits<{
   (e: 'change', value: string): void
 }>()
 
-const collectionName = props.collection || inject('storeId', null)
+const collectionName = props.$ref || inject('storeId', null)
 const store = collectionName
   ? useStore(collectionName.value||collectionName)
   : null
@@ -352,7 +352,7 @@ const fieldStyle = (key:string, field: any) => {
   if(
     isSelectType(field.type)
     && field.type !== 'boolean'
-    || field.collection === 'file'
+    || field.$ref === 'file'
   ) {
     style.push('padding-bottom: .6rem;')
   }

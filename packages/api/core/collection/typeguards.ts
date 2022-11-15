@@ -1,8 +1,8 @@
 import type {
   MaybeCollectionDescription,
   MaybeCollectionAction,
-  CollectionField,
-  CollectionFieldType,
+  CollectionProperty,
+  CollectionPropertyType,
   CollectionPreset,
   StoreEffect
 
@@ -23,23 +23,23 @@ export const presets = (description: MaybeCollectionDescription): MaybeCollectio
   description.presets?.forEach((preset: string) => {
     if( !isValidPreset(preset) ) {
       throw TypeError(
-        `invalid preset "${preset}" at "${(description as MaybeCollectionDescription).collection}"`
+        `invalid preset "${preset}" at "${(description as MaybeCollectionDescription).$id}"`
       )
     }
   })
 
   return description
 }
-export const fields = (description: MaybeCollectionDescription): MaybeCollectionDescription => {
-  const isValidFieldType = (fieldType?: string): fieldType is CollectionFieldType => {
-    return COLLECTION_FIELD_TYPES.includes(fieldType as CollectionFieldType)
+export const properties = (description: MaybeCollectionDescription): MaybeCollectionDescription => {
+  const isValidPropertyType = (propertyType?: string): propertyType is CollectionPropertyType => {
+    return COLLECTION_FIELD_TYPES.includes(propertyType as CollectionPropertyType)
   }
 
-  Object.values(description?.fields||{}).forEach((_field: unknown) => {
-    const field = _field as Pick<CollectionField, 'type' | 'collection'>
-    if( !isValidFieldType(field.type) && !field.collection ) {
+  Object.values(description?.properties||{}).forEach((_property: unknown) => {
+    const property = _property as Pick<CollectionProperty, 'type' | '$ref'>
+    if( !isValidPropertyType(property.type) && !property.$ref ) {
       throw TypeError(
-        `invalid field type "${field.type}" at "${(description as MaybeCollectionDescription).collection}"`
+        `invalid property type "${property.type}" at "${(description as MaybeCollectionDescription).$id}"`
       )
     }
   })
@@ -59,7 +59,7 @@ export const actions = (description: MaybeCollectionDescription): MaybeCollectio
 
     if( action.effect && !isValidStoreEffect(action.effect) ) {
       throw TypeError(
-        `invalid action effect "${action.effect}" at "${actionName}@${(description as MaybeCollectionDescription).collection}"`
+        `invalid action effect "${action.effect}" at "${actionName}@${(description as MaybeCollectionDescription).$id}"`
       )
     }
   }

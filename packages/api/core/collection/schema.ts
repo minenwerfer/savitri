@@ -28,36 +28,38 @@ export const descriptionToSchema = <T>(
 ) => {
   R.pipe(
     TypeGuards.presets,
-    TypeGuards.fields,
+    TypeGuards.properties,
     TypeGuards.actions
   )(description)
 
   let hasRefs = false
 
-  const convert = (a: any, [key, field]: [string, any]) => {
-    if( field.meta ) {
+  const convert = (a: any, [propertyName, property]: [string, any]) => {
+    if( property.meta ) {
       return a
     }
 
     const {
-      collection: collectionName,
+      $ref: referencedCollection,
       ...reference
-    } = getReferencedCollection(field) as any||{}
+    } = getReferencedCollection(property) as any||{}
+
+    const required = property.required !== false && property.type !== 'boolean'
+        ? property.required || description.strict
+        : description.required?.includes(propertyName)
 
     const result: any = {
       type: String,
-      unique: field.unique === true,
-      default: field.default,
-      required: field.required !== false && field.type !== 'boolean'
-        ? field.required || description.strict
-        : false
+      unique: property.unique === true,
+      default: property.default,
+      required
     }
 
-    if( field.hidden ) {
+    if( property.hidden ) {
       result.select = false
     }
 
-    if( typeof collectionName === 'string' && !field.preventPopulate ) {
+    if( typeof referencedCollection === 'string' && !property.preventPopulate ) {
       const join = (value: string|Array<string>) => Array.isArray(value)
         ? value.join(' ')
         : value
@@ -71,18 +73,18 @@ export const descriptionToSchema = <T>(
     }
 
     const typeMatch = Object.entries(typeMapping as Record<string, readonly string[]>)
-      .find(([, types]) => types.includes(field.type))?.[0]
+      .find(([, types]) => types.includes(property.type))?.[0]
 
     if( typeMatch ) {
-      result.type = arrayedTypes.includes(field.type)
+      result.type = arrayedTypes.includes(property.type)
         ? [eval(typeMatch)]
         : eval(typeMatch)
     }
 
-    if( typeof collectionName === 'string' ) {
+    if( typeof referencedCollection === 'string' ) {
       hasRefs = true
-      result.ref = collectionName
-      result.type = field._id === false
+      result.ref = referencedCollection
+      result.type = property._id === false
         ? Object
         : ObjectId
     }
@@ -91,17 +93,17 @@ export const descriptionToSchema = <T>(
       result.type = [result.type]
     }
 
-    if( ['checkbox', 'radio', 'select'].includes(field.type) ) {
-      result.validator = (v: string) => field.values.include(v)
+    if( ['checkbox', 'radio', 'select'].includes(property.type) ) {
+      result.validator = (v: string) => property.values.include(v)
     }
 
-    if( ['text'].includes(field.type) && field.required ) {
+    if( ['text'].includes(property.type) && property.required ) {
       result.validator = (v: string) => !!v && v.length > 0
     }
 
     return {
       ...a,
-      [key]: result
+      [propertyName]: result
     }
   }
 
@@ -117,13 +119,13 @@ export const descriptionToSchema = <T>(
   }
 
   if( description.presets ) {
-    description.fields = description.presets?.reduce((a: CollectionDescription, presetName) => {
-      return applyPreset(a, presetName, 'fields')
+    description.properties = description.presets?.reduce((a: CollectionDescription, presetName) => {
+      return applyPreset(a, presetName, 'properties')
 
-    }, description.fields as CollectionDescription)
+    }, description.properties as CollectionDescription)
   }
 
-  const schemaStructure = Object.entries(description.fields||{})
+  const schemaStructure = Object.entries(description.properties||{})
     .reduce(convert, { ...extra, ...initial })
 
   const schema = new Schema<T>(schemaStructure, options)
@@ -139,7 +141,7 @@ export const createModel = <T=any>(
   options?: any,
   cb?: (schema: Schema) => void
 ) => {
-  const { collection: modelName } = description
+  const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<T>
   }

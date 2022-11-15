@@ -44,7 +44,7 @@ export type CollectionState<Item> = PiniaState & {
 }
 
 export type CollectionGetters = {
-  fields: CollectionDescription['fields']
+  properties: CollectionDescription['properties']
   $filters: CollectionState<unknown>['filters']
   inlineReferences: Array<[string, CollectionReference]>
 }

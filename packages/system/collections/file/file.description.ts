@@ -3,53 +3,55 @@ import { makeDescription, Schema } from '../../../api/core/collection'
 export type File = Schema<typeof schema>
 
 const schema = {
+  $id: 'file',
   owned: true,
-  fields: {
+  required: [
+    'size',
+    'last_modified',
+    'filename',
+    'mime'
+  ],
+  properties: {
     mime: {
-      label: 'Mime',
+      description: 'Mime',
       type: 'text',
-      required: true
     },
     size: {
-      label: 'Tamanho',
+      description: 'Tamanho',
       type: 'number',
-      required: true
     },
     last_modified: {
-      label: 'Modificado em',
+      description: 'Modificado em',
       type: 'datetime',
-      required: true
     },
     filename: {
-      label: 'Nome do arquivo',
+      description: 'Nome do arquivo',
       type: 'text',
-      required: true
     },
     absolute_path: {
-      label: 'Caminho absoluto',
+      description: 'Caminho absoluto',
       type: 'text'
     },
     relative_path: {
-      label: 'Caminho relativo',
+      description: 'Caminho relativo',
       type: 'text'
     },
     immutable: {
-      label: 'Imutável',
+      description: 'Imutável',
       type: 'boolean'
     },
     link: {
-      label: 'Link',
+      description: 'Link',
       type: 'text'
     },
     download_link: {
-      label: 'Link de download',
+      description: 'Link de download',
       type: 'text'
     }
-  }
+  },
 } as const
 
 export const FileDescription = makeDescription<typeof schema>(schema, {
-  collection: 'file',
   actions: {
     deleteAll: {
       name: 'Remover',

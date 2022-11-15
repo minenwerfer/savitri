@@ -1,35 +1,29 @@
 import type {
   CollectionDescription,
-  CollectionField,
+  CollectionProperty,
   CollectionReference
 
 } from './types'
 
-export const getReferencedCollection = (field: CollectionField): CollectionReference|null => {
-  const query = Array.isArray(field.values||[])
-    ? (field.values||[{}])[0]?.__query
-    : field.values?.__query
+export const getReferencedCollection = (property: CollectionProperty): CollectionReference|null => {
+  const query = Array.isArray(property.values)
+    ? property.values?.[0]?.__query
+    : property.values?.__query
 
-  const reference = query || field
-  if( !reference.collection ) {
-    return null
-  }
-
-  return query || Object.assign({}, field)
+  const reference = query || Object.assign({}, property)
+  return reference?.$ref
+    ? reference
+    : null
 }
 
 export function getIndexes(
-  description: Pick<CollectionDescription, 'fields'>,
+  description: Pick<CollectionDescription, 'properties'>,
   key: string
 ): Array<string> {
-  const field = description.fields?.[key]
-  const {
-    collection,
-    index,
+  const property = description.properties?.[key]
+  const { $ref, index, } = getReferencedCollection(property)||{}
 
-  } = getReferencedCollection(field)||{}
-
-  if( !collection || !index ) {
+  if( !$ref || !index ) {
     return []
   }
 
@@ -39,15 +33,15 @@ export function getIndexes(
 }
 
 export const getFirstIndex = (
-  description: Pick<CollectionDescription, 'fields'>,
+  description: Pick<CollectionDescription, 'properties'>,
   key: string
 ): string => {
-  const fields = getIndexes(description, key)||[]
-  return fields[0]
+  const properties = getIndexes(description, key)||[]
+  return properties[0]
 }
 
 export const getFirstValue = (
-  description: Pick<CollectionDescription, 'fields'>,
+  description: Pick<CollectionDescription, 'properties'>,
   value: any,
   key: string
 ): string|number|null => {
@@ -55,9 +49,9 @@ export const getFirstValue = (
     return '-'
   }
 
-  const firstField = getFirstIndex(description, key)
-  const extract = (v: any) => typeof v === 'object' || firstField
-    ? v[firstField]
+  const firstProperty = getFirstIndex(description, key)
+  const extract = (v: any) => typeof v === 'object' || firstProperty
+    ? v[firstProperty]
     : v
 
   const firstValue = Array.isArray(value)
@@ -68,10 +62,10 @@ export const getFirstValue = (
 }
 
 export const formatValue = (
-  description: Pick<CollectionDescription, 'fields'>,
+  description: Pick<CollectionDescription, 'properties'>,
   value: any,
   key: string,
-  field?: CollectionField
+  property?: CollectionProperty
 ): string => {
   const firstValue = value && typeof value === 'object' && !(value instanceof Date)
     ? ((Array.isArray(value) || value?._id) ? getFirstValue(description, value, key) : Object.values(value)[0])
@@ -79,10 +73,10 @@ export const formatValue = (
 
   const formatted = (() => {
     switch(true) {
-      case field?.type === 'datetime':
-        return (String(firstValue) as any).formatDateTime(field?.includeHours)
+      case property?.type === 'datetime':
+        return (String(firstValue) as any).formatDateTime(property?.includeHours)
 
-      case field?.type === 'boolean': return firstValue ? 'true' : 'false'
+      case property?.type === 'boolean': return firstValue ? 'true' : 'false'
       case [undefined, null].includes(firstValue): return '-'
       default: return firstValue
     }

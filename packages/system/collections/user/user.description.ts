@@ -5,74 +5,77 @@ export type User = Schema<typeof schema> & {
 }
 
 const schema = {
-  fields: {
+  $id: 'user',
+  required: [
+    'first_name',
+    'last_name',
+    'role',
+    'email'
+  ],
+  properties: {
     first_name: {
-      label: 'Nome',
+      description: 'Nome',
       type: 'text',
-      required: true
     },
     last_name: {
-      label: 'Sobrenome',
+      description: 'Sobrenome',
       type: 'text',
-      required: true
     },
     full_name: {
-      label: 'Nome completo',
+      description: 'Nome completo',
       type: 'text',
       noform: true
     },
     active: {
-      label: 'Ativo',
+      description: 'Ativo',
       type: 'boolean',
       default: true
     },
     role: {
-      label: 'Papel',
+      description: 'Papel',
       type: 'select',
       values: [],
-      required: true
     },
     email: {
-      label: 'Email',
+      description: 'Email',
       type: 'email',
       unique: true,
-      required: true
     },
     password: {
-      label: 'Senha',
+      description: 'Senha',
       type: 'password',
       hidden: true,
       noform: true
     },
     phone: {
-      label: 'Telefone',
+      description: 'Telefone',
       type: 'text',
       mask: '(##) #####-####'
     },
     picture: {
-      collection: 'file',
-      label: 'Foto',
+      $ref: 'file',
+      description: 'Foto',
       accept: [
         'image/*',
       ]
     },
     group: {
-      label: 'Grupo',
+      description: 'Grupo',
       type: 'text',
       noform: true
     },
     self_registered: {
-      label: 'Autoregistrado',
+      description: 'Autoregistrado',
       type: 'boolean',
       readOnly: true
     },
     wizard_versions: {
-      label: 'Versão do wizard',
+      description: 'Versão do wizard',
       type: 'text',
       array: true
     },
     updated_at: {
-      label: 'Atualizado em',
+      description: 'Atualizado em',
       type: 'datetime',
       meta: true
     },
@@ -80,7 +83,6 @@ const schema = {
 } as const
 
 export const UserDescription = makeDescription<typeof schema>(schema, {
-  collection: 'user',
   presets: [
     'crud',
     'view',

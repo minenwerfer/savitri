@@ -1,11 +1,9 @@
+import type { ValuesOf } from '../../../common/types'
+
 export type MakeMapping<
   T extends Record<string, readonly string[]>,
   Arrayed extends readonly string[]
 > = Flatten<DeepMapping<T>, Arrayed>
-
-type ValuesOf<T> = T extends readonly string[]
-  ? T[number]
-  : T[keyof T]
 
 type DeepMapping<T extends Record<string, readonly string[]>> = {
   [P in keyof T]: {

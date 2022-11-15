@@ -3,27 +3,28 @@ import { makeDescription, Schema } from '../../../api/core/collection'
 export type Report = Schema<typeof schema>
 
 const schema = {
+  $id: 'report',
   owned: true,
-  fields: {
+  properties: {
     _collection: {
-      label: 'Módulo',
+      description: 'Módulo',
       type: 'text',
       translate: true
     },
     created_at: {
-      label: 'Data',
+      description: 'Data',
       type: 'datetime',
       meta: true
     },
     file: {
-      collection: 'file',
-      label: 'Arquivo',
+      $ref: 'file',
+      description: 'Arquivo',
       index: 'name',
       notable: true,
       noform: true
     },
     format: {
-      label: 'Formato',
+      description: 'Formato',
       type: 'select',
       values: {
         csv: 'CSV',
@@ -31,7 +32,7 @@ const schema = {
       }
     },
     type: {
-      label: 'Tipo',
+      description: 'Tipo',
       type: 'radio',
       values: {
         filtered_only: 'Apenas resultados filtrados',
@@ -40,25 +41,25 @@ const schema = {
       translate: true
     },
     limit: {
-      label: 'Limite',
-      description: 'Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção "Relatórios" antes de prosseguir.',
+      description: 'Limite',
+      hint: 'Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção "Relatórios" antes de prosseguir.',
       type: 'number',
       notable: true
     },
     offset: {
-      label: 'Offset',
-      description: 'Deixe vazio para retornar do princípio',
+      description: 'Offset',
+      hint: 'Deixe vazio para retornar do princípio',
       type: 'number',
       notable: true
     },
     filters: {
-      label: 'Filtros',
+      description: 'Filtros',
       type: 'object',
       notable: true,
       noform: true
     },
     entries_count: {
-      label: 'Entradas',
+      description: 'Entradas',
       type: 'number',
       noform: true
     }
@@ -66,7 +67,6 @@ const schema = {
 } as const
 
 export const ReportDescription = makeDescription<typeof schema>(schema, {
-  collection: 'report',
   unicon: 'bag-alt',
   presets: [
     'deleteAll'

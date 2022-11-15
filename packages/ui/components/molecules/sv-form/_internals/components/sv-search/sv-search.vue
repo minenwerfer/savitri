@@ -269,7 +269,7 @@ const search = async () => {
         }
       }))
     }
-  })).result
+  }))
 }
 
 let lazySearchTimeout

@@ -24,8 +24,8 @@ export abstract class Controller {
    */
   constructor(
     readonly props: {
-      description?: Partial<CollectionDescription>,
-      controller?: string
+      description?: CollectionDescription,
+      controller: string
       forbiddenMethods?: Array<string>,
       rawMethods?: Record<string, string>,
       provide?: Record<string, any>
@@ -36,8 +36,10 @@ export abstract class Controller {
     }
 
     if( !props.controller ) {
-      props.controller = props.description?.collection
+      props.controller = props.description!.$id
     }
+
+    props.controller = props.controller.split('/').pop() as string
 
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {

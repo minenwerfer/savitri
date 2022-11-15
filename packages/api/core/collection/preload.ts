@@ -1,9 +1,6 @@
 import * as R from 'ramda'
 import { getReferencedCollection, CollectionDescription } from '../../../common'
-
-type DeepWritable<T> = {
-  -readonly [P in keyof T]: DeepWritable<T[P]>
-}
+import type { DeepWritable } from '../../../common/types'
 
 export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${collectionName}`)
@@ -23,15 +20,15 @@ export const requireCollection = (collectionName:string): any => {
 }
 
 export const preloadCollection = (
-  collection: Omit<CollectionDescription, 'fields'> & {
-    fields?: DeepWritable<CollectionDescription['fields']>
+  collection: Omit<CollectionDescription, 'properties'> & {
+    properties?: DeepWritable<CollectionDescription['properties']>
   }
 ) => {
   if( collection.alias ) {
     const _aliasedCollection = requireCollection(collection.alias)
 
     const {
-      collection: collectionName,
+      $id: collectionName,
       strict,
       ...aliasedCollection
 
@@ -55,24 +52,24 @@ export const preloadCollection = (
     Object.assign(collection, merge)
   }
 
-  if( collection.fields ) {
-    collection.fields = Object.entries(collection.fields).reduce((a: any, [key, _field]) => {
-      const field = Object.assign({}, _field)
-      const reference = getReferencedCollection(field)
+  if( collection.properties ) {
+    collection.properties = Object.entries(collection.properties).reduce((a: any, [key, _property]) => {
+      const property = Object.assign({}, _property)
+      const reference = getReferencedCollection(property)
 
       if( reference ) {
-        field.type ??= 'reference'
-        field.isReference = true
-        field.dynamicReference = !field.collection
-        field.referencedCollection = reference.collection
+        property.type ??= 'reference'
+        property.isReference = true
+        property.dynamicReference = !property.$ref
       }
 
       return {
         ...a,
-        [key]: field
+        [key]: property
       }
     }, {})
   }
 
+  collection.name = collection.$id.split('/').pop() as string
   return collection
 }

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { User } from '../../../../system/collections/user/user.description'
 import useCollection from '../collection'
-import { normalizeFields, normalizeValues } from '../helpers'
+import { normalizeProperties, normalizeValues } from '../helpers'
 import useMetaStore from './meta'
 
 type Credentials = {
@@ -53,12 +53,12 @@ const collection = useCollection({
     }
   },
   getters: {
-    fields() {
+    properties() {
       const metaStore = useMetaStore()
-      const fields = normalizeFields(this.description.fields!)
-      fields.role.values = normalizeValues(Object.keys(metaStore.roles))
+      const properties = normalizeProperties(this.description.properties!)
+      properties.role.values = normalizeValues(Object.keys(metaStore.roles))
 
-      return fields
+      return properties
     },
 
     $currentUser(): UserState['currentUser'] {

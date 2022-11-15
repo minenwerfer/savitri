@@ -21,17 +21,17 @@
           :key="`header-${index}`"
           :class="`
             table__header
-            table__header--label
+            table__header--description
             ${border && 'table__header--border'}
         `">
-          {{ header.label || header.placeholder }}
+          {{ header.description || header.placeholder }}
         </th>
         <th
           v-if="actions"
           style="text-align: right;"
           :class="`
             table__header
-            table__header--label
+            table__header--description
             ${border && 'table__header--border'}
         `"></th>
       </tr>
@@ -55,7 +55,7 @@
           />
         </td>
         <td
-          v-for="([column, field], cindex) in Object.entries(columns)"
+          v-for="([column, property], cindex) in Object.entries(columns)"
           :key="`column-${row._id}-${cindex}`"
           :class="`
             table__cell
@@ -65,20 +65,20 @@
           <div class="table__cell-grid">
             <!-- responsivity on mobile -->
             <div style="display: none">
-              {{ field.label }}
+              {{ property.description }}
             </div>
 
-            <div v-if="field.type === 'image'">
+            <div v-if="property.type === 'image'">
               <img
                 :src="row[column].src"
                 v-if="row[column]?.src"
               />
             </div>
 
-            <div v-else-if="field.type === 'boolean'">
+            <div v-else-if="property.type === 'boolean'">
               <sv-switch
-                v-if="!field.readOnly"
-                v-bind="field"
+                v-if="!property.readOnly"
+                v-bind="property"
                 v-model="row[column]"
                 @update:model-value="toggle($event, row._id, column)"
               ></sv-switch>
@@ -93,7 +93,7 @@
             </div>
 
             <div v-else>
-              <div v-if="field.collection === 'file'">
+              <div v-if="property.$ref === 'file'">
                 <sv-picture
                   v-if="/^image/.test(row[column].mime)" 
                   v-model="row[column].link"
@@ -115,7 +115,7 @@
                   store.formatValue({
                     value: row[column],
                     key: column,
-                    field
+                    property
                   })
                 }}
               </div>
@@ -127,7 +127,7 @@
                 }}
               </div>
             </div>
-            <div v-if="store?.getIndexes({ key: column })?.length > 1 && field.collection !== 'file'">
+            <div v-if="store?.getIndexes({ key: column })?.length > 1 && property.collection !== 'file'">
               <div
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"

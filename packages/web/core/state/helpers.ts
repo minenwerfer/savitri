@@ -9,14 +9,14 @@ import type {
 
 } from '../../../common/types'
 
-const isObject = (field: any) =>
-  typeof field.collection === 'string'
-    || field.type === 'object'
-    || field.values?.[0]?.__query
-    || field.values?.__query
+const isObject = (property: any) =>
+  typeof property.$ref === 'string'
+    || property.type === 'object'
+    || property.values?.[0]?.__query
+    || property.values?.__query
 
-const isArray = (field: any) => field.array
-  || Array.isArray(field.values)
+const isArray = (property: any) => property.array
+  || Array.isArray(property.values)
 
 
 export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
@@ -43,19 +43,20 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
       }
     }
 
-    if( !query.collection ) {
-      throw new TypeError('dynamic query but no collection is specified')
+    const ref = query.$ref?.split('/').pop() as string
+    if( !ref ) {
+      throw new TypeError('dynamic query but no ref is specified')
     }
 
-    return withIsomorphicLock(`dynamicQuery:${query.collection}`, async () => {
-      if( !(query.collection in QUERY_CACHE) ) {
-        QUERY_CACHE[query.collection] = {
+    return withIsomorphicLock(`dynamicQuery:${ref}`, async () => {
+      if( !(ref in QUERY_CACHE) ) {
+        QUERY_CACHE[ref] = {
           items: [],
           satisfied: false
         }
       }
 
-      const stored = QUERY_CACHE[query.collection]
+      const stored = QUERY_CACHE[ref]
       const hasToUpdate = typeof query.limit === 'number'
         && (query.limit > stored.items.length || query.limit === 0)
         && !stored.satisfied
@@ -75,7 +76,7 @@ export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any
         return {}
       }
 
-      const route = `${query.collection}/getAll`
+      const route = `${ref}/getAll`
 
       try {
         const options: any = {
@@ -158,7 +159,7 @@ export const normalizeActions = (actions: CollectionActions) => Object.entries(a
 export const normalizeFilters = (filters: Array<any>) => {
   return filters.reduce((a: any, b) => {
     const filter = typeof b !== 'string'
-      ? { [b.field]: b.default||'' }
+      ? { [b.property]: b.default||'' }
       : { [b]: '' }
 
       return {
@@ -190,43 +191,43 @@ export const normalizeValues = (values: any|Array<any>) => {
   }), {})
 }
 
-export const normalizeFields = (fields: CollectionDescription['fields']) => {
-  return Object.entries(fields||{}).reduce((a: object, [fieldName, field]: [string, any]) => {
-    if( field.values && field.type !== 'boolean' ) {
-      field.values = normalizeValues(field.values)
+export const normalizeProperties = (properties: CollectionDescription['properties']) => {
+  return Object.entries(properties||{}).reduce((a: object, [propertyName, property]: [string, any]) => {
+    if( property.values && property.type !== 'boolean' ) {
+      property.values = normalizeValues(property.values)
     }
 
-    if( typeof field.collection === 'string' ) {
-      field.type = 'collection'
+    if( typeof property.collection === 'string' ) {
+      property.type = 'collection'
     }
 
-    field.type ??= 'text'
+    property.type ??= 'text'
 
     return {
       ...a,
-      [fieldName]: field
+      [propertyName]: property
     }
   }, {})
 }
 
 export const freshItem = (description: CollectionDescription) => {
-  const item: Record<string, any> = Object.entries(description.fields||{}).reduce((a: any, [key, field]) => {
-    if( !isObject(field) ) {
+  const item: Record<string, any> = Object.entries(description.properties||{}).reduce((a: any, [key, property]) => {
+    if( !isObject(property) ) {
       return a
     }
 
-    if( [...ARRAY_TYPES, 'boolean'].includes(field.type!) ) {
+    if( [...ARRAY_TYPES, 'boolean'].includes(property.type!) ) {
       return {
         ...a,
-        [key]: field.type !== 'radio'
-          ? (field.type === 'boolean' ? false : [])
+        [key]: property.type !== 'radio'
+          ? (property.type === 'boolean' ? false : [])
           : ''
       }
     }
 
     return {
       ...a,
-      [key]: isArray(field) ? [] : {}
+      [key]: isArray(property) ? [] : {}
     }
   }, {})
 
@@ -234,16 +235,16 @@ export const freshItem = (description: CollectionDescription) => {
 }
 
 export const freshFilters = (description: CollectionDescription) => {
-  return Object.entries(description.fields||{})
-    .reduce((a: any, [key, field]: [string, any]) => {
-      if( isObject(field) ) {
+  return Object.entries(description.properties||{})
+    .reduce((a: any, [key, property]: [string, any]) => {
+      if( isObject(property) ) {
         return {
           ...a,
-          [key]: isArray(field) ? [] : {}
+          [key]: isArray(property) ? [] : {}
         }
       }
 
-      if( field.type === 'datetime' ) {
+      if( property.type === 'datetime' ) {
         return {
           ...a,
           [key]: {
