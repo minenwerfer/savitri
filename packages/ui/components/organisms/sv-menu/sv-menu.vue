@@ -94,14 +94,14 @@ const onEntryClick = (route: Route & { meta: any }) => {
   }
 }
 
-const getSchema = (schema: any, routes: Array<Route>) => {
+const getSchema = (schema: any, routes: Array<Route>): Array<Route&SchemaNode> => {
   if( !Array.isArray(schema) ) {
     return schema
   }
 
   return schema.map((s) => {
     return typeof s === 'string'
-      ? routes.find((route: Route) => route.name === s)
+      ? routes.find((route) => route.name === s)
       : s
   })
 }
@@ -155,7 +155,7 @@ const routesWithChildren = computed(() => (
 ))
 
 watch(() => metaStore.descriptions, () => {
-  routes.value = getRoutes()
+  routes.value = getRoutes() as any
 })
 </script>
 

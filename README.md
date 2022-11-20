@@ -1,7 +1,7 @@
 Savitri
 =======
 
-Strongely typed, fullstack TypeScript RAD (remote application development) framework.
+Strongely typed, fullstack TypeScript RAD (RAD application development) framework.
 It's not a public release yet.
 
 Built on:

@@ -27,7 +27,7 @@
     ]
   },
   "include": [
-    "packages/global.d.ts",
+    "packages/web/global.d.ts",
     "packages/*/**/*.ts",
     "packages/*/**/*.vue"
   ],

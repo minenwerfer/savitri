@@ -7,6 +7,7 @@ export type RouteMeta = {
     hidden?: boolean
     isPrivate?: boolean
     order?: number
+    roles?: Array<string>
   }
 }
 

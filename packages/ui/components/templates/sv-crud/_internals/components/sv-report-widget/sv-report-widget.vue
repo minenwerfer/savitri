@@ -43,9 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useStore, useParentStore } from '@savitri/web'
-import { SvBox, SvForm, SvButton } from '../../../../../..'
+import { useStore, useParentStore } from '../../../../../../../web'
+import { SvBox, SvForm, SvButton } from '../../../../..'
 import { isReportVisible } from '../../store'
 
 const props = defineProps<{
@@ -53,9 +52,7 @@ const props = defineProps<{
 }>()
 
 const store = useParentStore()
-
 const reportStore = useStore('report')
-const metaStore = useStore('meta')
 
 const requestReport = () => {
   return reportStore.insert({

@@ -64,7 +64,8 @@ const emit = defineEmits<{
 const fileStore = useStore('file')
 provide('buttonSize', 'small')
 
-const preview = ref(null)
+const preview = ref<({ type: string }&Blob)|null>(null)
+
 const previewFile = computed(() =>
   preview.value
     ? URL.createObjectURL(preview.value)
@@ -73,7 +74,7 @@ const previewFile = computed(() =>
 
 const isImage = computed(() => 
   (/^image\//.test(props.modelValue?.mime) && !preview.value?.type)
-    || /^image\//.test(preview.value?.type)
+    || /^image\//.test(preview.value?.type!)
 )
 
 const readFile = (file: any): Promise<any> => new Promise((resolve) => {

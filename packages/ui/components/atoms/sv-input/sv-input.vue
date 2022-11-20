@@ -8,7 +8,7 @@
       <slot name="hint"></slot>
     </div>
     <div
-      v-if="property.type !== 'textbox'"
+      v-if="property.s$format !== 'textbox'"
       :class="`
         input__container
         input__container--${variant}`
@@ -89,9 +89,10 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const property = props.property||{}
 
 const searchOnly = inject('searchOnly', false)
-const readOnly = !searchOnly && props.readOnly
+const readOnly = !searchOnly && property.readOnly
 
 const copyToClipboard = useClipboard()
 
@@ -102,7 +103,6 @@ const emit = defineEmits<{
 const input = ref(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
 
-const property = props.property||{}
 const {
   s$icon: icon,
   s$mask: mask,

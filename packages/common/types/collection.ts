@@ -109,7 +109,6 @@ type CollectionPropertyAux = {
   notable?: boolean
   unique?: boolean
   hidden?: boolean
-  uniqueItems?: boolean
 
   /** @see SvFile */
   readonly accept?: Array<string>

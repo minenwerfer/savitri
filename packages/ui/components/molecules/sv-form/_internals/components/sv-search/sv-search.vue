@@ -207,19 +207,19 @@ const clear = () => {
 
 const select = (item: any, itemIndex: number) => {
   const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
-  const modelValue = props.property.array
+  const modelValue = props.property.type === 'array'
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
-  if( props.property.uniqueValues ) {
+  if( props.property.uniqueItems ) {
     matchingItems.value.splice(itemIndex, 1)
   }
 
-  if( !props.property.array ) {
+  if( props.property.type === 'array' ) {
     matchingItems.value = []
   }
 
-  emit('update:modelValue', props.property.array
+  emit('update:modelValue', props.property.type === 'array'
     ? [ ...modelValue, item ]
     : item
   )
@@ -237,7 +237,7 @@ const addItem = () => {
 }
 
 const search = async () => {
-  if( Object.values(inputValue).every((v: string) => !(String(v).length > 0)) ) {
+  if( Object.values(inputValue).every((v) => !(String(v).length > 0)) ) {
     matchingItems.value = []
     return
   }
@@ -261,7 +261,7 @@ const search = async () => {
   }))
 }
 
-let lazySearchTimeout
+let lazySearchTimeout: any
 const lazySearch = () => {
   isTyping.value = true
   window.clearTimeout(lazySearchTimeout)

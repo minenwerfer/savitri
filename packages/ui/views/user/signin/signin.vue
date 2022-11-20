@@ -50,9 +50,9 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, useParentStore } from '@savitri/web'
+import { useStore, useParentStore } from '../../../../web'
 import { default as webpackVariables } from 'variables'
-import { SvForm, SvButton } from '../../..'
+import { SvForm, SvButton } from '../../../components'
 
 const router = useRouter()
 const userStore = useParentStore()

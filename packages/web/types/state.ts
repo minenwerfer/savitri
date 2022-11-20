@@ -1,3 +1,4 @@
+import type { StoreGeneric } from 'pinia'
 import type { CollectionDescription, CollectionProperty } from '../../common/types/collection'
 import collectionActions from '../core/state/actions'
 import collectionGetters from '../core/state/getters'
@@ -52,6 +53,8 @@ export type CollectionGetters = {
 export type CollectionStore<T=any> = CollectionState<T>
   & typeof collectionActions
   & typeof collectionGetters
+  & CollectionGetters
+  & StoreGeneric
 
 export type CollectionStructure<T=any> = CollectionState<T> & {
   getters?: any

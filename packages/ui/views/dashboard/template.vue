@@ -30,9 +30,8 @@
 
 <script setup lang="ts">
 import { onMounted, inject, ref } from 'vue'
-import { useStore } from '@savitri/web'
-import { default as webpackVariables } from 'variables'
-import { SvMenu, SvTopbar } from '../..'
+import { useStore } from '../../../web'
+import { SvMenu, SvTopbar } from '../../components'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'

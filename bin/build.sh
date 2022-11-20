@@ -18,7 +18,7 @@ tsc || true && \
   [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
 
 [ "$COMMAND" == "pack" ] && {
-  cp tsconfig.json dist/web
+  cp {tsconfig.json,global.d.ts} dist/web
   cp -r packages/web/public dist/web
 
   for package in ${PACKAGES[*]}; do

@@ -76,7 +76,7 @@ const metaStore = useStore('meta')
 const store = useStore(metaStore.view.collection)
 const individualActions = inject('individualActions', [])
 
-const parentStore = inject('parentStore')
+const parentStore = inject<CollectionStore<any>>('parentStore')
 
 const insert = async () => {
   const result = await store.deepInsert({
@@ -84,14 +84,14 @@ const insert = async () => {
   })
 
   if( props.parentField ) {
-    const newSet = parentStore.item[props.parentField] ||= []
-    if( newSet.findIndex(({ _id }) => _id === result._id) === -1 ) {
+    const newSet = parentStore!.item[props.parentField] ||= []
+    if( newSet.findIndex(({ _id }:{ _id: string }) => _id === result._id) === -1 ) {
       newSet.push(result._id)
     }
 
-    await parentStore.insert({
+    await parentStore!.insert({
       what: {
-        _id: parentStore.item._id,
+        _id: parentStore!.item._id,
         [props.parentField]: newSet
       }
     })

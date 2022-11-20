@@ -124,14 +124,14 @@ const emit = defineEmits<{
 const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
 
-const body = ref<Element & { offsetHeight: number }>({})
+const body = ref<Element & { offsetHeight: number }>()
 
 const reachedEnd = ref(true)
 
 const updateScroll = () => {
   const { value: bodyElem } = body
   reachedEnd.value = bodyElem
-    ? bodyElem.scrollTop + bodyElem.offsetHeight >= bodyElem.scrollHeight
+    ? bodyElem.scrollTop + bodyElem.offsetHeight! >= bodyElem.scrollHeight
     : true
 }
 

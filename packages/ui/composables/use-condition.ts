@@ -1,12 +1,11 @@
-export default (
-  subject: any,
-  condition: {
-    operator: string
-    term1: string
-    term2: any
-    else: any
-  }
-) => {
+export type Condition = {
+  operator: string
+  term1: string
+  term2: string
+  else?: any
+}
+
+export default (subject: any, condition: Condition) => {
   const {
     operator,
     term2
@@ -24,6 +23,7 @@ export default (
       case 'equal': return term1 === term2
       case 'unequal': return term1 !== term2
       case 'in': return term2.includes(term1)
+      default: return false;
     }
   })()
 

@@ -44,9 +44,8 @@
 
 <script setup lang="ts">
 import { provide, inject } from 'vue'
-import { default as webpackVariables } from 'variables'
-import { useStore } from '@savitri/web'
-import { SvInfo, SvIcon, SvBox } from '../..'
+import { useStore } from '../../../../web'
+import { SvInfo, SvIcon } from '../..'
 
 import SvSearchBar from './_internals/components/sv-search-bar/sv-search-bar.vue'
 import SvSearchResults from './_internals/components/sv-search-results/sv-search-results.vue'

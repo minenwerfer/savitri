@@ -6,11 +6,11 @@
     :key="modelValue"
     :value="getValue(modelValue)"
     @click.stop="void"
-    @change="$emit('update:modelValue', $event.target.value)"
+    @change="$emit('update:modelValue', ($event.target as any).value)"
   >
     <option value="">{{ $t('none') }}</option>
     <option
-      v-for="option in property?.values"
+      v-for="option in property?.enum"
       :key="option.value"
       :value="option.value"
     >
@@ -27,18 +27,18 @@ export default {
 </script>
 
 <script setup lang="ts">
+import type { CollectionProperty } from '../../../../common'
+
 type Props = {
   modelValue?: any
-  property?: {
-    values: Array<any>
-  }
+  property: CollectionProperty
 }
 
 const props = defineProps<Props>()
 
 const getValue = (value: any) => {
   return typeof value !== 'string'
-    ? Object.keys(props.property?.values||{}).find((key: string) => value?._id === key)
+    ? Object.keys(props.property?.enum||{}).find((key: string) => value?._id === key)
     : value
 }
 </script>

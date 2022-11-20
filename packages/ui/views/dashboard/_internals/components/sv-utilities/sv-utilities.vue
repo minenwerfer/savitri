@@ -29,14 +29,13 @@ import {
 
 } from 'vue'
 
-import { useStore, useHttp } from '../../../../../../web'
-import { SvInfo, SvIcon, SvNew } from '../../../../..'
-
+import { SvInfo, SvIcon } from '../../../../../components'
 import { default as webpackVariables } from 'variables'
 
-const { http } = useHttp()
-const metaStore = useStore('meta')
-const release = reactive({})
+const release = reactive({
+  product: []
+})
+
 provide('release', release)
 
 //onMounted(async () => {
@@ -45,7 +44,7 @@ provide('release', release)
 //  }
 //})
 
-const lastRelease = computed(() => release.product?.length)
+const lastRelease = computed(() => release.product.length)
 const _lastReadRelease = ref(0)
 
 const lastReadRelease = computed({

@@ -23,9 +23,9 @@ declare module 'vue-unicons/dist/icons' {
 //   export * from './'
 // }
 
-// declare module '@savitri/ui' {
-//   export * from '../ui'
-// }
+declare module '@savitri/ui' {
+  export { default as routes } from '../ui/router'
+}
 
 // declare module '@savitri/common' {
 //   export * from '../common'

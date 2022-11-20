@@ -186,21 +186,11 @@
 </template>
 
 <script setup lang="ts">
-import {
-  inject,
-  ref,
-  watch,
-  reactive,
-  computed,
-  toRefs
-
-} from 'vue'
-
-import { useStore, useFile } from '@savitri/web'
+import { inject, computed } from 'vue'
+import { useStore } from '../../../../web'
 
 import {
   SvButton,
-  SvBareButton,
   SvIcon,
   SvPicture,
   SvDropdown,
@@ -213,7 +203,7 @@ import { useCondition } from '../../../composables'
 type Props = {
   columns: any
   rows: any
-  collection?: string
+  collection?: string&{ value: string }
   checkbox?: boolean
   border?: boolean
   headers?: boolean

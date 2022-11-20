@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../web'
 import { SvButton } from '../../'
 
 const SvModal = defineAsyncComponent(() => import('../../organisms/sv-modal/sv-modal.vue'))

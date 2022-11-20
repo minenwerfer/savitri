@@ -158,11 +158,10 @@ import {
   computed,
   provide,
   inject,
-  reactive
 
 } from 'vue'
 
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../web'
 import {
   SvInput,
   SvOptions,
@@ -171,17 +170,20 @@ import {
 
 } from '../..'
 
-import { useCondition } from '../../../composables'
+import { useCondition, Condition } from '../../../composables'
 
 import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
 
 type LayoutConfig = {
-  span: string
-  verticalSpacing: string
+  span?: string
+  verticalSpacing?: string
+  component?: string
+  if?: Condition
 }
 
 type Props = {
+  $ref?: string&{ value: string }
   form: Record<string, any>
   formData: Record<string, any>
   collection?: string
@@ -192,7 +194,7 @@ type Props = {
   formComponents?: any
   omitFormHeader?: boolean
   omitInputLabels?: boolean
-  validationErrors?: Record<string, any>
+  validationErrors?: Record<string, any>|null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -220,7 +222,7 @@ if( !collectionName && process.env.NODE_ENV !== 'production' ) {
   )
 }
 
-const passAhead = (propName: string) => {
+const passAhead = (propName: keyof Props) => {
   const value = inject(propName, props[propName])
   if( props[propName] ) {
     provide(propName, props[propName])

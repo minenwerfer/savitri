@@ -74,7 +74,7 @@ const collectionsActions: Record<string, {
 
 const resultsByModule = computed(() => {
   return Object.entries(results.items)
-    .filter(([, results]: [unknown, Array<any>]) => results.length > 0)
+    .filter(([, results]: [unknown, Array<{ _id: string }>]) => results.length > 0)
 })
 
 const clearResults = () => {

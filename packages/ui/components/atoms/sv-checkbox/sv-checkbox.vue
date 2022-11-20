@@ -61,7 +61,7 @@ const emit = defineEmits<{
 const checkbox = ref<any>(null)
 
 const value = typeof props.value === 'object'
-  ? (props.value?._id || props.value)
+  ? ((props.value as any)?._id || props.value)
   : props.value
 
 const selectedValues = (values: Array<Props['modelValue']>): (string|boolean)[] => {

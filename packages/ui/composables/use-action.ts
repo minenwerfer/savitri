@@ -19,7 +19,7 @@ export default <T extends { $id: string }, F extends { _id: string }>(
     params: {}
   })
 
-  const fn = (actionProps: CollectionAction & { action: string }) => {
+  const fn = (actionProps: CollectionAction & { action: string }): (filters: F) => void => {
     const { action: actionName, effect: actionEffect } = actionProps
     const [scopeName, scopedAction] = actionName.split('/')
 

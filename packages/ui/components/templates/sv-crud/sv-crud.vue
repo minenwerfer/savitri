@@ -95,16 +95,14 @@ import {
 } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useStore, useParentStore, ActionEvent } from '@savitri/web'
+import { useStore, useParentStore, ActionEvent, CollectionStore } from '../../../../web'
 import { useAction } from '../../../composables'
 
 import {
   SvBox,
   SvTable,
-  SvForm,
   SvButton,
   SvPagination,
-  SvBareButton,
   SvInfo,
   SvIcon
 
@@ -139,7 +137,10 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const router = useRouter()
 
-let store, parentStore
+let
+  store: CollectionStore = null,
+  parentStore: CollectionStore = null
+
 const metaStore = useStore('meta')
 
 try {
@@ -206,7 +207,7 @@ onUnmounted(() => {
 })
 
 
-watch(() => actionEventBus, async (event: ActionEvent) => {
+watch(() => actionEventBus, async (event) => {
   if (
     [
       'spawnEdit',
@@ -261,8 +262,8 @@ watch(() => actionEventBus, async (event: ActionEvent) => {
 }, { deep: true })
 
 
-watch(() => isInsertVisible, (value: boolean) => {
-  if( value === false ) {
+watch(() => isInsertVisible, (value) => {
+  if( value.value === false ) {
     metaStore.view.collection = props.collection
     store.clearItem()
   }

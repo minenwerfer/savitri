@@ -35,15 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
 import { useStore } from '@savitri/web'
 import {
-  SvHeader,
   SvBox,
   SvForm,
   SvButton
 
-} from '../../../..'
+} from '../../../../components'
 
 const userStore = useStore('user')
 const metaStore = useStore('meta')

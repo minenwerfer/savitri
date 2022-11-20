@@ -17,7 +17,9 @@ export type Property = {
   default?: any
   description?: string
   items?: Property
+
   readOnly?: boolean
+  uniqueItems?: boolean
 
   minimum?: number
   maximum?: number
