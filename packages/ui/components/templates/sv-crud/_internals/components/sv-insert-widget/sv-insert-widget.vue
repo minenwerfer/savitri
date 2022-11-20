@@ -54,7 +54,8 @@
 
 <script setup lang="ts">
 import { inject, watch } from 'vue'
-import { useStore, useParentStore } from '@savitri/web'
+import type { CollectionStore } from '../../../../../../../web'
+import { useStore } from '../../../../../../../web'
 import {
   SvBox,
   SvForm,
@@ -62,9 +63,9 @@ import {
   SvDropdown,
   SvIcon
   
-} from '@savitri/ui'
+} from '../../../../..'
 
-import { isInsertVisible, isInsertReadOnly } from '../../store'
+import { isInsertVisible } from '../../store'
 
 const props = defineProps<{
   parentCollection?: string

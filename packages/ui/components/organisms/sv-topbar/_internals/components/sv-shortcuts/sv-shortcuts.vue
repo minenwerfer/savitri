@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../../../../web'
 import {
   SvBox,
   SvIcon,

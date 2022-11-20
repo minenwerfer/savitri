@@ -11,13 +11,14 @@ import * as TypeGuards from './typeguards'
 import {
   getReferencedCollection,
   CollectionDescription,
+  CollectionProperty,
   MaybeCollectionDescription
 
 } from '../../../common'
 
 import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
-import { typeMapping, arrayedTypes } from './typemapping'
+import { getTypeConstructor } from './typemapping'
 // import { v1 as uuidv1 } from 'uuid'
 const { ObjectId } = Schema.Types
 
@@ -34,8 +35,8 @@ export const descriptionToSchema = <T>(
 
   let hasRefs = false
 
-  const convert = (a: any, [propertyName, property]: [string, any]) => {
-    if( property.meta ) {
+  const convert = (a: any, [propertyName, property]: [string, CollectionProperty]) => {
+    if( property.s$meta ) {
       return a
     }
 
@@ -44,22 +45,20 @@ export const descriptionToSchema = <T>(
       ...reference
     } = getReferencedCollection(property) as any||{}
 
-    const required = property.required !== false && property.type !== 'boolean'
-        ? property.required || description.strict
-        : description.required?.includes(propertyName)
+    const required = description.strict || description.required?.includes(propertyName)
 
     const result: any = {
       type: String,
-      unique: property.unique === true,
+      unique: property.s$unique === true,
       default: property.default,
       required
     }
 
-    if( property.hidden ) {
+    if( property.s$hidden ) {
       result.select = false
     }
 
-    if( typeof referencedCollection === 'string' && !property.preventPopulate ) {
+    if( typeof referencedCollection === 'string' && !property.s$preventPopulate ) {
       const join = (value: string|Array<string>) => Array.isArray(value)
         ? value.join(' ')
         : value
@@ -72,33 +71,19 @@ export const descriptionToSchema = <T>(
       }
     }
 
-    const typeMatch = Object.entries(typeMapping as Record<string, readonly string[]>)
-      .find(([, types]) => types.includes(property.type))?.[0]
-
-    if( typeMatch ) {
-      result.type = arrayedTypes.includes(property.type)
-        ? [eval(typeMatch)]
-        : eval(typeMatch)
-    }
+    const type = getTypeConstructor(property)
+    result.type = type
 
     if( typeof referencedCollection === 'string' ) {
       hasRefs = true
       result.ref = referencedCollection
-      result.type = property._id === false
+      result.type = property.s$noId
         ? Object
         : ObjectId
     }
 
-    if( reference.array ) {
-      result.type = [result.type]
-    }
-
-    if( ['checkbox', 'radio', 'select'].includes(property.type) ) {
-      result.validator = (v: string) => property.values.include(v)
-    }
-
-    if( ['text'].includes(property.type) && property.required ) {
-      result.validator = (v: string) => !!v && v.length > 0
+    if( property.enum ) {
+      result.enum = property.enum
     }
 
     return {

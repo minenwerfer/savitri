@@ -161,16 +161,16 @@ const actionsAndMutations: Actions & Mutations = {
     const inlineReferences = this.inlineReferences
     const newItem = (payload?.what || this.item) as Item
 
-    for( const [k, { $ref: collection, array }] of inlineReferences ) {
+    for( const [k, { $ref: collection, type }] of inlineReferences ) {
       if(
         newItem[k]
         && typeof newItem[k] === 'object'
         && Object.keys(newItem[k]).length > 0
       ) {
-        const helperStore = useStore(collection)
+        const helperStore = useStore(collection!)
 
         const getInsertedId = async (subject: any) => {
-          if( array && Array.isArray(subject) ) {
+          if( type === 'array' && Array.isArray(subject) ) {
             const ids = []
             for( const item of subject ) {
               const result = await helperStore.insert({ what: item })
@@ -267,7 +267,7 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   formatValue(args) {
-      const value = args.property.translate
+      const value = args.property.s$translate
         ? I18N.global.tc(args.value)
         : args.value
 

@@ -3,19 +3,19 @@
     <div v-if="isExpanded">
       <sv-form
         v-bind="{
-          collection: field.collection,
-          form: field.form
-            ? store.useFields(field.form)
-            : store.fields,
+          collection: property.$ref,
+          form: property.s$form
+            ? store.useProperties(property.s$form)
+            : store.propertys,
           formData: edited,
           layout: store.formLayout
         }"
       >
         <template #header v-if="!omitFormHeader">
-          {{ $t(field.collection||'').capitalize() }}
+          {{ $t(property.$ref||'').capitalize() }}
         </template>
       </sv-form>
-      <div v-if="!field.inline">
+      <div v-if="!property.s$inline">
         <sv-button @clicked="insert">Salvar</sv-button>
         <sv-button @clicked="clear">Limpar</sv-button>
       </div>
@@ -24,8 +24,8 @@
     <div v-else>
       <sv-form
         v-bind="{
-          collection: field.collection,
-          form: store.useFields(indexes),
+          collection: property.$ref,
+          form: store.useProperties(indexes),
           formData: inputValue,
           layout: store.formLayout,
           searchOnly: true
@@ -33,11 +33,11 @@
         @input="lazySearch"
       >
         <template #header v-if="!omitFormHeader">
-          {{ $t(field.collection||'').capitalize() }}
+          {{ $t(property.$ref||'').capitalize() }}
         </template>
       </sv-form>
       <sv-button
-        v-if="expanded && field.array"
+        v-if="expanded && property.array"
         icon="plus"
         @clicked="addItem"
       >
@@ -45,13 +45,13 @@
       </sv-button>
     </div>
 
-    <div v-if="!isExpanded || field.array" :key="inputValue">
+    <div v-if="!isExpanded || property.s$array" :key="inputValue">
       <sv-search-selected
-        v-model="modelValue"
         v-bind="{
           searchOnly,
           indexes,
-          field,
+          property,
+          modelValue
         }"
 
         @update:model-value="emit('update:modelValue', $event)"
@@ -68,7 +68,7 @@
             }"
 
             :key="`matching-${item._id}`"
-            @click="select(item, index)"
+            @click="select(item, +index)"
           >
             <sv-icon
               name="plus"
@@ -84,7 +84,7 @@
           <div v-else-if="
             !store.isLoading
               && Object.values(inputValue).filter((v) => !!v).length > 0
-              && !((field.array && modelValue?.length) || modelValue?._id)
+              && !((property.type === 'array' && modelValue?.length) || modelValue?._id)
           ">
             Não há resultados
           </div>
@@ -106,7 +106,8 @@ import {
 
 } from 'vue'
 
-import { useStore, useParentStore } from '@savitri/web'
+import type { CollectionProperty } from '../../../../../../../common'
+import { useStore, useParentStore } from '../../../../../../../web'
 import { SvButton, SvIcon } from '../../../../..'
 
 import SvSearchSelected from '../sv-search-selected/sv-search-selected.vue'
@@ -117,22 +118,15 @@ const SvForm = defineAsyncComponent(() => import('../../../../../molecules/sv-fo
 
 type Props = {
   modelValue: any
-  fieldName: string
+  propertyName: string
   parentCollection?: string
   searchOnly?: boolean
 
-  field: {
-    array?: boolean
-    collection?: string
-    label?: string
-    form?: any
-    inline?: boolean
-    inlineEditing?: boolean
-    uniqueValues?: boolean
-  }
+  property: CollectionProperty
 }
 
 const props = defineProps<Props>()
+
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
   (e: 'changed'): void
@@ -140,30 +134,25 @@ const emit = defineEmits<{
 
 provide('iconReactive', true)
 
-const boxProps = reactive({
-  float: false,
-  fill: true
-})
-
-const searchOnly = !props.field.inlineEditing || inject<boolean>('searchOnly', null)
+const searchOnly = !props.property.s$inlineEditing || inject<boolean|null>('searchOnly', null)
 const omitFormHeader = inject('omitFormHeader', false)
 
 const parentStore = useParentStore(props.parentCollection)
-const store = useStore(props.field.collection)
+const store = useStore(props.property.$ref!)
 
 const indexes = parentStore.getIndexes({
-  key: props.fieldName
+  key: props.propertyName
 })
 
 const expanded = ref(false)
-const edited = ref(parentStore.item[props.fieldName])
-const matchingItems = ref([])
+const edited = ref(parentStore.item[props.propertyName])
+const matchingItems = ref<Array<Record<string, any> & { _id: string }>>([])
 
-const isExpanded = computed(() => expanded.value || props.field.inline)
+const isExpanded = computed(() => expanded.value || props.property.s$inline)
 
 const rawItem = computed(() => {
-  const item = parentStore.item[props.fieldName]
-  const items = props.field.array
+  const item = parentStore.item[props.propertyName]
+  const items = props.property.type === 'array'
     ? (Array.isArray(item) ? item : [item])
     : item
 
@@ -177,7 +166,7 @@ const insert = async () => {
   const result: any = await store.insert({ what: edited.value })
 
   const value = (() => {
-    if( !props.field.array ) {
+    if( props.property.type === 'array' ) {
       return result
     }
 
@@ -193,44 +182,44 @@ const insert = async () => {
   const parentResult = await parentStore.insert({
     what: {
       ...(parentStore.item._id ? { _id: parentStore.item._id } : parentStore.item),
-      [props.fieldName]: value
+      [props.propertyName]: value
     }
   })
 
-  emit('update:modelValue', parentResult[props.fieldName])
+  emit('update:modelValue', parentResult[props.propertyName])
   matchingItems.value = []
   expanded.value = false
 }
 
-const edit = (item: any) => {
-  const itemsCount = rawItem.value.length
-  edited.value = item
-  expanded.value = true
-}
+//const edit = (item: any) => {
+//  const itemsCount = rawItem.value.length
+//  edited.value = item
+//  expanded.value = true
+//}
 
 const clear = () => {
   expanded.value = false
   matchingItems.value = []
-  if( props.field.array ) {
+  if( props.property.type === 'array' ) {
     rawItem.value = rawItem.value.slice(0, -1)
   }
 }
 
 const select = (item: any, itemIndex: number) => {
   const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
-  const modelValue = props.field.array
+  const modelValue = props.property.array
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
 
-  if( props.field.uniqueValues ) {
+  if( props.property.uniqueValues ) {
     matchingItems.value.splice(itemIndex, 1)
   }
 
-  if( !props.field.array ) {
+  if( !props.property.array ) {
     matchingItems.value = []
   }
 
-  emit('update:modelValue', props.field.array
+  emit('update:modelValue', props.property.array
     ? [ ...modelValue, item ]
     : item
   )

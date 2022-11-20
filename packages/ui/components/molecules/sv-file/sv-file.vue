@@ -17,7 +17,7 @@
       <input
         type="file"
         ref="file"
-        :accept="field?.accept?.join(',')"
+        :accept="property?.accept?.join(',')"
         @change="changePreview"
       />
       <div
@@ -45,21 +45,17 @@
 
 <script setup lang="ts">
 import { provide, ref, computed } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../web'
 import { SvPicture, SvButton } from '../..'
 
 type Props = {
   modelValue: any
-  field?: {
+  property?: {
     accept?: Array<string>
   }
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  accept: [
-    '*/*'
-  ]
-})
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
@@ -94,7 +90,7 @@ const readFile = (file: any): Promise<any> => new Promise((resolve) => {
   fr.readAsDataURL(file)
 })
 
-const changePreview = (event) => {
+const changePreview = (event: any) => {
   preview.value = event.target.files[0]
 }
 

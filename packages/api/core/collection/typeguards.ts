@@ -2,26 +2,26 @@ import type {
   MaybeCollectionDescription,
   MaybeCollectionAction,
   CollectionProperty,
-  CollectionPropertyType,
-  CollectionPreset,
+  PropertyTypes,
+  CollectionPresets,
   StoreEffect
 
 } from '../../../common/types'
 
 import {
-  COLLECTION_FIELD_TYPES,
+  PROPERTY_TYPES,
   COLLECTION_PRESETS,
   STORE_EFFECTS
 
 } from '../../../common/constants'
 
 export const presets = (description: MaybeCollectionDescription): MaybeCollectionDescription => {
-  const isValidPreset = (preset?: string): preset is CollectionPreset => {
-    return COLLECTION_PRESETS.includes(preset as CollectionPreset)
+  const isValidPresets = (preset?: string): preset is CollectionPresets => {
+    return COLLECTION_PRESETS.includes(preset as CollectionPresets)
   }
 
   description.presets?.forEach((preset: string) => {
-    if( !isValidPreset(preset) ) {
+    if( !isValidPresets(preset) ) {
       throw TypeError(
         `invalid preset "${preset}" at "${(description as MaybeCollectionDescription).$id}"`
       )
@@ -31,15 +31,15 @@ export const presets = (description: MaybeCollectionDescription): MaybeCollectio
   return description
 }
 export const properties = (description: MaybeCollectionDescription): MaybeCollectionDescription => {
-  const isValidPropertyType = (propertyType?: string): propertyType is CollectionPropertyType => {
-    return COLLECTION_FIELD_TYPES.includes(propertyType as CollectionPropertyType)
+  const isValidPropertyType = (propertyType?: string): propertyType is PropertyTypes => {
+    return PROPERTY_TYPES.includes(propertyType as PropertyTypes)
   }
 
-  Object.values(description?.properties||{}).forEach((_property: unknown) => {
-    const property = _property as Pick<CollectionProperty, 'type' | '$ref'>
-    if( !isValidPropertyType(property.type) && !property.$ref ) {
+  Object.entries(description?.properties||{}).forEach(([propertyName, _property]) => {
+    const property = _property as Pick<CollectionProperty, 'type' | '$ref' | 'enum'>
+    if( property.type && !isValidPropertyType(property.type) ) {
       throw TypeError(
-        `invalid property type "${property.type}" at "${(description as MaybeCollectionDescription).$id}"`
+        `invalid property type "${property.type}" at "${(description as MaybeCollectionDescription).$id}.${propertyName}"`
       )
     }
   })

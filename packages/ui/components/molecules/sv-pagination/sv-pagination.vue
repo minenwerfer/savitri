@@ -47,20 +47,9 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ref,
-  computed,
-  watch,
-  defineAsyncComponent
-
-} from 'vue'
-
-import { useParentStore } from '@savitri/web'
-import {
-  PAGINATION_PER_PAGE_DEFAULT,
-  PAGINATION_PER_PAGE_DEFAULTS
-
-} from '@savitri/common'
+import { ref, computed, watch, } from 'vue'
+import { PAGINATION_PER_PAGE_DEFAULTS } from '../../../../common'
+import { useParentStore } from '../../../../web'
 
 import {
   SvButton,
@@ -79,7 +68,7 @@ const page = computed({
 
 const limit = computed({
   get: () => String(store.pagination.limit),
-  set: (value: number) => {
+  set: (value) => {
     store.pagination.limit = Number(value)
   }
 })

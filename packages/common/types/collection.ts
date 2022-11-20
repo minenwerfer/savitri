@@ -1,15 +1,10 @@
-import {
-  COLLECTION_FIELD_TYPES,
-  COLLECTION_PRESETS,
-  STORE_EFFECTS
+import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
+import type { Property, PropertyUiFormats } from './property'
 
-} from '../constants'
-
-export type CollectionPropertyType = typeof COLLECTION_FIELD_TYPES[number]
-export type CollectionPreset = typeof COLLECTION_PRESETS[number]
+export type CollectionPresets = typeof COLLECTION_PRESETS[number]
 
 export type StoreEffect = keyof typeof STORE_EFFECTS
-export type CollectionId = `/${string}`
+export type CollectionId = string
 
 export type CollectionAction = Readonly<{
   name: string
@@ -34,7 +29,6 @@ export type FormLayout = {
 
 export type CollectionDescription = {
   $id: CollectionId
-  name: string
   alias?: string
   unicon?: string
   options?: {
@@ -50,7 +44,7 @@ export type CollectionDescription = {
   owned?: boolean
 
   // takes an array of something
-  readonly presets?: Array<CollectionPreset>
+  readonly presets?: Array<CollectionPresets>
   readonly required?: Array<string>
   table?: Array<string>
   tableMeta?: Array<string>
@@ -96,8 +90,35 @@ export type MaybeCollectionDescription = Omit<CollectionDescription,
   individualActions?: MaybeCollectionActions
 }
 
-export type CollectionReference = {
-  $ref: CollectionId
+export type CollectionProperty = Property & {
+  [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P]
+}
+
+type CollectionPropertyAux = {
+  icon?: string
+  format?: PropertyUiFormats
+  placeholder?: string
+  hint?: string
+  mask?: string
+  translate?: boolean
+  required?: boolean
+  meta?: boolean
+  form?: Array<string>
+
+  noform?: boolean
+  notable?: boolean
+  unique?: boolean
+  hidden?: boolean
+  uniqueItems?: boolean
+
+  /** @see SvFile */
+  readonly accept?: Array<string>
+
+  isReference?: boolean
+  referencedCollection?: string
+  preventPopulate?: boolean
+  noId?: boolean
+
   array?: boolean
   limit?: number
   index?: Array<string>|string
@@ -106,34 +127,3 @@ export type CollectionReference = {
   inline?: boolean
   inlineEditing?: boolean
 }
-
-export type CollectionProperty = Readonly<Omit<CollectionReference, '$ref'> & {
-  $ref?: CollectionId
-  description: string
-  placeholder?: string
-  hint?: string
-  type?: CollectionPropertyType
-  isReference?: boolean
-  dynamicReference?: boolean
-  mask?: string
-  translate?: boolean
-  required?: boolean
-  meta?: boolean
-
-  noform?: boolean
-  notable?: boolean
-  unique?: boolean
-  hidden?: boolean
-  default?: any
-
-  includeHours?: boolean
-  readOnly?: boolean
-  uniqueValues?: boolean
-
-  /** @see SvFile */
-  readonly accept?: Array<string>
-
-  values?: Record<string, string> | Array<any> | {
-    __query: CollectionReference
-  }
-}>

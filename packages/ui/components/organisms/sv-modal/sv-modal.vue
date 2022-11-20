@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../web'
 
 const SvBox = defineAsyncComponent(() => import('../../molecules/sv-box/sv-box.vue'))
 const metaStore = useStore('meta')

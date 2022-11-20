@@ -14,7 +14,7 @@ const schema = {
   properties: {
     mime: {
       description: 'Mime',
-      type: 'text',
+      type: 'string',
     },
     size: {
       description: 'Tamanho',
@@ -22,19 +22,20 @@ const schema = {
     },
     last_modified: {
       description: 'Modificado em',
-      type: 'datetime',
+      type: 'string',
+      format: 'date-time'
     },
     filename: {
       description: 'Nome do arquivo',
-      type: 'text',
+      type: 'string',
     },
     absolute_path: {
       description: 'Caminho absoluto',
-      type: 'text'
+      type: 'string'
     },
     relative_path: {
       description: 'Caminho relativo',
-      type: 'text'
+      type: 'string'
     },
     immutable: {
       description: 'Imutável',
@@ -42,11 +43,11 @@ const schema = {
     },
     link: {
       description: 'Link',
-      type: 'text'
+      type: 'string'
     },
     download_link: {
       description: 'Link de download',
-      type: 'text'
+      type: 'string'
     }
   },
 } as const

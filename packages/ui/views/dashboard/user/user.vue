@@ -14,7 +14,7 @@
     <sv-form
       v-bind="{
         collection: 'userExtra',
-        form: userExtraStore.fields,
+        form: userExtraStore.properties,
         formData: userExtraStore.item
       }"
     ></sv-form>
@@ -38,14 +38,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { hasStore, useStore } from '@savitri/web'
+import { hasStore, useStore } from '../../../../web'
 import {
   SvCrud,
   SvBox,
   SvForm,
   SvButton
 
-} from '@savitri/ui'
+} from '../../..'
 
 const userStore = useStore('user')
 const userExtraStore = hasStore('userExtra')

@@ -1,14 +1,14 @@
 <template>
   <label :class="`
     checkbox
-    ${field.readOnly && 'checkbox--readOnly'}
+    ${property.readOnly && 'checkbox--readOnly'}
   `">
     <input
       v-model="bindVal"
       ref="checkbox"
       v-bind="{
-        type: field.type,
-        readOnly: field.readOnly,
+        type,
+        readOnly: property.readOnly,
         checked: bindVal
       }"
 io
@@ -31,43 +31,40 @@ io
   </label>
 </template>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
+</script>
+
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import type { CollectionProperty } from '../../../../common'
 
 type Props = {
-  modelValue?: any
+  modelValue?: string|Array<string>|boolean
   value?: string|boolean
   label?: string
   description?: string
-  field?: {
-    type?: string
-    required?: boolean
-    readOnly?: boolean
-  }
+  property: CollectionProperty
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  type: 'checkbox'
-})
+const props = defineProps<Props>()
+const type = props.property.type === 'array'
+  ? 'checkbox'
+  : 'radio'
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string|Array<string>|boolean): void
-  (e: 'change', value: string): void
+  (e: 'update:modelValue' | 'change', value: Props['modelValue']): void
 }>()
 
 const checkbox = ref<any>(null)
-
-const onClick = () => {
-  if( !props.field?.required && !props.field?.readOnly ) {
-    checkbox.value.click()
-  }
-}
 
 const value = typeof props.value === 'object'
   ? (props.value?._id || props.value)
   : props.value
 
-const selectedValues = (values: Array<any>): (string|boolean)[] => {
+const selectedValues = (values: Array<Props['modelValue']>): (string|boolean)[] => {
   return values.map((v: any) => v._id || v)
 }
 
@@ -77,30 +74,32 @@ const bindVal = computed({
       return false
     }
 
-    if( props.field?.type === 'radio' ) {
+    if( props.property.type !== 'array' ) {
       return props.modelValue === props.value
     }
 
     return Array.isArray(props.modelValue)
-      ? selectedValues(props.modelValue).includes(props.value)
+      ? selectedValues(props.modelValue).includes(props.value as string)
       : !!props.value
   },
 
-  set: (newVal: boolean) => {
-    if( props.field?.readOnly ) {
+  set: () => {
+    if( props.property?.readOnly ) {
       return
     }
 
-    if( props.field?.type === 'radio' ) {
+    if( props.property.type !== 'array' ) {
       emit('update:modelValue', value)
       return
     }
 
-    const values = props.modelValue||[]
+    const values = props.modelValue
+      ? [props.modelValue]
+      : []
 
     emit('update:modelValue', !selectedValues(values).includes(value)
       ? [ ...values, value ]
-      : selectedValues(props.modelValue).filter((v: any) => v !== value))
+      : selectedValues(values).filter((v) => v !== value))
   }
 })
 </script>

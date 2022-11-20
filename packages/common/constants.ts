@@ -20,20 +20,30 @@ export const PAGINATION_PER_PAGE_DEFAULTS = [
 // default value of above
 export const PAGINATION_PER_PAGE_DEFAULT = 35
 
-export const COLLECTION_FIELD_TYPES = [
+export const PROPERTY_TYPES = [
+  'string',
+  'integer',
+  'number',
   'boolean',
+  'object',
+  'array'
+] as const
+
+export const PROPERTY_FORMATS = [
+  'date',
+  'date-time'
+] as const
+
+export const PROPERTY_UI_FORMATS = [
   'checkbox',
-  'datetime',
   'email',
   'integer',
   'number',
   'object',
   'password',
   'radio',
-  'reference',
   'select',
-  'text',
-  'textbox',
+  'textbox'
 ] as const
 
 export const COLLECTION_PRESETS = [
@@ -44,11 +54,6 @@ export const COLLECTION_PRESETS = [
   'owned',
   'toggleActive',
   'view',
-] as const
-
-export const ARRAY_TYPES = [
-  'checkbox',
-  'radio'
 ] as const
 
 export const STORE_EFFECTS = {

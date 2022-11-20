@@ -11,7 +11,7 @@
       v-if="!reportStore.item._id"
       v-bind="{
         collection: 'report',
-        form: reportStore.useFieldsExcept([
+        form: reportStore.usePropertiesExcept([
           'owner',
           '_collection'
         ]),

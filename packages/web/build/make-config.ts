@@ -38,14 +38,14 @@ export default (params: any) => {
   })
 
   // if( params.mode === 'prod' ) {
-    config.module.rules = config.module.rules
-      .map((r: any) => r.loader !== 'ts-loader' ? r : {
-        ...r,
-        options: {
-          ...r.options,
-          transpileOnly: true
-        }
-      })
+    // config.module.rules = config.module.rules
+    //   .map((r: any) => r.loader !== 'ts-loader' ? r : {
+    //     ...r,
+    //     options: {
+    //       ...r.options,
+    //       transpileOnly: true
+    //     }
+    //   })
   // }
 
   return config

@@ -1,34 +1,33 @@
-import type { MakeMapping } from './typemapping.types'
+import { Types } from 'mongoose'
 
-export const typeMapping = {
-  String: [
-    'text',
-    'email',
-    'password',
-    'radio',
-    'select',
-    'checkbox'
-  ],
-  Number: [
-    'number',
-    'integer'
-  ],
-  Object: [
-    'object'
-  ],
-  Boolean: [
-    'boolean'
-  ],
-  Date: [
-    'datetime'
-  ]
-} as const
+export const getTypeConstructor = (property: any): any => {
+  if( property.type === 'array' ) {
+    const type = getTypeConstructor(property.items)
+    return [type]
+  }
 
-export const arrayedTypes = [
-  'checkbox'
-] as const
+  if( property.$ref ) {
+    return Types.ObjectId
+  }
 
-export type TypeMapping = Record<string, never> & MakeMapping<
-  typeof typeMapping,
-  typeof arrayedTypes
->
+  if( property.enum ) {
+    const first = property.enum[0]
+    return first?.constructor || String
+  }
+
+  switch( property.format ) {
+    case 'date':
+    case 'date-time':
+      return Date
+  }
+
+  switch( property.type ) {
+    case 'string':
+      return String
+    case 'number':
+    case 'integer':
+      return Number
+    case 'boolean':
+      return Boolean
+  }
+}

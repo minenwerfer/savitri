@@ -7,30 +7,30 @@
       <slot name="header"></slot>
     </header>
     <fieldset
-      v-if="!isReadOnly && Object.keys(fields).length > 0"
+      v-if="!isReadOnly && Object.keys(properties).length > 0"
       class="form__fieldset"
     >
       <!-- form -->
       <div
-        v-for="([key, field], index) in fields"
+        v-for="([key, property], index) in properties"
         :key="`field-${index}`"
-        :style="fieldStyle(key, field)"
+        :style="fieldStyle(key, property)"
 
         class="form__field"
         @input="emit('input', key)"
       >
         <label v-if="
-          field.type !== 'boolean'
-            && (!field.$ref || field.$ref === 'file')
+          property.type !== 'boolean'
+            && (!property.$ref || property.$ref === 'file')
             && !omitInputLabels
         ">
           <strong>
-            {{ field.translate ? $t(field.description) : field.description }}
+            {{ property.translate ? $t(property.description) : property.description }}
           </strong>
           <div
-            v-if="field.description"
-            v-html="field.description"
-            class="form__field-description"
+            v-if="property.hint"
+            v-html="property.hint"
+            class="form__field-hint"
           ></div>
         </label>
 
@@ -39,93 +39,93 @@
           :is="formComponents[layout[key].component.$ref]"
           v-model="formData[key]"
           v-bind="{
-            field,
+            property,
             fieldName: key,
             ...layout[key].component.props||{},
           }"
         />
 
         <div
-          v-else-if="field.type === 'datetime' && searchOnly"
+          v-else-if="property.type === 'datetime' && searchOnly"
           style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 1rem;"
         >
           <sv-input
             v-model="formData[key].$gte"
             v-bind="{
-              field,
+              property,
               fieldName: key
             }"
           ></sv-input>
           <sv-input
             v-model="formData[key].$lte"
             v-bind="{
-              field,
+              property,
               fieldName: key
             }"
           ></sv-input>
         </div>
 
-        <!-- text -->
-        <sv-input
-          v-else-if="isTextType(field.type)"
-          v-model="formData[key]"
-          v-bind="{
-            field,
-            fieldName: key,
-            placeholder: field.placeholder || field.translate ? $t(field.description) : field.description
-          }"
-        ></sv-input>
-
         <sv-options
-          v-else-if="['checkbox', 'radio'].includes(field.type)"
+          v-else-if="['checkbox', 'radio'].includes(property.s$format)"
           v-model="formData[key]"
           v-bind="{
-            field,
+            property,
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns
           }"
         ></sv-options>
 
-        <sv-switch
-          v-else-if="field.type === 'boolean'"
-          v-model="formData[key]"
-          v-slot="{ description }"
-
-          v-bind="{
-            field
-          }"
-        >
-          {{
-            field.values
-              ? label
-              : field.label
-          }}
-        </sv-switch>
-
         <sv-select
-          v-else-if="field.type === 'select'"
+          v-else-if="property.s$format === 'select'"
           v-model="formData[key]"
           v-bind="{
-            field
+            property
           }"
           style="width: 100%"
         ></sv-select>
 
-        <sv-file
-          v-else-if="field.$ref === 'file'"
+        <!-- text -->
+        <sv-input
+          v-else-if="property.type === 'string'"
           v-model="formData[key]"
           v-bind="{
-            field
+            property,
+            fieldName: key,
+            placeholder: property.placeholder || property.translate ? $t(property.description||'') : property.description
+          }"
+        ></sv-input>
+
+        <sv-switch
+          v-else-if="property.type === 'boolean'"
+          v-model="formData[key]"
+          v-slot="{ description }"
+
+          v-bind="{
+            property
+          }"
+        >
+          {{
+            property.values
+              ? description
+              : property.description
+          }}
+        </sv-switch>
+
+        <sv-file
+          v-else-if="property.$ref === 'file'"
+          v-model="formData[key]"
+          v-bind="{
+            property
           }"
         ></sv-file>
 
         <sv-search
-          v-else-if="field.$ref"
+          v-else-if="property.$ref"
           :key="`collectionfield-${index}`"
 
           v-model="formData[key]"
           v-bind="{
-            field,
+            property,
             fieldName: key,
             parentCollection: collection
           }"
@@ -145,28 +145,6 @@
         </div>
       </div>
     </fieldset>
-
-    <!-- <fieldset v-if="isReadOnly" class="form__fieldset"> -->
-    <!--   <sv-input -->
-    <!--     v-for="([key, field], index) in fields" -->
-    <!--     :key="`collection-${index}`" -->
-
-    <!--     v-bind="{ -->
-    <!--       ...inputBind(field, key), -->
-    <!--       value: store.formatValue({ -->
-    <!--         value: field.translate ? $t(props.formData[key]||'') : props.formData[key], -->
-    <!--         key, -->
-    <!--         field, -->
-    <!--         form: true -->
-    <!--       }) -->
-    <!--     }" -->
-
-    <!--     :style="fieldStyle(key, field)" -->
-    <!--     class="form__field" -->
-    <!--   > -->
-    <!--     {{ field.label }} -->
-    <!--   </sv-input> -->
-    <!-- </fieldset> -->
 
     <div v-if="$slots.footer" class="form__footer">
       <slot name="footer"></slot>
@@ -199,7 +177,8 @@ import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
 
 type LayoutConfig = {
-  span: number
+  span: string
+  verticalSpacing: string
 }
 
 type Props = {
@@ -261,13 +240,13 @@ const omitInputLabels = passAhead('omitInputLabels')
 provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
 
-const filterFields = (condition: (f: any) => boolean) => 
+const filterProperties = (condition: (f: any) => boolean) => 
   Object.entries(props.form)
-    .reduce((a: Array<any>, [key, field]: [string, any]) => {
+    .reduce((a: Array<any>, [key, property]: [string, any]) => {
       if(
-        !(field
-          && (!field.noform || props.searchOnly)
-          && (!condition || condition([key, field]))
+        !(property
+          && (!property.noform || props.searchOnly)
+          && (!condition || condition([key, property]))
       )) {
         return a
       }
@@ -277,7 +256,7 @@ const filterFields = (condition: (f: any) => boolean) =>
         [
           key,
           {
-            ...field,
+            ...property,
             hidden: undefined
           }
         ]
@@ -285,7 +264,7 @@ const filterFields = (condition: (f: any) => boolean) =>
     }, [])
 
 
-const has = (fieldName: string) => {
+const has = (propertyName: string) => {
   if(
     props.searchOnly
     || !props.strict
@@ -294,26 +273,15 @@ const has = (fieldName: string) => {
     return true
   }
 
-  const formFields = store.description?.form
-  return !formFields || formFields.includes(fieldName)
+  const formProperties = store.description?.form
+  return !formProperties || formProperties.includes(propertyName)
 }
 
-const fields = filterFields(([key, f]: [string, any]) => {
+const properties = filterProperties(([key, f]: [string, any]) => {
   return (!f.readOnly || props.searchOnly)
     && !f.meta
     && has(key)
 })
-
-const isTextType = (type: string) => {
-  return [
-    'text',
-    'textbox',
-    'password',
-    'number',
-    'integer',
-    'datetime'
-  ].includes(type)
-}
 
 const isSelectType = (type: string) => {
   return [
@@ -324,11 +292,11 @@ const isSelectType = (type: string) => {
   ].includes(type)
 }
 
-const fieldStyle = (key:string, field: any) => {
+const fieldStyle = (key:string, property: any) => {
   const style = []
   const layout = props.layout?.[key] || props.layout?.$default
 
-  if( !field ) {
+  if( !property ) {
     return
   }
 
@@ -350,9 +318,9 @@ const fieldStyle = (key:string, field: any) => {
   `)
 
   if(
-    isSelectType(field.type)
-    && field.type !== 'boolean'
-    || field.$ref === 'file'
+    isSelectType(property.type)
+    && property.type !== 'boolean'
+    || property.$ref === 'file'
   ) {
     style.push('padding-bottom: .6rem;')
   }
@@ -369,15 +337,6 @@ const fieldStyle = (key:string, field: any) => {
   }
 
   return style.join('')
-}
-
-const inputBind = (field: any, key: string, value: any) => {
-  return {
-    ...field,
-    readOnly: true,
-    type: isTextType(field.type) ? field.type : 'text',
-    value,
-  }
 }
 </script>
 

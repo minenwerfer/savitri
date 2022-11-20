@@ -19,7 +19,7 @@ export const fill = <T extends MongoDocument>(
   }
 
   const missing = Object.entries(description.properties).reduce((a: any, [key, value]) => {
-    if( item[key] && !value.meta ) {
+    if( item[key] && !value.s$meta ) {
       return a
     }
 

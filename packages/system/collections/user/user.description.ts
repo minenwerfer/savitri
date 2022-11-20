@@ -1,6 +1,7 @@
 import { makeDescription, Schema } from '../../../api/core/collection'
 
-export type User = Schema<typeof schema> & {
+export type User = Omit<Schema<typeof schema>, 'role'> & {
+  role: string
   testPassword?(password: string): boolean
 }
 
@@ -15,16 +16,16 @@ const schema = {
   properties: {
     first_name: {
       description: 'Nome',
-      type: 'text',
+      type: 'string'
     },
     last_name: {
       description: 'Sobrenome',
-      type: 'text',
+      type: 'string'
     },
     full_name: {
       description: 'Nome completo',
-      type: 'text',
-      noform: true
+      type: 'string',
+      s$noform: true
     },
     active: {
       description: 'Ativo',
@@ -33,24 +34,26 @@ const schema = {
     },
     role: {
       description: 'Papel',
-      type: 'select',
-      values: [],
+      enum: [],
+      s$format: 'select'
     },
     email: {
       description: 'Email',
-      type: 'email',
-      unique: true,
+      type: 'string',
+      s$format: 'email',
+      s$unique: true,
     },
     password: {
       description: 'Senha',
-      type: 'password',
-      hidden: true,
-      noform: true
+      type: 'string',
+      s$format: 'password',
+      s$hidden: true,
+      s$noform: true
     },
     phone: {
       description: 'Telefone',
-      type: 'text',
-      mask: '(##) #####-####'
+      type: 'string',
+      s$mask: '(##) #####-####'
     },
     picture: {
       $ref: 'file',
@@ -61,8 +64,8 @@ const schema = {
     },
     group: {
       description: 'Grupo',
-      type: 'text',
-      noform: true
+      type: 'string',
+      s$noform: true
     },
     self_registered: {
       description: 'Autoregistrado',
@@ -71,13 +74,14 @@ const schema = {
     },
     wizard_versions: {
       description: 'Versão do wizard',
-      type: 'text',
-      array: true
+      type: 'string',
+      s$array: true
     },
     updated_at: {
       description: 'Atualizado em',
-      type: 'datetime',
-      meta: true
+      type: 'string',
+      format: 'date-time',
+      s$meta: true
     },
   }
 } as const

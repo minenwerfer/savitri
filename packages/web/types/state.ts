@@ -1,4 +1,4 @@
-import type { CollectionDescription, CollectionReference } from '../../common/types/collection'
+import type { CollectionDescription, CollectionProperty } from '../../common/types/collection'
 import collectionActions from '../core/state/actions'
 import collectionGetters from '../core/state/getters'
 
@@ -46,7 +46,7 @@ export type CollectionState<Item> = PiniaState & {
 export type CollectionGetters = {
   properties: CollectionDescription['properties']
   $filters: CollectionState<unknown>['filters']
-  inlineReferences: Array<[string, CollectionReference]>
+  inlineReferences: Array<[string, CollectionProperty]>
 }
 
 export type CollectionStore<T=any> = CollectionState<T>

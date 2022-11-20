@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useParentStore } from '@savitri/web'
+import { useParentStore } from '../../../../../../../web'
 
 const store = useParentStore()
 const pagination = computed(() => store.pagination)

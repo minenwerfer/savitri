@@ -18,12 +18,12 @@
 
 <script setup lang="ts">
 import { provide, inject } from 'vue'
-import { SvBox } from '@savitri/ui'
+import { SvBox } from '../..'
 
 provide('storeId', 'user')
 provide('buttonSize', 'large')
 
-const productName = inject('productName')
+// const productName = inject('productName')
 const productLogo = inject('productLogo')
 //const productVersion = inject('productVersion')
 //const baseVersion = inject('baseVersion')

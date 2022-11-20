@@ -58,9 +58,8 @@ export const preloadCollection = (
       const reference = getReferencedCollection(property)
 
       if( reference ) {
-        property.type ??= 'reference'
-        property.isReference = true
-        property.dynamicReference = !property.$ref
+        property.s$isReference = true
+        property.s$referencedCollection = reference.$ref
       }
 
       return {
@@ -70,6 +69,5 @@ export const preloadCollection = (
     }, {})
   }
 
-  collection.name = collection.$id.split('/').pop() as string
   return collection
 }

@@ -1,7 +1,7 @@
 {
-  "fields": {
+  "properties": {
     "owner": {
-      "collection": "user",
+      "$ref": "user",
       "label": "Usuário",
       "index": "email",
       "noform": true

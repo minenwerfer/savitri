@@ -35,7 +35,7 @@
 
     <div class="tabbed__content">
       <div
-        v-for="([key, value], tab) in Object.entries($slots)"
+        v-for="(key, tab) in Object.keys($slots)"
         :key="`tab-${key}`"
       >
         <slot
@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { SvBareButton, SvBox } from '../..'
 
@@ -80,7 +80,7 @@ if( props.updateRoute ) {
 
   watch(() => route.hash, updateTab)
 
-  watch(() => props.currentTab, (v: string) => {
+  watch(() => props.currentTab, (v) => {
     if( route.hash !== `#${v}` ) {
       router.push({ hash: `#${v}` })
     }

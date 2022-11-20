@@ -10,20 +10,26 @@
   >
     <option value="">{{ $t('none') }}</option>
     <option
-      v-for="option in field?.values"
+      v-for="option in property?.values"
       :key="option.value"
       :value="option.value"
     >
-      {{ field.translate ? $t(option.label) : option.label }}
+      {{ property.s$translate ? $t(option.label) : option.label }}
     </option>
     <slot></slot>
   </select>
 </template>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
+</script>
+
 <script setup lang="ts">
 type Props = {
   modelValue?: any
-  field?: {
+  property?: {
     values: Array<any>
   }
 }
@@ -32,7 +38,7 @@ const props = defineProps<Props>()
 
 const getValue = (value: any) => {
   return typeof value !== 'string'
-    ? Object.keys(props.field?.values||{}).find((key: string) => value?._id === key)
+    ? Object.keys(props.property?.values||{}).find((key: string) => value?._id === key)
     : value
 }
 </script>

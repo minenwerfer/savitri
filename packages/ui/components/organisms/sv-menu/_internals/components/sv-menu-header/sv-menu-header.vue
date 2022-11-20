@@ -20,8 +20,8 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useStore } from '@savitri/web'
-import { SvPicture, SvIcon } from '../../../../../..'
+import { useStore } from '../../../../../../../web'
+import { SvPicture } from '../../../../../..'
 
 const userStore = useStore('user')
 const router = useRouter()

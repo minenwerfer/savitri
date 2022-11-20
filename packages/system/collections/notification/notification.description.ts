@@ -10,33 +10,36 @@ const schema = {
   ],
   properties: {
     destination: {
-      $ref: '/user',
       description: 'Destinatário',
-      index: 'email',
-      array: true
+      type: 'array',
+      items: {
+        $ref: 'user'
+      },
+      s$index: 'email'
     },
     title: {
       description: 'Título',
-      type: 'text',
+      type: 'string',
     },
     action: {
       description: 'Ação',
-      type: 'text'
+      type: 'string'
     },
     groups: {
       description: 'Grupos',
-      type: 'text',
-      placeholder: 'Ex.: logistic,producer',
-      hint: 'Separados por vírgula, ou vazio'
+      type: 'string',
+      s$placeholder: 'Ex.: logistic,producer',
+      s$hint: 'Separados por vírgula, ou vazio'
     },
     subject: {
       description: 'Sujeito',
-      type: 'text'
+      type: 'string'
     },
     content: {
       description: 'Conteúdo',
-      type: 'textbox',
-      notable: true
+      type: 'string',
+      s$format: 'textbox',
+      s$notable: true
     }
   }
 } as const

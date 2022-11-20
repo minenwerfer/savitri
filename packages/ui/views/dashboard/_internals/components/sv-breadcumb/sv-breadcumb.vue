@@ -12,10 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from '@savitri/web'
-import { Route } from '@savitri/web/router'
+import { useStore, Route } from '../../../../../../web'
 
 const metaStore = useStore('meta')
 const getRoute = () => {

@@ -46,7 +46,7 @@ type Props = {
 }
 
 type Emits = {
-  (e: 'update:modelValue', value: typeof Props['modelValue']): void
+  (e: 'update:modelValue' | 'pushBack', value: Props['modelValue']): void
 }
 
 const props = defineProps<Props>()
@@ -65,7 +65,7 @@ const selected = computed(() => {
 const unselect = async (item: any, purge=true) => {
   if( props.field.purge && purge ) {
     const { _id } = item
-    await store.remove({ filter: { _id } })
+    // await store.remove({ filter: { _id } })
   }
 
   const deleteFirst = () => {

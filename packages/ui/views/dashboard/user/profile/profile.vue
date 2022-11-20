@@ -4,7 +4,7 @@
     <sv-form
       v-bind="{
         collection: 'user',
-        form: userStore.useFields([
+        form: userStore.useProperties([
           'first_name',
           'last_name',
           'email',

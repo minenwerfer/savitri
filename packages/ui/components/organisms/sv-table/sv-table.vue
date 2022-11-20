@@ -244,7 +244,7 @@ const dropdownActions = computed(() => (
   props.actions.filter((action: any) => !props.layout?.actions?.[action.action]?.button)
 ))
 
-const toggle = (value, rowId, key) => {
+const toggle = (value: boolean, rowId: string, key: string) => {
   if( store ) {
     store.insert({
       what: {
@@ -257,7 +257,7 @@ const toggle = (value, rowId, key) => {
   }
 }
 
-const buttonStyle = (subject, action) => {
+const buttonStyle = (subject: any, action: any) => {
   const style = []
   const layout = props.layout?.actions?.[action.action]
 

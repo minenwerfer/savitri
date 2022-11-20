@@ -130,7 +130,7 @@ const getters: Getters = {
    */
   inlineReferences() {
     return Object.entries(this.description.properties||{})
-      .filter(([, property]) => typeof property.$ref === 'string' && property.inline === true)
+      .filter(([, property]) => typeof property.$ref === 'string' && property.s$inline)
   },
 
   /**
@@ -152,7 +152,7 @@ const getters: Getters = {
         return
       }
 
-      if( property.type === 'text' ) {
+      if( property.type === 'string' ) {
         return {
           $regex: value,
           $options: 'i'

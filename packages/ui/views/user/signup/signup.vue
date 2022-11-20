@@ -11,7 +11,7 @@
     <sv-form
       v-bind="{
         formData: userStore.item,
-        form: userStore.useFields([
+        form: userStore.useProperties([
           'first_name',
           'last_name',
           'email',
@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { useParentStore } from '@savitri/web'
-import { SvForm, SvIcon, SvButton } from '@savitri/ui'
+import { useParentStore } from '../../../../web'
+import { SvForm, SvIcon, SvButton } from '../../..'
 
 const userStore = useParentStore()
 </script>

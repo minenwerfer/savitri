@@ -52,12 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, inject } from 'vue'
+import { ref, computed, watch, } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useStore, Route } from '../../../../web'
 import { SvIcon } from '../../'
-
-import { useStore } from '@savitri/web'
-import { Route } from '@savitri/web/router'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
 
@@ -68,7 +66,7 @@ type Props = {
 }
 
 type SchemaNode = {
-  roles: Array<string>
+  roles?: Array<string>
   children?: Route
 }
 
@@ -78,11 +76,8 @@ const metaStore = useStore('meta')
 const userStore = useStore('user')
 const router = useRouter()
 
-const productName = inject('productName')
-const productLogo = inject('productLogo', undefined)
-
 const shrink = ref(
-  Object.values(props.schema).reduce((a: any, route: [string, any], i) => {
+  Object.values(props.schema).reduce((a: any, route: any, i) => {
     return {
       ...a,
       [i]: !!route.shrink
@@ -111,40 +106,40 @@ const getSchema = (schema: any, routes: Array<Route>) => {
   })
 }
 
-const getRoutes = ({ children }: SchemaNode = {}): Array<Route> => {
-  const routes = children || typeof props.entrypoint === 'string'
-    ? router.getRoutes().filter((route) => (route.name ||'').startsWith(`${props.entrypoint}-`))
-    : router.getRoutes()
+const getRoutes = (node?: SchemaNode): Array<Route> => {
+  const children = node?.children
+  const routes: unknown = children || typeof props.entrypoint === 'string'
+    ? router.getRoutes().filter((route) => (route.name as string ||'').startsWith(`${props.entrypoint}-`))
+    : router.getRoutes() 
 
   const schema = getSchema(children || props.schema, routes as Array<Route>)
   const entries: Record<string, Route> = {}
 
-  Object.entries(schema)
-    .forEach(([key, node]) => {
-      if( !node ) {
-        return
-      }
+  Object.entries(schema).forEach(([key, node]) => {
+    if( !node ) {
+      return
+    }
 
-      const {
-        children,
-        ...route
+    const {
+      children,
+      ...route
 
-      } = node
+    } = node
 
-      const roles = route?.meta?.roles || node.roles
-      if( roles && !roles.includes(userStore.$currentUser.role) ) {
-        return
-      }
+    const roles = route?.meta?.roles || node.roles
+    if( roles && !roles.includes(userStore.$currentUser.role) ) {
+      return
+    }
 
-      entries[key] = route
-      entries[key].meta = route.meta || {
-        title: key
-      }
+    entries[key] = route
+    entries[key].meta = route.meta || {
+      title: key
+    }
 
-      if( children ) {
-        entries[key].children = getRoutes(node)
-      }
-    })
+    if( children ) {
+      entries[key].children = getRoutes(node)
+    }
+  })
 
   return Object.values(entries) as Array<Route>
 }

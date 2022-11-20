@@ -124,7 +124,8 @@ const emit = defineEmits<{
 const isFloating = computed(() => props.floating || props.float)
 const isCollapsed = ref(props.collapsed)
 
-const body = ref(null)
+const body = ref<Element & { offsetHeight: number }>({})
+
 const reachedEnd = ref(true)
 
 const updateScroll = () => {

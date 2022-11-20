@@ -10,6 +10,7 @@
   `">
     <div :class="`
       icon__icon
+      ${ size && `icon__icon--${size}` }
       ${
         small
           ? 'icon__icon--small'
@@ -17,7 +18,9 @@
       }
     `">
       <unicon
-        v-bind="props"
+        v-bind="{
+          fill
+        }"
         role="icon-img"
       ></unicon>
     </div>
@@ -33,9 +36,10 @@ import { inject } from 'vue'
 type Props = {
   name: string
   fill?: string
+  size?: string
   small?: boolean
   alt?: boolean
-  reactive?: boolean
+  reactive?: boolean|null
   selected?: boolean
 }
 

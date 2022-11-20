@@ -33,7 +33,7 @@ const getQuadrant = (el: HTMLDivElement) => {
     height: windowHeight,
     width: windowWidth
 
-  } = window.visualViewport
+  } = window.visualViewport!
 
   styles.push(
     (coords.top - windowHeight/2) < (windowHeight/2 - coords.bottom)

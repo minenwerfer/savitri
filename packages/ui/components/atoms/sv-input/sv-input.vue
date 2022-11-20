@@ -2,13 +2,13 @@
   <label class="input">
     <strong class="input__label">
       <slot v-if="$slots.default"></slot>
-      <slot v-else name="label"></slot>
+      <slot v-else name="description"></slot>
     </strong>
-    <div v-if="$slots.description" class="input__description">
-      <slot name="description"></slot>
+    <div v-if="$slots.hint" class="input__hint">
+      <slot name="hint"></slot>
     </div>
     <div
-      v-if="field.type !== 'textbox'"
+      v-if="property.type !== 'textbox'"
       :class="`
         input__container
         input__container--${variant}`
@@ -22,17 +22,16 @@
         :class="`
           input__input
           input__input--${variant}
-          ${field.icon && 'input__input--icon'}
+          ${property.icon && 'input__input--icon'}
           ${readOnly && 'input__input--readOnly'}
         `"
 
         @maska="onInput($event, true)"
         @input="onInput"
-        @change="onChange"
       />
       <sv-icon 
-        v-if="field.icon"
-        :name="field.icon"
+        v-if="icon"
+        :name="icon"
         :class="`
           input__icon
           input__icon--${variant}
@@ -68,61 +67,66 @@
   </label>
 </template>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
+</script>
+
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
+import type { CollectionProperty } from '../../../../common'
+
 import { useClipboard } from '../../../composables'
 import { SvInfo, SvIcon } from '../..'
 
 type Props = {
   modelValue?: string|number|Date
-  fieldName?: string
-  field: {
-    type?: string
-    mask?: string|Array<string>
-    icon?: string
-    variant?: string
-    readOnly?: boolean
-    placeholder?: string
-    min?: number
-    max?: number
-  }
+  propertyName?: string
+  property: CollectionProperty
+  variant?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  field: {
-    type: 'text'
-  }
-})
+const props = defineProps<Props>()
 
-const name = props.fieldName
 const searchOnly = inject('searchOnly', false)
 const readOnly = !searchOnly && props.readOnly
 
 const copyToClipboard = useClipboard()
 
 const emit = defineEmits<{
-  (e: 'input', value: string|number): void
-  (e: 'update:modelValue', value: string|number): void
+  (e: 'update:modelValue' | 'input', value: string|number|Date): void
 }>()
 
 const input = ref(null)
 const variant = inject('inputVariant', props.variant) || 'normal'
 
+const property = props.property||{}
 const {
-  icon,
-  mask,
-  variant: _variant,
+  s$icon: icon,
+  s$mask: mask,
   readOnly: _readOnly,
-  ...inputBind
 
-} = props.field
+} = property
 
-inputBind.name = props.fieldName
+const inputBind: {
+  type: string
+  min?: number
+  max?: number
+  name?: string
+  readonly?: boolean
+} = {
+  type: property.s$format||'text',
+  min: property.minimum || property.exclusiveMinimum,
+  max: property.maximum || property.exclusiveMaximum,
+}
+
+inputBind.name = props.propertyName
 inputBind.readonly = readOnly
 
-if( inputBind.type === 'datetime' ) {
-  inputBind.type = !searchOnly && props.field?.includeHours
+if( ['date', 'date-time'].includes(property.format!) ) {
+  inputBind.type = !searchOnly && property.format === 'date-time'
     ? 'datetime-local'
     : 'date'
 }
@@ -132,7 +136,7 @@ if( inputBind.type === 'text' && searchOnly ) {
 }
 
 const getDatetimeString = () => {
-   return props.modelValue.toISOString().split('T').shift()
+   return (props.modelValue as Date).toISOString().split('T').shift()
 }
 
 const inputValue = ref(
@@ -143,8 +147,10 @@ const inputValue = ref(
 
 const updateValue = (value: string|number) => {
   const newVal = (() => {
-    switch( props.field?.type ) {
-      case 'datetime': return new Date(value)
+    switch( property.format ) {
+      case 'date':
+      case 'date-time':
+        return new Date(value)
       default: return value
     }
   })()
@@ -156,10 +162,10 @@ const updateValue = (value: string|number) => {
 const onInput = (
   event: {
     target: {
-      modelValue: string,
-        dataset?: {
-          maskRawValue: string
-        }
+      value: string,
+      dataset?: {
+        maskRawValue: string
+      }
     }
   },
   masked: boolean
@@ -170,21 +176,15 @@ const onInput = (
 
   inputValue.value = event.target.value
   const newValue = masked
-    ? event.target.dataset.maskRawValue
+    ? event.target.dataset?.maskRawValue
     : event.target.value
     
-  if( props.type === 'number' && !newValue ) {
+  if( property.type === 'number' && !newValue ) {
     updateValue(0)
     return
   }
 
-  updateValue(newValue)
-}
-
-const onChange = (event: { target: { modelValue: string } }) => {
-  if( props.type === 'datetime' ) {
-    emit('update:modelValue', ISOToDate(event.target.modelValue))
-  }
+  updateValue(newValue!)
 }
 </script>
 

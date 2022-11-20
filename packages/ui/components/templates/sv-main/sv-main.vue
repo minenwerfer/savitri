@@ -62,17 +62,17 @@ watch(() => metaStore.descriptions, descriptions => {
       return
     }
 
-    const routeName = `dashboard-${description.name}`
+    const routeName = `dashboard-${description.$id}`
     if( router.hasRoute(routeName) ) {
       return
     }
 
     const route = {
       name: routeName,
-      path: description.name,
-      redirect: `/dashboard/c/${description.name}`,
+      path: description.$id,
+      redirect: `/dashboard/c/${description.$id}`,
       meta: {
-        title: description.name,
+        title: description.$id,
         unicon: description.unicon,
       }
     }

@@ -1,16 +1,11 @@
 import type {
   CollectionDescription,
-  CollectionProperty,
-  CollectionReference
+  CollectionProperty
 
 } from './types'
 
-export const getReferencedCollection = (property: CollectionProperty): CollectionReference|null => {
-  const query = Array.isArray(property.values)
-    ? property.values?.[0]?.__query
-    : property.values?.__query
-
-  const reference = query || Object.assign({}, property)
+export const getReferencedCollection = (property: CollectionProperty): CollectionProperty|null => {
+  const reference = property.items || property
   return reference?.$ref
     ? reference
     : null
@@ -21,15 +16,15 @@ export function getIndexes(
   key: string
 ): Array<string> {
   const property = description.properties?.[key]
-  const { $ref, index, } = getReferencedCollection(property)||{}
+  const { $ref, s$index } = getReferencedCollection(property)||{}
 
-  if( !$ref || !index ) {
+  if( !$ref || !s$index ) {
     return []
   }
 
-  return Array.isArray(index)
-    ? index
-    : [index]
+  return Array.isArray(s$index)
+    ? s$index
+    : [s$index]
 }
 
 export const getFirstIndex = (
@@ -73,8 +68,8 @@ export const formatValue = (
 
   const formatted = (() => {
     switch(true) {
-      case property?.type === 'datetime':
-        return (String(firstValue) as any).formatDateTime(property?.includeHours)
+      case ['date', 'date-time'].includes(property?.format!):
+        return (String(firstValue) as any).formatDateTime(property?.format === 'date-time')
 
       case property?.type === 'boolean': return firstValue ? 'true' : 'false'
       case [undefined, null].includes(firstValue): return '-'

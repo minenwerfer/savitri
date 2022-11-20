@@ -20,14 +20,21 @@ import { computed } from 'vue'
 import { useParentStore } from '../../../../../../../web'
 import { SvIcon } from '../../../../../..'
 
+type DateFilter = {
+  $lte: string
+  $gte: string
+}
+
 const store = useParentStore()
 const printableFilters = computed(() => {
-  let isMongoOperation
+  let isMongoOperation: boolean
+
   const activeFilters = (() => {
-    const [firstEntry] = Object.entries(store.activeFilters)
+    const [firstEntry] = Object.entries(store.activeFilters) as Array<any>
+
     if( firstEntry && ['$and', '$or'].includes(firstEntry[0]) ) {
       isMongoOperation = true
-      return firstEntry[1].reduce((a, filter) => {
+      return firstEntry[1].reduce((a: any, filter: any) => {
         return {
           ...a,
           ...filter
@@ -41,8 +48,8 @@ const printableFilters = computed(() => {
   return Object.entries(activeFilters).map(([key, filter]) => {
     const field = store.description.fields[key]
     const formatted = (() => {
-      if( field.isReference ) {
-        if( field.array ) {
+      if( field.s$isReference ) {
+        if( field.type === 'array' ) {
           return store.formatValue({
             value: filter,
             key,
@@ -50,13 +57,13 @@ const printableFilters = computed(() => {
           })
         }
 
-        const value = filter
+        const value = filter as any[]
         return value.slice(-8)
       }
 
-      if( field.type === 'datetime' ) {
-        const d1 = filter.$gte.split('T')[0] || ''
-        const d2 = filter.$lte?.split('T')[0] || ''
+      if( ['date', 'date-time'].includes(field.s$format) ) {
+        const d1 = (filter as DateFilter).$gte.split('T')[0] || ''
+        const d2 = (filter as DateFilter).$lte?.split('T')[0] || ''
         return `${d1} - ${d2}`
       }
 

@@ -13,9 +13,9 @@
       v-bind="{
         collection: 'userExtra',
         formData: userExtraStore.item,
-        form: webpackVariables.signupExtraFields
-          ? userExtraStore.useFields(webpackVariables.signupExtraFields)
-          : userExtraStore.useFieldsExcept(['owner']),
+        form: webpackVariables.signupExtraProperties
+          ? userExtraStore.useProperties(webpackVariables.signupExtraProperties)
+          : userExtraStore.usePropertiesExcept(['owner']),
         validationErrors: userStore.validationErrors
       }"
     ></sv-form>
@@ -57,7 +57,7 @@ import {
   useStore,
   useParentStore,
 
-} from '@savitri/web'
+} from '../../../../web'
 
 import { usePasswordPolicy } from '../../../composables'
 
@@ -67,7 +67,7 @@ import {
   SvCheckbox,
   SvButton,
 
-} from '@savitri/ui'
+} from '../../..'
 
 import { default as webpackVariables } from 'variables'
 

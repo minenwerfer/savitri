@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { ref, watch, provide } from 'vue'
-import { useHttp } from '@savitri/web'
+import { useHttp } from '../../../../../../../web'
 import { SvInput } from '../../../../..'
 import { results } from '../../store'
 

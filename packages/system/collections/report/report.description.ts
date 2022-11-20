@@ -8,60 +8,61 @@ const schema = {
   properties: {
     _collection: {
       description: 'Módulo',
-      type: 'text',
-      translate: true
+      type: 'string',
+      s$translate: true
     },
     created_at: {
       description: 'Data',
-      type: 'datetime',
-      meta: true
+      type: 'string',
+      format: 'date-time',
+      s$meta: true
     },
     file: {
       $ref: 'file',
       description: 'Arquivo',
-      index: 'name',
-      notable: true,
-      noform: true
+      s$index: 'name',
+      s$notable: true,
+      s$noform: true
     },
     format: {
       description: 'Formato',
-      type: 'select',
-      values: {
-        csv: 'CSV',
-        pdf: 'PDF'
-      }
+      enum: [
+        'csv',
+        'pdf'
+      ],
+      s$format: 'select'
     },
     type: {
       description: 'Tipo',
-      type: 'radio',
-      values: {
-        filtered_only: 'Apenas resultados filtrados',
-        everything: 'Todo o período'
-      },
-      translate: true
+      enum: [
+        'filtered_only',
+        'everything'
+      ],
+      s$format: 'radio',
+      s$translate: true
     },
     limit: {
       description: 'Limite',
-      hint: 'Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção "Relatórios" antes de prosseguir.',
       type: 'number',
-      notable: true
+      s$hint: 'Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção "Relatórios" antes de prosseguir.',
+      s$notable: true
     },
     offset: {
       description: 'Offset',
-      hint: 'Deixe vazio para retornar do princípio',
       type: 'number',
-      notable: true
+      s$hint: 'Deixe vazio para retornar do princípio',
+      s$notable: true
     },
     filters: {
       description: 'Filtros',
       type: 'object',
-      notable: true,
-      noform: true
+      s$notable: true,
+      s$noform: true
     },
     entries_count: {
       description: 'Entradas',
       type: 'number',
-      noform: true
+      s$noform: true
     }
   }
 } as const

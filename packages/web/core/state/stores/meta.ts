@@ -6,7 +6,7 @@ import useHttp from '../../http'
 import useCollection from '../collection'
 
 import { useStore, hasStore, registerStore } from '../use'
-import { hydrateQuery, freshItem, freshFilters } from '../helpers'
+import { freshItem, freshFilters } from '../helpers'
 
 type CollectionName = string
 type PromptAnswer = { name: string }
@@ -73,7 +73,7 @@ export default defineStore('meta', {
           )
         }
 
-        description.properties = await hydrateQuery(description.properties, false)
+        // description.properties = await hydrateQuery(description.properties, false)
 
         if( hasStore(collectionName) ) {
           const store = useStore(collectionName)

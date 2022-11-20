@@ -1,7 +1,6 @@
 import type { CollectionProperty, ValuesOf } from '../../../common/types'
 export type { CollectionDescription } from '../../../common/types'
 import type { MongoDocument, ObjectId } from '../../types'
-import type { TypeMapping } from './typemapping'
 
 export type Schema<T extends Properties> = CaseOwned<T>
 
@@ -28,13 +27,19 @@ type Owned = {
   owner: Reference
 }
 
-type MapType<T extends keyof TypeMapping> = TypeMapping[T]
+type MapType<T> = T extends { format: 'date'|'date-time' }
+  ? Date : T extends { type: 'string' }
+  ? string : T extends { type: 'number' }
+  ? number : T extends { type: 'boolean' }
+  ? boolean : T extends { enum: ReadonlyArray<infer K> }
+  ? K : T extends { $ref: string }
+  ? Reference : never
 
 type CaseReference<T> = T extends { $id: string }
   ? Reference
-  : T extends { values: [{ __query: { $id: string } }] } | { values: { __query: { $id: string } } }
-  ? Reference
-  : MapType<Property<T>['type']>
+  : T extends { type: 'array', items: infer K }
+  ? Array<MapType<K>>
+  : MapType<T>
 
 type CaseArray<T> = T extends { array: true }
   ? Array<CaseReference<T>>
@@ -47,7 +52,7 @@ type CaseReadonly<T> = T extends { readOnly: true }
 type Type<T> = CaseReadonly<T>
 
 type Property<F> = F & {
-  type: keyof TypeMapping
+  // type?: keyof TypeMapping
   array?: boolean
   readOnly?: boolean
 }

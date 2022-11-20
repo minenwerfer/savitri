@@ -8,7 +8,7 @@ declare module '*.vue' {
 }
 
 declare module 'variables' {
-  const strict: true
+  const strict: boolean
   const bundleName: string
   const workingDir: string
   const productName: string
@@ -19,9 +19,17 @@ declare module 'variables' {
 declare module 'vue-unicons/dist/icons' {
 }
 
-declare module '@savitri/ui' {
-  const routes: any
-}
+// declare module '@savitri/web' {
+//   export * from './'
+// }
+
+// declare module '@savitri/ui' {
+//   export * from '../ui'
+// }
+
+// declare module '@savitri/common' {
+//   export * from '../common'
+// }
 
 // web core
 declare var ROUTER: any

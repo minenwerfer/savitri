@@ -1,7 +1,4 @@
-import { fromEntries, withIsomorphicLock } from '../../../common'
-import { ARRAY_TYPES } from '../../../common/constants'
-import { useStore } from './'
-import useHttp from '../http'
+import { fromEntries } from '../../../common'
 
 import type {
   CollectionActions,
@@ -10,121 +7,11 @@ import type {
 } from '../../../common/types'
 
 const isObject = (property: any) =>
-  typeof property.$ref === 'string'
+  typeof property.$ref
     || property.type === 'object'
-    || property.values?.[0]?.__query
-    || property.values?.__query
+    || property.items?.$ref
+    || property.items?.type === 'object'
 
-const isArray = (property: any) => property.array
-  || Array.isArray(property.values)
-
-
-export const hydrateQuery = async(obj: any, array: boolean = false): Promise<any> => {
-  const { nonProxiedHttp: http } = useHttp()
-
-  const userStore = useStore('user')
-  const normalize = (data: any, query: any) => data.reduce((a: any, item: any) => ({
-    ...a,
-    [item._id]: item[Array.isArray(query.index)
-      ? query.index[0]
-      : query.index]
-  }), {})
-
-  const hydrate = async ([key, query]: [string, any]) => {
-    if( key !== '__query' ) {
-      if( array ) {
-        return obj
-      }
-
-      return {
-        [key]: typeof query === 'object'
-          ? await hydrateQuery(query, Array.isArray(query))
-          : query
-      }
-    }
-
-    const ref = query.$ref?.split('/').pop() as string
-    if( !ref ) {
-      throw new TypeError('dynamic query but no ref is specified')
-    }
-
-    return withIsomorphicLock(`dynamicQuery:${ref}`, async () => {
-      if( !(ref in QUERY_CACHE) ) {
-        QUERY_CACHE[ref] = {
-          items: [],
-          satisfied: false
-        }
-      }
-
-      const stored = QUERY_CACHE[ref]
-      const hasToUpdate = typeof query.limit === 'number'
-        && (query.limit > stored.items.length || query.limit === 0)
-        && !stored.satisfied
-
-      if( stored.items.length > 0 && !hasToUpdate ) {
-        return normalize(stored.items, query)
-      }
-
-      if( hasToUpdate && stored ) {
-        query.offset = stored.items.length
-      }
-
-      /**
-       * @remarks optimization
-       */
-      if( !userStore.$currentUser.role && !query.public ) {
-        return {}
-      }
-
-      const route = `${ref}/getAll`
-
-      try {
-        const options: any = {
-          filters: query.filters || {},
-          limit: query.limit || 0,
-          offset: query.offset,
-        }
-
-        if( query.index ) {
-          options.project = query.index
-          options.sort = Array.isArray(query.index)
-            ? query.index.reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {})
-            : { [query.index]: 1 }
-        }
-
-        const { data } = await http.post(route, options)
-
-        stored.items.push(...data.result)
-        stored.satisfied = data.pagination.recordsTotal === query.offset
-
-        const result = normalize(stored.items, query)
-        return result
-
-      } catch(e) {
-        return stored.items
-      }
-
-    })
-  }
-
-  const entries = Array.isArray(obj)
-    ? obj.map((i) => Object.entries(i)[0])
-    : Object.entries(obj)
-
-  const result: any = array ? [] : {}
-
-  for (const pair of entries) {
-    const hydrated = await hydrate(pair)
-
-    array
-      ? result.push(hydrated)
-      : Object.assign(result, hydrated)
-  }
-
-  return array
-    ? result[0]
-    : result
-}
 
 export const condenseItem = (item: Record<string, any>) => {
   return Object.entries(item||{}).reduce((a:any, [key, value]) => ({
@@ -216,18 +103,18 @@ export const freshItem = (description: CollectionDescription) => {
       return a
     }
 
-    if( [...ARRAY_TYPES, 'boolean'].includes(property.type!) ) {
-      return {
-        ...a,
-        [key]: property.type !== 'radio'
-          ? (property.type === 'boolean' ? false : [])
-          : ''
+    const value = (() => {
+      switch( property.type ) {
+        case 'boolean': return false
+        case 'array': return []
+        case 'object': return {}
+        default: return null
       }
-    }
+    })()
 
     return {
       ...a,
-      [key]: isArray(property) ? [] : {}
+      [key]: value
     }
   }, {})
 
@@ -240,7 +127,7 @@ export const freshFilters = (description: CollectionDescription) => {
       if( isObject(property) ) {
         return {
           ...a,
-          [key]: isArray(property) ? [] : {}
+          [key]: property.type === 'array' ? [] : {}
         }
       }
 

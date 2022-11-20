@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../web'
 import { SvBareButton, SvIcon } from '../..'
 
 type Props = {
@@ -51,8 +51,12 @@ type Props = {
   subject?: any
 }
 
+type Action = {
+  click: (subject: any) => void
+}
+
 type Emits = {
-  (e: 'actionClicked', event: { action: any, subject: any }): void
+  (e: 'actionClicked', event: { action: Action, subject: any }): void
 }
 
 const props = defineProps<Props>()
@@ -71,7 +75,7 @@ const filterActions = (actions: Array<any>) => {
   })
 }
 
-const onClick = (action, subject) => {
+const onClick = (action: Action, subject: any) => {
   action.click(subject)
   emit('actionClicked', { action, subject })
 

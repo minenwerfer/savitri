@@ -2,13 +2,13 @@
   <div class="switch-wrapper">
     <a
       v-clickable="{
-        blocked: field?.readOnly
+        blocked: property?.readOnly
       }"
 
       :class="`
         switch
         ${modelValue && 'switch--active'}
-        ${field?.readOnly && 'switch--readOnly'}
+        ${property?.readOnly && 'switch--readOnly'}
       `"
       @click.stop="toggle"
     >
@@ -23,12 +23,18 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
+</script>
+
 <script setup lang="ts">
 import { computed } from 'vue'
 
 type Props = {
   modelValue?: boolean
-  field?: {
+  property?: {
     values: Array<string>
     readOnly?: boolean
   }
@@ -42,10 +48,10 @@ type Emits = {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const valueLabel = computed(() => props.field?.values?.[props.modelValue?0:1])
+const valueLabel = computed(() => props.property?.values?.[props.modelValue?0:1])
 
 const toggle = () => {
-  if( !props.field?.readOnly ) {
+  if( !props.property?.readOnly ) {
     emit('change', !props.modelValue)
     emit('update:modelValue', !props.modelValue)
   }

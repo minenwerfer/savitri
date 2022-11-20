@@ -1,4 +1,3 @@
-export { default as SvNew } from './sv-new/sv-new.vue'
 export { default as SvBareButton } from './sv-bare-button/sv-bare-button.vue'
 export { default as SvButton } from './sv-button/sv-button.vue'
 export { default as SvCheckbox } from './sv-checkbox/sv-checkbox.vue'

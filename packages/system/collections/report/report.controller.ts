@@ -34,13 +34,13 @@ export class ReportController extends Mutable<Report> {
     const entries = !table
       ? Object.entries(description.properties)
       : Object.entries(description.properties)
-        .filter(([key, _]: [string, unknown]) => table.includes(key))
+        .filter(([key, _]) => table.includes(key))
 
     return filter(entries)
   }
 
   private _getColumns(properties: Array<CollectionProperty>) {
-    return Object.values(properties).map((f: { description: string }) => f.description)
+    return Object.values(properties).map(f => f.description!)
   }
 
   private _filename(ext: string) {
