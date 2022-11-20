@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import { getReferencedCollection } from '../../../common'
-import type { DeepWritable, CollectionDescription } from '../../../types'
+import type { CollectionDescription } from '../../../types'
 
 export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${collectionName}`)
@@ -19,11 +19,7 @@ export const requireCollection = (collectionName:string): any => {
   return require(`${process.cwd()}/collections/${collectionName}/${collectionName}.description.json`)
 }
 
-export const preloadCollection = (
-  collection: Omit<CollectionDescription, 'properties'> & {
-    properties?: DeepWritable<CollectionDescription['properties']>
-  }
-) => {
+export const preloadCollection = (collection: CollectionDescription) => {
   if( collection.alias ) {
     const _aliasedCollection = requireCollection(collection.alias)
 

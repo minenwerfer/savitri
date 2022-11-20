@@ -7,6 +7,10 @@ import { File, FileDescription } from './file.description'
 import FileModel from './file.model'
 
 const { STORAGE_PATH } = process.env
+if( !STORAGE_PATH ) {
+  throw new Error('STORAGE_PATH is not set in the environment')
+}
+
 
 export class FileController extends Mutable<File> {
   constructor() {
@@ -24,10 +28,6 @@ export class FileController extends Mutable<File> {
     },
     token: DecodedToken
   ) {
-    if( !STORAGE_PATH ) {
-      throw new Error('STORAGE_PATH is not set in the environment')
-    }
-
     const what = Object.assign({}, props.what)
     what.owner = token.user._id
 

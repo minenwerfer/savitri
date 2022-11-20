@@ -1,13 +1,35 @@
+import {
+  PROPERTY_TYPES,
+  PROPERTY_FORMATS,
+  PROPERTY_UI_FORMATS,
+
+} from '../constants'
+
+export type PropertyTypes = typeof PROPERTY_TYPES[number]
+export type PropertyFormats = typeof PROPERTY_FORMATS[number]
+export type PropertyUiFormats = typeof PROPERTY_UI_FORMATS[number]
+
 export type JsonSchema = {
   $id: string
   required?: ReadonlyArray<string>
   presets?: ReadonlyArray<string>
-  properties: Record<string, Property<any>>
+  properties: Record<string, Property>
 }
 
-type Property<F> = F & {
-  // type?: keyof TypeMapping
-  array?: boolean
+export type Property = {
+  $ref?: string
+  type?: PropertyTypes
+  format?: PropertyFormats
+  enum?: ReadonlyArray<any>
+  default?: any
+  description?: string
+  items?: Property
+
   readOnly?: boolean
-}
+  uniqueItems?: boolean
 
+  minimum?: number
+  maximum?: number
+  exclusiveMinimum?: number
+  exclusiveMaximum?: number
+}

@@ -1,5 +1,5 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { Property, PropertyUiFormats } from './property'
+import type { Property, PropertyUiFormats } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
 
