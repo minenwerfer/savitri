@@ -8,13 +8,8 @@ import {
 
 import * as R from 'ramda'
 import * as TypeGuards from './typeguards'
-import {
-  getReferencedCollection,
-  CollectionDescription,
-  CollectionProperty,
-  MaybeCollectionDescription
-
-} from '../../../common'
+import { getReferencedCollection } from '../../../common'
+import type { CollectionDescription, CollectionProperty, MaybeCollectionDescription } from '../../../types'
 
 import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'

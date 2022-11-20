@@ -1,5 +1,5 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
-import type { CollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../types'
 import type {
   HandlerRequest,
   ProvidedParams,

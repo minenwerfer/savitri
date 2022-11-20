@@ -1,5 +1,5 @@
 import { RequestProvider } from '../../common'
-import { SV_API_URL } from '../../common/constants'
+import { SV_API_URL } from '../../types/constants'
 import { useStore } from './state'
 
 export default () => {

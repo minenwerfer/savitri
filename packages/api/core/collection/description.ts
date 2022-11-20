@@ -1,4 +1,4 @@
-import type { MaybeCollectionDescription } from '../../../common/types'
+import type { MaybeCollectionDescription } from '../../../types'
 import type { SchemaProperties } from './schema.types'
 
 export const makeDescription = <

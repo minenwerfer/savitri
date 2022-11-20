@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { default as webpackVariables } from 'variables'
 import { deepClone } from '../../../../common'
-import { CollectionDescription } from '../../../../common/types'
+import { CollectionDescription } from '../../../../types'
 import useHttp from '../../http'
 import useCollection from '../collection'
 

@@ -1,5 +1,5 @@
 import type { StoreGeneric } from 'pinia'
-import type { CollectionDescription, CollectionProperty } from '../../common/types/collection'
+import type { CollectionDescription, CollectionProperty } from '../../types'
 import collectionActions from '../core/state/actions'
 import collectionGetters from '../core/state/getters'
 

@@ -1,6 +1,6 @@
 import * as Collection from '../../../common/collection'
 import { fromEntries, deepClone } from '../../../common'
-import type { CollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../types'
 
 import useHttp from '../http'
 import useMetaStore from './stores/meta'

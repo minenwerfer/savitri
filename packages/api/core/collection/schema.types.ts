@@ -1,13 +1,13 @@
-import type { CollectionProperty, ValuesOf } from '../../../common/types'
-export type { CollectionDescription } from '../../../common/types'
-import type { MongoDocument, ObjectId } from '../../types'
+import type { CollectionProperty, ValuesOf, JsonSchema } from '../../../types'
+export type { CollectionDescription } from '../../../types'
+import type { MongoDocument, Reference } from '../../types'
 
-export type Schema<T extends Properties> = CaseOwned<T>
+export type Schema<T extends JsonSchema> = CaseOwned<T>
 
 export type SchemaProperties<T> = T & {
   [
     P in keyof T as
-    P extends keyof Properties
+    P extends keyof JsonSchema
       ? P
       : never
   ]: P extends 'properties'
@@ -15,14 +15,6 @@ export type SchemaProperties<T> = T & {
     : T[P]
 }
 
-type Properties = {
-  $id: string
-  required?: ReadonlyArray<string>
-  presets?: ReadonlyArray<string>
-  properties: Record<string, Property<any>>
-}
-
-type Reference = ObjectId|string|(object & MongoDocument)|undefined
 type Owned = {
   owner: Reference
 }
@@ -51,12 +43,6 @@ type CaseReadonly<T> = T extends { readOnly: true }
 
 type Type<T> = CaseReadonly<T>
 
-type Property<F> = F & {
-  // type?: keyof TypeMapping
-  array?: boolean
-  readOnly?: boolean
-}
-
 type IsRequired<
   F,
   ExplicitlyRequired,
@@ -72,25 +58,25 @@ type IsRequired<
   ]: F[P]
 }
 
-type RequiredProperties<F, E> = IsRequired<F, E, true>
-type UnrequiredProperties<F> = IsRequired<F, '', false>
+type RequiredJsonSchema<F, E> = IsRequired<F, E, true>
+type UnrequiredJsonSchema<F> = IsRequired<F, '', false>
 
-type OptionalProperties<F, E> = Exclude<keyof F, RequiredProperties<F, E>>
+type OptionalJsonSchema<F, E> = Exclude<keyof F, RequiredJsonSchema<F, E>>
 
 type StrictMode<F> = MongoDocument &
   { [P in keyof F]: Type<F[P]> } &
-  { [P in UnrequiredProperties<F>]?: Type<F[P]> }
+  { [P in UnrequiredJsonSchema<F>]?: Type<F[P]> }
 
 type PermissiveMode<F, E> = MongoDocument &
-  { [P in RequiredProperties<F, E>]: Type<F[P]> } &
-  { [P in OptionalProperties<F, E>]?: Type<F[P]> }
+  { [P in RequiredJsonSchema<F, E>]: Type<F[P]> } &
+  { [P in OptionalJsonSchema<F, E>]?: Type<F[P]> }
 
-type CaseOwned<T extends Properties> = T extends { owned: true }
+type CaseOwned<T extends JsonSchema> = T extends { owned: true }
   ? Owned & MapTypes<T>
   : MapTypes<T>
 
 type MapTypes<
-  S extends Properties,
+  S extends JsonSchema,
   F=S['properties'],
   ExplicitlyRequired=S['required']
 > = S extends { strict: true }

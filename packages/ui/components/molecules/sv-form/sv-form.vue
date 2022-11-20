@@ -35,8 +35,8 @@
         </label>
 
         <component
-          v-if="layout?.[key]?.component && formComponents[layout[key].component?.$ref]"
-          :is="formComponents[layout[key].component.$ref]"
+          v-if="layout?.[key]?.component && formComponents[layout[key].component?.name]"
+          :is="formComponents[layout[key].component.name]"
           v-model="formData[key]"
           v-bind="{
             property,
@@ -178,8 +178,11 @@ const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-fil
 type LayoutConfig = {
   span?: string
   verticalSpacing?: string
-  component?: string
   if?: Condition
+  component?: {
+    name: string
+    props?: object
+  }
 }
 
 type Props = {
@@ -205,9 +208,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:formData', value: any): void
-  (e: 'input', value: string): void
-  (e: 'change', value: string): void
+  (e: 'update:formData' | 'input', value: any): void
+  (e: 'change'): void
 }>()
 
 const collectionName = props.$ref || inject('storeId', null)
@@ -285,15 +287,6 @@ const properties = filterProperties(([key, f]: [string, any]) => {
     && has(key)
 })
 
-const isSelectType = (type: string) => {
-  return [
-    'checkbox',
-    'radio',
-    'boolean',
-    'select'
-  ].includes(type)
-}
-
 const fieldStyle = (key:string, property: any) => {
   const style = []
   const layout = props.layout?.[key] || props.layout?.$default
@@ -318,14 +311,6 @@ const fieldStyle = (key:string, property: any) => {
     --field-span: ${layout?.span || 6};
     grid-column: span var(--field-span) / span var(--field-span);
   `)
-
-  if(
-    isSelectType(property.type)
-    && property.type !== 'boolean'
-    || property.$ref === 'file'
-  ) {
-    style.push('padding-bottom: .6rem;')
-  }
 
   if( !layout ) {
     return style.join('')

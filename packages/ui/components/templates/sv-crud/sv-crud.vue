@@ -95,7 +95,7 @@ import {
 } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useStore, useParentStore, ActionEvent, CollectionStore } from '../../../../web'
+import { useStore, useParentStore, CollectionStore } from '../../../../web'
 import { useAction } from '../../../composables'
 
 import {
@@ -138,20 +138,15 @@ const emit = defineEmits<Emits>()
 const router = useRouter()
 
 let
-  store: CollectionStore = null,
-  parentStore: CollectionStore = null
+  store: CollectionStore,
+  parentStore: CollectionStore
 
 const metaStore = useStore('meta')
 
-try {
-  store = useStore(props.collection)
-} catch( e ) {
-  router.push({ name: 'not-found' })
-}
-
-if( props.parentField ) {
-  parentStore = useParentStore(props.parentCollection)
-}
+store = useStore(props.collection)
+parentStore = props.parentField
+  ? useParentStore(props.parentCollection)
+  : null
 
 const { hash } = useRoute()
 const [call, actionEventBus] = useAction(store, router)

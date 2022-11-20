@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import type { Model } from '../database'
-import type { CollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../types'
 import type { MongoDocument } from '../../types'
 
 import { fromEntries, deepMerge } from '../../../common/helpers'

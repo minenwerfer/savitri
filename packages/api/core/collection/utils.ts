@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import type { CollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../types'
 import type { MongoDocument } from '../../types'
 
 export const normalizeProjection = (projection?: string|Array<string>|Record<string, number>) => {

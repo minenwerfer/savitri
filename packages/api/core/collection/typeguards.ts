@@ -6,14 +6,14 @@ import type {
   CollectionPresets,
   StoreEffect
 
-} from '../../../common/types'
+} from '../../../types'
 
 import {
   PROPERTY_TYPES,
   COLLECTION_PRESETS,
   STORE_EFFECTS
 
-} from '../../../common/constants'
+} from '../../../types/constants'
 
 export const presets = (description: MaybeCollectionDescription): MaybeCollectionDescription => {
   const isValidPresets = (preset?: string): preset is CollectionPresets => {

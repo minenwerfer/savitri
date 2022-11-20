@@ -37,7 +37,7 @@
         </template>
       </sv-form>
       <sv-button
-        v-if="expanded && property.array"
+        v-if="expanded && property.type === 'array'"
         icon="plus"
         @clicked="addItem"
       >
@@ -126,6 +126,7 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const property = props.property
 
 const emit = defineEmits<{
   (e: 'update:modelValue', event: any): void
@@ -160,7 +161,7 @@ const rawItem = computed(() => {
 })
 
 const isTyping = ref(false)
-const inputValue = reactive({})
+const inputValue = reactive<Record<string, any>>({})
 
 const insert = async () => {
   const result: any = await store.insert({ what: edited.value })
@@ -201,7 +202,7 @@ const clear = () => {
   expanded.value = false
   matchingItems.value = []
   if( props.property.type === 'array' ) {
-    rawItem.value = rawItem.value.slice(0, -1)
+    // rawItem.value = rawItem.value.slice(0, -1)
   }
 }
 

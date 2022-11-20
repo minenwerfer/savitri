@@ -1,6 +1,6 @@
 import * as R from 'ramda'
-import { getReferencedCollection, CollectionDescription } from '../../../common'
-import type { DeepWritable } from '../../../common/types'
+import { getReferencedCollection } from '../../../common'
+import type { DeepWritable, CollectionDescription } from '../../../types'
 
 export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${collectionName}`)

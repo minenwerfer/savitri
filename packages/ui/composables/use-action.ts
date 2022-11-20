@@ -1,8 +1,8 @@
 import { reactive } from 'vue'
 import type { Router } from 'vue-router'
-import type { CollectionAction, StoreEffect } from '../../common/types'
+import type { CollectionAction, StoreEffect } from '../../types'
 import type { ActionEvent } from '../../web/types/action'
-import { STORE_EFFECTS } from '../../common/constants'
+import { STORE_EFFECTS } from '../../types/constants'
 
 const getEffect = (store: any, effectName: StoreEffect) => {
   const effect = STORE_EFFECTS[effectName]
@@ -12,7 +12,7 @@ const getEffect = (store: any, effectName: StoreEffect) => {
 export default <T extends { $id: string }, F extends { _id: string }>(
   store: (T & Record<string, (...args: any[]) => any>),
   router: Router
-) => {
+): [(...args: any[]) => void, any] => {
   const eventBus = reactive<ActionEvent>({
     id: -1,
     name: '',

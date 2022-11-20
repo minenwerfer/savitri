@@ -1,6 +1,6 @@
 import type { ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest, DecodedToken } from '../../types'
-import { PAGINATION_PER_PAGE_LIMIT } from '../../../common/constants'
+import { PAGINATION_PER_PAGE_LIMIT } from '../../../types/constants'
 
 type PreHookParams = {
   request: HandlerRequest

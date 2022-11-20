@@ -1,4 +1,4 @@
-import type { CollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../types'
 import { preloadCollection } from '../../../api/core/collection'
 import * as SystemCollections from '../../collections'
 

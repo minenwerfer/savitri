@@ -4,7 +4,7 @@ import type {
   CollectionActions,
   CollectionDescription
 
-} from '../../../common/types'
+} from '../../../types'
 
 const isObject = (property: any) =>
   typeof property.$ref

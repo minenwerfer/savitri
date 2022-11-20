@@ -1,4 +1,4 @@
-import type { CollectionProperty } from '../../../common/types'
+import type { CollectionProperty } from '../../../types'
 import type { CollectionState } from '../../types/state'
 import { fromEntries, deepClone } from '../../../common'
 

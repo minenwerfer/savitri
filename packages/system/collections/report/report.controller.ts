@@ -5,7 +5,7 @@ const { writeFile } = require('fs').promises
 import type { DecodedToken } from '../../../api/types'
 import { fromEntries } from '../../../common/helpers'
 import * as Collection from '../../../common/collection'
-import type { CollectionProperty } from '../../../common/types'
+import type { CollectionProperty } from '../../../types'
 import { Mutable, getController } from '../../../api/core/controller'
 
 import { Report, ReportDescription } from './report.description'

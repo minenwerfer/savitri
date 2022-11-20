@@ -1,4 +1,4 @@
-import type { CollectionDescription } from '../../../common/types'
+import type { CollectionDescription } from '../../../types'
 import { getController } from '../../../api/core/controller'
 import { getDescriptions } from '../meta/meta.helper'
 

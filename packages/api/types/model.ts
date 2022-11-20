@@ -6,6 +6,8 @@ export type MongoDocument = {
   updated_at?: Date
 }
 
+export type Reference = ObjectId|string|(object & MongoDocument)|undefined
+
 export {
   ObjectId
 }

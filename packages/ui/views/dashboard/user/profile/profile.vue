@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from '@savitri/web'
+import { useStore } from '../../../../../web'
 import {
   SvBox,
   SvForm,

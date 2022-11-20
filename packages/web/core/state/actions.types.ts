@@ -1,4 +1,4 @@
-import type { CollectionProperty } from '../../../common/types'
+import type { CollectionProperty } from '../../../types'
 import type { CollectionState, CollectionGetters } from '../../types/state'
 
 type CrudParameters = {
@@ -25,7 +25,7 @@ type ActionFilter = Partial<Pick<CrudParameters,
 >
 
 export type Item = Record<string, any> & {
-  _id: string
+  _id?: string
 }
 
 interface ActionsAux {
@@ -64,8 +64,8 @@ interface MutationsAux {
   setItems(items: Array<any>): Array<any>
   insertItem(item: Item): Item
   removeItem(item: Item): Item
-  clearItem(item: Item): Item
-  clearItems(item: any): void
+  clearItem(): Item
+  clearItems(): void
 }
 
 export type StatefulFunction<
