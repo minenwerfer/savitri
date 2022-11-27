@@ -18,8 +18,8 @@ Features
 - In-house set of backoffice components
 - Multilanguage
 - Multitenant
+- Plugins system
 
 Todo:
-- JSON-schema compliance (http://json-schema.org/)
 - Improve code splitting and lazyloading
 - Whitelabeling support
