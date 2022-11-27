@@ -22,7 +22,7 @@
         :class="`
           input__input
           input__input--${variant}
-          ${property.icon && 'input__input--icon'}
+          ${icon && 'input__input--icon'}
           ${readOnly && 'input__input--readOnly'}
         `"
 
@@ -76,13 +76,15 @@ export default {
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
-import type { CollectionProperty } from '../../../../common'
+import type { CollectionProperty } from '../../../../types'
 
 import { useClipboard } from '../../../composables'
 import { SvInfo, SvIcon } from '../..'
 
+type InputType = string|number|Date
+
 type Props = {
-  modelValue?: string|number|Date
+  modelValue?: InputType
   propertyName?: string
   property: CollectionProperty
   variant?: string
@@ -97,7 +99,7 @@ const readOnly = !searchOnly && property.readOnly
 const copyToClipboard = useClipboard()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue' | 'input', value: string|number|Date): void
+  (e: 'update:modelValue' | 'input', value: InputType): void
 }>()
 
 const input = ref(null)
@@ -112,12 +114,14 @@ const {
 
 const inputBind: {
   type: string
+  placeholder?: string
   min?: number
   max?: number
   name?: string
   readonly?: boolean
 } = {
   type: property.s$format||'text',
+  placeholder: property.s$placeholder,
   min: property.minimum || property.exclusiveMinimum,
   max: property.maximum || property.exclusiveMaximum,
 }
@@ -145,7 +149,7 @@ const inputValue = ref(
     : props.modelValue || ''
 )
 
-const updateValue = (value: string|number) => {
+const updateValue = (value: InputType) => {
   const newVal = (() => {
     switch( property.format ) {
       case 'date':
@@ -160,7 +164,7 @@ const updateValue = (value: string|number) => {
 }
 
 const onInput = (
-  event: {
+  event: Event & {
     target: {
       value: string,
       dataset?: {
@@ -168,7 +172,7 @@ const onInput = (
       }
     }
   },
-  masked: boolean
+  masked?: boolean
 ) => {
   if( !masked && event.target.dataset?.maskRawValue ) {
     return

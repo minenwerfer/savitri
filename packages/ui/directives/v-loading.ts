@@ -1,6 +1,8 @@
 import type { Directive, DirectiveBinding } from 'vue'
 
 const update = (el: HTMLElement, binding: DirectiveBinding) => {
+  el.ariaBusy = el.getAttribute('aria-busy')
+
   if( !binding.value ) {
     if( el.ariaBusy ) {
       el.removeAttribute('aria-busy')

@@ -39,7 +39,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { CollectionProperty } from '../../../../common'
+import type { CollectionProperty } from '../../../../types'
 
 type Props = {
   modelValue?: string|Array<string>|boolean

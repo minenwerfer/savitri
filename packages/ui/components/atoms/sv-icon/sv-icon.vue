@@ -19,6 +19,7 @@
     `">
       <unicon
         v-bind="{
+          name,
           fill
         }"
         role="icon-img"

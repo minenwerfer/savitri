@@ -1,8 +1,8 @@
 import * as R from 'ramda'
 import { getReferencedCollection } from '../../../common'
-import type { CollectionDescription } from '../../../types'
+import type { MaybeCollectionDescription } from '../../../types'
 
-export const applyPreset = (description: CollectionDescription, collectionName:string, parentName?:string) => {
+export const applyPreset = (description: MaybeCollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${collectionName}`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
@@ -19,7 +19,7 @@ export const requireCollection = (collectionName:string): any => {
   return require(`${process.cwd()}/collections/${collectionName}/${collectionName}.description.json`)
 }
 
-export const preloadCollection = (collection: CollectionDescription) => {
+export const preloadCollection = (collection: MaybeCollectionDescription) => {
   if( collection.alias ) {
     const _aliasedCollection = requireCollection(collection.alias)
 
@@ -42,7 +42,7 @@ export const preloadCollection = (collection: CollectionDescription) => {
   if( presets.length > 0 ) {
     const merge = presets?.reduce(
       (a, presetName: string) => applyPreset(a, presetName),
-      collection as CollectionDescription
+      collection as MaybeCollectionDescription
     )
 
     Object.assign(collection, merge)

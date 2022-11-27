@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, } from 'vue'
-import { PAGINATION_PER_PAGE_DEFAULTS } from '../../../../common'
+import { PAGINATION_PER_PAGE_DEFAULTS } from '../../../../types'
 import { useParentStore } from '../../../../web'
 
 import {

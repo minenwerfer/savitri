@@ -106,7 +106,7 @@ import {
 
 } from 'vue'
 
-import type { CollectionProperty } from '../../../../../../../common'
+import type { CollectionProperty } from '../../../../../../../types'
 import { useStore, useParentStore } from '../../../../../../../web'
 import { SvButton, SvIcon } from '../../../../..'
 

@@ -5,16 +5,16 @@
       :form-data="userStore.credentials"
       :form="{
         email: {
-          placeholder: 'E-mail',
-          icon: 'user',
-          type: 'text',
-          required: true,
+          type: 'string',
+          s$placeholder: 'E-mail',
+          s$icon: 'user',
+          s$format: 'email'
         },
         password: {
-          placeholder: 'Senha',
-          icon: 'key-skeleton',
-          type: 'password',
-          required: true,
+          type: 'string',
+          s$placeholder: 'Senha',
+          s$icon: 'key-skeleton',
+          s$format: 'password'
         }
       }"
     ></sv-form>

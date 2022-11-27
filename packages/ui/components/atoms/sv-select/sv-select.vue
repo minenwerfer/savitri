@@ -27,7 +27,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import type { CollectionProperty } from '../../../../common'
+import type { CollectionProperty } from '../../../../types'
 
 type Props = {
   modelValue?: any
