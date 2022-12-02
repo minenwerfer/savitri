@@ -28,20 +28,20 @@
             {{ property.translate ? $t(property.description) : property.description }}
           </strong>
           <div
-            v-if="property.hint"
-            v-html="property.hint"
+            v-if="property.s$hint"
+            v-html="property.s$hint"
             class="form__field-hint"
           ></div>
         </label>
 
         <component
           v-if="layout?.[key]?.component && formComponents[layout[key].component?.name]"
-          :is="formComponents[layout[key].component.name]"
+          :is="formComponents[layout[key].component!.name]"
           v-model="formData[key]"
           v-bind="{
             property,
             fieldName: key,
-            ...layout[key].component.props||{},
+            ...layout[key].component!.props||{},
           }"
         />
 
@@ -91,7 +91,7 @@
           v-bind="{
             property,
             fieldName: key,
-            placeholder: property.placeholder || property.translate ? $t(property.description||'') : property.description
+            placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description
           }"
         ></sv-input>
 
@@ -105,7 +105,7 @@
           }"
         >
           {{
-            property.values
+            property.s$values
               ? description
               : property.description
           }}
@@ -126,7 +126,7 @@
           v-model="formData[key]"
           v-bind="{
             property,
-            fieldName: key,
+            propertyName: key,
             parentCollection: collection
           }"
 
@@ -249,7 +249,7 @@ const filterProperties = (condition: (f: any) => boolean) =>
     .reduce((a: Array<any>, [key, property]: [string, any]) => {
       if(
         !(property
-          && (!property.noform || props.searchOnly)
+          && (!(property.s$noform  || property.s$meta) || props.searchOnly)
           && (!condition || condition([key, property]))
       )) {
         return a

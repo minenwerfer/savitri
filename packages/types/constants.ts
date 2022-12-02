@@ -39,8 +39,9 @@ export const PROPERTY_UI_FORMATS = [
   'object',
   'password',
   'radio',
+  'search',
   'select',
-  'textbox'
+  'textbox',
 ] as const
 
 export const COLLECTION_PRESETS = [

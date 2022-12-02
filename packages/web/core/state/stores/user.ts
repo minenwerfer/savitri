@@ -56,7 +56,7 @@ const collection = useCollection({
     properties() {
       const metaStore = useMetaStore()
       const properties = normalizeProperties(this.description.properties!)
-      properties.role.values = normalizeValues(Object.keys(metaStore.roles))
+      properties.role.enum = normalizeValues(Object.keys(metaStore.roles))
 
       return properties
     },

@@ -74,8 +74,11 @@ const schema = {
     },
     wizard_versions: {
       description: 'Versão do wizard',
-      type: 'string',
-      s$array: true
+      type: 'array',
+      items: {
+        type: 'string'
+      },
+      s$noform: true
     },
     updated_at: {
       description: 'Atualizado em',

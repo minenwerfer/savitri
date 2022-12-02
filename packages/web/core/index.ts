@@ -4,14 +4,12 @@ import { createApp } from 'vue'
 import VueLazyLoad from 'vue3-lazyload'
 import VueUnicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
-import type { Router } from 'vue-router'
+import type { Router, RouteRecordRaw } from 'vue-router'
 export * from 'vue'
 
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
-import { routes } from '@savitri/ui'
-import { extendRouter, RouterExtension } from './router'
-import { routerInstance as createRouter } from './router'
+import { routerInstance as createRouter, extendRouter, RouterExtension } from './router'
 import { default as webpackVariables } from 'variables'
 
 import { useStore } from './state'
@@ -33,6 +31,7 @@ interface AppOptions {
   menuSchema: MenuSchema
   routerExtension?: RouterExtension
   modules?: Array<Plugin>
+  routes?: Array<RouteRecordRaw>
 }
 
 export const useApp = (config: AppOptions): Promise<{
@@ -51,7 +50,7 @@ export const useApp = (config: AppOptions): Promise<{
   app.use(createPinia())
   registerDirectives(app)
 
-  const router = createRouter(routes)
+  const router = createRouter(config.routes||[])
   const i18n = createI18n(i18nConfig)
 
   if( routerExtension ) {

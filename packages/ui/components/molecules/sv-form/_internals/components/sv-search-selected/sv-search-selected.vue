@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { CollectionProperty } from '../../../../../../../types'
 import { SvIcon } from '../../../../..'
 import SvSearchContainer from '../sv-search-container/sv-search-container.vue'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
@@ -41,8 +42,8 @@ import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 type Props = {
   modelValue?: any
   indexes: Array<string>
-  field: any
   searchOnly?: boolean
+  property: CollectionProperty
 }
 
 type Emits = {
@@ -53,7 +54,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const selected = computed(() => {
-  if( props.field.array ) {
+  if( props.property.type === 'array' ) {
     return props.modelValue
   }
 

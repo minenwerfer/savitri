@@ -98,12 +98,16 @@ export const normalizeProperties = (properties: CollectionDescription['propertie
 }
 
 export const freshItem = (description: CollectionDescription) => {
-  const item: Record<string, any> = Object.entries(description.properties||{}).reduce((a: any, [key, property]) => {
+  const item: Record<string, any> = Object.entries(description.properties).reduce((a: any, [key, property]) => {
     if( !isObject(property) ) {
       return a
     }
 
     const value = (() => {
+      if( property.$ref ) {
+        return {}
+      }
+
       switch( property.type ) {
         case 'boolean': return false
         case 'array': return []

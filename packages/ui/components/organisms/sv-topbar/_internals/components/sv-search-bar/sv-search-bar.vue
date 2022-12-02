@@ -2,10 +2,10 @@
   <div class="searchbar" @focusin="search">
     <sv-input
       v-model.lazy="query"
-      :field="{
-        icon: 'search',
-        placeholder: 'Buscar',
-        type: 'search'
+      :property="{
+        s$placeholder: 'Buscar',
+        s$icon: 'search',
+        s$format: 'search'
       }"
       class="searchbar__input"
     ></sv-input>
