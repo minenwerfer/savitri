@@ -35,6 +35,7 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const property = props.property
 
 const getValue = (value: any) => {
   return typeof value !== 'string'

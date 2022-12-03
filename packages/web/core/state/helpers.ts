@@ -80,8 +80,8 @@ export const normalizeValues = (values: any|Array<any>) => {
 
 export const normalizeProperties = (properties: CollectionDescription['properties']) => {
   return Object.entries(properties||{}).reduce((a: object, [propertyName, property]: [string, any]) => {
-    if( property.values && property.type !== 'boolean' ) {
-      property.values = normalizeValues(property.values)
+    if( property.enum && property.type !== 'boolean' ) {
+      property.enum = normalizeValues(property.enum)
     }
 
     if( typeof property.collection === 'string' ) {
