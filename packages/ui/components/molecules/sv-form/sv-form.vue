@@ -35,7 +35,7 @@
         </label>
 
         <component
-          v-if="layout?.[key]?.component && formComponents[layout[key].component?.name]"
+          v-if="layout?.[key]?.component && formComponents[layout[key].component!.name]"
           :is="formComponents[layout[key].component!.name]"
           v-model="formData[key]"
           v-bind="{
@@ -46,7 +46,7 @@
         />
 
         <div
-          v-else-if="property.type === 'datetime' && searchOnly"
+          v-else-if="property.format === 'date-time' && searchOnly"
           style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 1rem;"
         >
           <sv-input

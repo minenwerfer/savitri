@@ -48,7 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
   reactive: null
 })
 
-const size = props.size || inject('iconSize', 'medium')
+const size = props.size || inject('iconSize', null)
 const reactive = typeof props.reactive === 'boolean'
   ? props.reactive
   : inject('iconReactive', false)

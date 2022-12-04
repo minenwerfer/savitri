@@ -7,17 +7,28 @@ import type {
 } from '../../../types'
 
 const isObject = (property: any) =>
-  typeof property.$ref
+  property.$ref
     || property.type === 'object'
     || property.items?.$ref
     || property.items?.type === 'object'
 
 
-export const condenseItem = (item: Record<string, any>) => {
-  return Object.entries(item||{}).reduce((a:any, [key, value]) => ({
-    ...a,
-    [key]: value && typeof value === 'object' && '_id' in value ? { _id: value._id } : value
-  }), {})
+export const condenseItem = (item: Record<string, any>): Record<string, Exclude<any, '_id'>> => {
+  return Object.entries(item||{}).reduce((a:any, [key, value]) => {
+    if( Array.isArray(value) ) {
+      return {
+        ...a,
+        [key]: value.map(v => v._id||v)
+      }
+    }
+
+    return {
+      ...a,
+      [key]: value && typeof value === 'object' && '_id' in value
+        ? { _id: value._id }
+        : value
+    }
+  }, {})
 }
 
 export const removeEmpty = (item: any) => {
