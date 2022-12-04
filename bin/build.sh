@@ -9,6 +9,7 @@ PACKAGES=(
   ui
   web
   system
+  types
 )
 
 tsc || true && \

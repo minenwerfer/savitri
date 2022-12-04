@@ -3,9 +3,9 @@ import { inject } from 'vue'
 const stores: typeof STORES = {}
 Object.assign(window, { STORES: stores })
 
-stores.meta = require('./stores/meta').default
-stores.user = require('./stores/user').default
-stores.report = require('./stores/report').default
+stores.meta = require('../stores/meta').default
+stores.user = require('../stores/user').default
+stores.report = require('../stores/report').default
 
 export const useStore = (storeId: string) => {
   if( !(storeId in STORES) ) {

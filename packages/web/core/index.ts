@@ -15,17 +15,17 @@ import { default as webpackVariables } from 'variables'
 import { useStore } from './state'
 import registerDirectives from '../../ui/directives'
 
-type Plugin = {
+export type Plugin = {
   routerExtension?: RouterExtension
 }
 
-type MenuSchema = Record<string, {
+export type MenuSchema = Record<string, {
   roles?: Array<string>
   children: Array<string>
   shrink?: boolean
 }>
 
-interface AppOptions {
+export type AppOptions = {
   component: any
   i18n?: any
   menuSchema: MenuSchema

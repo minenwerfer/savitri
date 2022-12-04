@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { default as webpackVariables } from 'variables'
-import { deepClone } from '../../../../common'
-import { CollectionDescription } from '../../../../types'
-import useHttp from '../../http'
-import useCollection from '../collection'
+import { deepClone } from '../../../common'
+import { CollectionDescription } from '../../../types'
+import useHttp from '../http'
+import useCollection from '../state/collection'
 
-import { useStore, hasStore, registerStore } from '../use'
-import { freshItem, freshFilters } from '../helpers'
+import { useStore, hasStore, registerStore } from '../state/use'
+import { freshItem, freshFilters } from '../state/helpers'
 
 type CollectionName = string
 type PromptAnswer = { name: string }

@@ -40,7 +40,7 @@
           v-model="formData[key]"
           v-bind="{
             property,
-            fieldName: key,
+            propertyName: key,
             ...layout[key].component!.props||{},
           }"
         />
@@ -53,14 +53,14 @@
             v-model="formData[key].$gte"
             v-bind="{
               property,
-              fieldName: key
+              propertyName: key
             }"
           ></sv-input>
           <sv-input
             v-model="formData[key].$lte"
             v-bind="{
               property,
-              fieldName: key
+              propertyName: key
             }"
           ></sv-input>
         </div>
@@ -90,7 +90,7 @@
           v-model="formData[key]"
           v-bind="{
             property,
-            fieldName: key,
+            propertyName: key,
             placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description
           }"
         ></sv-input>
@@ -98,7 +98,7 @@
         <sv-switch
           v-else-if="property.type === 'boolean'"
           v-model="formData[key]"
-          v-slot="{ description }"
+          v-slot="{ label }"
 
           v-bind="{
             property
@@ -106,7 +106,7 @@
         >
           {{
             property.s$values
-              ? description
+              ? label
               : property.description
           }}
         </sv-switch>
@@ -130,7 +130,7 @@
             parentCollection: collection
           }"
 
-          :style="fieldStyle(key, field)"
+          :style="fieldStyle(key, property)"
           @changed="emit('change')"
         ></sv-search>
 
@@ -171,6 +171,7 @@ import {
 } from '../..'
 
 import { useCondition, Condition } from '../../../composables'
+import type { CollectionProperty } from '../../../../types'
 
 import SvSearch from './_internals/components/sv-search/sv-search.vue'
 const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
@@ -187,7 +188,7 @@ type LayoutConfig = {
 
 type Props = {
   $ref?: string&{ value: string }
-  form: Record<string, any>
+  form: Record<string, CollectionProperty>
   formData: Record<string, any>
   collection?: string
   isReadOnly?: boolean

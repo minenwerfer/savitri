@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/hapi__hapi": "^20.0.10",
     "@types/lodash": "^4.14.181",
     "@types/ramda": "^0.28.15",

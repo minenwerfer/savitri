@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import type { User } from '../../../../system/collections/user/user.description'
-import useCollection from '../collection'
-import { normalizeProperties, normalizeValues } from '../helpers'
+import type { User } from '../../../system/collections/user/user.description'
+import useCollection from '../state/collection'
+import { normalizeProperties, normalizeValues } from '../state/helpers'
 import useMetaStore from './meta'
 
 type Credentials = {

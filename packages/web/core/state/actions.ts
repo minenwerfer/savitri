@@ -3,7 +3,7 @@ import { fromEntries, deepClone } from '../../../common'
 import type { CollectionDescription } from '../../../types'
 
 import useHttp from '../http'
-import useMetaStore from './stores/meta'
+import useMetaStore from '../stores/meta'
 import { useStore } from './use'
 import type { Actions, Mutations, Item } from './actions.types'
 

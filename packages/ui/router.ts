@@ -1,6 +1,6 @@
-import { Route } from '../web/core/router'
+import { RouteRecordRaw } from 'vue-router'
 
-const publicRoutes: Array<Route> = [
+const publicRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'landing',
@@ -45,7 +45,7 @@ const publicRoutes: Array<Route> = [
   }
 ]
 
-const privateRoutes: Array<Route> = [
+const privateRoutes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',

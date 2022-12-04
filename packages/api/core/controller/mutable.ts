@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import type { Model } from '../database'
+import type { Model } from 'mongoose'
 import type { CollectionDescription } from '../../../types'
 import type { MongoDocument } from '../../types'
 

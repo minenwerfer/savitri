@@ -64,7 +64,7 @@ const selected = computed(() => {
 })
 
 const unselect = async (item: any, purge=true) => {
-  if( props.field.purge && purge ) {
+  if( props.property.s$purge && purge ) {
     const { _id } = item
     // await store.remove({ filter: { _id } })
   }
@@ -77,12 +77,12 @@ const unselect = async (item: any, purge=true) => {
     return modelValue
   }
 
-  emit('update:modelValue', props.field.array
+  emit('update:modelValue', props.property.type === 'array'
       ? deleteFirst()
       : undefined
   )
 
-  if( props.field.uniqueValues ) {
+  if( props.property.uniqueItems ) {
     emit('pushBack', item)
   }
 }

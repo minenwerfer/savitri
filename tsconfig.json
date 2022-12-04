@@ -13,7 +13,7 @@
     "esModuleInterop": true,
     "strictPropertyInitialization": false,
     "paths": {
-      "common/*": ["./packages/common/src/*"],
+      "common/*": ["./packages/common/*"],
       "api/*": ["./packages/api/core/*"],
       "web/*": ["./packages/web/core/*"],
       "ui/*": ["./packages/ui/*"],
