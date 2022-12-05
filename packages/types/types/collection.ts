@@ -101,7 +101,6 @@ type CollectionPropertyAux = {
   hint?: string
   mask?: string
   translate?: boolean
-  required?: boolean
   meta?: boolean
   form?: Array<string>
 

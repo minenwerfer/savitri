@@ -2,9 +2,9 @@
   "properties": {
     "owner": {
       "$ref": "user",
-      "label": "Usuário",
-      "index": "email",
-      "noform": true
+      "description": "Usuário",
+      "s$index": "email",
+      "s$noform": true
     }
   }
 }

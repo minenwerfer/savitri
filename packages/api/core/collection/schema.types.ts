@@ -46,30 +46,44 @@ type Type<T> = CaseReadonly<T>
 type IsRequired<
   F,
   ExplicitlyRequired,
-  Value extends boolean
+  Value
 > = keyof {
   [
     P in keyof F as
-    F[P] extends { required: Value } | { readOnly: true }
-      ? P
+    F[P] extends { readOnly: true }
+      ? never
       : P extends ValuesOf<ExplicitlyRequired>
+      ? Value extends true
+      ? P
+      : never
+      : never
+  ]: F[P]
+}
+
+type IsReadonly<F> = keyof {
+  [
+    P in keyof F as
+    F[P] extends { readOnly: true }
       ? P
       : never
   ]: F[P]
 }
 
-type RequiredJsonSchema<F, E> = IsRequired<F, E, true>
-type UnrequiredJsonSchema<F> = IsRequired<F, '', false>
+type RequiredProperties<F, E> = IsRequired<F, E, true>
+type UnrequiredProperties<F> = IsRequired<F, '', false>
+type ReadonlyProperties<F> = IsReadonly<F>
 
-type OptionalJsonSchema<F, E> = Exclude<keyof F, RequiredJsonSchema<F, E>>
+type OptionalProperties<F, E> = Exclude<keyof F, RequiredProperties<F, E> | ReadonlyProperties<F>>
 
 type StrictMode<F> = MongoDocument &
   { [P in keyof F]: Type<F[P]> } &
-  { [P in UnrequiredJsonSchema<F>]?: Type<F[P]> }
+  { [P in UnrequiredProperties<F>]?: Type<F[P]> } &
+  { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
 
 type PermissiveMode<F, E> = MongoDocument &
-  { [P in RequiredJsonSchema<F, E>]: Type<F[P]> } &
-  { [P in OptionalJsonSchema<F, E>]?: Type<F[P]> }
+  { [P in RequiredProperties<F, E>]: Type<F[P]> } &
+  { [P in OptionalProperties<F, E>]?: Type<F[P]> } &
+  { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
 
 type CaseOwned<T extends JsonSchema> = T extends { owned: true }
   ? Owned & MapTypes<T>
