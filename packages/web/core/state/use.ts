@@ -52,7 +52,3 @@ export const registerStore = async <
   const storeId = store.$id
   STORES[storeId] = fn
 }
-
-export const getStores = () => {
-  return stores
-}

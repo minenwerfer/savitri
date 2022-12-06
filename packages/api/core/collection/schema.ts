@@ -72,9 +72,6 @@ export const descriptionToSchema = <T>(
     if( typeof referencedCollection === 'string' ) {
       hasRefs = true
       result.ref = referencedCollection
-      result.type = property.s$noId
-        ? Object
-        : ObjectId
     }
 
     if( property.enum ) {

@@ -1,13 +1,16 @@
 import { Types } from 'mongoose'
+import { CollectionProperty } from '../../../types'
 
-export const getTypeConstructor = (property: any): any => {
+export const getTypeConstructor = (property: CollectionProperty): any => {
   if( property.type === 'array' ) {
-    const type = getTypeConstructor(property.items)
+    const type = getTypeConstructor(property.items!)
     return [type]
   }
 
   if( property.$ref ) {
-    return Types.ObjectId
+    return property.s$noId
+      ? Object
+      : Types.ObjectId
   }
 
   if( property.enum ) {
