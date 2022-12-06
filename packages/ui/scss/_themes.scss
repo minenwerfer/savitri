@@ -10,6 +10,7 @@ $themes: (
     foreground-color-alt: #000,
     background-color: #fff,
     background-color-alt: darken(#fff, 10%),
+    topbar-background-color: rgb(255, 255, 255, .92),
     body-color: #f8f9fa
   ),
   dark: (
@@ -20,6 +21,7 @@ $themes: (
     foreground-color-alt: #fff,
     background-color: #50505b,
     background-color-alt: lighten(#50505b, 20%),
+    topbar-background-color: rgba(60, 60, 60, .92),
     body-color: #30303b
   ),
   contrast: (
@@ -30,6 +32,7 @@ $themes: (
     foreground-color-alt: #fff,
     background-color: #fff,
     background-color-alt: lighten(#555, 20%),
+    topbar-background-color: #fff,
     body-color: #444
   )
 );

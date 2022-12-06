@@ -6,7 +6,7 @@
           collection: property.$ref,
           form: property.s$form
             ? store.useProperties(property.s$form)
-            : store.propertys,
+            : store.properties,
           formData: edited,
           layout: store.formLayout
         }"

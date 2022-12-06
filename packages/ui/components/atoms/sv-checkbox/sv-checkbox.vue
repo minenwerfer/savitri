@@ -18,14 +18,14 @@ io
       v-clickable
       class="checkbox__text"
     >
-      <div class="checkbox__label">
-        <slot name="label" v-if="$slots.label"></slot>
-        <div v-else-if="label" v-html="label"></div>
-        <slot v-else></slot>
-      </div>
       <div class="checkbox__description">
         <slot name="description" v-if="$slots.description"></slot>
         <div v-else-if="description" v-html="description"></div>
+        <slot v-else></slot>
+      </div>
+      <div class="checkbox__hint">
+        <slot name="hint" v-if="$slots.hint"></slot>
+        <div v-else-if="hint" v-html="hint"></div>
       </div>
     </div>
   </label>
@@ -44,8 +44,8 @@ import type { CollectionProperty } from '../../../../types'
 type Props = {
   modelValue?: string|Array<string>|boolean
   value?: string|boolean
-  label?: string
   description?: string
+  hint?: string
   property: CollectionProperty
 }
 

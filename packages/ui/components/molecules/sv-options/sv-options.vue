@@ -13,9 +13,7 @@
       v-model="modelValue"
       v-bind="{
         ...option,
-        property,
-        value: option,
-        label: option
+        property
       }"
 
       :class="`

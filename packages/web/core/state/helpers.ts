@@ -67,13 +67,13 @@ export const normalizeFilters = (filters: Array<any>) => {
   }, {})
 }
 
-export const normalizeValues = (values: any|Array<any>) => {
+export const normalizeEnum = (values: any|Array<any>) => {
   if( Array.isArray(values) ) {
     return values.reduce((a, value) => ({
       ...a,
       [value]: {
         value,
-        label: value
+        description: value
       }
     }), {})
   }
@@ -83,7 +83,7 @@ export const normalizeValues = (values: any|Array<any>) => {
     [key]: {
       value: key,
       ...(typeof value === 'string'
-        ? { label: value }
+        ? { description: value }
         : value)
     }
   }), {})
@@ -92,7 +92,7 @@ export const normalizeValues = (values: any|Array<any>) => {
 export const normalizeProperties = (properties: CollectionDescription['properties']) => {
   return Object.entries(properties||{}).reduce((a: object, [propertyName, property]: [string, any]) => {
     if( property.enum && property.type !== 'boolean' ) {
-      property.enum = normalizeValues(property.enum)
+      property.enum = normalizeEnum(property.enum)
     }
 
     if( typeof property.collection === 'string' ) {

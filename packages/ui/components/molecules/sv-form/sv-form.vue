@@ -188,7 +188,6 @@ type LayoutConfig = {
 }
 
 type Props = {
-  $ref?: string&{ value: string }
   form: Record<string, CollectionProperty>
   formData: Record<string, any>
   collection?: string
@@ -214,7 +213,7 @@ const emit = defineEmits<{
   (e: 'change'): void
 }>()
 
-const collectionName = props.$ref || inject('storeId', null)
+const collectionName = props.collection || inject('storeId', null)
 const store = collectionName
   ? useStore(collectionName.value||collectionName)
   : null

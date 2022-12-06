@@ -20,7 +20,7 @@
   @include themed() {
     color: t(foreground-color);
     border-bottom: 1px solid t(border-color);
-    background: t(background-color);
+    background: t(topbar-background-color);
   }
 
   @media screen and (min-width: 600px) {
