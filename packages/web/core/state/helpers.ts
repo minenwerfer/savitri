@@ -146,7 +146,7 @@ export const freshFilters = (description: CollectionDescription) => {
         }
       }
 
-      if( property.type === 'datetime' ) {
+      if( ['date', 'date-time'].includes(property.format) ) {
         return {
           ...a,
           [key]: {

@@ -7,14 +7,15 @@
     `"
   >
     <sv-checkbox
-      v-for="(option, index) in field?.values"
+      v-for="(option, index) in property?.enum"
       :key="`option-${index}`"
 
       v-model="modelValue"
       v-bind="{
         ...option,
-        field,
-        value: option.value,
+        property,
+        value: option,
+        label: option
       }"
 
       :class="`
@@ -35,17 +36,13 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { CollectionProperty } from '../../../../types'
 import { SvCheckbox } from '../../..'
 
 type Props = {
   modelValue: any
   columns?: number
-  field?: {
-    values: any
-    translate?: boolean
-    type?: string
-    readOnly?: boolean
-  }
+  property?: CollectionProperty
 }
 
 type Emits = {

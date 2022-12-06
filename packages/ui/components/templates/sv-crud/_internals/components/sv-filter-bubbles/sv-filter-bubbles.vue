@@ -7,7 +7,7 @@
       class="bubble"
       @click="removeFilter(filter.key)"
     >
-      <div class="bubble__name">{{ filter.label }}</div>
+      <div class="bubble__name">{{ filter.description }}</div>
       <div>{{ filter.formatted }}</div>
 
       <sv-icon small name="times"></sv-icon>
@@ -46,14 +46,14 @@ const printableFilters = computed(() => {
   })()
 
   return Object.entries(activeFilters).map(([key, filter]) => {
-    const field = store.description.fields[key]
+    const property = store.description.properties[key]
     const formatted = (() => {
-      if( field.s$isReference ) {
-        if( field.type === 'array' ) {
+      if( property.s$isReference ) {
+        if( property.type === 'array' ) {
           return store.formatValue({
             value: filter,
             key,
-            field
+            property
           })
         }
 
@@ -61,7 +61,7 @@ const printableFilters = computed(() => {
         return value.slice(-8)
       }
 
-      if( ['date', 'date-time'].includes(field.s$format) ) {
+      if( ['date', 'date-time'].includes(property.format) ) {
         const d1 = (filter as DateFilter).$gte.split('T')[0] || ''
         const d2 = (filter as DateFilter).$lte?.split('T')[0] || ''
         return `${d1} - ${d2}`
@@ -70,7 +70,7 @@ const printableFilters = computed(() => {
       return store.formatValue({
         value: filter,
         key,
-        field
+        property
       })
     })()
 
@@ -79,7 +79,7 @@ const printableFilters = computed(() => {
       : key
 
     return {
-      label: field.label,
+      description: property.description,
       key: actualKey,
       formatted
     }

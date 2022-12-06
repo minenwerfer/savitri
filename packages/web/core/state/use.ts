@@ -50,7 +50,7 @@ export const registerStore = async <
 
   const store: F = fn as F
   const storeId = store.$id
-  stores[storeId] = fn
+  STORES[storeId] = fn
 }
 
 export const getStores = () => {

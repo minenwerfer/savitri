@@ -54,7 +54,7 @@
 
     <textarea
       v-else
-      :placeholder="placeholder"
+      :placeholder="inputBind.placeholder"
       :readonly="readOnly"
 
       :class="`
@@ -120,7 +120,7 @@ const inputBind: {
   name?: string
   readonly?: boolean
 } = {
-  type: property.s$format||'text',
+  type: property.s$format||property.type!,
   placeholder: property.s$placeholder,
   min: property.minimum || property.exclusiveMinimum,
   max: property.maximum || property.exclusiveMaximum,

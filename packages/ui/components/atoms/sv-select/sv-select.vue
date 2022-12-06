@@ -14,7 +14,7 @@
       :key="option.value"
       :value="option.value"
     >
-      {{ property.s$translate ? $t(option.label) : option.label }}
+      {{ property?.s$translate ? $t(option.label) : option.label }}
     </option>
     <slot></slot>
   </select>
@@ -31,7 +31,7 @@ import type { CollectionProperty } from '../../../../types'
 
 type Props = {
   modelValue?: any
-  property: CollectionProperty
+  property?: CollectionProperty
 }
 
 const props = defineProps<Props>()

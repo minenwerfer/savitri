@@ -21,17 +21,18 @@
         @clicked="page -= 1"
       ></sv-button>
 
-      <sv-input
-        v-model="pageInput"
-        :key="page"
-        :field="{
-          type: 'number',
-          min: 1
-        }"
+      <div class="pagination__page-input">
+        <sv-input
+          v-model="pageInput"
+          :key="page"
+          :property="{
+            type: 'number',
+            minimum: 1
+          }"
 
-        class="pagination__page-input"
-        @change="page = pageInput"
-      ></sv-input>
+          @change="page = pageInput"
+        ></sv-input>
+      </div>
       <div>
         de {{ pageCount + 1 }}
       </div>

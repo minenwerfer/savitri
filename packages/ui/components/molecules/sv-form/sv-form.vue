@@ -179,6 +179,7 @@ const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-fil
 type LayoutConfig = {
   span?: string
   verticalSpacing?: string
+  optionsColumns?: number
   if?: Condition
   component?: {
     name: string
