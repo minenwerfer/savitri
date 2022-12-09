@@ -12,7 +12,7 @@ export type HandlerRequest = Request & {
 
 export type DecodedToken = {
   user: User
-  extra: any
+  extra?: Record<string, any>
 }
 
 export type Role = {
@@ -41,6 +41,13 @@ export type ApiConfig = {
 }
 
 export type ProvidedParams = Record<string, any> & {
-  apiConfig: ApiConfig
+  config?: {
+    group?: string
+    roles?: Array<string>
+    allowSignup?: boolean
+    signupDefaults?: {
+      role?: string
+      active?: boolean
+    }
+  }
 }
-

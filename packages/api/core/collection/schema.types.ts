@@ -37,11 +37,7 @@ type CaseArray<T> = T extends { array: true }
   ? Array<CaseReference<T>>
   : CaseReference<T>
 
-type CaseReadonly<T> = T extends { readOnly: true }
-  ? Readonly<CaseArray<T>>
-  : CaseArray<T>
-
-type Type<T> = CaseReadonly<T>
+type Type<T> = CaseArray<T>
 
 type IsRequired<
   F,
@@ -50,9 +46,7 @@ type IsRequired<
 > = keyof {
   [
     P in keyof F as
-    F[P] extends { readOnly: true }
-      ? never
-      : P extends ValuesOf<ExplicitlyRequired>
+    P extends ValuesOf<ExplicitlyRequired>
       ? Value extends true
       ? P
       : never
@@ -81,8 +75,8 @@ type StrictMode<F> = MongoDocument &
   { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
 
 type PermissiveMode<F, E> = MongoDocument &
-  { [P in RequiredProperties<F, E>]: Type<F[P]> } &
   { [P in OptionalProperties<F, E>]?: Type<F[P]> } &
+  { -readonly [P in RequiredProperties<F, E>]: Type<F[P]> } &
   { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
 
 type CaseOwned<T extends JsonSchema> = T extends { owned: true }
@@ -98,7 +92,7 @@ type MapTypes<
   : PermissiveMode<F, ExplicitlyRequired>
 
 
-type F<T> = {
+type Aux<T> = {
   -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
     ? T[P] & ReadonlyArray<K>
     : P extends keyof CollectionProperty
@@ -106,5 +100,5 @@ type F<T> = {
     : never
 }
 type Writable<T> = {
-  -readonly [P in keyof T]: F<T[P]>
+  -readonly [P in keyof T]: Aux<T[P]>
 }
