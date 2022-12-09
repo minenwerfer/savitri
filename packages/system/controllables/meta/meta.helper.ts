@@ -1,5 +1,6 @@
 import type { CollectionDescription } from '../../../types'
 import { preloadCollection } from '../../../api/core/collection'
+import { loadDescription } from '../../../api/core/collection/assets'
 import * as SystemCollections from '../../collections'
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
@@ -9,24 +10,12 @@ const getUserCollections = (dynamic?: boolean) => {
     return require(`${process.cwd()}/collections`)
   }
 
-  const { readdirSync, existsSync } = require('fs')
+  const { readdirSync } = require('fs')
   return readdirSync(`${process.cwd()}/collections`).reduce((a: any, d: string) => {
     try {
-      const
-        isValid = !d.startsWith('_'),
-        isJson = isValid && existsSync(`collections/${d}/${d}.description.json`),
-        path = require.resolve(`${process.cwd()}/collections/${d}/${d}.description${isJson ? '.json' : ''}`)
-
-
-      if( !isValid ) {
-        return a
-      }
-
       return {
         ...a,
-        [d]: isJson
-          ? require(path)
-          : require(path)[d[0].toUpperCase() + d.slice(1)]
+        [d]: loadDescription(d, true)
       }
     } catch(e) {
       return a

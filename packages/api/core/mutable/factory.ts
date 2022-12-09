@@ -1,11 +1,10 @@
 import { useAccessControl, Options } from './access'
-import { getDescriptions } from '../descriptions'
+import { getCollectionAsset } from '../collection/assets'
 import useFunctions from './functions'
 
-const descriptions = getDescriptions()
-
 export const useCollection = (collectionName: string, explicitOptions?: Options) => {
-  const description = descriptions[collectionName]
+  const description = getCollectionAsset(collectionName, 'description')
+  const model = getCollectionAsset(collectionName, 'model')
 
   if( !description ) {
     throw new Error(
@@ -20,7 +19,7 @@ export const useCollection = (collectionName: string, explicitOptions?: Options)
 
   const access = useAccessControl(description, options)
   return useFunctions(
-    null,
+    model,
     description,
     access
   )

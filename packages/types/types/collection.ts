@@ -44,10 +44,12 @@ export type CollectionDescription = {
   owned?: boolean
 
   // takes an array of something
-  readonly presets?: Array<CollectionPresets>
-  readonly required?: Array<string>
+  presets?: Array<CollectionPresets>
+  required?: Array<string>
   table?: Array<string>
   tableMeta?: Array<string>
+  reportProperties?: Array<string>
+
 
   form?: Array<string>
   writable?: Array<string>

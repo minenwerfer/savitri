@@ -34,7 +34,7 @@ export const useAccessControl = (description: CollectionDescription, options: Op
 
     deepMerge(
       newPayload,
-      baseControl.beforeRead!(token, description.$id)
+      baseControl.beforeRead!(token!, description.$id)
     )
 
     if( newPayload.limit > 150 ) {
@@ -57,7 +57,7 @@ export const useAccessControl = (description: CollectionDescription, options: Op
 
     deepMerge(
       filters,
-      baseControl.beforeWrite!(token, description.$id)
+      baseControl.beforeWrite!(token!, description.$id)
     )
 
     return newPayload

@@ -1,5 +1,5 @@
 import { Types } from '../../../api/core/database'
-import { getController } from '../../../api/core/controller'
+import { getController, useCollection } from '../../../api'
 
 export const userExtraModel = () => {
   return require(`${process.cwd()}/collections/userExtra/userExtra.model`).default
@@ -15,7 +15,7 @@ export const saveWithExtra = async (props: { what: any }) => {
   })
 
   await userExtra.validate()
-  const user = await super.insert.call(this, props)
+  const user = await useCollection('user').insert(props, null, {})
 
   /**
    * For the future reference: I decided to call Mutable.insert instead of

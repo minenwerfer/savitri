@@ -36,4 +36,3 @@ export const getController = (id:string, type:'collections'|'controllables' = 'c
 }
 
 export * from './controller'
-export * from './mutable'

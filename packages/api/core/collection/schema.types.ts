@@ -23,7 +23,8 @@ type MapType<T> = T extends { format: 'date'|'date-time' }
   ? Date : T extends { type: 'string' }
   ? string : T extends { type: 'number' }
   ? number : T extends { type: 'boolean' }
-  ? boolean : T extends { enum: ReadonlyArray<infer K> }
+  ? boolean : T extends { type: 'object' }
+  ? object: T extends { enum: ReadonlyArray<infer K> }
   ? K : T extends { $ref: string }
   ? Reference : never
 

@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import type { CollectionFunction } from '../../../../api/types'
+import { useCollection } from '../../../../api'
 import { User } from '../user.description'
 import { saveWithExtra } from '../user.helper'
 
@@ -14,8 +15,8 @@ const insert: CollectionFunction<Props> = async (props, token, apiConfig) => {
   props.what.group = apiConfig.group
 
   // user is being inserted by a non-root user
-  if( token?.user?.role !== 'root' ) {
-    const userId = props.what._id = token.user?._id
+  if( token?.user.role !== 'root' ) {
+    const userId = props.what._id = token?.user._id
     delete props.what.role
 
     // a new user is being created
@@ -50,7 +51,7 @@ const insert: CollectionFunction<Props> = async (props, token, apiConfig) => {
 
   return props.what.extra
     ? saveWithExtra(props)
-    : super.insert.call(this, props)
+    : useCollection('user').insert(props, token, apiConfig)
 }
 
 export default insert
