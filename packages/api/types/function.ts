@@ -1,7 +1,16 @@
+import { useAccessControl } from '../core/mutable/access'
 import type { DecodedToken, ApiConfig } from './server'
 
-export type CollectionFunction<Props> = (
+export type ApiContext = {
+  apiConfig: ApiConfig
+}
+
+export type ApiContextWithAC = ApiContext & {
+  access: ReturnType<typeof useAccessControl>
+}
+
+export type ApiFunction<Props> = (
   props: Props,
   decodedToken: DecodedToken|null,
-  apiConfig: ApiConfig
+  context: ApiContext
 ) => any

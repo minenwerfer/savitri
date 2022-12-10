@@ -1,8 +1,11 @@
-import { useAccessControl, Options } from './access'
-import { getCollectionAsset } from '../collection/assets'
+import type { ApiContext, ApiContextWithAC } from '../../types'
+import { getCollectionAsset } from '../assets'
+import { useAccessControl } from './access'
 import useFunctions from './functions'
 
-export const useCollection = (collectionName: string, explicitOptions?: Options) => {
+export const useCollection = (collectionName: string, _context: ApiContext|null = null) => {
+  const context = _context || {} as ApiContext
+
   const description = getCollectionAsset(collectionName, 'description')
   const model = getCollectionAsset(collectionName, 'model')
 
@@ -12,15 +15,21 @@ export const useCollection = (collectionName: string, explicitOptions?: Options)
     )
   }
 
-  const options = Object.assign(
-    explicitOptions||{},
-    description.options
-  ) as Options
+  const options = description.options
+  // const options = Object.assign(
+  //   context?.options||{},
+  //   description.options||{}
+  // ) as Options
 
-  const access = useAccessControl(description, options)
+  const access = useAccessControl(description, options, context)
+  Object.assign(context, {
+    options,
+    access
+  })
+
   return useFunctions(
     model,
     description,
-    access
+    context as ApiContextWithAC
   )
 }

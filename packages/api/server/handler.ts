@@ -1,4 +1,10 @@
+if( process.env.MODE !== 'PRODUCTION') {
+  require('dotenv').config()
+}
+
 import * as R from 'ramda'
+import { useCollection } from '../core/mutable'
+import { loadFunction } from '../core/assets'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type {
   HandlerRequest,
@@ -11,7 +17,7 @@ import { Error as MongooseError } from 'mongoose'
 
 import { getController } from '../core/controller'
 import { TokenService } from '../core/token'
-import { FileController } from '../../system/collections/file/file.controller'
+// import { FileController } from '../../system/collections/file/file.controller'
 
 import { sanitizeRequest, prependPagination } from './hooks/pre'
 import { appendPagination } from './hooks/post'
@@ -93,31 +99,47 @@ export const customVerbs = (type: 'collections'|'controllables') =>
   h: ResponseToolkit,
   provide?: ProvidedParams
 ) => {
-    const {
-      params: {
-        controller,
-        verb
-      }
-    } = request
+    // const {
+    //   params: {
+    //     controller,
+    //     verb
+    //   }
+    // } = request
+    // const context = {
+    //   apiConfig: {},
+    // }
 
-    const Controller = getController(controller, type)
-    const instance = new Controller
+    // const token = await getToken(request) as DecodedToken
+    // const instance = useCollection('user', context)
+
+    // const result = await instance.getAll({
+    //   a: 1
+    // }, token)
+    //
+    const result = loadFunction('user@authenticate')({
+      email: 'teste',
+      password: 'teste'
+    })
+
+    // const Controller = getController(controller, type)
+    // const instance = new Controller
     
-    instance.injected = provide||{}
+    // instance.injected = provide||{}
 
-    const token = await getToken(request) as DecodedToken
-    const method = (instance.webInterface||instance)[verb]
+    // const token = await getToken(request) as DecodedToken
+    // const method = (instance.webInterface||instance)[verb]
 
-    prePipe({ request, token, response: h })
-    const result = await method(request, token, h)
+    // prePipe({ request, token, response: h })
+    // const result = await method(request, token, h)
 
-    const mime = instance.rawType(verb)
-    if( mime ) {
-      return h.response(result)
-        .header('Content-Type', mime)
-    }
+    // const mime = instance.rawType(verb)
+    // if( mime ) {
+    //   return h.response(result)
+    //     .header('Content-Type', mime)
+    // }
 
-    return postPipe({result, instance, request})
+    return result
+    // return postPipe({result, instance, request})
 }
 
 export const regularVerb = (verb: RegularVerb) =>
@@ -158,17 +180,17 @@ export const regularVerb = (verb: RegularVerb) =>
 }
 
 export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {
-  const instance = new FileController
+  // const instance = new FileController
 
-  const { hash, options } = request.params
-  const { filename, content, mime } = await instance.download(hash)
+  // const { hash, options } = request.params
+  // const { filename, content, mime } = await instance.download(hash)
 
-  const parsedOptions = (options||'').split(',')
-  const has = (opt: string) => parsedOptions.includes(opt)
+  // const parsedOptions = (options||'').split(',')
+  // const has = (opt: string) => parsedOptions.includes(opt)
 
-  return h.response(content)
-    .header('Content-Type', mime)
-    .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+  // return h.response(content)
+  //   .header('Content-Type', mime)
+  //   .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }
 
 export const fileInsert = async (
@@ -176,10 +198,10 @@ export const fileInsert = async (
   _h: ResponseToolkit,
   provide?: ProvidedParams
 ) => {
-  const instance = new FileController
-  const token = await getToken(request) as DecodedToken
-  instance.injected = provide!
+  // const instance = new FileController
+  // const token = await getToken(request) as DecodedToken
+  // instance.injected = provide!
 
-  const result = await instance.insert(request.payload as any, token)
-  return { result }
+  // const result = await instance.insert(request.payload as any, token)
+  // return { result }
 }

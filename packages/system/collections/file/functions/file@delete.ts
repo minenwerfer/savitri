@@ -1,4 +1,4 @@
-import type { CollectionFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../api/types'
 import { useCollection } from '../../../../api'
 import FileModel from '../file.model'
 
@@ -10,14 +10,14 @@ type Props = {
   }
 }
 
-const _delete: CollectionFunction<Props> = async (props, token, apiConfig) => {
+const _delete: ApiFunction<Props> = async (props, token, ctx) => {
   const file = await FileModel.findOne(props.filters)
   if( !file ) {
     throw new Error('file not found')
   }
 
   await unlink(file.absolute_path).catch(() => null)
-  return useCollection('file').delete(props, token, apiConfig)
+  return useCollection('file', ctx).delete(props, token)
 }
 
 export default _delete

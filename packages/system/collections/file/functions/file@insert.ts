@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import type { CollectionFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../api/types'
 import { useCollection } from '../../../../api'
 import { File } from '../file.description'
 import FileModel from '../file.model'
@@ -20,7 +20,7 @@ type Props = {
   >
 }
 
-const insert: CollectionFunction<Props> = async (props, token, apiConfig) => {
+const insert: ApiFunction<Props> = async (props, token, ctx) => {
   const what = Object.assign({}, props.what)
   what.owner = token?.user._id
 
@@ -50,7 +50,7 @@ const insert: CollectionFunction<Props> = async (props, token, apiConfig) => {
   what.absolute_path = `${STORAGE_PATH}/${filenameHash}.${extension}`
   await writeFile(what.absolute_path, Buffer.from(what.content.split(',').pop()!, 'base64'))
 
-  return useCollection('user').insert(props, token, apiConfig)
+  return useCollection('user', ctx).insert(props, token)
 }
 
 export default insert

@@ -2,6 +2,8 @@ import * as bcrypt from 'bcrypt'
 import { createModel } from '../../../api/core/collection'
 import { User, UserDescription } from './user.description'
 
+import '../file/file.model'
+
 export default createModel(UserDescription, null, (schema) => { 
   schema.methods.testPassword = function(candidate: string) {
     return bcrypt.compare(candidate, this.password || '')

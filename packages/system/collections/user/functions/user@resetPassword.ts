@@ -1,10 +1,10 @@
-import type { CollectionFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../api/types'
 
 type Props = {
   email: string
 }
 
-const resetPassword: CollectionFunction<Props> = (props) => {
+const resetPassword: ApiFunction<Props> = (props) => {
   return {
     email: props.email
   }

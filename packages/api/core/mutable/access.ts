@@ -1,5 +1,5 @@
 import { deepMerge } from '../../../common/helpers'
-import type { CollectionFunction } from '../../types/function'
+import type { ApiFunction, ApiContext } from '../../types/function'
 import type { CollectionDescription } from '../../../types'
 import * as baseControl from '../access/baseControl'
 
@@ -10,8 +10,15 @@ export type Options = {
   }
 }
 
-export const useAccessControl = (description: CollectionDescription, options: Options) => {
-  const beforeRead: CollectionFunction<any> = (props, token, apiConfig) => {
+export const useAccessControl = (description: CollectionDescription, _options: Options, context: ApiContext) => {
+  const options = _options||{}
+  const apiConfig = context?.apiConfig||{}
+
+  if( description.options ) {
+    Object.assign(options, description.options)
+  }
+
+  const beforeRead: ApiFunction<any> = (props, token) => {
     const newPayload = Object.assign({}, {
       filters: props?.filters||{},
       sort: props?.sort,
@@ -44,7 +51,7 @@ export const useAccessControl = (description: CollectionDescription, options: Op
     return newPayload
   }
 
-  const beforeWrite: CollectionFunction<any> = (props, token, apiConfig) => {
+  const beforeWrite: ApiFunction<any> = (props, token) => {
     const newPayload = Object.assign({ what: {} }, props)
     const filters = newPayload.what || {}
 

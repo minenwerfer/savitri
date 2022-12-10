@@ -1,14 +1,14 @@
-import type { CollectionFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../api/types'
 import { Report } from '../report.description'
 
-import ReportModel from '../report.model'
-import FileModel from '../../file/file.model'
+// import ReportModel from '../report.model'
+// import FileModel from '../../file/file.model'
 
 type Props = {
   what: Partial<Report>
 }
 
-const insert: CollectionFunction<Props> = async(_props, _token) => {
+const insert: ApiFunction<Props> = async(_props, _token) => {
   // const {
   //   _collection: collectionName,
   //   type,

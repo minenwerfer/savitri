@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 export * from 'mongoose'
 
-if( process.env.MODE !== 'PRODUCTION') {
-  require('dotenv').config()
-}
-
 const { MONGODB_URI } = process.env
 
 mongoose.Promise = global.Promise

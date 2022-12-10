@@ -1,11 +1,19 @@
 import { Types } from '../../../api/core/database'
-import { getController, useCollection } from '../../../api'
+import { useCollection } from '../../../api'
+import type { ApiFunction } from '../../../api/types'
+import type { User } from './user.description'
+
+type SaveWithExtraProps = {
+  what: Partial<User> & {
+    extra: Record<string, any>
+  }
+}
 
 export const userExtraModel = () => {
   return require(`${process.cwd()}/collections/userExtra/userExtra.model`).default
 }
 
-export const saveWithExtra = async (props: { what: any }) => {
+export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, token, ctx) => {
   const { extra } = props.what
 
   const UserExtra = userExtraModel()
@@ -15,22 +23,14 @@ export const saveWithExtra = async (props: { what: any }) => {
   })
 
   await userExtra.validate()
-  const user = await useCollection('user').insert(props, null, {})
+  const user = await useCollection('user', ctx).insert(props, null)
 
-  /**
-   * For the future reference: I decided to call Mutable.insert instead of
-   * Model.create because with the former way user can set userExtra access
-   * control and guards.
-   */
-  const userExtraInstance = new (getController('userExtra'))
-  userExtraInstance.injected = this.injected
-
-  await userExtraInstance.insert({
+  useCollection('userExtra', ctx).insert({
     what: {
       ...extra,
       owner: user._id
     }
-  })
+  }, token)
 
   return user
 }

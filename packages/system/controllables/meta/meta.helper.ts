@@ -1,6 +1,6 @@
 import type { CollectionDescription } from '../../../types'
 import { preloadCollection } from '../../../api/core/collection'
-import { loadDescription } from '../../../api/core/collection/assets'
+import { loadDescription } from '../../../api/core/assets'
 import * as SystemCollections from '../../collections'
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}

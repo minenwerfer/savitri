@@ -1,4 +1,4 @@
-import type { CollectionFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../api/types'
 import { TokenService } from '../../../../api/core/token'
 import UserModel from '../user.model'
 import { userExtraModel } from '../user.helper'
@@ -8,7 +8,7 @@ type Props = {
   password: string
 }
 
-const authenticate: CollectionFunction<Props> = async (props, _decodedToken, apiConfig) => {
+const authenticate: ApiFunction<Props> = async (props, _decodedToken, context) => {
   if( !props.email ) {
     throw new Error('Empty email or password')
   }
@@ -60,9 +60,9 @@ const authenticate: CollectionFunction<Props> = async (props, _decodedToken, api
     extra: {},
   }
 
-  if( apiConfig.populateUserExtra ) {
+  if( context?.apiConfig?.populateUserExtra ) {
     const UserExtra = userExtraModel()
-    const projection = apiConfig.populateUserExtra
+    const projection = context.apiConfig.populateUserExtra
       .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 
     const userExtra = await UserExtra
