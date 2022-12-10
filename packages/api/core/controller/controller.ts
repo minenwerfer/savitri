@@ -8,7 +8,7 @@ import type {
   Role
 } from '../../types'
 
-import { AuthorizationError, PermissionError } from '../exceptions'
+// import { AuthorizationError, PermissionError } from '../exceptions'
 import baseRoles from '../access/baseRoles'
 
 export abstract class Controller {
@@ -44,20 +44,20 @@ export abstract class Controller {
     this._webInterface = new Proxy(this, {
       get: (target, key: string) => {
         if( key.startsWith('_') ) {
-          throw new PermissionError('forbidden method (cannot be called externally)')
+          // throw new PermissionError('forbidden method (cannot be called externally)')
         }
 
         if( this.props.forbiddenMethods?.includes(key) ) {
-          throw new PermissionError('forbidden method(explicitly forbidden)')
+          // throw new PermissionError('forbidden method(explicitly forbidden)')
         }
 
         return function(req: HandlerRequest, token: DecodedToken, res?: ResponseToolkit) {
           if( !target.isGranted(token, key)) {
             if( token?.user?.role ) {
-              throw new PermissionError('forbidden method (access denied)')
+              // throw new PermissionError('forbidden method (access denied)')
             }
 
-            throw new AuthorizationError('signed out')
+            // throw new AuthorizationError('signed out')
           }
 
           const payload = Object.keys(req.payload||{}).length === 0

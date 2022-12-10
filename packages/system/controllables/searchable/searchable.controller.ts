@@ -1,7 +1,7 @@
 import type { DecodedToken } from '../../../api/types'
 import { mongoose } from '../../../api/core/database'
 import { Controller } from '../../../api/core/controller'
-import { AuthorizationError } from '../../../api/core/exceptions'
+import { makeException } from '../../../api/core/exceptions'
 import { getSearchables, buildAggregations } from './searchable.helper'
 
 export class SearchableController extends Controller {
@@ -13,7 +13,10 @@ export class SearchableController extends Controller {
 
   public async search(props: { query: Array<string> }, token: DecodedToken) {
     if( !token?.user?.role ) {
-      throw new AuthorizationError('signed out')
+      throw makeException({
+        name: 'AuthorizationError',
+        message: 'signed out'
+      })
     }
 
     props.query = props.query.filter((q: string) => !!q)

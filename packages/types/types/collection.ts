@@ -27,16 +27,18 @@ export type FormLayout = {
   verticalSpacing: number
 }
 
+export type CollectionOptions = {
+  queryPreset: {
+    filters: Record<string, any>
+    sort: Record<string, any>
+  }
+}
+
 export type CollectionDescription = {
   $id: CollectionId
   alias?: string
   unicon?: string
-  options?: {
-    queryPreset?: {
-      filters?: Record<string, any>
-      sort?: Record<string, any>
-    }
-  }
+  options?: CollectionOptions
 
   // modifiers
   strict?: boolean // all properties are required

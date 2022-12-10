@@ -1,7 +1,7 @@
 import { ServerRoute } from '@hapi/hapi'
 import {
   safeHandle,
-  safeHandleProvide,
+  safeHandleContext,
   regularVerb,
   customVerbs,
   fileDownload,
@@ -9,11 +9,11 @@ import {
 
 } from './handler'
 
-import type { ProvidedParams } from '../types'
+import type { ApiContext } from '../types'
 
-export default (provide: ProvidedParams): Array<ServerRoute> => {
+export default (context?: Partial<ApiContext>): Array<ServerRoute> => {
   const defaultHandler = (...args: Parameters<typeof safeHandle>) => {
-    return safeHandleProvide(args[0], provide)
+    return safeHandleContext(args[0], context)
   }
 
   return [

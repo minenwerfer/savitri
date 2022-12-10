@@ -40,14 +40,7 @@ export type ApiConfig = {
   beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>
 }
 
-export type ProvidedParams = Record<string, any> & {
-  config?: {
-    group?: string
-    roles?: Array<string>
-    allowSignup?: boolean
-    signupDefaults?: {
-      role?: string
-      active?: boolean
-    }
-  }
+export type ApiContext = {
+  apiConfig: ApiConfig
+  injected: Record<string, any>
 }

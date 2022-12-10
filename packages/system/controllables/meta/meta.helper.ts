@@ -1,7 +1,7 @@
 import type { CollectionDescription } from '../../../types'
 import { preloadCollection } from '../../../api/core/collection'
-import { loadDescription } from '../../../api/core/assets'
-import * as SystemCollections from '../../collections'
+import { getEntityAsset } from '../../../api/core/assets'
+import * as SystemCollections from '../../collections/exports'
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
 
@@ -15,7 +15,7 @@ const getUserCollections = (dynamic?: boolean) => {
     try {
       return {
         ...a,
-        [d]: loadDescription(d, true)
+        [d]: getEntityAsset(d, 'description')
       }
     } catch(e) {
       return a

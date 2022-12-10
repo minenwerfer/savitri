@@ -4,7 +4,7 @@ import type { CollectionDescription } from '../../../types'
 import type { ApiFunction, ApiContextWithAC, MongoDocument, } from '../../types'
 import { fromEntries } from '../../../common/helpers'
 import { normalizeProjection, fill, prepareInsert } from '../collection'
-import { ItemNotFound } from '../exceptions'
+import { makeException } from '../exceptions'
 
 const DEFAULT_SORT = {
   date_updated: -1,
@@ -93,7 +93,10 @@ export default <T extends MongoDocument>(
       const pipe = R.pipe(
         (item: T & { _doc?: T }) => {
           if( !item ) {
-            throw new ItemNotFound('item not found')
+            throw makeException({
+              name: 'ItemNotFound',
+              message: 'item wasnt found'
+            })
           }
 
           return item._doc||item

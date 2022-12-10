@@ -1,17 +1,10 @@
 import { deepMerge } from '../../../common/helpers'
-import type { ApiFunction, ApiContext } from '../../types/function'
-import type { CollectionDescription } from '../../../types'
+import type { ApiFunction, ApiContext } from '../../types'
+import type { CollectionDescription, CollectionOptions } from '../../../types'
 import * as baseControl from '../access/baseControl'
 
-export type Options = {
-  queryPreset: {
-    filters: Record<string, any>
-    sort: Record<string, any>
-  }
-}
-
-export const useAccessControl = (description: CollectionDescription, _options: Options, context: ApiContext) => {
-  const options = _options||{}
+export const useAccessControl = (description: CollectionDescription, _options?: CollectionOptions, context?: ApiContext) => {
+  const options = _options||{} as CollectionOptions
   const apiConfig = context?.apiConfig||{}
 
   if( description.options ) {

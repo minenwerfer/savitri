@@ -1,13 +1,13 @@
 import type { ApiContext, ApiContextWithAC } from '../../types'
-import { getCollectionAsset } from '../assets'
+import { getEntityAsset } from '../assets'
 import { useAccessControl } from './access'
 import useFunctions from './functions'
 
 export const useCollection = (collectionName: string, _context: ApiContext|null = null) => {
   const context = _context || {} as ApiContext
 
-  const description = getCollectionAsset(collectionName, 'description')
-  const model = getCollectionAsset(collectionName, 'model')
+  const description = getEntityAsset<'description'>(collectionName, 'description')
+  const model = getEntityAsset<'model'>(collectionName, 'model')
 
   if( !description ) {
     throw new Error(

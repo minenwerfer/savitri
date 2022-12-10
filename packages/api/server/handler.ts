@@ -3,13 +3,12 @@ if( process.env.MODE !== 'PRODUCTION') {
 }
 
 import * as R from 'ramda'
-import { useCollection } from '../core/mutable'
-import { loadFunction } from '../core/assets'
+import { getEntityFunction } from '../core/assets'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type {
   HandlerRequest,
   DecodedToken,
-  ProvidedParams
+  ApiContext
 
 } from '../types'
 
@@ -38,6 +37,11 @@ const prePipe = R.pipe(
 const postPipe = R.pipe(
   appendPagination
 )
+
+const fallbackContext = {
+  apiConfig: {},
+  injected: {}
+}
 
 export const getToken = async (request: Request) => request.headers.authorization
   ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
@@ -85,11 +89,14 @@ export const safeHandle = (
   }
 }
 
-export const safeHandleProvide = (
-  fn: (request: HandlerRequest, h: ResponseToolkit, provide: ProvidedParams) => object,
-  provide: ProvidedParams
+export const safeHandleContext = (
+  fn: (request: HandlerRequest, h: ResponseToolkit, context: ApiContext) => object,
+  _context?: Partial<ApiContext>
 ) => {
-  const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, provide)
+  const fc = Object.assign({}, fallbackContext)
+  const context = Object.assign(fc, _context)
+
+  const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, context)
   return safeHandle(fn2)
 }
 
@@ -97,7 +104,7 @@ export const customVerbs = (type: 'collections'|'controllables') =>
   async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  provide?: ProvidedParams
+  _context?: ApiContext
 ) => {
     // const {
     //   params: {
@@ -116,15 +123,17 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     //   a: 1
     // }, token)
     //
-    const result = loadFunction('user@authenticate')({
-      email: 'teste',
-      password: 'teste'
-    })
+    // const result = getEntityAsset<'function'>('user@get', 'function')(null, null, {
+    //   apiConfig: {}
+    // })
+
+    const context = _context||fallbackContext
+    const result = getEntityFunction('meta@test', 'controllable')(null, null, context)
 
     // const Controller = getController(controller, type)
     // const instance = new Controller
     
-    // instance.injected = provide||{}
+    // instance.injected = context||{}
 
     // const token = await getToken(request) as DecodedToken
     // const method = (instance.webInterface||instance)[verb]
@@ -132,11 +141,6 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     // prePipe({ request, token, response: h })
     // const result = await method(request, token, h)
 
-    // const mime = instance.rawType(verb)
-    // if( mime ) {
-    //   return h.response(result)
-    //     .header('Content-Type', mime)
-    // }
 
     return result
     // return postPipe({result, instance, request})
@@ -146,7 +150,7 @@ export const regularVerb = (verb: RegularVerb) =>
   async (
     request: HandlerRequest,
     h: ResponseToolkit,
-    provide?: ProvidedParams
+    context?: ApiContext
 ) => {
   const {
     controller,
@@ -156,7 +160,7 @@ export const regularVerb = (verb: RegularVerb) =>
   const Controller = getController(controller)
   const _instance = new Controller
   const instance = _instance.webInterface
-  instance.injected = provide
+  instance.injected = context
 
   const token = await getToken(request) as DecodedToken
 
@@ -196,11 +200,11 @@ export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) 
 export const fileInsert = async (
   request: HandlerRequest,
   _h: ResponseToolkit,
-  provide?: ProvidedParams
+  context?: ApiContext
 ) => {
   // const instance = new FileController
   // const token = await getToken(request) as DecodedToken
-  // instance.injected = provide!
+  // instance.injected = context!
 
   // const result = await instance.insert(request.payload as any, token)
   // return { result }

@@ -1,7 +1,10 @@
-import type { Model } from 'mongoose'
 import { existsSync } from 'fs'
-import * as SystemCollections from '../../system/collections'
-import * as SystemControllables from '../../system/controllables'
+import type { Model } from 'mongoose'
+import type { CollectionDescription } from '../../types'
+import type { ApiFunction } from '..//types'
+import { default as SystemCollections } from '../../system/collections'
+import { default as SystemControllables } from '../../system/controllables'
+import { useCollection } from './mutable'
 
 type AssetType =
   'model'
@@ -14,10 +17,25 @@ type EntityType =
   'collection'
   | 'controllable'
 
+type AssetReturnType<Type> = Type extends 'function'
+  ? ApiFunction<any> : Type extends 'description'
+  ? CollectionDescription : Type extends 'model'
+  ? Model<any> : never
+
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},
   description: {},
   function: {}
+}
+
+const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any) => {
+  const repo = __cached[assetType]
+  if( assetName in repo ) {
+    return repo[assetName]
+  }
+
+  const asset = repo[assetName] = fn()
+  return asset
 }
 
 const isInternal = (entityName: string, entityType: EntityType = 'collection'): boolean => {
@@ -36,11 +54,11 @@ const getPrefix = (collectionName: string, internal: boolean, entityType: Entity
   })()
 
   return internal
-    ? `${process.cwd()}/${pluralized}/${collectionName}`
-    : `${__dirname}/../../system/${pluralized}/${collectionName}`
+    ? `${__dirname}/../../system/${pluralized}/${collectionName}`
+    : `${process.cwd()}/${pluralized}/${collectionName}`
 }
 
-export const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
+const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
   const prefix = getPrefix(collectionName, internal)
   try {
     return require(`${prefix}/${collectionName}.model`).default
@@ -49,7 +67,7 @@ export const loadModel = (collectionName: string, internal: boolean): Model<any>
   }
 }
 
-export const loadDescription = (collectionName: string, internal: boolean) => {
+const loadDescription = (collectionName: string, internal: boolean) => {
   const prefix = getPrefix(collectionName, internal)
   const isValid = !collectionName.startsWith('_'),
     isJson = isValid && existsSync(`${prefix}/${collectionName}.description.json`),
@@ -64,27 +82,50 @@ export const loadDescription = (collectionName: string, internal: boolean) => {
     : require(path)[collectionName[0].toUpperCase() + collectionName.slice(1) + 'Description']
 }
 
-export const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection', internal: boolean = false) => {
+const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection', internal: boolean = false) => {
   const [entityName] = functionPath.split('@')
   const prefix = getPrefix(entityName, internal, entityType)
 
   return require(`${prefix}/functions/${functionPath}`).default
 }
 
-export const getCollectionAsset = (collectionName: string, assetType: AssetType) => {
-  let asset
+export const getEntityAsset = <Type extends AssetType>(
+  assetName: Type extends 'function'
+    ? FunctionPath
+    : string,
+  assetType: AssetType,
+  entityType: EntityType = 'collection'
+): AssetReturnType<Type> => {
+  return cacheIfPossible(
+    assetName,
+    assetType,
+    () => {
+      const entityName = assetType === 'function'
+        ? assetName.split('@').shift()!
+        : assetName
 
-  if( __cached[assetType][collectionName] ) {
-    return __cached[assetType][collectionName]
-  }
+      const internal = isInternal(entityName, entityType)
 
-  const internal = isInternal(collectionName)
+      switch( assetType ) {
+        case 'model': return loadModel(assetName, internal)
+        case 'description': return loadDescription(assetName, internal)
+        case 'function': {
+          try {
+            return loadFunction(assetName as FunctionPath, entityType, internal)
+          } catch( e ) {
+            const [, functionName] = assetName.split('@')
+            const fn: ApiFunction<unknown> = (props, token, context) => {
+              return useCollection(entityName, context)[functionName](props, token)
+            }
 
-  switch( assetType ) {
-    case 'model': asset = loadModel(collectionName, internal); break
-    case 'description': asset = loadDescription(collectionName, internal); break
-  }
+            return fn
+          }
+        }
+      }
+    }
+  )
+}
 
-  __cached[assetType][collectionName] = asset
-  return asset
+export const getEntityFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection') => {
+  return getEntityAsset<'function'>(functionPath, 'function', entityType)
 }
