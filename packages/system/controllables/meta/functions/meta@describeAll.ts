@@ -1,7 +1,7 @@
 import type { ApiFunction } from '../../../../api/types'
 import { getDescriptions } from '../meta.helper'
 
-const describeAll: ApiFunction<unknown> = (_props, _token, context) => {
+const describeAll: ApiFunction<null> = (_props, _token, context) => {
   const descriptions = getDescriptions(context.apiConfig.dynamicCollections)
   return {
     descriptions,

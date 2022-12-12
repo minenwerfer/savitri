@@ -116,7 +116,6 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     //   apiConfig: {},
     // }
 
-    // const token = await getToken(request) as DecodedToken
     // const instance = useCollection('user', context)
 
     // const result = await instance.getAll({
@@ -127,8 +126,10 @@ export const customVerbs = (type: 'collections'|'controllables') =>
     //   apiConfig: {}
     // })
 
+    const token = await getToken(request) as DecodedToken
     const context = _context||fallbackContext
-    const result = getEntityFunction('meta@test', 'controllable')(null, null, context)
+
+    const result = getEntityFunction('meta@test', 'controllable')(null, token, context)
 
     // const Controller = getController(controller, type)
     // const instance = new Controller
