@@ -11,7 +11,9 @@ type Props = {
   }
 }
 
-const insert: ApiFunction<Props> = async (props, token, ctx) => {
+type Return = Promise<Partial<User>>
+
+const insert: ApiFunction<Props, Return> = async (props, token, ctx) => {
   const { apiConfig } = ctx
   props.what.group = apiConfig.group
 
@@ -52,7 +54,7 @@ const insert: ApiFunction<Props> = async (props, token, ctx) => {
 
   return props.what.extra
     ? saveWithExtra(props, token, ctx)
-    : useCollection('user', ctx).insert(props, token)
+    : useCollection('user', ctx).insert(props, token) as Promise<User>
 }
 
 export default insert

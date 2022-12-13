@@ -14,7 +14,7 @@ import type {
 
 import { Error as MongooseError } from 'mongoose'
 
-import { getController } from '../core/controller'
+// import { getController } from '../core/controller'
 import { TokenService } from '../core/token'
 // import { FileController } from '../../system/collections/file/file.controller'
 
@@ -158,30 +158,30 @@ export const regularVerb = (verb: RegularVerb) =>
     id
   } = request.params||{}
 
-  const Controller = getController(controller)
-  const _instance = new Controller
-  const instance = _instance.webInterface
-  instance.injected = context
+  // const Controller = getController(controller)
+  // const _instance = new Controller
+  // const instance = _instance.webInterface
+  // instance.injected = context
 
-  const token = await getToken(request) as DecodedToken
+  // const token = await getToken(request) as DecodedToken
 
-  prePipe({ request, token, response: h })
-  const requestCopy = Object.assign({}, request)
-  requestCopy.payload ||= {}
+  // prePipe({ request, token, response: h })
+  // const requestCopy = Object.assign({}, request)
+  // requestCopy.payload ||= {}
 
-  if( id ) {
-    requestCopy.payload.filters = {
-      ...requestCopy.payload.filters||{},
-      _id: id
-    }
+  // if( id ) {
+  //   requestCopy.payload.filters = {
+  //     ...requestCopy.payload.filters||{},
+  //     _id: id
+  //   }
 
-    if( 'what' in requestCopy.payload ) {
-      requestCopy.payload.what._id = id
-    }
-  }
+  //   if( 'what' in requestCopy.payload ) {
+  //     requestCopy.payload.what._id = id
+  //   }
+  // }
 
-  const result = await instance[verb](requestCopy, token, h)
-  return postPipe({result, instance, request})
+  // const result = await instance[verb](requestCopy, token, h)
+  // return postPipe({result, instance, request})
 }
 
 export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {

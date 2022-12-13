@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import type { CollectionDescription } from '../../../types'
 import type { MongoDocument } from '../../types'
 
-export const normalizeProjection = <T>(projection?: Array<keyof T>|Record<string, number>) => {
+export const normalizeProjection = <T>(projection?: Array<keyof T>|Record<keyof T, number>) => {
   if( Array.isArray(projection) ) {
     return projection.reduce((a, key) => ({ ...a, [key]: 1 }), {})
   }

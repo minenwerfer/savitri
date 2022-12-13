@@ -13,7 +13,7 @@ export const userExtraModel = () => {
   return require(`${process.cwd()}/collections/userExtra/userExtra.model`).default
 }
 
-export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, token, ctx) => {
+export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User>>> = async (props, token, ctx) => {
   const { extra } = props.what
 
   const UserExtra = userExtraModel()

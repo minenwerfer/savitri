@@ -1,5 +1,6 @@
-import type { ApiFunction } from '../../../../api/types'
 import { TokenService } from '../../../../api/core/token'
+import type { ApiFunction } from '../../../../api/types'
+import type { User } from '../user.description'
 import UserModel from '../user.model'
 import { userExtraModel } from '../user.helper'
 
@@ -8,7 +9,22 @@ type Props = {
   password: string
 }
 
-const authenticate: ApiFunction<Props> = async (props, _decodedToken, context) => {
+type Return = Promise<{
+  user: Pick<User,
+    'first_name'
+    | 'last_name'
+    | 'email'
+    | 'role'
+    | 'active'
+  >
+  extra: Record<string, any>
+  token: {
+    type: 'bearer'
+    token: string
+  }
+}>
+
+const authenticate: ApiFunction<Props, Return> = async (props, _decodedToken, context) => {
   if( !props.email ) {
     throw new Error('Empty email or password')
   }
@@ -33,7 +49,10 @@ const authenticate: ApiFunction<Props> = async (props, _decodedToken, context) =
         active: true,
       },
       extra: {},
-      token
+      token: {
+        type: 'bearer',
+        token
+      }
     }
   }
 
@@ -78,7 +97,10 @@ const authenticate: ApiFunction<Props> = async (props, _decodedToken, context) =
 
   return {
     ...response,
-    token
+    token: {
+      type: 'bearer',
+      token
+    }
   }
 }
 

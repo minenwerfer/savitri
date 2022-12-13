@@ -1,9 +1,13 @@
-import type { ApiContext, ApiContextWithAC } from '../../types'
+import type { ApiContext, ApiContextWithAC, DecodedToken } from '../../types'
+import type { CollectionFunctions } from './functions.types'
 import { getEntityAsset } from '../assets'
 import { useAccessControl } from './access'
 import useFunctions from './functions'
 
-export const useCollection = (collectionName: string, _context: ApiContext|null = null) => {
+type Fallback = (props: any, token: DecodedToken|null) => any
+type AnyFunction = CollectionFunctions & Record<string, Fallback>
+
+export const useCollection = (collectionName: string, _context: ApiContext|null = null): AnyFunction => {
   const context = _context || {} as ApiContext
 
   const description = getEntityAsset<'description'>(collectionName, 'description')

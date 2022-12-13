@@ -3,6 +3,17 @@ import type { ApiFunction, ApiContext } from '../../types'
 import type { CollectionDescription, CollectionOptions } from '../../../types'
 import * as baseControl from '../access/baseControl'
 
+type ReadPayload = {
+  filters: Record<string, any>
+  sort: Record<string, any>
+  limit: number
+}
+
+type WritePayload = {
+  what: Record<string, any>
+  filters: Record<string, any>
+}
+
 export const useAccessControl = (description: CollectionDescription, _options?: CollectionOptions, context?: ApiContext) => {
   const options = _options||{} as CollectionOptions
   const apiConfig = context?.apiConfig||{}
@@ -11,7 +22,7 @@ export const useAccessControl = (description: CollectionDescription, _options?: 
     Object.assign(options, description.options)
   }
 
-  const beforeRead: ApiFunction<any> = (props, token) => {
+  const beforeRead: ApiFunction<any, ReadPayload> = (props, token) => {
     const newPayload = Object.assign({}, {
       filters: props?.filters||{},
       sort: props?.sort,
@@ -44,7 +55,7 @@ export const useAccessControl = (description: CollectionDescription, _options?: 
     return newPayload
   }
 
-  const beforeWrite: ApiFunction<any> = (props, token) => {
+  const beforeWrite: ApiFunction<any, WritePayload> = (props, token) => {
     const newPayload = Object.assign({ what: {} }, props)
     const filters = newPayload.what || {}
 

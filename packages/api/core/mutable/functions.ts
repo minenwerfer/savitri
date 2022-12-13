@@ -1,7 +1,8 @@
 import * as R from 'ramda'
 import type { Model } from 'mongoose'
 import type { CollectionDescription } from '../../../types'
-import type { ApiFunction, ApiContextWithAC, MongoDocument, } from '../../types'
+import type { ApiContextWithAC, MongoDocument, DecodedToken } from '../../types'
+import type { GetAllProps, CollectionFunctions } from './functions.types'
 import { fromEntries } from '../../../common/helpers'
 import { normalizeProjection, fill, prepareInsert } from '../collection'
 import { makeException } from '../exceptions'
@@ -11,20 +12,6 @@ const DEFAULT_SORT = {
   date_created: -1,
   created_at: -1,
 }
-
-type QuerySort<T> = Record<keyof T, 1|-1>
-
-type GetAllProps<T> = {
-  filters?: Partial<T>
-  offset?: number
-  limit?: number
-  sort?: QuerySort<T>
-  project?: Array<keyof T>
-}
-
-type OmitLastParameter<T=Parameters<ApiFunction<any>>> = T extends [ ...infer Head, any ]
-  ? (...args: Head) => ReturnType<ApiFunction<any>>
-  : never
 
 export default <T extends MongoDocument>(
   model: Model<T>,
@@ -39,23 +26,27 @@ export default <T extends MongoDocument>(
     }
   } = context
   
-  const _insert: ApiFunction<{ what: Partial<T> }> = async (props, token): Promise<T|null> => {
+  const _insert = async (props: { what: Partial<T> }, token: DecodedToken|null) => {
     const { _id } = props.what
     const { what } = beforeWrite(props, token, context)
     const readyWhat = prepareInsert(what, description)
 
     if( !_id ) {
       const newDoc = await model.create(readyWhat)
-      return model.findOne({ _id: newDoc._id })
+      return model.findOne({ _id: newDoc._id }).lean({
+        autopopulate: true
+      })
     }
 
     return model.findOneAndUpdate(
       { _id }, readyWhat,
       { new: true, runValidators: true }
-    )
+    ).lean({
+      autopopulate: true
+    })
   }
 
-  const _getAll: ApiFunction<GetAllProps<T>> = (props, token) => {
+  const _getAll = (props: GetAllProps<T>, token: DecodedToken|null) => {
     if( typeof props.limit !== 'number' ) {
       props.limit = +(process.env.PAGINATION_LIMIT||35)
     }
@@ -77,21 +68,26 @@ export default <T extends MongoDocument>(
       .sort(sort)
       .skip(props.offset || 0)
       .limit(props.limit)
+      .lean({
+        autopopulate: true
+      })
   }
 
-  const functions: Record<string, OmitLastParameter> = {
-    async insert(props: { what: Partial<T> }, token) {
-      const result = await _insert(props, token, context)
-      return fill(result?._doc||result, description)
+  const functions: CollectionFunctions<T> = {
+    async insert(props, token) {
+      const result = await _insert(props, token)
+      if( result ) {
+        return fill(result, description)
+      }
     },
 
-    async get( props: { filters?: Partial<T>, project?: Array<keyof T> }) {
+    async get(props) {
       if( !props?.filters ) {
         throw new Error('no filter specified')
       }
 
       const pipe = R.pipe(
-        (item: T & { _doc?: T }) => {
+        (item) => {
           if( !item ) {
             throw makeException({
               name: 'ItemNotFound',
@@ -99,29 +95,25 @@ export default <T extends MongoDocument>(
             })
           }
 
-          return item._doc||item
+          return item
         },
-        (item) => item && fill(item, description),
+        (item) => fill(item, description),
       )
 
       const result = await model.findOne(props.filters, normalizeProjection<T>(props.project))
       return pipe(result as T)
     },
 
-    async getAll(props: GetAllProps<T>, token) {
-     const result: Array<T> = await _getAll(props||{}, token, context)
-
-     const pipe = R.pipe(
-       (item: T & { _doc?: T }) => item._doc || item,
-       (item: T) => !props.project
-        ? fill(item, description)
-        : item
-     )
-
-     return result.map(pipe)
+    async getAll(props, token) {
+     const result = await _getAll(props||{}, token)
+     return result.map((item) => {
+       if( item ) {
+         return fill(item, description)
+       }
+     })
     },
 
-    delete(props: { filters: Partial<T> }, token) {
+    async delete(props, token) {
       if( !props.filters ) {
         throw new Error('no criteria specified')
       }
@@ -130,7 +122,7 @@ export default <T extends MongoDocument>(
       return model.findOneAndDelete(query.filters, { strict: 'throw' })
     },
 
-    deleteAll(props: { filters: Partial<T> }, token) {
+    async deleteAll(props, token) {
       if( !Array.isArray(props.filters?._id) || props.filters?._id?.length === 0 ) {
         throw new Error('no criteria specified')
       }
@@ -145,23 +137,24 @@ export default <T extends MongoDocument>(
       return model.deleteMany(query.filters, { strict: 'throw' })
     },
 
-    modify(props: { filters: Partial<T>, what: Partial<T> }, token) {
+    async modify(props, token) {
       const { what, filters } = beforeWrite(props, token, context)
       const readyWhat = prepareInsert(what, description)
 
       return model.findOneAndUpdate(filters, readyWhat, { new: true, runValidators: true })
     },
 
-    modifyAll(props: { filters: Array<Partial<T>>, what: Partial<T> }, token) {
+    async modifyAll(props, token) {
       const { what, filters } = beforeWrite(props, token, context)
       const readyWhat = prepareInsert(what, description)
 
       return model.updateMany(filters.filters, readyWhat)
     },
 
-    count(props: { filters?: Partial<T> }, token) {
+    async count(props, token) {
       const query = beforeRead(props, token, context)
-      return model.countDocuments(query.filters)
+      const count = await model.countDocuments(query.filters) as unknown
+      return count as number
     },
   }
   
