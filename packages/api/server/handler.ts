@@ -1,6 +1,4 @@
-if( process.env.MODE !== 'PRODUCTION') {
-  require('dotenv').config()
-}
+import './bootstrap'
 
 import * as R from 'ramda'
 import { getEntityFunction } from '../core/assets'
@@ -15,12 +13,10 @@ import type {
 } from '../types'
 
 import { Error as MongooseError } from 'mongoose'
-
-// import { getController } from '../core/controller'
 import { TokenService } from '../core/token'
 // import { FileController } from '../../system/collections/file/file.controller'
 
-import { sanitizeRequest, prependPagination } from './hooks/pre'
+import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
 import { appendPagination } from './hooks/post'
 
 export type RegularVerb =
@@ -32,6 +28,7 @@ export type RegularVerb =
   | 'deleteAll'
 
 const prePipe = R.pipe(
+  checkAC,
   sanitizeRequest,
   prependPagination
 )
@@ -120,7 +117,13 @@ export const customVerbs = (entityType: EntityType) =>
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
 
-  prePipe({ request, token, response: h })
+  prePipe({
+    request,
+    token,
+    response: h,
+    functionPath,
+    context
+  })
 
   const result = await getEntityFunction(functionPath, entityType)(request.payload, token, context)
   return postPipe({
@@ -149,7 +152,14 @@ export const regularVerb = (functionName: RegularVerb) =>
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
 
-  prePipe({ request, token, response: h })
+  prePipe({
+    request,
+    token,
+    response: h,
+    functionPath,
+    context
+  })
+
   const requestCopy = Object.assign({}, request)
   requestCopy.payload ||= {}
 

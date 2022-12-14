@@ -1,7 +1,7 @@
 import { deepMerge } from '../../../common/helpers'
 import type { ApiFunction, ApiContext } from '../../types'
 import type { CollectionDescription, CollectionOptions } from '../../../types'
-import * as baseControl from '../access/baseControl'
+import * as baseControl from './base-control'
 
 type ReadPayload = {
   filters: Record<string, any>

@@ -1,7 +1,7 @@
 import type { ApiContext, ApiContextWithAC, DecodedToken } from '../../types'
 import type { CollectionFunctions } from './functions.types'
 import { getEntityAsset } from '../assets'
-import { useAccessControl } from './access'
+import { useAccessControl } from '../access/use'
 import useFunctions from './functions'
 
 type Fallback = (props: any, token: DecodedToken|null) => any

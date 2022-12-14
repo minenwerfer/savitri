@@ -1,4 +1,4 @@
-import { useAccessControl } from '../core/mutable/access'
+import { useAccessControl } from '../core/access/use'
 import type { DecodedToken, ApiContext } from './server'
 
 export type FunctionPath = `${string}@${string}`

@@ -1,6 +1,6 @@
 import { ApiConfig } from '../../types'
 
-export const beforeRead: ApiConfig['beforeRead'] = (token, collectionName) => {
+export const beforeRead: ApiConfig['beforeRead'] = (_token, _collectionName) => {
   const preset: any = {}
   return preset
 }
