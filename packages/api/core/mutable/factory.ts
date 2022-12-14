@@ -11,7 +11,9 @@ export const useCollection = (collectionName: string, _context: ApiContext|null 
   const context = _context || {} as ApiContext
 
   const description = getEntityAsset<'description'>(collectionName, 'description')
-  const model = getEntityAsset<'model'>(collectionName, 'model')
+  const originalCollectionName = description.alias || collectionName
+
+  const model = getEntityAsset<'model'>(originalCollectionName, 'model')
 
   if( !description ) {
     throw new Error(

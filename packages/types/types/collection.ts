@@ -28,9 +28,9 @@ export type FormLayout = {
 }
 
 export type CollectionOptions = {
-  queryPreset: {
-    filters: Record<string, any>
-    sort: Record<string, any>
+  queryPreset?: {
+    filters?: Record<string, any>
+    sort?: Record<string, any>
   }
 }
 

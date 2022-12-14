@@ -8,7 +8,9 @@ import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type {
   HandlerRequest,
   DecodedToken,
-  ApiContext
+  ApiContext,
+  EntityType,
+  FunctionPath
 
 } from '../types'
 
@@ -100,88 +102,75 @@ export const safeHandleContext = (
   return safeHandle(fn2)
 }
 
-export const customVerbs = (type: 'collections'|'controllables') =>
+export const customVerbs = (entityType: EntityType) =>
   async (
   request: HandlerRequest,
   h: ResponseToolkit,
   _context?: ApiContext
 ) => {
-    // const {
-    //   params: {
-    //     controller,
-    //     verb
-    //   }
-    // } = request
-    // const context = {
-    //   apiConfig: {},
-    // }
+  const {
+    params: {
+      entityName,
+      functionName
+    }
+  } = request
 
-    // const instance = useCollection('user', context)
+  const functionPath: FunctionPath = `${entityName}@${functionName}`
 
-    // const result = await instance.getAll({
-    //   a: 1
-    // }, token)
-    //
-    // const result = getEntityAsset<'function'>('user@get', 'function')(null, null, {
-    //   apiConfig: {}
-    // })
+  const token = await getToken(request) as DecodedToken
+  const context = _context||fallbackContext
 
-    const token = await getToken(request) as DecodedToken
-    const context = _context||fallbackContext
+  prePipe({ request, token, response: h })
 
-    const result = getEntityFunction('meta@test', 'controllable')(null, token, context)
-
-    // const Controller = getController(controller, type)
-    // const instance = new Controller
-    
-    // instance.injected = context||{}
-
-    // const token = await getToken(request) as DecodedToken
-    // const method = (instance.webInterface||instance)[verb]
-
-    // prePipe({ request, token, response: h })
-    // const result = await method(request, token, h)
-
-
-    return result
-    // return postPipe({result, instance, request})
+  const result = await getEntityFunction(functionPath, entityType)(request.payload, token, context)
+  return postPipe({
+    request,
+    result,
+    token,
+    entityName
+  })
 }
 
-export const regularVerb = (verb: RegularVerb) =>
+export const regularVerb = (functionName: RegularVerb) =>
   async (
     request: HandlerRequest,
     h: ResponseToolkit,
-    context?: ApiContext
+    _context?: ApiContext
 ) => {
   const {
-    controller,
-    id
-  } = request.params||{}
+    params: {
+      entityName,
+      id
+    }
+  } = request
 
-  // const Controller = getController(controller)
-  // const _instance = new Controller
-  // const instance = _instance.webInterface
-  // instance.injected = context
+  const functionPath: FunctionPath = `${entityName}@${functionName}`
 
-  // const token = await getToken(request) as DecodedToken
+  const token = await getToken(request) as DecodedToken
+  const context = _context||fallbackContext
 
-  // prePipe({ request, token, response: h })
-  // const requestCopy = Object.assign({}, request)
-  // requestCopy.payload ||= {}
+  prePipe({ request, token, response: h })
+  const requestCopy = Object.assign({}, request)
+  requestCopy.payload ||= {}
 
-  // if( id ) {
-  //   requestCopy.payload.filters = {
-  //     ...requestCopy.payload.filters||{},
-  //     _id: id
-  //   }
+  if( id ) {
+    requestCopy.payload.filters = {
+      ...requestCopy.payload.filters||{},
+      _id: id
+    }
 
-  //   if( 'what' in requestCopy.payload ) {
-  //     requestCopy.payload.what._id = id
-  //   }
-  // }
+    if( 'what' in requestCopy.payload ) {
+      requestCopy.payload.what._id = id
+    }
+  }
 
-  // const result = await instance[verb](requestCopy, token, h)
-  // return postPipe({result, instance, request})
+  const result = await getEntityFunction(functionPath)(request.payload, token, context)
+  return postPipe({
+    request,
+    result,
+    token,
+    entityName
+  })
 }
 
 export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {

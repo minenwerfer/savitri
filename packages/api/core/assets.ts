@@ -1,26 +1,17 @@
 import { existsSync } from 'fs'
 import type { Model } from 'mongoose'
-import type { CollectionDescription } from '../../types'
-import type { ApiFunction } from '..//types'
+import type {
+  ApiFunction ,
+  AssetType,
+  EntityType,
+  FunctionPath,
+  AssetReturnType
+
+} from '../types'
+
 import { default as SystemCollections } from '../../system/collections'
 import { default as SystemControllables } from '../../system/controllables'
 import { useCollection } from './mutable'
-
-type AssetType =
-  'model'
-  | 'description'
-  | 'function'
-
-type FunctionPath = `${string}@${string}`
-
-type EntityType =
-  'collection'
-  | 'controllable'
-
-type AssetReturnType<Type> = Type extends 'function'
-  ? ApiFunction<any> : Type extends 'description'
-  ? CollectionDescription : Type extends 'model'
-  ? Model<any> : never
 
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},
@@ -112,7 +103,11 @@ export const getEntityAsset = <Type extends AssetType>(
         case 'function': {
           try {
             return loadFunction(assetName as FunctionPath, entityType, internal)
-          } catch( e ) {
+          } catch( e: any ) {
+            if( e.code !== 'MODULE_NOT_FOUND' ) {
+              throw e
+            }
+
             const [, functionName] = assetName.split('@')
             const fn: ApiFunction<unknown> = (props, token, context) => {
               return useCollection(entityName, context)[functionName](props, token)

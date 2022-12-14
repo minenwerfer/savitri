@@ -25,14 +25,22 @@ const collection = useCollection({
   actions: {
     authenticate(payload: Credentials) {
       try {
-        return this.$customEffect(
+        return this.customEffect(
           'authenticate', payload,
-          async ({ user, token }: {
+          async ({ user, token: _token }: {
             user: User
-            token: string
+            token: { 
+              type: 'Bearer'
+              token: string
+            }
           }) => {
             this.credentials = {}
             this.currentUser = { ...user }
+
+            const {
+              type: _tokenType,
+              token
+            } = _token
 
             sessionStorage.setItem('auth:token', token)
             sessionStorage.setItem('auth:currentUser', JSON.stringify(user))

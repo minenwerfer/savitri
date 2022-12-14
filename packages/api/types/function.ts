@@ -1,6 +1,8 @@
 import { useAccessControl } from '../core/mutable/access'
 import type { DecodedToken, ApiContext } from './server'
 
+export type FunctionPath = `${string}@${string}`
+
 export type ApiContextWithAC = ApiContext & {
   access: ReturnType<typeof useAccessControl>
 }
