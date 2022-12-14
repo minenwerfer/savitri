@@ -11,7 +11,7 @@ import type {
 
 import { default as SystemCollections } from '../../system/collections'
 import { default as SystemControllables } from '../../system/controllables'
-import { useCollection } from './mutable'
+import { useCollection } from './collection/use'
 
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},

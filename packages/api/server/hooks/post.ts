@@ -1,6 +1,6 @@
 import type { Request } from '@hapi/hapi'
 import type { HandlerRequest, DecodedToken } from '../../types'
-import { useCollection } from '../../core/mutable'
+import { useCollection } from '../../core/collection'
 
 type PostHookParams = {
   result: object|Array<object>,
