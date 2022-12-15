@@ -12,6 +12,14 @@ const schema = {
     age: {
       description: 'Age',
       type: 'string'
+    },
+    job: {
+      description: 'Job',
+      enum: [
+        'aviator',
+        'doctor',
+        'programmer'
+      ]
     }
   }
 } as const
