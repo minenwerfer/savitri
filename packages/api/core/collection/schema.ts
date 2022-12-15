@@ -15,7 +15,6 @@ import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
 // import { v1 as uuidv1 } from 'uuid'
-const { ObjectId } = Schema.Types
 
 export const descriptionToSchema = <T>(
   description: MaybeCollectionDescription,

@@ -5,7 +5,7 @@ export const makeDescription = <
   T,
   A=SchemaProperties<T>,
   Description=Omit<MaybeCollectionDescription, keyof A>
->(schema: A, description: Description): A & Description => ({
+>(schema: A, description: Description = {} as Description): A & Description => ({
   ...schema,
   ...description
 })

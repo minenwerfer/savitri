@@ -29,7 +29,7 @@ export const isGranted = (
   token: DecodedToken,
   context: ApiContext
 ) => {
-  const baseRole = token.user._id
+  const baseRole = token?.user?._id
     ? baseRoles.authenticated
     : baseRoles.unauthenticated
 

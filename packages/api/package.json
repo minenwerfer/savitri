@@ -14,8 +14,9 @@
   },
   "dependencies": {
     "@hapi/hapi": "^20.2.1",
-    "@savitri/system": "^1.0.0",
     "@savitri/common": "~1.0.0",
+    "@savitri/system": "^1.0.0",
+    "@savitri/types": "~1.0.0",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
