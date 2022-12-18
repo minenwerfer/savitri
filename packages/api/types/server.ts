@@ -1,5 +1,6 @@
 import type { Request } from '@hapi/hapi'
 import type { User } from '../../system/collections/user/user.description'
+import type { CollectionFunctions } from '../core/collection/functions.types'
 
 export type HandlerRequest = Request & {
   payload: {
@@ -43,4 +44,6 @@ export type ApiConfig = {
 export type ApiContext = {
   apiConfig: ApiConfig
   injected: Record<string, any>
+  collection: CollectionFunctions
+  token: DecodedToken
 }

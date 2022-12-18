@@ -26,7 +26,7 @@ export const bootstrapRoutes = () => {
         redirect: `/dashboard/c/${description.$id}`,
         meta: {
           title: description.$id,
-          unicon: description.unicon,
+          icon: description.icon,
         }
       }
 

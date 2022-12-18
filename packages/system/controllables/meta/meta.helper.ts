@@ -17,7 +17,11 @@ const getUserCollections = (dynamic?: boolean) => {
         ...a,
         [d]: getEntityAsset(d, 'description')
       }
-    } catch(e) {
+    } catch(e: any) {
+      if( e.code !== 'MODULE_NOT_FOUND' ) {
+        throw e
+      }
+
       return a
     }
   }, {})

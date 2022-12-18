@@ -8,26 +8,31 @@ const publicRoutes: Array<RouteRecordRaw> = [
     meta: { title: 'Página inicial' }
   },
   {
+    path: '/external',
+    name: 'external',
+    component: () => import('./components/templates/sv-external/sv-external.vue'),
+  },
+  {
     path: '/user',
     name: 'user',
-    component: () => import('./views/user/template.vue'),
+    component: () => import('./components/templates/sv-external/sv-external.vue'),
     children: [
       {
         path: 'signin',
         name: 'user-signin',
-        component: () => import('./views/user/signin/signin.vue'),
+        component: () => import('./views/user/signin.vue'),
         meta: { title: 'Autenticação' }
       },
       {
         path: 'signup',
         name: 'user-signup',
-        component: () => import('./views/user/signup/signup.vue'),
+        component: () => import('./views/user/signup.vue'),
         meta: { title: 'Registro' }
       },
       {
         path: 'signup-extra',
         name: 'user-signup-extra',
-        component: () => import('./views/user/signup-extra/signup-extra.vue'),
+        component: () => import('./views/user/signup-extra.vue'),
         meta: { title: 'Registro' }
       }
     ]
@@ -65,7 +70,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
         component: () => import('./views/dashboard/user/user.vue'),
         meta: {
           title: 'Usuários',
-          unicon: 'user-circle'
+          icon: 'user-circle'
         }
       },
       {

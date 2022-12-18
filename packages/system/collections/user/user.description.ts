@@ -89,7 +89,7 @@ const schema = {
   }
 } as const
 
-export const UserDescription = makeDescription<typeof schema>(schema, {
+export default makeDescription<typeof schema>(schema, {
   presets: [
     'crud',
     'view',
@@ -98,20 +98,20 @@ export const UserDescription = makeDescription<typeof schema>(schema, {
   individualActions: {
     'ui/spawnEdit': {
       name: 'Editar',
-      unicon: 'edit',
+      icon: 'edit',
     },
     'ui/spawnExtra': {
       name: 'Editar detalhes',
-      unicon: 'edit'
+      icon: 'edit'
     },
     'route/dashboard-user-changepass': {
       name: 'Mudar senha',
-      unicon: 'key-skeleton',
+      icon: 'key-skeleton',
       fetchItem: true
     },
     delete: {
       name: 'Remover',
-      unicon: 'trash-alt',
+      icon: 'trash-alt',
       ask: true
     }
   },

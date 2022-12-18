@@ -67,19 +67,19 @@ const schema = {
   }
 } as const
 
-export const ReportDescription = makeDescription<typeof schema>(schema, {
-  unicon: 'bag-alt',
+export default makeDescription<typeof schema>(schema, {
+  icon: 'bag-alt',
   presets: [
     'deleteAll'
   ],
   individualActions: {
     download: {
       name: 'Baixar',
-      unicon: 'cloud-download'
+      icon: 'cloud-download'
     },
     delete: {
       name: 'Remover',
-      unicon: 'trash-alt',
+      icon: 'trash-alt',
       ask: true
     }
   },

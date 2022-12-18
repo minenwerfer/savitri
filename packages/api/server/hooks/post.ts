@@ -1,11 +1,11 @@
 import type { Request } from '@hapi/hapi'
-import type { HandlerRequest, DecodedToken } from '../../types'
+import type { HandlerRequest, ApiContext } from '../../types'
 import { useCollection } from '../../core/collection'
 
 type PostHookParams = {
   result: object|Array<object>,
   request: Request & HandlerRequest
-  token: DecodedToken|null
+  context: ApiContext
   entityName: string
 }
 
@@ -13,7 +13,7 @@ export const appendPagination = async (params: PostHookParams) => {
   const {
     request,
     result,
-    token,
+    context,
     entityName
   } = params
 
@@ -22,9 +22,9 @@ export const appendPagination = async (params: PostHookParams) => {
   }
 
   if( Array.isArray(result) ) {
-    const countFunction = useCollection(entityName).count
+    const countFunction = useCollection(entityName, context).count
     const recordsTotal = typeof countFunction === 'function'
-      ? await countFunction({ filters: request.payload?.filters || {} }, token)
+      ? await countFunction({ filters: request.payload?.filters || {} })
       : result.length
 
     const limit = request.payload?.limit

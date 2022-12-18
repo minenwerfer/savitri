@@ -84,17 +84,6 @@
           style="width: 100%"
         ></sv-select>
 
-        <!-- text -->
-        <sv-input
-          v-else-if="property.type === 'string'"
-          v-model="formData[key]"
-          v-bind="{
-            property,
-            propertyName: key,
-            placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description
-          }"
-        ></sv-input>
-
         <sv-switch
           v-else-if="property.type === 'boolean'"
           v-model="formData[key]"
@@ -133,6 +122,17 @@
           :style="fieldStyle(key, property)"
           @changed="emit('change')"
         ></sv-search>
+
+        <!-- text -->
+        <sv-input
+          v-else
+          v-model="formData[key]"
+          v-bind="{
+            property,
+            propertyName: key,
+            placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description
+          }"
+        ></sv-input>
 
 
         <div v-if="validationErrors?.[key]" class="form__validation-error">

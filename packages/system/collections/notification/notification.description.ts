@@ -44,7 +44,7 @@ const schema = {
   }
 } as const
 
-export const NotificationDescription = makeDescription<typeof schema>(schema, {
+export default makeDescription<typeof schema>(schema, {
   presets: [
     'crud'
   ],

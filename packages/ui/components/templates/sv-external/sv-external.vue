@@ -1,13 +1,16 @@
 <template>
   <div class="external">
-    <div class="external__content">
+    <div class="external__wrapper">
       <img
         :src="require(`@/assets/${productLogo}`).default"
         class="external__logo"
         data-image="logo"
       />
       <sv-box>
-        <slot></slot>
+        <div class="external__content">
+          <slot></slot>
+          <router-view></router-view>
+        </div>
       </sv-box>
       <!-- <div class="external__version"> -->
       <!--   v{{ productVersion }} running on Savitri v{{baseVersion}} -->

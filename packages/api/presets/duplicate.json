@@ -2,7 +2,7 @@
   "individualActions": {
     "ui/duplicate": {
       "name": "Duplicar",
-      "unicon": "share-alt"
+      "icon": "share-alt"
     }
   }
 }

@@ -50,7 +50,11 @@ const getters: Getters = {
     }
 
     return fromEntries(Object.entries(this.description.properties)
-      .filter(([, property]: [unknown, any]) => !property.hidden && !property.notable)
+      .filter(([, property]) => (
+        !property.s$hidden
+          && !property.s$notable
+          && (!property.s$inline || property.s$index)
+      ))
       .slice(0, 8))
   },
 
@@ -58,16 +62,10 @@ const getters: Getters = {
     return this.description.tableMeta||[]
   },
 
-  /**
-   * @see SvCrud
-   */
   actions() {
     return normalizeActions(this.description.actions!)
   },
 
-  /**
-   * @see SvCrud
-   */
   individualActions() {
     return normalizeActions(this.description.individualActions!)
   },

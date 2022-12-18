@@ -8,7 +8,7 @@ export type CollectionId = string
 
 export type CollectionAction = Readonly<{
   name: string
-  unicon?: string
+  icon?: string
   ask?: boolean
   selection?: boolean
   effect?: StoreEffect
@@ -37,7 +37,7 @@ export type CollectionOptions = {
 export type CollectionDescription = {
   $id: CollectionId
   alias?: string
-  unicon?: string
+  icon?: string
   options?: CollectionOptions
 
   // modifiers

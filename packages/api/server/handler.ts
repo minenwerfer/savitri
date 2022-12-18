@@ -39,8 +39,10 @@ const postPipe = R.pipe(
 
 const fallbackContext = {
   apiConfig: {},
-  injected: {}
-}
+  injected: {},
+  collection: {}
+
+} as ApiContext
 
 export const getToken = async (request: Request) => request.headers.authorization
   ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
@@ -116,6 +118,7 @@ export const customVerbs = (entityType: EntityType) =>
 
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
+  context.token = token
 
   prePipe({
     request,
@@ -125,11 +128,11 @@ export const customVerbs = (entityType: EntityType) =>
     context
   })
 
-  const result = await getEntityFunction(functionPath, entityType)(request.payload, token, context)
+  const result = await getEntityFunction(functionPath, entityType)(request.payload, context)
   return postPipe({
     request,
     result,
-    token,
+    context,
     entityName
   })
 }
@@ -151,6 +154,7 @@ export const regularVerb = (functionName: RegularVerb) =>
 
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
+  context.token = token
 
   prePipe({
     request,
@@ -174,11 +178,11 @@ export const regularVerb = (functionName: RegularVerb) =>
     }
   }
 
-  const result = await getEntityFunction(functionPath)(request.payload, token, context)
+  const result = await getEntityFunction(functionPath)(request.payload, context)
   return postPipe({
     request,
     result,
-    token,
+    context,
     entityName
   })
 }

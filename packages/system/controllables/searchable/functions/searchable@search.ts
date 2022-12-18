@@ -7,7 +7,7 @@ type Props = {
   query: Array<string>
 }
 
-const search: ApiFunction<Props> = async (props, token, { apiConfig }) => {
+const search: ApiFunction<Props> = async (props, { token, apiConfig }) => {
   if( !token?.user?.role ) {
     throw makeException({
       name: 'AuthorizationError',

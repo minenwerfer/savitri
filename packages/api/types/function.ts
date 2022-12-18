@@ -1,5 +1,5 @@
 import { useAccessControl } from '../core/access/use'
-import type { DecodedToken, ApiContext } from './server'
+import type { ApiContext } from './server'
 
 export type FunctionPath = `${string}@${string}`
 
@@ -9,6 +9,5 @@ export type ApiContextWithAC = ApiContext & {
 
 export type ApiFunction<Props, Return={}> = (
   props: Props,
-  decodedToken: DecodedToken|null,
   context: ApiContext
 ) => Return

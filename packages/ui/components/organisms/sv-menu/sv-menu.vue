@@ -38,7 +38,7 @@
               ${isCurrent(route) && 'menu__route--current'}
             `"
 
-            :name="route.meta?.unicon || 'file'"
+            :name="route.meta?.icon || 'file'"
             :title="$tc(route.meta.title, 2).capitalize()"
             @click="onEntryClick(route)"
           >
@@ -76,8 +76,8 @@ const metaStore = useStore('meta')
 const userStore = useStore('user')
 const router = useRouter()
 
-const shrink = ref(
-  Object.values(props.schema).reduce((a: any, route: any, i) => {
+const shrink = ref<Record<string, boolean>>(
+  Object.values(props.schema).reduce((a: Record<string, boolean>, route: any, i) => {
     return {
       ...a,
       [i]: !!route.shrink

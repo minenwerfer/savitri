@@ -1,18 +1,21 @@
 import { createModel } from '../../../api/core/collection'
-import { File, FileDescription } from './file.description'
+import { File, default as FileDescription } from './file.description'
 
 import '../user/user.model'
 
-export default createModel(FileDescription, null, (schema) => {
-  schema.post('init', async function() {
-    const timestamp = this.last_modified
-      ? new Date(this.last_modified).getTime()
-      : 'fresh'
+export default createModel<File>(FileDescription, null, null, (schema) => {
+  const link = (_id: File['_id']) => `${process.env.API_URL}/file/${_id}`
 
-    const link = `${process.env.API_URL}/file/${this._id}`
+  const timestamp = (last_modified: Date) => last_modified
+    ? new Date(last_modified).getTime()
+    : 'fresh'
 
-    this.link = `${link}?${timestamp}`
-    this.download_link = `${link}/download?${timestamp}`
+  schema.virtual('link').get(function(this: File) {
+    return `${link(this._id)}?${timestamp(this.last_modified)}`
+  })
+
+  schema.virtual('link').get(function(this: File) {
+    return `${link(this._id)}/download?${timestamp(this.last_modified)}`
   })
 })
 

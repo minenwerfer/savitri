@@ -43,16 +43,18 @@ const schema = {
     },
     link: {
       description: 'Link',
-      type: 'string'
+      type: 'string',
+      s$meta: true
     },
     download_link: {
       description: 'Link de download',
-      type: 'string'
+      type: 'string',
+      s$meta: true
     }
   },
 } as const
 
-export const FileDescription = makeDescription<typeof schema>(schema, {
+export default makeDescription<typeof schema>(schema, {
   actions: {
     deleteAll: {
       name: 'Remover',
@@ -63,7 +65,7 @@ export const FileDescription = makeDescription<typeof schema>(schema, {
   individualActions: {
     remove: {
       name: 'Remover',
-      unicon: 'trash-alt',
+      icon: 'trash-alt',
       ask: true
     }
   },

@@ -39,7 +39,7 @@
         <sv-button
           v-for="(actionProps, index) in store.actions"
           :key="`action-${index}`"
-          :icon="actionProps.unicon"
+          :icon="actionProps.icon"
           :disabled="store.selectedIds.length === 0 && actionProps.selection"
           @clicked="call(actionProps)({ _id: selectedIds })"
         >

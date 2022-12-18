@@ -39,7 +39,7 @@
               <sv-button
                 v-for="actionProps in getActions(collectionName)"
                 v-bind="{
-                  icon: actionProps.unicon,
+                  icon: actionProps.icon,
                   size: 'small',
                   variant: 'alt'
                 }"

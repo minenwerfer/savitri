@@ -24,7 +24,7 @@ type Return = Promise<{
   }
 }>
 
-const authenticate: ApiFunction<Props, Return> = async (props, _decodedToken, context) => {
+const authenticate: ApiFunction<Props, Return> = async (props, context) => {
   if( !props.email ) {
     throw new Error('Empty email or password')
   }

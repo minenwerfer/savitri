@@ -149,7 +149,7 @@
               v-for="action in buttonActions"
               :key="`action-${action.action}`"
               variant="alt"
-              :icon="action.unicon"
+              :icon="action.icon"
 
               :style="buttonStyle(row, action)"
               @clicked="action.click(row)"

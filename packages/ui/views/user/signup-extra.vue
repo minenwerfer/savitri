@@ -1,51 +1,49 @@
 <template>
-  <div class="userExtra">
-    <sv-icon
-      v-clickable
-      name="arrow-left"
-      @click="$router.push({ name: 'user-signup' })"
+  <sv-icon
+    v-clickable
+    name="arrow-left"
+    @click="router.push({ name: 'user-signup' })"
+  >
+    Voltar
+  </sv-icon>
+
+  <sv-form
+    v-if="userExtraStore"
+    v-bind="{
+      collection: 'userExtra',
+      formData: userExtraStore.item,
+      form: webpackVariables.signupExtraProperties
+        ? userExtraStore.useProperties(webpackVariables.signupExtraProperties)
+        : userExtraStore.usePropertiesExcept(['owner']),
+      validationErrors: userStore.validationErrors
+    }"
+  ></sv-form>
+
+  <sv-form
+    v-bind="{
+      form: passwordForm,
+      formData: password
+    }"
+  >
+    <template #header>
+      Senha
+    </template>
+    <template #footer>
+      {{ passwordError || 'Senhas conferem' }}
+    </template>
+  </sv-form>
+
+  <div class="userExtra__footer">
+    <sv-checkbox v-model="tosAccepted">
+      Declaro que li e aceito os termos de uso
+    </sv-checkbox>
+
+    <sv-button
+      :disabled="passwordError || !tosAccepted"
+      @clicked="insert"
     >
-      Voltar
-    </sv-icon>
-
-    <sv-form
-      v-if="userExtraStore"
-      v-bind="{
-        collection: 'userExtra',
-        formData: userExtraStore.item,
-        form: webpackVariables.signupExtraProperties
-          ? userExtraStore.useProperties(webpackVariables.signupExtraProperties)
-          : userExtraStore.usePropertiesExcept(['owner']),
-        validationErrors: userStore.validationErrors
-      }"
-    ></sv-form>
-
-    <sv-form
-      v-bind="{
-        form: passwordForm,
-        formData: password
-      }"
-    >
-      <template #header>
-        Senha
-      </template>
-      <template #footer>
-        {{ passwordError || 'Senhas conferem' }}
-      </template>
-    </sv-form>
-
-    <div class="userExtra__footer">
-      <sv-checkbox v-model="tosAccepted">
-        Declaro que li e aceito os termos de uso
-      </sv-checkbox>
-
-      <sv-button
-        :disabled="passwordError || !tosAccepted"
-        @clicked="insert"
-      >
-        Criar conta
-      </sv-button>
-    </div>
+      Criar conta
+    </sv-button>
   </div>
 </template>
 
@@ -57,9 +55,9 @@ import {
   useStore,
   useParentStore,
 
-} from '../../../../web'
+} from '../../../web'
 
-import { usePasswordPolicy } from '../../../composables'
+import { usePasswordPolicy } from '../../composables'
 
 import {
   SvForm,
@@ -67,7 +65,7 @@ import {
   SvCheckbox,
   SvButton,
 
-} from '../../..'
+} from '../..'
 
 import { default as webpackVariables } from 'variables'
 
@@ -139,5 +137,3 @@ const insert = async () => {
   // router.push({ name: 'user-signin' })
 }
 </script>
-
-<style scoped src="./signup-extra.scss"></style>

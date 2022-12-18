@@ -1,5 +1,3 @@
-import type { DecodedToken } from '../../types'
-
 export type GetAllProps<T> = {
   filters?: Partial<T>
   offset?: number
@@ -14,7 +12,7 @@ export type CollectionFunctions<
   R=ReturnTypes<T>
 > = {
   [K in keyof P]: K extends keyof R
-    ? (props: P[K], token: DecodedToken|null) => R[K]
+    ? (props: P[K]) => R[K]
     : never
 }
 
@@ -47,11 +45,11 @@ type Props<T> = {
     filters: Partial<T>
   }
   modify: {
-    filters: Array<Partial<T>>
+    filters: Partial<T>
     what: Partial<T>
   }
   modifyAll: {
-    filters: Array<Partial<T>>
+    filters: Partial<T>
     what: Partial<T>
   }
   count: {

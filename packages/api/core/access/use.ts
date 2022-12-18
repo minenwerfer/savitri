@@ -22,7 +22,7 @@ export const useAccessControl = (description: CollectionDescription, _options?: 
     Object.assign(options, description.options)
   }
 
-  const beforeRead: ApiFunction<any, ReadPayload> = (props, token) => {
+  const beforeRead: ApiFunction<any, ReadPayload> = (props, { token }) => {
     const newPayload = Object.assign({}, {
       filters: props?.filters||{},
       sort: props?.sort,
@@ -55,7 +55,7 @@ export const useAccessControl = (description: CollectionDescription, _options?: 
     return newPayload
   }
 
-  const beforeWrite: ApiFunction<any, WritePayload> = (props, token) => {
+  const beforeWrite: ApiFunction<any, WritePayload> = (props, { token }) => {
     const newPayload = Object.assign({ what: {} }, props)
     const filters = newPayload.what || {}
 

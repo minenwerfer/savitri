@@ -2,7 +2,7 @@
   "individualActions": {
     "toggleActive": {
       "name": "Ativa/desativa",
-      "unicon": "toggle-on"
+      "icon": "toggle-on"
     }
   }
 }

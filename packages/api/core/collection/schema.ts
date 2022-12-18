@@ -2,7 +2,8 @@ import {
   model as mongooseModel,
   models as mongooseModels,
   Model,
-  Schema
+  Schema,
+  SchemaOptions,
 
 } from 'mongoose'
 
@@ -15,12 +16,10 @@ import { options as defaultOptions } from '../database'
 import { applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
 // import { v1 as uuidv1 } from 'uuid'
+//
+type SchemaStructure = Record<string, Record<string, any>>
 
-export const descriptionToSchema = <T>(
-  description: MaybeCollectionDescription,
-  options = {},
-  extra: any = {}
-) => {
+export const descriptionToSchemaObj = (description: MaybeCollectionDescription) => {
   R.pipe(
     TypeGuards.presets,
     TypeGuards.properties,
@@ -83,7 +82,7 @@ export const descriptionToSchema = <T>(
     }
   }
 
-  const initial = {
+  // const initial = {
     // _id: {
     //   type: String,
     //   default: uuidv1
@@ -92,6 +91,12 @@ export const descriptionToSchema = <T>(
     //   type: ObjectId,
     //   required: true
     // }
+  // }
+
+  if( !description.properties ) {
+    throw new TypeError(
+      `description doesnt have properties set`
+    )
   }
 
   if( description.presets ) {
@@ -101,30 +106,55 @@ export const descriptionToSchema = <T>(
     }, description.properties as CollectionDescription)
   }
 
-  const schemaStructure = Object.entries(description.properties||{})
-    .reduce(convert, { ...extra, ...initial })
+  const schemaStructure = Object.entries(description.properties)
+    .reduce(convert, {})
+
+  return {
+    schemaStructure,
+    hasRefs
+  }
+}
+
+export const descriptionToSchema = <T>(
+  description: MaybeCollectionDescription,
+  options: SchemaOptions = {},
+  cb?: ((structure: SchemaStructure) => void)|null
+) => {
+  const {
+    schemaStructure,
+    hasRefs
+
+  } = descriptionToSchemaObj(description)
+
+  if( cb ) {
+    cb(schemaStructure)
+  }
 
   const schema = new Schema<T>(schemaStructure, options)
   if( hasRefs ) {
     schema.plugin(require('mongoose-autopopulate'))
   }
 
+  schema.plugin(require('mongoose-lean-getters'))
+  schema.plugin(require('mongoose-lean-virtuals'))
+
   return schema
 }
 
 export const createModel = <T=any>(
   description: MaybeCollectionDescription,
-  options?: any,
-  cb?: (schema: Schema) => void
+  options?: SchemaOptions|null,
+  modelCb?: ((structure: SchemaStructure) => void)|null,
+  schemaCb?: (schema: Schema) => void
 ) => {
   const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<T>
   }
 
-  const schema = descriptionToSchema<T>(description, options || defaultOptions)
-  if( cb ) {
-    cb(schema)
+  const schema = descriptionToSchema<T>(description, options || defaultOptions, modelCb)
+  if( schemaCb ) {
+    schemaCb(schema)
   }
 
   return mongooseModel<T>(modelName, schema)

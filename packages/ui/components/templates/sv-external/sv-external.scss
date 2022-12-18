@@ -15,7 +15,7 @@
     background: t(body-color);
   }
 
-  &__content {
+  &__wrapper {
     display: flex;
     flex-direction: column;
     row-gap: 1.4rem;
@@ -26,6 +26,12 @@
     @media screen and (min-width: 600px) {
       width: 30rem;
     }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.4rem;
   }
 
   &__logo {

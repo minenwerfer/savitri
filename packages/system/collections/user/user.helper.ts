@@ -13,7 +13,8 @@ export const userExtraModel = () => {
   return require(`${process.cwd()}/collections/userExtra/userExtra.model`).default
 }
 
-export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User>>> = async (props, token, ctx) => {
+export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User>>> = async (props, context) => {
+  const { collection } = context
   const { extra } = props.what
 
   const UserExtra = userExtraModel()
@@ -23,14 +24,14 @@ export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User
   })
 
   await userExtra.validate()
-  const user = await useCollection('user', ctx).insert(props, null)
+  const user = await collection.insert(props)
 
-  useCollection('userExtra', ctx).insert({
+  useCollection('userExtra', context).insert({
     what: {
       ...extra,
       owner: user._id
     }
-  }, token)
+  })
 
   return user
 }

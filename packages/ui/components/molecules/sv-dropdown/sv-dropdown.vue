@@ -30,8 +30,8 @@
         >
           <sv-icon
             small
-            v-if="action.unicon"
-            :name="action.unicon"
+            v-if="action.icon"
+            :name="action.icon"
           >
             {{ action.name }}
           </sv-icon>

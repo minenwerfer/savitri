@@ -11,6 +11,7 @@ import type {
 
 import { default as SystemCollections } from '../../system/collections'
 import { default as SystemControllables } from '../../system/controllables'
+import type { CollectionFunctions } from './collection/functions.types'
 import { useCollection } from './collection/use'
 
 const __cached: Record<AssetType, Record<string, any>> = {
@@ -51,11 +52,7 @@ const getPrefix = (collectionName: string, internal: boolean, entityType: Entity
 
 const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
   const prefix = getPrefix(collectionName, internal)
-  try {
-    return require(`${prefix}/${collectionName}.model`).default
-  } catch( err ) {
-    return null
-  }
+  return require(`${prefix}/${collectionName}.model`).default
 }
 
 const loadDescription = (collectionName: string, internal: boolean) => {
@@ -70,14 +67,26 @@ const loadDescription = (collectionName: string, internal: boolean) => {
   
   return isJson
     ? require(path)
-    : require(path)[collectionName[0].toUpperCase() + collectionName.slice(1) + 'Description']
+    : require(path).default
 }
 
 const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection', internal: boolean = false) => {
   const [entityName] = functionPath.split('@')
   const prefix = getPrefix(entityName, internal, entityType)
 
-  return require(`${prefix}/functions/${functionPath}`).default
+  const originalFn = require(`${prefix}/functions/${functionPath}`).default
+  if( entityType === 'controllable' ) {
+    return originalFn
+  }
+
+  const fn: ApiFunction<any> = (props, context) => {
+    return originalFn(props, {
+      ...context,
+      collection: useCollection(entityName, context)
+    })
+  }
+
+  return fn
 }
 
 export const getEntityAsset = <Type extends AssetType>(
@@ -109,8 +118,11 @@ export const getEntityAsset = <Type extends AssetType>(
             }
 
             const [, functionName] = assetName.split('@')
-            const fn: ApiFunction<unknown> = (props, token, context) => {
-              return useCollection(entityName, context)[functionName](props, token)
+            const fn: ApiFunction<unknown> = (props, context) => {
+              const description = getEntityAsset<'description'>(entityName, 'description')
+              const actualEntityName = description.alias || description.$id
+
+              return useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions](props)
             }
 
             return fn

@@ -14,7 +14,7 @@
       :key="option.value"
       :value="option.value"
     >
-      {{ property?.s$translate ? $t(option.label) : option.label }}
+      {{ property?.s$translate ? $t(option.description) : option.description }}
     </option>
     <slot></slot>
   </select>

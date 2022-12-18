@@ -2,7 +2,7 @@
   "individualActions": {
     "delete": {
       "name": "Remover",
-      "unicon": "trash-alt",
+      "icon": "trash-alt",
       "ask": true
     }
   }

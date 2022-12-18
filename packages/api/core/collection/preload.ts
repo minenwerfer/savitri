@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import { getReferencedCollection } from '../../../common'
+import { getEntityAsset } from '../assets'
 import type { MaybeCollectionDescription } from '../../../types'
 
 export const applyPreset = (description: MaybeCollectionDescription, collectionName:string, parentName?:string) => {
@@ -15,13 +16,9 @@ export const applyPreset = (description: MaybeCollectionDescription, collectionN
   )
 }
 
-export const requireCollection = (collectionName:string): any => {
-  return require(`${process.cwd()}/collections/${collectionName}/${collectionName}.description.json`)
-}
-
 export const preloadCollection = (collection: MaybeCollectionDescription) => {
   if( collection.alias ) {
-    const _aliasedCollection = requireCollection(collection.alias)
+    const _aliasedCollection = getEntityAsset<'description'>(collection.alias, 'description')
 
     const {
       $id: collectionName,
