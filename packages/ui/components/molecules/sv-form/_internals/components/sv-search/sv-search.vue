@@ -139,7 +139,7 @@ const searchOnly = !props.property.s$inlineEditing || inject<boolean|null>('sear
 const omitFormHeader = inject('omitFormHeader', false)
 
 const parentStore = useParentStore(props.parentCollection)
-const store = useStore(props.property.$ref!)
+const store = useStore(props.property.s$referencedCollection!)
 
 const indexes = parentStore.getIndexes({
   key: props.propertyName

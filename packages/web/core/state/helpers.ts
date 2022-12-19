@@ -67,34 +67,8 @@ export const normalizeFilters = (filters: Array<any>) => {
   }, {})
 }
 
-export const normalizeEnum = (values: any|Array<any>) => {
-  if( Array.isArray(values) ) {
-    return values.reduce((a, value) => ({
-      ...a,
-      [value]: {
-        value,
-        description: value
-      }
-    }), {})
-  }
-
-  return Object.entries(values).reduce((a, [key, value]: [string, any]) => ({
-    ...a,
-    [key]: {
-      value: key,
-      ...(typeof value === 'string'
-        ? { description: value }
-        : value)
-    }
-  }), {})
-}
-
 export const normalizeProperties = (properties: CollectionDescription['properties']) => {
   return Object.entries(properties||{}).reduce((a: object, [propertyName, property]: [string, any]) => {
-    if( property.enum && property.type !== 'boolean' ) {
-      property.enum = normalizeEnum(property.enum)
-    }
-
     if( typeof property.collection === 'string' ) {
       property.type = 'collection'
     }
@@ -110,10 +84,6 @@ export const normalizeProperties = (properties: CollectionDescription['propertie
 
 export const freshItem = (description: CollectionDescription) => {
   const item: Record<string, any> = Object.entries(description.properties).reduce((a: any, [key, property]) => {
-    if( !isObject(property) ) {
-      return a
-    }
-
     const value = (() => {
       if( property.$ref ) {
         return {}

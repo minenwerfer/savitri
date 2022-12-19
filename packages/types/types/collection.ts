@@ -42,10 +42,11 @@ export type CollectionDescription = {
 
   // modifiers
   strict?: boolean // all properties are required
-  route?: Array<string>
   owned?: boolean
+  report?: boolean
 
   // takes an array of something
+  route?: Array<string>
   presets?: Array<CollectionPresets>
   required?: Array<string>
   table?: Array<string>

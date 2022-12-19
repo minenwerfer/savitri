@@ -11,10 +11,10 @@
     <option value="">{{ $t('none') }}</option>
     <option
       v-for="option in property?.enum"
-      :key="option.value"
-      :value="option.value"
+      :key="option"
+      :value="option"
     >
-      {{ property?.s$translate ? $t(option.description) : option.description }}
+      {{ property?.s$translate ? $t(option) : option }}
     </option>
     <slot></slot>
   </select>

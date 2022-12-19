@@ -65,74 +65,144 @@
           ></sv-input>
         </div>
 
-        <sv-options
-          v-else-if="['checkbox', 'radio'].includes(property.s$format)"
+        <div
+          v-else-if="property.type === 'array'"
+          style="display: grid; row-gap: .4rem"
+        >
+          <div
+            v-for="listIndex in formData[key].length"
+            style="display: flex; column-gap: .6rem; align-items: center"
+          >
+            <div style="flex-grow: 1">
+              <component
+                :is="getComponent(property)"
+                v-model="formData[key][listIndex]"
+                v-bind="{
+                  property: {
+                    ...property,
+                    ...property.items
+                  },
+                  propertyName: key,
+                  parentCollection: collection,
+                  columns: layout?.[key]?.optionsColumns
+                    || layout?.$default?.optionsColumns
+                }"
+              ></component>
+            </div>
+
+            <sv-icon
+              v-clickable
+              reactive
+              name="trash"
+              @click="spliceFromArray(formData[key], listIndex)"
+            ></sv-icon>
+          </div>
+
+          <div>
+            <sv-button
+              small
+              variant="alt"
+              icon="plus"
+              @click="pushToArray(formData[key])"
+            >
+              Adicionar
+            </sv-button>
+          </div>
+        </div>
+
+        <component
+          v-else
+          :is="getComponent(property)"
           v-model="formData[key]"
           v-bind="{
             property,
+            propertyName: key,
+            parentCollection: collection,
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns
           }"
-        ></sv-options>
+        ></component>
 
-        <sv-select
-          v-else-if="property.s$format === 'select'"
-          v-model="formData[key]"
-          v-bind="{
-            property
-          }"
-          style="width: 100%"
-        ></sv-select>
+        <!-- <sv-options -->
+        <!--   v-else-if="['checkbox', 'radio'].includes(property.s$format)" -->
+        <!--   v-model="formData[key]" -->
+        <!--   v-bind="{ -->
+        <!--     property, -->
+        <!--     columns: layout?.[key]?.optionsColumns -->
+        <!--       || layout?.$default?.optionsColumns -->
+        <!--   }" -->
+        <!-- ></sv-options> -->
 
-        <sv-switch
-          v-else-if="property.type === 'boolean'"
-          v-model="formData[key]"
-          v-slot="{ label }"
+        <!-- <sv-select -->
+        <!--   v-else-if="property.s$format === 'select'" -->
+        <!--   v-model="formData[key]" -->
+        <!--   v-bind="{ -->
+        <!--     property -->
+        <!--   }" -->
+        <!--   style="width: 100%" -->
+        <!-- ></sv-select> -->
 
-          v-bind="{
-            property
-          }"
-        >
-          {{
-            property.s$values
-              ? label
-              : property.description
-          }}
-        </sv-switch>
+        <!-- <sv-switch -->
+        <!--   v-else-if="property.type === 'boolean'" -->
+        <!--   v-model="formData[key]" -->
+        <!--   v-slot="{ label }" -->
 
-        <sv-file
-          v-else-if="property.$ref === 'file'"
-          v-model="formData[key]"
-          v-bind="{
-            property
-          }"
-        ></sv-file>
+        <!--   v-bind="{ -->
+        <!--     property -->
+        <!--   }" -->
+        <!-- > -->
+        <!--   {{ -->
+        <!--     property.s$values -->
+        <!--       ? label -->
+        <!--       : property.description -->
+        <!--   }} -->
+        <!-- </sv-switch> -->
 
-        <sv-search
-          v-else-if="property.$ref"
-          :key="`collectionfield-${index}`"
+        <!-- <sv-file -->
+        <!--   v-else-if="refProperty.$ref === 'file'" -->
+        <!--   v-model="formData[key]" -->
+        <!--   v-bind="{ -->
+        <!--     property -->
+        <!--   }" -->
+        <!-- ></sv-file> -->
 
-          v-model="formData[key]"
-          v-bind="{
-            property,
-            propertyName: key,
-            parentCollection: collection
-          }"
+        <!-- <sv-search -->
+        <!--   v-else-if="property.$ref" -->
+        <!--   :key="`collectionfield-${index}`" -->
 
-          :style="fieldStyle(key, property)"
-          @changed="emit('change')"
-        ></sv-search>
+        <!--   v-model="formData[key]" -->
+        <!--   v-bind="{ -->
+        <!--     property, -->
+        <!--     propertyName: key, -->
+        <!--     parentCollection: collection, -->
+        <!--   }" -->
+
+        <!--   :style="fieldStyle(key, property)" -->
+        <!--   @changed="emit('change')" -->
+        <!-- ></sv-search> -->
 
         <!-- text -->
-        <sv-input
-          v-else
-          v-model="formData[key]"
-          v-bind="{
-            property,
-            propertyName: key,
-            placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description
-          }"
-        ></sv-input>
+        <!-- banana -->
+        <!-- <sv-input -->
+        <!--   v-else-if="property.type === 'array'" -->
+        <!--   v-model="models[key][formIndex]" -->
+        <!--   v-bind="{ -->
+        <!--     property, -->
+        <!--     propertyName: key, -->
+        <!--     placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description, -->
+        <!--     cu: 'oi' -->
+        <!--   }" -->
+        <!-- ></sv-input> -->
+
+        <!-- <sv-input -->
+        <!--   v-else -->
+        <!--   v-model="formData[key]" -->
+        <!--   v-bind="{ -->
+        <!--     property, -->
+        <!--     propertyName: key, -->
+        <!--     placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description -->
+        <!--   }" -->
+        <!-- ></sv-input> -->
 
 
         <div v-if="validationErrors?.[key]" class="form__validation-error">
@@ -153,28 +223,13 @@
 </template>
 
 <script setup lang="ts">
-import {
-  defineAsyncComponent,
-  computed,
-  provide,
-  inject,
-
-} from 'vue'
-
+import { computed, provide, inject } from 'vue'
 import { useStore } from '../../../../web'
-import {
-  SvInput,
-  SvOptions,
-  SvSwitch,
-  SvSelect
-
-} from '../..'
+import { SvInput, SvIcon, SvButton } from '../..'
 
 import { useCondition, Condition } from '../../../composables'
 import type { CollectionProperty } from '../../../../types'
-
-import SvSearch from './_internals/components/sv-search/sv-search.vue'
-const SvFile = defineAsyncComponent(() => import('../../molecules/sv-file/sv-file.vue'))
+import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
 
 type LayoutConfig = {
   span?: string

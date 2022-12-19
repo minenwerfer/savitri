@@ -143,18 +143,26 @@ export const descriptionToSchema = <T>(
 
 export const createModel = <T=any>(
   description: MaybeCollectionDescription,
-  options?: SchemaOptions|null,
-  modelCb?: ((structure: SchemaStructure) => void)|null,
-  schemaCb?: (schema: Schema) => void
+  config?: {
+    options?: SchemaOptions|null,
+    modelCallback?: ((structure: SchemaStructure) => void)|null,
+    schemaCallback?: (schema: Schema) => void
+  }
 ) => {
+  const {
+    options,
+    modelCallback,
+    schemaCallback
+  } = config||{}
+
   const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<T>
   }
 
-  const schema = descriptionToSchema<T>(description, options || defaultOptions, modelCb)
-  if( schemaCb ) {
-    schemaCb(schema)
+  const schema = descriptionToSchema<T>(description, options || defaultOptions, modelCallback)
+  if( schemaCallback ) {
+    schemaCallback(schema)
   }
 
   return mongooseModel<T>(modelName, schema)

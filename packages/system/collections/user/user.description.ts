@@ -25,7 +25,8 @@ const schema = {
     full_name: {
       description: 'Nome completo',
       type: 'string',
-      s$noform: true
+      s$noform: true,
+      s$meta: true
     },
     active: {
       description: 'Ativo',
