@@ -5,7 +5,6 @@ import { fromEntries, deepClone } from '../../../common'
 import  {
   condenseItem,
   removeEmpty,
-  normalizeProperties,
   normalizeFilters,
   normalizeActions
 
@@ -17,7 +16,7 @@ type Getters = Record<string, (this: CollectionState<any> & Record<`$${string}`,
 
 const getters: Getters = {
   properties() {
-    return normalizeProperties(this.description.properties!)
+    return this.description.properties
   },
 
   /**

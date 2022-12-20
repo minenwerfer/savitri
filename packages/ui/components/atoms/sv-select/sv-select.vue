@@ -6,7 +6,7 @@
     :key="modelValue"
     :value="getValue(modelValue)"
     @click.stop="void"
-    @change="$emit('update:modelValue', ($event.target as any).value)"
+    @change="update(($event.target as any).value)"
   >
     <option value="">{{ $t('none') }}</option>
     <option
@@ -35,7 +35,16 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'update:modelValue'|'change', value: any): void
+}>()
+
 const property = props.property
+
+const update = (value: any) => {
+  emit('update:modelValue', value)
+  emit('change', value)
+}
 
 const getValue = (value: any) => {
   return typeof value !== 'string'

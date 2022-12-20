@@ -52,7 +52,7 @@ export const normalizeActions = (actions: CollectionActions) => Object.entries(a
         ...value
       }
   ]
-  }, [])
+}, [])
 
 export const normalizeFilters = (filters: Array<any>) => {
   return filters.reduce((a: any, b) => {
@@ -64,21 +64,6 @@ export const normalizeFilters = (filters: Array<any>) => {
         ...a,
         ...filter
       }
-  }, {})
-}
-
-export const normalizeProperties = (properties: CollectionDescription['properties']) => {
-  return Object.entries(properties||{}).reduce((a: object, [propertyName, property]: [string, any]) => {
-    if( typeof property.collection === 'string' ) {
-      property.type = 'collection'
-    }
-
-    property.type ??= 'text'
-
-    return {
-      ...a,
-      [propertyName]: property
-    }
   }, {})
 }
 

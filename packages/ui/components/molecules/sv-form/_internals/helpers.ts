@@ -1,4 +1,4 @@
-import { CollectionProperty } from '@savitri/types'
+import { CollectionProperty } from '../../../../../types'
 import {
   SvInput,
   SvOptions,

@@ -70,7 +70,7 @@
           style="display: grid; row-gap: .4rem"
         >
           <div
-            v-for="listIndex in formData[key].length"
+            v-for="(_, listIndex) in formData[key]"
             style="display: flex; column-gap: .6rem; align-items: center"
           >
             <div style="flex-grow: 1">
@@ -103,7 +103,8 @@
               small
               variant="alt"
               icon="plus"
-              @click="pushToArray(formData[key])"
+              :disabled="formData[key].length >= property.maxItems!"
+              @clicked="pushToArray(formData[key])"
             >
               Adicionar
             </sv-button>
@@ -300,28 +301,27 @@ const omitInputLabels = passAhead('omitInputLabels')
 provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
 
-const filterProperties = (condition: (f: any) => boolean) => 
-  Object.entries(props.form)
-    .reduce((a: Array<any>, [key, property]: [string, any]) => {
-      if(
-        !(property
-          && (!(property.s$noform  || property.s$meta) || props.searchOnly)
-          && (!condition || condition([key, property]))
+const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]> => 
+  Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
+    if(
+      !(property
+        && (!(property.s$noform  || property.s$meta) || props.searchOnly)
+        && (!condition || condition([key, property]))
       )) {
-        return a
-      }
+      return a
+    }
 
-      return [
-        ...a,
-        [
-          key,
-          {
-            ...property,
-            hidden: undefined
-          }
-        ]
+    return [
+      ...a,
+      [
+        key,
+        {
+          ...property,
+          hidden: undefined
+        }
       ]
-    }, [])
+    ]
+  }, [])
 
 
 const has = (propertyName: string) => {

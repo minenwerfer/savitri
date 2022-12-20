@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import type { User } from '../../../system/collections/user/user.description'
 import useCollection from '../state/collection'
-import { normalizeProperties, normalizeEnum } from '../state/helpers'
 import useMetaStore from './meta'
 
 type Credentials = {
@@ -63,8 +62,8 @@ const collection = useCollection({
   getters: {
     properties() {
       const metaStore = useMetaStore()
-      const properties = normalizeProperties(this.description.properties!)
-      properties.role.enum = normalizeEnum(Object.keys(metaStore.roles))
+      const properties = this.description.properties!
+      properties.role.enum = Object.keys(metaStore.roles)
 
       return properties
     },

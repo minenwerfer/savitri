@@ -32,4 +32,10 @@ export type Property = {
   maximum?: number
   exclusiveMinimum?: number
   exclusiveMaximum?: number
+
+  minItems?: number
+  maxItems?: number
+
+  minLength?: number
+  maxLength?: number
 }

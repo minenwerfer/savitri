@@ -248,7 +248,7 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   useProperties(properties) {
-    return properties.reduce((a: any, property: string) => {
+    return properties.reduce((a: any, property) => {
       if( !(property in this.properties) ) {
         return a
       }
@@ -268,7 +268,7 @@ const actionsAndMutations: Actions & Mutations = {
 
   formatValue(args) {
       const value = args.property.s$translate
-        ? I18N.global.tc(args.value)
+        ? I18N.global.tc(args.value||'')
         : args.value
 
       return Collection.formatValue(
