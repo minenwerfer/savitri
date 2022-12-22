@@ -147,18 +147,28 @@ const getters: Getters = {
 
     const expr = (key: string, value: any) => {
       const property = this.description.properties?.[key]
-      if( !property ) {
-        return
+      const getValue = (value: any) => {
+        if( !property ) {
+          return
+        }
+
+        if( property.type === 'string' ) {
+          return {
+            $regex: value,
+            $options: 'i'
+          }
+        }
+
+        return value._id||value
       }
 
-      if( property.type === 'string' ) {
+      if( Array.isArray(value) ) {
         return {
-          $regex: value,
-          $options: 'i'
+          $in: value.map(v => getValue(v))
         }
       }
 
-      return value._id || value
+      return getValue(value)
     }
 
     const entries = Object.entries(filters).reduce((a: Array<any>, [key, filter]: [string, any]) => {

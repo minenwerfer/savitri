@@ -76,17 +76,16 @@ export default {
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
-import type { CollectionProperty } from '../../../../types'
-
 import { useClipboard } from '../../../composables'
 import { SvInfo, SvIcon } from '../..'
+import type { CollectionProperty } from '../../../../types'
 
 type InputType = string|number|Date
 
 type Props = {
-  modelValue?: InputType
-  propertyName?: string
+  modelValue: InputType
   property: CollectionProperty
+  propertyName?: string
   variant?: string
 }
 

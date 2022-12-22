@@ -1,5 +1,5 @@
 import path from 'path'
-const { VueLoaderPlugin } = require('vue-loader')
+import { VueLoaderPlugin } from 'vue-loader'
 // const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default
 // const CircularDependencyPlugin = require('circular-dependency-plugin')
 //

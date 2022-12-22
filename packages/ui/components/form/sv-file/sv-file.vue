@@ -17,7 +17,7 @@
       <input
         type="file"
         ref="file"
-        :accept="property?.accept?.join(',')"
+        :accept="property.s$accept?.join(',')"
         @change="changePreview"
       />
       <div
@@ -47,12 +47,12 @@
 import { provide, ref, computed } from 'vue'
 import { useStore } from '../../../../web'
 import { SvPicture, SvButton } from '../..'
+import type { CollectionProperty } from '../../../../types'
 
 type Props = {
   modelValue: any
-  property?: {
-    accept?: Array<string>
-  }
+  property: CollectionProperty
+  propertyName?: string
 }
 
 const props = defineProps<Props>()

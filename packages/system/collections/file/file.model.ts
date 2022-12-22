@@ -3,7 +3,7 @@ import { File, default as FileDescription } from './file.description'
 
 import '../user/user.model'
 
-export default createModel<File>(FileDescription, {
+export default createModel(FileDescription, {
   schemaCallback: (schema) => {
     const link = (_id: File['_id']) => `${process.env.API_URL}/file/${_id}`
 

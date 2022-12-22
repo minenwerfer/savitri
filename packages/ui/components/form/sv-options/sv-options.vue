@@ -7,7 +7,7 @@
     `"
   >
     <sv-checkbox
-      v-for="(option, index) in property?.enum"
+      v-for="(option, index) in property.enum"
       :key="`option-${index}`"
 
       v-model="modelValue"
@@ -34,13 +34,14 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { SvCheckbox } from '..'
 import type { CollectionProperty } from '../../../../types'
-import { SvCheckbox } from '../../..'
 
 type Props = {
   modelValue: any
+  property: CollectionProperty
+  propertyName?: string
   columns?: number
-  property?: CollectionProperty
 }
 
 type Emits = {

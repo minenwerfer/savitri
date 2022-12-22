@@ -14,8 +14,6 @@ import type {
 
 import { Error as MongooseError } from 'mongoose'
 import { TokenService } from '../core/token'
-// import { FileController } from '../../system/collections/file/file.controller'
-
 import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
 import { appendPagination } from './hooks/post'
 
@@ -187,29 +185,36 @@ export const regularVerb = (functionName: RegularVerb) =>
   })
 }
 
-export const fileDownload = async (request: HandlerRequest, h: ResponseToolkit) => {
-  // const instance = new FileController
+export const fileDownload = async (
+  request: HandlerRequest,
+  h: ResponseToolkit,
+  _context?: ApiContext
+) => {
+  const token = await getToken(request) as DecodedToken
+  const context = _context||fallbackContext
+  context.token = token
 
-  // const { hash, options } = request.params
-  // const { filename, content, mime } = await instance.download(hash)
+  const { hash, options } = request.params
+  const { filename, content, mime } = await getEntityFunction('file@download')(hash, context)
 
-  // const parsedOptions = (options||'').split(',')
-  // const has = (opt: string) => parsedOptions.includes(opt)
+  const parsedOptions = (options||'').split(',')
+  const has = (opt: string) => parsedOptions.includes(opt)
 
-  // return h.response(content)
-  //   .header('Content-Type', mime)
-  //   .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+  return h.response(content)
+    .header('Content-Type', mime)
+    .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }
 
 export const fileInsert = async (
   request: HandlerRequest,
   _h: ResponseToolkit,
-  context?: ApiContext
+  _context?: ApiContext
 ) => {
-  // const instance = new FileController
-  // const token = await getToken(request) as DecodedToken
-  // instance.injected = context!
+  const token = await getToken(request) as DecodedToken
+  const context = _context||fallbackContext
+  context.token = token
 
-  // const result = await instance.insert(request.payload as any, token)
-  // return { result }
+  const result = await getEntityFunction('file@insert')(request.payload, context)
+
+  return { result }
 }

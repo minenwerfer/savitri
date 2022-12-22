@@ -49,7 +49,10 @@ const insert: ApiFunction<Props> = async (props, { token, collection }) => {
   what.absolute_path = `${STORAGE_PATH}/${filenameHash}.${extension}`
   await writeFile(what.absolute_path, Buffer.from(what.content.split(',').pop()!, 'base64'))
 
-  return collection.insert(props)
+  return collection.insert({
+    ...props,
+    what
+  })
 }
 
 export default insert

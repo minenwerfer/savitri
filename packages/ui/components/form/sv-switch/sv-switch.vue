@@ -2,13 +2,13 @@
   <div class="switch-wrapper">
     <a
       v-clickable="{
-        blocked: property?.readOnly
+        blocked: property.readOnly
       }"
 
       :class="`
         switch
         ${modelValue && 'switch--active'}
-        ${property?.readOnly && 'switch--readOnly'}
+        ${property.readOnly && 'switch--readOnly'}
       `"
       @click.stop="toggle"
     >
@@ -35,8 +35,9 @@ export default {
 import type { CollectionProperty } from '../../../../types'
 
 type Props = {
-  modelValue?: boolean
+  modelValue: any
   property: CollectionProperty
+  propertyName?: string
 }
 
 type Emits = {
@@ -46,8 +47,10 @@ type Emits = {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+const property = props.property
+
 const toggle = () => {
-  if( !props.property?.readOnly ) {
+  if( !props.property.readOnly ) {
     emit('change', !props.modelValue)
     emit('update:modelValue', !props.modelValue)
   }

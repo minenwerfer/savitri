@@ -20,12 +20,12 @@ io
     >
       <div class="checkbox__description">
         <slot name="description" v-if="$slots.description"></slot>
-        <div v-else-if="description" v-html="description"></div>
+        <div v-else-if="property.description" v-html="property.description"></div>
         <slot v-else></slot>
       </div>
       <div class="checkbox__hint">
         <slot name="hint" v-if="$slots.hint"></slot>
-        <div v-else-if="hint" v-html="hint"></div>
+        <div v-else-if="property.s$hint" v-html="property.s$hint"></div>
       </div>
     </div>
   </label>
@@ -42,15 +42,16 @@ import { computed, ref } from 'vue'
 import type { CollectionProperty } from '../../../../types'
 
 type Props = {
-  modelValue?: string|Array<string>|boolean
-  value?: string|boolean
-  description?: string
-  hint?: string
+  modelValue: any
   property: CollectionProperty
+  propertyName?: string
+  variant?: string
 }
 
 const props = defineProps<Props>()
-const type = props.property.type === 'array'
+const property = props.property||{}
+
+const type = property.type === 'array'
   ? 'checkbox'
   : 'radio'
 
@@ -74,7 +75,7 @@ const bindVal = computed({
       return false
     }
 
-    if( props.property.type !== 'array' ) {
+    if( property.type !== 'array' ) {
       return props.modelValue === props.value
     }
 
@@ -84,11 +85,11 @@ const bindVal = computed({
   },
 
   set: () => {
-    if( props.property?.readOnly ) {
+    if( property.readOnly ) {
       return
     }
 
-    if( props.property.type !== 'array' ) {
+    if( property.type !== 'array' ) {
       emit('update:modelValue', value)
       return
     }

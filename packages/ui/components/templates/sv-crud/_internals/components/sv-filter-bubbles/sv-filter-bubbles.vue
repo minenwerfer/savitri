@@ -56,9 +56,6 @@ const printableFilters = computed(() => {
             property
           })
         }
-
-        const value = filter as any[]
-        return value.slice(-8)
       }
 
       if( ['date', 'date-time'].includes(property.format) ) {

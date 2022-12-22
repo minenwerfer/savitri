@@ -4,14 +4,10 @@ import {
   SvOptions,
   SvSwitch,
   SvSelect,
+  SvFile,
+  SvSearch
 
-} from '../../..'
-
-import {
-  SvFile
 } from '../..'
-
-import SvSearch from './components/sv-search/sv-search.vue'
 
 
 export const getComponent = (property: CollectionProperty) => {

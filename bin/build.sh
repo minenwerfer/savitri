@@ -12,14 +12,8 @@ PACKAGES=(
   types
 )
 
-tsc || true && \
-  cp -r packages/api/resources/* dist/api/resources && \
-  cp -r packages/api/presets dist/api && \
-  cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
-  [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
-
-[ "$COMMAND" == "pack" ] && {
-  cp {tsconfig.json,global.d.ts} dist/web
+function do_pack() {
+  cp {tsconfig.json,web/global.d.ts} dist/web
   cp -r packages/web/public dist/web
 
   for package in ${PACKAGES[*]}; do
@@ -35,3 +29,14 @@ tsc || true && \
   done
 }
 
+tsc || true && \
+  cp -r packages/api/resources/* dist/api/resources && \
+  cp -r packages/api/presets dist/api && \
+  cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
+  [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
+
+case "$COMMAND" in
+  pack)
+    do_pack
+  ;;
+esac

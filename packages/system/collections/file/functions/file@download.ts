@@ -10,7 +10,9 @@ const download: ApiFunction<string> = async (_id): Promise<Omit<File, 'content'>
     throw new Error('file not found')
   }
 
+  console.log(file)
   const content = await readFile(file.absolute_path)
+
   return {
     ...file,
     content: Buffer.from(content, 'base64')

@@ -46,7 +46,7 @@
     ></sv-form>
     <template #footer>
       <sv-button
-        variant="light"
+        variant="transparent"
         @clicked="store.clearFilters"
       >
         Limpar

@@ -10,7 +10,6 @@
       v-if="!isReadOnly && Object.keys(properties).length > 0"
       class="form__fieldset"
     >
-      <!-- form -->
       <div
         v-for="([key, property], index) in properties"
         :key="`field-${index}`"
@@ -25,7 +24,7 @@
             && !omitInputLabels
         ">
           <strong>
-            {{ property.translate ? $t(property.description) : property.description }}
+            {{ property.s$translate ? $t(property.description) : property.description }}
           </strong>
           <div
             v-if="property.s$hint"
@@ -66,7 +65,7 @@
         </div>
 
         <div
-          v-else-if="property.type === 'array'"
+          v-else-if="property.type === 'array' && !(property.s$isReference && !property.s$inline)"
           style="display: grid; row-gap: .4rem"
         >
           <div
@@ -123,88 +122,6 @@
               || layout?.$default?.optionsColumns
           }"
         ></component>
-
-        <!-- <sv-options -->
-        <!--   v-else-if="['checkbox', 'radio'].includes(property.s$format)" -->
-        <!--   v-model="formData[key]" -->
-        <!--   v-bind="{ -->
-        <!--     property, -->
-        <!--     columns: layout?.[key]?.optionsColumns -->
-        <!--       || layout?.$default?.optionsColumns -->
-        <!--   }" -->
-        <!-- ></sv-options> -->
-
-        <!-- <sv-select -->
-        <!--   v-else-if="property.s$format === 'select'" -->
-        <!--   v-model="formData[key]" -->
-        <!--   v-bind="{ -->
-        <!--     property -->
-        <!--   }" -->
-        <!--   style="width: 100%" -->
-        <!-- ></sv-select> -->
-
-        <!-- <sv-switch -->
-        <!--   v-else-if="property.type === 'boolean'" -->
-        <!--   v-model="formData[key]" -->
-        <!--   v-slot="{ label }" -->
-
-        <!--   v-bind="{ -->
-        <!--     property -->
-        <!--   }" -->
-        <!-- > -->
-        <!--   {{ -->
-        <!--     property.s$values -->
-        <!--       ? label -->
-        <!--       : property.description -->
-        <!--   }} -->
-        <!-- </sv-switch> -->
-
-        <!-- <sv-file -->
-        <!--   v-else-if="refProperty.$ref === 'file'" -->
-        <!--   v-model="formData[key]" -->
-        <!--   v-bind="{ -->
-        <!--     property -->
-        <!--   }" -->
-        <!-- ></sv-file> -->
-
-        <!-- <sv-search -->
-        <!--   v-else-if="property.$ref" -->
-        <!--   :key="`collectionfield-${index}`" -->
-
-        <!--   v-model="formData[key]" -->
-        <!--   v-bind="{ -->
-        <!--     property, -->
-        <!--     propertyName: key, -->
-        <!--     parentCollection: collection, -->
-        <!--   }" -->
-
-        <!--   :style="fieldStyle(key, property)" -->
-        <!--   @changed="emit('change')" -->
-        <!-- ></sv-search> -->
-
-        <!-- text -->
-        <!-- banana -->
-        <!-- <sv-input -->
-        <!--   v-else-if="property.type === 'array'" -->
-        <!--   v-model="models[key][formIndex]" -->
-        <!--   v-bind="{ -->
-        <!--     property, -->
-        <!--     propertyName: key, -->
-        <!--     placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description, -->
-        <!--     cu: 'oi' -->
-        <!--   }" -->
-        <!-- ></sv-input> -->
-
-        <!-- <sv-input -->
-        <!--   v-else -->
-        <!--   v-model="formData[key]" -->
-        <!--   v-bind="{ -->
-        <!--     property, -->
-        <!--     propertyName: key, -->
-        <!--     placeholder: property.s$placeholder || property.s$translate ? $t(property.description||'') : property.description -->
-        <!--   }" -->
-        <!-- ></sv-input> -->
-
 
         <div v-if="validationErrors?.[key]" class="form__validation-error">
           <span v-if="validationErrors[key].type">

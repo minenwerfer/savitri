@@ -7,27 +7,12 @@
         indexes
       }"
       :key="item._id"
+      @click="unselect(item, false)"
     >
-      <div v-if="!searchOnly" class="selected__icons">
-        <sv-icon
-          v-clickable
-          name="edit"
-          @click="edit(item)"
-        ></sv-icon>
-        <sv-icon
-          v-clickable
-          name="trash"
-          @click="unselect(item)"
-        ></sv-icon>
-      </div>
-
-      <div v-else class="selected__icons">
-        <sv-icon
-          v-clickable
-          name="minus"
-          @click="unselect(item, false)"
-        ></sv-icon>
-      </div>
+      <sv-icon
+        v-clickable
+        name="minus"
+      ></sv-icon>
     </sv-search-item>
   </sv-search-container>
 </template>
@@ -35,6 +20,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { CollectionProperty } from '../../../../../../../types'
+import { useParentStore } from '../../../../../../../web'
 import { SvIcon } from '../../../../..'
 import SvSearchContainer from '../sv-search-container/sv-search-container.vue'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
@@ -53,8 +39,11 @@ type Emits = {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
+const property = props.property
+const store = useParentStore()
+
 const selected = computed(() => {
-  if( props.property.type === 'array' ) {
+  if( property.type === 'array' ) {
     return props.modelValue
   }
 
@@ -64,9 +53,9 @@ const selected = computed(() => {
 })
 
 const unselect = async (item: any, purge=true) => {
-  if( props.property.s$purge && purge ) {
+  if( property.s$purge && purge ) {
     const { _id } = item
-    // await store.remove({ filter: { _id } })
+    await store.remove({ filters: { _id } })
   }
 
   const deleteFirst = () => {
@@ -77,12 +66,12 @@ const unselect = async (item: any, purge=true) => {
     return modelValue
   }
 
-  emit('update:modelValue', props.property.type === 'array'
+  emit('update:modelValue', property.type === 'array'
       ? deleteFirst()
       : undefined
   )
 
-  if( props.property.uniqueItems ) {
+  if( property.uniqueItems || (property.type === 'array' && props.searchOnly) ) {
     emit('pushBack', item)
   }
 }
