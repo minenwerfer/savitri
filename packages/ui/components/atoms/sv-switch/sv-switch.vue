@@ -19,7 +19,9 @@
       `"></div>
     </a>
 
-    <slot :label="valueLabel"></slot>
+    <div>
+      {{ property.description }}
+    </div>
   </div>
 </template>
 
@@ -30,25 +32,19 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { CollectionProperty } from '../../../../types'
 
 type Props = {
   modelValue?: boolean
-  property?: {
-    values: Array<string>
-    readOnly?: boolean
-  }
+  property: CollectionProperty
 }
 
 type Emits = {
-  (e: 'change', value: boolean): void
-  (e: 'update:modelValue', value: boolean): void
+  (e: 'update:modelValue' | 'change', value: boolean): void
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
-
-const valueLabel = computed(() => props.property?.values?.[props.modelValue?0:1])
 
 const toggle = () => {
   if( !props.property?.readOnly ) {

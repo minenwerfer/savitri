@@ -161,7 +161,7 @@ const actionsAndMutations: Actions & Mutations = {
     const inlineReferences = this.inlineReferences
     const newItem = (payload?.what || this.item) as Item
 
-    for( const [k, { $ref: collection, type }] of inlineReferences ) {
+    for( const [k, { s$referencedCollection: collection, type }] of inlineReferences ) {
       if(
         newItem[k]
         && typeof newItem[k] === 'object'

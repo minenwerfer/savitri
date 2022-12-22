@@ -1,9 +1,9 @@
 import type { CollectionDescription, CollectionProperty } from '../types'
 
-export const getReferencedCollection = (property: CollectionProperty): CollectionProperty|null => {
-  const reference = property.items || property
+export const getReferencedCollection = (property?: CollectionProperty): CollectionProperty|null => {
+  const reference = property?.items || property
   return reference?.$ref
-    ? reference
+    ? { ...property, ...reference }
     : null
 }
 

@@ -37,7 +37,7 @@ export const getComponent = (property: CollectionProperty) => {
 }
 
 export const pushToArray = (modelValue: Array<any>) => {
-  modelValue.push(null)
+  modelValue.push({})
 }
 
 export const spliceFromArray = (modelValue: Array<any>, index: number) => {

@@ -7,7 +7,7 @@
           form: property.s$form
             ? store.useProperties(property.s$form)
             : store.properties,
-          formData: edited,
+          formData: modelValue,
           layout: store.formLayout
         }"
       >
@@ -21,31 +21,23 @@
       </div>
     </div>
 
-    <div v-else>
-      <sv-form
-        v-bind="{
-          collection: property.$ref,
-          form: store.useProperties(indexes),
-          formData: inputValue,
-          layout: store.formLayout,
-          searchOnly: true
-        }"
-        @input="lazySearch"
-      >
-        <template #header v-if="!omitFormHeader">
-          {{ $t(property.$ref||'').capitalize() }}
-        </template>
-      </sv-form>
-      <sv-button
-        v-if="expanded && property.type === 'array'"
-        icon="plus"
-        @clicked="addItem"
-      >
-        Novo
-      </sv-button>
-    </div>
+    <sv-form
+      v-else
+      v-bind="{
+        collection: property.$ref,
+        form: store.useProperties(indexes),
+        formData: inputValue,
+        layout: store.formLayout,
+        searchOnly: true
+      }"
+      @input="lazySearch"
+    >
+      <template #header v-if="!omitFormHeader">
+        {{ $t(property.$ref||'').capitalize() }}
+      </template>
+    </sv-form>
 
-    <div v-if="!isExpanded || property.s$array" :key="inputValue">
+    <div v-if="!isExpanded || property.type === 'array'" :key="inputValue">
       <sv-search-selected
         v-bind="{
           searchOnly,
@@ -146,7 +138,6 @@ const indexes = parentStore.getIndexes({
 })
 
 const expanded = ref(false)
-const edited = ref(parentStore.item[props.propertyName])
 const matchingItems = ref<Array<Record<string, any> & { _id: string }>>([])
 
 const isExpanded = computed(() => expanded.value || props.property.s$inline)
@@ -164,7 +155,7 @@ const isTyping = ref(false)
 const inputValue = reactive<Record<string, any>>({})
 
 const insert = async () => {
-  const result: any = await store.insert({ what: edited.value })
+  const result = await store.insert({ what: props.modelValue })
 
   const value = (() => {
     if( props.property.type === 'array' ) {
@@ -192,12 +183,6 @@ const insert = async () => {
   expanded.value = false
 }
 
-//const edit = (item: any) => {
-//  const itemsCount = rawItem.value.length
-//  edited.value = item
-//  expanded.value = true
-//}
-
 const clear = () => {
   expanded.value = false
   matchingItems.value = []
@@ -207,7 +192,7 @@ const clear = () => {
 }
 
 const select = (item: any, itemIndex: number) => {
-  const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e).length > 0)
+  const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e||{}).length > 0)
   const modelValue = props.property.type === 'array'
     ? filterEmpties(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue])
     : props.modelValue
@@ -230,11 +215,6 @@ const select = (item: any, itemIndex: number) => {
 
 const pushBack = (item: any) => {
   matchingItems.value.push(item)
-}
-
-const addItem = () => {
-  edited.value = {}
-  expanded.value = true
 }
 
 const search = async () => {

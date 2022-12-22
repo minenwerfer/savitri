@@ -36,14 +36,22 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
     const {
       $ref: referencedCollection,
       ...reference
-    } = getReferencedCollection(property) as any||{}
+    } = getReferencedCollection(property)||{}
 
     const required = description.strict || description.required?.includes(propertyName)
 
-    const result: any = {
+    const result: Record<string, any> = {
       type: String,
       unique: property.s$unique === true,
-      default: property.default,
+      default: (() => {
+        if( property.default ) {
+          return property.default
+        }
+
+        if( property.type === 'array' ) {
+          return []
+        }
+      })(),
       required
     }
 
@@ -57,10 +65,10 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
         : value
 
       result.autopopulate = {
-        maxDepth: reference.maxDepth || 2,
-        select: reference.select
-          ? join(reference.select)
-          : join(reference.index)
+        maxDepth: reference.s$maxDepth || 2,
+        select: reference.s$select
+          ? join(reference.s$select)
+          : join(reference.s$index||[])
       }
     }
 

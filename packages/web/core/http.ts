@@ -33,7 +33,7 @@ const httpMethodWrapper = (
     .catch(async (error: any) => {
       const metaStore = useStore('meta')
 
-      if( ['TokenExpiredError', 'AuthorizationError'].includes(error.name) ) {
+      if( ['TokenExpiredError', 'AuthorizationError', 'JsonWebTokenError'].includes(error.name) ) {
         sessionStorage.clear()
         ROUTER.push({ name: 'user-signin' })
 

@@ -18,7 +18,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
     if( Array.isArray(value) ) {
       return {
         ...a,
-        [key]: value.map(v => v._id||v)
+        [key]: value.map(v => v?._id||v)
       }
     }
 

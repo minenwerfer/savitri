@@ -1,6 +1,6 @@
 import type { CollectionProperty } from '../../../types'
 import type { CollectionState } from '../../types/state'
-import { fromEntries, deepClone } from '../../../common'
+import { fromEntries, deepClone, getReferencedCollection } from '../../../common'
 
 import  {
   condenseItem,
@@ -126,8 +126,10 @@ const getters: Getters = {
    * Used internally.
    */
   inlineReferences() {
-    return Object.entries(this.description.properties||{})
-      .filter(([, property]) => typeof property.$ref === 'string' && property.s$inline)
+    return Object.entries(this.description.properties||{}).filter(([, _property]) => {
+      const property = getReferencedCollection(_property)||_property
+      return typeof property.$ref === 'string' && property.s$inline
+    })
   },
 
   /**

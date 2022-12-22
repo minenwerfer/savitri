@@ -83,7 +83,7 @@
                     ...property.items
                   },
                   propertyName: key,
-                  parentCollection: collection,
+                  parentCollection: collectionName,
                   columns: layout?.[key]?.optionsColumns
                     || layout?.$default?.optionsColumns
                 }"
@@ -103,7 +103,7 @@
               small
               variant="alt"
               icon="plus"
-              :disabled="formData[key].length >= property.maxItems!"
+              :disabled="formData[key]?.length >= property.maxItems!"
               @clicked="pushToArray(formData[key])"
             >
               Adicionar
@@ -118,7 +118,7 @@
           v-bind="{
             property,
             propertyName: key,
-            parentCollection: collection,
+            parentCollection: collectionName,
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns
           }"
