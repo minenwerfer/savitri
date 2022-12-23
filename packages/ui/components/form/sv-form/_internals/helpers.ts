@@ -1,4 +1,6 @@
 import { CollectionProperty } from '../../../../../types'
+import { deepClone } from '../../../../../common'
+import { useStore } from '../../../../../web'
 import {
   SvInput,
   SvOptions,
@@ -10,30 +12,56 @@ import {
 } from '../..'
 
 
-export const getComponent = (property: CollectionProperty) => {
+export const getComponent = (property: CollectionProperty, customComponents: Record<string, any>) => {
   const propType = property.type === 'array'
     ? property.items?.type
     : property.type
 
-  switch( true ) {
-    case ['checkbox', 'radio'].includes(property.s$format!):
-      return SvOptions
-    case  property.s$format === 'select':
-      return SvSelect
-    case propType === 'boolean':
-      return SvSwitch
-    case property.s$referencedCollection === 'file':
-      return SvFile
-    case property.s$isReference:
-      return SvSearch
-
-    default:
-      return SvInput
+  // strangely enough this won't work if placed outside function
+  const defaultComponents = {
+    options: SvOptions,
+    select: SvSelect,
+    switch: SvSwitch,
+    file: SvFile,
+    search: SvSearch,
+    input: SvInput
   }
+
+  const mappedComponentType = (() => {
+    switch( true ) {
+      case ['checkbox', 'radio'].includes(property.s$format!):
+        return 'options'
+      case property.s$format === 'select':
+        return 'select'
+      case propType === 'boolean':
+        return 'switch'
+      case property.s$referencedCollection === 'file':
+        return 'file'
+      case property.s$isReference:
+        return 'search'
+      case !!property.enum:
+        return 'select'
+
+      default:
+        return 'input'
+    }
+  })()
+
+  if( customComponents?.[mappedComponentType] ) {
+    return customComponents[mappedComponentType]
+  }
+
+  return defaultComponents[mappedComponentType] || defaultComponents.input
 }
 
-export const pushToArray = (modelValue: Array<any>) => {
-  modelValue.push({})
+export const pushToArray = (modelValue: Array<any>, property: CollectionProperty) => {
+  if( property.s$isReference ) {
+    const helperStore = useStore(property.s$referencedCollection!)
+    const newVal = deepClone(helperStore.freshItem)
+    return modelValue.push(newVal)
+  }
+
+  modelValue.push(null)
 }
 
 export const spliceFromArray = (modelValue: Array<any>, index: number) => {

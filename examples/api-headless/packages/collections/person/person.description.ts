@@ -24,4 +24,4 @@ const schema = {
   }
 } as const
 
-export const PersonDescription = makeDescription<typeof schema>(schema)
+export default makeDescription<typeof schema>(schema)

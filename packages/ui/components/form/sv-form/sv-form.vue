@@ -34,8 +34,8 @@
         </label>
 
         <component
-          v-if="layout?.[key]?.component && formComponents[layout[key].component!.name]"
-          :is="formComponents[layout[key].component!.name]"
+          v-if="layout?.[key]?.component && propertyComponents[layout[key].component!.name]"
+          :is="propertyComponents[layout[key].component!.name]"
           v-model="formData[key]"
           v-bind="{
             property,
@@ -74,7 +74,7 @@
           >
             <div style="flex-grow: 1">
               <component
-                :is="getComponent(property)"
+                :is="getComponent(property, formComponents)"
                 v-model="formData[key][listIndex]"
                 v-bind="{
                   property: {
@@ -103,7 +103,7 @@
               variant="alt"
               icon="plus"
               :disabled="formData[key]?.length >= property.maxItems!"
-              @clicked="pushToArray(formData[key])"
+              @clicked="pushToArray(formData[key], property)"
             >
               Adicionar
             </sv-button>
@@ -112,7 +112,7 @@
 
         <component
           v-else
-          :is="getComponent(property)"
+          :is="getComponent(property, formComponents)"
           v-model="formData[key]"
           v-bind="{
             property,
@@ -168,7 +168,8 @@ type Props = {
   searchOnly?: boolean
   layout?: Record<string, LayoutConfig>
   strict?: boolean
-  formComponents?: any
+  formComponents?: Record<string, any>
+  propertyComponents?: Record<string, any>
   omitFormHeader?: boolean
   omitInputLabels?: boolean
   validationErrors?: Record<string, any>|null
@@ -198,8 +199,8 @@ if( !collectionName && process.env.NODE_ENV !== 'production' ) {
   )
 }
 
-const passAhead = (propName: keyof Props) => {
-  const value = inject(propName, props[propName])
+const passAhead = <T extends keyof Props, P extends Props[T]>(propName: T): P => {
+  const value = inject<P>(propName, props[propName] as P)
   if( props[propName] ) {
     provide(propName, props[propName])
   }
@@ -211,7 +212,8 @@ const validationErrors = computed(() => props.validationErrors !== null
   ? props.validationErrors
   : store?.validationErrors)
 
-const formComponents = passAhead('formComponents')
+const formComponents = passAhead('formComponents')||{}
+const propertyComponents = passAhead('propertyComponents')||{}
 const omitFormHeader = passAhead('omitFormHeader')
 const omitInputLabels = passAhead('omitInputLabels')
 

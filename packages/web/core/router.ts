@@ -57,9 +57,8 @@ export const normalizeRoutes = (routes: Record<string, Omit<Route, 'name'>>): Ar
 }))
 
 export const extendRouter = (router: any, routerExtension: RouterExtension) => {
-  Object.entries(routerExtension)
-    .forEach(([parentName, routes]) => {
-      const normalized = normalizeRoutes(routes)
-      normalized.forEach((route) => router.addRoute(parentName, route))
-    })
+  Object.entries(routerExtension).forEach(([parentName, routes]) => {
+    const normalized = normalizeRoutes(routes)
+    normalized.forEach((route) => router.addRoute(parentName, route))
+  })
 }

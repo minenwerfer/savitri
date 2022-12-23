@@ -4,35 +4,17 @@ import { createApp } from 'vue'
 import VueLazyLoad from 'vue3-lazyload'
 import VueUnicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
-import type { Router, RouteRecordRaw } from 'vue-router'
-export * from 'vue'
+import type { Router } from 'vue-router'
 
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
-import { routerInstance as createRouter, extendRouter, RouterExtension } from './router'
+import { routerInstance as createRouter, extendRouter } from './router'
 import { default as webpackVariables } from 'variables'
 
-import { useStore } from './state'
+import type { Plugin, AppOptions } from '../types'
 import registerDirectives from '../../ui/directives'
+import { useStore } from './state'
 
-export type Plugin = {
-  routerExtension?: RouterExtension
-}
-
-export type MenuSchema = Record<string, {
-  roles?: Array<string>
-  children: Array<string>
-  shrink?: boolean
-}>
-
-export type AppOptions = {
-  component: any
-  i18n?: any
-  menuSchema: MenuSchema
-  routerExtension?: RouterExtension
-  modules?: Array<Plugin>
-  routes?: Array<RouteRecordRaw>
-}
 
 export const useApp = (config: AppOptions): Promise<{
   app: any

@@ -35,9 +35,6 @@
       </sv-dropdown>
     </template>
     <template #footer>
-      <!-- <pre> -->
-      <!--   {{ store.item }} -->
-      <!-- </pre> -->
       <sv-button
         variant="transparent"
         @clicked="cancel"

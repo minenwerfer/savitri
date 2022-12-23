@@ -1,0 +1,8 @@
+{
+  "extends": "../../node_modules/@savitri/web/tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.vue",
+    "global.d.ts"
+  ]
+}

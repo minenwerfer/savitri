@@ -66,9 +66,7 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
 
       result.autopopulate = {
         maxDepth: reference.s$maxDepth || 2,
-        select: reference.s$select
-          ? join(reference.s$select)
-          : join(reference.s$index||[])
+        select: reference.s$select && join(reference.s$select)
       }
     }
 

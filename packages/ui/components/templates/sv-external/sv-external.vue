@@ -1,11 +1,11 @@
 <template>
   <div class="external">
     <div class="external__wrapper">
-      <img
-        :src="require(`@/assets/${productLogo}`).default"
-        class="external__logo"
-        data-image="logo"
-      />
+      <!-- <img -->
+      <!--   :src="require(`@/assets/${productLogo}`).default" -->
+      <!--   class="external__logo" -->
+      <!--   data-image="logo" -->
+      <!-- /> -->
       <sv-box>
         <div class="external__content">
           <slot></slot>

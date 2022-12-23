@@ -122,7 +122,14 @@ export const getEntityAsset = <Type extends AssetType>(
               const description = getEntityAsset<'description'>(entityName, 'description')
               const actualEntityName = description.alias || description.$id
 
-              return useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions](props)
+              const method = useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions]
+              if( !method || typeof method !== 'function' ) {
+                throw new TypeError(
+                  `no such function ${assetName}`
+                )
+              }
+
+              return method(props)
             }
 
             return fn

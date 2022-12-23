@@ -168,6 +168,9 @@ const actionsAndMutations: Actions & Mutations = {
         && Object.keys(newItem[k]).length > 0
       ) {
         const helperStore = useStore(collection!)
+        await helperStore.insert({
+          what: newItem[k]
+        })
 
         const getInsertedId = async (subject: any) => {
           if( type === 'array' && Array.isArray(subject) ) {
@@ -180,9 +183,11 @@ const actionsAndMutations: Actions & Mutations = {
             return ids
           }
 
-          return helperStore.insert({
+          const result = await helperStore.insert({
             what: subject
-          })?._id
+          })
+
+          return result?._id
         }
 
         newItem[k] = await getInsertedId(newItem[k])

@@ -2,15 +2,15 @@
   <div class="topbar">
     <div
       class="topbar__branding"
-      @click="$router.push({ name: 'dashboard-home' })"
+      @click="router.push({ name: 'dashboard-home' })"
     >
       <div v-if="!productLogo">{{ productName }}</div>
-      <img
-        v-else
-        :src="require(`@/assets/${productLogo}`).default"
-        class="topbar__logo"
-        data-image="logo"
-      />
+      <!-- <img -->
+      <!--   v-else -->
+      <!--   :src="require(`@/assets/${productLogo}`).default" -->
+      <!--   class="topbar__logo" -->
+      <!--   data-image="logo" -->
+      <!-- /> -->
     </div>
 
     <div class="topbar__main">
@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 import { provide, inject } from 'vue'
+import { useRouter } from 'vue-router'
 import { useStore } from '../../../../web'
 import { SvInfo, SvIcon } from '../..'
 
@@ -55,6 +56,7 @@ import { shortcutsVisible } from './_internals/store'
 
 provide('iconReactive', true)
 const metaStore = useStore('meta')
+const router = useRouter()
 
 const productName = inject('productName')
 const productLogo = inject('productLogo')

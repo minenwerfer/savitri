@@ -150,6 +150,10 @@ const inputValue = ref(
 
 const updateValue = (value: InputType) => {
   const newVal = (() => {
+    if( property.type === 'number' ) {
+      return Number(value)
+    }
+
     switch( property.format ) {
       case 'date':
       case 'date-time':
