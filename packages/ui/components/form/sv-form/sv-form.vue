@@ -70,6 +70,7 @@
         >
           <div
             v-for="(_, listIndex) in formData[key]"
+            :key="`rep-${key}${_}-${listIndex}`"
             style="display: flex; column-gap: .6rem; align-items: center"
           >
             <div style="flex-grow: 1">
@@ -81,6 +82,7 @@
                     ...property,
                     ...property.items
                   },
+                  value: _,
                   propertyName: key,
                   parentCollection: collectionName,
                   columns: layout?.[key]?.optionsColumns
