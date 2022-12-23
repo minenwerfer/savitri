@@ -11,7 +11,7 @@ const schema = {
     },
     age: {
       description: 'Age',
-      type: 'string'
+      type: 'number'
     },
     job: {
       description: 'Job',
