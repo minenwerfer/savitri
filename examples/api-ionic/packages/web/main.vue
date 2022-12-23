@@ -8,10 +8,13 @@
       tw-p-8
     ">
       <sv-box>
-        <pre>{{ store.description }}</pre>
+        <pre
+          contenteditable
+          @input="input"
+        >{{ editable }}</pre>
       </sv-box>
 
-      <sv-box>
+      <sv-box :key="store.description">
         <sv-form
           :key="store.item"
           v-bind="{
@@ -36,11 +39,22 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useStore } from '@savitri/web'
 import { SvBox, SvForm } from '@savitri/ui'
 import { IonButton } from '@ionic/vue'
 
 const store = useStore('person')
+const editable = ref(store.description)
+
+const input = ({ target: { innerText } }: any) => {
+  try {
+    const val = JSON.parse(innerText)
+    store.description = val
+  } catch( err ) {
+    //
+  }
+}
 </script>
 
 <style>

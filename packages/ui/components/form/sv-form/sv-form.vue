@@ -145,8 +145,8 @@ import { computed, provide, inject } from 'vue'
 import { useStore } from '../../../../web'
 import { SvInput, SvIcon, SvButton } from '../..'
 
-import { useCondition, Condition } from '../../../composables'
 import type { CollectionProperty } from '../../../../types'
+import { useCondition, Condition } from '../../../composables'
 import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
 
 type LayoutConfig = {

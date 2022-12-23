@@ -5,12 +5,12 @@
       @click="router.push({ name: 'dashboard-home' })"
     >
       <div v-if="!productLogo">{{ productName }}</div>
-      <!-- <img -->
-      <!--   v-else -->
-      <!--   :src="require(`@/assets/${productLogo}`).default" -->
-      <!--   class="topbar__logo" -->
-      <!--   data-image="logo" -->
-      <!-- /> -->
+      <img
+        v-else
+        :src="require(`@/assets/${productLogo}`).default"
+        class="topbar__logo"
+        data-image="logo"
+      />
     </div>
 
     <div class="topbar__main">
