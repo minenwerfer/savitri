@@ -15,7 +15,7 @@ export default createModel(FileDescription, {
         return `${link(this._id)}?${timestamp(this.last_modified)}`
       })
 
-      schema.virtual('link').get(function(this: File) {
+      schema.virtual('download_link').get(function(this: File) {
         return `${link(this._id)}/download?${timestamp(this.last_modified)}`
       })
   }

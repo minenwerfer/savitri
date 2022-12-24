@@ -8,7 +8,7 @@
       <slot name="hint"></slot>
     </div>
     <div
-      v-if="property.s$format !== 'textbox'"
+      v-if="property.s$element !== 'textarea'"
       :class="`
         input__container
         input__container--${variant}`
@@ -119,7 +119,7 @@ const inputBind: {
   name?: string
   readonly?: boolean
 } = {
-  type: property.s$format||property.type!,
+  type: property.s$inputType||'text',
   placeholder: property.s$placeholder,
   min: property.minimum || property.exclusiveMinimum,
   max: property.maximum || property.exclusiveMaximum,

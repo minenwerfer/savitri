@@ -31,19 +31,6 @@ export const PROPERTY_FORMATS = [
   'date-time'
 ] as const
 
-export const PROPERTY_UI_FORMATS = [
-  'checkbox',
-  'email',
-  'integer',
-  'number',
-  'object',
-  'password',
-  'radio',
-  'search',
-  'select',
-  'textbox',
-] as const
-
 export const COLLECTION_PRESETS = [
   'crud',
   'duplicate',

@@ -30,7 +30,7 @@ const schema = {
         'csv',
         'pdf'
       ],
-      s$format: 'select'
+      s$element: 'select'
     },
     type: {
       description: 'Tipo',
@@ -38,7 +38,7 @@ const schema = {
         'filtered_only',
         'everything'
       ],
-      s$format: 'radio',
+      s$element: 'radio',
       s$translate: true
     },
     limit: {

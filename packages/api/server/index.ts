@@ -2,8 +2,8 @@ import * as Hapi from '@hapi/hapi'
 
 import '../../common/polyfill'
 import  type { ApiContext } from '../types'
+import { connectDatabase } from '../core/database'
 import getRoutes from './routes'
-
 export { getToken } from './handler'
 
 declare global {
@@ -51,4 +51,9 @@ export const init = async (props?: {
   }
 
   return server
+}
+
+export const initWithDatabase = (...args: Parameters<typeof init>): ReturnType<typeof init> => {
+  connectDatabase()
+  return init(...args)
 }

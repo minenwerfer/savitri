@@ -5,7 +5,7 @@
       :property="{
         s$placeholder: 'Buscar',
         s$icon: 'search',
-        s$format: 'search'
+        s$element: 'search'
       }"
       class="searchbar__input"
     ></sv-input>

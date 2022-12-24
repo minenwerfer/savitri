@@ -36,18 +36,18 @@ const schema = {
     role: {
       description: 'Papel',
       enum: [],
-      s$format: 'select'
+      s$element: 'select'
     },
     email: {
       description: 'Email',
       type: 'string',
-      s$format: 'email',
+      s$inputType: 'email',
       s$unique: true,
     },
     password: {
       description: 'Senha',
       type: 'string',
-      s$format: 'password',
+      s$inputType: 'password',
       s$hidden: true,
       s$noform: true
     },

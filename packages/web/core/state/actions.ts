@@ -21,7 +21,11 @@ const mutations: Mutations = {
   },
 
   insertItem(item) {
-    this.item = item
+    Object.assign(this.item, this.freshItem)
+    Object.entries(item).forEach(([key, value]) => {
+      this.item[key] = value
+    })
+
     const found = this.items.find(({ _id }) => _id === item._id)
     if( found ) {
       Object.assign(found, item)
@@ -159,7 +163,7 @@ const actionsAndMutations: Actions & Mutations = {
 
   async deepInsert(payload?) {
     const inlineReferences = this.inlineReferences
-    const newItem = (payload?.what || this.item) as Item
+    const newItem = (payload?.what || Object.assign({}, this.item)) as Item
 
     for( const [k, { s$referencedCollection: collection, type }] of inlineReferences ) {
       if(
@@ -168,15 +172,12 @@ const actionsAndMutations: Actions & Mutations = {
         && Object.keys(newItem[k]).length > 0
       ) {
         const helperStore = useStore(collection!)
-        await helperStore.insert({
-          what: newItem[k]
-        })
 
         const getInsertedId = async (subject: any) => {
           if( type === 'array' && Array.isArray(subject) ) {
             const ids = []
             for( const item of subject ) {
-              const result = await helperStore.insert({ what: item })
+              const result = await helperStore.deepInsert({ what: item })
               ids.push(result._id)
             }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
     <div class="pagination__control">
-      <sv-select v-model="limit">
+      <sv-select v-model="limit" :property="{}">
         <option
           v-for="limit in PAGINATION_PER_PAGE_DEFAULTS"
           :key="`limit-${limit}`"
@@ -10,7 +10,10 @@
           {{ limit }}
         </option>
       </sv-select>
-      <div>por página</div>
+      <sv-icon
+        name="list-ul"
+        fill="gray"
+      ></sv-icon>
     </div>
 
     <div class="pagination__control">
@@ -34,7 +37,7 @@
         ></sv-input>
       </div>
       <div>
-        de {{ pageCount + 1 }}
+        / {{ pageCount + 1 }}
       </div>
 
       <sv-button
@@ -55,7 +58,8 @@ import { useParentStore } from '../../../../web'
 import {
   SvButton,
   SvSelect,
-  SvInput
+  SvInput,
+  SvIcon
 } from '../../'
 
 const store = useParentStore()

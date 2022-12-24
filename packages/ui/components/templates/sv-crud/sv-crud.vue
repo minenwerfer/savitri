@@ -65,21 +65,13 @@
       </div>
     </sv-box>
 
-    <sv-box fill transparent-mobile>
-      <sv-table
-        v-if="store.tableDescription"
-        v-loading="store.isLoading"
-        :key="store.$id"
-
-        v-bind="{
-          checkbox: hasSelectionActions,
-          columns: store.tableDescription,
-          rows: store.$items,
-          actions: individualActions,
-          layout: store.tableLayout
-        }"
-      ></sv-table>
-    </sv-box>
+    <component
+      :is="getLayout(layout || store?.layout)"
+      v-bind="{
+        individualActions,
+        layoutOptions: layout?.options || store?.layout.options
+      }"
+    ></component>
 
   </div>
 </template>
@@ -97,10 +89,10 @@ import {
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, useParentStore, CollectionStore } from '../../../../web'
 import { useAction } from '../../../composables'
+import type { Layout } from '../../../../types'
 
 import {
   SvBox,
-  SvTable,
   SvButton,
   SvPagination,
   SvInfo,
@@ -108,6 +100,7 @@ import {
 
 } from '../../'
 
+import { getLayout } from './_internals/layouts'
 import SvReportWidget from './_internals/components/sv-report-widget/sv-report-widget.vue'
 import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
@@ -127,6 +120,7 @@ type Props = {
   noRefresh?: boolean
   parentCollection?: string
   parentField?: string
+  layout?: Layout
 }
 
 type Emits = {
@@ -150,11 +144,6 @@ parentStore = props.parentField
 
 const { hash } = useRoute()
 const [call, actionEventBus] = useAction(store, router)
-
-const hasSelectionActions = computed(() => {
-  return store.actions
-    .some((action: any) => !!action.selection)
-})
 
 const fetchItems = async () => {
   if( props.parentField ) {
@@ -233,7 +222,7 @@ watch(() => actionEventBus, async (event) => {
 
   else if( event.name === 'duplicate' ) {
     const newItem = Object.entries(store.item).reduce((a: any, [key, value]: [string, any]) => {
-      if( store.fields[key]?.collection === 'file' ) {
+      if( store.properties[key]?.collection === 'file' ) {
         return a
       }
 
@@ -247,6 +236,7 @@ watch(() => actionEventBus, async (event) => {
       ...newItem,
       _id: undefined
     })
+
     isInsertVisible.value = true
   }
 

@@ -1,5 +1,5 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { Property, PropertyUiFormats } from './jsonschema'
+import type { Property } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
 
@@ -34,6 +34,21 @@ export type CollectionOptions = {
   }
 }
 
+export type LayoutName =
+  'tabular'
+  | 'grid'
+
+export type LayoutOptions = {
+  picture?: string
+  title?: string
+  description?: string
+}
+
+export type Layout = {
+  name: LayoutName
+  options?: LayoutOptions
+}
+
 export type CollectionDescription = {
   $id: CollectionId
   alias?: string
@@ -61,6 +76,7 @@ export type CollectionDescription = {
     default: string
   }>
 
+  layout?: Layout
   formLayout?: Record<string, Partial<FormLayout>>|object
   tableLayout?: Record<string, any>|object
 
@@ -95,13 +111,24 @@ export type MaybeCollectionDescription = Omit<CollectionDescription,
   individualActions?: MaybeCollectionActions
 }
 
-export type CollectionProperty = Property & {
-  [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P]
-}
+export type CollectionProperty = Property
+  & { [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P] }
+
+export type PropertyElement =
+  'select'
+  | 'checkbox'
+  | 'radio'
+  | 'textarea'
+
+export type PropertyInputType =
+  'text'
+  | 'email'
+  | 'password'
 
 type CollectionPropertyAux = {
   icon?: string
-  format?: PropertyUiFormats
+  element?: PropertyElement
+  inputType?: PropertyInputType
   placeholder?: string
   hint?: string
   mask?: string

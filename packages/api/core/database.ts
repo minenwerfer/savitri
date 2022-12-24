@@ -1,13 +1,7 @@
 const mongoose = require('mongoose')
 export * from 'mongoose'
 
-const { MONGODB_URI } = process.env
-
 mongoose.Promise = global.Promise
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
 
 /**
  * @exports
@@ -24,4 +18,13 @@ export const options = {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   }
+}
+
+
+export const connectDatabase = () => {
+  const { MONGODB_URI } = process.env
+  mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
 }

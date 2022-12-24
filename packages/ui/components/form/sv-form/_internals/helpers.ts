@@ -29,9 +29,9 @@ export const getComponent = (property: CollectionProperty, customComponents: Rec
 
   const mappedComponentType = (() => {
     switch( true ) {
-      case ['checkbox', 'radio'].includes(property.s$format!):
+      case ['checkbox', 'radio'].includes(property.s$element!):
         return 'options'
-      case property.s$format === 'select':
+      case property.s$element === 'select':
         return 'select'
       case propType === 'boolean':
         return 'switch'

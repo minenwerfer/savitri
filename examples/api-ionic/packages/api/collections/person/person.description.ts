@@ -27,7 +27,7 @@ const schema = {
           'programmer'
         ],
       },
-      s$format: 'select'
+      s$element: 'select',
     },
     pet: {
       description: 'Pets',

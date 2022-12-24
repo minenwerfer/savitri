@@ -7,13 +7,6 @@
       tw-gap-6
       tw-p-8
     ">
-      <sv-box>
-        <pre
-          contenteditable
-          @input="input"
-        >{{ editable }}</pre>
-      </sv-box>
-
       <sv-box :key="store.description">
         <sv-form
           :key="store.item"
@@ -28,11 +21,21 @@
           <ion-button @click="store.clearItem">
             Clear
           </ion-button>
+          <ion-button @click="store.deepInsert">
+            Save
+          </ion-button>
         </template>
       </sv-box>
 
       <sv-box>
         <pre>{{ store.item }}</pre>
+      </sv-box>
+
+      <sv-box>
+        <pre
+          contenteditable
+          @input="input"
+        >{{ editable }}</pre>
       </sv-box>
     </div>
   </div>

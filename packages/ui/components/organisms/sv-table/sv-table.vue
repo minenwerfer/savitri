@@ -68,17 +68,20 @@
               {{ property.description }}
             </div>
 
-            <div v-if="property.type === 'image'">
-              <img
-                :src="row[column].src"
-                v-if="row[column]?.src"
-              />
-            </div>
+            <!-- dormant -->
+            <!-- <div v-if="property.type === 'image'"> -->
+            <!--   <img -->
+            <!--     :src="row[column].src" -->
+            <!--     v-if="row[column]?.src" -->
+            <!--   /> -->
+            <!-- </div> -->
 
-            <div v-else-if="property.type === 'boolean'">
+            <div v-if="property.type === 'boolean'">
               <sv-switch
                 v-if="!property.readOnly"
-                v-bind="property"
+                v-bind="{
+                   property 
+                }"
                 v-model="row[column]"
                 @update:model-value="toggle($event, row._id, column)"
               ></sv-switch>
@@ -188,6 +191,7 @@
 <script setup lang="ts">
 import { inject, computed } from 'vue'
 import { useStore } from '../../../../web'
+import type { CollectionProperty } from '../../../../types'
 
 import {
   SvButton,
@@ -201,7 +205,7 @@ import {
 import { useCondition } from '../../../composables'
 
 type Props = {
-  columns: any
+  columns: Record<string, CollectionProperty>
   rows: any
   collection?: string&{ value: string }
   checkbox?: boolean

@@ -1,4 +1,4 @@
-import type { CollectionProperty } from '../../../types'
+import type { CollectionProperty, Layout } from '../../../types'
 import type { CollectionState } from '../../types/state'
 import { fromEntries, deepClone, getReferencedCollection } from '../../../common'
 
@@ -71,6 +71,11 @@ const getters: Getters = {
 
   searchableActions() {
     return normalizeActions(this.description.searchable?.actions||{})
+  },
+
+  hasSelectionActions(this: any) {
+    return this.actions
+      .some((action: any) => !!action.selection)
   },
 
   formLayout() {
@@ -232,6 +237,13 @@ const getters: Getters = {
           ...(property ? { [k]: property } : {})
         }
       }, {})
+  },
+  
+  layout() {
+    return this.description.layout || {
+      name: 'tabular',
+      options: {}
+    } as Layout
   }
 }
 

@@ -7,13 +7,13 @@
         type: 'string',
         s$placeholder: 'E-mail',
         s$icon: 'user',
-        s$format: 'email'
+        s$inputType: 'email'
       },
       password: {
         type: 'string',
         s$placeholder: 'Senha',
         s$icon: 'key-skeleton',
-        s$format: 'password'
+        s$inputType: 'password'
       }
     }"
   ></sv-form>

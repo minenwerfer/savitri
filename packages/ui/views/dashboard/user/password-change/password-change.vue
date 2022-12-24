@@ -46,12 +46,14 @@ const password = reactive({
 
 const passwordForm = {
   password: {
-    label: 'Senha',
-    type: 'password'
+    description: 'Senha',
+    type: 'string',
+    s$inputType: 'password'
   },
   confirmation: {
-    label: 'Confirmação da senha',
-    type: 'password'
+    description: 'Confirmação da senha',
+    type: 'string',
+    s$inputType: 'password'
   }
 }
 

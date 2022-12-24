@@ -3,7 +3,7 @@ import type { HandlerRequest, ApiContext } from '../../types'
 import { useCollection } from '../../core/collection'
 
 type PostHookParams = {
-  result: object|Array<object>,
+  result: object|Array<object>
   request: Request & HandlerRequest
   context: ApiContext
   entityName: string
