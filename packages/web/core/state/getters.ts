@@ -1,4 +1,4 @@
-import type { CollectionProperty, Layout } from '../../../types'
+import type { CollectionProperty, Layout, LayoutName } from '../../../types'
 import type { CollectionState } from '../../types/state'
 import { fromEntries, deepClone, getReferencedCollection } from '../../../common'
 
@@ -244,6 +244,10 @@ const getters: Getters = {
       name: 'tabular',
       options: {}
     } as Layout
+  },
+
+  $currentLayout() {
+    return this.currentLayout || (this.description.layout?.name||'tabular') as LayoutName
   }
 }
 

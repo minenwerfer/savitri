@@ -17,6 +17,22 @@
             @click="fetchItems"
           ></sv-icon>
         </sv-info>
+        <sv-info v-if="
+          !noLayoutToggle
+            && store.description.layout
+            && store.description.layout?.name !== 'tabular'
+        ">
+          <template #text>
+            Alternar layout
+          </template>
+          <sv-icon
+            v-clickable
+            alt
+            reactive
+            name="table"
+            @click="toggleLayout"
+          ></sv-icon>
+        </sv-info>
         <sv-button
           small
           v-if="store.description.report"
@@ -66,7 +82,7 @@
     </sv-box>
 
     <component
-      :is="getLayout(layout || store?.layout)"
+      :is="getLayout(store.$currentLayout)"
       v-bind="{
         individualActions,
         layoutOptions: layout?.options || store?.layout.options
@@ -118,6 +134,7 @@ type Props = {
   noControls?: boolean
   noFetch?: boolean
   noRefresh?: boolean
+  noLayoutToggle?: boolean
   parentCollection?: string
   parentField?: string
   layout?: Layout
@@ -260,6 +277,12 @@ const individualActions = computed(() => {
     ...action
   }))
 })
+
+const toggleLayout = () => {
+  store.currentLayout = store.currentLayout === 'tabular'
+    ? store.description.layout!.name
+    : 'tabular'
+}
 
 provide('storeId', computed(() => props.collection))
 provide('individualActions', individualActions)

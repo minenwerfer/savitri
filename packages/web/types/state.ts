@@ -31,6 +31,7 @@ export type CollectionState<Item> = PiniaState & {
   activeFilters: any
 
   selected: Array<Item>
+  currentLayout: string
 
   queryCache: Record<string, any>
   description: Readonly<Partial<CollectionDescription>>

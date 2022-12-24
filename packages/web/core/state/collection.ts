@@ -40,8 +40,8 @@ export default (
     : initial
 }
 
-const state = <T=object>(): CollectionState<T> => {
-  return {
+const state = <T=object>() => {
+  const ret = {
     item: {},
     freshItem: {},
     items: [],
@@ -50,6 +50,7 @@ const state = <T=object>(): CollectionState<T> => {
     activeFilters: {},
 
     selected: [],
+    currentLayout: '',
 
     queryCache: {},
     description: {},
@@ -68,5 +69,7 @@ const state = <T=object>(): CollectionState<T> => {
       currentPage: 0
     }
   }
+
+  return ret as typeof ret & CollectionState<T>
 }
 

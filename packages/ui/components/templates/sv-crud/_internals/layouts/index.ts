@@ -1,12 +1,12 @@
-import type { Layout } from '../../../../../../types'
+import type { LayoutName } from '../../../../../../types'
 import SvTabular from './sv-tabular/sv-tabular.vue'
 import SvGrid from './sv-grid/sv-grid.vue'
 
-export const getLayout = (layout: Layout) => {
+export const getLayout = (layoutName: LayoutName) => {
   const defaultLayouts = {
     tabular: SvTabular,
     grid: SvGrid
   }
 
-  return defaultLayouts[layout?.name] || defaultLayouts.tabular
+  return defaultLayouts[layoutName] || defaultLayouts.tabular
 }
