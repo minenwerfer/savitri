@@ -4,8 +4,8 @@ import type { CollectionDescription } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
 import type { GetAllProps, CollectionFunctions } from './functions.types'
 import { fromEntries } from '../../../common/helpers'
-import { normalizeProjection, fill, prepareInsert } from '../collection'
 import { makeException } from '../exceptions'
+import { normalizeProjection, fill, prepareInsert } from './utils'
 
 const DEFAULT_SORT = {
   date_updated: -1,

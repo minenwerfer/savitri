@@ -7,7 +7,7 @@
       class="grid__item"
     >
       <sv-picture
-        :url="firstIfArray(item[layoutOptions.picture!]).link"
+        :url="firstIfArray(item[layoutOptions.picture!])?.link"
         style="height: 16rem"
       ></sv-picture>
       <template #footer>

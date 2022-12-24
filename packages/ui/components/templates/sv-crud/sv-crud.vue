@@ -181,8 +181,7 @@ onMounted(() => {
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
 
-  if(
-    !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
+  if( !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
     fetchItems()
   }
 })
@@ -239,9 +238,19 @@ watch(() => actionEventBus, async (event) => {
 
   else if( event.name === 'duplicate' ) {
     const newItem = Object.entries(store.item).reduce((a: any, [key, value]: [string, any]) => {
-      if( store.properties[key]?.collection === 'file' ) {
-        return a
+      const property = store.properties[key]||{}
+      const unbound = (value: any) => {
+        if( property.s$isFile ) {
+          value = {}
+        }
+        if( property.s$inline ) {
+          delete value._id
+        }
       }
+
+      property.type === 'array'
+        ? value.forEach(unbound)
+        : unbound(value)
 
       return {
         ...a,

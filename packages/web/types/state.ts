@@ -1,7 +1,7 @@
 import type { StoreGeneric } from 'pinia'
-import type { CollectionDescription, CollectionProperty } from '../../types'
+import type { CollectionDescription } from '../../types'
+import type { Getters } from '../core/state/getters'
 import collectionActions from '../core/state/actions'
-import collectionGetters from '../core/state/getters'
 
 export type PiniaState = {
   readonly $id?: string
@@ -45,15 +45,10 @@ export type CollectionState<Item> = PiniaState & {
   pagination: Pagination
 }
 
-export type CollectionGetters = {
-  properties: CollectionDescription['properties']
-  $filters: CollectionState<unknown>['filters']
-  inlineReferences: Array<[string, CollectionProperty]>
-}
+export type CollectionGetters = Getters
 
 export type CollectionStore<T=any> = CollectionState<T>
   & typeof collectionActions
-  & typeof collectionGetters
   & CollectionGetters
   & StoreGeneric
 

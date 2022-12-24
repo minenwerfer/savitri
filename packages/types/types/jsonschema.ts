@@ -1,13 +1,11 @@
 import {
   PROPERTY_TYPES,
   PROPERTY_FORMATS,
-  PROPERTY_UI_FORMATS,
 
 } from '../constants'
 
 export type PropertyTypes = typeof PROPERTY_TYPES[number]
 export type PropertyFormats = typeof PROPERTY_FORMATS[number]
-export type PropertyUiFormats = typeof PROPERTY_UI_FORMATS[number]
 
 export type JsonSchema = {
   $id: string

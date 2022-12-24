@@ -15,6 +15,7 @@ type ActionOptions = {
     | 'DELETE'
   unproxied?: boolean
   skipLoading?: boolean
+  skipEffect?: boolean
   fullResponse?: boolean
 }
 
@@ -38,6 +39,7 @@ interface ActionsAux {
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
   deepInsert(payload?: { what: Item }): Promise<Item>
   delete(payload: { filters?: Item }): Promise<Item>
+  deleteAll(payload: { filters?: Item }): Promise<Item>
   filter(props?: { project: Array<string> }): Promise<any>
   updateItems(): Promise<any>
   clearFilters(): CollectionState<any>['freshFilters']

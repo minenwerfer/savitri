@@ -1,6 +1,6 @@
 import type { CollectionProperty, Layout, LayoutName } from '../../../types'
 import type { CollectionState } from '../../types/state'
-import { fromEntries, deepClone, getReferencedCollection } from '../../../common'
+import { fromEntries, deepClone } from '../../../common'
 
 import  {
   condenseItem,
@@ -10,11 +10,15 @@ import  {
 
 } from './helpers'
 
-type Getters = Record<string, (this: CollectionState<any> & Record<`$${string}`, any> & {
+export type Getters = Record<`$${string}`, any> & {
   properties: Record<string, CollectionProperty>
-}) => any>
+  references: Array<[string, CollectionProperty]>
+  inlineReferences: Array<[string, CollectionProperty]>
+}
 
-const getters: Getters = {
+type GettersFunctions = Record<string, (this: CollectionState<any> & Getters) => any>
+
+const getters: GettersFunctions = {
   properties() {
     return this.description.properties
   },
@@ -95,7 +99,9 @@ const getters: Getters = {
   },
 
   $item() {
-    return this.item
+    const item = Object.assign({}, this.freshItem)
+    Object.assign(item, this.item)
+    return item
   },
 
   /**
@@ -126,14 +132,19 @@ const getters: Getters = {
     return this.items.length
   },
 
+  references() {
+    return Object.entries(this.description.properties||{}).filter(([, property]) => {
+      return property.s$isReference
+    })
+  },
+
   /**
    * Retrieves properties which refeer to a collection (typeof collection === 'string') and have "inline" set to true.
    * Used internally.
    */
   inlineReferences() {
-    return Object.entries(this.description.properties||{}).filter(([, _property]) => {
-      const property = getReferencedCollection(_property)||_property
-      return typeof property.$ref === 'string' && property.s$inline
+    return Object.entries(this.description.properties||{}).filter(([, property]) => {
+      return property.s$isReference && property.s$inline
     })
   },
 

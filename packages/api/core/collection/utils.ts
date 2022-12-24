@@ -54,7 +54,7 @@ export const prepareInsert = (
       return a
     }
 
-    if( [undefined, null].includes(value) || R.isEmpty(value)) {
+    if( ( [undefined, null].includes(value) || R.isEmpty(value) ) && !Array.isArray(value) ) {
       a.$unset[key] = 1
       return a
     }

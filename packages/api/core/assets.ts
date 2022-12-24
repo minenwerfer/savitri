@@ -93,7 +93,7 @@ export const getEntityAsset = <Type extends AssetType>(
   assetName: Type extends 'function'
     ? FunctionPath
     : string,
-  assetType: AssetType,
+  assetType: Type,
   entityType: EntityType = 'collection'
 ): AssetReturnType<Type> => {
   return cacheIfPossible(
@@ -119,7 +119,7 @@ export const getEntityAsset = <Type extends AssetType>(
 
             const [, functionName] = assetName.split('@')
             const fn: ApiFunction<unknown> = (props, context) => {
-              const description = getEntityAsset<'description'>(entityName, 'description')
+              const description = getEntityAsset(entityName, 'description')
               const actualEntityName = description.alias || description.$id
 
               const method = useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions]
@@ -141,5 +141,5 @@ export const getEntityAsset = <Type extends AssetType>(
 }
 
 export const getEntityFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection') => {
-  return getEntityAsset<'function'>(functionPath, 'function', entityType)
+  return getEntityAsset(functionPath, 'function', entityType)
 }

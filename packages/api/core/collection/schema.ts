@@ -13,6 +13,7 @@ import { getReferencedCollection } from '../../../common'
 import type { CollectionDescription, CollectionProperty, MaybeCollectionDescription } from '../../../types'
 
 import { options as defaultOptions } from '../database'
+import { getEntityAsset } from '../assets'
 import { applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
 // import { v1 as uuidv1 } from 'uuid'
@@ -59,23 +60,25 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
       result.select = false
     }
 
-    if( typeof referencedCollection === 'string' && !property.s$preventPopulate ) {
-      const join = (value: string|Array<string>) => Array.isArray(value)
-        ? value.join(' ')
-        : value
-
-      result.autopopulate = {
-        maxDepth: reference.s$maxDepth || 2,
-        select: reference.s$select && join(reference.s$select)
-      }
-    }
-
     const type = getTypeConstructor(property)
     result.type = type
 
     if( typeof referencedCollection === 'string' ) {
+      const refDescription = getEntityAsset(referencedCollection, 'description')
+
       hasRefs = true
-      result.ref = referencedCollection
+      result.ref = refDescription.alias || refDescription.$id
+
+      if( !property.s$preventPopulate ) {
+        const join = (value: string|Array<string>) => Array.isArray(value)
+          ? value.join(' ')
+          : value
+
+        result.autopopulate = {
+          maxDepth: reference.s$maxDepth || 2,
+          select: reference.s$select && join(reference.s$select)
+        }
+      }
     }
 
     if( property.enum ) {

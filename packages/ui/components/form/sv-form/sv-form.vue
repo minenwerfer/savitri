@@ -65,7 +65,10 @@
         </div>
 
         <div
-          v-else-if="property.type === 'array' && !(property.s$isReference && !property.s$inline)"
+          v-else-if="
+            property.type === 'array'
+              && (!(property.s$isReference && !property.s$inline) || property.s$isFile)
+          "
           style="display: grid; row-gap: .4rem"
         >
           <div

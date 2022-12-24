@@ -9,6 +9,33 @@ import type { Actions, Mutations, Item } from './actions.types'
 
 const { http, nonProxiedHttp } = useHttp()
 
+async function _cascadingDelete(this: ThisParameterType<Actions['delete']>, payload: any) {
+  let item: any
+  for( const [propertyName, property] of this.references ) {
+    if( property.s$inline || property.s$isFile ) {
+      if( !item ) {
+        item = await this.get(payload, { skipEffect: true })
+      }
+
+      const value = item?.[propertyName]
+      if( value && (!Array.isArray(value) || value.length > 0) ) {
+        const helperStore = useStore(property.s$referencedCollection!)
+        if( Array.isArray(value) ) {
+          const ids = value.map((filter: any) => filter._id)
+          await helperStore.deleteAll({
+            filters: {
+              _id: ids
+            }
+          })
+          continue
+        }
+
+        await helperStore.delete(value)
+      }
+    }
+  }
+}
+
 const mutations: Mutations = {
   setItem(item) {
     this.item = item
@@ -40,13 +67,19 @@ const mutations: Mutations = {
     return item
   },
 
-  removeItem(item) {
-    this.items = this.items.filter(({ _id }) => item._id !== _id)
-    if( this.item._id === item._id ) {
+  removeItem(subject) {
+    this.items = this.items.filter(({ _id }) => {
+      if( Array.isArray(subject) ) {
+        return !subject.find(sub => sub._id === _id)
+      }
+
+      return subject._id !== _id
+    })
+    if( this.item._id === subject._id ) {
       this.item._id = null
     }
 
-    return item
+    return subject
   },
 
   clearItem() {
@@ -107,6 +140,10 @@ const actionsAndMutations: Actions & Mutations = {
 
   async customEffect(verb, payload, fn, options?) {
     const response = await this.custom(verb, payload, options)
+    if( options?.skipEffect ) {
+      return response
+    }
+
     return response
       ? fn(response)
       : {}
@@ -200,9 +237,20 @@ const actionsAndMutations: Actions & Mutations = {
     })
   },
 
-  delete(payload) {
+  async delete(payload) {
+    await _cascadingDelete.call(this, payload)
+
     return this.customEffect(
-      'delete', { filters: { _id: payload?.filters?._id } },
+      'delete', { filters: { _id: payload.filters?._id } },
+      this.removeItem
+    )
+  },
+
+  async deleteAll(payload) {
+    await _cascadingDelete.call(this, payload)
+
+    return this.customEffect(
+      'deleteAll', { filters: { _id: payload.filters?._id } },
       this.removeItem
     )
   },

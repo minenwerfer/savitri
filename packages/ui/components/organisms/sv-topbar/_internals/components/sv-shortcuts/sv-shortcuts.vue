@@ -10,6 +10,7 @@
     >
       <sv-select
         v-model="metaStore.theme"
+        :property="{}"
         @change="metaStore.saveTheme"
       >
         <option value="default">Padrão</option>

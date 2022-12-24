@@ -96,6 +96,13 @@ export default makeDescription<typeof schema>(schema, {
     'view',
     'duplicate'
   ],
+  layout: {
+    name: 'grid',
+    options: {
+      title: 'first_name',
+      picture: 'picture'
+    }
+  },
   individualActions: {
     'ui/spawnEdit': {
       name: 'Editar',

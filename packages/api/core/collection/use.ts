@@ -10,10 +10,10 @@ type AnyFunction = CollectionFunctions & Record<keyof CollectionFunctions, Fallb
 export const useCollection = (collectionName: string, _context: ApiContext|null = null): AnyFunction => {
   const context = _context || {} as ApiContext
 
-  const description = getEntityAsset<'description'>(collectionName, 'description')
+  const description = getEntityAsset(collectionName, 'description')
   const originalCollectionName = description.alias || collectionName
 
-  const model = getEntityAsset<'model'>(originalCollectionName, 'model')
+  const model = getEntityAsset(originalCollectionName, 'model')
 
   if( !description ) {
     throw new Error(

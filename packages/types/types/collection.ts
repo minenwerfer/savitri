@@ -146,6 +146,7 @@ type CollectionPropertyAux = {
   readonly accept?: Array<string>
 
   isReference?: boolean
+  isFile?: boolean
   referencedCollection?: string
   preventPopulate?: boolean
   noId?: boolean

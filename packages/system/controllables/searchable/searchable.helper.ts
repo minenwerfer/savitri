@@ -41,7 +41,7 @@ export const getSearchables = () => {
       }, {})
 
       // force model registration
-      getEntityAsset<'model'>(collectionName, 'model')
+      getEntityAsset(collectionName, 'model')
 
       return {
         ...a,

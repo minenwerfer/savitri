@@ -18,7 +18,7 @@ export const applyPreset = (description: MaybeCollectionDescription, collectionN
 
 export const preloadCollection = (collection: MaybeCollectionDescription) => {
   if( collection.alias ) {
-    const _aliasedCollection = getEntityAsset<'description'>(collection.alias, 'description')
+    const _aliasedCollection = getEntityAsset(collection.alias, 'description')
 
     const {
       $id: collectionName,
@@ -52,6 +52,7 @@ export const preloadCollection = (collection: MaybeCollectionDescription) => {
 
       if( reference ) {
         property.s$isReference = true
+        property.s$isFile = reference.$ref === 'file'
         property.s$referencedCollection = reference.$ref
       }
 
