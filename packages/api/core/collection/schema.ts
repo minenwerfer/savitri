@@ -14,7 +14,7 @@ import type { CollectionDescription, CollectionProperty, MaybeCollectionDescript
 
 import { options as defaultOptions } from '../database'
 import { getEntityAsset } from '../assets'
-import { applyPreset } from './preload'
+import { preloadDescription, applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
 // import { v1 as uuidv1 } from 'uuid'
 //
@@ -75,7 +75,13 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
           : value
 
         result.autopopulate = {
-          maxDepth: reference.s$maxDepth || 2,
+          maxDepth: (() => {
+            if( reference.s$maxDepth === 0 ) {
+              return 10
+            }
+
+            return reference.s$maxDepth || 2
+          })(),
           select: reference.s$select && join(reference.s$select)
         }
       }
@@ -151,13 +157,15 @@ export const descriptionToSchema = <T>(
 }
 
 export const createModel = <T=any>(
-  description: MaybeCollectionDescription,
+  _description: MaybeCollectionDescription,
   config?: {
     options?: SchemaOptions|null,
     modelCallback?: ((structure: SchemaStructure) => void)|null,
     schemaCallback?: (schema: Schema) => void
   }
 ) => {
+  const description = preloadDescription(_description)
+
   const {
     options,
     modelCallback,
@@ -170,6 +178,71 @@ export const createModel = <T=any>(
   }
 
   const schema = descriptionToSchema<T>(description, options || defaultOptions, modelCallback)
+
+  const cascadingDelete: Array<{
+    propertyName: string
+    collectionName: string
+    array: boolean
+  }> = []
+
+  for( const [propertyName, property] of Object.entries(description.properties) ) {
+    if( property.s$isFile || property.s$inline ) {
+      const referenceDescription = getEntityAsset(property.s$referencedCollection!, 'description')
+      cascadingDelete.push({
+        propertyName,
+        collectionName: referenceDescription.alias || referenceDescription.$id,
+        array: property.type === 'array'
+      })
+    }
+  }
+
+  const purge = async (doc: any) => {
+    for( const subject of cascadingDelete ) {
+      const model = mongooseModel(subject.collectionName)
+      if( subject.array ) {
+        await model.deleteMany({
+          _id: {
+            $in: doc[subject.propertyName]
+          }
+        })
+        continue
+      }
+
+      await model.deleteOne({
+        _id: doc[subject.propertyName]
+      })
+    }
+  }
+
+  if( cascadingDelete.length > 0 ) {
+    const cascadingDeleteProjection = cascadingDelete.reduce((a, { propertyName }) => ({
+      ...a,
+      [propertyName]: 1
+    }), {})
+
+    schema.post('findOneAndDelete', async function(doc) {
+      await purge(doc)
+    })
+
+    schema.pre('deleteOne', async function() {
+      const doc = await this.model
+        .findOne(this.getQuery(), cascadingDeleteProjection)
+        .lean()
+
+      await purge(doc)
+    })
+
+    schema.pre('deleteMany', async function() {
+      const results = await this.model
+        .find(this.getQuery(), cascadingDeleteProjection)
+        .lean()
+
+      for( const doc of results ) {
+        await purge(doc)
+      }
+    })
+  }
+
   if( schemaCallback ) {
     schemaCallback(schema)
   }

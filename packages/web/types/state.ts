@@ -4,7 +4,7 @@ import type { Getters } from '../core/state/getters'
 import collectionActions from '../core/state/actions'
 
 export type PiniaState = {
-  readonly $id?: string
+  readonly $id: string
 }
 
 export type Pagination = {

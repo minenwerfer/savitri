@@ -1,5 +1,5 @@
 import type { CollectionDescription } from '../../../types'
-import { preloadCollection } from '../../../api/core/collection'
+import { preloadDescription } from '../../../api/core/collection'
 import { getEntityAsset } from '../../../api/core/assets'
 import * as SystemCollections from '../../collections/exports'
 
@@ -41,7 +41,7 @@ export const getDescriptions = (dynamicUserCollections?: boolean): Record<string
   const descriptions = Object.entries(target).reduce((a: any, [, collectionSchema]) => {
     return {
       ...a,
-      [collectionSchema.$id]: preloadCollection(collectionSchema)
+      [collectionSchema.$id]: preloadDescription(collectionSchema)
     }
   }, {})
 

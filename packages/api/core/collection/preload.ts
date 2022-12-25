@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import { getReferencedCollection } from '../../../common'
 import { getEntityAsset } from '../assets'
-import type { MaybeCollectionDescription } from '../../../types'
+import type { MaybeCollectionDescription, CollectionDescription } from '../../../types'
 
 export const applyPreset = (description: MaybeCollectionDescription, collectionName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${collectionName}`)
@@ -16,9 +16,9 @@ export const applyPreset = (description: MaybeCollectionDescription, collectionN
   )
 }
 
-export const preloadCollection = (collection: MaybeCollectionDescription) => {
-  if( collection.alias ) {
-    const _aliasedCollection = getEntityAsset(collection.alias, 'description')
+export const preloadDescription = (description: MaybeCollectionDescription) => {
+  if( description.alias ) {
+    const _aliasedCollection = getEntityAsset(description.alias, 'description')
 
     const {
       $id: collectionName,
@@ -27,26 +27,26 @@ export const preloadCollection = (collection: MaybeCollectionDescription) => {
 
     } = _aliasedCollection
 
-    const temp = Object.assign(aliasedCollection, collection)
-    Object.assign(collection, temp)
+    const temp = Object.assign(aliasedCollection, description)
+    Object.assign(description, temp)
   }
 
-  const presets = collection.presets || []
-  if( collection.owned ) {
+  const presets = description.presets || []
+  if( description.owned ) {
     presets.push('owned')
   }
 
   if( presets.length > 0 ) {
     const merge = presets?.reduce(
       (a, presetName: string) => applyPreset(a, presetName),
-      collection as MaybeCollectionDescription
+      description as MaybeCollectionDescription
     )
 
-    Object.assign(collection, merge)
+    Object.assign(description, merge)
   }
 
-  if( collection.properties ) {
-    collection.properties = Object.entries(collection.properties).reduce((a: any, [key, _property]) => {
+  if( description.properties ) {
+    description.properties = Object.entries(description.properties).reduce((a: any, [key, _property]) => {
       const property = Object.assign({}, _property)
       const reference = getReferencedCollection(property)
 
@@ -63,5 +63,5 @@ export const preloadCollection = (collection: MaybeCollectionDescription) => {
     }, {})
   }
 
-  return collection
+  return description as CollectionDescription
 }

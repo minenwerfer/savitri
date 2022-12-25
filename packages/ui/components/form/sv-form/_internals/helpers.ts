@@ -57,7 +57,7 @@ export const getComponent = (property: CollectionProperty, customComponents: Rec
 export const pushToArray = (modelValue: Array<any>, property: CollectionProperty) => {
   if( property.s$isReference ) {
     const helperStore = useStore(property.s$referencedCollection!)
-    const newVal = deepClone(helperStore.freshItem)
+    const newVal = deepClone(helperStore.$freshItem)
     return modelValue.push(newVal)
   }
 

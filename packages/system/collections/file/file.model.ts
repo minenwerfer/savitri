@@ -11,6 +11,8 @@ const timestamp = (last_modified: Date) => last_modified
   : 'fresh'
 
 const deleteFile = (path: string) => {
+  console.log('yuuuupiii!!')
+  console.log(path)
   return unlink(path).catch(() => null)
 }
 
@@ -18,7 +20,7 @@ export default createModel(FileDescription, {
   schemaCallback: (schema) => {
     schema.pre('deleteOne', async function() {
       const doc = await this.model
-        .findOne(this.getQuery, { absolute_path: 1 })
+        .findOne(this.getQuery(), { absolute_path: 1 })
         .lean()
 
       await deleteFile(doc.absolute_path)

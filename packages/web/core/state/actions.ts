@@ -9,33 +9,6 @@ import type { Actions, Mutations, Item } from './actions.types'
 
 const { http, nonProxiedHttp } = useHttp()
 
-async function _cascadingDelete(this: ThisParameterType<Actions['delete']>, payload: any) {
-  let item: any
-  for( const [propertyName, property] of this.references ) {
-    if( property.s$inline || property.s$isFile ) {
-      if( !item ) {
-        item = await this.get(payload, { skipEffect: true })
-      }
-
-      const value = item?.[propertyName]
-      if( value && (!Array.isArray(value) || value.length > 0) ) {
-        const helperStore = useStore(property.s$referencedCollection!)
-        if( Array.isArray(value) ) {
-          const ids = value.map((filter: any) => filter._id)
-          await helperStore.deleteAll({
-            filters: {
-              _id: ids
-            }
-          })
-          continue
-        }
-
-        await helperStore.delete(value)
-      }
-    }
-  }
-}
-
 const mutations: Mutations = {
   setItem(item) {
     this.item = item
@@ -200,7 +173,7 @@ const actionsAndMutations: Actions & Mutations = {
 
   async deepInsert(payload?) {
     const inlineReferences = this.inlineReferences
-    const newItem = (payload?.what || Object.assign({}, this.item)) as Item
+    const newItem = Object.assign({}, payload?.what || this.item) as Item
 
     for( const [k, { s$referencedCollection: collection, type }] of inlineReferences ) {
       if(
@@ -221,7 +194,7 @@ const actionsAndMutations: Actions & Mutations = {
             return ids
           }
 
-          const result = await helperStore.insert({
+          const result = await helperStore.deepInsert({
             what: subject
           })
 
@@ -238,8 +211,6 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   async delete(payload) {
-    await _cascadingDelete.call(this, payload)
-
     return this.customEffect(
       'delete', { filters: { _id: payload.filters?._id } },
       this.removeItem
@@ -247,8 +218,6 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   async deleteAll(payload) {
-    await _cascadingDelete.call(this, payload)
-
     return this.customEffect(
       'deleteAll', { filters: { _id: payload.filters?._id } },
       this.removeItem

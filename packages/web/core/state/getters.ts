@@ -1,6 +1,7 @@
 import type { CollectionProperty, Layout, LayoutName } from '../../../types'
 import type { CollectionState } from '../../types/state'
 import { fromEntries, deepClone } from '../../../common'
+import { useStore } from './use'
 
 import  {
   condenseItem,
@@ -102,6 +103,33 @@ const getters: GettersFunctions = {
     const item = Object.assign({}, this.freshItem)
     Object.assign(item, this.item)
     return item
+  },
+
+  $freshItem() {
+    const recurse = (
+      store: CollectionState<any> & Getters,
+      parent?: string,
+      grandParent?: string
+    ): Record<string, any> => {
+      return Object.entries(store.properties).reduce((a, [key, property]) => {
+        if( property.s$isReference && store.$id !== grandParent ) {
+          const subject = property.s$referencedCollection!
+          const helperStore = useStore(subject)
+
+          return {
+            ...a,
+            [key]: recurse(helperStore, store.$id, parent)
+          }
+        }
+
+        return {
+          ...a,
+          [key]: store.freshItem[key]
+        }
+      }, {})
+    }
+
+    return recurse(this)
   },
 
   /**
