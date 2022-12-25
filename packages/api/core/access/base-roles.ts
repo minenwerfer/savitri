@@ -21,7 +21,8 @@ export default {
       user: {
         methods: [
           'insert',
-          'authenticate'
+          'authenticate',
+          'ping'
         ]
       },
       userExtra: {
