@@ -33,14 +33,8 @@ const getters: GettersFunctions = {
       return
     }
 
-    const prepare = (property: any) => ({
-      ...property,
-      label: property.name?.capitalize() || property.label,
-      type: property.$ref ? 'collection' : property.type,
-    })
-
     if( this.description.table ) {
-      return this.description.table.reduce((a:object, propertyName) => {
+      return this.description.table.reduce((a, propertyName) => {
         const property = this.description.properties?.[propertyName]
         if( !property ) {
           return a
@@ -48,7 +42,7 @@ const getters: GettersFunctions = {
 
         return {
           ...a,
-          [propertyName]: prepare(property)
+          [propertyName]: property
         }
       }, {})
     }
@@ -267,15 +261,14 @@ const getters: GettersFunctions = {
       return {}
     }
 
-    return Object.keys(normalizeFilters(this.description.filters))
-      .reduce((a: object, k: string) => {
-        const property = this.properties[k]
+    return Object.keys(normalizeFilters(this.description.filters)).reduce((a, k) => {
+      const property = this.properties[k]
 
-        return {
-          ...a,
-          ...(property ? { [k]: property } : {})
-        }
-      }, {})
+      return {
+        ...a,
+        ...(property ? { [k]: property } : {})
+      }
+    }, {})
   },
   
   layout() {
