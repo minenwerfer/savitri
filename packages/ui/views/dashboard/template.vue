@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, inject, ref } from 'vue'
+import { onMounted, inject } from 'vue'
 import { useStore } from '../../../web'
 import { SvMenu, SvTopbar } from '../../components'
 
@@ -50,9 +50,9 @@ onMounted(() => {
       isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') !== 'false',
     }
   })
-})
 
-const isReleasesVisible = ref(false)
+  useStore('user').functions.ping()
+})
 </script>
 
 <style scoped src="./template.scss"></style>

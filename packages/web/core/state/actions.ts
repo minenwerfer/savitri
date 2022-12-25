@@ -68,7 +68,7 @@ const mutations: Mutations = {
 const actionsAndMutations: Actions & Mutations = {
   ...mutations,
 
-  $controller() {
+  $functions() {
     return new Proxy(this, {
       get: (target, verb: string) => {
         return (...args: any[]) => target.custom(verb, ...args)

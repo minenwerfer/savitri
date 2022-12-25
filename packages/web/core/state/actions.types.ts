@@ -30,7 +30,7 @@ export type Item = Record<string, any> & {
 }
 
 interface ActionsAux {
-  $controller: (...args: any[]) => any
+  $functions: (...args: any[]) => any
   custom(verb: string|null, payload?: string, options?: ActionOptions): Promise<any>
   customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
   $customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>

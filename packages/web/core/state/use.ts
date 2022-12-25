@@ -13,8 +13,8 @@ export const useStore = (storeId: string) => {
   }
 
   const store = STORES[storeId]()
-  if( store.$controller ) {
-    store.controller = store.$controller()
+  if( store.$functions ) {
+    store.functions = store.$functions()
   }
 
   return store
