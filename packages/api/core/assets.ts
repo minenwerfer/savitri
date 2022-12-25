@@ -12,7 +12,7 @@ import type {
 import { default as SystemCollections } from '../../system/collections'
 import { default as SystemControllables } from '../../system/controllables'
 import type { CollectionFunctions } from './collection/functions.types'
-import { useCollection } from './collection/use'
+import { useCollection, createModel } from './collection'
 
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},
@@ -50,11 +50,6 @@ const getPrefix = (collectionName: string, internal: boolean, entityType: Entity
     : `${process.cwd()}/${pluralized}/${collectionName}`
 }
 
-const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
-  const prefix = getPrefix(collectionName, internal)
-  return require(`${prefix}/${collectionName}.model`).default
-}
-
 const loadDescription = (collectionName: string, internal: boolean) => {
   const prefix = getPrefix(collectionName, internal)
   const isValid = !collectionName.startsWith('_'),
@@ -68,6 +63,24 @@ const loadDescription = (collectionName: string, internal: boolean) => {
   return isJson
     ? require(path)
     : require(path).default
+}
+
+const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
+  const prefix = getPrefix(collectionName, internal)
+  return require(`${prefix}/${collectionName}.model`).default
+}
+
+const loadModelWithFallback = (collectionName: string, internal: boolean) => {
+  try {
+    return loadModel(collectionName, internal)
+  } catch( e: any ) {
+    if( e.code !== 'MODULE_NOT_FOUND' ) {
+      throw e
+    }
+    
+    const description = getEntityAsset(collectionName, 'description')
+    return createModel(description)
+  }
 }
 
 const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection', internal: boolean = false) => {
@@ -89,6 +102,33 @@ const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'coll
   return fn
 }
 
+const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: EntityType, internal: boolean) => {
+  try {
+    return loadFunction(functionPath, entityType, internal)
+  } catch( e: any ) {
+    if( e.code !== 'MODULE_NOT_FOUND' ) {
+      throw e
+    }
+
+    const [entityName, functionName] = functionPath.split('@')
+    const fn: ApiFunction<unknown> = (props, context) => {
+      const description = getEntityAsset(entityName, 'description')
+      const actualEntityName = description.alias || description.$id
+
+      const method = useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions]
+      if( !method || typeof method !== 'function' ) {
+        throw new TypeError(
+          `no such function ${functionPath}`
+        )
+      }
+
+      return method(props)
+    }
+
+    return fn
+  }
+}
+
 export const getEntityAsset = <Type extends AssetType>(
   assetName: Type extends 'function'
     ? FunctionPath
@@ -107,34 +147,11 @@ export const getEntityAsset = <Type extends AssetType>(
       const internal = isInternal(entityName, entityType)
 
       switch( assetType ) {
-        case 'model': return loadModel(assetName, internal)
         case 'description': return loadDescription(assetName, internal)
-        case 'function': {
-          try {
-            return loadFunction(assetName as FunctionPath, entityType, internal)
-          } catch( e: any ) {
-            if( e.code !== 'MODULE_NOT_FOUND' ) {
-              throw e
-            }
-
-            const [, functionName] = assetName.split('@')
-            const fn: ApiFunction<unknown> = (props, context) => {
-              const description = getEntityAsset(entityName, 'description')
-              const actualEntityName = description.alias || description.$id
-
-              const method = useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions]
-              if( !method || typeof method !== 'function' ) {
-                throw new TypeError(
-                  `no such function ${assetName}`
-                )
-              }
-
-              return method(props)
-            }
-
-            return fn
-          }
-        }
+        case 'model':
+          return loadModelWithFallback(assetName, internal)
+        case 'function':
+          return loadFunctionWithFallback(assetName as FunctionPath, entityType, internal)
       }
     }
   )

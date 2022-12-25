@@ -21,9 +21,6 @@
           <ion-button @click="store.clearItem">
             Clear
           </ion-button>
-          <ion-button @click="store.deepInsert">
-            Save
-          </ion-button>
         </template>
       </sv-box>
 

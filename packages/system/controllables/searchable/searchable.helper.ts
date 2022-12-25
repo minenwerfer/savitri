@@ -12,12 +12,12 @@ export const getSearchables = () => {
   const descriptions = getDescriptions()
 
   const searchable = Object.entries(descriptions)
-    .reduce((a: any, [collectionName, description]: [string, any]) => {
+    .reduce((a, [collectionName, description]: [string, any]) => {
       if( !description.searchable?.indexes || description.alias ) {
         return a
       }
 
-      const indexes = description.searchable.indexes.reduce((a: any, index: string) => {
+      const indexes = description.searchable.indexes.reduce((a: Record<string, any>, index: string) => {
         const property = description.properties[index]
         if( !property ) {
           return a
@@ -64,7 +64,7 @@ export const buildAggregations = (
   const aggregations: Record<string, any> = {}
 
   Object.entries(searchables).forEach(([collectionName, config]: [string, any]) => {
-    const matches = Object.entries(config.indexes).reduce((a: any, [indexName, index]: [string, any]) => {
+    const matches = Object.entries(config.indexes).reduce((a: Record<string, any>, [indexName, index]: [string, any]) => {
       const getType: any = (q: any) => {
         switch(index.type) {
           case 'number':
@@ -90,7 +90,7 @@ export const buildAggregations = (
     }, { $or: [] })
 
     const project = Object.keys(config.indexes)
-      .reduce((a: any, index: string) => ({ ...a, [index]: 1 }), {})
+      .reduce((a: Record<string, any>, index: string) => ({ ...a, [index]: 1 }), {})
 
     if( config.picture ) {
       project._picture = `$${config.picture}`

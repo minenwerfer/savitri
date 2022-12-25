@@ -2,7 +2,7 @@
   <component v-if="runonceSlot" :is="runonceSlot"></component>
 
   <div class="template">
-    <sv-topbar v-if="!$route.meta?.notopbar">
+    <sv-topbar v-if="!route.meta?.notopbar">
       <component :is="topbarSlot" v-if="topbarSlot"></component>
       <sv-utilities></sv-utilities>
     </sv-topbar>
@@ -30,12 +30,14 @@
 
 <script setup lang="ts">
 import { onMounted, inject } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from '../../../web'
 import { SvMenu, SvTopbar } from '../../components'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
+const route = useRoute()
 const metaStore = useStore('meta')
 const menuSchema = inject('menuSchema', {})
 const notice = inject('notice', null)

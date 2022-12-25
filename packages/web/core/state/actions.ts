@@ -56,7 +56,7 @@ const mutations: Mutations = {
   },
 
   clearItem() {
-    const item = this.item = deepClone(this.freshItem)
+    const item = this.item = this.$freshItem
     return item
   },
 
@@ -271,7 +271,7 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   useProperties(properties) {
-    return properties.reduce((a: any, property) => {
+    return properties.reduce((a, property) => {
       if( !(property in this.properties) ) {
         return a
       }

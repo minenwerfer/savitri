@@ -237,7 +237,7 @@ watch(() => actionEventBus, async (event) => {
   }
 
   else if( event.name === 'duplicate' ) {
-    const newItem = Object.entries(store.item).reduce((a: any, [key, value]: [string, any]) => {
+    const newItem = Object.entries(store.item).reduce((a, [key, value]: [string, any]) => {
       const property = store.properties[key]||{}
       const unbound = (value: any) => {
         if( property.s$isFile ) {

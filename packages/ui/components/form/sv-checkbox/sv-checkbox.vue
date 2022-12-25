@@ -41,6 +41,7 @@ import { computed, ref } from 'vue'
 import type { CollectionProperty } from '../../../../types'
 
 type Props = {
+  value: any
   modelValue: any
   property: CollectionProperty
   propertyName?: string

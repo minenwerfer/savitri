@@ -59,9 +59,9 @@ const insert: ApiFunction<Props> = async(_props, _token) => {
   // })
 
   // const pipe = R.pipe(
-  //   (r: any) => propertiesNames.reduce((a: any, b) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
+  //   (r: any) => propertiesNames.reduce((a, b) => ({ ...a, [b]: r[b] ? r[b] : '' }), {}),
   //   (r: Report) => Object.entries(r)
-  //     .reduce((a: any, [key, value]) => {
+  //     .reduce((a, [key, value]) => {
   //       if( !(key in properties) ) {
   //         return a
   //       }

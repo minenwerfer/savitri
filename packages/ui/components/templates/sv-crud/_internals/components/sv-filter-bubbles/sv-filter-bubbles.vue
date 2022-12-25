@@ -34,7 +34,7 @@ const printableFilters = computed(() => {
 
     if( firstEntry && ['$and', '$or'].includes(firstEntry[0]) ) {
       isMongoOperation = true
-      return firstEntry[1].reduce((a: any, filter: any) => {
+      return firstEntry[1].reduce((a, filter: any) => {
         return {
           ...a,
           ...filter
@@ -84,7 +84,7 @@ const printableFilters = computed(() => {
 })
 
 const removeFilter = (target: string) => {
-  store.filters = Object.entries(store.filters).reduce((a: any, [key, filter]) => {
+  store.filters = Object.entries(store.filters).reduce((a, [key, filter]) => {
     if( key === target ) {
       return a
     }

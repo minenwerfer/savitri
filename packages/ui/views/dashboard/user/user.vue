@@ -69,7 +69,7 @@ const handleUiEvent = async (event: any) => {
 }
 
 const insertExtra = async () => {
-  await userExtraStore.insert({
+  await userExtraStore.deepInsert({
     what: {
       ...userExtraStore.condensedItem,
       owner: userStore.item._id

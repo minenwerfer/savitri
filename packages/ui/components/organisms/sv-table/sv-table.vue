@@ -191,7 +191,7 @@
 <script setup lang="ts">
 import { inject, computed } from 'vue'
 import { useStore } from '../../../../web'
-import type { CollectionProperty } from '../../../../types'
+import type { CollectionProperty, CollectionAction } from '../../../../types'
 
 import {
   SvButton,
@@ -211,7 +211,10 @@ type Props = {
   checkbox?: boolean
   border?: boolean
   headers?: boolean
-  actions?: any
+  actions?: Array<CollectionAction & {
+    action: string
+    click: (...args: any[]) => void
+  }>
   layout?: any
 }
 
@@ -231,11 +234,11 @@ const selected = computed({
 })
 
 const buttonActions = computed(() => (
-  props.actions.filter((action: any) => props.layout?.actions?.[action.action]?.button)
+  props.actions?.filter((action) => props.layout?.actions?.[action.action]?.button)
 ))
 
 const dropdownActions = computed(() => (
-  props.actions.filter((action: any) => !props.layout?.actions?.[action.action]?.button)
+  props.actions?.filter((action) => !props.layout?.actions?.[action.action]?.button)
 ))
 
 const toggle = (value: boolean, rowId: string, key: string) => {

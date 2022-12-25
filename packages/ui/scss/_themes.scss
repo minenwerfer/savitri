@@ -4,7 +4,8 @@ $default-input-padding: .6rem;
 $themes: (
   default: (
     border-color: #dedede,
-    button-color: #000,
+    button-background-color: #000,
+    button-border-color: #dedede,
     switch-color: #000,
     foreground-color: #444,
     foreground-color-alt: #000,
@@ -15,7 +16,8 @@ $themes: (
   ),
   dark: (
     border-color: #888,
-    button-color: #fff,
+    button-background-color: #fff,
+    button-border-color: #fff,
     switch-color: blue,
     foreground-color: #eee,
     foreground-color-alt: #fff,
@@ -26,7 +28,8 @@ $themes: (
   ),
   contrast: (
     border-color: #222,
-    button-color: linear-gradient(45deg, darkblue, magenta),
+    button-background-color: linear-gradient(45deg, darkblue, magenta),
+    button-border-color: transparent,
     switch-color: linear-gradient(45deg, darkblue, magenta),
     foreground-color: #000,
     foreground-color-alt: #fff,

@@ -20,7 +20,7 @@
 
           @click="shrink[index] = !shrink[index]"
         >
-          {{ $tc(entry.meta.title, 2).capitalize() }}
+          {{ $tc(entry.meta?.title, 2).capitalize() }}
         </sv-icon>
 
 
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useStore, Route } from '../../../../web'
+import { useStore, Route, MenuSchema } from '../../../../web'
 import { SvIcon } from '../../'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
@@ -62,7 +62,7 @@ import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.
 type Props = {
   entrypoint?: string
   visible: boolean
-  schema?: any
+  schema: MenuSchema
 }
 
 type SchemaNode = {

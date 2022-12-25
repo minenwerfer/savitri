@@ -46,7 +46,7 @@ export const preloadDescription = (description: MaybeCollectionDescription) => {
   }
 
   if( description.properties ) {
-    description.properties = Object.entries(description.properties).reduce((a: any, [key, _property]) => {
+    description.properties = Object.entries(description.properties).reduce((a, [key, _property]) => {
       const property = Object.assign({}, _property)
       const reference = getReferencedCollection(property)
 

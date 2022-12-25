@@ -73,7 +73,7 @@ export const safeHandle = (
     if( error instanceof MongooseError.ValidationError ) {
       const errors = Object.values(error.errors)
       response.error.silent = true
-      response.error.validation = errors.reduce((a: any, error: any) => {
+      response.error.validation = errors.reduce((a, error: any) => {
         return {
           ...a,
           [error.path]: {

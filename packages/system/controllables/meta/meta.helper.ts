@@ -11,7 +11,7 @@ const getUserCollections = (dynamic?: boolean) => {
   }
 
   const { readdirSync } = require('fs')
-  return readdirSync(`${process.cwd()}/collections`).reduce((a: any, d: string) => {
+  return readdirSync(`${process.cwd()}/collections`).reduce((a: Record<string, any>, d: string) => {
     try {
       return {
         ...a,
@@ -38,7 +38,7 @@ export const getDescriptions = (dynamicUserCollections?: boolean): Record<string
     ...SystemCollections
   }
 
-  const descriptions = Object.entries(target).reduce((a: any, [, collectionSchema]) => {
+  const descriptions = Object.entries(target).reduce((a, [, collectionSchema]) => {
     return {
       ...a,
       [collectionSchema.$id]: preloadDescription(collectionSchema)

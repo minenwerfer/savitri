@@ -106,7 +106,12 @@ const getters: GettersFunctions = {
       grandParent?: string
     ): Record<string, any> => {
       return Object.entries(store.properties).reduce((a, [key, property]) => {
-        if( property.s$isReference && store.$id !== grandParent ) {
+        if(
+          property.s$isReference
+            && property.s$inline
+            && property.type !== 'array'
+            && store.$id !== grandParent
+        ) {
           const subject = property.s$referencedCollection!
           const helperStore = useStore(subject)
 
@@ -144,7 +149,7 @@ const getters: GettersFunctions = {
         ]
       }, [])
 
-    return this.items.map((item: any) => ({
+    return this.items.map((item) => ({
       ...item,
       ...(fromEntries(collections.map((m) => [m, item[m]||{}])))
     }))
@@ -160,10 +165,6 @@ const getters: GettersFunctions = {
     })
   },
 
-  /**
-   * Retrieves properties which refeer to a collection (typeof collection === 'string') and have "inline" set to true.
-   * Used internally.
-   */
   inlineReferences() {
     return Object.entries(this.description.properties||{}).filter(([, property]) => {
       return property.s$isReference && property.s$inline

@@ -14,7 +14,7 @@ const isObject = (property: any) =>
 
 
 export const condenseItem = (item: Record<string, any>): Record<string, Exclude<any, '_id'>> => {
-  return Object.entries(item||{}).reduce((a:any, [key, value]) => {
+  return Object.entries(item||{}).reduce((a, [key, value]) => {
     if( Array.isArray(value) ) {
       return {
         ...a,
@@ -55,7 +55,7 @@ export const normalizeActions = (actions: CollectionActions) => Object.entries(a
 }, [])
 
 export const normalizeFilters = (filters: Array<any>) => {
-  return filters.reduce((a: any, b) => {
+  return filters.reduce((a, b) => {
     const filter = typeof b !== 'string'
       ? { [b.property]: b.default||'' }
       : { [b]: '' }
@@ -68,7 +68,7 @@ export const normalizeFilters = (filters: Array<any>) => {
 }
 
 export const freshItem = (description: CollectionDescription) => {
-  const item: Record<string, any> = Object.entries(description.properties).reduce((a: any, [key, property]) => {
+  const item: Record<string, any> = Object.entries(description.properties).reduce((a, [key, property]) => {
     const value = (() => {
       if( property.$ref ) {
         return {}
@@ -93,7 +93,7 @@ export const freshItem = (description: CollectionDescription) => {
 
 export const freshFilters = (description: CollectionDescription) => {
   return Object.entries(description.properties||{})
-    .reduce((a: any, [key, property]: [string, any]) => {
+    .reduce((a, [key, property]) => {
       if( isObject(property) ) {
         return {
           ...a,
@@ -101,7 +101,7 @@ export const freshFilters = (description: CollectionDescription) => {
         }
       }
 
-      if( ['date', 'date-time'].includes(property.format) ) {
+      if( ['date', 'date-time'].includes(property.format!) ) {
         return {
           ...a,
           [key]: {

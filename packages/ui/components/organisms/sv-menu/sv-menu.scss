@@ -116,13 +116,14 @@
     column-gap: .5rem;
     padding: .3rem .5rem;
 
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     border-radius: 5px;
     white-space: nowrap;
 
     @include themed() {
       &--current {
-        border-color: t(foreground-color);
+        border-color: t(border-color);
+        background: t(body-color);
         // background: #2060fa;
       }
 

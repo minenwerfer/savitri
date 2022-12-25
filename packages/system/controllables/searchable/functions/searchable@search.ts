@@ -21,7 +21,7 @@ const search: ApiFunction<Props> = async (props, { token, apiConfig }) => {
   }
 
   const searchables = Object.entries(getSearchables())
-    .reduce((a: any, [key, value]: [string, any]) => {
+    .reduce((a, [key, value]: [string, any]) => {
       // if( !this.isGranted(token, 'getAll', key) ) {
       //   return a
       // }

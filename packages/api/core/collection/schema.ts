@@ -67,7 +67,8 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
       const refDescription = getEntityAsset(referencedCollection, 'description')
 
       hasRefs = true
-      result.ref = refDescription.alias || refDescription.$id
+      const actualReferenceName = result.ref = refDescription.alias || refDescription.$id
+      getEntityAsset(actualReferenceName, 'model')
 
       if( !property.s$preventPopulate ) {
         const join = (value: string|Array<string>) => Array.isArray(value)
