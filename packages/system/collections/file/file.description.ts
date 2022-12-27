@@ -5,6 +5,9 @@ export type File = Schema<typeof schema>
 const schema = {
   $id: 'file',
   owned: true,
+  presets: [
+    'owned'
+  ],
   required: [
     'size',
     'last_modified',

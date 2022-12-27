@@ -99,6 +99,7 @@ export type MaybeCollectionDescription = Omit<CollectionDescription,
   | 'name'
   | 'properties'
   | 'required'
+  | 'indexes'
   | 'presets'
   | 'actions'
   | 'individualActions'
@@ -106,7 +107,8 @@ export type MaybeCollectionDescription = Omit<CollectionDescription,
   $id: string
   name?: string
   required?: ReadonlyArray<string>
-  presets?: Array<string>
+  indexes?: ReadonlyArray<string>|string
+  presets?: ReadonlyArray<string>
   properties?: Record<string, any>
   actions?: MaybeCollectionActions
   individualActions?: MaybeCollectionActions

@@ -31,7 +31,10 @@ export const preloadDescription = (description: MaybeCollectionDescription) => {
     Object.assign(description, temp)
   }
 
-  const presets = description.presets || []
+  const presets = (description as {
+    -readonly [P in keyof CollectionDescription]: CollectionDescription[P]
+  }).presets || []
+
   if( description.owned ) {
     presets.push('owned')
   }
