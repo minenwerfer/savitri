@@ -32,5 +32,7 @@ export const getTypeConstructor = (property: CollectionProperty): any => {
       return Number
     case 'boolean':
       return Boolean
+    case 'object':
+      return Object
   }
 }

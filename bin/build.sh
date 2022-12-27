@@ -13,7 +13,7 @@ PACKAGES=(
 )
 
 function do_pack() {
-  cp {tsconfig.json,web/global.d.ts} dist/web
+  cp {tsconfig.json,packages/web/global.d.ts} dist/web
   cp -r packages/web/public dist/web
 
   for package in ${PACKAGES[*]}; do

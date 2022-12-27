@@ -51,7 +51,7 @@ const getters: GettersFunctions = {
       .filter(([, property]) => (
         !property.s$hidden
           && !property.s$notable
-          && (!property.s$inline || property.s$index)
+          && (!property.s$inline || property.s$indexes)
       ))
       .slice(0, 8))
   },

@@ -15,7 +15,7 @@ const schema = {
       items: {
         $ref: 'user'
       },
-      s$index: 'email'
+      s$indexes: 'email'
     },
     title: {
       description: 'Título',

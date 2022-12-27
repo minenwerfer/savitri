@@ -11,6 +11,10 @@ const schema = {
     'filename',
     'mime'
   ],
+  indexes: [
+    'filename',
+    'link'
+  ],
   properties: {
     mime: {
       description: 'Mime',

@@ -2,8 +2,6 @@ import * as bcrypt from 'bcrypt'
 import { createModel } from '../../../api/core/collection'
 import UserDescription from './user.description'
 
-import '../file/file.model'
-
 export default createModel(UserDescription, {
   schemaCallback: (schema) => { 
     schema.virtual('full_name').get(function() {

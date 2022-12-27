@@ -73,11 +73,12 @@ const loadModel = (collectionName: string, internal: boolean): Model<any>|null =
 const loadModelWithFallback = (collectionName: string, internal: boolean) => {
   try {
     return loadModel(collectionName, internal)
+
   } catch( e: any ) {
     if( e.code !== 'MODULE_NOT_FOUND' ) {
       throw e
     }
-    
+
     const description = getEntityAsset(collectionName, 'description')
     return createModel(description)
   }
@@ -106,7 +107,7 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: Entity
   try {
     return loadFunction(functionPath, entityType, internal)
   } catch( e: any ) {
-    if( e.code !== 'MODULE_NOT_FOUND' ) {
+    if( e.code !== 'MODULE_NOT_FOUND' || entityType !== 'collection' ) {
       throw e
     }
 

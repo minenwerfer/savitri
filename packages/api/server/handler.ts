@@ -131,7 +131,8 @@ export const customVerbs = (entityType: EntityType) =>
     request,
     result,
     context,
-    entityName
+    entityName,
+    entityType
   })
 }
 
@@ -181,7 +182,8 @@ export const regularVerb = (functionName: RegularVerb) =>
     request,
     result,
     context,
-    entityName
+    entityName,
+    entityType: 'collection'
   })
 }
 

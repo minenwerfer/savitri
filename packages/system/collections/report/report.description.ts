@@ -20,7 +20,7 @@ const schema = {
     file: {
       $ref: 'file',
       description: 'Arquivo',
-      s$index: 'name',
+      s$indexes: 'name',
       s$notable: true,
       s$noform: true
     },

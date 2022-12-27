@@ -1,5 +1,5 @@
 import { Types } from '../../../api/core/database'
-import { useCollection } from '../../../api'
+import { useCollection, getEntityAsset } from '../../../api'
 import type { ApiFunction } from '../../../api/types'
 import type { User } from './user.description'
 
@@ -10,7 +10,7 @@ type SaveWithExtraProps = {
 }
 
 export const userExtraModel = () => {
-  return require(`${process.cwd()}/collections/userExtra/userExtra.model`).default
+  return getEntityAsset('userExtra', 'model')
 }
 
 export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User>>> = async (props, context) => {

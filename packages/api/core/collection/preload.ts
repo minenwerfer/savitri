@@ -3,8 +3,8 @@ import { getReferencedCollection } from '../../../common'
 import { getEntityAsset } from '../assets'
 import type { MaybeCollectionDescription, CollectionDescription } from '../../../types'
 
-export const applyPreset = (description: MaybeCollectionDescription, collectionName:string, parentName?:string) => {
-  const preset = require(`${__dirname}/../../presets/${collectionName}`)
+export const applyPreset = (description: MaybeCollectionDescription, presetName:string, parentName?:string) => {
+  const preset = require(`${__dirname}/../../presets/${presetName}`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
   return R.mergeDeepWith(
@@ -54,6 +54,17 @@ export const preloadDescription = (description: MaybeCollectionDescription) => {
         property.s$isReference = true
         property.s$isFile = reference.$ref === 'file'
         property.s$referencedCollection = reference.$ref
+
+        if( !property.s$indexes && !property.s$inline ) {
+          const referenceDescription = getEntityAsset(reference.$ref!, 'description')
+          const indexes = property.s$indexes = referenceDescription.indexes
+
+          if( !indexes ) {
+            throw new Error(
+              `neither s$indexes or s$inline are present on reference property or indexes is set on target description on ${description.$id}.${key}`
+            )
+          }
+        }
       }
 
       return {

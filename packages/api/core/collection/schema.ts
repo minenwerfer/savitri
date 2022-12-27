@@ -20,6 +20,13 @@ import { getTypeConstructor } from './typemapping'
 //
 type SchemaStructure = Record<string, Record<string, any>>
 
+/** This static array is populated only once on the warmup with the name of the
+ * collections cast with mongoose.model. It is the simplest way to avoid
+ * circular dependencies in-between the descriptionToSchemaObj() reference
+ * casting and the createModel() return statement.
+ */
+const __loadedModels: Array<string> = []
+
 export const descriptionToSchemaObj = (description: MaybeCollectionDescription) => {
   R.pipe(
     TypeGuards.presets,
@@ -64,11 +71,14 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
     result.type = type
 
     if( typeof referencedCollection === 'string' ) {
-      const refDescription = getEntityAsset(referencedCollection, 'description')
-
+      const referenceDescription = getEntityAsset(referencedCollection, 'description')
       hasRefs = true
-      const actualReferenceName = result.ref = refDescription.alias || refDescription.$id
-      getEntityAsset(actualReferenceName, 'model')
+
+      const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
+      if( !__loadedModels.includes(actualReferenceName) ) {
+        getEntityAsset(actualReferenceName, 'model')
+        __loadedModels.push(actualReferenceName)
+      }
 
       if( !property.s$preventPopulate ) {
         const join = (value: string|Array<string>) => Array.isArray(value)
@@ -178,6 +188,7 @@ export const createModel = <T=any>(
     return mongooseModels[modelName] as Model<T>
   }
 
+  __loadedModels.push(modelName)
   const schema = descriptionToSchema<T>(description, options || defaultOptions, modelCallback)
 
   const cascadingDelete: Array<{

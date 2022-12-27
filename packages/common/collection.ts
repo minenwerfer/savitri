@@ -12,15 +12,15 @@ export function getIndexes(
   key: string
 ): Array<string> {
   const property = description.properties?.[key]
-  const { $ref, s$index } = getReferencedCollection(property)||{}
+  const { $ref, s$indexes } = getReferencedCollection(property)||{}
 
-  if( !$ref || !s$index ) {
+  if( !$ref || !s$indexes ) {
     return []
   }
 
-  return Array.isArray(s$index)
-    ? s$index
-    : [s$index]
+  return Array.isArray(s$indexes)
+    ? s$indexes
+    : [s$indexes]
 }
 
 export const getFirstIndex = (

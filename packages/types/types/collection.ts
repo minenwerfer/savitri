@@ -55,6 +55,8 @@ export type CollectionDescription = {
   icon?: string
   options?: CollectionOptions
 
+  indexes?: Array<string>|string
+
   // modifiers
   strict?: boolean // all properties are required
   owned?: boolean
@@ -67,7 +69,6 @@ export type CollectionDescription = {
   table?: Array<string>
   tableMeta?: Array<string>
   reportProperties?: Array<string>
-
 
   form?: Array<string>
   writable?: Array<string>
@@ -153,7 +154,7 @@ type CollectionPropertyAux = {
 
   array?: boolean
   limit?: number
-  index?: Array<string>|string
+  indexes?: Array<string>|string
   select?: Array<string>
   maxDepth?: number
   inline?: boolean

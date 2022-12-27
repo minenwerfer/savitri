@@ -7,7 +7,7 @@ export type ApiContextWithAC = ApiContext & {
   access: ReturnType<typeof useAccessControl>
 }
 
-export type ApiFunction<Props, Return={}> = (
+export type ApiFunction<Props=unknown, Return={}> = (
   props: Props,
   context: ApiContext
 ) => Return

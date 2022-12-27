@@ -3,7 +3,6 @@
     "owner": {
       "$ref": "user",
       "description": "Usuário",
-      "s$index": "email",
       "s$noform": true
     }
   }

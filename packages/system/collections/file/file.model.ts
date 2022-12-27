@@ -2,8 +2,6 @@ import { createModel } from '../../../api/core/collection'
 import { File, default as FileDescription } from './file.description'
 const { unlink } = require('fs').promises
 
-import '../user/user.model'
-
 const link = (_id: File['_id']) => `${process.env.API_URL}/file/${_id}`
 
 const timestamp = (last_modified: Date) => last_modified

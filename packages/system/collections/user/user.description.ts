@@ -13,6 +13,7 @@ const schema = {
     'role',
     'email'
   ],
+  indexes: 'name',
   properties: {
     first_name: {
       description: 'Nome',
