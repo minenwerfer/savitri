@@ -2,7 +2,7 @@ Savitri
 =======
 
 > An idiot admires complexity, a genius admires simplicity. A physicist tries
-> to make it simples, for an idiot anything the more complicate it is the more
+> to make it simple, for an idiot anything the more complicate it is the more
 > he will admire it. — Terry A. Davis
 
 Our philosophy is that most complexity is dumb, and computing is more efficient
