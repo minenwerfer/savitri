@@ -29,11 +29,20 @@ export const useApp = (config: AppOptions): Promise<{
   }: AppOptions = config
 
   const app = createApp(component)
-  app.use(createPinia())
   registerDirectives(app)
+
+  const pinia = createPinia()
+  app.use(pinia)
 
   const router = createRouter(config.routes||[])
   const i18n = createI18n(i18nConfig)
+
+  pinia.use(() => ({
+    router,
+    i18n,
+    store: useStore
+  }))
+
 
   if( routerExtension ) {
     extendRouter(router, routerExtension)

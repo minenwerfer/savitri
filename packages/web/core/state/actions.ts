@@ -56,7 +56,7 @@ const mutations: Mutations = {
   },
 
   clearItem() {
-    const item = this.item = this.$freshItem
+    const item = this.item = Object.assign({}, this.$freshItem)
     return item
   },
 
