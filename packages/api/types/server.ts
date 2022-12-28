@@ -1,6 +1,5 @@
 import type { Request } from '@hapi/hapi'
 import type { User } from '../../system/collections/user/user.description'
-import type { CollectionFunctions } from '../core/collection/functions.types'
 
 export type HandlerRequest = Request & {
   payload: {
@@ -27,8 +26,12 @@ export type Role = {
 export type Roles = Record<string, Role>
 
 export type ApiConfig = {
+  port?: number
+  modules?: Array<string> // experimental
+
   group?: string
   roles?: Roles
+
   allowSignup?: boolean
   signupDefaults?: {
     role: string
@@ -39,11 +42,4 @@ export type ApiConfig = {
 
   beforeRead?: (token: DecodedToken, collectionName: string) => Record<string, any>
   beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>
-}
-
-export type ApiContext = {
-  apiConfig: ApiConfig
-  injected: Record<string, any>
-  collection: CollectionFunctions
-  token: DecodedToken
 }

@@ -11,9 +11,9 @@ import {
 
 import type { ApiContext } from '../types'
 
-export default (context?: Partial<ApiContext>): Array<ServerRoute> => {
+export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
   const defaultHandler = (...args: Parameters<typeof safeHandle>) => {
-    return safeHandleContext(args[0], context)
+    return safeHandleContext(args[0], context||{})
   }
 
   return [

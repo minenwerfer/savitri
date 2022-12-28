@@ -21,7 +21,6 @@ const schema = {
       $ref: 'file',
       description: 'Arquivo',
       s$indexes: 'name',
-      s$notable: true,
       s$noform: true
     },
     format: {
@@ -45,18 +44,15 @@ const schema = {
       description: 'Limite',
       type: 'number',
       s$hint: 'Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção "Relatórios" antes de prosseguir.',
-      s$notable: true
     },
     offset: {
       description: 'Offset',
       type: 'number',
       s$hint: 'Deixe vazio para retornar do princípio',
-      s$notable: true
     },
     filters: {
       description: 'Filtros',
       type: 'object',
-      s$notable: true,
       s$noform: true
     },
     entries_count: {

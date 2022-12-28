@@ -16,8 +16,8 @@ import { options as defaultOptions } from '../database'
 import { getEntityAsset } from '../assets'
 import { preloadDescription, applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
-// import { v1 as uuidv1 } from 'uuid'
-//
+
+
 type SchemaStructure = Record<string, Record<string, any>>
 
 /** This static array is populated only once on the warmup with the name of the
@@ -44,7 +44,7 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
     const {
       $ref: referencedCollection,
       ...reference
-    } = getReferencedCollection(property)||{}
+    } = getReferencedCollection(property)||{} as CollectionProperty
 
     const required = description.strict || description.required?.includes(propertyName)
 
@@ -107,17 +107,6 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
       [propertyName]: result
     }
   }
-
-  // const initial = {
-    // _id: {
-    //   type: String,
-    //   default: uuidv1
-    // }
-    // domain_id: {
-    //   type: ObjectId,
-    //   required: true
-    // }
-  // }
 
   if( !description.properties ) {
     throw new TypeError(

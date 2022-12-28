@@ -6,26 +6,34 @@ import { connectDatabase } from '../core/database'
 import getRoutes from './routes'
 export { getToken } from './handler'
 
-declare global {
-  var modules: Array<any>
+const defaultConfig = {
+  port: 3000,
+  modules: [],
+  descriptions: {},
+  roles: {
+    guest: {
+      grantEverything: true
+    }
+  }
 }
 
-export const init = async (props?: {
-  port?: number
-  modules?: Array<any>
-  context?: Partial<ApiContext>
-}): Promise<Hapi.Server> => {
-  props = props || {
-    port: 3000,
-    modules: []
+export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Server> => {
+  const apiConfig = Object.assign({}, defaultConfig)
+  Object.assign(apiConfig, _context?.apiConfig||{})
+
+  const context: Partial<ApiContext> = Object.assign({}, _context||{})
+  Object.assign(context, { apiConfig })
+
+  if( apiConfig.modules ) {
+    global.modules = apiConfig.modules
   }
 
-  if( props.modules ) {
-    globalThis.modules = props.modules
+  if( context?.descriptions ) {
+    global.descriptions = context.descriptions
   }
 
   const server = Hapi.server({
-    port: props.port || 3000,
+    port: apiConfig.port,
     host: '0.0.0.0',
     routes: {
       cors: {
@@ -44,8 +52,7 @@ export const init = async (props?: {
     }
   })
 
-  const routes = getRoutes(props.context)
-
+  const routes = getRoutes(context)
   for( const route of routes ) {
     server.route(route)
   }
@@ -53,7 +60,17 @@ export const init = async (props?: {
   return server
 }
 
-export const initWithDatabase = (...args: Parameters<typeof init>): ReturnType<typeof init> => {
+export const initWithDatabase = (...args: Parameters<typeof init>) => {
   connectDatabase()
   return init(...args)
+}
+
+export const initThenStart = async (...args: Parameters<typeof init>) => {
+  const server = await init(...args)
+  server.start()
+}
+
+export const initWithDatabaseThenStart = async (...args: Parameters<typeof init>) => {
+  const server = await initWithDatabase(...args)
+  server.start()
 }

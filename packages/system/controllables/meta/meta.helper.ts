@@ -1,17 +1,22 @@
+import { readdirSync } from 'fs'
 import type { CollectionDescription } from '../../../types'
+import type { ApiContext } from '../../../api/types'
 import { preloadDescription } from '../../../api/core/collection'
 import { getEntityAsset } from '../../../api/core/assets'
-import * as SystemCollections from '../../collections/exports'
 
 const __cachedDescriptions: Record<string, CollectionDescription> = {}
+export const cachedDescriptions = __cachedDescriptions
 
-const getUserCollections = (dynamic?: boolean) => {
+const discoverDescriptions = (dynamic?: boolean, internal?: boolean) => {
+  const path = internal
+    ? `${__dirname}/../../collections`
+    : `${process.cwd()}/collections`
+
   if( dynamic ) {
-    return require(`${process.cwd()}/collections`)
+    return require(path)
   }
 
-  const { readdirSync } = require('fs')
-  return readdirSync(`${process.cwd()}/collections`).reduce((a: Record<string, any>, d: string) => {
+  return readdirSync(path).reduce((a: Record<string, any>, d) => {
     try {
       return {
         ...a,
@@ -27,15 +32,20 @@ const getUserCollections = (dynamic?: boolean) => {
   }, {})
 }
 
-export const getDescriptions = (dynamicUserCollections?: boolean): Record<string, CollectionDescription> => {
+export const getDescriptions = ({
+  descriptions: presetDescriptions,
+  apiConfig: {
+    dynamicCollections
+  },
+}: ApiContext): Record<string, CollectionDescription> => {
   if( Object.keys(__cachedDescriptions).length > 0 ) {
     return __cachedDescriptions
   }
 
-  const UserCollections = getUserCollections(dynamicUserCollections)
   const target: Record<string, CollectionDescription> = {
-    ...UserCollections,
-    ...SystemCollections
+    ...presetDescriptions||{},
+    ...discoverDescriptions(dynamicCollections),
+    ...discoverDescriptions(false, true)
   }
 
   const descriptions = Object.entries(target).reduce((a, [, collectionSchema]) => {

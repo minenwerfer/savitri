@@ -170,7 +170,7 @@ const fetchItems = async () => {
 
   return store.filter({
     project: [
-      ...Object.keys(store.tableDescription),
+      ...Object.keys(store.properties),
       ...store.tableMeta
     ]
   })

@@ -1,4 +1,6 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
+import type { ApiFunction } from '../../api/types'
+import type { Model } from '../../api/database'
 import type { Property } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
@@ -51,6 +53,11 @@ export type Layout = {
 
 export type CollectionDescription = {
   $id: CollectionId
+  description?: string
+
+  model?: Model<any>
+  functions?: Record<string, ApiFunction<any, any>>
+
   alias?: string
   icon?: string
   options?: CollectionOptions
@@ -140,7 +147,6 @@ type CollectionPropertyAux = {
   form?: Array<string>
 
   noform?: boolean
-  notable?: boolean
   unique?: boolean
   hidden?: boolean
   purge?: boolean

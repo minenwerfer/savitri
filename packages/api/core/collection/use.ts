@@ -1,13 +1,9 @@
 import type { ApiContext, ApiContextWithAC } from '../../types'
-import type { CollectionFunctions } from './functions.types'
 import { getEntityAsset } from '../assets'
 import { useAccessControl } from '../access/use'
 import useFunctions from './functions'
 
-type Fallback = (props: any) => any
-type AnyFunction = CollectionFunctions & Record<keyof CollectionFunctions, Fallback>
-
-export const useCollection = (collectionName: string, _context: ApiContext|null = null): AnyFunction => {
+export const useCollection = (collectionName: string, _context: ApiContext|null = null) => {
   const context = _context || {} as ApiContext
 
   const description = getEntityAsset(collectionName, 'description')
@@ -33,9 +29,14 @@ export const useCollection = (collectionName: string, _context: ApiContext|null 
     access
   })
 
-  return useFunctions(
+  const functions = useFunctions(
     model,
     description,
     context as ApiContextWithAC
   )
+
+  return {
+    ...functions,
+    model
+  }
 }

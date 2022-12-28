@@ -39,7 +39,6 @@ const schema = {
       description: 'Conteúdo',
       type: 'string',
       s$element: 'textarea',
-      s$notable: true
     }
   }
 } as const

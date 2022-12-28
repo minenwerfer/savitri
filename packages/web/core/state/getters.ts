@@ -24,38 +24,6 @@ const getters: GettersFunctions = {
     return this.description.properties
   },
 
-  /**
-   * @see SvTable
-   * @see SvCrud
-   */
-  tableDescription() {
-    if( !this.description.properties ) {
-      return
-    }
-
-    if( this.description.table ) {
-      return this.description.table.reduce((a, propertyName) => {
-        const property = this.description.properties?.[propertyName]
-        if( !property ) {
-          return a
-        }
-
-        return {
-          ...a,
-          [propertyName]: property
-        }
-      }, {})
-    }
-
-    return fromEntries(Object.entries(this.description.properties)
-      .filter(([, property]) => (
-        !property.s$hidden
-          && !property.s$notable
-          && (!property.s$inline || property.s$indexes)
-      ))
-      .slice(0, 8))
-  },
-
   tableMeta() {
     return this.description.tableMeta||[]
   },

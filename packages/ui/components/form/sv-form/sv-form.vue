@@ -24,7 +24,11 @@
             && !omitInputLabels
         ">
           <strong>
-            {{ property.s$translate ? $t(property.description) : property.description }}
+            {{
+              property.s$translate
+                ? $t(property.description || key)
+                : property.description || key
+            }}
           </strong>
           <div
             v-if="property.s$hint"

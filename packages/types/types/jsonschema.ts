@@ -1,8 +1,4 @@
-import {
-  PROPERTY_TYPES,
-  PROPERTY_FORMATS,
-
-} from '../constants'
+import { PROPERTY_TYPES, PROPERTY_FORMATS } from '../constants'
 
 export type PropertyTypes = typeof PROPERTY_TYPES[number]
 export type PropertyFormats = typeof PROPERTY_FORMATS[number]
@@ -14,11 +10,26 @@ export type JsonSchema = {
   properties: Record<string, Property>
 }
 
-export type Property = {
-  $ref?: string
-  type?: PropertyTypes
+export type RefType = {
+  $ref: string
+}
+
+export type EnumType = {
+  enum: ReadonlyArray<any>
+}
+
+export type PrimitiveType = {
+  type: PropertyTypes
+}
+
+export type PropertyAux =
+  { [P in keyof RefType]?: RefType[P] } &
+  { [P in keyof EnumType]?: EnumType[P] } &
+  { [P in keyof PrimitiveType]?: PrimitiveType[P] }
+
+export type Property = (RefType | EnumType | PrimitiveType) & PropertyAux &  {
   format?: PropertyFormats
-  enum?: ReadonlyArray<any>
+
   default?: any
   description?: string
   items?: Property

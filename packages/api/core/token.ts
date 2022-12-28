@@ -7,27 +7,20 @@ import {
 
 } from 'jsonwebtoken'
 
-// interface AsyncJwt {
-//   sign: (payload: any, secret: string, options?: any) => Promise<string>
-//   verify: (payload: any, secret: string, options?: any) => Promise<string>
-// }
-
-// const AsyncJwt: AsyncJwt = {
-//   sign: promisify(jwt.sign),
-//   verify: promisify(jwt.verify)
-// }
-
 const asyncSign = promisify<string|object|Buffer, Secret, SignOptions>(sign)
 const asyncVerify = promisify<string, Secret, any>(verify)
+
+declare namespace process {
+  var env: {
+    APPLICATION_SECRET: string
+  }
+}
 
 /**
  * @exports @const
  * Random alphanumeric sequence for salting JWT.
  */
-export const { APPLICATION_SECRET } = process.env as { APPLICATION_SECRET: Secret }
-if( !APPLICATION_SECRET ) {
-  throw new Error('APPLICATION_SECRET is undefined')
-}
+export const { APPLICATION_SECRET } = process.env
 
 /**
  * @exports @const
@@ -45,6 +38,10 @@ export class TokenService {
    * Creates a token from a object.
    */
   static sign(payload: object, secret?: string): Promise<void|string> {
+    if( !APPLICATION_SECRET ) {
+      throw new Error('APPLICATION_SECRET is undefined')
+    }
+
     return asyncSign(payload, secret || APPLICATION_SECRET, {
       expiresIn: EXPIRES_IN
     })

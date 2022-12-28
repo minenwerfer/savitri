@@ -1,13 +1,13 @@
 <template>
   <sv-box fill transparent-mobile>
     <sv-table
-      v-if="store.tableDescription"
+      v-if="store.properties"
       v-loading="store.isLoading"
       :key="store.$id"
 
       v-bind="{
         checkbox: store.hasSelectionActions,
-        columns: store.tableDescription,
+        columns: store.properties,
         rows: store.$items,
         actions: individualActions,
         layout: store.tableLayout

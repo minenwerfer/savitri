@@ -1,15 +1,16 @@
 import type { CollectionDescription } from '../../../types'
+import type { ApiContext } from '../../../api/types'
 import { getEntityAsset } from '../../../api'
 import { getDescriptions } from '../meta/meta.helper'
 
 const __searchable: Record<string, CollectionDescription> = {}
 
-export const getSearchables = () => {
+export const getSearchables = (context: ApiContext) => {
   if( Object.keys(__searchable).length > 0 ) {
     return __searchable
   }
 
-  const descriptions = getDescriptions()
+  const descriptions = getDescriptions(context)
 
   const searchable = Object.entries(descriptions)
     .reduce((a, [collectionName, description]: [string, any]) => {

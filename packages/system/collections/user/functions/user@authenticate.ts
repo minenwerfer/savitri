@@ -66,6 +66,10 @@ const authenticate: ApiFunction<Props, Return> = async (props, context) => {
     throw new Error('this user is inactive')
   }
 
+  context.log('successful authentication', {
+    email: user.email
+  })
+
   const tokenContent = {
     user: {
       _id: leanUser._id,

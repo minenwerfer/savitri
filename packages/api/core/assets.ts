@@ -2,6 +2,7 @@ import { existsSync } from 'fs'
 import type { Model } from 'mongoose'
 import type {
   ApiFunction ,
+  AnyFunctions,
   AssetType,
   EntityType,
   FunctionPath,
@@ -84,23 +85,58 @@ const loadModelWithFallback = (collectionName: string, internal: boolean) => {
   }
 }
 
+const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: EntityType) => {
+  const [entityName] = functionPath.split('@')
+  const proxyFn = (entityName: string, context: any, _entityType?: EntityType) => {
+    return new Proxy({}, {
+      get: (_, entityFunction: string) => {
+        return (props?: any) => getEntityFunction(`${entityName}@${entityFunction}`, _entityType)(props, context)
+      }      
+    }) as AnyFunctions
+  }
+
+  const wrapper: ApiFunction = (props, context) => {
+    const collection = entityType === 'collection'
+      ? useCollection(entityName, context)
+      : {} as CollectionFunctions
+
+    return fn(props, {
+      ...context,
+      collection,
+      log: (message, details) => {
+        return useCollection('log', context).insert({
+          what: {
+            message,
+            details,
+            context: entityName,
+            owner: context.token.user?._id
+          }
+        })
+      },
+      entity: proxyFn(entityName, context, entityType),
+      collections: new Proxy({}, {
+        get: (_, entityName: string) => {
+          return proxyFn(entityName, context)
+        }
+      }),
+      controllables: new Proxy({}, {
+        get: (_, entityName: string) => {
+          return proxyFn(entityName, context, 'controllable')
+        }
+      })
+    })
+  }
+
+  return wrapper
+}
+
+
 const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection', internal: boolean = false) => {
   const [entityName] = functionPath.split('@')
   const prefix = getPrefix(entityName, internal, entityType)
 
-  const originalFn = require(`${prefix}/functions/${functionPath}`).default
-  if( entityType === 'controllable' ) {
-    return originalFn
-  }
-
-  const fn: ApiFunction<any> = (props, context) => {
-    return originalFn(props, {
-      ...context,
-      collection: useCollection(entityName, context)
-    })
-  }
-
-  return fn
+  const originalFn: ApiFunction = require(`${prefix}/functions/${functionPath}`).default
+  return wrapFunction(originalFn, functionPath, entityType)
 }
 
 const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: EntityType, internal: boolean) => {
@@ -112,7 +148,7 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: Entity
     }
 
     const [entityName, functionName] = functionPath.split('@')
-    const fn: ApiFunction<unknown> = (props, context) => {
+    const fn: ApiFunction<any> = (props, context) => {
       const description = getEntityAsset(entityName, 'description')
       const actualEntityName = description.alias || description.$id
 
@@ -147,8 +183,28 @@ export const getEntityAsset = <Type extends AssetType>(
 
       const internal = isInternal(entityName, entityType)
 
+      if( entityName !== 'meta' ) {
+        const description = global.descriptions?.[entityName]
+        if( description ) {
+          switch( assetType ) {
+            case 'description':
+              return description
+            case 'model':
+              return description?.model
+                || loadModelWithFallback(assetName, internal)
+            case 'function': {
+              const fn = description.functions?.[assetName.split('@').pop()!]
+              return fn
+                ? wrapFunction(fn, assetName as FunctionPath, entityType)
+                : loadFunctionWithFallback(assetName as FunctionPath, entityType, internal)
+            }
+          }
+        }
+      }
+
       switch( assetType ) {
-        case 'description': return loadDescription(assetName, internal)
+        case 'description':
+          return loadDescription(assetName, internal)
         case 'model':
           return loadModelWithFallback(assetName, internal)
         case 'function':

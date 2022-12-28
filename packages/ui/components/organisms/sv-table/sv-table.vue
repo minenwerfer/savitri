@@ -17,14 +17,14 @@
           />
         </th>
         <th
-          v-for="(header, index) in columns"
+          v-for="([propertyName, property], index) in Object.entries(columns)"
           :key="`header-${index}`"
           :class="`
             table__header
             table__header--description
             ${border && 'table__header--border'}
         `">
-          {{ header.description || header.placeholder }}
+          {{ property.description || propertyName }}
         </th>
         <th
           v-if="actions"

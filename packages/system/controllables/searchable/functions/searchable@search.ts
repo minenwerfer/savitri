@@ -7,7 +7,8 @@ type Props = {
   query: Array<string>
 }
 
-const search: ApiFunction<Props> = async (props, { token, apiConfig }) => {
+const search: ApiFunction<Props> = async (props, context) => {
+  const { token, apiConfig } = context
   if( !token?.user?.role ) {
     throw makeException({
       name: 'AuthorizationError',
@@ -20,7 +21,7 @@ const search: ApiFunction<Props> = async (props, { token, apiConfig }) => {
     throw new Error('no query provided')
   }
 
-  const searchables = Object.entries(getSearchables())
+  const searchables = Object.entries(getSearchables(context))
     .reduce((a, [key, value]: [string, any]) => {
       // if( !this.isGranted(token, 'getAll', key) ) {
       //   return a

@@ -22,7 +22,8 @@ export const options = {
 
 
 export const connectDatabase = () => {
-  const { MONGODB_URI } = process.env
+  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
+
   mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

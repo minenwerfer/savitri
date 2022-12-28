@@ -87,7 +87,7 @@ watch(() => page.value, (newVal: number) => {
   pageInput.value = newVal + 1
   store.filter({
     project: [
-      ...Object.keys(store.tableDescription),
+      ...Object.keys(store.properties),
       ...store.tableMeta
     ]
   })
