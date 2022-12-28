@@ -5,12 +5,16 @@ Savitri
 > to make it simples, for an idiot anything the more complicate it is the more
 > he will admire it. — Terry A. Davis
 
-Strongely typed, fullstack TypeScript RAD (rapid application development) framework.
-It's not a public release yet.
+Our philosophy is that most complexity is dumb, and computing is more efficient
+when you have fun. So we made it real complex so you can make it real simple.
+Savitri is a strongely typed, fullstack TypeScript RAD (rapid application
+development) framework you'll enjoy working with.
+
+# We are looking for contributors!
+Join in our Discord server if you're interested in contributing.
 
 Features
-- Builtin authentication
-- Builtin file uploading
+- Builtin authentication, file uploading and logging
 - Builtin RBAC (role-based access control)
 - In-house set of backoffice components
 - Schema validation
