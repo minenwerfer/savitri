@@ -33,7 +33,7 @@ const descriptions = {
       }
     },
     functions: {
-      buy: async (props, { log, entity }) => {
+      buy: (props, { log, entity }) => {
         log('bought a fruit', {
           name: props?.nome
         })
