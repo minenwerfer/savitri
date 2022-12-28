@@ -13,7 +13,16 @@ const mode = process.argv[2];
 
 (() => {
   try {
-    const content = require(`${process.cwd()}/${relpath}`)
+    const content = (() => {
+      {
+        try {
+          return require(`${process.cwd()}/${relpath}`)
+        } catch( e ) {
+          return {}
+        }
+      }
+    })()
+
     const buildConfig = Object.assign(content, {
       mode,
       name: process.cwd().split('/').pop(),

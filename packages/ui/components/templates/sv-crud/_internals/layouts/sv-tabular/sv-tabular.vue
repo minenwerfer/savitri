@@ -7,7 +7,7 @@
 
       v-bind="{
         checkbox: store.hasSelectionActions,
-        columns: store.properties,
+        columns: store.tableProperties,
         rows: store.$items,
         actions: individualActions,
         layout: store.tableLayout

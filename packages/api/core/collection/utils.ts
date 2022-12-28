@@ -68,7 +68,7 @@ export const prepareInsert = (
   })
 
   const prepareCreate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
-    if( forbidden(key) ) {
+    if( forbidden(key) || !value ) {
       return a
     }
 

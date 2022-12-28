@@ -1,5 +1,6 @@
 import type { CollectionProperty, Layout, LayoutName } from '../../../types'
 import type { CollectionState } from '../../types/state'
+import type { Actions, Mutations } from './actions.types'
 import { fromEntries, deepClone } from '../../../common'
 import { useStore } from './use'
 
@@ -12,20 +13,17 @@ import  {
 } from './helpers'
 
 export type Getters = Record<`$${string}`, any> & {
+  $patch: any
   properties: Record<string, CollectionProperty>
   references: Array<[string, CollectionProperty]>
   inlineReferences: Array<[string, CollectionProperty]>
 }
 
-type GettersFunctions = Record<string, (this: CollectionState<any> & Getters) => any>
+type GettersFunctions = Record<string, (this: CollectionState<any> & Getters & Actions & Mutations) => any>
 
 const getters: GettersFunctions = {
   properties() {
     return this.description.properties
-  },
-
-  tableMeta() {
-    return this.description.tableMeta||[]
   },
 
   actions() {
@@ -48,6 +46,17 @@ const getters: GettersFunctions = {
   formLayout() {
     return this.description.formLayout||{}
   },
+
+  tableProperties() {
+    return this.description.table
+      ? this.useProperties(this.description.table)
+      : this.properties
+  },
+
+  tableMeta() {
+    return this.description.tableMeta||[]
+  },
+
 
   tableLayout() {
     return this.description.tableLayout||{}
