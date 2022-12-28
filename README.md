@@ -10,8 +10,6 @@ when you have fun. So we made it real complex so you can make it real simple.
 Savitri is a strongely typed, fullstack TypeScript RAD (rapid application
 development) framework you'll enjoy working with.
 
-# We are looking for contributors!
-Join in our Discord server if you're interested in contributing.
 
 Features
 - Builtin authentication, file uploading and logging
@@ -68,3 +66,8 @@ init({ descriptions })
 Todo:
 - Improve code splitting and lazyloading
 - Whitelabeling support
+
+
+## We are looking for contributors!
+Join in our Discord server if you're interested in contributing.
+
