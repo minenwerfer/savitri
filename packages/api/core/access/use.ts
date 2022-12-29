@@ -1,6 +1,6 @@
 import { deepMerge } from '../../../common/helpers'
 import type { ApiFunction, ApiContext } from '../../types'
-import type { CollectionDescription, CollectionOptions } from '../../../types'
+import type { CollectionDescription } from '../../../types'
 import * as baseControl from './base-control'
 
 type ReadPayload = {
@@ -14,13 +14,12 @@ type WritePayload = {
   filters: Record<string, any>
 }
 
-export const useAccessControl = (description: CollectionDescription, _options?: CollectionOptions, context?: ApiContext) => {
-  const options = _options||{} as CollectionOptions
-  const apiConfig = context?.apiConfig||{}
+export const useAccessControl = (description: CollectionDescription, context?: ApiContext) => {
+  const options = description.options
+    ? Object.assign({}, description.options)
+    : {}
 
-  if( description.options ) {
-    Object.assign(options, description.options)
-  }
+  const apiConfig = context?.apiConfig||{}
 
   const beforeRead: ApiFunction<any, ReadPayload> = (props, { token }) => {
     const newPayload = Object.assign({}, {

@@ -19,8 +19,6 @@ export const checkAC = (params: PreHookParams) => {
     params.context
   )
   
-  console.log(params.context.apiConfig.roles)
-
   if( !granted ) {
     throw makeException({
       name: 'AuthorizationError',

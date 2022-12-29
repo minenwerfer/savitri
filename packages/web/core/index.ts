@@ -39,7 +39,7 @@ export const useApp = (config: AppOptions): Promise<{
 
   pinia.use(() => ({
     router,
-    i18n,
+    i18n: i18n.global,
     store: useStore
   }))
 

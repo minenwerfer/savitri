@@ -149,10 +149,7 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: Entity
 
     const [entityName, functionName] = functionPath.split('@')
     const fn: ApiFunction<any> = (props, context) => {
-      const description = getEntityAsset(entityName, 'description')
-      const actualEntityName = description.alias || description.$id
-
-      const method = useCollection(actualEntityName, context)[functionName as keyof CollectionFunctions]
+      const method = useCollection(entityName, context)[functionName as keyof CollectionFunctions]
       if( !method || typeof method !== 'function' ) {
         throw new TypeError(
           `no such function ${functionPath}`

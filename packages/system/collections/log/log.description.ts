@@ -14,6 +14,10 @@ const schema = {
     },
     details: {
       type: 'object'
+    },
+    created_at: {
+      type: 'string',
+      format: 'date-time'
     }
   }
 } as const

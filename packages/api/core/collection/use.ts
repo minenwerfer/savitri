@@ -17,22 +17,16 @@ export const useCollection = (collectionName: string, _context: ApiContext|null 
     )
   }
 
-  const options = description.options
-  // const options = Object.assign(
-  //   context?.options||{},
-  //   description.options||{}
-  // ) as Options
-
-  const access = useAccessControl(description, options, context)
-  Object.assign(context, {
-    options,
+  const access = useAccessControl(description, context)
+  const contextWithAC: ApiContextWithAC = {
+    ...context,
     access
-  })
+  }
 
   const functions = useFunctions(
     model,
     description,
-    context as ApiContextWithAC
+    contextWithAC
   )
 
   return {
