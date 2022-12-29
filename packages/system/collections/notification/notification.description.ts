@@ -10,7 +10,6 @@ const schema = {
   ],
   properties: {
     destination: {
-      description: 'Destinatário',
       type: 'array',
       items: {
         $ref: 'user'
@@ -18,25 +17,18 @@ const schema = {
       s$indexes: 'email'
     },
     title: {
-      description: 'Título',
       type: 'string',
     },
     action: {
-      description: 'Ação',
       type: 'string'
     },
     groups: {
-      description: 'Grupos',
       type: 'string',
-      s$placeholder: 'Ex.: logistic,producer',
-      s$hint: 'Separados por vírgula, ou vazio'
     },
     subject: {
-      description: 'Sujeito',
       type: 'string'
     },
     content: {
-      description: 'Conteúdo',
       type: 'string',
       s$element: 'textarea',
     }

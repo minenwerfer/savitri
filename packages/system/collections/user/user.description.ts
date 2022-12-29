@@ -16,66 +16,54 @@ const schema = {
   indexes: 'name',
   properties: {
     first_name: {
-      description: 'Nome',
       type: 'string'
     },
     last_name: {
-      description: 'Sobrenome',
       type: 'string'
     },
     full_name: {
-      description: 'Nome completo',
       type: 'string',
       s$noform: true,
       s$meta: true
     },
     active: {
-      description: 'Ativo',
       type: 'boolean',
       default: true
     },
     role: {
-      description: 'Papel',
       enum: [],
       s$element: 'select'
     },
     email: {
-      description: 'Email',
       type: 'string',
       s$inputType: 'email',
       s$unique: true,
     },
     password: {
-      description: 'Senha',
       type: 'string',
       s$inputType: 'password',
       s$hidden: true,
       s$noform: true
     },
     phone: {
-      description: 'Telefone',
       type: 'string',
       s$mask: '(##) #####-####'
     },
     picture: {
       $ref: 'file',
-      description: 'Foto',
       accept: [
         'image/*',
       ]
     },
     group: {
-      description: 'Grupo',
       type: 'string',
       s$noform: true
     },
     self_registered: {
-      description: 'Autoregistrado',
       type: 'boolean',
       readOnly: true
     },
     wizard_versions: {
-      description: 'Versão do wizard',
       type: 'array',
       items: {
         type: 'string'
@@ -83,7 +71,6 @@ const schema = {
       s$noform: true
     },
     updated_at: {
-      description: 'Atualizado em',
       type: 'string',
       format: 'date-time',
       s$meta: true

@@ -7,24 +7,20 @@ const schema = {
   owned: true,
   properties: {
     _collection: {
-      description: 'Módulo',
       type: 'string',
       s$translate: true
     },
     created_at: {
-      description: 'Data',
       type: 'string',
       format: 'date-time',
       s$meta: true
     },
     file: {
       $ref: 'file',
-      description: 'Arquivo',
       s$indexes: 'name',
       s$noform: true
     },
     format: {
-      description: 'Formato',
       enum: [
         'csv',
         'pdf'
@@ -32,7 +28,6 @@ const schema = {
       s$element: 'select'
     },
     type: {
-      description: 'Tipo',
       enum: [
         'filtered_only',
         'everything'
@@ -41,22 +36,18 @@ const schema = {
       s$translate: true
     },
     limit: {
-      description: 'Limite',
       type: 'number',
       s$hint: 'Relatórios com muitas entradas são custosos em termos de processamento, portanto utilize essa opção com cuidado. Verifique antes se já não há um relatório pronto na seção "Relatórios" antes de prosseguir.',
     },
     offset: {
-      description: 'Offset',
       type: 'number',
       s$hint: 'Deixe vazio para retornar do princípio',
     },
     filters: {
-      description: 'Filtros',
       type: 'object',
       s$noform: true
     },
     entries_count: {
-      description: 'Entradas',
       type: 'number',
       s$noform: true
     }
