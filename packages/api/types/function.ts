@@ -1,4 +1,5 @@
 import { useAccessControl } from '../core/access/use'
+import type { ValidateFunction } from '../core/collection/validate'
 import type { MaybeCollectionDescription } from '../../types'
 import type { Log } from '../../system/collections/log/log.description'
 import type { CollectionFunctions } from '../core/collection/functions.types'
@@ -36,6 +37,7 @@ export type ApiContext = {
   injected: Record<string, any>
   token: DecodedToken
 
+  validate: <T>(what: T, required?: Array<keyof T>) => void
   collection: CollectionFunctions
   entity: AnyFunctions
   log: (message: string, details?: Record<string, any>) => Promise<Log>

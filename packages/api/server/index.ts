@@ -6,10 +6,13 @@ import { connectDatabase } from '../core/database'
 import getRoutes from './routes'
 export { getToken } from './handler'
 
-const defaultConfig = {
+const defaultApiConfig = {
   port: 3000,
   modules: [],
   descriptions: {},
+}
+
+const defaultAccessControl = {
   roles: {
     guest: {
       grantEverything: true
@@ -18,11 +21,17 @@ const defaultConfig = {
 }
 
 export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Server> => {
-  const apiConfig = Object.assign({}, defaultConfig)
+  const apiConfig = Object.assign({}, defaultApiConfig)
+  const accessControl = Object.assign({}, defaultAccessControl)
+
   Object.assign(apiConfig, _context?.apiConfig||{})
+  Object.assign(accessControl, _context?.accessControl||{})
 
   const context: Partial<ApiContext> = Object.assign({}, _context||{})
-  Object.assign(context, { apiConfig })
+  Object.assign(context, {
+    apiConfig,
+    accessControl
+  })
 
   if( apiConfig.modules ) {
     global.modules = apiConfig.modules

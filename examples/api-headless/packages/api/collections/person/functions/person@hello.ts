@@ -6,14 +6,11 @@ type Props = Pick<Person,
   | 'job'
 >
 
-const hello: ApiFunction<Props> = (props) => {
-  // we don't provide runtime props validation
-  // do it yourself or use an external library like zod
-  if( !props.name  || !props.job) {
-    throw new TypeError(
-      `please provide name and job`
-    )
-  }
+const hello: ApiFunction<Props> = (props, { validate }) => {
+  validate(props, [
+    'name',
+    'job'
+  ])
 
   const treatment = (() => {
     switch( props.job ) {

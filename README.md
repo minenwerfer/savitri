@@ -15,7 +15,7 @@ Features
 - Builtin authentication, file uploading and logging
 - Builtin RBAC (role-based access control)
 - In-house set of backoffice components
-- Schema validation
+- Runtime and static schema validation
 - Automatic dependency resolution
 - Automatic schema references
 
@@ -28,14 +28,15 @@ const descriptions = {
   fruta: {
     $id: 'fruta',
     properties: {
-      nome: {
+      name: {
         type: 'string'
       }
     },
     functions: {
-      buy: (props, { log, entity }) => {
+      buy: (props, { log, entity, validate }) => {
+        validate(props, ['name'])
         log('bought a fruit', {
-          name: props?.nome
+          name: props.name
         })
 
         return entity.bye()

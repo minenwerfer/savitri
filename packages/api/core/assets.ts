@@ -6,13 +6,15 @@ import type {
   AssetType,
   EntityType,
   FunctionPath,
-  AssetReturnType
+  AssetReturnType,
+  ApiContext
 
 } from '../types'
 
 import { default as SystemCollections } from '../../system/collections'
 import { default as SystemControllables } from '../../system/controllables'
 import type { CollectionFunctions } from './collection/functions.types'
+import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { useCollection, createModel } from './collection'
 
 const __cached: Record<AssetType, Record<string, any>> = {
@@ -96,13 +98,10 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
   }
 
   const wrapper: ApiFunction = (props, context) => {
-    const collection = entityType === 'collection'
-      ? useCollection(entityName, context)
-      : {} as CollectionFunctions
-
-    return fn(props, {
+    const newContext: ApiContext = {
       ...context,
-      collection,
+      validate: (...args: any[]) => null,
+      collection: {} as CollectionFunctions,
       log: (message, details) => {
         return useCollection('log', context).insert({
           what: {
@@ -124,7 +123,15 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
           return proxyFn(entityName, context, 'controllable')
         }
       })
-    })
+    }
+
+    if( entityType === 'collection' ) {
+      const description = getEntityAsset(entityName, 'description')
+      newContext.validate = (...args: Parameters<ValidateFunction<any>>) => validateFromDescription(description, ...args)
+      newContext.collection = useCollection(entityName, context)
+    }
+
+    return fn(props, newContext)
   }
 
   return wrapper
