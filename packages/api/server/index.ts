@@ -60,8 +60,8 @@ export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Se
   return server
 }
 
-export const initWithDatabase = (...args: Parameters<typeof init>) => {
-  connectDatabase()
+export const initWithDatabase = async (...args: Parameters<typeof init>) => {
+  await connectDatabase()
   return init(...args)
 }
 

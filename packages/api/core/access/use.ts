@@ -19,7 +19,7 @@ export const useAccessControl = (description: CollectionDescription, context?: A
     ? Object.assign({}, description.options)
     : {}
 
-  const apiConfig = context?.apiConfig||{}
+  const accessControl = context?.accessControl||{}
 
   const beforeRead: ApiFunction<any, ReadPayload> = (props, { token }) => {
     const newPayload = Object.assign({}, {
@@ -35,10 +35,10 @@ export const useAccessControl = (description: CollectionDescription, context?: A
       )
     }
 
-    if( apiConfig.beforeRead && token ) {
+    if( accessControl.beforeRead && token ) {
       deepMerge(
         newPayload,
-        apiConfig.beforeRead(token, description.$id)
+        accessControl.beforeRead(token, description.$id)
       )
     }
 
@@ -58,10 +58,10 @@ export const useAccessControl = (description: CollectionDescription, context?: A
     const newPayload = Object.assign({ what: {} }, props)
     const filters = newPayload.what || {}
 
-    if( apiConfig.beforeWrite && token ) {
+    if( accessControl.beforeWrite && token ) {
       deepMerge(
         filters,
-        apiConfig.beforeWrite(token, description.$id)
+        accessControl.beforeWrite(token, description.$id)
       )
     }
 

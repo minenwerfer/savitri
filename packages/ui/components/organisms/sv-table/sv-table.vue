@@ -143,7 +143,7 @@
           </div>
         </td>
         <td
-          v-if="actions?.length > 0"
+          v-if="actions?.length"
           class="table__cell"
         >
           <div class="table__cell-actions">
@@ -234,11 +234,11 @@ const selected = computed({
 })
 
 const buttonActions = computed(() => (
-  props.actions?.filter((action) => props.layout?.actions?.[action.action]?.button)
+  props.actions?.filter((action) => props.layout?.actions?.[action.action]?.button) || []
 ))
 
 const dropdownActions = computed(() => (
-  props.actions?.filter((action) => !props.layout?.actions?.[action.action]?.button)
+  props.actions?.filter((action) => !props.layout?.actions?.[action.action]?.button) || []
 ))
 
 const toggle = (value: boolean, rowId: string, key: string) => {

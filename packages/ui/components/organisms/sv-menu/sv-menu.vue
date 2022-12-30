@@ -127,7 +127,7 @@ const getRoutes = (node?: SchemaNode): Array<Route> => {
     } = node
 
     const roles = route?.meta?.roles || node.roles
-    if( roles && !roles.includes(userStore.$currentUser.role) ) {
+    if( roles && !userStore.$currentUser.roles?.some((role: string) => roles.includes(role)) ) {
       return
     }
 

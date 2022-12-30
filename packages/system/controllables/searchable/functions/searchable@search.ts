@@ -8,8 +8,8 @@ type Props = {
 }
 
 const search: ApiFunction<Props> = async (props, context) => {
-  const { token, apiConfig } = context
-  if( !token?.user?.role ) {
+  const { token, accessControl } = context
+  if( !token?.user?.roles.length ) {
     throw makeException({
       name: 'AuthorizationError',
       message: 'signed out'
@@ -33,8 +33,8 @@ const search: ApiFunction<Props> = async (props, context) => {
       }
   }, {})
 
-  const beforeRead = apiConfig.beforeRead
-    ? (collectionName: string) => apiConfig.beforeRead!(token, collectionName)
+  const beforeRead = accessControl.beforeRead
+    ? (collectionName: string) => accessControl.beforeRead!(token, collectionName)
     : null
 
   const aggregations = buildAggregations(

@@ -26,7 +26,7 @@ export default <T extends MongoDocument>(
 ) => {
   const context = _context||{} as ApiContextWithAC
   const {
-    access: {
+    acFunctions: {
       beforeRead,
       beforeWrite
     }

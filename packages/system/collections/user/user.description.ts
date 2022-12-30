@@ -1,7 +1,7 @@
 import { makeDescription, Schema } from '../../../api/core/collection'
 
 export type User = Omit<Schema<typeof schema>, 'role'> & {
-  role: string
+  roles: Array<string>
   testPassword?(password: string): boolean
 }
 
@@ -15,23 +15,26 @@ const schema = {
   ],
   indexes: 'name',
   properties: {
-    first_name: {
+    full_name: {
       type: 'string'
+    },
+    first_name: {
+      type: 'string',
+      s$meta: true
     },
     last_name: {
-      type: 'string'
-    },
-    full_name: {
       type: 'string',
-      s$noform: true,
       s$meta: true
     },
     active: {
       type: 'boolean',
       default: true
     },
-    role: {
-      enum: [],
+    roles: {
+      type: 'array',
+      items: {
+        enum: [],
+      },
       s$element: 'select'
     },
     email: {
@@ -87,7 +90,7 @@ export default makeDescription<typeof schema>(schema, {
   layout: {
     name: 'grid',
     options: {
-      title: 'first_name',
+      title: 'full_name',
       picture: 'picture'
     }
   },

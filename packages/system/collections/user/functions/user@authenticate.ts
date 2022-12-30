@@ -14,7 +14,7 @@ type Return = Promise<{
     'first_name'
     | 'last_name'
     | 'email'
-    | 'role'
+    | 'roles'
     | 'active'
   >
   extra: Record<string, any>
@@ -36,7 +36,7 @@ const authenticate: ApiFunction<Props, Return> = async (props, context) => {
     const token = await TokenService.sign({
       user: {
         _id: null,
-        role: 'root'
+        roles: ['root']
       },
     }) as string
 
@@ -45,7 +45,7 @@ const authenticate: ApiFunction<Props, Return> = async (props, context) => {
         first_name: 'God',
         last_name: 'Mode',
         email: '',
-        role: 'root',
+        roles: ['root'],
         active: true,
       },
       extra: {},
@@ -73,7 +73,7 @@ const authenticate: ApiFunction<Props, Return> = async (props, context) => {
   const tokenContent = {
     user: {
       _id: leanUser._id,
-      role: leanUser.role
+      roles: leanUser.roles
     },
     extra: {}
   }

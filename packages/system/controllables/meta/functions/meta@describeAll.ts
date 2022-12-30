@@ -5,7 +5,7 @@ const describeAll: ApiFunction<null> = (_props, context) => {
   const descriptions = getDescriptions(context)
   return {
     descriptions,
-    roles: context.apiConfig.roles
+    roles: context.accessControl.roles
   }
 }
 

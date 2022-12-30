@@ -5,8 +5,7 @@
       v-bind="{
         collection: 'user',
         form: userStore.useProperties([
-          'first_name',
-          'last_name',
+          'full_name',
           'email',
           'phone',
           'picture'
@@ -19,7 +18,7 @@
     <template #footer>
       <sv-button
         variant="transparent"
-        @clicked="$router.push({ name: 'dashboard-user-changepass' })"
+        @clicked="router.push({ name: 'dashboard-user-changepass' })"
       >
         Mudar senha
       </sv-button>
@@ -35,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { useStore } from '../../../../../web'
 import {
   SvBox,
@@ -43,6 +43,7 @@ import {
 
 } from '../../../../components'
 
+const router = useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
 

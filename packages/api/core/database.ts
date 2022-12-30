@@ -21,8 +21,21 @@ export const options = {
 }
 
 
-export const connectDatabase = () => {
-  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/test'
+export const connectDatabase = async () => {
+  const MONGODB_URI = await (async () => {
+    const envURI = process.env.MONGODB_URI
+    if( !envURI ) {
+      console.warn(
+        `mongo URI wasn't supplied, fallbacking to memory storage`
+      )
+
+      const { MongoMemoryServer } = require('mongodb-memory-server')
+      const mongod = await MongoMemoryServer.create()
+      return mongod.getUri()
+    }
+
+    return process.env.MO
+  })()
 
   mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,

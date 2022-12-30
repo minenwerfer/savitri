@@ -17,10 +17,10 @@ export const useCollection = (collectionName: string, _context: ApiContext|null 
     )
   }
 
-  const access = useAccessControl(description, context)
+  const acFunctions = useAccessControl(description, context)
   const contextWithAC: ApiContextWithAC = {
     ...context,
-    access
+    acFunctions
   }
 
   const functions = useFunctions(

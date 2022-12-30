@@ -6,10 +6,6 @@ import type { ApiConfig, DecodedToken } from './server'
 
 export type FunctionPath = `${string}@${string}`
 
-export type ApiContextWithAC = ApiContext & {
-  access: ReturnType<typeof useAccessControl>
-}
-
 export type ApiFunction<Props=unknown, Return={}> = (
   props: Props,
   context: ApiContext
@@ -17,8 +13,26 @@ export type ApiFunction<Props=unknown, Return={}> = (
 
 export type AnyFunctions = CollectionFunctions & Record<string, (props?: any) => any>
 
+export type Role = {
+  grantEverything?: boolean
+  capabilities?: Record<string, {
+    grantEverything?: boolean
+    methods?: Array<string>
+    blacklist?: Array<string>
+  }>
+}
+
+export type Roles = Record<string, Role>
+
+export type AccessControl = {
+  roles?: Roles
+  beforeRead?: (token: DecodedToken, collectionName: string) => Record<string, any>
+  beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>
+}
+
 export type ApiContext = {
   apiConfig: ApiConfig
+  accessControl: AccessControl
   injected: Record<string, any>
   token: DecodedToken
 
@@ -29,5 +43,9 @@ export type ApiContext = {
   controllables: Record<string, AnyFunctions>
 
   descriptions?: Record<string, MaybeCollectionDescription>
+}
+
+export type ApiContextWithAC = ApiContext & {
+  acFunctions: ReturnType<typeof useAccessControl>
 }
 

@@ -9,19 +9,25 @@ const _isGranted = (
 ) => {
   const [entityName, functionName] = functionPath.split('@')
 
-  const roleName = token?.user?.role || 'guest'
-  const currentRole = targetRole || context.apiConfig?.roles?.[roleName]
+  const userRoles = token?.user?.roles || ['guest']
+  return userRoles.some((roleName) => {
+    const currentRole = targetRole || context.accessControl.roles?.[roleName]
 
-  if( !currentRole ) {
-    return false
-  }
+    if( !currentRole ) {
+      return false
+    }
 
-  const subject = currentRole?.capabilities?.[entityName]
-  return (
-    currentRole?.grantEverything
-    || subject?.grantEverything
-    || subject?.methods?.includes(functionName)
-  )
+    const subject = currentRole?.capabilities?.[entityName]
+    if( subject?.blacklist?.includes(functionName) ) {
+      return false
+    }
+
+    return (
+      currentRole?.grantEverything
+      || subject?.grantEverything
+      || subject?.methods?.includes(functionName)
+    )
+  })
 }
 
 export const isGranted = (

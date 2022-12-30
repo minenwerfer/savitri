@@ -20,7 +20,7 @@
     </a>
 
     <div>
-      {{ property.description }}
+      {{ property.description || propertyName }}
     </div>
   </div>
 </template>

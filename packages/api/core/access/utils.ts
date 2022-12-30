@@ -1,5 +1,5 @@
 import { deepMerge } from '../../../common/helpers/deepMerge'
-import type { Role, Roles } from '../../types/server'
+import type { Role, Roles } from '../../types'
 
 export const grantEverything = (names: Array<string>) => names.reduce((a, n) => {
   return {

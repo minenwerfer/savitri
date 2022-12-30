@@ -6,15 +6,12 @@ const schema = {
   $id: 'person',
   properties: {
     name: {
-      description: 'Name',
       type: 'string'
     },
     age: {
-      description: 'Age',
       type: 'number'
     },
     job: {
-      description: 'Job',
       enum: [
         'aviator',
         'doctor',

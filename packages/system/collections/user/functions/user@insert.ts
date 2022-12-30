@@ -17,9 +17,9 @@ const insert: ApiFunction<Props, Return> = async (props, context) => {
   props.what.group = apiConfig.group
 
   // user is being inserted by a non-root user
-  if( token?.user.role !== 'root' ) {
+  if( !token?.user?.roles.includes('root') ) {
     const userId = props.what._id = token?.user._id
-    delete props.what.role
+    delete props.what.roles
 
     // a new user is being created
     if( !userId ) {

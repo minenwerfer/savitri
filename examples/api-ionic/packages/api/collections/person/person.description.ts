@@ -6,19 +6,15 @@ const schema = {
   $id: 'person',
   properties: {
     name: {
-      description: 'Name',
       type: 'string'
     },
     age: {
-      description: 'Age',
       type: 'number'
     },
     active: {
-      description: 'Active',
       type: 'boolean'
     },
     job: {
-      description: 'Job',
       type: 'array',
       items: {
         enum: [
@@ -29,8 +25,7 @@ const schema = {
       },
       s$element: 'select',
     },
-    pet: {
-      description: 'Pets',
+    pets: {
       type: 'array',
       items: {
         $ref: 'pet'

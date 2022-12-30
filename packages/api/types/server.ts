@@ -15,31 +15,18 @@ export type DecodedToken = {
   extra?: Record<string, any>
 }
 
-export type Role = {
-  grantEverything?: boolean
-  capabilities?: Record<string, {
-    grantEverything?: boolean
-    methods?: Array<string>
-  }>
-}
-
-export type Roles = Record<string, Role>
 
 export type ApiConfig = {
   port?: number
   modules?: Array<string> // experimental
-
   group?: string
-  roles?: Roles
 
   allowSignup?: boolean
   signupDefaults?: {
     role: string
     active: boolean
   }
+
   populateUserExtra?: Array<string>
   dynamicCollections?: boolean
-
-  beforeRead?: (token: DecodedToken, collectionName: string) => Record<string, any>
-  beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>
 }

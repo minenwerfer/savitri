@@ -2,6 +2,7 @@ import { reactive } from 'vue'
 import type { Router } from 'vue-router'
 import type { CollectionAction, StoreEffect } from '../../types'
 import type { ActionEvent } from '../../web/types/action'
+import { deepClone } from '../../common'
 import { STORE_EFFECTS } from '../../types/constants'
 
 const getEffect = (store: any, effectName: StoreEffect) => {
@@ -48,7 +49,8 @@ export default <T extends { $id: string }, F extends { _id: string }>(
       }
 
       if( scopeName === 'ui' ) {
-        return (filters: F) => {
+        return (_filters: F) => {
+          const filters = deepClone(_filters)
           Object.assign(eventBus, {
             id: Math.random(),
             name: scopedAction,

@@ -6,11 +6,9 @@ const schema = {
   $id: 'pet',
   properties: {
     name: {
-      description: 'Name',
       type: 'string'
     },
     specie: {
-      description: 'Specie',
       enum: [
         'dog',
         'cat',
@@ -18,7 +16,6 @@ const schema = {
       ]
     },
     favorite_toy: {
-      description: 'Favorite toy',
       $ref: 'toy',
       s$inline: true
     }

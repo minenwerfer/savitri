@@ -6,11 +6,9 @@ const schema = {
   $id: 'toy',
   properties: {
     name: {
-      description: 'Name',
       type: 'string'
     },
     price: {
-      description: 'Price',
       type: 'number'
     }
   }

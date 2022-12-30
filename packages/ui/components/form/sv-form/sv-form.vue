@@ -49,7 +49,7 @@
         />
 
         <div
-          v-else-if="property.format === 'date-time' && searchOnly"
+          v-else-if="['date', 'date-time'].includes(property.format!) && searchOnly"
           style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 1rem;"
         >
           <sv-input

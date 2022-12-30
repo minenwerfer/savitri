@@ -3,24 +3,23 @@
     fixed-right
     v-model:visible="isInsertVisible"
     :title="`${isInsertReadOnly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
-    :key="store.item._id"
     @overlay-click="cancel"
   >
     <sv-form
       v-bind="{
         collection: metaStore.view.collection,
         form: store.properties,
-        formData: store.item,
+        formData: store.$item,
         isReadOnly: isInsertReadOnly,
         layout: store.formLayout
       }"
 
-      @add="$e.preventDefault()"
+      @add="$event.preventDefault()"
     ></sv-form>
     <template #extra>
       <sv-dropdown
         v-bind="{
-          subject: store.item,
+          subject: store.$item,
           actions: individualActions
             .filter(({ action }) => action !== 'ui/spawnEdit')
         }"
@@ -28,7 +27,7 @@
       >
         <sv-icon
           v-clickable
-          v-if="store.item._id"
+          v-if="store.$item._id"
           reactive
           name="ellipsis-h"
         ></sv-icon>
@@ -80,18 +79,18 @@ const parentStore = inject<CollectionStore<any>>('parentStore')
 
 const insert = async () => {
   const result = await store.deepInsert({
-    what: store.item
+    what: store.$item
   })
 
   if( props.parentField ) {
-    const newSet = parentStore!.item[props.parentField] ||= []
+    const newSet = parentStore!.$item[props.parentField] ||= []
     if( newSet.findIndex(({ _id }:{ _id: string }) => _id === result._id) === -1 ) {
       newSet.push(result._id)
     }
 
     await parentStore!.insert({
       what: {
-        _id: parentStore!.item._id,
+        _id: parentStore!.$item._id,
         [props.parentField]: newSet
       }
     })
@@ -111,7 +110,7 @@ const cancel = () => {
   })
 }
 
-watch(() => store.item._id, (_id) => {
+watch(() => store.$item._id, (_id) => {
   if( _id === null ) {
     isInsertVisible.value = false
   }

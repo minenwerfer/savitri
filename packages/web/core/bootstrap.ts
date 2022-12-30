@@ -11,7 +11,10 @@ export const bootstrapRoutes = () => {
   watch(() => metaStore.descriptions, (descriptions: Record<string, CollectionDescription>) => {
     Object.values(descriptions).forEach((description) => {
       const routeVisibility = description.route
-      if( Array.isArray(routeVisibility) && !routeVisibility.includes(userStore.$currentUser.role)  ) {
+      if(
+        Array.isArray(routeVisibility)
+          && !userStore.$currentUser.roles.some((role: string) => routeVisibility.includes(role))
+      ) {
         return
       }
 

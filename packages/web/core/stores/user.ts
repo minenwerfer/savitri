@@ -63,12 +63,12 @@ const collection = useCollection({
     properties() {
       const metaStore = useMetaStore()
       const properties = this.description.properties!
-      properties.role.enum = Object.keys(metaStore.roles)
+      properties.roles.items.enum = Object.keys(metaStore.roles)
 
       return properties
     },
 
-    $currentUser(): UserState['currentUser'] {
+    $currentUser(): User {
       if( !this.currentUser?._id ) {
         this.currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
       }

@@ -4,12 +4,18 @@ import UserDescription from './user.description'
 
 export default createModel(UserDescription, {
   schemaCallback: (schema) => { 
-    schema.virtual('full_name').get(function() {
-      this.full_name = `${this.first_name||'N/A'} ${this.last_name||'N/A'}`
+    schema.virtual('first_name').get(function() {
+      this.first_name = this.full_name?.split(' ')[0] || 'N/A'
+    })
+
+    schema.virtual('last_name').get(function() {
+      this.last_name = this.full_name?.split(' ').slice(1).join(' ') || 'N/A'
     })
 
     schema.methods.testPassword = function(candidate: string) {
-      return bcrypt.compare(candidate, this.password || '')
+      return this.password
+        ? bcrypt.compare(candidate, this.password)
+        : false
     }
   }
 })
