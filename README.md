@@ -66,11 +66,11 @@ init({ descriptions })
 
 ## Packages
 
-| Name              | Status                                              | Description
-| ---               | ---                                                 | ---
-| [savitri-api]     | [![savitri-api-status]][savitri-api-package]        | Semantic API implementation
-| [savitri-web]     | [![savitri-web-status]][savitri-web-package]        | Web bindings for API
-| [savitri-ui]      | [![savitri-ui-status]][savitri-ui-package]          | Backoffice UI kit
+| Name                        | Status                                              | Description
+| ---                         | ---                                                 | ---
+| [@savitri/api][savitri-api] | [![savitri-api-status]][savitri-api-package]        | Semantic API implementation
+| [@savitri/web][savitri-web] | [![savitri-web-status]][savitri-web-package]        | Web bindings for API
+| [@savitri/ui][savitri-ui]   | [![savitri-ui-status]][savitri-ui-package]          | Backoffice UI kit
 
 [savitri-api]: https://test.com/
 [savitri-web]: https://test.com/
