@@ -22,11 +22,11 @@ export const options = {
 
 
 export const connectDatabase = async () => {
-  const MONGODB_URI = await (async () => {
-    const envURI = process.env.MONGODB_URI
-    if( !envURI ) {
+  const mongodbUri = await (async () => {
+    const envUri = process.env.MONGODB_URI
+    if( !envUri ) {
       console.warn(
-        `mongo URI wasn't supplied, fallbacking to memory storage`
+        `mongo URI wasn't supplied, fallbacking to memory storage (this means your data will only be alive during runtime)`
       )
 
       const { MongoMemoryServer } = require('mongodb-memory-server')
@@ -34,10 +34,10 @@ export const connectDatabase = async () => {
       return mongod.getUri()
     }
 
-    return process.env.MO
+    return envUri
   })()
 
-  mongoose.connect(MONGODB_URI, {
+  mongoose.connect(mongodbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
