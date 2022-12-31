@@ -2,7 +2,7 @@ import type {
   MaybeCollectionDescription,
   MaybeCollectionAction,
   CollectionProperty,
-  PropertyTypes,
+  PropertyType,
   CollectionPresets,
   StoreEffect
 
@@ -31,8 +31,8 @@ export const presets = (description: MaybeCollectionDescription): MaybeCollectio
   return description
 }
 export const properties = (description: MaybeCollectionDescription): MaybeCollectionDescription => {
-  const isValidPropertyType = (propertyType?: string): propertyType is PropertyTypes => {
-    return PROPERTY_TYPES.includes(propertyType as PropertyTypes)
+  const isValidPropertyType = (propertyType?: string): propertyType is PropertyType => {
+    return PROPERTY_TYPES.includes(propertyType as PropertyType)
   }
 
   Object.entries(description?.properties||{}).forEach(([propertyName, _property]) => {

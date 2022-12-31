@@ -1,7 +1,7 @@
 import { PROPERTY_TYPES, PROPERTY_FORMATS } from '../constants'
 
-export type PropertyTypes = typeof PROPERTY_TYPES[number]
-export type PropertyFormats = typeof PROPERTY_FORMATS[number]
+export type PropertyType = typeof PROPERTY_TYPES[number]
+export type PropertyFormat = typeof PROPERTY_FORMATS[number]
 
 export type JsonSchema = {
   $id: string
@@ -19,7 +19,7 @@ export type EnumType = {
 }
 
 export type PrimitiveType = {
-  type: PropertyTypes
+  type: PropertyType
 }
 
 export type PropertyAux =
@@ -28,7 +28,7 @@ export type PropertyAux =
   { [P in keyof PrimitiveType]?: PrimitiveType[P] }
 
 export type Property = (RefType | EnumType | PrimitiveType) & PropertyAux &  {
-  format?: PropertyFormats
+  format?: PropertyFormat
 
   default?: any
   description?: string

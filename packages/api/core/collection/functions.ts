@@ -73,7 +73,10 @@ export default <T extends MongoDocument>(
       .lean(LEAN_OPTIONS)
   }
 
-  const functions: CollectionFunctions<T> = {
+  const functions: CollectionFunctions<T> & {
+    context: () => ApiContextWithAC
+  } = {
+    context: () => context,
     async insert(props) {
       const result = await _insert(props)
       if( result ) {
@@ -159,6 +162,6 @@ export default <T extends MongoDocument>(
       return count as number
     },
   }
-  
+
   return functions
 }

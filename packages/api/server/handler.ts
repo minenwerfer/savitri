@@ -66,7 +66,8 @@ export const safeHandle = (
       error: {
         name: error.name,
         code: error.code,
-        message: error.message
+        message: error.message,
+        details: error.details
       }
     }
 

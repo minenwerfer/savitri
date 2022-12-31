@@ -92,7 +92,10 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
   const proxyFn = (entityName: string, context: any, _entityType?: EntityType) => {
     return new Proxy({}, {
       get: (_, entityFunction: string) => {
-        return (props?: any) => getEntityFunction(`${entityName}@${entityFunction}`, _entityType)(props, context)
+        const asset = getEntityFunction(`${entityName}@${entityFunction}`, _entityType)
+        return typeof asset === 'function'
+          ? (props?: any) => asset(props, context)
+          : asset
       }      
     }) as AnyFunctions
   }
@@ -101,6 +104,9 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
     const newContext: ApiContext = {
       ...context,
       validate: (...args: any[]) => null,
+    }
+
+    Object.assign(newContext, {
       collection: {} as CollectionFunctions,
       log: (message, details) => {
         return useCollection('log', context).insert({
@@ -115,15 +121,15 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
       entity: proxyFn(entityName, context, entityType),
       collections: new Proxy({}, {
         get: (_, entityName: string) => {
-          return proxyFn(entityName, context)
+          return proxyFn(entityName, newContext)
         }
       }),
       controllables: new Proxy({}, {
         get: (_, entityName: string) => {
-          return proxyFn(entityName, context, 'controllable')
+          return proxyFn(entityName, newContext, 'controllable')
         }
       })
-    }
+    } as ApiContext)
 
     if( entityType === 'collection' ) {
       const description = getEntityAsset(entityName, 'description')
