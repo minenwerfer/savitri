@@ -8,7 +8,7 @@ Savitri
 
 ## Introduction
 
-Savitri is a **fullstack framework** meant to enable developers to rapidly prototype their ideas and progressively turn the initial prototype into safe and easily maintanable project as it grows bigger. It was conceived so you don't have to rewrite boilerplate and deal with overcomplexity over and over when you move from a project to another, apart from that Savitri enforces a delightful clean, minimal code architecture meaning your code will have the least amount of personality possible and it'll likely never become legated.
+Savitri is a **fullstack framework** meant to enable developers to rapidly prototype their ideas and progressively turn the initial prototype into safe and easily maintanable project as it grows bigger. It was conceived so you don't have to rewrite boilerplate and deal with overcomplexity over and over when you move from a project to another. Apart from that Savitri enforces a delightful clean, minimal code architecture meaning your code will have the least amount of personality possible and it'll likely never become legated.
 
 
 ## Packages

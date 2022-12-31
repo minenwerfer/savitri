@@ -18,10 +18,9 @@ export const validateFromDescription = <T>(
     throw runtimeValidationError('target is empty')
   }
 
-  const propsSet = new Set([
-    ...required||[],
-    ...Object.keys(what)
-  ])
+  const propsSet = required
+    ? new Set([ ...required, ...Object.keys(what) ])
+    : new Set(Object.keys(description.properties))
 
   propsSet.forEach((prop) => {
     const value = what[prop as keyof T]
