@@ -119,6 +119,10 @@
           </div>
         </div>
 
+        <pre v-else-if="property.type === 'object'">{{
+          formData[key]
+        }}</pre>
+
         <component
           v-else
           :is="getComponent(property, formComponents)"

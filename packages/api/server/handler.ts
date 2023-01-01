@@ -15,7 +15,7 @@ import type {
 import { Error as MongooseError } from 'mongoose'
 import { TokenService } from '../core/token'
 import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
-import { appendPagination } from './hooks/post'
+import { processRedirects, appendPagination } from './hooks/post'
 
 export type RegularVerb =
   'get'
@@ -32,6 +32,7 @@ const prePipe = R.pipe(
 )
 
 const postPipe = R.pipe(
+  processRedirects,
   appendPagination
 )
 
@@ -118,6 +119,7 @@ export const customVerbs = (entityType: EntityType) =>
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
   context.token = token
+  context.response = h
 
   prePipe({
     request,

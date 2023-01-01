@@ -3,21 +3,39 @@ import type { HandlerRequest, ApiContext, EntityType } from '../../types'
 import { useCollection } from '../../core/collection'
 
 type PostHookParams = {
-  result: object|Array<object>
+  redirected?: boolean
+  result: any
   request: Request & HandlerRequest
   context: ApiContext
   entityName: string
   entityType: EntityType
 }
 
+export const processRedirects = (params: PostHookParams) => {
+  const { result } = params
+  if( result.headers?.location ) {
+    return {
+      redirected: true,
+      ...params,
+    }
+  }
+
+  return params
+}
+
 export const appendPagination = async (params: PostHookParams) => {
   const {
+    redirected,
     request,
     result,
     context,
     entityName,
     entityType
   } = params
+
+  if( redirected ) {
+    return result
+  }
 
   const response = {
     result

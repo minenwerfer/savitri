@@ -1,4 +1,5 @@
 import { useAccessControl } from '../core/access/use'
+import type { ResponseToolkit } from '@hapi/hapi'
 import type { MaybeCollectionDescription } from '../../types'
 import type { Log } from '../../system/collections/log/log.description'
 import type { CollectionFunctions } from '../core/collection/functions.types'
@@ -44,6 +45,7 @@ export type ApiContext = {
   controllables: Record<string, AnyFunctions>
 
   descriptions?: Record<string, MaybeCollectionDescription>
+  response: ResponseToolkit
 }
 
 export type ApiContextWithAC = ApiContext & {

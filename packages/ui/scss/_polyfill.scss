@@ -20,6 +20,7 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 ::-webkit-scrollbar {
@@ -28,6 +29,6 @@ input[type=number] {
 
 .main--dark {
   [data-image=logo] {
-    filter: brightness(2);
+    filter: grayscale(1) brightness(10);
   }
 }
