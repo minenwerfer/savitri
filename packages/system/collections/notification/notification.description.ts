@@ -13,8 +13,7 @@ const schema = {
       type: 'array',
       items: {
         $ref: 'user'
-      },
-      s$indexes: 'email'
+      }
     },
     title: {
       type: 'string',

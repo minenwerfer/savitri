@@ -19,7 +19,7 @@
     >
       <div class="checkbox__description">
         <slot name="description" v-if="$slots.description"></slot>
-        <div v-else-if="property.description" v-html="property.description"></div>
+        <div v-else-if="value" v-html="value"></div>
         <slot v-else></slot>
       </div>
       <div class="checkbox__hint">

@@ -13,7 +13,7 @@ type PostHookParams = {
 
 export const processRedirects = (params: PostHookParams) => {
   const { result } = params
-  if( result.headers?.location ) {
+  if( result?.headers?.location ) {
     return {
       redirected: true,
       ...params,

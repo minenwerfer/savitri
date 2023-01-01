@@ -17,7 +17,6 @@ const schema = {
     },
     file: {
       $ref: 'file',
-      s$indexes: 'name',
       s$noform: true
     },
     format: {

@@ -62,7 +62,7 @@ export type CollectionDescription = {
   icon?: string
   options?: CollectionOptions
 
-  indexes?: Array<string>|string
+  indexes?: Array<string>
 
   // modifiers
   strict?: boolean // all properties are required
@@ -114,7 +114,7 @@ export type MaybeCollectionDescription = Omit<CollectionDescription,
   $id: string
   name?: string
   required?: ReadonlyArray<string>
-  indexes?: ReadonlyArray<string>|string
+  indexes?: ReadonlyArray<string>
   presets?: ReadonlyArray<string>
   properties?: Record<string, any>
   actions?: MaybeCollectionActions
@@ -162,7 +162,7 @@ type CollectionPropertyAux = {
 
   array?: boolean
   limit?: number
-  indexes?: Array<string>|string
+  indexes?: Array<string>
   select?: Array<string>
   maxDepth?: number
   inline?: boolean

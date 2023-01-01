@@ -18,9 +18,7 @@ export function getIndexes(
     return []
   }
 
-  return Array.isArray(s$indexes)
-    ? s$indexes
-    : [s$indexes]
+  return s$indexes
 }
 
 export const getFirstIndex = (

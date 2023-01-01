@@ -6,23 +6,24 @@
       grid-template-columns: repeat(var(--columns), 1fr);
     `"
   >
-    <sv-checkbox
+    <div
       v-for="(option, index) in property.enum"
       :key="`option-${index}`"
-
-      v-model="modelValue"
-      v-bind="{
-        ...option,
-        property
-      }"
 
       :class="`
         options__checkbox
         ${modelValue && 'options__checkbox--selected'}
-      `"
+    `">
+        <sv-checkbox
+          :model-value="modelValue"
+          v-bind="{
+            value: option,
+            property
+          }"
 
-      @update:model-value="updateValue"
-    ></sv-checkbox>
+          @update:model-value="updateValue"
+        ></sv-checkbox>
+      </div>
   </div>
 </template>
 
