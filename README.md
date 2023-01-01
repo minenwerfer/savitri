@@ -48,25 +48,6 @@ This is a minimal, yet fully-fledged Savitri API contained in a single file (sui
 const { initWithDatabaseThenStart: init } = require('@savitri/api/server')
 
 const descriptions = {
-  fruta: {
-    $id: 'fruta',
-    properties: {
-      name: {
-        type: 'string'
-      }
-    },
-    functions: {
-      buy: (props, { log, entity, validate }) => {
-        validate(props, ['name'])
-        log('bought a fruit', {
-          name: props.name
-        })
-
-        return entity.bye()
-      },
-      bye: () => 'Obrigado, volte sempre'
-    }
-  },
   animal: {
     $id: 'animal',
     properties: {
@@ -80,6 +61,9 @@ const descriptions = {
           'onívoro'
         ]
       }
+    },
+    endpoints: {
+      hello: () => 'Hello, world!'
     }
   }
 }
