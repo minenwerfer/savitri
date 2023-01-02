@@ -21,14 +21,6 @@ export function getIndexes(
   return s$indexes
 }
 
-export const getFirstIndex = (
-  description: Pick<CollectionDescription, 'properties'>,
-  key: string
-): string => {
-  const properties = getIndexes(description, key)||[]
-  return properties[0]
-}
-
 export const getFirstValue = (
   description: Pick<CollectionDescription, 'properties'>,
   value: any,
@@ -38,14 +30,21 @@ export const getFirstValue = (
     return '-'
   }
 
-  const firstProperty = getFirstIndex(description, key)
-  const extract = (v: any) => typeof v === 'object' || firstProperty
-    ? v[firstProperty]
-    : v
+  const firstIndex = (() => {
+    const indexes = getIndexes(description,  key)
+    if( indexes.length > 0 ) {
+      return indexes
+    }
+
+    return Array.isArray(value)
+      ? Object.keys(value[0]||{})
+      : Object.keys(value)
+
+  })()[0]
 
   const firstValue = Array.isArray(value)
-    ? value.map((v: any) => extract(v)).join(', ')
-    : extract(value)
+    ? value.map((v: any) => v[firstIndex]).join(', ')
+    : value[firstIndex]
 
   return firstValue
 }

@@ -104,10 +104,6 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
     const newContext: ApiContext = {
       ...context,
       validate: (...args: any[]) => null,
-    }
-
-    Object.assign(newContext, {
-      collection: {} as CollectionFunctions,
       log: (message, details) => {
         return useCollection('log', context).insert({
           what: {
@@ -118,24 +114,27 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
           }
         })
       },
-      entity: proxyFn(entityName, context, entityType),
-      collections: new Proxy({}, {
-        get: (_, entityName: string) => {
-          return proxyFn(entityName, newContext)
-        }
-      }),
-      controllables: new Proxy({}, {
-        get: (_, entityName: string) => {
-          return proxyFn(entityName, newContext, 'controllable')
-        }
-      })
-    } as ApiContext)
+      collection: {} as CollectionFunctions,
+      entity: proxyFn(entityName, context, entityType)
+    }
 
     if( entityType === 'collection' ) {
       const description = getEntityAsset(entityName, 'description')
       newContext.validate = (...args: Parameters<ValidateFunction<any>>) => validateFromDescription(description, ...args)
-      newContext.collection = useCollection(entityName, context)
+      newContext.collection = useCollection(entityName, newContext)
     }
+
+    newContext.collections = new Proxy({}, {
+      get: (_, entityName: string) => {
+        return proxyFn(entityName, newContext)
+      }
+    })
+
+    newContext.controllables = new Proxy({}, {
+      get: (_, entityName: string) => {
+        return proxyFn(entityName, newContext, 'controllable')
+      }
+    })
 
     return fn(props, newContext)
   }
@@ -172,7 +171,7 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: Entity
       return method(props)
     }
 
-    return fn
+    return wrapFunction(fn, functionPath, entityType)
   }
 }
 

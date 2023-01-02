@@ -21,7 +21,7 @@ export const useAccessControl = (description: CollectionDescription, context?: A
 
   const accessControl = context?.accessControl||{}
 
-  const beforeRead: ApiFunction<any, ReadPayload> = (props, { token }) => {
+  const beforeRead: ApiFunction<any, ReadPayload> = (props, context) => {
     const newPayload = Object.assign({}, {
       filters: props?.filters||{},
       sort: props?.sort,
@@ -35,16 +35,16 @@ export const useAccessControl = (description: CollectionDescription, context?: A
       )
     }
 
-    if( accessControl.beforeRead && token ) {
+    if( accessControl.beforeRead && context.token ) {
       deepMerge(
         newPayload,
-        accessControl.beforeRead(token, description.$id)
+        accessControl.beforeRead(newPayload, context)
       )
     }
 
     deepMerge(
       newPayload,
-      baseControl.beforeRead!(token!, description.$id)
+      baseControl.beforeRead!(newPayload, context)
     )
 
     if( newPayload.limit > 150 ) {
@@ -54,20 +54,19 @@ export const useAccessControl = (description: CollectionDescription, context?: A
     return newPayload
   }
 
-  const beforeWrite: ApiFunction<any, WritePayload> = (props, { token }) => {
+  const beforeWrite: ApiFunction<any, WritePayload> = (props, context) => {
     const newPayload = Object.assign({ what: {} }, props)
-    const filters = newPayload.what || {}
 
-    if( accessControl.beforeWrite && token ) {
+    if( accessControl.beforeWrite && context.token ) {
       deepMerge(
-        filters,
-        accessControl.beforeWrite(token, description.$id)
+        newPayload,
+        accessControl.beforeWrite(newPayload, context)
       )
     }
 
     deepMerge(
-      filters,
-      baseControl.beforeWrite!(token!, description.$id)
+      newPayload,
+      baseControl.beforeWrite!(newPayload, context)
     )
 
     return newPayload

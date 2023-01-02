@@ -20,6 +20,7 @@ export const useCollection = (collectionName: string, _context: ApiContext|null 
   const acFunctions = useAccessControl(description, context)
   const contextWithAC: ApiContextWithAC = {
     ...context,
+    entityName: collectionName,
     acFunctions
   }
 

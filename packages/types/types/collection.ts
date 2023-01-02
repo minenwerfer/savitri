@@ -77,7 +77,7 @@ export type CollectionDescription = {
   tableMeta?: Array<string>
   reportProperties?: Array<string>
 
-  form?: Array<string>
+  form?: Array<string>|Record<string, Array<string>>
   writable?: Array<string>
   filters?: Array<string|{
     property: string

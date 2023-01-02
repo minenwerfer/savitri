@@ -5,11 +5,11 @@ import UserDescription from './user.description'
 export default createModel(UserDescription, {
   schemaCallback: (schema) => { 
     schema.virtual('first_name').get(function() {
-      this.first_name = this.full_name?.split(' ')[0] || 'N/A'
+      return this.full_name?.split(' ')[0] || 'N/A'
     })
 
     schema.virtual('last_name').get(function() {
-      this.last_name = this.full_name?.split(' ').slice(1).join(' ') || 'N/A'
+      return this.full_name?.split(' ').slice(1).join(' ') || 'N/A'
     })
 
     schema.methods.testPassword = function(candidate: string) {

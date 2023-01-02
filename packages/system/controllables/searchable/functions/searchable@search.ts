@@ -34,7 +34,7 @@ const search: ApiFunction<Props> = async (props, context) => {
   }, {})
 
   const beforeRead = accessControl.beforeRead
-    ? (collectionName: string) => accessControl.beforeRead!(token, collectionName)
+    ? (payload: Record<string, any>) => accessControl.beforeRead!(payload, context)
     : null
 
   const aggregations = buildAggregations(

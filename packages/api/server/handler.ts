@@ -119,6 +119,7 @@ export const customVerbs = (entityType: EntityType) =>
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
   context.token = token
+  context.entityName = entityName
   context.response = h
 
   prePipe({
@@ -156,6 +157,7 @@ export const regularVerb = (functionName: RegularVerb) =>
 
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
+  context.entityName = entityName
   context.token = token
 
   prePipe({

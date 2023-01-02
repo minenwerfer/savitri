@@ -46,7 +46,8 @@ export const descriptionToSchemaObj = (description: MaybeCollectionDescription) 
       ...reference
     } = getReferencedCollection(property)||{} as CollectionProperty
 
-    const required = description.strict || description.required?.includes(propertyName)
+    const required = property.type !== 'boolean'
+      && (description.strict || description.required?.includes(propertyName))
 
     const result: Record<string, any> = {
       type: String,

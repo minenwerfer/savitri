@@ -12,7 +12,7 @@
     </sv-picture>
 
     <div class="header__info">
-      <div class="header__info-name">{{ userStore.$currentUser.first_name }}</div>
+      <div class="header__info-name">{{ userStore.$currentUser.full_name }}</div>
       <div class="header__info-access">{{ userStore.$currentUser.roles?.join(', ') }}</div>
     </div>
   </div>

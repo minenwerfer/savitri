@@ -27,11 +27,12 @@ export type Roles = Record<string, Role>
 
 export type AccessControl = {
   roles?: Roles
-  beforeRead?: (token: DecodedToken, collectionName: string) => Record<string, any>
-  beforeWrite?: (token: DecodedToken, collectionName: string) => Record<string, any>
+  beforeRead?: (payload: Record<string, any>, context: ApiContext) => Record<string, any>
+  beforeWrite?: (payload: Record<string, any>, context: ApiContext) => Record<string, any>
 }
 
 export type ApiContext = {
+  entityName: string
   apiConfig: ApiConfig
   accessControl: AccessControl
   injected: Record<string, any>

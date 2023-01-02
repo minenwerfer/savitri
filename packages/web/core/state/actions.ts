@@ -4,8 +4,9 @@ import type { CollectionDescription } from '../../../types'
 
 import useHttp from '../http'
 import useMetaStore from '../stores/meta'
-import { useStore } from './use'
 import type { Actions, Mutations, Item } from './actions.types'
+import { useStore } from './use'
+import { condenseItem } from './helpers'
 
 const { http, nonProxiedHttp } = useHttp()
 
@@ -206,7 +207,7 @@ const actionsAndMutations: Actions & Mutations = {
     }
 
     return this.insert({
-      what: newItem
+      what: condenseItem(newItem)
     })
   },
 
