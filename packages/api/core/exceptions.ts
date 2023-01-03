@@ -3,6 +3,8 @@ export type CustomException = {
   code?: string
   message?: string
   details?: Record<string, any>
+  silent?: boolean
+  logout?: boolean
 }
 
 export const makeException = (custom: CustomException) => {

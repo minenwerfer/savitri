@@ -14,6 +14,7 @@ import type {
 
 import { Error as MongooseError } from 'mongoose'
 import { TokenService } from '../core/token'
+import { makeException } from '../core/exceptions'
 import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
 import { processRedirects, appendPagination } from './hooks/post'
 
@@ -43,9 +44,19 @@ const fallbackContext = {
 
 } as ApiContext
 
-export const getToken = async (request: Request) => request.headers.authorization
-  ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
-  : {} as object
+export const getToken = async (request: Request) => {
+  try {
+    return request.headers.authorization
+      ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
+      : {} as object
+  } catch( e: any ) {
+    throw makeException({
+      name: 'AuthenticationError',
+      message: e.message,
+      logout: true
+    })
+  }
+}
 
 export const safeHandle = (
   fn: (request: HandlerRequest, h: ResponseToolkit) => any|Promise<any>

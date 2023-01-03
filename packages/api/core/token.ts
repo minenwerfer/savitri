@@ -28,15 +28,7 @@ export const { APPLICATION_SECRET } = process.env
  */
 export const EXPIRES_IN = 36000
 
-/**
- * @exports @class
- * Token service for signing and decoding objects with JWT.
- */
 export class TokenService {
-  /**
-   * @static @method
-   * Creates a token from a object.
-   */
   static sign(payload: object, secret?: string): Promise<void|string> {
     if( !APPLICATION_SECRET ) {
       throw new Error('APPLICATION_SECRET is undefined')
@@ -47,18 +39,10 @@ export class TokenService {
     })
   }
 
-  /**
-   * @static @method
-   * Verifies token authenticity.
-   */
   static verify(token: string, secret?: string) {
     return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 
-  /**
-   * @static @method
-   * Decodes token to object.
-   */
   static decode(token: string, secret?: string): Promise<any> {
     return asyncVerify(token, secret || APPLICATION_SECRET)
   }

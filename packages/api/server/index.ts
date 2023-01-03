@@ -3,6 +3,7 @@ import * as Hapi from '@hapi/hapi'
 import '../../common/polyfill'
 import  type { ApiContext } from '../types'
 import { connectDatabase } from '../core/database'
+import warmup from '../core/warmup'
 import getRoutes from './routes'
 export { getToken } from './handler'
 
@@ -27,11 +28,14 @@ export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Se
   Object.assign(apiConfig, _context?.apiConfig||{})
   Object.assign(accessControl, _context?.accessControl||{})
 
-  const context: Partial<ApiContext> = Object.assign({}, _context||{})
-  Object.assign(context, {
+  const context = Object.assign(_context||{}, {
     apiConfig,
-    accessControl
+    accessControl,
   })
+
+  console.time('warmup')
+  await warmup(context)
+    .then(() => console.timeEnd('warmup'))
 
   if( apiConfig.modules ) {
     global.modules = apiConfig.modules

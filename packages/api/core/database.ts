@@ -2,17 +2,8 @@ const mongoose = require('mongoose')
 export * from 'mongoose'
 
 mongoose.Promise = global.Promise
-
-/**
- * @exports
- * Mongoose singleton instance.
- */
 export { mongoose }
 
-/**
- * @exports
- * Options that might be used in schema creation.
- */
 export const options = {
   timestamps: {
     createdAt: 'created_at',

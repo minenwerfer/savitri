@@ -33,22 +33,16 @@ const httpMethodWrapper = (
     .catch(async (error: any) => {
       const metaStore = useStore('meta')
 
-      if( ['TokenExpiredError', 'AuthorizationError', 'JsonWebTokenError'].includes(error.name) ) {
-        sessionStorage.clear()
-        ROUTER.push({ name: 'user-signin' })
-
+      if( !error.silent ) {
         metaStore.spawnModal({
           title: 'Erro',
-          body: 'Você não tem permissão para acessar essa página'
+          body: error
         })
+      }
 
-      } else {
-        if( !error.silent! ) {
-          metaStore.spawnModal({
-            title: 'Erro',
-            body: error
-          })
-        }
+      if( error.logout ) {
+        sessionStorage.clear()
+        ROUTER.push({ name: 'user-signin' })
       }
 
       console.trace(error)
