@@ -1,6 +1,6 @@
-import * as Collection from '../../../common/collection'
-import { fromEntries, deepClone } from '../../../common'
-import type { CollectionDescription } from '../../../types'
+import * as Collection from '@semantic-api/common/collection'
+import { fromEntries, deepClone } from '@semantic-api/common'
+import type { Description } from '@semantic-api/types'
 
 import useHttp from '../http'
 import useMetaStore from '../stores/meta'
@@ -13,6 +13,11 @@ const { http, nonProxiedHttp } = useHttp()
 const mutations: Mutations = {
   setItem(item) {
     this.item = item
+    this.referenceItem = deepClone({
+      ...this.freshItem,
+      ...item
+    })
+
     return item
   },
 
@@ -174,7 +179,7 @@ const actionsAndMutations: Actions & Mutations = {
 
   async deepInsert(payload?) {
     const inlineReferences = this.inlineReferences
-    const newItem = Object.assign({}, payload?.what || this.item) as Item
+    const newItem = Object.assign({}, payload?.what || this.diffedItem) as Item
 
     for( const [k, { s$referencedCollection: collection, type }] of inlineReferences ) {
       if(
@@ -296,7 +301,7 @@ const actionsAndMutations: Actions & Mutations = {
         : args.value
 
       return Collection.formatValue(
-        this.rawDescription as Pick<CollectionDescription, 'properties'>,
+        this.rawDescription as Pick<Description, 'properties'>,
         value,
         args.key,
         args.property
@@ -305,7 +310,7 @@ const actionsAndMutations: Actions & Mutations = {
 
   getIndexes(args) {
     return Collection.getIndexes(
-      this.rawDescription as Pick<CollectionDescription, 'properties'>,
+      this.rawDescription as Pick<Description, 'properties'>,
       args.key
     )
   }

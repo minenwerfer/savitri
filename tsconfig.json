@@ -1,40 +1,19 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "sourceMap": false,
+    "outDir": "dist",
     "target": "esnext",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "allowJs": false,
     "strict": true,
     "declaration": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "strictPropertyInitialization": false,
-    "paths": {
-      "common/*": ["./packages/common/*"],
-      "api/*": ["./packages/api/core/*"],
-      "web/*": ["./packages/web/core/*"],
-      "ui/*": ["./packages/ui/*"],
-      "system/*": ["./packages/system/*"]
-    },
     "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
+      "dom"
     ]
   },
   "include": [
-    "packages/web/global.d.ts",
-    "packages/*/**/*.ts",
-    "packages/*/**/*.vue"
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "target": "es2017x",
-      "module": "commonjs"
-    }
-  }
+    "packages/web/**/*",
+    "packages/ui/**/*",
+    "packages/ui/**/*.vue"
+  ]
 }

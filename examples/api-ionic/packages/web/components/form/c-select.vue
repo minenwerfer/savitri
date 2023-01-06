@@ -1,6 +1,6 @@
 <template>
   <ion-select
-    :placeholder="property.description"
+    :placeholder="property.description || propertyName"
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <ion-select-option
@@ -20,6 +20,7 @@ import { IonSelect, IonSelectOption } from '@ionic/vue'
 type Props = {
   modelValue: any
   property: CollectionProperty
+  propertyName: string
 }
 
 const props = defineProps<Props>()

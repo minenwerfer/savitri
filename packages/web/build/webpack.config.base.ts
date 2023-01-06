@@ -8,10 +8,7 @@ declare namespace global {
 }
 
 const baseWebpackConfig = {
-  // entry file
   entry: path.resolve(__dirname, global.appDir),
-
-  // resolve typescript along with js
   resolve: {
     extensions: [
       '.js',
@@ -31,8 +28,6 @@ const baseWebpackConfig = {
       'style': path.resolve(__dirname, '../../ui/scss'),
     }
   },
-
-  // define loaders for each extension
   module: {
     rules: [
       {
@@ -70,8 +65,6 @@ const baseWebpackConfig = {
       },
     ]
   },
-
-  // these plugins will be included by default
   plugins: [
     new VueLoaderPlugin(),
     // new WatchExternalFilesPlugin({
@@ -86,14 +79,11 @@ const baseWebpackConfig = {
     //   cwd: global.appDir
     // })
   ],
-
-  // optimization, mainly for production builds
   optimization: {
     splitChunks: {
       chunks: 'all'
     }
   },
-
   stats: {
     errorDetails: true
   },

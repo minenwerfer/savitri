@@ -1,19 +1,20 @@
 import { watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { arraysIntersects } from '@semantic-api/common'
 import { useStore } from './state/use'
-import type { CollectionDescription } from '../../types'
+import type { Description } from '@semantic-api/types'
 
 export const bootstrapRoutes = () => {
   const metaStore = useStore('meta')
   const userStore = useStore('user')
   const router = useRouter()
 
-  watch(() => metaStore.descriptions, (descriptions: Record<string, CollectionDescription>) => {
+  watch(() => metaStore.descriptions, (descriptions: Record<string, Description>) => {
     Object.values(descriptions).forEach((description) => {
       const routeVisibility = description.route
       if(
         Array.isArray(routeVisibility)
-          && !userStore.$currentUser.roles?.some((role: string) => routeVisibility.includes(role))
+          && arraysIntersects(userStore.$currentUser.roles, routeVisibility)
       ) {
         return
       }

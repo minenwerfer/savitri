@@ -1,8 +1,0 @@
-{
-  "individualActions": {
-    "ui/duplicate": {
-      "name": "Duplicar",
-      "icon": "share-alt"
-    }
-  }
-}

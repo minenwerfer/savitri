@@ -4,12 +4,8 @@ COMMAND=$(expr "$1" \| "")
 BUILD_COMPONENTS=
 
 PACKAGES=(
-  api
-  common
   ui
   web
-  system
-  types
 )
 
 function do_pack() {
@@ -30,7 +26,6 @@ function do_pack() {
 }
 
 tsc || true && \
-  cp -r packages/api/resources/* dist/api/resources && \
   cp -r packages/api/presets dist/api && \
   cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
   [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)

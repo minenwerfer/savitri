@@ -1,6 +1,6 @@
 <template>
   <ion-item>
-    <ion-label>{{ property.description }}</ion-label>
+    <ion-label>{{ property.description || propertyName }}</ion-label>
     <ion-toggle @update:model-value="$emit('update:modelValue', $event)"></ion-toggle>
   </ion-item>
 </template>
@@ -12,6 +12,7 @@ import { IonItem, IonLabel, IonToggle } from '@ionic/vue'
 type Props = {
   modelValue: any
   property: CollectionProperty
+  propertyName: string
 }
 
 const props = defineProps<Props>()

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
+import { deepClone } from '@semantic-api/common'
+import { Description } from '@semantic-api/types'
 import { default as webpackVariables } from 'variables'
-import { deepClone } from '../../../common'
-import { CollectionDescription } from '../../../types'
 import useHttp from '../http'
 import useCollection from '../state/collection'
 
@@ -56,7 +56,7 @@ export default defineStore('meta', {
     async describeAll() {
       this.isLoading = true
       const response = await http.get('_/meta/describeAll')
-      const descriptions: Record<CollectionName, CollectionDescription> =
+      const descriptions: Record<CollectionName, Description> =
         this.descriptions = response.data.result.descriptions
 
       this.roles = response.data.result.roles

@@ -1,7 +1,7 @@
-import type { CollectionProperty, Layout, LayoutName } from '../../../types'
+import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
 import type { CollectionState } from '../../types/state'
 import type { Actions, Mutations } from './actions.types'
-import { fromEntries, deepClone } from '../../../common'
+import { fromEntries, deepClone, deepDiff } from '@semantic-api/common'
 import { useStore } from './use'
 
 import  {
@@ -17,6 +17,7 @@ export type Getters = Record<`$${string}`, any> & {
   properties: Record<string, CollectionProperty>
   references: Array<[string, CollectionProperty]>
   inlineReferences: Array<[string, CollectionProperty]>
+  diffedItem: Record<string, any>
 }
 
 type GettersFunctions = Record<string, (this: CollectionState<any> & Getters & Actions & Mutations) => any>
@@ -74,6 +75,14 @@ const getters: GettersFunctions = {
     const item = Object.assign({}, this.freshItem)
     Object.assign(item, this.item)
     return item
+  },
+
+  diffedItem() {
+    return deepDiff(
+      this.referenceItem,
+      this.$item,
+      true
+    )
   },
 
   $freshItem() {

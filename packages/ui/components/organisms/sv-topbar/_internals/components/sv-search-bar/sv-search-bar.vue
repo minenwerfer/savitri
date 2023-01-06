@@ -3,9 +3,10 @@
     <sv-input
       v-model.lazy="query"
       :property="{
+        type: 'string',
         s$placeholder: 'Buscar',
         s$icon: 'search',
-        s$element: 'search'
+        s$inputType: 'search'
       }"
       class="searchbar__input"
     ></sv-input>

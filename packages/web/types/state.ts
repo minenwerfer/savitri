@@ -1,5 +1,5 @@
 import type { StoreGeneric } from 'pinia'
-import type { CollectionDescription } from '../../types'
+import type { Description } from '@semantic-api/types'
 import type { Getters } from '../core/state/getters'
 import collectionActions from '../core/state/actions'
 
@@ -25,6 +25,7 @@ export type ValidationErrors = Record<string, ValidationError>
 export type CollectionState<Item> = PiniaState & {
   item: Item|object
   freshItem: Partial<Item>
+  referenceItem: Partial<Item>
   items: Array<Item>
   filters: Partial<Item>
   freshFilters: any
@@ -34,8 +35,8 @@ export type CollectionState<Item> = PiniaState & {
   currentLayout: string
 
   queryCache: Record<string, any>
-  description: Readonly<Partial<CollectionDescription>>
-  rawDescription: Readonly<Partial<CollectionDescription>>
+  description: Readonly<Partial<Description>>
+  rawDescription: Readonly<Partial<Description>>
 
   validationErrors: ValidationErrors
 

@@ -9,7 +9,7 @@
       v-bind="{
         collection: metaStore.view.collection,
         form: store.properties,
-        formData: store.$item,
+        formData: store.item,
         isReadOnly: isInsertReadOnly,
         layout: store.formLayout
       }"
@@ -75,12 +75,13 @@ const metaStore = useStore('meta')
 const store = useStore(metaStore.view.collection)
 const individualActions = inject('individualActions', [])
 
+// unused
+const isInsertReadOnly = false
+
 const parentStore = inject<CollectionStore<any>>('parentStore')
 
 const insert = async () => {
-  const result = await store.deepInsert({
-    what: store.$item
-  })
+  const result = await store.deepInsert()
 
   if( props.parentField ) {
     const newSet = parentStore!.$item[props.parentField] ||= []

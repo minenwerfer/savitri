@@ -34,7 +34,6 @@ Savitri is a **fullstack framework** meant to enable developers to rapidly proto
 
 - Builtin authentication, file uploading and logging
 - Builtin RBAC (role-based access control)
-- In-house set of backoffice components
 - Runtime and static schema validation
 - Automatic dependency resolution
 - Automatic schema references

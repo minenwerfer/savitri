@@ -1,4 +1,4 @@
-import type { CollectionProperty } from '../../../types'
+import type { CollectionProperty } from '@semantic-api/types'
 import type { CollectionState, CollectionGetters } from '../../types/state'
 
 type CrudParameters = {

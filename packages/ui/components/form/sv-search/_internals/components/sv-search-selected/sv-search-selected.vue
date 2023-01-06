@@ -68,7 +68,7 @@ const unselect = async (item: any, purge=true) => {
 
   emit('update:modelValue', property.type === 'array'
       ? deleteFirst()
-      : undefined
+      : null
   )
 
   if( property.uniqueItems || (property.type === 'array' && props.searchOnly) ) {

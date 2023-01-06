@@ -1,5 +1,5 @@
 {
-  "name": "@savitri/web",
+  "name": "savitri",
   "version": "1.1.237",
   "description": "## Project setup ``` npm install ```",
   "main": "main.ts",
@@ -22,6 +22,9 @@
     "@types/webpack-env": "^1.16.3"
   },
   "dependencies": {
+    "@semantic-api/common": "file:../../../semantic-api/packages/common",
+    "@semantic-api/system": "file:../../../semantic-api/packages/system",
+    "@semantic-api/types": "file:../../../semantic-api/packages/types",
     "@types/ramda": "^0.28.15",
     "axios": "^0.24.0",
     "css-loader": "^6.5.0",

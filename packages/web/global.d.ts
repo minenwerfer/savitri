@@ -19,19 +19,10 @@ declare module 'variables' {
 declare module 'vue-unicons/dist/icons' {
 }
 
-// declare module '@savitri/web' {
-//   export * from './'
-// }
-
 declare module '@savitri/ui' {
   export { default as routes } from '../ui/router'
 }
 
-// declare module '@savitri/common' {
-//   export * from '../common'
-// }
-
-// web core
 declare var ROUTER: any
 declare var I18N: any
 declare var STORES: Record<string, any>

@@ -1,9 +1,0 @@
-{
-  "actions": {
-    "deleteAll": {
-      "name": "Remover",
-      "ask": true,
-      "selection": true
-    }
-  }
-}

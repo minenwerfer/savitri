@@ -1,4 +1,4 @@
-import type { LayoutName } from '../../../../../../types'
+import type { LayoutName } from '@semantic-api/types'
 import SvTabular from './sv-tabular/sv-tabular.vue'
 import SvGrid from './sv-grid/sv-grid.vue'
 

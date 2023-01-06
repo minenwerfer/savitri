@@ -1,10 +1,5 @@
-import { fromEntries } from '../../../common'
-
-import type {
-  CollectionActions,
-  CollectionDescription
-
-} from '../../../types'
+import type { CollectionActions, Description } from '@semantic-api/types'
+import { fromEntries } from '@semantic-api/common'
 
 const isObject = (property: any) =>
   property.$ref
@@ -67,7 +62,7 @@ export const normalizeFilters = (filters: Array<any>) => {
   }, {})
 }
 
-export const freshItem = (description: CollectionDescription) => {
+export const freshItem = (description: Description) => {
   const item: Record<string, any> = Object.entries(description.properties).reduce((a, [key, property]) => {
     const value = (() => {
       if( property.$ref ) {
@@ -91,7 +86,7 @@ export const freshItem = (description: CollectionDescription) => {
   return item
 }
 
-export const freshFilters = (description: CollectionDescription) => {
+export const freshFilters = (description: Description) => {
   return Object.entries(description.properties||{})
     .reduce((a, [key, property]) => {
       if( isObject(property) ) {

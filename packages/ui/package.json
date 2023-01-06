@@ -1,5 +1,5 @@
 {
-  "name": "@savitri/ui",
+  "name": "savitri-ui",
   "version": "0.0.99",
   "description": "",
   "main": "index.js",
@@ -8,5 +8,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@semantic-api/common": "file:../../../semantic-api/packages/common",
+    "@semantic-api/types": "file:../../../semantic-api/packages/types"
+  }
 }

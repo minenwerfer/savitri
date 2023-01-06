@@ -55,6 +55,7 @@
 import { ref, computed, watch, } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore, Route, MenuSchema } from '../../../../web'
+import { arraysIntersects } from '../../../../common'
 import { SvIcon } from '../../'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
@@ -127,7 +128,7 @@ const getRoutes = (node?: SchemaNode): Array<Route> => {
     } = node
 
     const roles = route?.meta?.roles || node.roles
-    if( roles && !userStore.$currentUser.roles?.some((role: string) => roles.includes(role)) ) {
+    if( roles && !arraysIntersects(userStore.$currentUser.roles, roles) ) {
       return
     }
 

@@ -1,5 +1,5 @@
-import { CollectionProperty } from '../../../../../types'
-import { deepClone } from '../../../../../common'
+import { CollectionProperty } from '@semantic-api/types'
+import { deepClone } from '@semantic-api/common'
 import { useStore } from '../../../../../web'
 import {
   SvInput,

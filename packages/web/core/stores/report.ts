@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
+import { SV_API_URL } from '@semantic-api/types'
 import useCollection from '../state/collection'
-import { SV_API_URL } from '../../../types/constants'
 
 const collection = useCollection({
   state: {

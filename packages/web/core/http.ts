@@ -1,5 +1,5 @@
-import { RequestProvider } from '../../common'
-import { SV_API_URL } from '../../types/constants'
+import { RequestProvider } from '@semantic-api/common'
+import { SV_API_URL } from '@semantic-api/types'
 import { useStore } from './state'
 
 export default () => {
@@ -40,7 +40,7 @@ const httpMethodWrapper = (
         })
       }
 
-      if( error.logout ) {
+      if( error.logout || ['JsonWebTokenError'].includes(error.name) ) {
         sessionStorage.clear()
         ROUTER.push({ name: 'user-signin' })
       }

@@ -1,6 +1,8 @@
 <template>
   <ion-item>
-    <ion-label>{{ property.description }}</ion-label>
+    <ion-label>
+      {{ property.description || propertyName }}
+    </ion-label>
     <ion-input
       :type="propType"
       @update:model-value="update"
@@ -14,6 +16,7 @@ import { IonItem, IonLabel, IonInput } from '@ionic/vue'
 
 type Props = {
   property: CollectionProperty
+  propertyName: string
 }
 
 type Emits = {

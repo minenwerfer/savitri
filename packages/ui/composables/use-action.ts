@@ -1,9 +1,9 @@
 import { reactive } from 'vue'
 import type { Router } from 'vue-router'
-import type { CollectionAction, StoreEffect } from '../../types'
+import type { CollectionAction, StoreEffect } from '@semantic-api/types'
 import type { ActionEvent } from '../../web/types/action'
-import { deepClone } from '../../common'
-import { STORE_EFFECTS } from '../../types/constants'
+import { deepClone } from '@semantic-api/common'
+import { STORE_EFFECTS } from '@semantic-api/types'
 
 const getEffect = (store: any, effectName: StoreEffect) => {
   const effect = STORE_EFFECTS[effectName]

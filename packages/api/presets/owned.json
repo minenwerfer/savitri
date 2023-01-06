@@ -1,9 +1,0 @@
-{
-  "properties": {
-    "owner": {
-      "$ref": "user",
-      "description": "Usuário",
-      "s$noform": true
-    }
-  }
-}

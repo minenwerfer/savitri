@@ -1,8 +1,0 @@
-{
-  "individualActions": {
-    "toggleActive": {
-      "name": "Ativa/desativa",
-      "icon": "toggle-on"
-    }
-  }
-}

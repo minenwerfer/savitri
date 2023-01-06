@@ -1,35 +1,8 @@
 {
-  "name": "savitri",
-  "version": "0.1.5148",
-  "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./bin/build.sh pack",
-    "watch": "./bin/watch.sh"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
-    "@types/hapi__hapi": "^20.0.10",
-    "@types/lodash": "^4.14.181",
-    "@types/ramda": "^0.28.15",
-    "@types/uuid": "^8.3.4",
-    "autoprefixer": "^10.4.8",
-    "axios": "^0.24.0",
-    "bcrypt": "^5.1.0",
-    "circular-dependency-plugin": "^5.2.2",
-    "copy-webpack-plugin": "^10.2.0",
-    "pinia": "^2.0.16",
-    "postcss": "^8.4.14",
-    "postcss-loader": "^7.0.1",
-    "tailwindcss": "^3.1.7",
-    "uuid": "^8.3.2",
-    "vue-router": "^4.1.2",
-    "yaml": "^2.0.1"
-  },
-  "optionalDependencies": {
-    "mongodb-memory-server": "^8.10.2"
+    "build": "./bin/build.sh",
+    "package": "./bin/build.sh pack",
+    "watch": "tsc --watch",
+    "publish": "./bin/publish.sh"
   }
 }
