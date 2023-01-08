@@ -1,0 +1,112 @@
+@import 'style/theming';
+
+$horizontal-padding: 1rem;
+$picture-size: 3.6rem;
+
+.results {
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  width: 100vw;
+
+  transform: translate(-1px, -1px);
+
+  height: 100vh;
+  max-height: auto;
+  overflow-y: scroll;
+  // transition: all .35s ease-out;
+
+  padding-bottom: 2.8rem;
+
+  @include themed() {
+    background: t(background-color);
+    border: 1px solid t(border-color);
+
+    &__collection-name {
+      background: t(background-color-alt);
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    left: $menu-width;
+    height: auto;
+    max-height: 28rem;
+    width: 40rem;
+    padding-bottom: 0;
+  }
+
+  // &--hidden {
+  //   max-height: 0;
+  //   border: none;
+  //   padding-bottom: 0;
+  // }
+
+  &__collections {
+    display: grid;
+  }
+
+  &__collection {
+    &:not(:last-child) {
+      border-bottom: 1px solid #dedede;
+    }
+  }
+
+  &__collection-name {
+    padding: .6rem $horizontal-padding;
+  }
+
+  &__results {
+  }
+
+  &__result {
+    display: flex;
+    column-gap: 1.2rem;
+    padding: .6rem $horizontal-padding;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #dedede;
+    }
+  }
+
+  &__picture {
+    width: $picture-size;
+    height: $picture-size;
+    border: 1px solid #dedede;
+  }
+
+  &__picture-fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__info {
+    opacity: .75;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 22rem;
+  }
+
+  &__info-line {
+    display: flex;
+    align-items: flex-end;
+    column-gap: .6rem;
+  }
+
+  &__info-label {
+    font-size: .9rem;
+    font-weight: bold;
+
+    &:after {
+      content: ': ';
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-self: center;
+    margin-left: auto;
+    column-gap: .4rem;
+  }
+}

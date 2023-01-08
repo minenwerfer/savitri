@@ -1,0 +1,24 @@
+.shortcuts {
+  position: fixed;
+  right: 1.6rem;
+  margin-top: .6rem;
+
+  z-index: 50;
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    row-gap: .4rem;
+
+    :deep(svg) {
+      width: 1.2rem;
+    }
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    column-gap: .2rem;
+    width: 100%;
+  }
+}

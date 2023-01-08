@@ -1,0 +1,14 @@
+{
+  "name": "savitri",
+  "version": "1.3.103",
+  "description": "",
+  "bin": {
+    "savitri": "bin/savitri.js"
+  },
+  "scripts": {
+    "build": "tsc && cp src/savitri.js bin"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

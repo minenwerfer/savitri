@@ -1,0 +1,32 @@
+.bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+
+  @media screen and (min-width: 600px) {
+    max-width: 30rem;
+  }
+}
+
+.bubble {
+  display: flex;
+  align-items: center;
+  column-gap: .2rem;
+
+  font-size: .9rem;
+  border: 1px solid green;
+  border-radius: 5px;
+
+  background: lightgreen;
+  padding: .2rem .4rem;
+
+  &__name {
+    &:after {
+      content: ': ';
+    }
+  }
+
+  &:hover {
+    background: darken(lightgreen, 10%);
+  }
+}

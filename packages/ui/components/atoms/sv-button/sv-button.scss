@@ -1,0 +1,73 @@
+@import 'style/theming';
+
+.button {
+  transition: all .2s;
+  padding: .35em 1em;
+  text-align: center;
+  border-radius: 4px;
+  outline: none;
+
+  @include themed() {
+    color: t(foreground-color);
+
+    :deep(svg) {
+      height: .95rem;
+    }
+
+    &--alt,
+    &--transparent {
+      &:hover {
+        background: t(background-color-alt);
+      }
+    }
+
+    &--alt {
+      color: t(foreground-color-alt);
+      background: t(button-background-alt);
+      border: 1px solid t(button-border-color);
+
+      :deep(svg) {
+        fill: t(foreground-color-alt);
+      }
+    }
+
+    &--normal {
+      color: t(background-color);
+      background: t(button-background-color);
+      border: 1px solid t(button-border-color);
+
+      :deep(svg) {
+        fill: t(background-color);
+      }
+
+      font-weight: bold;
+    }
+  }
+
+  &--small {
+    padding: .35rem 1.2rem;
+    font-size: 10pt;
+  }
+
+  &--medium {
+    padding: .6rem 1.8rem;
+    font-size: 10.5pt;
+  }
+
+  &--large {
+    padding: .85rem 2.4rem;
+    font-size: 11pt;
+  }
+
+  // &--neutral {
+  //   @include normal-style($color: $neutral-foreground-color);
+  // }
+
+  // &--success {
+  //   @include normal-style($color: $success-foreground-color);
+  // }
+  
+  // &--critical {
+  //   @include normal-style($color: $critical-foreground-color);
+  // }
+}

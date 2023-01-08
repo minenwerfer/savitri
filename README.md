@@ -9,9 +9,10 @@ Check out who is using [here](https://github.com/semantic-api/savitri-awesome).
 ## Features
 
 - Automatic store creation
-- Automatic routes discovery from the filesystem
+- Automatic form building
 - Builtin visual handling of exceptions
-- Builtin REST-inside-state-manager system
+- Builtin REST-inside-store system
+- Carefully crafted UI components
 - ...and much more!
 
 ## Getting started

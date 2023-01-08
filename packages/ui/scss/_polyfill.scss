@@ -1,0 +1,34 @@
+@import 'theming';
+
+* {
+  @include themed() {
+    ::-webkit-scrollbar-track { background: t(background-color); }
+    ::-webkit-scrollbar-thumb { background: lighten(t(foreground-color), 40%); }
+    ::-webkit-scrollbar-thumb:hover { background: t(foreground-color); }
+
+    a:link, a:visited, a:hover, a:active {
+      color: t(foreground-color);
+    }
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main--dark {
+  [data-image=logo] {
+    filter: grayscale(1) brightness(10);
+  }
+}

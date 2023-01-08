@@ -1,0 +1,45 @@
+.crud {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    row-gap: .2rem;
+
+    @media screen and (min-width: 600px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__panel-control {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: .4rem;
+
+    :deep(svg) {
+      width: 20px;
+    }
+
+    &--custom {
+      align-items: flex-end;
+    }
+  }
+
+  &__table-panel {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+
+    justify-content: space-between;
+    padding: .8rem;
+
+    @media screen and (min-width: 600px) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__header {
+    margin-bottom: -1rem;
+  }
+
+  &__footer {
+    margin-top: -1rem;
+  }
+
+  &__fieldset {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__field-hint {
+    font-size: .9rem;
+    opacity: .8;
+  }
+
+  &__search-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  &__validation-error {
+    font-size: .9rem;
+    padding: .4rem 0;
+    color: red;
+  }
+}

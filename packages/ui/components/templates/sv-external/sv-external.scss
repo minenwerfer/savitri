@@ -1,0 +1,48 @@
+@import 'style/theming';
+
+.external {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  @include themed() {
+    background: t(body-color);
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.4rem;
+    width: 90vw;
+
+    padding: 2rem 0;
+
+    @media screen and (min-width: 600px) {
+      width: 30rem;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.4rem;
+  }
+
+  &__logo {
+    width: 10rem;
+    height: 3rem;
+    object-fit: contain;
+    align-self: center;
+  }
+
+  &__version {
+    align-self: center;
+    opacity: .6;
+  }
+}

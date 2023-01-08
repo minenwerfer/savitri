@@ -1,0 +1,120 @@
+@import 'style/theming';
+
+$horizontal-padding: .8rem;
+$picture-size: 3.6rem;
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &__row {
+    &--header {
+      display: none;
+      line-height: 2.25rem;
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      text-align: left;
+
+      @include themed() {
+        background: t(background-color-alt);
+        border-bottom: 1px solid t(border-color);
+      }
+
+      @media screen and (min-width: 600px) {
+        display: table-row;
+      }
+    }
+
+    &--body {
+      margin-bottom: 1.2rem;
+      padding: .6rem;
+      line-height: 2.25rem;
+
+      @include themed() {
+        &:not(:last-child) {
+          border-bottom: 1px solid t(border-color);
+        }
+
+        &:hover {
+          background: t(background-color-alt);
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      @media screen and (max-width: 600px) {
+        display: block;
+        background: #fff;
+        border-radius: 5px;
+
+        @include themed() {
+          border: 1px solid t(border-color);
+        }
+      }
+    }
+
+  }
+
+  &__header {
+    display: hidden;
+
+    &--label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media screen and (min-width: 600px) {
+      display: table-cell;
+      padding: .2rem $horizontal-padding;
+    }
+  }
+
+  &__cell {
+    display: block;
+    line-height: 1.3rem;
+
+    @media screen and (min-width: 600px) {
+      display: table-cell;
+      padding: 0 $horizontal-padding;
+
+      &--padded {
+        padding: $horizontal-padding;
+      }
+    }
+  }
+
+  &__cell-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    @media screen and (min-width: 600px) {
+      display: block;
+    }
+  }
+
+  &__cell-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: .8rem;
+    margin-left: auto;
+
+  }
+
+  &__picture {
+    height: $picture-size;
+    width: $picture-size;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  &__empty {
+    display: grid;
+    place-items: center;
+    padding: 1.6rem 0;
+  }
+}
