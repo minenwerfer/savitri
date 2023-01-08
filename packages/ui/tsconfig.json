@@ -1,5 +1,0 @@
-{
-  "include": [
-    "../web/global.d.ts"
-  ]
-}
