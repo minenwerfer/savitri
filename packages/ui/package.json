@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semantic-api/common": "file:../../../semantic-api/packages/common",
-    "@semantic-api/types": "file:../../../semantic-api/packages/types"
+    "@semantic-api/common": "latest",
+    "@semantic-api/types": "latest"
   }
 }

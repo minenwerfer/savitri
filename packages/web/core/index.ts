@@ -1,4 +1,4 @@
-import '../../common/polyfill'
+import '@semantic-api/common/polyfill'
 
 import { createApp } from 'vue'
 import VueLazyLoad from 'vue3-lazyload'

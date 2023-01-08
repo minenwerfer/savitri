@@ -19,7 +19,7 @@
     <template #extra>
       <sv-dropdown
         v-bind="{
-          subject: store.$item,
+          subject: store.item,
           actions: individualActions
             .filter(({ action }) => action !== 'ui/spawnEdit')
         }"
@@ -27,7 +27,7 @@
       >
         <sv-icon
           v-clickable
-          v-if="store.$item._id"
+          v-if="store.item._id"
           reactive
           name="ellipsis-h"
         ></sv-icon>
@@ -38,14 +38,14 @@
         variant="transparent"
         @clicked="cancel"
       >
-        Cancelar
+        {{ $t('action.cancel') }}
       </sv-button>
       <sv-button
         large
         :disabled="store.isLoading || isInsertReadOnly"
         @clicked="insert"
       >
-        Salvar
+      {{ $t('action.insert') }}
       </sv-button>
     </template>
   </sv-box>
@@ -84,14 +84,14 @@ const insert = async () => {
   const result = await store.deepInsert()
 
   if( props.parentField ) {
-    const newSet = parentStore!.$item[props.parentField] ||= []
+    const newSet = parentStore!.item[props.parentField] ||= []
     if( newSet.findIndex(({ _id }:{ _id: string }) => _id === result._id) === -1 ) {
       newSet.push(result._id)
     }
 
     await parentStore!.insert({
       what: {
-        _id: parentStore!.$item._id,
+        _id: parentStore!.item._id,
         [props.parentField]: newSet
       }
     })
@@ -111,7 +111,7 @@ const cancel = () => {
   })
 }
 
-watch(() => store.$item._id, (_id) => {
+watch(() => store.item._id, (_id) => {
   if( _id === null ) {
     isInsertVisible.value = false
   }

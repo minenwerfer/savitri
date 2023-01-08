@@ -8,7 +8,7 @@
       v-bind="{
         checkbox: store.hasSelectionActions,
         columns: store.tableProperties,
-        rows: store.$items,
+        rows: store.items,
         actions: individualActions,
         layout: store.tableLayout
       }"
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { useParentStore } from '@savitri/web'
-import { LayoutOptions } from '../../../../../../../types'
+import { LayoutOptions } from '@semantic-api/types'
 import { SvBox, SvTable } from '../../../../..'
 
 type Props = {

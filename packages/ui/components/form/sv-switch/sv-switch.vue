@@ -32,7 +32,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import type { CollectionProperty } from '../../../../types'
+import type { CollectionProperty } from '@semantic-api/types'
 
 type Props = {
   modelValue: any

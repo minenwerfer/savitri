@@ -54,8 +54,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { arraysIntersects } from '@semantic-api/common'
 import { useStore, Route, MenuSchema } from '../../../../web'
-import { arraysIntersects } from '../../../../common'
 import { SvIcon } from '../../'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'

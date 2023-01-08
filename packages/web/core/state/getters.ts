@@ -71,16 +71,10 @@ const getters: GettersFunctions = {
     return condenseItem(this.item)
   },
 
-  $item() {
-    const item = Object.assign({}, this.freshItem)
-    Object.assign(item, this.item)
-    return item
-  },
-
   diffedItem() {
     return deepDiff(
       this.referenceItem,
-      this.$item,
+      this.item,
       true
     )
   },
@@ -115,30 +109,6 @@ const getters: GettersFunctions = {
     }
 
     return recurse(this)
-  },
-
-  /**
-   * Normalizes state.items.
-   */
-  $items() {
-    if( !Array.isArray(this.items) ) return []
-
-    const collections = Object.entries(this.description?.properties||{})
-      .reduce((a: Array<any>, [key, property]) => {
-        if( typeof property.$ref !== 'string' ) {
-          return a
-        }
-
-        return [
-          ...a,
-          key
-        ]
-      }, [])
-
-    return this.items.map((item) => ({
-      ...item,
-      ...(fromEntries(collections.map((m) => [m, item[m]||{}])))
-    }))
   },
 
   itemsCount() {

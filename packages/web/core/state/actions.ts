@@ -12,7 +12,11 @@ const { http, nonProxiedHttp } = useHttp()
 
 const mutations: Mutations = {
   setItem(item) {
-    this.item = item
+    Object.assign(this.item, this.freshItem)
+    Object.entries(item).forEach(([key, value]) => {
+      this.item[key] = value
+    })
+
     this.referenceItem = deepClone({
       ...this.freshItem,
       ...item
@@ -27,10 +31,7 @@ const mutations: Mutations = {
   },
 
   insertItem(item) {
-    Object.assign(this.item, this.freshItem)
-    Object.entries(item).forEach(([key, value]) => {
-      this.item[key] = value
-    })
+    this.insertItem(item)
 
     const found = this.items.find(({ _id }) => _id === item._id)
     if( found ) {
@@ -259,12 +260,12 @@ const actionsAndMutations: Actions & Mutations = {
       actions: [
         {
           name: 'cancel',
-          title: I18N.global.tc('cancel'),
+          title: I18N.global.tc('action.cancel'),
           variant: 'transparent'
         },
         {
           name: 'confirm',
-          title: I18N.global.tc('confirm'),
+          title: I18N.global.tc('action.confirm'),
           size: 'large'
         },
       ]

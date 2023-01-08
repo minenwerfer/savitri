@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { User } from '@semantic-api/system/collections/user/user.description'
+import type { User } from '@semantic-api/system/resources/collections/user/user.description'
 import useCollection from '../state/collection'
 import useMetaStore from './meta'
 

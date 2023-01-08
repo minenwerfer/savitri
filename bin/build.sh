@@ -26,8 +26,6 @@ function do_pack() {
 }
 
 tsc || true && \
-  cp -r packages/api/presets dist/api && \
-  cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
   [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
 
 case "$COMMAND" in
