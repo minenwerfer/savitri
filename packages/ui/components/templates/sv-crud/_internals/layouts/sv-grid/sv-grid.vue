@@ -34,8 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import { useParentStore } from '@savitri/web'
-import { LayoutOptions } from '../../../../../../../types'
+import { LayoutOptions } from '@semantic-api/types'
+import { useParentStore } from '../../../../../../../web'
 import {
   SvBox,
   SvDropdown,

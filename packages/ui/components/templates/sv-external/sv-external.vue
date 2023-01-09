@@ -2,7 +2,7 @@
   <div class="external">
     <div class="external__wrapper">
       <img
-        :src="require(`@/assets/${productLogo}`).default"
+        src="/assets/logo.png"
         class="external__logo"
         data-image="logo"
       />
@@ -20,14 +20,14 @@
 </template>
 
 <script setup lang="ts">
-import { provide, inject } from 'vue'
+import { provide } from 'vue'
 import { SvBox } from '../..'
 
 provide('storeId', 'user')
 provide('buttonSize', 'large')
 
 // const productName = inject('productName')
-const productLogo = inject('productLogo')
+// const productLogo = inject('productLogo')
 //const productVersion = inject('productVersion')
 //const baseVersion = inject('baseVersion')
 </script>

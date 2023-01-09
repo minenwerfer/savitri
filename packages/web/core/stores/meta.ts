@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { deepClone } from '@semantic-api/common'
 import { Description } from '@semantic-api/types'
-import { default as webpackVariables } from 'variables'
+// import { default as webpackVariables } from 'variables'
 import useHttp from '../http'
 import useCollection from '../state/collection'
 
@@ -195,7 +195,7 @@ export default defineStore('meta', {
   getters: {
     $theme(): string {
       if( !this.theme ) {
-        const defaultTheme = webpackVariables.defaultTheme || 'default'
+        const defaultTheme = /*webpackVariables.defaultTheme ||*/ 'default'
         this.theme = localStorage.getItem('meta:theme') || defaultTheme
       }
 

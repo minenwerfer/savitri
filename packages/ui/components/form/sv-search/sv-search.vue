@@ -91,8 +91,8 @@ import {
 
 } from 'vue'
 
+import type { CollectionProperty } from '@semantic-api/types'
 import { useStore, useParentStore } from '../../../../web'
-import type { CollectionProperty } from '../../../../types'
 import { SvIcon } from '../..'
 
 import SvSearchSelected from './_internals/components/sv-search-selected/sv-search-selected.vue'

@@ -38,7 +38,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { CollectionProperty } from '../../../../types'
+import type { CollectionProperty } from '@semantic-api/types'
 
 type Props = {
   value: any

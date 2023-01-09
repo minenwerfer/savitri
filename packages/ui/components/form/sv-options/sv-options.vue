@@ -35,8 +35,8 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { CollectionProperty } from '@semantic-api/types'
 import { SvCheckbox } from '..'
-import type { CollectionProperty } from '../../../../types'
 
 type Props = {
   modelValue: any

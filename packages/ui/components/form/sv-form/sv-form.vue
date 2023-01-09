@@ -155,10 +155,10 @@
 
 <script setup lang="ts">
 import { computed, provide, inject } from 'vue'
+import type { CollectionProperty } from '@semantic-api/types'
 import { useStore } from '../../../../web'
 import { SvInput, SvIcon, SvButton } from '../..'
 
-import type { CollectionProperty } from '../../../../types'
 import { useCondition, Condition } from '../../../composables'
 import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
 

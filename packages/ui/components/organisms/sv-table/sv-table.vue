@@ -191,7 +191,7 @@
 <script setup lang="ts">
 import { inject, computed } from 'vue'
 import { useStore } from '../../../../web'
-import type { CollectionProperty, CollectionAction } from '../../../../types'
+import type { CollectionProperty } from '@semantic-api/types'
 
 import {
   SvButton,

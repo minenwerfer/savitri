@@ -1,25 +1,29 @@
 import { merge } from 'webpack-merge'
 // const { readFileSync } = require('fs')
 
-const oldCwd = process.cwd()
+// const oldCwd = process.cwd()
 
 export default (params: any) => {
   // dev, prod or lib
   const modes: Record<string, string> = {
+    library: 'lib',
     production: 'prod',
     development: 'dev'
   }
+  
+  const targetMode = params.mode
+  delete params.mode
 
-  const { webpackConfig } = require(`./webpack.config.${modes[params.mode]||'dev'}`)
+  const { webpackConfig } = require(`./webpack.config.${modes[targetMode]||'dev'}`)
 
-  params.externals ??= {}
-  params.externals.variables ??= {}
+  // params.externals ??= {}
+  // params.externals.variables ??= {}
 
-  Object.assign(params.externals.variables, {
-    workingDir: oldCwd,
-    bundleName: params.name,
-    productVersion: require(`${oldCwd}/package.json`).version,
-  })
+  // Object.assign(params.externals.variables, {
+  //   workingDir: oldCwd,
+  //   bundleName: params.name,
+  //   productVersion: require(`${oldCwd}/package.json`).version,
+  // })
 
   const config = merge(webpackConfig, {
     ...params,
@@ -32,12 +36,12 @@ export default (params: any) => {
    //    },
    //  },
 
-    output: params.mode === 'production'
+    output: targetMode === 'production'
       ? { path: `/var/www/html/${params.name}` }
       : {}
   })
 
-  if( params.tsTranspileOnly ) {
+  if( params.tsTranspileOnly || targetMode === 'library' ) {
     delete config.tsTranspileOnly
     config.module.rules = config.module.rules
       .map((r: any) => r.loader !== 'ts-loader' ? r : {

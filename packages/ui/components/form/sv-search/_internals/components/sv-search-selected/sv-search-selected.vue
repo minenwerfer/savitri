@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { CollectionProperty } from '../../../../../../../types'
+import type { CollectionProperty } from '@semantic-api/types'
 import { useParentStore } from '../../../../../../../web'
 import { SvIcon } from '../../../../..'
 import SvSearchContainer from '../sv-search-container/sv-search-container.vue'

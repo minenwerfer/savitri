@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@savitri/web": "latest",
     "@semantic-api/common": "latest",
     "@semantic-api/types": "latest"
   }

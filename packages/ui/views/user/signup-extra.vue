@@ -67,7 +67,9 @@ import {
 
 } from '../..'
 
-import { default as webpackVariables } from 'variables'
+// import { default as webpackVariables } from 'variables'
+
+const webpackVariables = {}
 
 const router = useRouter()
 const userStore = useParentStore()

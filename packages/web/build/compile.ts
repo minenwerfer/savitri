@@ -32,7 +32,7 @@ const mode = process.argv[2];
     const config = makeConfig(buildConfig)
     const compiler = webpack(config)
 
-    if( ['production', 'lib'].includes(mode) ) {
+    if( ['production', 'library'].includes(mode) ) {
       compiler.run((err: any, stats: any) => console.log((err || stats).toString()))
       return
     }

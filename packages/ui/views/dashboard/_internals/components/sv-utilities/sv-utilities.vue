@@ -30,7 +30,9 @@ import {
 } from 'vue'
 
 import { SvInfo, SvIcon } from '../../../../../components'
-import { default as webpackVariables } from 'variables'
+// import { default as webpackVariables } from 'variables'
+
+const webpackVariables = {}
 
 const release = reactive({
   product: []

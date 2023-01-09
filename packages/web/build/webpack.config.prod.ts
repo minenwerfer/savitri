@@ -15,6 +15,7 @@ export const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
+      base: '/'
     }),
   ]
 } as any)

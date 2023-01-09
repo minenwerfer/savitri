@@ -76,9 +76,9 @@ export default {
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
+import type { CollectionProperty } from '@semantic-api/types'
 import { useClipboard } from '../../../composables'
 import { SvInfo, SvIcon } from '../..'
-import type { CollectionProperty } from '../../../../types'
 
 type InputType = string|number|Date
 

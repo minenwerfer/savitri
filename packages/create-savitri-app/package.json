@@ -1,0 +1,17 @@
+{
+  "name": "create-savitri-app",
+  "version": "0.0.102",
+  "description": "",
+  "bin": {
+    "create-savitri-app": "bin/index.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "semantic-api-spec": "^1.0.0"
+  }
+}

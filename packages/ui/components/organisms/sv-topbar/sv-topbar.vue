@@ -7,7 +7,7 @@
       <div v-if="!productLogo">{{ productName }}</div>
       <img
         v-else
-        :src="require(`@/assets/${productLogo}`).default"
+        src="/assets/logo.png"
         class="topbar__logo"
         data-image="logo"
       />
@@ -59,7 +59,6 @@ const metaStore = useStore('meta')
 const router = useRouter()
 
 const productName = inject('productName')
-const productLogo = inject('productLogo')
 </script>
 
 <style scoped src="./sv-topbar.scss"></style>

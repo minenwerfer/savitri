@@ -9,7 +9,7 @@ import type { Router } from 'vue-router'
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter, extendRouter } from './router'
-import { default as webpackVariables } from 'variables'
+// import { default as webpackVariables } from 'variables'
 
 import type { Plugin, AppOptions } from '../types'
 import registerDirectives from '../../ui/directives'
@@ -77,11 +77,11 @@ export const useApp = (config: AppOptions): Promise<{
   app.use(VueUnicon as any)
   app.use(VueLazyLoad)
 
-  app.mixin({
-    provide: {
-      ...webpackVariables
-    }
-  })
+  // app.mixin({
+  //   provide: {
+  //     ...webpackVariables
+  //   }
+  // })
 
   Object.assign(window, {
     ROUTER: router,

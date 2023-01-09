@@ -1,7 +1,7 @@
 #!/bin/bash
 
 COMMAND=$(expr "$1" \| "")
-BUILD_COMPONENTS=
+BUILD_COMPONENTS=1
 
 PACKAGES=(
   ui
@@ -10,7 +10,6 @@ PACKAGES=(
 
 function do_pack() {
   cp {tsconfig.json,packages/web/global.d.ts} dist/web
-  cp -r packages/web/public dist/web
 
   for package in ${PACKAGES[*]}; do
     cp "packages/${package}/package.json" "dist/${package}/package.json"
@@ -25,8 +24,11 @@ function do_pack() {
   done
 }
 
-tsc || true && \
-  [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
+tsc
+if [ ! -z $BUILD_COMPONENTS ]; then
+  cp -r packages/ui/scss dist/ui
+  # (cd packages/web && npm run build)
+fi
 
 case "$COMMAND" in
   pack)
