@@ -123,17 +123,14 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
 
       if( isUnequal ) {
         if( R.is(Object, value) && R.is(Object, origin[key]) ) {
-          if( Array.isArray(value) ) {
-            return {
-              ...a,
-              [key]: value
-            }
-          }
-
-          const res = changes(value, origin[key])
-          if( !Object.keys(res).length ) {
+          const _res = changes(value, origin[key])
+          if( !Object.keys(_res).length ) {
             return a
           }
+
+          const res = Array.isArray(value)
+            ? value.map((v, index) => _res[+index] || v)
+            : _res
 
           return {
             ...a,

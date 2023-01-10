@@ -80,6 +80,10 @@ const getters: GettersFunctions = {
     )
   },
 
+  hasDiff() {
+    return Object.keys(this.diffedItem).length
+  },
+
   $freshItem() {
     const recurse = (
       store: CollectionState<any> & Getters,

@@ -42,7 +42,7 @@
       </sv-button>
       <sv-button
         large
-        :disabled="store.isLoading || isInsertReadOnly"
+        :disabled="store.isLoading || !store.hasDiff || isInsertReadOnly"
         @clicked="insert"
       >
       {{ $t('action.insert') }}
