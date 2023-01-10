@@ -63,6 +63,10 @@ const mutations: Mutations = {
   },
 
   clearItem() {
+    Object.keys(this.item).forEach((key) => {
+      delete this.item[key]
+    })
+
     return this.setItem({})
   },
 

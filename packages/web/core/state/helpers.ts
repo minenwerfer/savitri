@@ -116,9 +116,13 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
   const changes = (target: T, origin: T): any => {
     const diff = Object.entries(target).reduce((a: any, [key, value]) => {
       const isUnequal = (() => {
-        return Array.isArray(value) && Array.isArray(origin[key]) 
-          ? !value.every((v, i) => (!v && i === value.length-1) || origin[key][i] === v) || value.length < origin[key].length
-          : value !== origin[key]
+        if( Array.isArray(value) && Array.isArray(origin[key]) ) {
+          return !value.every((v, i) => (v === null && i !== value.length-1) || origin[key][i] === v)
+            || value.length < origin[key].length
+        }
+
+        return value !== origin[key]
+          && (typeof value !== 'number' && value && origin[key])
       })()
 
       if( isUnequal ) {
