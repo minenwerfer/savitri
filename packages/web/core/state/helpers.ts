@@ -122,7 +122,7 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
         }
 
         return value !== origin[key]
-          && (typeof value !== 'number' && value && origin[key])
+          && (typeof value !== 'number' && (value || origin[key]))
       })()
 
       if( isUnequal ) {
