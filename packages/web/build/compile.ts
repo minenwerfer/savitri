@@ -2,10 +2,6 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import makeConfig from './make-config'
 
-declare namespace global {
-  let appDir: string
-}
-
 const relpath = 'build'
 const mode = process.argv[2];
 
@@ -26,10 +22,10 @@ const mode = process.argv[2];
       name: process.cwd().split('/').pop(),
     })
 
-    global.appDir = process.cwd()
+    const appDir = process.cwd()
     process.chdir(__dirname)
 
-    const config = makeConfig(buildConfig)
+    const config = makeConfig(appDir)(buildConfig)
     const compiler = webpack(config)
 
     if( ['production', 'library'].includes(mode) ) {

@@ -1,9 +1,9 @@
 import path from 'path'
-import { merge } from 'webpack-merge'
-import { baseWebpackConfig } from './webpack.config.base'
+import merge from './merge'
+import baseWebpackConfig from './webpack.config.base'
 
 // library
-export const webpackConfig = merge(baseWebpackConfig, {
+export default (appDir: string) => merge(baseWebpackConfig(appDir), {
   mode: 'production',
   devtool: 'eval-source-map',
   entry: {
@@ -20,4 +20,4 @@ export const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     splitChunks: false
   }
-} as any)
+})

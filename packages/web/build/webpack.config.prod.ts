@@ -1,9 +1,9 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { merge } from 'webpack-merge'
-import { baseWebpackConfig } from './webpack.config.base'
+import merge from './merge'
+import baseWebpackConfig from './webpack.config.base'
 
 // production
-export const webpackConfig = merge(baseWebpackConfig, {
+export default (appDir: string) => merge(baseWebpackConfig(appDir), {
   mode: 'production',
   devtool: 'eval-source-map',
 
@@ -14,8 +14,9 @@ export const webpackConfig = merge(baseWebpackConfig, {
 
   plugins: [
     new HtmlWebpackPlugin({
-      inject: true,
-      base: '/'
+      base: '/',
+      inject: 'body',
+      template: '../static/index.ejs'
     }),
   ]
-} as any)
+})

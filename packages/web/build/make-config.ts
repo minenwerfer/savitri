@@ -3,18 +3,18 @@ import { merge } from 'webpack-merge'
 
 // const oldCwd = process.cwd()
 
-export default (params: any) => {
+export default (appDir: string) => (params: any) => {
   // dev, prod or lib
-  const modes: Record<string, string> = {
+  const modes = {
     library: 'lib',
     production: 'prod',
     development: 'dev'
   }
   
-  const targetMode = params.mode
+  const targetMode: keyof typeof modes = params.mode
   delete params.mode
 
-  const { webpackConfig } = require(`./webpack.config.${modes[targetMode]||'dev'}`)
+  const webpackConfig = require(`./webpack.config.${modes[targetMode]||'dev'}`).default(appDir)
 
   // params.externals ??= {}
   // params.externals.variables ??= {}

@@ -1,7 +1,8 @@
 import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
 import type { CollectionState } from '../../types/state'
 import type { Actions, Mutations } from './actions.types'
-import { fromEntries, deepClone, deepDiff } from '@semantic-api/common'
+import { fromEntries, deepClone } from '@semantic-api/common'
+import { deepDiff } from './helpers'
 import { useStore } from './use'
 
 import  {

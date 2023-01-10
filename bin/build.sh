@@ -9,7 +9,11 @@ PACKAGES=(
 )
 
 function do_pack() {
-  cp {tsconfig.json,packages/web/global.d.ts} dist/web
+cp -r {\
+tsconfig.json\
+,packages/web/global.d.ts\
+,packages/web/static\
+} dist/web
 
   for package in ${PACKAGES[*]}; do
     cp "packages/${package}/package.json" "dist/${package}/package.json"
@@ -27,7 +31,6 @@ function do_pack() {
 tsc
 if [ ! -z $BUILD_COMPONENTS ]; then
   cp -r packages/ui/scss dist/ui
-  # (cd packages/web && npm run build)
 fi
 
 case "$COMMAND" in
