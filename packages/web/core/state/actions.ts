@@ -31,7 +31,7 @@ const mutations: Mutations = {
   },
 
   insertItem(item) {
-    this.insertItem(item)
+    this.setItem(item)
 
     const found = this.items.find(({ _id }) => _id === item._id)
     if( found ) {
