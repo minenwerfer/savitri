@@ -114,14 +114,22 @@ export const freshFilters = (description: Description) => {
 
 export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, preserveIds?: boolean) => {
   const changes = (target: T, origin: T): any => {
-    let arrayIdx = 0
     const res = Object.entries(target).reduce((a: any, [key, value]) => {
-      if( value !== origin[key] ) {
-        let resultKey = Array.isArray(origin)
-          ? arrayIdx++
-          : key
+      const isUnequal = (() => {
+        return Array.isArray(value) && Array.isArray(origin[key]) 
+          ? !value.every((v) => origin[key].includes(v))
+          : value !== origin[key]
+      })()
 
+      if( isUnequal ) {
         if( R.is(Object, value) && R.is(Object, origin[key]) ) {
+          if( Array.isArray(value) ) {
+            return {
+              ...a,
+              [key]: value
+            }
+          }
+
           const res = changes(value, origin[key])
           if( !Object.keys(res).length ) {
             return a
@@ -129,13 +137,13 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
 
           return {
             ...a,
-            [resultKey]: res
+            [key]: res
           }
         }
 
         return {
           ...a,
-          [resultKey]: value
+          [key]: value
         }
       }
 
