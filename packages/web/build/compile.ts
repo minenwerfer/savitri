@@ -1,31 +1,33 @@
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
-import makeConfig from './make-config'
+import makeConfig from './makeConfig'
 
-const relpath = 'build'
-const mode = process.argv[2];
+const mode = process.argv[2]
 
-(() => {
+const getOptionalFile = (relpath: string) => {
   try {
-    const content = (() => {
-      {
-        try {
-          return require(`${process.cwd()}/${relpath}`)
-        } catch( e ) {
-          return {}
-        }
-      }
-    })()
+    return require(`${process.cwd()}/${relpath}`)
+  } catch( e ) {
+    return {}
+  }
+}
 
-    const buildConfig = Object.assign(content, {
-      mode,
-      name: process.cwd().split('/').pop(),
-    })
 
-    const appDir = process.cwd()
+const main = () => {
+  try {
+    const params = {
+      appDir: process.cwd(),
+      buildConfig: {
+        ...getOptionalFile('build'),
+        mode,
+        name: process.cwd().split('/').pop(),
+      },
+      instanceConfig: getOptionalFile('instance')
+    }
+
     process.chdir(__dirname)
 
-    const config = makeConfig(appDir)(buildConfig)
+    const config = makeConfig(params)
     const compiler = webpack(config)
 
     if( ['production', 'library'].includes(mode) ) {
@@ -50,4 +52,6 @@ const mode = process.argv[2];
     // webpack drops a thousand lines of error
     console.trace(error)
   }
-})()
+}
+
+main()

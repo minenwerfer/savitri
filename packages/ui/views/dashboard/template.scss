@@ -3,7 +3,7 @@
 .template {
   @include themed() {
     color: t(foreground-color-alt);
-    background: t(body-color);
+    background: t(body-background);
   }
 
   &__main {

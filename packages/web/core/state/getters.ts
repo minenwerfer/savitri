@@ -19,6 +19,7 @@ export type Getters = Record<`$${string}`, any> & {
   references: Array<[string, CollectionProperty]>
   inlineReferences: Array<[string, CollectionProperty]>
   diffedItem: Record<string, any>
+  hasDiff: boolean
 }
 
 type GettersFunctions = Record<string, (this: CollectionState<any> & Getters & Actions & Mutations) => any>
@@ -82,6 +83,42 @@ const getters: GettersFunctions = {
 
   hasDiff() {
     return Object.keys(this.diffedItem).length
+  },
+
+  insertReady() {
+    const formIncludes = (key: string) => {
+      const form = this.description.form!
+      return Array.isArray(form)
+        ? form.includes(key)
+        : key in form
+    }
+
+    const ensureFulfillment = () => {
+      const keys = this.description.strict
+        ? Object.keys(this.properties)
+        : this.description.required
+
+      if( !keys ) {
+        return true
+      }
+
+      return keys.every((k) => {
+        const property = this.description.properties?.[k]!
+
+        return !(k in this.properties)
+          || (this.description.form && !formIncludes(k))
+          || property.s$noForm
+          || property.type === 'boolean'
+          || (
+            !!this.item[k]
+              && (!property.s$isReference || this.item[k]._id)
+          )
+      })
+    }
+
+    return this.diffedItem
+      && this.hasDiff
+      && ensureFulfillment()
   },
 
   $freshItem() {

@@ -62,7 +62,7 @@
     }
 
     &--normal {
-      padding: $default-input-padding;
+      padding: var(--default-input-padding);
     }
 
     &--bold {

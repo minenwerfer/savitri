@@ -2,7 +2,7 @@
   <div class="external">
     <div class="external__wrapper">
       <img
-        src="/assets/logo.png"
+        src="/static/logo.png"
         class="external__logo"
         data-image="logo"
       />
@@ -23,7 +23,6 @@
 import { provide } from 'vue'
 import { SvBox } from '../..'
 
-provide('storeId', 'user')
 provide('buttonSize', 'large')
 
 // const productName = inject('productName')

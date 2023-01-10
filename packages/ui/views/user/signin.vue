@@ -48,14 +48,14 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, useParentStore } from '../../../web'
+import { useStore } from '../../../web'
 // import { default as webpackVariables } from 'variables'
 import { SvForm, SvButton } from '../../components'
 
 const webpackVariables = {}
 
 const router = useRouter()
-const userStore = useParentStore()
+const userStore = useStore('user')
 const metaStore = useStore('meta')
 
 provide('inputVariant', 'bold')

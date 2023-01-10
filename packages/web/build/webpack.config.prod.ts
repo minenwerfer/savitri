@@ -1,9 +1,11 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import merge from './merge'
+import type { BuildParams } from './types'
+import makeHtmlWebpackPlugin from './htmlWebpackPlugin'
+import makeCopyWebpackPlugin from './copyWebpackPlugin'
 import baseWebpackConfig from './webpack.config.base'
 
 // production
-export default (appDir: string) => merge(baseWebpackConfig(appDir), {
+export default (params: BuildParams) => merge(baseWebpackConfig(params), {
   mode: 'production',
   devtool: 'eval-source-map',
 
@@ -13,10 +15,7 @@ export default (appDir: string) => merge(baseWebpackConfig(appDir), {
   },
 
   plugins: [
-    new HtmlWebpackPlugin({
-      base: '/',
-      inject: 'body',
-      template: '../static/index.ejs'
-    }),
+    makeHtmlWebpackPlugin(params.instanceConfig),
+    makeCopyWebpackPlugin(params.appDir),
   ]
 })

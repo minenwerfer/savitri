@@ -14,6 +14,7 @@ Check out who is using [here](https://github.com/semantic-api/savitri-awesome).
 - Builtin REST-inside-store system
 - Carefully crafted UI components
 - Runtime network payload optimization
+- Full theming and white labeling support
 - ...and much more!
 
 ## Getting started

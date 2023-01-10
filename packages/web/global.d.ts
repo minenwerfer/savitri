@@ -1,10 +1,7 @@
-/// <reference types="vue/macros-global" />
-
-/* eslint-disable */
-declare module '*.vue' {
-  import type { DefineComponent } from 'vue'
-  const component: DefineComponent<{}, {}, any>
-  export default component
+declare namespace global {
+  var INSTANCE_VARS: {
+    themes?: Array<string>
+  }
 }
 
 declare module 'variables' {

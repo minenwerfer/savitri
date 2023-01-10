@@ -12,7 +12,7 @@
   place-items: center;
   height: 100vh;
   @include themed() {
-    background: t(body-color);
+    background: t(body-background);
   }
 
   &__wrapper {

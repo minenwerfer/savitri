@@ -2,7 +2,7 @@
   <sv-icon
     v-clickable
     name="arrow-left"
-    @click="$router.push({ name: 'user-signin' })"
+    @click="router.push({ name: 'user-signin' })"
   >
     Efetuar login
   </sv-icon>
@@ -19,14 +19,16 @@
     }"
   ></sv-form>
 
-  <sv-button @clicked="$router.push({ name: 'user-signup-extra' })">
+  <sv-button @clicked="router.push({ name: 'user-signup-extra' })">
     Próximo
   </sv-button>
 </template>
 
 <script setup lang="ts">
-import { useParentStore } from '../../../web'
+import { useRouter } from 'vue-router'
+import { useStore } from '../../../web'
 import { SvForm, SvIcon, SvButton } from '../..'
 
-const userStore = useParentStore()
+const router = useRouter()
+const userStore = useStore('user')
 </script>

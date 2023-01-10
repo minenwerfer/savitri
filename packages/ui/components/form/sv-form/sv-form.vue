@@ -23,7 +23,10 @@
             && (!property.$ref || property.$ref === 'file')
             && !omitInputLabels
         ">
-          <strong>
+          <strong :class="{
+            'form__field-required-hint': highlightRequired
+              && (store?.description.strict || store?.description.required?.includes(key))
+          }">
             {{
               property.s$translate
                 ? $t(property.description || key)
@@ -189,13 +192,15 @@ type Props = {
   omitFormHeader?: boolean
   omitInputLabels?: boolean
   validationErrors?: Record<string, any>|null
+  highlightRequired?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isReadOnly: false,
   searchony: false,
   strict: true,
-  validationErrors: null
+  validationErrors: null,
+  highlightRequired: true
 })
 
 const emit = defineEmits<{
@@ -240,7 +245,7 @@ const filterProperties = (condition: (f: any) => boolean): Array<[string, Collec
   Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
     if(
       !(property
-        && (!(property.s$noform  || property.s$meta) || props.searchOnly)
+        && (!(property.s$noForm  || property.s$meta) || props.searchOnly)
         && (!condition || condition([key, property]))
       )) {
       return a

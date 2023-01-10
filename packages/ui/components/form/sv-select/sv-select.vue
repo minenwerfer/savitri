@@ -31,7 +31,7 @@ import type { CollectionProperty } from '@semantic-api/types'
 
 type Props = {
   modelValue: any
-  property: CollectionProperty
+  property?: CollectionProperty
   propertyName?: string
 }
 

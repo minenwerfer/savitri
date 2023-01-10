@@ -1,11 +1,15 @@
 import path from 'path'
-import type { Configuration } from 'webpack'
 import { VueLoaderPlugin } from 'vue-loader'
+import type { Configuration } from 'webpack'
+import type { BuildParams } from './types'
+import sassData from './sassData'
 // const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default
 // const CircularDependencyPlugin = require('circular-dependency-plugin')
 //
 
-const baseWebpackConfig = (appDir: string): Configuration => {
+const baseWebpackConfig = (params: BuildParams): Configuration => {
+  const { appDir } = params
+
   const config = {
     entry: path.resolve(__dirname, appDir),
     resolve: {
@@ -55,7 +59,12 @@ const baseWebpackConfig = (appDir: string): Configuration => {
           use: [
             'vue-style-loader',
             'css-loader',
-            'sass-loader'
+            {
+              loader: 'sass-loader',
+              options: {
+                additionalData: sassData(params.instanceConfig)
+              }
+            }
           ]
         },
         {
@@ -90,7 +99,8 @@ const baseWebpackConfig = (appDir: string): Configuration => {
 
   try {
     module.paths.push(`${appDir}/../../node_modules`)
-    const tailwindAddon: any = require('@savitri/addon-tailwind').default;
+    const tailwindAddon: any = require('@savitri/addon-tailwind').default(appDir);
+
     (config.module.rules[2].use as Array<string>).push(
       tailwindAddon
     )

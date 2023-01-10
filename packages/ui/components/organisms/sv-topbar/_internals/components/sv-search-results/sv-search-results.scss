@@ -28,7 +28,7 @@ $picture-size: 3.6rem;
   }
 
   @media screen and (min-width: 600px) {
-    left: $menu-width;
+    left: var(--menu-width);
     height: auto;
     max-height: 28rem;
     width: 40rem;

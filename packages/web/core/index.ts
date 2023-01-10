@@ -1,6 +1,6 @@
 import '@semantic-api/common/polyfill'
 
-import { createApp } from 'vue'
+import { createApp, App } from 'vue'
 import VueLazyLoad from 'vue3-lazyload'
 import VueUnicon from 'vue-unicons'
 import * as Icons from 'vue-unicons/dist/icons'
@@ -17,8 +17,9 @@ import { useStore } from './state'
 
 
 export const useApp = (config: AppOptions): Promise<{
-  app: any
+  app: App
   router: Router
+  mount: () => any
 }> => new Promise(async (resolve) => {
   const {
     component,
@@ -96,5 +97,6 @@ export const useApp = (config: AppOptions): Promise<{
   resolve({
     app,
     router,
+    mount: () => app.mount('#app')
   })
 })

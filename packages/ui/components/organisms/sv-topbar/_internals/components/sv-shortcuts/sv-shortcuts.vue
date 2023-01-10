@@ -10,12 +10,14 @@
     >
       <sv-select
         v-model="metaStore.theme"
-        :property="{}"
         @change="metaStore.saveTheme"
       >
-        <option value="default">Padrão</option>
-        <option value="dark">Escuro</option>
-        <option value="contrast">Contraste</option>
+        <option
+          v-for="theme in metaStore.availableThemes"
+          :value="theme"
+        >
+          {{ theme }}
+        </option>
       </sv-select>
 
       <sv-icon

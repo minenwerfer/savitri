@@ -1,44 +1,40 @@
-$menu-width: 16.8rem;
-$default-input-padding: .6rem;
+:root {
+  --menu-width: 16.8rem;
+  --default-input-padding: .6rem;
 
-$themes: (
-  default: (
-    border-color: #dedede,
-    button-background-color: #000,
-    button-border-color: #555,
-    switch-background-color: #000,
-    switch-border-color: transparent,
-    foreground-color: #444,
-    foreground-color-alt: #000,
-    background-color: #fff,
-    background-color-alt: darken(#fff, 10%),
-    topbar-background-color: rgb(255, 255, 255, .92),
-    body-color: #f8f9fa
-  ),
-  dark: (
-    border-color: #888,
-    button-background-color: #fff,
-    button-border-color: #fff,
-    switch-background-color: blue,
-    switch-border-color: transparent,
-    foreground-color: #eee,
-    foreground-color-alt: #fff,
-    background-color: #50505b,
-    background-color-alt: lighten(#50505b, 20%),
-    topbar-background-color: lighten(#50505bf0, 20%),
-    body-color: #30303b
-  ),
-  contrast: (
-    border-color: #222,
-    button-background-color: linear-gradient(45deg, darkblue, magenta),
-    button-border-color: transparent,
-    switch-background-color: linear-gradient(45deg, darkblue, magenta),
-    switch-border-color: #000,
-    foreground-color: #000,
-    foreground-color-alt: #fff,
-    background-color: #fff,
-    background-color-alt: lighten(#555, 20%),
-    topbar-background-color: #fff,
-    body-color: #444
-  )
-);
+  --default-border-color: #dedede;
+  --default-button-background-color: #000000aa;
+  --default-button-border-color: #555;
+  --default-switch-background-color: #000;
+  --default-switch-border-color: transparent;
+  --default-foreground-color: #000;
+  --default-foreground-color-alt: #000;
+  --default-background-color: #fff;
+  --default-background-color-alt: darken(#fff, 10%);
+  --default-topbar-background-color: rgb(255, 255, 255, .92);
+  --default-body-background: #f8f9fa;
+
+  --dark-border-color: #888;
+  --dark-button-background-color: #fff;
+  --dark-button-border-color: #fff;
+  --dark-switch-background-color: blue;
+  --dark-switch-border-color: transparent;
+  --dark-foreground-color: #eee;
+  --dark-foreground-color-alt: #fff;
+  --dark-background-color: #50505b;
+  --dark-background-color-alt: lighten(#50505b, 20%);
+  --dark-topbar-background-color: lighten(#50505bf0, 20%);
+  --dark-body-background: #30303b;
+
+  --contrast-border-color: #222;
+  --contrast-button-background-color: linear-gradient(45deg, darkblue, magenta);
+  --contrast-button-border-color: transparent;
+  --contrast-switch-background-color: linear-gradient(45deg, darkblue, magenta);
+  --contrast-switch-border-color: #000;
+  --contrast-foreground-color: #000;
+  --contrast-foreground-color-alt: #fff;
+  --contrast-background-color: #fff;
+  --contrast-background-color-alt: lighten(#555, 20%);
+  --contrast-topbar-background-color: #fff;
+  --contrast-body-background: #444;
+}

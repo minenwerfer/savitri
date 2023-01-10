@@ -1,9 +1,10 @@
 import path from 'path'
+import type { BuildParams } from './types'
 import merge from './merge'
 import baseWebpackConfig from './webpack.config.base'
 
 // library
-export default (appDir: string) => merge(baseWebpackConfig(appDir), {
+export default (params: BuildParams) => merge(baseWebpackConfig(params), {
   mode: 'production',
   devtool: 'eval-source-map',
   entry: {

@@ -28,6 +28,12 @@
     opacity: .8;
   }
 
+  &__field-required-hint:after {
+    content: '*';
+    color: #ee2222;
+    margin-left: .35rem;
+  }
+
   &__search-grid {
     display: grid;
     gap: 2rem;

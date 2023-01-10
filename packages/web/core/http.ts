@@ -35,7 +35,7 @@ const httpMethodWrapper = (
 
       if( !error.silent ) {
         metaStore.spawnModal({
-          title: 'Erro',
+          title: 'Error',
           body: error
         })
       }

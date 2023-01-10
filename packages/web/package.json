@@ -23,6 +23,7 @@
     "@semantic-api/types": "latest",
     "@types/ramda": "^0.28.15",
     "axios": "^0.24.0",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.5.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",

@@ -3,7 +3,7 @@
 * {
   @include themed() {
     ::-webkit-scrollbar-track { background: t(background-color); }
-    ::-webkit-scrollbar-thumb { background: lighten(t(foreground-color), 40%); }
+    ::-webkit-scrollbar-thumb { background: t(foreground-color); }
     ::-webkit-scrollbar-thumb:hover { background: t(foreground-color); }
 
     a:link, a:visited, a:hover, a:active {
