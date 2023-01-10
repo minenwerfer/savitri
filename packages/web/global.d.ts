@@ -4,15 +4,6 @@ declare namespace global {
   }
 }
 
-declare module 'variables' {
-  const strict: boolean
-  const bundleName: string
-  const workingDir: string
-  const productName: string
-  const productLogo: string
-  const defaultTheme: string
-}
-
 declare module 'vue-unicons/dist/icons' {
 }
 
