@@ -13,7 +13,7 @@ Check out who is using [here](https://github.com/semantic-api/savitri-awesome).
 - Builtin visual handling of exceptions
 - Builtin REST-inside-store system
 - Carefully crafted UI components
-- Payload diff: transfer only the required amount of data throughout the network
+- Network payload optimization
 - ...and much more!
 
 ## Getting started

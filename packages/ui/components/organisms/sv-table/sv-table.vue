@@ -96,7 +96,7 @@
             </div>
 
             <div v-else>
-              <div v-if="property.$ref === 'file'">
+              <div v-if="property.$ref === 'file' && row[column]">
                 <sv-picture
                   v-if="/^image/.test(row[column].mime)" 
                   v-model="row[column].link"
