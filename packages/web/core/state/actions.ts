@@ -12,7 +12,7 @@ const { http, nonProxiedHttp } = useHttp()
 
 const mutations: Mutations = {
   setItem(item) {
-    Object.assign(this.item, this.freshItem)
+    Object.assign(this.item, deepClone(this.freshItem))
     Object.entries(item).forEach(([key, value]) => {
       this.item[key] = value
     })
@@ -63,8 +63,7 @@ const mutations: Mutations = {
   },
 
   clearItem() {
-    const item = this.item = Object.assign({}, this.$freshItem)
-    return item
+    return this.setItem({})
   },
 
   clearItems() {
