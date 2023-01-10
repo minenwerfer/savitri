@@ -114,23 +114,28 @@ export const freshFilters = (description: Description) => {
 
 export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, preserveIds?: boolean) => {
   const changes = (target: T, origin: T): any => {
-    const res = Object.entries(target).reduce((a: any, [key, value]) => {
+    const diff = Object.entries(target).reduce((a: any, [key, value]) => {
       const isUnequal = (() => {
         return Array.isArray(value) && Array.isArray(origin[key]) 
-          ? !value.every((v) => origin[key].includes(v))
+          ? !value.every((v, i) => (!v && i === value.length-1) || origin[key][i] === v) || value.length < origin[key].length
           : value !== origin[key]
       })()
 
       if( isUnequal ) {
         if( R.is(Object, value) && R.is(Object, origin[key]) ) {
-          const _res = changes(value, origin[key])
-          if( !Object.keys(_res).length ) {
+          const res = changes(value, origin[key])
+
+          if( Array.isArray(value) ) {
+            a[key] = value.length < origin[key].length
+              ? origin[key]
+              : value.map((v, index) => res[+index] || v)
+
             return a
           }
 
-          const res = Array.isArray(value)
-            ? value.map((v, index) => _res[+index] || v)
-            : _res
+          if( !Object.keys(res).length ) {
+            return a
+          }
 
           return {
             ...a,
@@ -147,11 +152,11 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
       return a
     }, {})
 
-    if( preserveIds && target._id && Object.keys(res).length > 0 ) {
-      res._id = target._id
+    if( preserveIds && target._id && Object.keys(diff).length > 0 ) {
+      diff._id = target._id
     }
 
-    return res
+    return diff
   }
 
   return changes(target, origin)

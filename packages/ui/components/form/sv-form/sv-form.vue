@@ -111,7 +111,10 @@
               small
               variant="alt"
               icon="plus"
-              :disabled="formData[key]?.length >= property.maxItems!"
+              :disabled="
+                formData[key]?.length >= property.maxItems!
+                || formData[key][formData[key].length-1] === null
+              "
               @clicked="pushToArray(formData[key], property)"
             >
               Adicionar
