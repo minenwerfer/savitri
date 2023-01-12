@@ -3,7 +3,7 @@
   --default-input-padding: .6rem;
 
   --default-border-color: #dedede;
-  --default-button-background-color: #000000aa;
+  --default-button-background-color: #000000ee;
   --default-button-border-color: #555;
   --default-switch-background-color: #000;
   --default-switch-border-color: transparent;
@@ -14,16 +14,16 @@
   --default-topbar-background-color: rgb(255, 255, 255, .92);
   --default-body-background: #f8f9fa;
 
-  --dark-border-color: #888;
+  --dark-border-color: #666;
   --dark-button-background-color: #fff;
-  --dark-button-border-color: #fff;
+  --dark-button-border-color: #666;
   --dark-switch-background-color: blue;
   --dark-switch-border-color: transparent;
   --dark-foreground-color: #eee;
   --dark-foreground-color-alt: #fff;
   --dark-background-color: #50505b;
-  --dark-background-color-alt: lighten(#50505b, 20%);
-  --dark-topbar-background-color: lighten(#50505bf0, 20%);
+  --dark-background-color-alt: #50505b;
+  --dark-topbar-background-color: #50505bf0;
   --dark-body-background: #30303b;
 
   --contrast-border-color: #222;

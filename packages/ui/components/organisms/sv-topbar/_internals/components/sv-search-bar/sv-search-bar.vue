@@ -37,6 +37,7 @@ const search = async () => {
     .map((q: string) => q.trim())
   })).data.result
 }
+
 watch(() => query.value, search)
 </script>
 

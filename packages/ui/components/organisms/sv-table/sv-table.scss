@@ -25,6 +25,12 @@ $picture-size: 3.6rem;
       }
     }
 
+    &--header:after {
+      @include themed() {
+        content: ': ' + var(--default-background-color);
+      }
+    }
+
     &--body {
       margin-bottom: 1.2rem;
       padding: .6rem;

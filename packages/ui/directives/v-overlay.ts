@@ -6,7 +6,7 @@ const __layer = {
 }
 
 export default {
-  mounted: (el: HTMLDivElement, binding) => {
+  mounted: (el, binding) => {
     if( binding.value?.condition === false ) {
       return
     }
@@ -45,7 +45,7 @@ export default {
     el.parentNode.insertBefore(overlayElem, el)
   },
 
-  beforeUnmount: (el: HTMLDivElement, binding) => {
+  beforeUnmount: (el, binding) => {
     if( binding.value?.condition === false ) {
       return
     }

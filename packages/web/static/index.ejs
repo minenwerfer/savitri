@@ -2,7 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Savitri App</title>
+    <title><%= instanceConfig.title || 'Savitri App' %></title>
+    <script>
+      window.INSTANCE_VARS = <%= JSON.stringify(instanceConfig) %>
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -51,7 +51,7 @@ const getQuadrant = (el: HTMLDivElement) => {
 }
 
 export default {
-  mounted: (el: HTMLDivElement, binding) => {
+  mounted: (el, binding) => {
     const options: WizardOptions = binding.value
 
     const metaStore = useStore('meta')

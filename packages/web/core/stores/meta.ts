@@ -23,6 +23,10 @@ export default defineStore('meta', {
 
     theme: '',
     availableThemes: global.INSTANCE_VARS.themes,
+    
+    detached: {},
+    detachedItr: -1,
+    detachedStack: [],
 
     view: {
       title: '',
@@ -197,11 +201,23 @@ export default defineStore('meta', {
   getters: {
     $theme(): string {
       if( !this.theme ) {
-        const defaultTheme = /*webpackVariables.defaultTheme ||*/ 'default'
+        const defaultTheme = 'default'
         this.theme = localStorage.getItem('meta:theme') || defaultTheme
       }
 
       return this.theme
+    },
+
+    detachedComponents(): Array<any> {
+      // this cast is necessary to track down dependecy
+      this.detachedItr;
+
+      const detachedStack = this.detachedStack as Array<number>
+      return Object.values(this.detached as Array<{ vnode: any, visible: boolean }>)
+        .filter(component => component.visible === true)
+        .sort((a, b) => (
+          detachedStack.indexOf(a.vnode.ctx.uid) > this.detachedStack.indexOf(b.vnode.ctx.uid) ? -1 : 1
+        ))
     }
   }
 })

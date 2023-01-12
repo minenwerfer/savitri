@@ -1,3 +1,5 @@
+@import 'style/theming';
+
 $picture-size: 3.6rem;
 
 .header {
@@ -10,7 +12,6 @@ $picture-size: 3.6rem;
     width: $picture-size;
     height: $picture-size;
 
-    border: 1px solid #dedede;
     border-radius: 10px;
     overflow: hidden;
 
@@ -20,6 +21,10 @@ $picture-size: 3.6rem;
     display: grid;
     place-items: center;
     font-size: 1.6rem;
+
+    @include themed() {
+      border: 1px solid t(border-color);
+    }
 
     &:active {
       filter: brightness(.8);

@@ -1,0 +1,6 @@
+.detached {
+  &__shadowed {
+    opacity: .8;
+    filter: grayscale(1);
+  }
+}

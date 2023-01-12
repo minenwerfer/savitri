@@ -130,7 +130,10 @@
                 }}
               </div>
             </div>
-            <div v-if="store?.getIndexes({ key: column })?.length > 1 && property.collection !== 'file'">
+            <div v-if="
+              store?.getIndexes({ key: column })?.length > 1
+                && property.s$referencedCollection !== 'file'
+            ">
               <div
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
@@ -207,7 +210,7 @@ import { useCondition } from '../../../composables'
 type Props = {
   columns: Record<string, CollectionProperty>
   rows: any
-  collection?: string&{ value: string }
+  collection?: string
   checkbox?: boolean
   border?: boolean
   headers?: boolean

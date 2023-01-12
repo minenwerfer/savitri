@@ -7,7 +7,7 @@
       class="bubble"
       @click="removeFilter(filter.key)"
     >
-      <div class="bubble__name">{{ filter.description }}</div>
+      <div class="bubble__name">{{ filter.description || filter.key }}</div>
       <div>{{ filter.formatted }}</div>
 
       <sv-icon small name="times"></sv-icon>

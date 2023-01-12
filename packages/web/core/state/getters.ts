@@ -279,7 +279,7 @@ const getters: GettersFunctions = {
 
   $currentLayout() {
     return this.currentLayout || (this.description.layout?.name||'tabular') as LayoutName
-  }
+  },
 }
 
 export default getters
