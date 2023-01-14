@@ -62,7 +62,12 @@ import {
   SvIcon
 } from '../../'
 
-const store = useParentStore()
+type Props = {
+  collection: string
+}
+
+const props = defineProps<Props>()
+const store = useParentStore(props.collection)
 
 const page = computed({
   get: () => Math.floor(store.pagination.offset / store.pagination.limit),

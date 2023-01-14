@@ -26,13 +26,16 @@
       </div>
     </div>
   </div>
+
+  <sv-detached-panel></sv-detached-panel>
+  <sv-detached></sv-detached>
 </template>
 
 <script setup lang="ts">
 import { onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../../../web'
-import { SvMenu, SvTopbar } from '../../components'
+import { SvMenu, SvTopbar, SvDetached, SvDetachedPanel } from '../../components'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'

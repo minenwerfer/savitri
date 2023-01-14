@@ -1,6 +1,28 @@
 import type { Directive } from 'vue'
 import { useStore } from '@savitri/web'
 
+const makeHint = (pos: number, style?: string) => {
+  const size = 2;
+  const hint = document.createElement('div')
+
+  hint.setAttribute('style', `
+    position: absolute;
+    top: ${size*pos}rem;
+    left: -${size}rem;
+    color: #fff;
+    user-select: none;
+    cursor: pointer;
+
+    border-radius: 50% 0 0 50%;
+    width: ${size}rem;
+    height: ${size}rem;
+
+    ${style||''}
+  `)
+
+  return hint
+}
+
 export default {
   mounted: (el, _binding, vnode) => {
     const coords = {
@@ -13,7 +35,7 @@ export default {
       offsetY: 0
     }
 
-    const uid = (<any>vnode).ctx.uid
+    const uid = vnode.props?.uid
     const metaStore = useStore('meta')
 
     const container = el.parentNode
@@ -25,59 +47,17 @@ export default {
       position: fixed;
       top: 20rem;
       left: 20rem;
-      background: var(--${metaStore.theme}-background-color);
     `)
 
-    const dragHint = document.createElement('div')
-    dragHint.innerHTML = 'oi'
-    dragHint.setAttribute('style', `
-      position: absolute;
-      top: 0;
-      left: -2.5rem;
-      background: #0000ff;
-      color: #fff;
-      user-select: none;
-      cursor: move;
-
-      border-radius: 50% 0 0 50%;
-      width: 2.5rem;
-      height: 2.5rem;
-    `)
-
-    const closeHint = document.createElement('div')
-    closeHint.innerHTML = 'oi'
-    closeHint.setAttribute('style', `
-      position: absolute;
-      top: 2.5rem;
-      left: -2.5rem;
-      background: #ff0000;
-      color: #fff;
-      user-select: none;
-      cursor: pointer;
-
-      border-radius: 50% 0 0 50%;
-      width: 2.5rem;
-      height: 2.5rem;
-    `)
-
-    const shrinkHint = document.createElement('div')
-    shrinkHint.innerHTML = 'oi'
-    shrinkHint.setAttribute('style', `
-      position: absolute;
-      top: 5rem;
-      left: -2.5rem;
-      background: #00ff00;
-      color: #fff;
-      user-select: none;
-      cursor: pointer;
-
-      border-radius: 50% 0 0 50%;
-      width: 2.5rem;
-      height: 2.5rem;
-    `)
+    const dragHint = makeHint(0, 'background: blue; cursor: grab')
+    const shrinkHint = makeHint(1, 'background: yellow')
+    const closeHint = makeHint(2, 'background: red')
 
     closeHint.onclick = () => {
       metaStore.detached[uid].visible = false
+      if( metaStore.detachedStack[0] === uid ) {
+        metaStore.detachedStack.shift()
+      }
     }
 
     shrinkHint.onclick = () => {
@@ -93,6 +73,7 @@ export default {
       coords.initialY = e.clientY - coords.offsetY
 
       if( e.target === dragHint ) {
+        dragHint.style.cursor = 'grabbing'
         coords.active = true
       }
     }
@@ -101,6 +82,7 @@ export default {
       coords.initialX = coords.currentX
       coords.initialY = coords.currentY
 
+      dragHint.style.cursor = 'grab'
       coords.active = false
     }
 

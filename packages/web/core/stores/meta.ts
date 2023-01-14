@@ -214,9 +214,8 @@ export default defineStore('meta', {
 
       const detachedStack = this.detachedStack as Array<number>
       return Object.values(this.detached as Array<{ vnode: any, visible: boolean }>)
-        .filter(component => component.visible === true)
         .sort((a, b) => (
-          detachedStack.indexOf(a.vnode.ctx.uid) > this.detachedStack.indexOf(b.vnode.ctx.uid) ? -1 : 1
+          detachedStack.indexOf(a.vnode.props.uid) > this.detachedStack.indexOf(b.vnode.props.uid) ? -1 : 1
         ))
     }
   }

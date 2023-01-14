@@ -7,18 +7,22 @@ export default {
     if( vnode.props?._detached ) {
       return
     }
-    const uid = (<any>vnode).ctx.uid
+
+    const uid = (<any>vnode).ctx.uid + (binding.value?.identifier||'')
     const metaStore = useStore('meta')
     const subject = metaStore.detached[uid] = {
-      vnode: cloneVNode(vnode),
+      vnode: cloneVNode(vnode, {
+        uid,
+        closeHint: false
+      }),
       binding,
       visible: false
     }
 
     const detachHint = document.createElement('div')
-    detachHint.innerHTML = 'cu'
+    detachHint.innerHTML = 'xx'
     detachHint.onclick = () => {
-      metaStore.detachedItr = uid
+      metaStore.detachedItr = Math.random() + uid
       metaStore.detachedStack.unshift(uid)
       subject.visible = true
     }
@@ -40,11 +44,16 @@ export default {
       return
     }
 
-    const uid = (<any>vnode).ctx.uid
+    const uid = (<any>vnode).ctx.uid + (binding.value?.identifier||'')
     const metaStore = useStore('meta')
 
+    metaStore.detached[uid] ??= {}
     metaStore.detached[uid].binding = binding || (<any>vnode).ctx.props
-    metaStore.detached[uid].vnode = vnode
+    metaStore.detached[uid].vnode = cloneVNode(vnode, {
+      uid,
+      closeHint: false,
+      binding
+    })
   }
 
 } as Directive

@@ -1,6 +1,14 @@
+@import 'style/theming';
+
 .detached {
-  &__shadowed {
-    opacity: .8;
-    filter: grayscale(1);
+  @include themed() {
+    &__component {
+      filter: drop-shadow(0 5px 10px t(border-color));
+
+      &--shadowed {
+        filter: drop-shadow(0 5px 10px t(border-color)) grayscale(1);
+      }
+    }
   }
+
 }

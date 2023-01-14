@@ -11,7 +11,12 @@
 import { computed } from 'vue'
 import { useParentStore } from '../../../../../../../web'
 
-const store = useParentStore()
+type Props = {
+  collection: string
+}
+
+const props = defineProps<Props>()
+const store = useParentStore(props.collection)
 const pagination = computed(() => store.pagination)
 </script>
 

@@ -74,10 +74,10 @@
     ></sv-insert-widget>
     <sv-report-widget :collection="collection"></sv-report-widget>
 
-    <sv-box>
+    <sv-box v-detachable>
       <div class="crud__table-panel">
-        <sv-pagination></sv-pagination>
-        <sv-records-summary></sv-records-summary>
+        <sv-pagination :collection="collection"></sv-pagination>
+        <sv-records-summary :collection="collection"></sv-records-summary>
       </div>
     </sv-box>
 

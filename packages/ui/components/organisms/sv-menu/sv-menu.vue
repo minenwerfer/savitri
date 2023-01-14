@@ -1,6 +1,6 @@
 <template>
   <div :class="`menu ${!visible && 'menu--hidden'}`">
-    <sv-menu-header class="menu__header"></sv-menu-header>
+    <sv-menu-header v-detachable class="menu__header"></sv-menu-header>
 
     <!-- menu entries -->
     <div class="menu__entries">

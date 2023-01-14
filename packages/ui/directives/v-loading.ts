@@ -31,7 +31,6 @@ const update = (el: HTMLElement, binding: DirectiveBinding) => {
     display: grid;
     place-items: center;
 
-    z-index: 20;
     background: rgba(240, 240, 240, .8);
   `)
 

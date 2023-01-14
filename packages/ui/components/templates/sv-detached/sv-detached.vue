@@ -1,12 +1,16 @@
 <template>
   <div class="detached" v-if="metaStore.detachedItr">
     <div
-      v-for="({ vnode, binding }) in metaStore.detachedComponents"
-      :key="binding"
+      v-for="({ vnode, binding }) in metaStore.detachedComponents.filter(component => component.visible === true)"
+      :key="vnode.props.uid"
       :class="{
-        'detached__shadowed': metaStore.detachedStack[0] !== vnode.ctx.uid
+        'detached__component': true,
+        'detached__component--shadowed': metaStore.detachedStack[0] !== vnode.props.uid
       }"
+
+      style="border: 1px solid blue"
     >
+      {{ vnode.props.uid }}
       <component
         v-draggable
         v-bind="{
@@ -14,7 +18,7 @@
         }"
 
         :is="vnode"
-        @mousedown="metaStore.detachedStack.unshift(vnode.ctx.uid)"
+        @mousedown="metaStore.detachedStack.unshift(vnode.props.uid)"
       ></component>
     </div>
   </div>

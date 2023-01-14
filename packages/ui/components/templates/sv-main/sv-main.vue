@@ -40,13 +40,11 @@
       "></div>
     </sv-toast>
   </div>
-
-  <sv-detached></sv-detached>
 </template>
 
 <script setup lang="ts">
 import { useStore, bootstrapRoutes } from '../../../../web'
-import { SvModal, SvPrompt, SvToast, SvDetached } from '../../'
+import { SvModal, SvPrompt, SvToast } from '../../'
 import '../../../scss/main.scss'
 
 const metaStore = useStore('meta')
