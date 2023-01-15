@@ -1,5 +1,5 @@
 import type { Directive } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore } from '../../web'
 
 const makeHint = (pos: number, style?: string) => {
   const size = 2;
@@ -68,7 +68,7 @@ export default {
     el.insertBefore(closeHint, el.firstChild)
     el.insertBefore(shrinkHint, el.firstChild)
 
-    const dragStart = (e) => {
+    const dragStart = (e: MouseEvent) => {
       coords.initialX = e.clientX - coords.offsetX
       coords.initialY = e.clientY - coords.offsetY
 
@@ -86,7 +86,7 @@ export default {
       coords.active = false
     }
 
-    const drag = (e) => {
+    const drag = (e: MouseEvent) => {
       if( !coords.active ) {
         return
       }

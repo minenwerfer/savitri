@@ -1,7 +1,7 @@
 <template>
   <div class="detached" v-if="metaStore.detachedItr">
     <div
-      v-for="({ vnode, binding }) in metaStore.detachedComponents.filter(component => component.visible === true)"
+      v-for="({ vnode }) in metaStore.detachedComponents.filter(component => component.visible === true)"
       :key="vnode.props.uid"
       :class="{
         'detached__component': true,
@@ -10,7 +10,6 @@
 
       style="border: 1px solid blue"
     >
-      {{ vnode.props.uid }}
       <component
         v-draggable
         v-bind="{

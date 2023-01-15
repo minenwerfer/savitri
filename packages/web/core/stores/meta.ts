@@ -4,6 +4,7 @@ import { Description } from '@semantic-api/types'
 // import { default as webpackVariables } from 'variables'
 import useHttp from '../http'
 import useCollection from '../state/collection'
+import type { DetachedComponent } from '../../types'
 
 import { useStore, hasStore, registerStore } from '../state/use'
 import { freshItem, freshFilters } from '../state/helpers'
@@ -213,9 +214,9 @@ export default defineStore('meta', {
       this.detachedItr;
 
       const detachedStack = this.detachedStack as Array<number>
-      return Object.values(this.detached as Array<{ vnode: any, visible: boolean }>)
-        .sort((a, b) => (
-          detachedStack.indexOf(a.vnode.props.uid) > this.detachedStack.indexOf(b.vnode.props.uid) ? -1 : 1
+      return Object.values(this.detached as Array<DetachedComponent>)
+        .sort((a, b: DetachedComponent) => (
+          detachedStack.indexOf(a.vnode.props.uid) > detachedStack.indexOf(b.vnode.props.uid) ? -1 : 1
         ))
     }
   }

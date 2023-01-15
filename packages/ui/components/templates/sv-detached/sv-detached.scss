@@ -1,14 +1,15 @@
-@import 'style/theming';
+// @import 'style/theming';
 
 .detached {
-  @include themed() {
-    &__component {
-      filter: drop-shadow(0 5px 10px t(border-color));
+  z-index: 40;
+  // @include themed() {
+  //   &__component {
+  //     filter: drop-shadow(0 5px 5px t(border-color));
 
-      &--shadowed {
-        filter: drop-shadow(0 5px 10px t(border-color)) grayscale(1);
-      }
-    }
-  }
+  //     &--shadowed {
+  //       filter: drop-shadow(0 5px 5px t(border-color)) grayscale(1);
+  //     }
+  //   }
+  // }
 
 }

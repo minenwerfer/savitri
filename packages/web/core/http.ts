@@ -40,7 +40,7 @@ const httpMethodWrapper = (
         })
       }
 
-      if( error.logout || ['JsonWebTokenError'].includes(error.name) ) {
+      if( error.logout || ['JsonWebTokenError', 'TokenExpiredError'].includes(error.name) ) {
         sessionStorage.clear()
         ROUTER.push({ name: 'user-signin' })
       }

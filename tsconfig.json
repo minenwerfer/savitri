@@ -13,6 +13,6 @@
   },
   "include": [
     "packages/web/**/*",
-    "packages/ui/**/*",
+    "packages/ui/**/*"
   ]
 }

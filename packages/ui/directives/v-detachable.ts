@@ -1,6 +1,6 @@
 import type { Directive } from 'vue'
 import { cloneVNode } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore, DetachedComponent } from '../../web'
 
 export default {
   mounted: (el, binding, vnode) => {
@@ -8,14 +8,15 @@ export default {
       return
     }
 
-    const uid = (<any>vnode).ctx.uid + (binding.value?.identifier||'')
+    const uid = (<any>vnode).ctx.uid
     const metaStore = useStore('meta')
-    const subject = metaStore.detached[uid] = {
+    const subject: DetachedComponent = metaStore.detached[uid] = {
       vnode: cloneVNode(vnode, {
         uid,
         closeHint: false
       }),
-      binding,
+      binding: binding.value,
+      route: ROUTER.currentRoute.value.fullPath,
       visible: false
     }
 
@@ -24,7 +25,13 @@ export default {
     detachHint.onclick = () => {
       metaStore.detachedItr = Math.random() + uid
       metaStore.detachedStack.unshift(uid)
-      subject.visible = true
+      subject.visible = 'shrink'
+
+      useStore('user').functions.savePage({
+        route: subject.route,
+        visible: 'shrink'
+
+      } as DetachedComponent)
     }
 
     detachHint.setAttribute('style', `
@@ -44,15 +51,14 @@ export default {
       return
     }
 
-    const uid = (<any>vnode).ctx.uid + (binding.value?.identifier||'')
+    const uid = (<any>vnode).ctx.uid
     const metaStore = useStore('meta')
 
     metaStore.detached[uid] ??= {}
-    metaStore.detached[uid].binding = binding || (<any>vnode).ctx.props
+    metaStore.detached[uid].binding = binding.value || (<any>vnode).ctx.props
     metaStore.detached[uid].vnode = cloneVNode(vnode, {
       uid,
       closeHint: false,
-      binding
     })
   }
 
