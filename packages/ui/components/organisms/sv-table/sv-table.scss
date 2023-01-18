@@ -46,10 +46,10 @@ $picture-size: 3.6rem;
 
       @media screen and (max-width: 600px) {
         display: block;
-        background: #fff;
         border-radius: 5px;
 
         @include themed() {
+        background: t(background-color);
           border: 1px solid t(border-color);
         }
       }

@@ -21,7 +21,7 @@
         small
         icon="angle-left"
         :disabled="store.isLoading || page === 0"
-        @clicked="page -= 1"
+        @clicked="paginate('previous')"
       ></sv-button>
 
       <div class="pagination__page-input">
@@ -44,7 +44,7 @@
         small
         icon="angle-right"
         :disabled="store.isLoading || page === pageCount"
-        @clicked="page += 1"
+        @clicked="paginate('next')"
       ></sv-button>
     </div>
   </div>
@@ -87,6 +87,13 @@ const pageInput = ref(page.value ? page.value + 1 : 1)
 const pageCount = computed(
   () => Math.floor(store.pagination.recordsTotal / store.pagination.limit)
 )
+
+const paginate = (direction: 'previous'|'next') => {
+  window.scrollTo(0, 0)
+  page.value = direction === 'previous'
+    ? page.value - 1
+    : page.value + 1
+}
 
 watch(() => page.value, (newVal: number) => {
   pageInput.value = newVal + 1

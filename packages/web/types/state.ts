@@ -59,8 +59,12 @@ export type CollectionStructure<T=any> = CollectionState<T> & {
 }
 
 export type DetachedComponent = {
+  _id?: string
   visible: boolean|'shrink'
   vnode: any
   route: string
+  identifier: string
+  title?: string
+  description?: string
 }
 

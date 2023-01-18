@@ -17,9 +17,6 @@ $picture-size: 3.6rem;
 
     transition: filter .35s;
     cursor: pointer;
-
-    display: grid;
-    place-items: center;
     font-size: 1.6rem;
 
     @include themed() {

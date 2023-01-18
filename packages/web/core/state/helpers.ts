@@ -18,6 +18,10 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
       }
     }
 
+    if( value && Object.keys(value).length === 0 ) {
+      return a
+    }
+
     return {
       ...a,
       [key]: value && typeof value === 'object' && '_id' in value

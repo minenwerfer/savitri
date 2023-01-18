@@ -1,0 +1,15 @@
+@import 'style/theming';
+
+.subscribers {
+  &__picture {
+    font-size: 2rem;
+    border-radius: 50%;
+
+    width: 5rem;
+    height: 5rem;
+
+    @include themed() {
+      border: 1px solid t(border-color);
+    }
+  }
+}

@@ -7,8 +7,6 @@
         'detached__component': true,
         'detached__component--shadowed': metaStore.detachedStack[0] !== vnode.props.uid
       }"
-
-      style="border: 1px solid blue"
     >
       <component
         v-draggable

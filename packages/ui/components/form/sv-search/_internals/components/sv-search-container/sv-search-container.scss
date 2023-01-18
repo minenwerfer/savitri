@@ -1,10 +1,13 @@
+@import 'style/theming';
+
 .container {
   display: flex;
   flex-wrap: wrap;
   gap: .4rem;
-  border: 1px solid #dedede;
-
-  background: #ddd;
-
   padding: .6rem;
+
+  @include themed() {
+    background: t(background-color-alt);
+    border: 1px solid t(border-color);
+  }
 }

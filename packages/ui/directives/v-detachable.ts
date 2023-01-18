@@ -8,30 +8,43 @@ export default {
       return
     }
 
-    const uid = (<any>vnode).ctx.uid
+    const uid = binding.arg || (<any>vnode).ctx.uid
     const metaStore = useStore('meta')
-    const subject: DetachedComponent = metaStore.detached[uid] = {
+
+    metaStore.detached[uid] ??= {
       vnode: cloneVNode(vnode, {
         uid,
         closeHint: false
       }),
-      binding: binding.value,
+      title: binding.value?.title,
+      description: binding.value?.description,
       route: ROUTER.currentRoute.value.fullPath,
-      visible: false
+      visible: metaStore.detached[uid]?.visible || false,
+      identifier: binding.arg as string
     }
 
+    const subject: DetachedComponent = metaStore.detached[uid]
     const detachHint = document.createElement('div')
     detachHint.innerHTML = 'xx'
-    detachHint.onclick = () => {
-      metaStore.detachedItr = Math.random() + uid
-      metaStore.detachedStack.unshift(uid)
-      subject.visible = 'shrink'
+    detachHint.onclick = async () => {
+      if( subject.visible !== 'shrink' ) {
+        if( binding.arg ) {
+          const savedItem = useStore('savedItem')
+          const item = await savedItem.functions.subscribe({
+            title: binding.value?.title,
+            description: binding.value?.description,
+            route: subject.route,
+            identifier: binding.arg
 
-      useStore('user').functions.savePage({
-        route: subject.route,
-        visible: 'shrink'
+          } as Omit<DetachedComponent, 'vnode'>)
 
-      } as DetachedComponent)
+          Object.assign(metaStore.detached[uid], item)
+        }
+
+        metaStore.detachedItr = Math.random() + uid
+        metaStore.detachedStack.unshift(uid)
+        subject.visible = 'shrink'
+      }
     }
 
     detachHint.setAttribute('style', `
@@ -51,11 +64,11 @@ export default {
       return
     }
 
-    const uid = (<any>vnode).ctx.uid
+    const uid = binding.arg || (<any>vnode).ctx.uid
     const metaStore = useStore('meta')
 
     metaStore.detached[uid] ??= {}
-    metaStore.detached[uid].binding = binding.value || (<any>vnode).ctx.props
+    metaStore.detached[uid].identifier = binding.arg
     metaStore.detached[uid].vnode = cloneVNode(vnode, {
       uid,
       closeHint: false,

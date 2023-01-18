@@ -1,3 +1,5 @@
+@import 'style/theming';
+
 .item {
   display: flex;
   justify-content: space-between;
@@ -5,10 +7,13 @@
 
   // border: 1px solid #dedede;
   //
-  border: 1px solid #888;
   border-radius: 5px;
 
-  background: #fff;
+  @include themed() {
+    border: 1px solid t(border-color);
+    color: t(foreground-color);
+    background: t(background-color);
+  }
 
 
   :deep(svg) {

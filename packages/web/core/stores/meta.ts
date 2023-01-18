@@ -23,7 +23,7 @@ export default defineStore('meta', {
     globalIsLoading: false,
 
     theme: '',
-    availableThemes: global.INSTANCE_VARS.themes,
+    availableThemes: INSTANCE_VARS.themes,
     
     detached: {},
     detachedItr: -1,
@@ -213,10 +213,10 @@ export default defineStore('meta', {
       // this cast is necessary to track down dependecy
       this.detachedItr;
 
-      const detachedStack = this.detachedStack as Array<number>
+      const detachedStack = this.detachedStack as Array<string>
       return Object.values(this.detached as Array<DetachedComponent>)
         .sort((a, b: DetachedComponent) => (
-          detachedStack.indexOf(a.vnode.props.uid) > detachedStack.indexOf(b.vnode.props.uid) ? -1 : 1
+          detachedStack.indexOf(a.identifier) > detachedStack.indexOf(b.identifier) ? -1 : 1
         ))
     }
   }
