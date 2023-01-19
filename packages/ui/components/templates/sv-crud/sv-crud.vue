@@ -103,9 +103,8 @@ import {
 } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useStore, useParentStore, CollectionStore } from '../../../../web'
-import { useAction } from '../../../composables'
-import type { Layout } from '../../../../types'
+import { useStore, useParentStore, useAction, CollectionStore } from '../../../../web'
+import type { Layout } from '@semantic-api/types'
 
 import {
   SvBox,

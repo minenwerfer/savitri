@@ -46,7 +46,7 @@
     ></sv-search-selected>
 
     <div v-if="!isExpanded">
-      <sv-search-container v-if="matchingItems.length || modelValue?.length">
+      <sv-search-container v-if="matchingItems.length">
         <sv-search-item
           v-for="(item, index) in matchingItems"
           v-bind="{

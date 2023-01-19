@@ -193,7 +193,7 @@
 
 <script setup lang="ts">
 import { inject, computed } from 'vue'
-import { useStore } from '../../../../web'
+import { useStore, useCondition } from '../../../../web'
 import type { CollectionProperty } from '@semantic-api/types'
 
 import {
@@ -204,8 +204,6 @@ import {
   SvSwitch
 
 } from '../..'
-
-import { useCondition } from '../../../composables'
 
 type Props = {
   columns: Record<string, CollectionProperty>

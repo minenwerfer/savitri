@@ -60,8 +60,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '../../../../../../../web'
-import { useAction } from '../../../../../../composables'
+import { useStore, useAction } from '../../../../../../../web'
 
 import { SvPicture, SvButton } from '../../../../..'
 import { results } from '../../store'

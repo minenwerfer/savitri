@@ -1,5 +1,5 @@
 import { Directive, watch } from 'vue'
-import { useStore } from '../../web/core/state/use'
+import { useStore } from '../state/use'
 import Overlay from './v-overlay'
 import Clickable from './v-clickable'
 

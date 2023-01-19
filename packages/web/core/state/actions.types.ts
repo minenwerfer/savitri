@@ -59,6 +59,7 @@ interface ActionsAux {
     }
   ): string
   getIndexes(args: { key: string, form: boolean }): Array<string>
+  select(properties: Array<string>): Record<string, any>
 }
 
 interface MutationsAux {

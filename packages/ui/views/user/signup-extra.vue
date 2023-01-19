@@ -54,10 +54,9 @@ import {
   hasStore,
   useStore,
   useParentStore,
+  usePasswordPolicy
 
 } from '../../../web'
-
-import { usePasswordPolicy } from '../../composables'
 
 import {
   SvForm,

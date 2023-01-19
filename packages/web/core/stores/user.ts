@@ -9,12 +9,14 @@ type Credentials = {
 }
 
 type UserState = {
+  token: string
   credentials: Credentials|object
   currentUser: Partial<User>
 }
 
 const collection = useCollection({
   state: (): UserState => ({
+    token: '',
     currentUser: {},
     credentials: {
       email: '',
@@ -70,6 +72,7 @@ const collection = useCollection({
 
     $currentUser(): User {
       if( !this.currentUser?._id ) {
+        this.token = sessionStorage.getItem('auth:token')
         this.currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
       }
 

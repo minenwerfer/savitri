@@ -29,8 +29,7 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '../../../../../web'
-import { usePasswordPolicy } from '../../../../composables'
+import { useStore, usePasswordPolicy } from '../../../../../web'
 import { SvBox, SvForm, SvButton } from '../../../../components'
 
 const router = useRouter()

@@ -1,6 +1,6 @@
 import type { Directive } from 'vue'
 import { cloneVNode } from 'vue'
-import { useStore, DetachedComponent } from '../../web'
+import { useStore, DetachedComponent } from '../..'
 
 export default {
   mounted: (el, binding, vnode) => {

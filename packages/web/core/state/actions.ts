@@ -317,6 +317,19 @@ const actionsAndMutations: Actions & Mutations = {
       this.rawDescription as Pick<Description, 'properties'>,
       args.key
     )
+  },
+
+  select(properties) {
+    return Object.entries(this.item).reduce((a, [key, value]) => {
+      if( !properties.includes(key) ) {
+        return a
+      }
+
+      return {
+        ...a,
+        [key]: value
+      }
+    }, {})
   }
 }
 

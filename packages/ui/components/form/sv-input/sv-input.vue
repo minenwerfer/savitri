@@ -77,7 +77,7 @@ export default {
 import { ref, inject } from 'vue'
 import { maska as vMaska } from 'maska'
 import type { CollectionProperty } from '@semantic-api/types'
-import { useClipboard } from '../../../composables'
+import { useClipboard } from '../../../../web'
 import { SvInfo, SvIcon } from '../..'
 
 type InputType = string|number|Date

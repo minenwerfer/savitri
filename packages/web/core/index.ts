@@ -12,7 +12,7 @@ import { routerInstance as createRouter, extendRouter } from './router'
 // import { default as webpackVariables } from 'variables'
 
 import type { Plugin, AppOptions } from '../types'
-import registerDirectives from '../../ui/directives'
+import registerDirectives from './directives'
 import { useStore } from './state'
 
 

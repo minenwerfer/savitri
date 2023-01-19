@@ -1,5 +1,5 @@
 import type { Directive } from 'vue'
-import { useStore } from '../../web'
+import { useStore } from '../state/use'
 
 const makeHint = (pos: number, style?: string) => {
   const size = 2;

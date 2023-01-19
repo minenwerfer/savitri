@@ -128,6 +128,11 @@ const closeComponent = (component: DetachedComponent) => {
   })
 }
 
+const closePanel = () => {
+  panelVisible.value = false
+  sidebarVisible.value = false
+}
+
 const clearComponents = () => {
   Object.keys(metaStore.detached).forEach((key) => {
     metaStore.detached[key].visible = false
@@ -136,11 +141,8 @@ const clearComponents = () => {
   metaStore.detachedStack.splice(0)
   metaStore.detachedItr = Math.random()
   savedItemStore.functions.clear()
-}
 
-const closePanel = () => {
-  panelVisible.value = false
-  sidebarVisible.value = false
+  closePanel()
 }
 
 const openSidebar = (type: keyof typeof sidebarComponents, component: DetachedComponent) => {

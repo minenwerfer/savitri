@@ -3,7 +3,7 @@
     class="form"
     :style="`row-gap: ${omitFormHeader ? '.8rem' : '2rem'};`"
   >
-    <header v-if="$slots.header" class="form__header">
+    <header v-if="$slots.header && !omitFormHeader" class="form__header">
       <slot name="header"></slot>
     </header>
     <fieldset
@@ -162,10 +162,9 @@
 <script setup lang="ts">
 import { computed, provide, inject } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
-import { useStore } from '../../../../web'
+import { useStore, useCondition, Condition } from '../../../../web'
 import { SvInput, SvIcon, SvButton } from '../..'
 
-import { useCondition, Condition } from '../../../composables'
 import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
 
 type LayoutConfig = {
