@@ -1,5 +1,5 @@
 <template>
-  <sv-box v-detachable="store.items" fill transparent-mobile>
+  <sv-box fill transparent-mobile>
     <sv-table
       v-if="store.properties"
       v-loading="store.isLoading"

@@ -81,7 +81,14 @@ const actionsAndMutations: Actions & Mutations = {
   $functions() {
     return new Proxy(this, {
       get: (target, verb: string) => {
-        return (...args: any[]) => target.custom(verb, ...args)
+        return async (...args: any[]) => {
+          const result = await target.custom(verb, ...args)
+          if( result?._id ) {
+            return this.insertItem(result)
+          }
+
+          return result
+        }
       }
     })
   },

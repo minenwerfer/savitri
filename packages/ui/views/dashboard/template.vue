@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <sv-detached-panel></sv-detached-panel>
+  <sv-subscriptions></sv-subscriptions>
   <sv-detached></sv-detached>
 </template>
 
@@ -35,7 +35,7 @@
 import { onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../../../web'
-import { SvMenu, SvTopbar, SvDetached, SvDetachedPanel } from '../../components'
+import { SvMenu, SvTopbar, SvSubscriptions, SvDetached } from '../../components'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'

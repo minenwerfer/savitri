@@ -89,7 +89,6 @@ import { SvIcon } from '../../'
 type Props = {
   closeHint?: boolean
   visible?: boolean
-  animate?: boolean
   title?: string
   float?: boolean
   fixedRight?: boolean
@@ -110,7 +109,6 @@ const props = withDefaults(defineProps<Props>(), {
   collapsable: false,
   closeHint: false,
   visible: true,
-  animate: true
 })
 
 const emit = defineEmits<{

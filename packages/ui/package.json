@@ -12,6 +12,7 @@
   "dependencies": {
     "@savitri/web": "latest",
     "@semantic-api/common": "latest",
+    "@semantic-api/system": "latest",
     "@semantic-api/types": "latest"
   }
 }

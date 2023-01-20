@@ -74,20 +74,25 @@
     ></sv-insert-widget>
     <sv-report-widget :collection="collection"></sv-report-widget>
 
-    <sv-box v-detachable>
-      <div class="crud__table-panel">
-        <sv-pagination :collection="collection"></sv-pagination>
-        <sv-records-summary :collection="collection"></sv-records-summary>
-      </div>
-    </sv-box>
+    <sv-group
+      :no-border="store.$currentLayout === 'grid'"
+      :preserve-inner-borders="store.$currentLayout === 'grid'"
+    >
+      <sv-box>
+        <div class="crud__table-panel">
+          <sv-pagination :collection="collection"></sv-pagination>
+          <!-- <sv-records-summary :collection="collection"></sv-records-summary> -->
+        </div>
+      </sv-box>
 
-    <component
-      :is="getLayout(store.$currentLayout)"
-      v-bind="{
-        individualActions,
-        layoutOptions: layout?.options || store?.layout.options
-      }"
-    ></component>
+      <component
+        :is="getLayout(store.$currentLayout)"
+        v-bind="{
+          individualActions,
+          layoutOptions: layout?.options || store?.layout.options
+        }"
+      ></component>
+    </sv-group>
 
   </div>
 </template>
@@ -108,6 +113,7 @@ import type { Layout } from '@semantic-api/types'
 
 import {
   SvBox,
+  SvGroup,
   SvButton,
   SvPagination,
   SvInfo,
@@ -117,7 +123,6 @@ import {
 
 import { getLayout } from './_internals/layouts'
 import SvReportWidget from './_internals/components/sv-report-widget/sv-report-widget.vue'
-import SvRecordsSummary from './_internals/components/sv-records-summary/sv-records-summary.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 import SvInsertWidget from './_internals/components/sv-insert-widget/sv-insert-widget.vue'
 

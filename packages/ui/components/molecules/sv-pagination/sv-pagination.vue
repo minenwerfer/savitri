@@ -48,6 +48,13 @@
       ></sv-button>
     </div>
   </div>
+
+  <div v-if="pagination" class="summary">
+    Mostrando
+    {{ pagination.offset }} a
+    {{ pagination.offset + pagination.recordsCount }} de
+    {{ pagination.recordsTotal }} registros
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -68,6 +75,7 @@ type Props = {
 
 const props = defineProps<Props>()
 const store = useParentStore(props.collection)
+const pagination = computed(() => store.pagination)
 
 const page = computed({
   get: () => Math.floor(store.pagination.offset / store.pagination.limit),

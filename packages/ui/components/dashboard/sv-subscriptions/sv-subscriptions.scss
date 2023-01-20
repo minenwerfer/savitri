@@ -33,23 +33,13 @@
   display: flex;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (max-width: 600px) {
-    position: fixed;
-    right: 0;
-
-    z-index: 10;
-  }
-}
-
 .panel,
 .sidebar {
   width: 30rem;
   height: 100vh;
   padding: 1.8rem;
+
+  overflow: auto;
 
   @include themed() {
     color: t(foreground-color);
@@ -58,7 +48,26 @@
   }
 
   @media screen and (max-width: 600px) {
-    width: 100vw;
+    width: 100vw !important;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (max-width: 600px) {
+    position: fixed;
+    right: 0;
+
+    z-index: 10;
   }
 }
 
@@ -97,9 +106,7 @@
     column-gap: .5rem;
 
     &>* {
-      font-size: .9rem;
-      font-weight: bold;
-      opacity: .6;
+      font-size: .8rem;
     }
   }
 }

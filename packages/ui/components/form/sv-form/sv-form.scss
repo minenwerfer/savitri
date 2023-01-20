@@ -8,6 +8,9 @@
   }
 
   &__footer {
+    display: flex;
+    align-items: center;
+    column-gap: .6rem;
     margin-top: -1rem;
   }
 

@@ -24,9 +24,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
 
     return {
       ...a,
-      [key]: value && typeof value === 'object' && '_id' in value
-        ? { _id: value._id }
-        : value
+      [key]: value?._id || value
     }
   }, {})
 }

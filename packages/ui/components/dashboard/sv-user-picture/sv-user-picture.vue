@@ -11,6 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import { SvPicture } from '@savitri/ui'
+
 type Props = {
   user: {
     picture?: {

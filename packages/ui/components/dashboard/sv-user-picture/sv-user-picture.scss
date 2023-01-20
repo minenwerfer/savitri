@@ -1,4 +1,11 @@
+@import 'style/theming';
+
 .picture {
   display: grid;
   place-items: center;
+  overflow: hidden;
+
+  @include themed() {
+    border: 1px solid t(border-color);
+  }
 }

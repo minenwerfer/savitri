@@ -1,10 +1,10 @@
 <template>
   <div
-    v-if="detachedComponents.length"
+    v-if="subscriptionStore.itemsCount > 0"
     class="panel-container"
     @click="panelVisible = true"
   >
-    {{ detachedComponents.length }}
+    {{ subscriptionStore.itemsCount }}
   </div>
   <div
     v-if="panelVisible"
@@ -17,22 +17,31 @@
       v-if="sidebarVisible"
       class="sidebar"
     >
-      <sv-icon
-        v-clickable
-        reactive
-        name="multiply"
-        @click="sidebarVisible = false"
-        style="margin-left: auto"
-      ></sv-icon>
-
+      <div class="sidebar__header">
+        <div>{{ $t(sidebarType) }}</div>
+        <sv-icon
+          v-clickable
+          reactive
+          name="multiply"
+          @click="sidebarVisible = false"
+        ></sv-icon>
+      </div>
       <component
+        fill
+        transparent
+        no-border
+        v-model="subscriptionStore.item"
         :is="sidebarComponent"
+        style="border: 0"
       ></component>
     </div>
 
     <div class="panel">
       <div class="panel__top">
-        <div v-clickable @click="clearComponents">
+        <div
+          v-clickable
+          @click="subscriptionStore.ask({ action: clearComponents })"
+        >
           {{ $t('clear') }}
         </div>
         <sv-icon
@@ -44,7 +53,7 @@
       </div>
       <div class="panel__entries">
         <div
-          v-for="component in detachedComponents"
+          v-for="component in subscriptionStore.items"
           :key="component.identifier"
           class="panel__entry"
         >
@@ -57,20 +66,31 @@
           </div>
 
           <div class="panel__entry-options">
-            <div v-clickable v-if="component.vnode" @click="toggleComponent(component)">
-              {{ $t(component.visible === true ? 'shrink' : 'restore') }}
-            </div>
-            <div v-clickable @click="closeComponent(component)">
-              {{ $t('close') }}
-            </div>
-            <div v-clickable @click="goToRoute(component.route)">
+            <div
+              v-clickable
+              @click="goToRoute(component.route)"
+            >
               {{ $t('visit') }}
             </div>
-            <div v-clickable v-if="component._id" @click="openSidebar('messages', component)">
+            <div
+              v-clickable
+              v-if="component._id"
+              @click="openSidebar('messages', component)"
+            >
               {{ $t('messages') }} ({{ component.messages.length }})
             </div>
-            <div v-clickable v-if="component._id" @click="openSidebar('subscribers', component)">
-              {{ $t('subscribers') }} ({{ component.subscribers.length }})
+            <div
+              v-clickable
+              v-if="component._id"
+              @click="openSidebar('subscribers', component)"
+            >
+              {{ $t('subscribers') }} ({{ component.subscribers?.length || 0 }})
+            </div>
+            <div
+              v-clickable
+              @click="subscriptionStore.ask({ action: () => closeComponent(component) })"
+            >
+              {{ $t('close') }}
             </div>
           </div>
         </div>
@@ -80,11 +100,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore, DetachedComponent } from '@savitri/web'
 import { SvIcon } from '../..'
-import SvMessages from './_internals/components/sv-messages.vue'
+import SvMessages from '../sv-messages/sv-messages.vue'
 import SvSubscribers from './_internals/components/sv-subscribers/sv-subscribers.vue'
 
 const sidebarComponents = {
@@ -93,61 +113,37 @@ const sidebarComponents = {
 }
 
 const router = useRouter()
-const metaStore = useStore('meta')
-const savedItemStore = useStore('savedItem')
+const subscriptionStore = useStore('subscription')
+
+onMounted(subscriptionStore.getAll)
 
 const panelVisible = ref(false)
 const sidebarVisible = ref(false)
+const sidebarType = ref('')
 const sidebarComponent = ref({})
-const detachedComponents = computed(() => metaStore.detachedComponents.filter(component => component.visible))
-
-onMounted(async () => {
-  metaStore.detached = (await savedItemStore.getAll()).reduce((a, item) => ({
-    ...a,
-    [item.identifier]: {
-      ...item,
-      visible: 'shrink'
-    }
-  }), {})
-})
-
-const toggleComponent = (component: DetachedComponent) => {
-  if( component.visible === true ) {
-    component.visible = 'shrink'
-    return
-  }
-
-  component.visible = true
-  metaStore.detachedStack.unshift(component.vnode.props.uid)
-}
-
-const closeComponent = (component: DetachedComponent) => {
-  component.visible = false
-  savedItemStore.functions.unsubscribe({
-    identifier: component.identifier
-  })
-}
 
 const closePanel = () => {
   panelVisible.value = false
   sidebarVisible.value = false
 }
 
-const clearComponents = () => {
-  Object.keys(metaStore.detached).forEach((key) => {
-    metaStore.detached[key].visible = false
+const closeComponent = async (component: DetachedComponent) => {
+  await subscriptionStore.functions.unsubscribe({
+    identifier: component.identifier
   })
+  closePanel()
+}
 
-  metaStore.detachedStack.splice(0)
-  metaStore.detachedItr = Math.random()
-  savedItemStore.functions.clear()
-
+const clearComponents = async () => {
+  await subscriptionStore.functions.clear()
+  subscriptionStore.clearItems()
   closePanel()
 }
 
 const openSidebar = (type: keyof typeof sidebarComponents, component: DetachedComponent) => {
+  sidebarType.value = type
   sidebarComponent.value = sidebarComponents[type]
-  savedItemStore.setItem({
+  subscriptionStore.setItem({
     ...component,
     vnode: undefined
   })
@@ -160,4 +156,4 @@ const goToRoute = (route: string) => {
 }
 </script>
 
-<style scoped src="./sv-detached-panel.scss"></style>
+<style scoped src="./sv-subscriptions.scss"></style>

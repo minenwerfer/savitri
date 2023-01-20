@@ -8,10 +8,10 @@
   &__entry {
     display: flex;
     align-items: center;
-    column-gap: 1rem;
+    column-gap: .8rem;
 
     padding: .5rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
 
     @include themed() {
       &:not(:last-child) {
@@ -25,11 +25,16 @@
     font-size: 1.2rem;
     border-radius: 50%;
 
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 3.4rem;
+    height: 3.4rem;
 
-    @include themed() {
-      border: 1px solid t(border-color);
+    &--new {
+      display: grid;
+      place-items: center;
+
+      @include themed() {
+        border: 1px solid t(border-color);
+      }
     }
   }
 }

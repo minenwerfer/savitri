@@ -2,14 +2,11 @@
   display: flex;
   column-gap: 2rem;
   box-sizing: content-box;
-  height: 2rem;
 
   &__control {
     display: flex;
     align-items: center;
     column-gap: .6rem;
-
-    line-height: 100%;
 
     &>:not(button) {
       padding: 0 !important;

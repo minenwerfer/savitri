@@ -1,0 +1,48 @@
+.message {
+  display: flex;
+  gap: 1.6rem;
+
+  padding: 1rem;
+
+  &__user {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+
+    align-items: center;
+  }
+
+  &__metadata {
+    font-size: .83rem;
+    opacity: .4rem;
+  }
+
+  &__picture {
+    width: 3.6rem;
+    height: 3.6rem;
+
+    border-radius: 50%;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 8rem);
+  }
+
+  &__content {
+    display: block;
+    max-width: fit-content;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  &__bottom {
+    margin-top: auto;
+    font-size: .8rem;
+    
+    &>* {
+      display: inline-block;
+    }
+  }
+}

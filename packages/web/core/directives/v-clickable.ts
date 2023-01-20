@@ -8,6 +8,7 @@ export default {
         : 'pointer'
 
       el.style.cursor = cursor
+      el.style['user-select'] = 'none'
     }
   }
 } as Directive

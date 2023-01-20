@@ -25,10 +25,6 @@ export default defineStore('meta', {
     theme: '',
     availableThemes: INSTANCE_VARS.themes,
     
-    detached: {},
-    detachedItr: -1,
-    detachedStack: [],
-
     view: {
       title: '',
       layout: 'tabular',
@@ -208,16 +204,5 @@ export default defineStore('meta', {
 
       return this.theme
     },
-
-    detachedComponents(): Array<any> {
-      // this cast is necessary to track down dependecy
-      this.detachedItr;
-
-      const detachedStack = this.detachedStack as Array<string>
-      return Object.values(this.detached as Array<DetachedComponent>)
-        .sort((a, b: DetachedComponent) => (
-          detachedStack.indexOf(a.identifier) > detachedStack.indexOf(b.identifier) ? -1 : 1
-        ))
-    }
   }
 })
