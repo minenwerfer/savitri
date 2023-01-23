@@ -5,7 +5,7 @@ import makeCopyWebpackPlugin from './copyWebpackPlugin'
 import baseWebpackConfig from './webpack.config.base'
 
 // production
-export default (params: BuildParams) => merge(baseWebpackConfig(params), {
+export default (params: BuildParams) => merge(baseWebpackConfig(params, 'production'), {
   mode: 'production',
   output: {
     filename: '[name].bundle.js',

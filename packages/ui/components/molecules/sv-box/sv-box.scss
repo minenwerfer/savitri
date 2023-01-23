@@ -31,8 +31,6 @@ $section-padding: .8rem;
     border-radius: 5px;
     overflow: hidden;
 
-    border: 1px solid #dedede;
-
     @include themed() {
       border: 1px solid t(border-color);
       color: t(foreground-color);

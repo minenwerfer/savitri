@@ -19,9 +19,17 @@
 
       class="dropdown__content"
     >
-      <slot v-if="$slots.extra" name="extra"></slot>
 
       <div>
+        <div
+          v-if="$slots.extra"
+          class="dropdown__item"
+        >
+          <slot
+            v-if="$slots.extra"
+            name="extra"
+          ></slot>
+        </div>
         <sv-bare-button
           v-for="(action, aindex) in filterActions(actions)"
           :key="`action-${aindex}`"
@@ -32,6 +40,7 @@
             small
             v-if="action.icon"
             :name="action.icon"
+            style="gap: .8rem"
           >
             {{ action.name }}
           </sv-icon>

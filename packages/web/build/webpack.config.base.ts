@@ -2,12 +2,13 @@ import path from 'path'
 import { VueLoaderPlugin } from 'vue-loader'
 import type { Configuration } from 'webpack'
 import type { BuildParams } from './types'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import sassData from './sassData'
 // const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default
 // const CircularDependencyPlugin = require('circular-dependency-plugin')
 //
 
-const baseWebpackConfig = (params: BuildParams): Configuration => {
+const baseWebpackConfig = (params: BuildParams, mode?: 'production'): Configuration => {
   const { appDir } = params
 
   const config = {
@@ -50,14 +51,22 @@ const baseWebpackConfig = (params: BuildParams): Configuration => {
         {
           test: /\.css$/,
           use: [
-            'vue-style-loader',
-            'css-loader',
+            ...[
+              mode === 'production'
+                ? MiniCssExtractPlugin.loader
+                : 'vue-style-loader'
+            ],
+            'css-loader'
           ]
         },
         {
-          test: /\.scss$/,
+          test: /\.s[ac]ss$/,
           use: [
-            'vue-style-loader',
+            ...[
+              mode === 'production'
+                ? MiniCssExtractPlugin.loader
+                : 'vue-style-loader'
+            ],
             'css-loader',
             {
               loader: 'sass-loader',
@@ -75,6 +84,7 @@ const baseWebpackConfig = (params: BuildParams): Configuration => {
     },
     plugins: [
       new VueLoaderPlugin(),
+      new MiniCssExtractPlugin()
       // new WatchExternalFilesPlugin({
       //   files: [
       //     '../../ui/**/*.vue'

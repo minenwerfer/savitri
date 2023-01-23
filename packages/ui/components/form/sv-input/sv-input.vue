@@ -1,5 +1,5 @@
 <template>
-  <label class="input">
+  <label :key="rerenderFixture" class="input">
     <strong class="input__label">
       <slot v-if="$slots.default"></slot>
       <slot v-else name="description"></slot>
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref, inject, watch } from 'vue'
 import { maska as vMaska } from 'maska'
 import type { CollectionProperty } from '@semantic-api/types'
 import { useClipboard } from '../../../../web'
@@ -90,7 +90,7 @@ type Props = {
 }
 
 const props = defineProps<Props>()
-const property = props.property||{}
+const property = props.property||{} as CollectionProperty
 
 const searchOnly = inject('searchOnly', false)
 const readOnly = !searchOnly && property.readOnly
@@ -102,6 +102,7 @@ const emit = defineEmits<{
 }>()
 
 const input = ref(null)
+const rerenderFixture = ref(0)
 const variant = inject('inputVariant', props.variant) || 'normal'
 
 const {
@@ -193,6 +194,13 @@ const onInput = (
 
   updateValue(newValue!)
 }
+
+watch(() => props.modelValue, (value) => {
+  if( !value ) {
+    inputValue.value = ''
+    rerenderFixture.value += 1
+  }
+})
 </script>
 
 <style scoped src="./sv-input.scss"></style>

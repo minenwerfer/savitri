@@ -1,7 +1,12 @@
 <template>
   <div
+    v-clickable
     v-if="subscriptionStore.itemsCount > 0"
-    class="panel-container"
+    :class="{
+      'panel-hint': true,
+      'panel-hint--topbarPadding': !getLayoutOption('noTopbar')
+    }"
+
     @click="panelVisible = true"
   >
     {{ subscriptionStore.itemsCount }}

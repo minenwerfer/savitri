@@ -1,5 +1,17 @@
 <template>
-  <div :class="`menu ${!visible && 'menu--hidden'}`">
+  <div
+    :class="`
+      menu
+      ${!visible && 'menu--hidden'}
+      ${getLayoutOption('noTopbar') && 'menu--with-branding'}
+  `">
+    <sv-branding
+      v-clickable
+      v-if="getLayoutOption('noTopbar')"
+      click="dashboard"
+      class="menu__branding"
+    ></sv-branding>
+
     <sv-menu-header class="menu__header"></sv-menu-header>
 
     <!-- menu entries -->
@@ -31,7 +43,7 @@
         `">
           <sv-icon
             v-clickable
-            v-for="(route, index) in entry.children"
+            v-for="route in entry.children"
             :key="route.name"
             :class="`
               menu__route
@@ -56,7 +68,7 @@ import { ref, computed, watch, } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { arraysIntersects } from '@semantic-api/common'
 import { useStore, Route, MenuSchema } from '../../../../web'
-import { SvIcon } from '../../'
+import { SvIcon, SvBranding } from '../../'
 
 import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
 

@@ -7,6 +7,7 @@
       ${metaStore.$theme === 'dark' && 'tw-dark'}
   `">
     <router-view></router-view>
+    <slot></slot>
 
     <sv-modal
       v-model:visible="metaStore.modal.isVisible"

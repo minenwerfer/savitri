@@ -73,16 +73,42 @@ export const useApp = (config: AppOptions): Promise<{
 
   app.provide('baseVersion', require('../package.json').version)
   // app.provide('productVersion', require(`./package.json`).version)
+  app.provide('dashboardLayout', global.INSTANCE_VARS.dashboardLayout || {})
 
   VueUnicon.add([ ...Object.values(Icons) ] as Array<string>)
   app.use(VueUnicon as any)
   app.use(VueLazyLoad)
 
-  // app.mixin({
-  //   provide: {
-  //     ...webpackVariables
-  //   }
-  // })
+  app.mixin({
+    computed: {
+      viewTitle: () => {
+        const currentRoute = router.currentRoute.value
+        const title = currentRoute.meta?.title
+
+        if( !title ) {
+          return
+        }
+
+        return title === '%viewTitle%'
+          ? I18N.global.tc(currentRoute.params?.collection, 2)
+          : title
+      }
+    },
+    methods: {
+      getLayoutOption(optionName: keyof typeof global.INSTANCE_VARS['dashboardLayout']) {
+        const userStore = useStore('user')
+        const dashboardLayout = global.INSTANCE_VARS.dashboardLayout
+
+        if( !dashboardLayout ) {
+          return null
+        }
+
+        const role = userStore.$currentUser.roles?.find((role: string) => role in dashboardLayout) || 'default'
+
+        return dashboardLayout[role]?.[optionName]
+      }
+    }
+  })
 
   Object.assign(window, {
     ROUTER: router,

@@ -107,9 +107,10 @@ watch(() => props.itemInfo, (item) => {
 }, { deep: true })
 
 const pushMessage = async () => {
+  const { title, ...message } = messageStore.condensedItem
   await subscriptionStore.functions.pushMessage({
     _id: subscriptionStore.item._id,
-    message: messageStore.condensedItem,
+    message,
     item: itemInfo.value
   })
 

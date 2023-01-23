@@ -4,13 +4,13 @@
     :class="`
       icon
       ${reactive && 'icon--reactive'}
-      ${selected && 'icon--selected'}
       ${alt && 'icon--alt'}
       ${$slots.default && 'icon--centered'}
   `">
     <div :class="`
       icon__icon
       ${ size && `icon__icon--${size}` }
+      ${ iconRight && 'icon__icon--right' }
       ${
         small
           ? 'icon__icon--small'
@@ -25,8 +25,8 @@
         role="icon-img"
       ></unicon>
     </div>
-    <div role="icon-label">
-      <slot v-if="$slots.default"></slot>
+    <div v-if="$slots.default" role="icon-label">
+      <slot></slot>
     </div>
   </a>
 </template>
@@ -41,7 +41,7 @@ type Props = {
   small?: boolean
   alt?: boolean
   reactive?: boolean|null
-  selected?: boolean
+  iconRight?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

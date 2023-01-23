@@ -23,7 +23,7 @@ export default defineStore('meta', {
     globalIsLoading: false,
 
     theme: '',
-    availableThemes: INSTANCE_VARS.themes,
+    availableThemes: global.INSTANCE_VARS.themes,
     
     view: {
       title: '',

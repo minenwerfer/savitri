@@ -2,7 +2,7 @@
   <component v-if="runonceSlot" :is="runonceSlot"></component>
 
   <div class="template">
-    <sv-topbar v-if="!route.meta?.notopbar">
+    <sv-topbar>
       <component :is="topbarSlot" v-if="topbarSlot"></component>
       <sv-utilities></sv-utilities>
     </sv-topbar>
@@ -21,6 +21,10 @@
 
         <div class="template__view">
           <sv-breadcumb></sv-breadcumb>
+
+          <h1 v-if="getLayoutOption('noTopbar') && !route.meta?.noTitle">
+            {{ viewTitle.capitalize() }}
+          </h1>
           <router-view />
         </div>
       </div>

@@ -1,5 +1,4 @@
 <template>
-  <strong>Editar perfil</strong>
   <sv-box :key="userStore.fields" class="profile">
     <sv-form
       v-bind="{

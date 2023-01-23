@@ -1,8 +1,8 @@
 @import 'style/theming';
 
-.panel-container {
+.panel-hint {
   position: fixed;
-  top: 3.2rem;
+  top: 0;
   right: 0;
 
   width: 3rem;
@@ -18,10 +18,18 @@
 
   font-size: 1.2rem;
   font-weight: bold;
-  cursor: pointer;
+  user-select: none;
 
   @include themed() {
     border: 1px solid t(border-color);
+  }
+
+  @media screen and (max-width: 600px) {
+    top: 3.2rem;
+  }
+
+  &--topbarPadding {
+    top: 3.2rem;
   }
 }
 
@@ -31,15 +39,14 @@
   right: 0;
 
   display: flex;
+  overscroll-behavior: contain;
 }
 
 .panel,
 .sidebar {
-  width: 30rem;
+  width: 32rem;
   height: 100vh;
   padding: 1.8rem;
-
-  overflow: auto;
 
   @include themed() {
     color: t(foreground-color);

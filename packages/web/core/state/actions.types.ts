@@ -58,7 +58,7 @@ interface ActionsAux {
       property: CollectionProperty
     }
   ): string
-  getIndexes(args: { key: string, form: boolean }): Array<string>
+  getIndexes(args: { key: string, form: boolean }): ReadonlyArray<string>
   select(properties: Array<string>): Record<string, any>
 }
 

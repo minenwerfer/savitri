@@ -2,7 +2,7 @@
 
 .menu {
   position: sticky;
-  top: 3.2rem;
+  top: 0;
   left: 0;
   width: var(--menu-width);
   height: calc(100vh - 3.2rem);
@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  row-gap: 1rem;
+  row-gap: .8rem;
 
   padding: 1rem 0;
   z-index: 20;
@@ -26,6 +26,13 @@
     :deep(svg) {
       width: 1.3rem;
       fill: t(foreground-color);
+    }
+  }
+
+  &--with-branding {
+    @media screen and (min-width: 600px) {
+      top: 0;
+      height: 100vh;
     }
   }
 
@@ -62,6 +69,13 @@
     }
   }
 
+  &__branding {
+    height: 1.8rem;
+    align-self: center;
+
+    margin: 1rem 0;
+  }
+
   &__entries {
     width: var(--menu-width);
 
@@ -72,6 +86,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
+
     padding: 0 1rem;
     margin-top: 1rem;
   }
@@ -122,9 +137,9 @@
 
     @include themed() {
       &--current {
+        font-weight: bold;
         border-color: t(border-color);
         background: t(body-background);
-        // background: #2060fa;
       }
 
       &:hover {

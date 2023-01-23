@@ -1,30 +1,74 @@
 <template>
   <div class="header">
-    <sv-user-picture
-      :user="userStore.$currentUser"
-      class="header__picture"
-      @click="editProfile"
-    ></sv-user-picture>
+    <sv-dropdown
+      v-bind="{
+        actions: dropdownActions
+      }"
 
-    <div class="header__info">
-      <div class="header__info-name">{{ userStore.$currentUser.full_name }}</div>
-      <div class="header__info-access">{{ userStore.$currentUser.roles?.join(', ') }}</div>
-    </div>
+      style="width: 100%"
+    >
+      <div class="header__user">
+        <sv-icon
+          v-clickable
+          icon-right
+          reactive
+          name="angle-down"
+        >
+          <div class="header__user-inner">
+            <strong>{{ userStore.$currentUser.full_name }}</strong>
+            <div>{{ userStore.$currentUser.roles?.join(', ') }}</div>
+          </div>
+        </sv-icon>
+      </div>
+
+      <template #extra>
+        <sv-select
+          v-model="metaStore.theme"
+          @change="metaStore.saveTheme"
+        >
+          <option
+            v-for="theme in metaStore.availableThemes"
+            :value="theme"
+          >
+            {{ theme }}
+          </option>
+        </sv-select>
+      </template>
+    </sv-dropdown>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useStore } from '../../../../../../../web'
-import { SvUserPicture } from '../../../../../..'
+import { SvIcon, SvDropdown, SvSelect } from '../../../../../..'
 
-const userStore = useStore('user')
 const router = useRouter()
+const metaStore = useStore('meta')
+const userStore = useStore('user')
 
 const editProfile = () => {
   userStore.setItem(userStore.currentUser)
   router.push({ name: 'dashboard-user-profile' })
 }
+
+const dropdownActions = [
+  {
+    name: 'user profile',
+    icon: 'house-user',
+    click: () => {
+      editProfile()
+    }
+  },
+  {
+    name: 'signout',
+    icon: 'signout',
+    click: () => {
+      userStore.signout()
+      router.push({ name: 'user-signin' })
+    }
+  }
+]
 </script>
 
 <style scoped src="./sv-menu-header.scss"></style>

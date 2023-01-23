@@ -1,9 +1,5 @@
 @import 'style/theming';
 
-@mixin selected {
-  background: #eee;
-}
-
 .icon {
   display: flex;
   line-height: 100%;
@@ -19,22 +15,18 @@
     &--alt {
       fill: t(foreground-color-alt);
     }
-  }
 
-  &--selected {
-    @include selected;
-  }
+    &--reactive {
+      padding: 4px;
+      border-radius: 5px;
 
-  &--reactive {
-    padding: 4px;
-    border-radius: 5px;
+      &:hover {
+        background: t(background-color-alt);
+      }
 
-    &:hover {
-      @include selected;
-    }
-
-    &:active {
-      background: #ccc;
+      &:active {
+        background: #ccc;
+      }
     }
   }
 
@@ -44,6 +36,10 @@
   }
 
   &__icon {
+    &--right {
+      order: 1;
+    }
+
     &--small {
       width: 16px;
     }

@@ -1,15 +1,15 @@
 <template>
-  <div class="topbar">
-    <div
+  <div
+    :class="{
+      topbar: true,
+      'topbar--mobileOnly': getLayoutOption('noTopbar')
+    }"
+  >
+    <sv-branding
+      v-clickable
+      click="dashboard"
       class="topbar__branding"
-      @click="router.push({ name: 'dashboard-home' })"
-    >
-      <img
-        src="/static/logo.png"
-        class="topbar__logo"
-        data-image="logo"
-      />
-    </div>
+    ></sv-branding>
 
     <div class="topbar__main">
       <sv-icon
@@ -42,9 +42,8 @@
 
 <script setup lang="ts">
 import { provide } from 'vue'
-import { useRouter } from 'vue-router'
 import { useStore } from '../../../../web'
-import { SvInfo, SvIcon } from '../..'
+import { SvInfo, SvIcon, SvBranding } from '../..'
 
 import SvSearchBar from './_internals/components/sv-search-bar/sv-search-bar.vue'
 import SvSearchResults from './_internals/components/sv-search-results/sv-search-results.vue'
@@ -54,7 +53,6 @@ import { shortcutsVisible } from './_internals/store'
 
 provide('iconReactive', true)
 const metaStore = useStore('meta')
-const router = useRouter()
 </script>
 
 <style scoped src="./sv-topbar.scss"></style>
