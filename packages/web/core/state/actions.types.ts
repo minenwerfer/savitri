@@ -65,7 +65,7 @@ interface ActionsAux {
 interface MutationsAux {
   setItem(item: Item): Item
   setItems(items: Array<any>): Array<any>
-  insertItem(item: Item): Item
+  insertItem(item: Item, merge?: boolean): Item
   removeItem(item: Item): Item
   clearItem(): Item
   clearItems(): void

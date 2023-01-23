@@ -30,7 +30,12 @@ const mutations: Mutations = {
     return items
   },
 
-  insertItem(item) {
+  insertItem(_item, merge) {
+    const old = merge
+      ? Object.assign({}, this.item)
+      : {}
+
+    const item = Object.assign(old, _item)
     this.setItem(item)
 
     const found = this.items.find(({ _id }) => _id === item._id)
@@ -84,7 +89,7 @@ const actionsAndMutations: Actions & Mutations = {
         return async (...args: any[]) => {
           const result = await target.custom(verb, ...args)
           if( result?._id ) {
-            return this.insertItem(result)
+            return this.insertItem(result, true)
           }
 
           return result
