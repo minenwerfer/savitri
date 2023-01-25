@@ -1,3 +1,5 @@
+@import 'style/theming';
+
 .bubbles {
   display: flex;
   flex-wrap: wrap;
@@ -14,19 +16,21 @@
   column-gap: .2rem;
 
   font-size: .9rem;
-  border: 1px solid green;
   border-radius: 5px;
-
-  background: lightgreen;
   padding: .2rem .4rem;
+
+  @include themed() {
+    border: 1px solid t(background-color);
+    background: t(background-color-alt);
+
+    &:hover {
+      background: t(background-color-hover);
+    }
+  }
 
   &__name {
     &:after {
       content: ': ';
     }
-  }
-
-  &:hover {
-    background: darken(lightgreen, 10%);
   }
 }

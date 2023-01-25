@@ -28,15 +28,19 @@ const collection = useCollection({
       try {
         return this.customEffect(
           'authenticate', payload,
-          async ({ user, token: _token }: {
+          async ({ user, extra, token: _token }: {
             user: User
+            extra: Record<string, any>
             token: { 
               type: 'Bearer'
               token: string
             }
           }) => {
             this.credentials = {}
-            this.currentUser = { ...user }
+            this.currentUser = {
+              ...user,
+              extra
+            }
 
             const {
               type: _tokenType,
@@ -44,7 +48,7 @@ const collection = useCollection({
             } = _token
 
             sessionStorage.setItem('auth:token', token)
-            sessionStorage.setItem('auth:currentUser', JSON.stringify(user))
+            sessionStorage.setItem('auth:currentUser', JSON.stringify(this.currentUser))
 
             const metaStore = useMetaStore()
             await metaStore.describeAll()

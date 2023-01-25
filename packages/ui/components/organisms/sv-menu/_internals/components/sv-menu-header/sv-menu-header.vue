@@ -13,6 +13,7 @@
           icon-right
           reactive
           name="angle-down"
+          style="justify-content: space-between"
         >
           <div class="header__user-inner">
             <strong>{{ userStore.$currentUser.full_name }}</strong>
@@ -21,7 +22,7 @@
         </sv-icon>
       </div>
 
-      <template #extra>
+      <template #extra v-if="metaStore.availableThemes">
         <sv-select
           v-model="metaStore.theme"
           @change="metaStore.saveTheme"

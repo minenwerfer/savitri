@@ -32,8 +32,10 @@
         border-bottom: 1px solid t(border-color);
       }
 
-      &:hover {
-        background: t(background-color-alt);
+      &--reactive {
+        &:hover {
+          background: t(background-color-alt);
+        }
       }
     }
   }

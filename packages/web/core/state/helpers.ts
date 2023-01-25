@@ -18,7 +18,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
       }
     }
 
-    if( value && Object.keys(value).length === 0 ) {
+    if( R.empty(value) ) {
       return a
     }
 
@@ -124,7 +124,10 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
         }
 
         return value !== origin[key]
-          && (typeof value !== 'number' && (value || origin[key]))
+          && (
+            (typeof value !== 'number' && (value || origin[key]))
+              || typeof value === 'number'
+          )
       })()
 
       if( isUnequal ) {
@@ -133,7 +136,7 @@ export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, pr
 
           if( Array.isArray(value) ) {
             a[key] = value.length < origin[key].length
-              ? origin[key]
+              ? value
               : value.map((v, index) => res[+index] || v)
 
             return a

@@ -17,13 +17,13 @@
     &--alt,
     &--transparent {
       &:hover {
-        background: t(background-color-alt);
+        background: t(button-background-color-hover);
       }
     }
 
     &--alt {
       color: t(foreground-color-alt);
-      background: t(button-background-alt);
+      background: t(button-background-color-alt);
       border: 1px solid t(button-border-color);
 
       :deep(svg) {

@@ -7,7 +7,8 @@
     ::-webkit-scrollbar-thumb:hover { background: t(foreground-color); }
 
     a:link, a:visited, a:hover, a:active {
-      color: t(foreground-color);
+      color: inherit;
+      text-decoration: none;
     }
   }
 }

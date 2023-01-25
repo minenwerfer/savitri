@@ -2,6 +2,7 @@
   <div
     :class="`
       menu
+      no-print
       ${!visible && 'menu--hidden'}
       ${getLayoutOption('noTopbar') && 'menu--with-branding'}
   `">
@@ -23,7 +24,7 @@
       >
         <sv-icon
           v-clickable
-          v-if="visible"
+          v-if="visible && entry.shrink"
           name="angle-up"
           :class="`
             menu__entry-title
@@ -34,6 +35,13 @@
         >
           {{ $tc(entry.meta?.title, 2).capitalize() }}
         </sv-icon>
+
+        <div
+          v-else
+          class="menu__entry-title"
+        >
+          {{ $tc(entry.meta?.title, 2).capitalize() }}
+        </div>
 
 
         <!-- subroutes -->
@@ -59,6 +67,10 @@
         </div>
 
       </div>
+    </div>
+
+    <div v-if="$slots['menu-bottom']" class="menu__bottom">
+      <slot name="menu-bottom"></slot>
     </div>
   </div>
 </template>
@@ -162,7 +174,7 @@ const isCurrent = (subroute: any) => {
   return (subroute.redirect || subroute.path) === route.path
 }
 
-const routes = ref<Array<Route>>(getRoutes())
+const routes = ref<Array<Route & { shrink?: boolean }>>(getRoutes())
 const routesWithChildren = computed(() => (
   routes.value.filter((route) => route.children?.length > 0)
 ))

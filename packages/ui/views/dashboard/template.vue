@@ -9,10 +9,15 @@
 
     <div class="template__main">
       <sv-menu
+        v-if="menuSchema"
         v-model:visible="metaStore.menu.isVisible"
         entrypoint="dashboard"
         :schema="menuSchema"
-      ></sv-menu>
+      >
+        <template #menu-bottom v-if="$slots['menu-bottom']">
+          <slot name="menu-bottom"></slot>
+        </template>
+      </sv-menu>
 
       <div class="template__content">
         <div v-if="notice" class="template__notice">
@@ -31,15 +36,14 @@
     </div>
   </div>
 
-  <sv-subscriptions></sv-subscriptions>
-  <sv-detached></sv-detached>
+  <slot name="dashboard-outer"></slot>
 </template>
 
 <script setup lang="ts">
 import { onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '../../../web'
-import { SvMenu, SvTopbar, SvSubscriptions, SvDetached } from '../../components'
+import { SvMenu, SvTopbar } from '../../components'
 
 import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'

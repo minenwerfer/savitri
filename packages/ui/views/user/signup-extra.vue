@@ -8,12 +8,12 @@
   </sv-icon>
 
   <sv-form
-    v-if="userExtraStore"
+    v-if="userExtraStore && instanceVars.signupExtraProperties?.length !== 0"
     v-bind="{
       collection: 'userExtra',
       formData: userExtraStore.item,
-      form: webpackVariables.signupExtraProperties
-        ? userExtraStore.useProperties(webpackVariables.signupExtraProperties)
+      form: instanceVars.signupExtraProperties
+        ? userExtraStore.useProperties(instanceVars.signupExtraProperties)
         : userExtraStore.usePropertiesExcept(['owner']),
       validationErrors: userStore.validationErrors
     }"
@@ -33,13 +33,24 @@
     </template>
   </sv-form>
 
-  <div class="userExtra__footer">
-    <sv-checkbox v-model="tosAccepted">
+  <div style="
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 2rem
+  ">
+    <sv-checkbox
+      v-model="tosAccepted"
+      :property="{
+        type: 'boolean',
+        s$element: 'checkbox'
+      }"
+    >
       Declaro que li e aceito os termos de uso
     </sv-checkbox>
 
     <sv-button
-      :disabled="passwordError || !tosAccepted"
+      :disabled="!!passwordError || !tosAccepted"
       @clicked="insert"
     >
       Criar conta
@@ -50,13 +61,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  hasStore,
-  useStore,
-  useParentStore,
-  usePasswordPolicy
-
-} from '../../../web'
+import { hasStore, useStore, usePasswordPolicy } from '../../../web'
 
 import {
   SvForm,
@@ -66,12 +71,10 @@ import {
 
 } from '../..'
 
-// import { default as webpackVariables } from 'variables'
-
-const webpackVariables = {}
-
 const router = useRouter()
-const userStore = useParentStore()
+
+const metaStore = useStore('meta')
+const userStore = useStore('user')
 const userExtraStore = hasStore('userExtra')
   ? useStore('userExtra')
   : null
@@ -86,12 +89,12 @@ const password = reactive({
 
 const passwordForm = {
   password: {
-    label: 'Senha',
-    type: 'password'
+    type: 'string',
+    s$inputType: 'password'
   },
   confirmation: {
-    label: 'Confirmação da senha',
-    type: 'password'
+    type: 'string',
+    s$inputType: 'password'
   }
 }
 
@@ -108,12 +111,19 @@ const insert = async () => {
     userStore.item.extra = userExtraStore.item
   }
 
-  const user = await userStore.insert()
-  console.log(user)
+  const user = await userStore.insert().catch(async (e) => {
+    const formattedErrors = Object.entries(e.validation)
+      .map(([key, value]: [string, any]) => `- ${key}: ${value.type}`)
+      .join('\n')
 
-//  if( !user ) {
-//    return
-//  }
+    await metaStore.spawnModal({
+      title: 'Erro',
+      body: `There were some problems with your submission:\n${formattedErrors}`
+    })
+
+    throw e
+  })
+
 //
 //  const { _id: userId, email } = user
 
@@ -129,7 +139,6 @@ const insert = async () => {
 //    await userExtraStore.deepInsert()
 //  }
 
-  const metaStore = useStore('meta')
   await metaStore.spawnModal({
     title: 'Conta registrada',
     body: 'Blabla'

@@ -41,7 +41,7 @@ import { computed, ref } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
 
 type Props = {
-  value: any
+  value?: any
   modelValue: any
   property: CollectionProperty
   propertyName?: string
@@ -51,7 +51,7 @@ type Props = {
 const props = defineProps<Props>()
 const property = props.property||{}
 
-const type = property.type === 'array'
+const type = ['array', 'boolean'].includes(property.type!)
   ? 'checkbox'
   : 'radio'
 
@@ -63,7 +63,7 @@ const checkbox = ref<any>(null)
 
 const value = typeof props.value === 'object'
   ? ((props.value as any)?._id || props.value)
-  : props.value
+  : props.value||false
 
 const selectedValues = (values: Array<Props['modelValue']>): (string|boolean)[] => {
   return values.map((v: any) => v._id || v)
@@ -90,7 +90,7 @@ const bindVal = computed({
     }
 
     if( property.type !== 'array' ) {
-      emit('update:modelValue', value)
+      emit('update:modelValue', !props.modelValue)
       return
     }
 

@@ -1,5 +1,8 @@
 <template>
-  <div v-html="webpackVariables.signinText || 'Identifique-se'"></div>
+  <div
+    v-if="instanceVars.signinText"
+    v-html="instanceVars.signinText"
+  ></div>
   <sv-form
     :form-data="userStore.credentials"
     :form="{
@@ -36,7 +39,7 @@
   </div>
 
   <div
-    v-if="webpackVariables.signupForm"
+    v-if="instanceVars.signupForm"
     v-clickable
     class="signin__action"
     @click="router.push({ name: 'user-signup' })"
@@ -46,19 +49,13 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '../../../web'
-// import { default as webpackVariables } from 'variables'
 import { SvForm, SvButton } from '../../components'
-
-const webpackVariables = {}
 
 const router = useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
-
-provide('inputVariant', 'bold')
 
 const authenticate = async () => {
   await userStore.authenticate(userStore.credentials)

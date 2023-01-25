@@ -4,8 +4,6 @@ import { Description } from '@semantic-api/types'
 // import { default as webpackVariables } from 'variables'
 import useHttp from '../http'
 import useCollection from '../state/collection'
-import type { DetachedComponent } from '../../types'
-
 import { useStore, hasStore, registerStore } from '../state/use'
 import { freshItem, freshFilters } from '../state/helpers'
 
@@ -42,7 +40,6 @@ export default defineStore('meta', {
       isVisible: false,
       title: '',
       body: '',
-      image: '',
       component: '',
       details: {}
     },

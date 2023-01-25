@@ -44,6 +44,8 @@ export const useApp = (config: AppOptions): Promise<{
     store: useStore
   }))
 
+  const metaStore = useStore('meta')
+  const userStore = useStore('user')
 
   if( routerExtension ) {
     extendRouter(router, routerExtension)
@@ -81,6 +83,8 @@ export const useApp = (config: AppOptions): Promise<{
 
   app.mixin({
     computed: {
+      instanceVars: () => global.INSTANCE_VARS,
+      currentUser: () => userStore.$currentUser,
       viewTitle: () => {
         const currentRoute = router.currentRoute.value
         const title = currentRoute.meta?.title
@@ -96,7 +100,6 @@ export const useApp = (config: AppOptions): Promise<{
     },
     methods: {
       getLayoutOption(optionName: keyof typeof global.INSTANCE_VARS['dashboardLayout']) {
-        const userStore = useStore('user')
         const dashboardLayout = global.INSTANCE_VARS.dashboardLayout
 
         if( !dashboardLayout ) {
@@ -117,7 +120,6 @@ export const useApp = (config: AppOptions): Promise<{
     I18N: i18n
   })
 
-  const metaStore = useStore('meta')
   await metaStore.describeAll()
 
   resolve({

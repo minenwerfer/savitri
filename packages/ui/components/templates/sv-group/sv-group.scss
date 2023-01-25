@@ -2,7 +2,6 @@
 
 .group {
   border-radius: 5px;
-  overflow: hidden;
 
   @include themed() {
     &--no-inner-borders {

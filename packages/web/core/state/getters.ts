@@ -235,7 +235,7 @@ const getters: GettersFunctions = {
     }, [])
 
 
-    return condenseItem(fromEntries(entries))
+    return fromEntries(entries)
   },
 
   /**

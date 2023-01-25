@@ -35,6 +35,7 @@
   &__container {
     position: relative;
     display: flex;
+    height: 100%;
 
     &--normal, &--bold {
       border-radius: 3px;
@@ -66,7 +67,7 @@
     }
 
     &--bold {
-      padding: .6em .6em;
+      padding: 1rem;
     }
 
     &--light {

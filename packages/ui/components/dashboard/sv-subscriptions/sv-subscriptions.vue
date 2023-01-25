@@ -4,7 +4,8 @@
     v-if="subscriptionStore.itemsCount > 0"
     :class="{
       'panel-hint': true,
-      'panel-hint--topbarPadding': !getLayoutOption('noTopbar')
+      'panel-hint--topbarPadding': !getLayoutOption('noTopbar'),
+      'no-print': true
     }"
 
     @click="panelVisible = true"
@@ -107,7 +108,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, DetachedComponent } from '@savitri/web'
+import { useStore, Subscribable } from '@savitri/web'
 import { SvIcon } from '../..'
 import SvMessages from '../sv-messages/sv-messages.vue'
 import SvSubscribers from './_internals/components/sv-subscribers/sv-subscribers.vue'
@@ -132,7 +133,7 @@ const closePanel = () => {
   sidebarVisible.value = false
 }
 
-const closeComponent = async (component: DetachedComponent) => {
+const closeComponent = async (component: Subscribable) => {
   await subscriptionStore.functions.unsubscribe({
     identifier: component.identifier
   })

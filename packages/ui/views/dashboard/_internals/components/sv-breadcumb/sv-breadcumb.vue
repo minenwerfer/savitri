@@ -1,5 +1,8 @@
 <template>
-  <div class="breadcumb">
+  <div class="
+    no-print
+    breadcumb
+  ">
     <router-link
       v-for="(route, index) in routes"
       :key="`route-${index}`"

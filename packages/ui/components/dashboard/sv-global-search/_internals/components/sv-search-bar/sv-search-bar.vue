@@ -1,12 +1,14 @@
 <template>
-  <div class="searchbar" @focusin="search">
+  <div class="searchbar">
     <sv-input
       v-model.lazy="query"
+      variant="bold"
       :property="{
         type: 'string',
         s$placeholder: 'Buscar',
         s$icon: 'search',
-        s$inputType: 'search'
+        s$inputType: 'search',
+        s$focus: true
       }"
       class="searchbar__input"
     ></sv-input>

@@ -137,9 +137,13 @@
 
     @include themed() {
       &--current {
-        font-weight: bold;
         border-color: t(border-color);
+        color: t(foreground-color-alt);
         background: t(body-background);
+
+        :deep(svg) {
+          fill: t(foreground-color-alt);
+        }
       }
 
       &:hover {
@@ -151,5 +155,9 @@
   &__route-title {
     white-space: nowrap;
     // opacity: .8;
+  }
+
+  &__bottom {
+    margin-top: auto;
   }
 }

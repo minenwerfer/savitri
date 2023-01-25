@@ -2,7 +2,10 @@
   <div v-if="store" class="crud">
     <div
       v-if="!noControls"
-      class="crud__panel"
+      class="
+        no-print
+        crud__panel
+      "
     >
       <div class="crud__panel-control">
         <sv-info v-if="!noRefresh">

@@ -6,18 +6,32 @@
       main--${metaStore.$theme}
       ${metaStore.$theme === 'dark' && 'tw-dark'}
   `">
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <component :is="Component">
+      <template
+        v-for="slotName in Object.keys($slots)"
+        v-slot:[slotName]
+      >
+        <slot :name="slotName"></slot>
+      </template>
+      </component>
+    </router-view>
     <slot></slot>
 
     <sv-modal
       v-model:visible="metaStore.modal.isVisible"
       v-bind="metaStore.modal"
     >
-      <div>
-          <p v-if="metaStore.modal.body" v-html="metaStore.modal.body"></p>
-          <img v-if="metaStore.modal.image" :src="metaStore.modal.image" />
-          <component v-if="metaStore.modal.component" :is="metaStore.modal.component"></component>
-      </div>
+      <div
+        v-if="metaStore.modal.body"
+        v-html="metaStore.modal.body"
+        style="white-space: pre-wrap"
+      ></div>
+
+      <component
+        v-if="metaStore.modal.component"
+        :is="metaStore.modal.component"
+      ></component>
     </sv-modal>
 
     <sv-prompt

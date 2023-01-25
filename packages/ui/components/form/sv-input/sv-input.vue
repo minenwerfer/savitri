@@ -16,6 +16,7 @@
       <input
         v-maska="mask"
         v-bind="inputBind"
+        v-focus="rerenderFixture > 0 || property.s$focus"
         ref="input"
         :value="inputValue"
 
@@ -54,6 +55,7 @@
 
     <textarea
       v-else
+      v-focus="rerenderFixture > 0 || property.s$focus"
       :placeholder="inputBind.placeholder"
       :readonly="readOnly"
 
@@ -120,7 +122,13 @@ const inputBind: {
   name?: string
   readonly?: boolean
 } = {
-  type: property.s$inputType||'text',
+  type: (() => {
+    if( ['number', 'integer'].includes(property.type!) ) {
+      return 'number'
+    }
+
+    return property.s$inputType || 'text'
+  })(),
   placeholder: property.s$placeholder,
   min: property.minimum || property.exclusiveMinimum,
   max: property.maximum || property.exclusiveMaximum,
@@ -195,9 +203,11 @@ const onInput = (
   updateValue(newValue!)
 }
 
-watch(() => props.modelValue, (value) => {
-  if( !value ) {
-    inputValue.value = ''
+watch(() => props.modelValue, (value, oldValue) => {
+  if( oldValue && !value ) {
+    inputValue.value = property.type === 'number'
+      ? 0
+      : ''
     rerenderFixture.value += 1
   }
 })

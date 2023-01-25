@@ -12,7 +12,12 @@
     border-radius: 5px;
 
     @include themed() {
+      color: t(foreground-color-alt);
       background: t(body-background);
+
+      :deep(svg) {
+        fill: t(foreground-color-alt) !important;
+      }
     }
   }
 

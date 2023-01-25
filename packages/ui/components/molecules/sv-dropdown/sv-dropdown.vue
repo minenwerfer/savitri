@@ -33,7 +33,10 @@
         <sv-bare-button
           v-for="(action, aindex) in filterActions(actions)"
           :key="`action-${aindex}`"
-          class="dropdown__item"
+          class="
+            dropdown__item
+            dropdown__item--reactive
+          "
           @clicked="onClick(action, subject)"
         >
           <sv-icon

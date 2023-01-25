@@ -1,14 +1,14 @@
 <template>
   <div class="external">
     <div class="external__wrapper">
-      <img
-        src="/static/logo.png"
+      <sv-branding
+        v-clickable
+        click="homepage"
         class="external__logo"
-        data-image="logo"
-      />
+      ></sv-branding>
       <sv-box>
         <div class="external__content">
-          <slot></slot>
+          <!-- <slot v-if="$slots.default"></slot> -->
           <router-view></router-view>
         </div>
       </sv-box>
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { provide } from 'vue'
-import { SvBox } from '../..'
+import { SvBox, SvBranding } from '../..'
 
 provide('buttonSize', 'large')
 

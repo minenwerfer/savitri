@@ -1,5 +1,5 @@
 <template>
-  <div>Mudando a senha de {{ userStore.item.name }}</div>
+  <div>Mudando a senha de {{ userStore.item.full_name }}</div>
   <sv-box class="passchange">
     <div class="passchange__content">
       <sv-form

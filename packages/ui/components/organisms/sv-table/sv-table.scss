@@ -9,7 +9,7 @@ $picture-size: 3.6rem;
 
   &__row {
     &--header {
-      display: none;
+      display: table-row;
       line-height: 2.25rem;
       font-size: 8.5pt;
       text-transform: uppercase;
@@ -20,8 +20,8 @@ $picture-size: 3.6rem;
         border-bottom: 1px solid t(border-color);
       }
 
-      @media screen and (min-width: 600px) {
-        display: table-row;
+      @media screen and (max-width: 600px) {
+        display: none;
       }
     }
 
@@ -58,7 +58,7 @@ $picture-size: 3.6rem;
   }
 
   &__header {
-    display: hidden;
+    padding: .2rem $horizontal-padding;
 
     &--label {
       overflow: hidden;
@@ -66,32 +66,31 @@ $picture-size: 3.6rem;
       white-space: nowrap;
     }
 
-    @media screen and (min-width: 600px) {
-      display: table-cell;
-      padding: .2rem $horizontal-padding;
+    @media screen and (max-width: 600px) {
+      display: hidden;
     }
   }
 
   &__cell {
-    display: block;
+    padding: 0 $horizontal-padding;
     line-height: 1.3rem;
 
-    @media screen and (min-width: 600px) {
-      display: table-cell;
-      padding: 0 $horizontal-padding;
+    &--padded {
+      padding: $horizontal-padding;
+    }
 
-      &--padded {
-        padding: $horizontal-padding;
-      }
+    @media screen and (max-width: 600px) {
+      display: block;
+      padding: 0;
     }
   }
 
   &__cell-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: block;
 
-    @media screen and (min-width: 600px) {
-      display: block;
+    @media screen and (max-width: 600px) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 

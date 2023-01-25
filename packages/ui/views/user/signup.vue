@@ -9,10 +9,10 @@
 
   <sv-form
     v-bind="{
+      collection: 'user',
       formData: userStore.item,
       form: userStore.useProperties([
-        'first_name',
-        'last_name',
+        'full_name',
         'email',
         'phone'
       ])
