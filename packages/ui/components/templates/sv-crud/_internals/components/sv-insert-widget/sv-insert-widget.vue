@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { inject, watch } from 'vue'
 import type { CollectionStore } from '../../../../../../../web'
-import { useStore } from '../../../../../../../web'
+import { useStore, condenseItem } from '../../../../../../../web'
 import {
   SvBox,
   SvForm,

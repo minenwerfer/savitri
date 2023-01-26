@@ -18,7 +18,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
       }
     }
 
-    if( R.empty(value) ) {
+    if( R.isEmpty(value) ) {
       return a
     }
 
@@ -31,7 +31,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
 
 export const removeEmpty = (item: any) => {
   const entries = Object.entries(item)
-  .filter(([_, value]: [unknown, any]) => value)
+    .filter(([_, value]: [unknown, any]) => value)
 
   return fromEntries(entries)
 }

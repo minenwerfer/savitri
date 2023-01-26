@@ -24,8 +24,10 @@
             && !omitInputLabels
         ">
           <strong :class="{
-            'form__field-required-hint': highlightRequired
-              && (store?.description.strict || store?.description.required?.includes(key))
+            'form__field-required-hint':
+              highlightRequired
+                && !searchOnly
+                && (store?.description.strict || store?.description.required?.includes(key))
           }">
             {{
               property.s$translate

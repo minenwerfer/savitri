@@ -11,12 +11,15 @@ export type RouteMeta = {
   }
 }
 
-export type RouterExtension = Record<string, Record<string, Omit<Route, 'name'>>>
 
 export type Route = RouteMeta & Omit<RouteRecordRaw, 'children'> & {
-  children?: Record<string, any>
+  path: string
+  children?: Array<Route>
   components?: any
 }
+
+export type RouterExtensionNode = Array<Omit<Route, 'name'>>
+export type RouterExtension = Record<string, RouterExtensionNode>
 
 export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   const router = createRouter({
@@ -49,16 +52,30 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   return router
 }
 
-export const normalizeRoutes = (routes: Record<string, Omit<Route, 'name'>>): Array<any> => Object.entries(routes)
-  .map(([routeName, route]) => ({
-    ...route,
-    name: routeName,
-    children: route.children && normalizeRoutes(route.children)
-}))
+export const normalizeRoutes = (node: RouterExtensionNode, parentName?: string) => {
+  return node.map((child) => {
+    if( child.children ) {
+      child.children = normalizeRoutes(child.children, parentName)
+    }
+
+    const normalizedName = child.path
+      .replace(/^\//, '')
+      .replace(/\/:?/, '-')
+
+    return {
+      name: `${parentName}-${normalizedName}`,
+      ...child
+    }
+  })
+}
 
 export const extendRouter = (router: any, routerExtension: RouterExtension) => {
-  Object.entries(routerExtension).forEach(([parentName, routes]) => {
-    const normalized = normalizeRoutes(routes)
+  Object.entries(routerExtension).forEach(([key, routes]) => {
+    const parentName = key === 'public'
+      ? ''
+      : key
+
+    const normalized = normalizeRoutes(routes, key)
     normalized.forEach((route) => router.addRoute(parentName, route))
   })
 }

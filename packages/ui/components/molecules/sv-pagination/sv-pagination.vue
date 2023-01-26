@@ -17,12 +17,15 @@
     </div>
 
     <div class="pagination__control">
-      <sv-button
-        small
-        icon="angle-left"
+      <sv-bare-button
         :disabled="store.isLoading || page === 0"
         @clicked="paginate('previous')"
-      ></sv-button>
+      >
+        <sv-icon
+          small
+          name="angle-left"
+        ></sv-icon>
+      </sv-bare-button>
 
       <div class="pagination__page-input">
         <sv-input
@@ -64,6 +67,7 @@ import { useParentStore } from '../../../../web'
 
 import {
   SvButton,
+  SvBareButton,
   SvSelect,
   SvInput,
   SvIcon

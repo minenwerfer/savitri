@@ -25,7 +25,7 @@ const handleClick = () => {
 
   router.push({
     name: props.click === 'homepage'
-      ? 'home'
+      ? 'public-home'
       : 'dashboard-home'
   })
 }

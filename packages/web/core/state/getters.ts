@@ -104,6 +104,9 @@ const getters: GettersFunctions = {
 
       return keys.every((k) => {
         const property = this.description.properties?.[k]!
+        if( property.s$meta ) {
+          return true
+        }
 
         return !(k in this.properties)
           || (this.description.form && !formIncludes(k))
