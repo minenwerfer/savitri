@@ -4,13 +4,16 @@
   column-gap: .2rem;
   user-select: none;
   outline: none;
-  padding: 0;
 
   background: transparent;
   border: none;
 
   &:active {
     text-decoration: underline;
+  }
+
+  &:not(.button) {
+    padding: 0;
   }
 
   &--enabled {

@@ -55,7 +55,11 @@
 
         <div
           v-else-if="['date', 'date-time'].includes(property.format!) && searchOnly"
-          style="display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 1rem;"
+          style="
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 1rem;
+          "
         >
           <sv-input
             v-model="formData[key].$gte"
@@ -118,7 +122,12 @@
               icon="plus"
               :disabled="
                 formData[key]?.length >= property.maxItems!
-                || formData[key]?.[formData[key]?.length-1] === null
+                  || unfilled(formData[key]?.[formData[key]?.length-1])
+                  || (
+                    property.s$isFile
+                      && formData[key]?.length > 0
+                      && !formData[key]?.[formData[key]?.length-1]?._id
+                  )
               "
               @clicked="pushToArray(formData[key], property)"
             >
@@ -321,6 +330,11 @@ const fieldStyle = (key:string, property: any) => {
   }
 
   return style.join('')
+}
+
+const unfilled = (value: any) => {
+  return value === null
+    || (value instanceof Object && !Object.keys(value).length)
 }
 </script>
 

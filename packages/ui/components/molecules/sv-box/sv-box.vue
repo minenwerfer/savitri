@@ -20,22 +20,28 @@
         ${fixedRight && 'box__content--fixed-right'}
         ${transparent && 'box__content--transparent'}
         ${transparentMobile && 'box__content--transparent-mobile'}
+        ${outerHeader && 'box__content--outer-header'}
       `"
       @click="$event.stopPropagation()"
     >
       <!-- box head -->
       <div
-        v-if="$slots.title || title"
+        v-if="$slots.header || title"
         :class="`
           box__header
           ${isCollapsed && 'box__header--collapsed'}
+          ${outerHeader && 'box__header--outer'}
       `">
-        <div class="box__header-title">
-          <slot v-if="$slots.title" name="title"></slot>
+        <div class="box__header-left">
+          <slot v-if="$slots.header" name="header"></slot>
           <div v-else-if="title">{{ title }}</div>
+          <div
+            v-if="$slots.extra"
+            style="margin-left: auto"
+          >
+            <slot name="extra"></slot>
+          </div>
         </div>
-
-        <slot v-if="$slots.extra" name="extra"></slot>
 
         <sv-icon
           v-clickable
@@ -102,6 +108,7 @@ type Props = {
   fill?: boolean
   transparent?: boolean
   transparentMobile?: boolean
+  outerHeader?: boolean
 }
 // #endregion props
 

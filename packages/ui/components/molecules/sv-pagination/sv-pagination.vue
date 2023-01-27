@@ -11,6 +11,7 @@
         </option>
       </sv-select>
       <sv-icon
+        small
         name="list-ul"
         fill="gray"
       ></sv-icon>
@@ -43,12 +44,15 @@
         / {{ pageCount + 1 }}
       </div>
 
-      <sv-button
-        small
-        icon="angle-right"
+      <sv-bare-button
         :disabled="store.isLoading || page === pageCount"
         @clicked="paginate('next')"
-      ></sv-button>
+      >
+        <sv-icon
+          small
+          name="angle-right"
+        ></sv-icon>
+      </sv-bare-button>
     </div>
   </div>
 
