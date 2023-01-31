@@ -20,6 +20,7 @@
       >
         <label v-if="
           property.type !== 'boolean'
+            && !property.s$noLabel
             && (!property.$ref || property.$ref === 'file')
             && !omitInputLabels
         ">

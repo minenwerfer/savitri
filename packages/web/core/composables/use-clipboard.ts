@@ -1,4 +1,4 @@
-export default () => (text: string) => {
+export const useClipboard = () => (text: string) => {
   const textarea = document.createElement('textarea')
   textarea.value = text
 

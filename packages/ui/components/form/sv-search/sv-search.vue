@@ -92,7 +92,7 @@ import {
 } from 'vue'
 
 import type { CollectionProperty } from '@semantic-api/types'
-import { useStore, useParentStore } from '../../../../web'
+import { useStore, useParentStore, useDebounce } from '../../../../web'
 import { SvIcon } from '../..'
 
 import SvSearchSelected from './_internals/components/sv-search-selected/sv-search-selected.vue'
@@ -169,7 +169,7 @@ const search = async () => {
     return
   }
 
-  matchingItems.value = (await store.custom('getAll', {
+  matchingItems.value = await store.custom('getAll', {
     limit: 5,
     filters: {
       $or: indexes
@@ -181,17 +181,21 @@ const search = async () => {
         }
       }))
     }
-  }))
+  })
 }
 
-let lazySearchTimeout: any
+const debounce = useDebounce({
+  delay: 800,
+})
+
+const [doLazySearch] = debounce(() => {
+  search()
+  isTyping.value = false
+})
+
 const lazySearch = () => {
   isTyping.value = true
-  window.clearTimeout(lazySearchTimeout)
-  lazySearchTimeout = setTimeout(() => {
-    search()
-    isTyping.value = false
-  }, 800)
+  doLazySearch()
 }
 </script>
 

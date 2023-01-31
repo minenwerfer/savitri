@@ -50,9 +50,7 @@
           v-bind="message"
           :key="message._id"
           :style="noBorder && 'padding: 1rem 0'"
-        >
-          {{ modelValue?.messages || subscriptionStore.item.messages }}
-        </sv-message>
+        ></sv-message>
       </div>
     </sv-box>
   </sv-group>
@@ -80,6 +78,8 @@ const addVisible = ref(false)
 
 const subscriptionStore = useStore('subscription')
 const messageStore = useStore('message')
+
+const subscription = computed(() => props.modelValue || subscriptionStore.item)
 const messages = computed(() => {
   const items = props.modelValue?.messages || subscriptionStore.item.messages
   return items.sort((a, b) => a.created_at > b.created_at ? -1 : 1)
@@ -109,7 +109,7 @@ watch(() => props.itemInfo, (item) => {
 const pushMessage = async () => {
   const { title, ...message } = messageStore.condensedItem
   await subscriptionStore.functions.pushMessage({
-    _id: subscriptionStore.item._id,
+    _id: subscription.value._id,
     message,
     item: itemInfo.value
   })

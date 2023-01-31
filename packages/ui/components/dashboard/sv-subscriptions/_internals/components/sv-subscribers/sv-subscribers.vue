@@ -2,7 +2,7 @@
   <div class="subscribers">
     <div>
       <div
-        v-for="subscriber in subscriptionStore.item.subscribers"
+        v-for="subscriber in modelValue.subscribers"
         :key="subscriber._id"
         class="subscribers__entry"
       >
@@ -68,6 +68,11 @@ import {
 
 } from '../../../../..'
 
+type Props = {
+  modelValue: any
+}
+
+const props = defineProps<Props>()
 const subscriptionStore = useStore('subscription')
 const userStore = useStore('user')
 
@@ -78,7 +83,7 @@ const formData = reactive({
 
 const save = () => {
   subscriptionStore.functions.pushSubscribers({
-    _id: subscriptionStore.item._id,
+    _id: props.modelValue._id,
     subscribers: formData.subscribers
   })
 
@@ -87,7 +92,7 @@ const save = () => {
 
 const pullSubscriber = (subscriber: string) => {
   subscriptionStore.functions.pullSubscribers({
-    _id: subscriptionStore.item._id,
+    _id: props.modelValue._id,
     subscribers: [subscriber]
   })
 }

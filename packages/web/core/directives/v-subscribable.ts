@@ -1,7 +1,7 @@
 import type { Directive } from 'vue'
 import { useStore } from '../..'
 
-export type Subscribable = {
+export type Subscription = {
   _id?: string
   visible: boolean|'shrink'
   route: string
@@ -29,7 +29,7 @@ export default {
         route: ROUTER.currentRoute.value.fullPath,
         identifier
 
-      } as Subscribable)
+      } as Subscription)
     }
 
     subscribeHint.setAttribute('style', `

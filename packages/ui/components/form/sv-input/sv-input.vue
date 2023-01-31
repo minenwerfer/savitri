@@ -84,11 +84,15 @@ import { SvInfo, SvIcon } from '../..'
 
 type InputType = string|number|Date
 
+type InputVariant =
+  'normal'
+  | 'bold'
+
 type Props = {
   modelValue: InputType
   property: CollectionProperty
   propertyName?: string
-  variant?: string
+  variant?: InputVariant
 }
 
 const props = defineProps<Props>()

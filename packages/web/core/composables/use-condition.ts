@@ -5,7 +5,7 @@ export type Condition = {
   else?: any
 }
 
-export default (subject: any, condition: Condition) => {
+export const useCondition = (subject: any, condition: Condition) => {
   const {
     operator,
     term2

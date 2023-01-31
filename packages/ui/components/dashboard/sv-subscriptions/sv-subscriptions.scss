@@ -48,6 +48,8 @@
   height: 100vh;
   padding: 1.8rem;
 
+  overflow: auto;
+
   @include themed() {
     color: t(foreground-color);
     background: t(background-color);

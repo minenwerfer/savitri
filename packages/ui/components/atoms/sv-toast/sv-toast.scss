@@ -1,3 +1,5 @@
+@import 'style/theming';
+
 @keyframes blink {
   from { opacity: 1; }
   to { opacity: .4; }
@@ -9,15 +11,18 @@
 
   display: grid;
   place-items: center;
-
-  background: #fff;
-  border: 1px solid #000;
   border-radius: 5px;
 
   z-index: 70;
   animation: blink .35s forwards;
   animation-delay: 3s;
   animation-play-state: paused;
+
+  @include themed() {
+    color: t(foreground-color);
+    background: t(background-color);
+    border: 1px solid t(border-color);
+  }
 
   &--animate {
     animation-play-state: running;

@@ -36,7 +36,7 @@
         fill
         transparent
         no-border
-        v-model="subscriptionStore.item"
+        v-model="item"
         :is="sidebarComponent"
         style="border: 0"
       ></component>
@@ -59,42 +59,42 @@
       </div>
       <div class="panel__entries">
         <div
-          v-for="component in subscriptionStore.items"
-          :key="component.identifier"
+          v-for="subscription in subscriptions"
+          :key="subscription.identifier"
           class="panel__entry"
         >
           <div class="panel__entry-info">
-            <strong>{{ component.title }}</strong>
-            <div v-if="component._id">
-              {{ $t('created_by') }}: {{ component.owner.full_name }}
+            <strong>{{ subscription.title }}</strong>
+            <div v-if="subscription._id">
+              {{ $t('created_by') }}: {{ subscription.owner.full_name }}
             </div>
-            <div v-html="component.description" class="panel__entry-description"></div>
+            <div v-html="subscription.description" class="panel__entry-description"></div>
           </div>
 
           <div class="panel__entry-options">
             <div
               v-clickable
-              @click="goToRoute(component.route)"
+              @click="goToRoute(subscription.route)"
             >
               {{ $t('visit') }}
             </div>
             <div
               v-clickable
-              v-if="component._id"
-              @click="openSidebar('messages', component)"
+              v-if="subscription._id"
+              @click="openSidebar('messages', subscription)"
             >
-              {{ $t('messages') }} ({{ component.messages.length }})
+              {{ $t('messages') }} ({{ subscription.messages.length }})
             </div>
             <div
               v-clickable
-              v-if="component._id"
-              @click="openSidebar('subscribers', component)"
+              v-if="subscription._id"
+              @click="openSidebar('subscribers', subscription)"
             >
-              {{ $t('subscribers') }} ({{ component.subscribers?.length || 0 }})
+              {{ $t('subscribers') }} ({{ subscription.subscribers?.length || 0 }})
             </div>
             <div
               v-clickable
-              @click="subscriptionStore.ask({ action: () => closeComponent(component) })"
+              @click="subscriptionStore.ask({ action: () => closeComponent(subscription) })"
             >
               {{ $t('close') }}
             </div>
@@ -106,9 +106,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, Subscribable } from '@savitri/web'
+import { useStore, Subscription } from '@savitri/web'
 import { SvIcon } from '../..'
 import SvMessages from '../sv-messages/sv-messages.vue'
 import SvSubscribers from './_internals/components/sv-subscribers/sv-subscribers.vue'
@@ -127,15 +127,21 @@ const panelVisible = ref(false)
 const sidebarVisible = ref(false)
 const sidebarType = ref('')
 const sidebarComponent = ref({})
+const item = ref<any>({})
+
+const subscriptions = computed(() => {
+  return subscriptionStore.items
+    .sort((a, b) => a.created_at > b.created_at ? -1 : 1)
+})
 
 const closePanel = () => {
   panelVisible.value = false
   sidebarVisible.value = false
 }
 
-const closeComponent = async (component: Subscribable) => {
+const closeComponent = async (subscription: Subscription) => {
   await subscriptionStore.functions.unsubscribe({
-    identifier: component.identifier
+    identifier: subscription.identifier
   })
   closePanel()
 }
@@ -146,13 +152,14 @@ const clearComponents = async () => {
   closePanel()
 }
 
-const openSidebar = (type: keyof typeof sidebarComponents, component: DetachedComponent) => {
+const openSidebar = (type: keyof typeof sidebarComponents, subscription: Subscription) => {
   sidebarType.value = type
   sidebarComponent.value = sidebarComponents[type]
-  subscriptionStore.setItem({
-    ...component,
+  item.value = {
+    ...subscription,
     vnode: undefined
-  })
+  }
+
   sidebarVisible.value = true
 }
 
@@ -160,6 +167,12 @@ const goToRoute = (route: string) => {
   router.push(route)
   panelVisible.value = false
 }
+
+watch(() => subscriptionStore.item, (newItem) => {
+  if( newItem._id === item.value._id ) {
+    item.value = newItem
+  }
+}, { deep: true })
 </script>
 
 <style scoped src="./sv-subscriptions.scss"></style>

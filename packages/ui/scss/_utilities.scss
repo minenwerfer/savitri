@@ -1,0 +1,7 @@
+@import 'theming';
+
+.sv-border {
+  @include themed() {
+    border: 1px solid t(border-color);
+  }
+}

@@ -10,7 +10,7 @@ const getEffect = (store: any, effectName: StoreEffect) => {
   return store[effect]
 }
 
-export default <T extends { $id: string }, F extends { _id: string }>(
+export const useAction = <T extends { $id: string }, F extends { _id: string }>(
   store: (T & Record<string, (...args: any[]) => any>),
   router: Router
 ): [(...args: any[]) => void, any] => {

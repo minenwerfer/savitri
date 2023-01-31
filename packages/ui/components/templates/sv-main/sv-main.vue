@@ -40,23 +40,23 @@
     >
       {{ metaStore.prompt.body }}
     </sv-prompt>
-  </div>
 
-  <div :class="`
-    main__toasts
-    ${getLayoutOption('noTopbar') || 'main__toasts--topbarPadding'}
-  `">
-    <sv-toast
-      v-for="toast in metaStore.toasts"
-      v-bind="toast"
-      :key="`toast-${toast.itr}`"
-    >
-      <div v-html="
-      Array.isArray(toast.text)
-        ? $t(...toast.text)
-        : toast.text
-      "></div>
-    </sv-toast>
+    <div :class="`
+      main__toasts
+      ${getLayoutOption('noTopbar') || 'main__toasts--topbarPadding'}
+    `">
+      <sv-toast
+        v-for="toast in metaStore.toasts"
+        v-bind="toast"
+        :key="`toast-${toast.itr}`"
+      >
+        <div v-html="
+        Array.isArray(toast.text)
+          ? $t(...toast.text)
+          : toast.text
+        "></div>
+      </sv-toast>
+    </div>
   </div>
 </template>
 

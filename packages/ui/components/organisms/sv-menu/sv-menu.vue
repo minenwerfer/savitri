@@ -176,7 +176,7 @@ const isCurrent = (subroute: any) => {
 
 const routes = ref<Array<Route & { shrink?: boolean }>>(getRoutes())
 const routesWithChildren = computed(() => (
-  routes.value.filter((route) => route.children?.length > 0)
+  routes.value.filter((route) => route.children?.length! > 0)
 ))
 
 watch(() => metaStore.descriptions, () => {

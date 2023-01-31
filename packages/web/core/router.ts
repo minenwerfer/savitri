@@ -2,11 +2,9 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { useStore } from './state'
 
 export type RouteMeta = {
-  meta?: {
+  meta: {
     title: string
-    hidden?: boolean
-    isPrivate?: boolean
-    order?: number
+    icon?: string
     roles?: Array<string>
   }
 }
@@ -54,16 +52,22 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
 
 export const normalizeRoutes = (node: RouterExtensionNode, parentName?: string) => {
   return node.map((child) => {
+    const normalizedName = (() => {
+      if( !child.path ) {
+        return parentName
+      }
+
+      return `${parentName}-` + child.path
+        .replace(/^\//, '')
+        .replace(/\/:?/, '-')
+    })()
+
     if( child.children ) {
-      child.children = normalizeRoutes(child.children, parentName)
+      child.children = normalizeRoutes(child.children, normalizedName)
     }
 
-    const normalizedName = child.path
-      .replace(/^\//, '')
-      .replace(/\/:?/, '-')
-
     return {
-      name: `${parentName}-${normalizedName}`,
+      name: normalizedName,
       ...child
     }
   })
