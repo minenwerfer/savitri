@@ -1,5 +1,5 @@
 import type { CollectionProperty } from '@semantic-api/types'
-import type { CollectionState, CollectionGetters } from '../../types/state'
+import type { CollectionStore, CollectionState } from '../../types/state'
 
 type CrudParameters = {
   filters: any
@@ -31,6 +31,7 @@ export type Item = Record<string, any> & {
 
 interface ActionsAux {
   $functions: (...args: any[]) => any
+  errorPopup(e: any): Promise<any>|void
   custom(verb: string|null, payload?: string, options?: ActionOptions): Promise<any>
   customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
   $customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
@@ -73,9 +74,7 @@ interface MutationsAux {
 
 export type StatefulFunction<
   T extends (...args: any) => any,
-  This=CollectionState<any> & CollectionGetters & {
-    $patch: (props: object) => void
-  }
+  This=CollectionStore
 > = (this: This & ActionsAux & MutationsAux, ...args: Parameters<T>) => ReturnType<T>
 
 export type Actions = { [P in keyof ActionsAux]: StatefulFunction<ActionsAux[P]> }

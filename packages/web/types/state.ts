@@ -52,6 +52,9 @@ export type CollectionStore<T=any> = CollectionState<T>
   & typeof collectionActions
   & CollectionGetters
   & StoreGeneric
+  & {
+    store: (storeName: string) => CollectionStore
+  }
 
 export type CollectionStructure<T=any> = CollectionState<T> & {
   getters?: any

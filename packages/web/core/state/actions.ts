@@ -98,6 +98,22 @@ const actionsAndMutations: Actions & Mutations = {
     })
   },
 
+  errorPopup(e) {
+    if( !e.validation ) {
+      return
+    }
+
+    const formattedErrors = Object.entries(e.validation)
+      .map(([key, value]: [string, any]) => `- ${key}: ${value.type}`)
+      .join('\n')
+
+    const metaStore = useMetaStore()
+    return metaStore.spawnModal({
+      title: 'Erro',
+      body: `There were some problems with your submission:\n${formattedErrors}`
+    })
+  },
+
   async custom(verb,  payload?, options?) {
     this.validationErrors = {}
     if( !options?.skipLoading ) {

@@ -1,6 +1,5 @@
 import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
-import type { CollectionState } from '../../types/state'
-import type { Actions, Mutations } from './actions.types'
+import type { CollectionStore, CollectionState } from '../../types/state'
 import { fromEntries, deepClone } from '@semantic-api/common'
 import { deepDiff } from './helpers'
 import { useStore } from './use'
@@ -22,7 +21,7 @@ export type Getters = Record<`$${string}`, any> & {
   hasDiff: boolean
 }
 
-type GettersFunctions = Record<string, (this: CollectionState<any> & Getters & Actions & Mutations) => any>
+type GettersFunctions = Record<string, (this: Getters & CollectionStore) => any>
 
 const getters: GettersFunctions = {
   properties() {

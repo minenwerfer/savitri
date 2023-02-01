@@ -21,6 +21,7 @@ export default defineStore('meta', {
     globalIsLoading: false,
 
     theme: '',
+    themeOverride: '',
     availableThemes: global.INSTANCE_VARS.themes,
     
     view: {
@@ -153,7 +154,7 @@ export default defineStore('meta', {
       }))
     },
 
-    spawnModal(props: Omit<typeof this['modal'], 'isVisible'>) {
+    spawnModal(props: Partial<Omit<typeof this['modal'], 'isVisible'>>) {
       this.$patch({
         modal: {
           ...props,
@@ -194,12 +195,13 @@ export default defineStore('meta', {
 
   getters: {
     $theme(): string {
-      if( !this.theme ) {
+      const theme = this.themeOverride || this.theme
+      if( !theme ) {
         const defaultTheme = 'default'
         this.theme = localStorage.getItem('meta:theme') || defaultTheme
       }
 
-      return this.theme
+      return theme
     },
   }
 })

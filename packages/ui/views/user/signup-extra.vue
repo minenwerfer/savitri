@@ -49,13 +49,14 @@
       Declaro que li e aceito os termos de uso
     </sv-checkbox>
 
-    <sv-button
-      :disabled="!!passwordError || !tosAccepted"
-      @clicked="insert"
-    >
-      Criar conta
-    </sv-button>
   </div>
+
+  <sv-button
+    :disabled="!!passwordError || !tosAccepted"
+    @clicked="insert"
+  >
+    Criar conta
+  </sv-button>
 </template>
 
 <script setup lang="ts">
@@ -112,14 +113,8 @@ const insert = async () => {
   }
 
   const user = await userStore.insert().catch(async (e) => {
-    const formattedErrors = Object.entries(e.validation)
-      .map(([key, value]: [string, any]) => `- ${key}: ${value.type}`)
-      .join('\n')
-
-    await metaStore.spawnModal({
-      title: 'Erro',
-      body: `There were some problems with your submission:\n${formattedErrors}`
-    })
+    await userStore.errorPopup(e)
+    router.back()
 
     throw e
   })

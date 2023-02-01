@@ -1,5 +1,8 @@
 <template>
-  <div class="wall">
+  <div
+    v-theme:default
+    class="wall"
+  >
     <div class="wall__view">
       <sv-branding class="wall__branding"></sv-branding>
       <router-view></router-view>
@@ -12,6 +15,7 @@ import { provide } from 'vue'
 import { SvBranding } from '../..'
 
 provide('buttonSize', 'large')
+provide('inputVariant', 'bold')
 </script>
 
 <style scoped src="./sv-auth-wall.scss"></style>

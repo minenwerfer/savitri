@@ -56,7 +56,6 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '../../../web'
 import { SvForm, SvButton } from '../../components'
@@ -64,8 +63,6 @@ import { SvForm, SvButton } from '../../components'
 const router = useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
-
-provide('inputVariant', 'bold')
 
 const authenticate = async () => {
   await userStore.authenticate(userStore.credentials)
