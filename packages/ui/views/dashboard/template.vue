@@ -25,7 +25,10 @@
         </div>
 
         <div class="template__view">
-          <sv-breadcumb></sv-breadcumb>
+          <div class="template__top">
+            <sv-breadcumb></sv-breadcumb>
+            <slot name="dashboard-top"></slot>
+          </div>
 
           <h1 v-if="getLayoutOption('noTopbar') && !route.meta?.noTitle">
             {{ viewTitle.capitalize() }}

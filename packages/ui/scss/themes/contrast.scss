@@ -1,0 +1,14 @@
+:root {
+  --contrast-border-color: #222;
+  --contrast-button-background-color: linear-gradient(45deg, darkblue, magenta);
+  --contrast-button-border-color: transparent;
+  --contrast-switch-background-color: linear-gradient(45deg, darkblue, magenta);
+  --contrast-switch-border-color: #000;
+  --contrast-foreground-color: #000;
+  --contrast-foreground-color-alt: #fff;
+  --contrast-background-color: #fff;
+  --contrast-background-color-alt: lighten(#555, 20%);
+  --contrast-background-color-hover: lighten(#55f, 20%);
+  --contrast-topbar-background-color: #fff;
+  --contrast-body-background: #444;
+}

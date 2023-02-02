@@ -7,6 +7,7 @@ import * as Icons from 'vue-unicons/dist/icons'
 import type { Router } from 'vue-router'
 
 import { createPinia } from 'pinia'
+import { arraysIntersects } from '@semantic-api/common'
 import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter, extendRouter } from './router'
 // import { default as webpackVariables } from 'variables'
@@ -109,6 +110,9 @@ export const useApp = (config: AppOptions): Promise<{
         const role = userStore.$currentUser.roles?.find((role: string) => role in dashboardLayout) || 'default'
 
         return dashboardLayout[role]?.[optionName]
+      },
+      hasRoles(roles: string|Array<string>) {
+        return arraysIntersects(roles, userStore.$currentUser.roles)
       }
     }
   })

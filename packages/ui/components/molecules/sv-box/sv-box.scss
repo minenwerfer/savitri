@@ -131,7 +131,6 @@ $section-padding: .8rem;
     }
 
     &:not(&--outer) {
-      padding: 1rem;
       @include themed() {
         border-bottom: 1px solid t(border-color);
       }

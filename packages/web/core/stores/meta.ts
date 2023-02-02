@@ -199,6 +199,7 @@ export default defineStore('meta', {
       if( !theme ) {
         const defaultTheme = 'default'
         this.theme = localStorage.getItem('meta:theme') || defaultTheme
+        return this.theme
       }
 
       return theme
