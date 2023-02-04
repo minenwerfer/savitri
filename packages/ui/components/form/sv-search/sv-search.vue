@@ -82,6 +82,7 @@
 
 <script setup lang="ts">
 import {
+  onMounted,
   provide,
   inject,
   computed,
@@ -161,7 +162,10 @@ const pushBack = (item: any) => {
 
 const search = async () => {
   if( Object.values(inputValue).every((v) => !(String(v).length > 0)) ) {
-    matchingItems.value = []
+    matchingItems.value = property.s$prefetch
+      ? await store.custom('getAll')
+      : []
+
     return
   }
 
@@ -183,6 +187,12 @@ const search = async () => {
     }
   })
 }
+
+onMounted(async () => {
+  if( property.s$prefetch ) {
+    matchingItems.value = await store.custom('getAll')
+  }
+})
 
 const debounce = useDebounce({
   delay: 800,
