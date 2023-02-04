@@ -54,10 +54,16 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
           Object.assign(eventBus, {
             id: Math.random(),
             name: scopedAction,
-            params: { filters }
+            params: filters
           })
         }
       }
+    }
+
+    const prepareFilters = (filters: F) => {
+      return actionProps.requires
+        ? store.select(actionProps.requires, filters)
+        : filters
     }
 
     const storeAction = (() => {
@@ -73,11 +79,11 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
     if( actionProps.ask ) {
       return (filters: F) => store.ask({
         action: storeAction,
-        params: { filters }
+        params: prepareFilters(filters)
       })
     }
 
-    return (filters: F) => storeAction({ filters })
+    return (filters: F) => storeAction(prepareFilters(filters))
   }
 
   return [

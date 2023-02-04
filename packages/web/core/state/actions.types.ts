@@ -29,6 +29,8 @@ export type Item = Record<string, any> & {
   _id?: string
 }
 
+type ItemId = Pick<Item, '_id'>
+
 interface ActionsAux {
   $functions: (...args: any[]) => any
   errorPopup(e: any): Promise<any>|void
@@ -39,8 +41,8 @@ interface ActionsAux {
   getAll(payload: ActionFilter): Promise<any>
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
   deepInsert(payload?: { what: Item }): Promise<Item>
-  delete(payload: { filters?: Item }): Promise<Item>
-  deleteAll(payload: { filters?: Item }): Promise<Item>
+  delete(payload: { filters?: Item, _id?: ItemId }): Promise<Item>
+  deleteAll(payload: { filters?: Item, _id?: ItemId }): Promise<Item>
   filter(props?: { project: Array<string> }): Promise<any>
   updateItems(): Promise<any>
   clearFilters(): CollectionState<any>['freshFilters']
@@ -60,7 +62,7 @@ interface ActionsAux {
     }
   ): string
   getIndexes(args: { key: string, form: boolean }): ReadonlyArray<string>
-  select(properties: Array<string>): Record<string, any>
+  select(properties: Array<string>, item?: Record<string, any>): Record<string, any>
 }
 
 interface MutationsAux {

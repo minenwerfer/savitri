@@ -113,13 +113,16 @@ const getters: GettersFunctions = {
           || property.type === 'boolean'
           || (
             !!this.item[k]
-              && (!property.s$isReference || this.item[k]._id)
+              && (
+                !property.s$isReference
+                || property.type === 'array'
+                || this.item[k]._id
+              )
           )
       })
     }
-
-    return this.diffedItem
-      && this.hasDiff
+    
+    return this.hasDiff
       && ensureFulfillment()
   },
 

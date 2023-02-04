@@ -55,11 +55,11 @@ const userExtraStore = hasStore('userExtra')
 const extraPanel = ref(false)
 
 const handleUiEvent = async (event: any) => {
-  userStore.setItem(event.params.filters)
+  userStore.setItem(event.params)
 
   if( event.name === 'spawnExtra' && userExtraStore ) {
     await userExtraStore.get(
-      { filters: { owner: event.params.filters._id } },
+      { filters: { owner: event.params._id } },
       { unproxied: true }
 
     ).catch(userExtraStore.clearItem)

@@ -137,12 +137,11 @@
 
     @include themed() {
       &--current {
-        border-color: t(border-color);
-        color: t(foreground-color-alt);
-        background: t(body-background);
+        color: t(brand-color);
+        font-weight: bold;
 
         :deep(svg) {
-          fill: t(foreground-color-alt);
+          fill: t(brand-color);
         }
       }
 

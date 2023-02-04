@@ -106,9 +106,12 @@ $picture-size: 3.6rem;
   &__picture {
     height: $picture-size;
     width: $picture-size;
-    border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
+
+    @include themed() {
+      border: 1px solid t(border-color);
+    }
   }
 
   &__empty {

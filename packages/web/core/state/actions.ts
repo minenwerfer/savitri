@@ -250,14 +250,22 @@ const actionsAndMutations: Actions & Mutations = {
 
   async delete(payload) {
     return this.customEffect(
-      'delete', { filters: { _id: payload.filters?._id } },
+      'delete', {
+        filters: {
+          _id: payload.filters?._id || payload._id
+        }
+      },
       this.removeItem
     )
   },
 
   async deleteAll(payload) {
     return this.customEffect(
-      'deleteAll', { filters: { _id: payload.filters?._id } },
+      'deleteAll', {
+        filters: {
+          _id: payload.filters?._id || payload._id
+        }
+      },
       this.removeItem
     )
   },
@@ -347,8 +355,8 @@ const actionsAndMutations: Actions & Mutations = {
     )
   },
 
-  select(properties) {
-    return Object.entries(this.item).reduce((a, [key, value]) => {
+  select(properties, item) {
+    return Object.entries(item || this.item).reduce((a, [key, value]) => {
       if( !properties.includes(key) ) {
         return a
       }

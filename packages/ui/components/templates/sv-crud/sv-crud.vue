@@ -223,7 +223,7 @@ watch(() => actionEventBus, async (event) => {
   ) {
     await store.get({
       filters: {
-        _id: event.params.filters._id
+        _id: event.params._id
       }
     })
   }
@@ -269,6 +269,7 @@ watch(() => actionEventBus, async (event) => {
       _id: undefined
     })
 
+    store.referenceItem = {}
     isInsertVisible.value = true
   }
 
