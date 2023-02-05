@@ -1,11 +1,15 @@
 import type { CollectionProperty } from '@semantic-api/types'
+import type { Projection } from '@semantic-api/api'
 import type { CollectionStore, CollectionState } from '../../types/state'
 
 type CrudParameters = {
   filters: any
   limit: number
   offset: number
+  project?: Projection<any>
 }
+
+type ActionFilter = Partial<CrudParameters>
 
 type ActionOptions = {
   method?:
@@ -18,12 +22,6 @@ type ActionOptions = {
   skipEffect?: boolean
   fullResponse?: boolean
 }
-
-type ActionFilter = Partial<Pick<CrudParameters,
-  'filters'
-  | 'limit'
-  | 'offset'>
->
 
 export type Item = Record<string, any> & {
   _id?: string
@@ -43,7 +41,7 @@ interface ActionsAux {
   deepInsert(payload?: { what: Item }): Promise<Item>
   delete(payload: { filters?: Item, _id?: ItemId }): Promise<Item>
   deleteAll(payload: { filters?: Item, _id?: ItemId }): Promise<Item>
-  filter(props?: { project: Array<string> }): Promise<any>
+  filter(props?: ActionFilter): Promise<any>
   updateItems(): Promise<any>
   clearFilters(): CollectionState<any>['freshFilters']
   ask(props: {

@@ -194,7 +194,7 @@ const getters: GettersFunctions = {
           return
         }
 
-        if( property.type === 'string' ) {
+        if( property.type === 'string' && !property.format ) {
           return {
             $regex: value,
             $options: 'i'

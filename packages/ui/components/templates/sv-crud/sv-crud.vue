@@ -1,5 +1,37 @@
 <template>
-  <div v-if="store" class="crud">
+  <div
+    v-if="store"
+    class="crud"
+  >
+    <div
+      v-if="store.description.filterPresets"
+      class="crud__filter-presets"
+    >
+      <div
+        v-clickable
+        :class="`
+          crud__filter-preset-button
+          ${!route.hash && 'crud__filter-preset-button--active'}
+        `"
+
+        @click="togglePreset('', { filters: {} })"
+      >
+        {{ $t('all') }}
+      </div>
+      <div
+        v-clickable
+        v-for="([presetName, preset]) in Object.entries(store.description.filterPresets)"
+        :key="`filter-preset-${presetName}`"
+
+        :class="`
+          crud__filter-preset-button
+          ${route.hash === `#${presetName}` && 'crud__filter-preset-button--active'}
+        `"
+        @click="togglePreset(presetName, preset)"
+      >
+        {{ preset.name }}
+      </div>
+    </div>
     <div
       v-if="!noControls"
       class="
@@ -94,7 +126,17 @@
           individualActions,
           layoutOptions: layout?.options || store?.layout.options
         }"
-      ></component>
+      >
+        <template
+          v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"
+          v-slot:[slotName]="slotProps"
+        >
+          <slot
+            v-bind="slotProps"
+            :name="slotName"
+          ></slot>
+        </template>
+      </component>
     </sv-group>
 
   </div>
@@ -166,15 +208,24 @@ parentStore = props.parentField
   ? useParentStore(props.parentCollection)
   : null
 
-const { hash } = useRoute()
+const route = useRoute()
 const [call, actionEventBus] = useAction(store, router)
 
 const fetchItems = async () => {
+  /*
   if( props.parentField ) {
+    if( !parentStore.item._id ) {
+      await parentStore.get({
+        filters: {
+          owner: userStore.$currentUser._id
+        }
+      })
+    }
+
     store.setItems(parentStore.item[props.parentField]||[])
     return
   }
-
+  */
   return store.filter({
     project: [
       ...Object.keys(store.properties),
@@ -188,19 +239,22 @@ onMounted(() => {
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
 
+  if( route.hash && store.description.filterPresets ) {
+    const presetName = route.hash.slice(1)
+    togglePreset(presetName, store.description.filterPresets[presetName])
+    return
+  }
+
   if( !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
     fetchItems()
   }
 })
 
 onUnmounted(() => {
-  if( !hash.slice(1).split(',').includes('refresh') ) {
-    return
-  }
-
   const getFilters = () => store.filters
   const oldFilters = getFilters()
   store.clearFilters()
+  store.filterPreset = {}
 
   if( Object.keys(oldFilters).length > 0 ) {
     const filters = getFilters()
@@ -298,6 +352,13 @@ const toggleLayout = () => {
   store.currentLayout = store.currentLayout === 'tabular'
     ? store.description.layout!.name
     : 'tabular'
+}
+
+const togglePreset = (presetName: string, preset: any) => {
+  store.filterPreset = preset.filters
+  store.pagination.offset = 0
+  store.filter()
+  router.push({ hash: presetName ? `#${presetName}` : '' })
 }
 
 provide('storeId', computed(() => props.collection))

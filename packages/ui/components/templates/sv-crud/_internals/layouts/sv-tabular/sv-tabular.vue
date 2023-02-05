@@ -1,5 +1,6 @@
 <template>
   <sv-box fill transparent-mobile>
+    <slot v-if="$slots.inner" name="inner"></slot>
     <sv-table
       v-if="store.properties"
       v-loading="store.isLoading"
@@ -13,7 +14,17 @@
         actions: individualActions,
         layout: store.tableLayout
       }"
-    ></sv-table>
+    >
+      <template
+        v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"
+        v-slot:[slotName]="slotProps"
+      >
+        <slot
+          v-bind="slotProps"
+          :name="slotName"
+        ></slot>
+      </template>
+    </sv-table>
   </sv-box>
 </template>
 

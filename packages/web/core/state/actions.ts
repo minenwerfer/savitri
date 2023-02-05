@@ -271,10 +271,13 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   filter(props?) {
-    this.activeFilters = this.$filters
+    this.activeFilters = props?.filters || this.$filters
 
     return this.getAll({
-      filters: this.$filters,
+      filters: {
+        ...this.activeFilters,
+        ...this.filterPreset
+      },
       limit: this.pagination.limit,
       ...props||{}
     })

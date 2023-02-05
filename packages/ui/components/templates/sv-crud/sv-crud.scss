@@ -1,3 +1,5 @@
+@import 'style/theming';
+
 .crud {
   display: flex;
   flex-direction: column;
@@ -40,6 +42,31 @@
     @media screen and (min-width: 600px) {
       flex-direction: row;
       align-items: center;
+    }
+  }
+
+  &__filter-presets {
+    display: flex;
+  }
+
+  &__filter-preset-button {
+    padding: 0 .8rem;
+    opacity: .6;
+
+    @include themed() {
+      // background: t(background-color);
+      // border: 1px solid t(border-color);
+      color: t(foreground-color-alt);
+
+      &--active {
+        color: t(brand-color);
+        opacity: 1;
+        font-weight: bold;
+      }
+
+      &:not(:last-child) {
+        border-right: 1px solid t(border-color);
+      }
     }
   }
 }

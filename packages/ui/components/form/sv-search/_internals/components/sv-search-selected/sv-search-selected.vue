@@ -11,7 +11,8 @@
     >
       <sv-icon
         v-clickable
-        name="minus"
+        name="check-circle"
+        fill="green"
       ></sv-icon>
     </sv-search-item>
   </sv-search-container>

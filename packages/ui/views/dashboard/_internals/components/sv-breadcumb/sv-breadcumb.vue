@@ -9,7 +9,7 @@
       :to="{ name: route.name, params: $route.params }"
       class="breadcumb__link"
     >
-      {{ $tc(getTitle(route), 2).capitalize() }}
+      {{ getTitle(route) || viewTitle }}
     </router-link>
   </div>
 </template>
@@ -17,20 +17,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore, Route } from '../../../../../../web'
+import { Route } from '../../../../../../web'
 
-const metaStore = useStore('meta')
 const getRoute = () => {
   const route = useRoute()
   return route.matched || [route]
 }
 
-const viewTitle = computed(() => metaStore.view.title)
 const routes = computed(getRoute)
 
 const getTitle = (route: Route) => {
   return route.meta?.title === '%viewTitle%'
-    ? viewTitle.value
+    ? null
     : route.meta?.title||''
 }
 </script>

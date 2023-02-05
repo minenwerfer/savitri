@@ -3,6 +3,8 @@
     v-clickable
     class="item"
   >
+    <slot></slot>
+
     <div class="item__values">
       <div
         v-for="(index, idx) in indexes"
@@ -13,7 +15,6 @@
       </div>
     </div>
 
-    <slot></slot>
   </div>
 </template>
 

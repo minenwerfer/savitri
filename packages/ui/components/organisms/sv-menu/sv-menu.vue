@@ -171,7 +171,9 @@ const getRoutes = (node?: SchemaNode): Array<Route> => {
 
 const isCurrent = (subroute: any) => {
   const route = useRoute()
-  return (subroute.redirect || subroute.path) === route.path
+  return typeof subroute.redirect === 'string'
+    ? subroute.redirect === route.path
+    : subroute.path === (route.redirectedFrom?.path || route.path)
 }
 
 const routes = ref<Array<Route & { shrink?: boolean }>>(getRoutes())

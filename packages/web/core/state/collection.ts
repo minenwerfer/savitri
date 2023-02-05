@@ -49,6 +49,7 @@ const state = <T=object>() => {
     filters: {},
     freshFilters: {},
     activeFilters: {},
+    filterPreset: {},
 
     selected: [],
     currentLayout: '',

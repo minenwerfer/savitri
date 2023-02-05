@@ -2,15 +2,16 @@
 
 .item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 
   // border: 1px solid #dedede;
   //
-  border-radius: 5px;
 
   @include themed() {
-    border: 1px solid t(border-color);
+    &:not(:last-child) {
+      border-bottom: 1px solid t(border-color);
+    }
+
     color: t(foreground-color);
     background: t(background-color);
   }

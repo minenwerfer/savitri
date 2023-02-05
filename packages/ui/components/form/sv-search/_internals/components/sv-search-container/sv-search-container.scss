@@ -2,12 +2,11 @@
 
 .container {
   display: flex;
-  flex-wrap: wrap;
-  gap: .4rem;
-  padding: .6rem;
+  flex-direction: column;
 
   @include themed() {
     background: t(background-color-alt);
     border: 1px solid t(border-color);
+    border-width: 0 1px 1px 1px;
   }
 }

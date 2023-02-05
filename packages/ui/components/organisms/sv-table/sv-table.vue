@@ -61,8 +61,21 @@
             table__cell
             table__cell--padded
         `">
+          <slot
+            v-if="`row-${column}` in $slots"
+            v-bind="{
+              column,
+              property,
+              row
+            }"
 
-          <div class="table__cell-grid">
+            :name="`row-${column}`"
+          >
+          </slot>
+          <div
+            v-else
+            class="table__cell-grid"
+          >
             <!-- responsivity on mobile -->
             <div style="display: none">
               {{ property.description }}
@@ -147,7 +160,7 @@
         </td>
         <td
           v-if="actions?.length"
-          class="table__cell"
+          class="no-print table__cell"
         >
           <div class="table__cell-actions">
             <sv-button

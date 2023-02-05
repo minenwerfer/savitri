@@ -21,20 +21,22 @@ import { useParentStore } from '../../../../../../../web'
 import { SvIcon } from '../../../../../..'
 
 type DateFilter = {
-  $lte: string
-  $gte: string
+  $lte?: string
+  $gte?: string
 }
 
 const store = useParentStore()
+
 const printableFilters = computed(() => {
   let isMongoOperation: boolean
+  store.filters;
 
   const activeFilters = (() => {
     const [firstEntry] = Object.entries(store.activeFilters) as Array<any>
 
     if( firstEntry && ['$and', '$or'].includes(firstEntry[0]) ) {
       isMongoOperation = true
-      return firstEntry[1].reduce((a, filter: any) => {
+      return firstEntry[1].reduce((a: Record<string, any>, filter: any) => {
         return {
           ...a,
           ...filter
@@ -45,9 +47,17 @@ const printableFilters = computed(() => {
     return store.activeFilters
   })()
 
-  return Object.entries(activeFilters).map(([key, filter]) => {
+  return Object.entries(activeFilters).reduce((a: Array<{
+    description: string,
+    key: string,
+    formatted: string
+  }>, [key, filter]) => {
     const property = store.description.properties[key]
     const formatted = (() => {
+      if( !property ) {
+        return null
+      }
+
       if( property.s$isReference ) {
         if( property.type === 'array' ) {
           return store.formatValue({
@@ -59,8 +69,14 @@ const printableFilters = computed(() => {
       }
 
       if( ['date', 'date-time'].includes(property.format) ) {
-        const d1 = (filter as DateFilter).$gte.split('T')[0] || ''
-        const d2 = (filter as DateFilter).$lte?.split('T')[0] || ''
+        const formatDate = (date?: Date|string) => {
+          return date instanceof Date
+            ? date.formatToString()
+            : date && date.formatDateTime()
+        }
+
+        const d1 = formatDate((filter as DateFilter).$gte) || ''
+        const d2 = formatDate((filter as DateFilter).$lte) || ''
         return `${d1} - ${d2}`
       }
 
@@ -71,16 +87,23 @@ const printableFilters = computed(() => {
       })
     })()
 
+    if( !formatted ) {
+      return a
+    }
+
     const actualKey = isMongoOperation
       ? Object.keys(store.activeFilters)[0]
       : key
 
-    return {
-      description: property.description,
-      key: actualKey,
-      formatted
-    }
-  })
+    return [
+      ...a,
+      {
+        description: property?.description || key,
+        key: actualKey,
+        formatted
+      }
+    ]
+  }, [])
 })
 
 const removeFilter = (target: string) => {
