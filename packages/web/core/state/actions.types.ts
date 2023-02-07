@@ -21,6 +21,7 @@ type ActionOptions = {
   skipLoading?: boolean
   skipEffect?: boolean
   fullResponse?: boolean
+  insert?: boolean
 }
 
 export type Item = Record<string, any> & {
@@ -35,6 +36,7 @@ interface ActionsAux {
   custom(verb: string|null, payload?: string, options?: ActionOptions): Promise<any>
   customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
   $customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
+
   get(payload: ActionFilter, options?: ActionOptions): Promise<any>
   getAll(payload: ActionFilter): Promise<any>
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
@@ -50,15 +52,18 @@ interface ActionsAux {
     title?: string
     body?: string
   }): Promise<any>
+
   useProperties(properties: Array<string>): Record<string, CollectionProperty>
   usePropertiesExcept(properties: Array<string>): Record<string, CollectionProperty>
   formatValue(args: {
-      value: string|object,
+      value: string|object|Array<object>,
       key: string,
-      form: boolean,
-      property: CollectionProperty
+      form?: boolean,
+      property: CollectionProperty,
+      index?: string
     }
   ): string
+
   getIndexes(args: { key: string, form: boolean }): ReadonlyArray<string>
   select(properties: Array<string>, item?: Record<string, any>): Record<string, any>
 }

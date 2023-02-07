@@ -58,9 +58,14 @@ export const useApp = (config: AppOptions): Promise<{
 
   if( config.modules ) {
     config.modules.forEach((plugin: Plugin) => {
-      if( plugin.routerExtension ) {
-        extendRouter(router, plugin.routerExtension)
-      }
+      plugin({
+        app,
+        router,
+        extendRouter
+      })
+      // if( plugin.routerExtension ) {
+      //   extendRouter(router, plugin.routerExtension)
+      // }
 
       // if( plugin.storeExtension ) {
       //   extendStore(store, plugin.storeExtension)
@@ -95,7 +100,7 @@ export const useApp = (config: AppOptions): Promise<{
         }
 
         return title === '%viewTitle%'
-          ? I18N.global.tc(currentRoute.params?.collection, 2)
+          ? I18N.global.tc(currentRoute.params?.collection, 2).capitalize()
           : title
       }
     },

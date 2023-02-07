@@ -1,9 +1,11 @@
 import { Directive } from 'vue'
 
-export default {
+const focus: Directive = {
   mounted(el, binding) {
     if( binding.value ) {
       el.focus()
     }
   }
-} as Directive
+}
+
+export default focus

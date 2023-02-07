@@ -173,7 +173,7 @@ const isCurrent = (subroute: any) => {
   const route = useRoute()
   return typeof subroute.redirect === 'string'
     ? subroute.redirect === route.path
-    : subroute.path === (route.redirectedFrom?.path || route.path)
+    : subroute.path === (route.redirectedFrom?.path || route.path)?.split(/\/home$/)[0]
 }
 
 const routes = ref<Array<Route & { shrink?: boolean }>>(getRoutes())

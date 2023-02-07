@@ -53,6 +53,10 @@
     padding: 0 .8rem;
     opacity: .6;
 
+    &:first-child {
+      padding: 0 .8rem 0 0;
+    }
+
     @include themed() {
       // background: t(background-color);
       // border: 1px solid t(border-color);

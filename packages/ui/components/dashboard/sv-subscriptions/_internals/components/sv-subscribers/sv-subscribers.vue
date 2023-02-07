@@ -85,7 +85,7 @@ const save = () => {
   subscriptionStore.functions.pushSubscribers({
     _id: props.modelValue._id,
     subscribers: formData.subscribers
-  })
+  }, { insert: true })
 
   addVisible.value = false
 }
@@ -94,7 +94,7 @@ const pullSubscriber = (subscriber: string) => {
   subscriptionStore.functions.pullSubscribers({
     _id: props.modelValue._id,
     subscribers: [subscriber]
-  })
+  }, { insert: true })
 }
 </script>
 

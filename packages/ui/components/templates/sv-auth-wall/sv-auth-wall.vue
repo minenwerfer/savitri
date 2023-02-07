@@ -3,9 +3,15 @@
     v-theme:default
     class="wall"
   >
+    <sv-branding class="wall__branding"></sv-branding>
+    <div v-if="$slots['authwall-content']" class="wall__content">
+      <slot name="authwall-content"></slot>
+    </div>
+
     <div class="wall__view">
-      <sv-branding class="wall__branding"></sv-branding>
-      <router-view></router-view>
+      <div class="wall__view-center">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>

@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { provide, ref, computed } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
-import { useStore } from '../../../../web'
+import { useParentStore } from '../../../../web'
 import { SvPicture, SvButton } from '../..'
 
 type Props = {
@@ -61,7 +61,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
 }>()
 
-const fileStore = useStore('file')
+const store = useParentStore()
 provide('buttonSize', 'small')
 
 const preview = ref<({ type: string }&Blob)|null>(null)
@@ -101,7 +101,9 @@ const clearPreview = () => {
 
 const insert = async () => {
   const file = await readFile(preview.value)
-  const result = await fileStore.insert({
+  const result = await store.functions.upload({
+    parentId: store.item._id,
+    propertyName: props.propertyName,
     what: {
       _id: props.modelValue?._id,
       ...file
@@ -113,7 +115,9 @@ const insert = async () => {
 }
 
 const remove = async () => {
-  await fileStore.delete({
+  await store.functions.deleteFile({
+    parentId: store.item._id,
+    propertyName: props.propertyName,
     filters: {
       _id: props.modelValue._id
     }

@@ -107,6 +107,10 @@ const baseWebpackConfig = (params: BuildParams, mode?: 'production'): Configurat
     stats: {
       errorDetails: true
     },
+    externals: {
+      // path required by 'bson' module
+      'node:crypto': {}
+    }
   }
 
   try {

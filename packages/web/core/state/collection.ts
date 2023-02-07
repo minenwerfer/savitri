@@ -49,13 +49,14 @@ const state = <T=object>() => {
     filters: {},
     freshFilters: {},
     activeFilters: {},
-    filterPreset: {},
+    filtersPreset: {},
+    preferredTableProperties: [],
 
     selected: [],
     currentLayout: '',
 
     queryCache: {},
-    description: {},
+    _description: {},
     rawDescription: {},
 
     validationErrors: {},

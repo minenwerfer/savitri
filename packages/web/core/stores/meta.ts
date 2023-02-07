@@ -85,7 +85,7 @@ export default defineStore('meta', {
             filters,
             freshItem: deepClone(item),
             freshFilters: deepClone(filters),
-            description,
+            _description: description,
             rawDescription
           })
           continue
@@ -103,7 +103,7 @@ export default defineStore('meta', {
             filters,
             freshItem: deepClone(item),
             freshFilters: deepClone(filters),
-            description,
+            _description: description,
             rawDescription
           }),
 

@@ -23,7 +23,7 @@ const makeHint = (pos: number, style?: string) => {
   return hint
 }
 
-export default {
+const draggable: Directive = {
   mounted: (el, _binding, vnode) => {
     const coords = {
       active: false,
@@ -101,4 +101,6 @@ export default {
     document.addEventListener('mousedown', dragStart)
     document.addEventListener('mouseup', dragEnd)
   },
-} as Directive
+}
+
+export default draggable

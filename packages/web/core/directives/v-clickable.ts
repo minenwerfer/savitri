@@ -1,6 +1,6 @@
 import type { Directive } from 'vue'
 
-export default {
+const clickable: Directive = {
   mounted: (el, binding) => {
     if( window.matchMedia('(min-width: 600px)').matches ) {
       const cursor = binding.value?.blocked
@@ -11,4 +11,6 @@ export default {
       el.style['user-select'] = 'none'
     }
   }
-} as Directive
+}
+
+export default clickable

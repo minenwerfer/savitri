@@ -1,11 +1,13 @@
 import { Directive } from 'vue'
 import { useStore } from '../state'
 
-export default {
+const theme: Directive = {
   mounted(_, binding) {
     useStore('meta').themeOverride = binding.arg
   },
   unmounted() {
     useStore('meta').themeOverride = ''
   }
-} as Directive
+}
+
+export default theme

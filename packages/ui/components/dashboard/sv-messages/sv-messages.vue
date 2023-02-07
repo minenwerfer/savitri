@@ -112,7 +112,7 @@ const pushMessage = async () => {
     _id: subscription.value._id,
     message,
     item: itemInfo.value
-  })
+  }, { insert: true })
 
   messageStore.clearItem()
 }

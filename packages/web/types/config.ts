@@ -1,9 +1,12 @@
-import type { RouteRecordRaw } from 'vue-router'
-import type { RouterExtension } from '../core/router'
+import type { App } from 'vue'
+import type { Router, RouteRecordRaw } from 'vue-router'
+import type { extendRouter, RouterExtension } from '../core/router'
 
-export type Plugin = {
-  routerExtension?: RouterExtension
-}
+export type Plugin = (config: {
+  app: App
+  router: Router
+  extendRouter: typeof extendRouter
+}) => void
 
 export type MenuSchema = Record<string, {
   roles?: Array<string>

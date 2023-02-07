@@ -1,6 +1,6 @@
 import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
 import type { CollectionStore, CollectionState } from '../../types/state'
-import { fromEntries, deepClone } from '@semantic-api/common'
+import { fromEntries, deepClone, deepMerge } from '@semantic-api/common'
 import { deepDiff } from './helpers'
 import { useStore } from './use'
 
@@ -24,6 +24,25 @@ export type Getters = Record<`$${string}`, any> & {
 type GettersFunctions = Record<string, (this: Getters & CollectionStore) => any>
 
 const getters: GettersFunctions = {
+  description() {
+    if( this._description.preferred ) {
+      const userStore = useStore('user')
+      const description = Object.assign({}, this._description)
+      const toMerge = {}
+
+      userStore.$currentUser.roles.forEach((role: string) => {
+        if( role in this._description.preferred! ) {
+          deepMerge(toMerge, this._description.preferred![role])
+        }
+      })
+
+      deepMerge(description, toMerge, { arrays: false })
+      return description
+    }
+
+    return this._description
+  },
+
   properties() {
     return this.description.properties
   },
@@ -50,8 +69,12 @@ const getters: GettersFunctions = {
   },
 
   tableProperties() {
-    return this.description.table
-      ? this.useProperties(this.description.table)
+    const properties = this.preferredTableProperties.length > 0
+      ? this.preferredTableProperties
+      : this.description.table
+
+    return properties
+      ? this.useProperties(properties)
       : this.properties
   },
 

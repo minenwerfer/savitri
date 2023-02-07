@@ -2,6 +2,7 @@
   <h1
     v-if="instanceVars.signinText"
     v-html="instanceVars.signinText"
+    style="font-size: 2.4rem"
   ></h1>
   <sv-form
     :form-data="userStore.credentials"

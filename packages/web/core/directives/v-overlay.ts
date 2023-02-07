@@ -5,7 +5,7 @@ const __layer = {
   lastIndex: ''
 }
 
-export default {
+const overlay: Directive = {
   mounted: (el, binding) => {
     if( binding.value?.condition === false ) {
       return
@@ -54,4 +54,6 @@ export default {
     el.previousElementSibling?.remove()
     __layer.last -= 10
   }
-} as Directive
+}
+
+export default overlay

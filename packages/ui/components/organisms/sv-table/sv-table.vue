@@ -64,6 +64,7 @@
           <slot
             v-if="`row-${column}` in $slots"
             v-bind="{
+              store,
               column,
               property,
               row
@@ -151,9 +152,14 @@
                 v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
                 :key="`subvalue-${index}`"
               >
-                <div v-if="typeof row[column]?.[subvalue] !== 'object'">
-                  {{ row[column]?.[subvalue] }}
-                </div>
+                {{
+                  store.formatValue({
+                    value: row[column],
+                    key: column,
+                    property,
+                    index: subvalue
+                  })
+                }}
               </div>
             </div>
           </div>

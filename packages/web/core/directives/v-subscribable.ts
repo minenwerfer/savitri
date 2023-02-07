@@ -11,7 +11,7 @@ export type Subscription = {
 }
 
 
-export default {
+const subscribable: Directive = {
   mounted: (el, binding, vnode) => {
     if( vnode.props?._subscribeed ) {
       return
@@ -44,4 +44,6 @@ export default {
     el.appendChild(subscribeHint)
   },
 
-} as Directive
+}
+
+export default subscribable

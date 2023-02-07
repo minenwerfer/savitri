@@ -14,6 +14,7 @@
   `">
     <!-- box content -->
     <div
+      data-component="box"
       :class="`
         box__content
         ${isFloating && 'box__content--floating'}

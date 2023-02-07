@@ -142,12 +142,12 @@ const closePanel = () => {
 const closeComponent = async (subscription: Subscription) => {
   await subscriptionStore.functions.unsubscribe({
     identifier: subscription.identifier
-  })
+  }, { insert: true })
   closePanel()
 }
 
 const clearComponents = async () => {
-  await subscriptionStore.functions.clear()
+  await subscriptionStore.functions.clear(null, { insert: true })
   subscriptionStore.clearItems()
   closePanel()
 }

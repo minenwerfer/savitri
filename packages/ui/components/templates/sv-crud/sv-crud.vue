@@ -4,7 +4,7 @@
     class="crud"
   >
     <div
-      v-if="store.description.filterPresets"
+      v-if="store.description.filtersPresets"
       class="crud__filter-presets"
     >
       <div
@@ -20,7 +20,7 @@
       </div>
       <div
         v-clickable
-        v-for="([presetName, preset]) in Object.entries(store.description.filterPresets)"
+        v-for="([presetName, preset]) in Object.entries(store.description.filtersPresets)"
         :key="`filter-preset-${presetName}`"
 
         :class="`
@@ -154,7 +154,7 @@ import {
 
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, useParentStore, useAction, CollectionStore } from '../../../../web'
-import type { Layout } from '@semantic-api/types'
+import type { Layout, FiltersPreset } from '@semantic-api/types'
 
 import {
   SvBox,
@@ -239,9 +239,9 @@ onMounted(() => {
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
 
-  if( route.hash && store.description.filterPresets ) {
+  if( route.hash && store.description.filtersPresets ) {
     const presetName = route.hash.slice(1)
-    togglePreset(presetName, store.description.filterPresets[presetName])
+    togglePreset(presetName, store.description.filtersPresets[presetName])
     return
   }
 
@@ -254,7 +254,8 @@ onUnmounted(() => {
   const getFilters = () => store.filters
   const oldFilters = getFilters()
   store.clearFilters()
-  store.filterPreset = {}
+  store.filtersPreset = {}
+  store.preferredTableProperties = []
 
   if( Object.keys(oldFilters).length > 0 ) {
     const filters = getFilters()
@@ -354,8 +355,10 @@ const toggleLayout = () => {
     : 'tabular'
 }
 
-const togglePreset = (presetName: string, preset: any) => {
-  store.filterPreset = preset.filters
+const togglePreset = (presetName: string, preset: FiltersPreset) => {
+  store.filtersPreset = preset.filters
+  store.preferredTableProperties = preset.table || []
+
   store.pagination.offset = 0
   store.filter()
   router.push({ hash: presetName ? `#${presetName}` : '' })

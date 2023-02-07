@@ -88,9 +88,9 @@ const actionsAndMutations: Actions & Mutations = {
       get: (target, verb: string) => {
         return async (...args: any[]) => {
           const result = await target.custom(verb, ...args)
-          if( result?._id ) {
-            return this.insertItem(result, true)
-          }
+          // if( result?._id ) {
+          //   return this.insertItem(result, true)
+          // }
 
           return result
         }
@@ -144,6 +144,10 @@ const actionsAndMutations: Actions & Mutations = {
       })
 
     const data = (await promise)?.data
+    if( options?.insert ) {
+      this.insertItem(data)
+    }
+
     return !options?.fullResponse
       ? data.result
       : data
@@ -276,7 +280,7 @@ const actionsAndMutations: Actions & Mutations = {
     return this.getAll({
       filters: {
         ...this.activeFilters,
-        ...this.filterPreset
+        ...this.filtersPreset
       },
       limit: this.pagination.limit,
       ...props||{}
@@ -339,16 +343,32 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   formatValue(args) {
-      const value = args.property.s$translate
-        ? I18N.global.tc(args.value||'')
-        : args.value
+    const value = args.property.s$translate
+      ? I18N.global.tc(args.value||'')
+      : args.value
 
-      return Collection.formatValue(
-        this.rawDescription as Pick<Description, 'properties'>,
-        value,
-        args.key,
-        args.property
-      )
+    if( args.property?.s$isReference ) {
+      const helperStore = this.store(args.property.s$referencedCollection!)
+      const property = helperStore.description.properties![args.index!]
+
+      if( property?.s$isReference ) {
+        return helperStore.formatValue({
+          property,
+          key: args.key,
+          index: args.index,
+          value: Array.isArray(args.value)
+            ? args.value.map((value) => value[args.index!])
+            : (args.value as Record<string, any>)[args.index!]
+        })
+      }
+    }
+
+    return Collection.formatValue(
+      value,
+      args.key,
+      args.property,
+      args.index
+    )
   },
 
   getIndexes(args) {

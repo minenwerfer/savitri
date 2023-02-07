@@ -50,7 +50,7 @@ const getQuadrant = (el: HTMLDivElement) => {
   return styles.join('')
 }
 
-export default {
+const wizard: Directive = {
   mounted: (el, binding) => {
     const options: WizardOptions = binding.value
 
@@ -152,4 +152,6 @@ export default {
 
     }, { immediate: true })
   }
-} as Directive
+}
+
+export default wizard

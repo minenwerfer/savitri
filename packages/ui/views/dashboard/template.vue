@@ -31,7 +31,7 @@
           </div>
 
           <h1 v-if="getLayoutOption('noTopbar') && !route.meta?.noTitle">
-            {{ viewTitle.capitalize() }}
+            {{ viewTitle }}
           </h1>
           <router-view />
         </div>

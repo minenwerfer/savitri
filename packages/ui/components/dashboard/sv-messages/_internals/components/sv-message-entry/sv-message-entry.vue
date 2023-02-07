@@ -20,9 +20,7 @@
         <div
           v-clickable
           v-if="owner._id === userStore.$currentUser._id"
-          @click="subscriptionStore.functions.pullMessage({
-            _id
-          })"
+          @click="subscriptionStore.functions.pullMessage({ _id }, { insert: true })"
         >
           {{ $t('remove') }}
         </div>

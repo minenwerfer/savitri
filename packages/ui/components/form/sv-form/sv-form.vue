@@ -86,8 +86,8 @@
           style="display: grid; row-gap: .4rem"
         >
           <div
-            v-for="(_, listIndex) in formData[key]"
-            :key="`rep-${key}${_}-${listIndex}`"
+            v-for="(value, listIndex) in formData[key]"
+            :key="`rep-${key}-${listIndex}`"
             style="display: flex; column-gap: .6rem; align-items: center"
           >
             <div style="flex-grow: 1">
@@ -99,7 +99,7 @@
                     ...property,
                     ...property.items
                   },
-                  value: _,
+                  value: value,
                   propertyName: key,
                   parentCollection: collectionName,
                   columns: layout?.[key]?.optionsColumns
@@ -309,7 +309,6 @@ const fieldStyle = (key:string, property: any) => {
     )
 
     if( !result.satisfied ) {
-      props.formData[key] = undefined
       style.push(`display: none;`)
     }
   }
