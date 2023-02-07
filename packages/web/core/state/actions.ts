@@ -1,4 +1,4 @@
-import * as Collection from '@semantic-api/common/collection'
+import { getIndexes, formatValue } from '@semantic-api/common'
 import { fromEntries, deepClone } from '@semantic-api/common'
 import type { Description } from '@semantic-api/types'
 
@@ -307,12 +307,12 @@ const actionsAndMutations: Actions & Mutations = {
         {
           name: 'cancel',
           title: I18N.global.tc('action.cancel'),
-          variant: 'transparent'
+          variant: 'transparent',
+          size: 'small'
         },
         {
           name: 'confirm',
           title: I18N.global.tc('action.confirm'),
-          size: 'large'
         },
       ]
     })
@@ -363,7 +363,7 @@ const actionsAndMutations: Actions & Mutations = {
       }
     }
 
-    return Collection.formatValue(
+    return formatValue(
       value,
       args.key,
       args.property,
@@ -372,7 +372,7 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   getIndexes(args) {
-    return Collection.getIndexes(
+    return getIndexes(
       this.rawDescription as Pick<Description, 'properties'>,
       args.key
     )

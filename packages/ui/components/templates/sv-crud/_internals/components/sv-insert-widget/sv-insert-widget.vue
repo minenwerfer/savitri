@@ -35,13 +35,13 @@
     </template>
     <template #footer>
       <sv-button
+        small
         variant="transparent"
         @clicked="cancel"
       >
         {{ $t('action.cancel') }}
       </sv-button>
       <sv-button
-        large
         :disabled="!store.insertReady || isInsertReadOnly"
         @clicked="insert"
       >

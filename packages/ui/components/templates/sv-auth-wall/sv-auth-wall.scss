@@ -5,10 +5,11 @@
   height: 100vh;
 
   background: blue;
-  background: linear-gradient(
-    120deg,
-    darkblue,
-    purple 50%
+  background: var(--authwall-background, linear-gradient(
+      120deg,
+      darkblue,
+      purple 50%
+    )
   );
 
   &__branding {

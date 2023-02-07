@@ -20,10 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
 import { SvBox, SvBranding } from '../..'
-
-provide('buttonSize', 'large')
 
 // const productName = inject('productName')
 // const productLogo = inject('productLogo')

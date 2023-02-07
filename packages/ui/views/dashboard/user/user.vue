@@ -21,15 +21,13 @@
 
     <template #footer>
       <sv-button
+        small
         variant="transparent"
         @clicked="extraPanel = false"
       >
         Cancelar
       </sv-button>
-      <sv-button
-        large
-        @clicked="insertExtra"
-      >
+      <sv-button @clicked="insertExtra">
         Salvar
       </sv-button>
     </template>
