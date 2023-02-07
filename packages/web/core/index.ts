@@ -12,7 +12,7 @@ import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter, extendRouter } from './router'
 // import { default as webpackVariables } from 'variables'
 
-import type { Plugin, AppOptions } from '../types'
+import type { Module, AppOptions } from '../types'
 import registerDirectives from './directives'
 import { useStore } from './state'
 
@@ -57,7 +57,7 @@ export const useApp = (config: AppOptions): Promise<{
   // }
 
   if( config.modules ) {
-    config.modules.forEach((plugin: Plugin) => {
+    config.modules.forEach((plugin: Module) => {
       plugin({
         app,
         router,

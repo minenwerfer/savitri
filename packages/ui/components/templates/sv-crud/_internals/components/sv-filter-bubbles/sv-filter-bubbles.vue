@@ -51,7 +51,7 @@ const printableFilters = computed(() => {
     description: string,
     key: string,
     formatted: string
-  }>, [key, filter]) => {
+  }>, [key, filter]: [string, any]) => {
     const property = store.description.properties[key]
     const formatted = (() => {
       if( !property ) {
@@ -59,13 +59,11 @@ const printableFilters = computed(() => {
       }
 
       if( property.s$isReference ) {
-        if( property.type === 'array' ) {
-          return store.formatValue({
-            value: filter,
-            key,
-            property
-          })
-        }
+        return store.formatValue({
+          value: filter,
+          key,
+          property
+        })
       }
 
       if( ['date', 'date-time'].includes(property.format) ) {
@@ -80,11 +78,7 @@ const printableFilters = computed(() => {
         return `${d1} - ${d2}`
       }
 
-      return store.formatValue({
-        value: filter,
-        key,
-        property
-      })
+      return filter?.$regex || filter
     })()
 
     if( !formatted ) {

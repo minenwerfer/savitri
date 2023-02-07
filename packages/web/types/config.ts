@@ -2,7 +2,7 @@ import type { App } from 'vue'
 import type { Router, RouteRecordRaw } from 'vue-router'
 import type { extendRouter, RouterExtension } from '../core/router'
 
-export type Plugin = (config: {
+export type Module = (config: {
   app: App
   router: Router
   extendRouter: typeof extendRouter
@@ -19,6 +19,6 @@ export type AppOptions = {
   i18n?: any
   menuSchema?: MenuSchema
   routerExtension?: RouterExtension
-  modules?: Array<Plugin>
+  modules?: Array<Module>
   routes?: Array<RouteRecordRaw>
 }

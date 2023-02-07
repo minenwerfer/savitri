@@ -184,11 +184,11 @@ const actionsAndMutations: Actions & Mutations = {
   getAll(_payload)  {
     const payload = Object.assign({}, _payload)
 
-    if( !payload.limit ) {
+    if( typeof payload.limit !== 'number' ) {
       payload.limit = this.pagination.limit
     }
 
-    if( !payload.offset ) {
+    if( typeof payload.offset !== 'number' ) {
       payload.offset = this.pagination.offset
     }
 
