@@ -27,9 +27,3 @@ input[type=number] {
 ::-webkit-scrollbar {
   width: 8px;
 }
-
-.main--dark {
-  [data-image=logo] {
-    filter: grayscale(1) brightness(10);
-  }
-}

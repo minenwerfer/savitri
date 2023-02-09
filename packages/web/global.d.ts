@@ -1,6 +1,7 @@
 declare namespace global {
   var INSTANCE_VARS: {
     themes?: Array<string>
+    darkThemes?: Array<string>
     dashboardLayout?: Record<string, {
       noTopbar?: boolean
     }>

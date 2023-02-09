@@ -1,6 +1,6 @@
 <template>
   <img
-    src="/static/logo.png"
+    :src="alt ? '/static/logo-alt.png' : '/static/logo.png'"
     data-image="logo"
 
     class="branding"
@@ -12,6 +12,7 @@
 import { useRouter } from 'vue-router'
 
 type Props = {
+  alt?: boolean
   click?: 'homepage' | 'dashboard'
 }
 

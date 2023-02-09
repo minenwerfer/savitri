@@ -9,6 +9,7 @@
     <sv-branding
       v-clickable
       v-if="getLayoutOption('noTopbar')"
+      :alt="instanceVars.darkThemes?.includes(metaStore.theme)"
       click="dashboard"
       class="menu__branding"
     ></sv-branding>

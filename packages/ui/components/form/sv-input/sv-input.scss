@@ -4,12 +4,12 @@
   .input {
     @include themed() {
       &__container {
-        border: 1px solid t(foreground-color);
+        border: 1px solid t(brand-color);
       }
 
       &__icon {
         :deep(svg) {
-          fill: t(foreground-color);
+          fill: t(brand-color);
         }
       }
     }
@@ -67,7 +67,7 @@
     }
 
     &--bold {
-      padding: .95rem;
+      padding: .9rem;
       font-size: 11.5pt;
     }
 

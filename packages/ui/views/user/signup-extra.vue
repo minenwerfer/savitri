@@ -1,11 +1,14 @@
 <template>
-  <sv-icon
-    v-clickable
-    name="arrow-left"
-    @click="router.push({ name: 'user-signup' })"
-  >
-    Voltar
-  </sv-icon>
+  <div>
+    <h1>Quase lá</h1>
+    <sv-icon
+      v-clickable
+      name="arrow-left"
+      @click="router.push({ name: 'user-signup' })"
+    >
+      Voltar
+    </sv-icon>
+  </div>
 
   <sv-form
     v-if="userExtraStore && instanceVars.signupExtraProperties?.length !== 0"

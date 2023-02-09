@@ -1,9 +1,23 @@
 <template>
-  <h1
-    v-if="instanceVars.signinText"
-    v-html="instanceVars.signinText"
-    style="font-size: 2.4rem"
-  ></h1>
+  <div style="text-align: center">
+    <h1
+      v-if="instanceVars.signinText"
+      v-html="instanceVars.signinText"
+      style="font-size: 2.4rem; margin-bottom: .8rem"
+    ></h1>
+    <div
+      v-if="instanceVars.signupForm"
+    >
+      <span>Não possui uma conta?</span>
+      <span 
+        v-clickable
+        style="color: #2d96fa"
+        @click="router.push({ name: 'user-signup' })"
+      >
+        Criar uma conta
+      </span>
+    </div>
+  </div>
   <sv-form
     :form-data="userStore.credentials"
     :form="{
@@ -44,15 +58,6 @@
     >
       Continuar como {{ userStore.$currentUser.first_name }}
     </sv-button>
-  </div>
-
-  <div
-    v-if="instanceVars.signupForm"
-    v-clickable
-    class="signin__action"
-    @click="router.push({ name: 'user-signup' })"
-  >
-    Não possui uma conta?
   </div>
 </template>
 

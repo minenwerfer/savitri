@@ -348,7 +348,7 @@ const actionsAndMutations: Actions & Mutations = {
       : args.value
 
     if( args.property?.s$isReference ) {
-      const helperStore = this.store(args.property.s$referencedCollection!)
+      const helperStore = useStore(args.property.s$referencedCollection!)
       const property = helperStore.description.properties![args.index!]
 
       if( property?.s$isReference ) {

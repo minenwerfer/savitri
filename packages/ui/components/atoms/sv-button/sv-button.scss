@@ -31,7 +31,7 @@
       }
     }
 
-    &--normal {
+    &--normal, &--brand {
       color: t(background-color);
       background: t(button-background-color);
       border: 1px solid t(button-border-color);
@@ -41,6 +41,10 @@
       }
 
       font-weight: bold;
+    }
+
+    &--brand {
+      background: t(brand-color);
     }
   }
 

@@ -39,6 +39,7 @@ type Variant =
   'normal'
   | 'alt'
   | 'transparent'
+  | 'brand'
 
 type Props = {
   size?: Size
