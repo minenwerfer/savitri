@@ -38,12 +38,12 @@ interface ActionsAux {
   $customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
 
   get(payload: ActionFilter, options?: ActionOptions): Promise<any>
-  getAll(payload: ActionFilter): Promise<any>
+  getAll(payload: ActionFilter, options?: ActionOptions): Promise<any>
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
-  deepInsert(payload?: { what: Item }): Promise<Item>
-  delete(payload: { filters?: Item, _id?: ItemId }): Promise<Item>
-  deleteAll(payload: { filters?: Item, _id?: ItemId }): Promise<Item>
-  filter(props?: ActionFilter): Promise<any>
+  deepInsert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
+  delete(payload: { filters?: Item, _id?: ItemId }, options?: ActionOptions): Promise<Item>
+  deleteAll(payload: { filters?: Item, _id?: ItemId }, options?: ActionOptions): Promise<Item>
+  filter(props?: ActionFilter, options?: ActionOptions): Promise<any>
   updateItems(): Promise<any>
   clearFilters(): CollectionState<any>['freshFilters']
   ask(props: {

@@ -33,16 +33,17 @@ const httpMethodWrapper = (
     .catch(async (error: any) => {
       const metaStore = useStore('meta')
 
+      if( error.logout || ['JsonWebTokenError', 'TokenExpiredError'].includes(error.name) ) {
+        sessionStorage.clear()
+        ROUTER.push({ name: 'user-signin' })
+        return
+      }
+
       if( !error.silent ) {
         metaStore.spawnModal({
           title: 'Error',
           body: error
         })
-      }
-
-      if( error.logout || ['JsonWebTokenError', 'TokenExpiredError'].includes(error.name) ) {
-        sessionStorage.clear()
-        ROUTER.push({ name: 'user-signin' })
       }
 
       console.trace(error)

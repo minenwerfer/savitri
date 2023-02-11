@@ -57,18 +57,18 @@ export const useApp = (config: AppOptions): Promise<{
   // }
 
   if( config.modules ) {
-    config.modules.forEach((plugin: Module) => {
-      plugin({
+    config.modules.forEach((module: Module) => {
+      module({
         app,
         router,
         extendRouter
       })
-      // if( plugin.routerExtension ) {
-      //   extendRouter(router, plugin.routerExtension)
+      // if( module.routerExtension ) {
+      //   extendRouter(router, module.routerExtension)
       // }
 
-      // if( plugin.storeExtension ) {
-      //   extendStore(store, plugin.storeExtension)
+      // if( module.storeExtension ) {
+      //   extendStore(store, module.storeExtension)
       // }
     })
   }

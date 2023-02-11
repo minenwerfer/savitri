@@ -10,7 +10,7 @@
 
     <div class="message__body">
       <div class="message__metadata">
-        {{ new Date(created_at).getRelativeTimeFromNow() }}
+        <sv-icon small name="calendar-alt">{{ new Date(created_at).getRelativeTimeFromNow() }}</sv-icon>
       </div>
       <p class="message__content">
         {{ content }}
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import type { User } from '@semantic-api/system'
 import { useStore } from '@savitri/web'
-import { SvUserPicture } from '../../../../../..'
+import { SvIcon, SvUserPicture } from '../../../../../..'
 
 type Props = {
   _id: string

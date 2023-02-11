@@ -8,6 +8,7 @@
             : 'padding: .5rem 0'
       ">
         <sv-button
+          small
           v-if="!addVisible"
           icon="plus"
           @clicked="addVisible = true"
@@ -18,13 +19,16 @@
           v-else
           v-bind="{
             form: includeTitle
-              ? messageStore.properties
-              : messageStore.useProperties(['content']),
-            formData: messageStore.item
+              ? subscriptionMessageStore.properties
+              : subscriptionMessageStore.useProperties(['content']),
+            formData: subscriptionMessageStore.item
           }"
         >
           <template #footer>
-            <sv-button @clicked="pushMessage">
+            <sv-button 
+              :disabled="!subscriptionMessageStore.item.content"
+              @clicked="pushMessage"
+            >
               {{ $t('send') }}
             </sv-button>
             <sv-button
@@ -38,7 +42,6 @@
         </sv-form>
       </div>
     </sv-box>
-
 
     <sv-box fill v-if="messages.length">
       <div
@@ -59,7 +62,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useStore } from '@savitri/web'
-import { SvGroup, SvBox, SvForm, SvButton } from '../..'
+import { SvGroup, SvBox, SvForm, SvButton, SvIcon } from '../..'
 import SvMessage from './_internals/components/sv-message-entry/sv-message-entry.vue'
 
 type Props = {
@@ -77,7 +80,7 @@ const props = defineProps<Props>()
 const addVisible = ref(false)
 
 const subscriptionStore = useStore('subscription')
-const messageStore = useStore('message')
+const subscriptionMessageStore = useStore('subscriptionMessage')
 
 const subscription = computed(() => props.modelValue || subscriptionStore.item)
 const messages = computed(() => {
@@ -107,14 +110,14 @@ watch(() => props.itemInfo, (item) => {
 }, { deep: true })
 
 const pushMessage = async () => {
-  const { title, ...message } = messageStore.condensedItem
+  const { title, ...message } = subscriptionMessageStore.condensedItem
   await subscriptionStore.functions.pushMessage({
     _id: subscription.value._id,
     message,
     item: itemInfo.value
   }, { insert: true })
 
-  messageStore.clearItem()
+  subscriptionMessageStore.clearItem()
 }
 </script>
 

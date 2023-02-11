@@ -45,7 +45,10 @@
     gap: 1rem;
   ">
     <sv-button
-      :disabled="userStore.isLoading"
+      :disabled="
+        userStore.isLoading
+        || !userStore.credentials.email
+        || !userStore.credentials.password"
       @clicked="authenticate"
     >
       Entrar

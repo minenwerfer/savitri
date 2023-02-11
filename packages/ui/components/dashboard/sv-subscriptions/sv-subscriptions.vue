@@ -1,62 +1,23 @@
 <template>
-  <div
-    v-clickable
-    v-if="subscriptionStore.itemsCount > 0"
-    :class="{
-      'panel-hint': true,
-      'panel-hint--topbarPadding': !getLayoutOption('noTopbar'),
-      'no-print': true
-    }"
-
-    @click="panelVisible = true"
-  >
-    {{ subscriptionStore.itemsCount }}
-  </div>
-  <div
-    v-if="panelVisible"
-    v-overlay="{
-      click: closePanel
-    }"
-    class="fixed"
-  >
-    <div 
-      v-if="sidebarVisible"
-      class="sidebar"
-    >
-      <div class="sidebar__header">
-        <div>{{ $t(sidebarType) }}</div>
-        <sv-icon
-          v-clickable
-          reactive
-          name="multiply"
-          @click="sidebarVisible = false"
-        ></sv-icon>
-      </div>
-      <component
-        fill
-        transparent
-        no-border
-        v-model="item"
-        :is="sidebarComponent"
-        style="border: 0"
-      ></component>
-    </div>
-
-    <div class="panel">
-      <div class="panel__top">
-        <div
-          v-clickable
-          @click="subscriptionStore.ask({ action: clearComponents })"
-        >
-          {{ $t('clear') }}
-        </div>
-        <sv-icon
-          v-clickable
-          reactive
-          name="multiply"
-          @click="closePanel"
-        ></sv-icon>
-      </div>
+  <div style="
+    display: grid;
+    grid-template-columns: .5fr 1.5fr;
+  ">
+    <sv-box>
+      <!-- <div class="panel__top"> -->
+      <!--   <div -->
+      <!--     v-clickable -->
+      <!--     @click="subscriptionStore.ask({ action: clearSubscriptions })" -->
+      <!--   > -->
+      <!--     {{ $t('clear') }} -->
+      <!--   </div> -->
+      <!--   <sv-icon -->
+      <!--     v-clickable -->
+      <!--     reactive -->
+      <!--     name="multiply" -->
+      <!--     @click="closePanel" -->
+      <!--   ></sv-icon> -->
+      <!-- </div> -->
       <div class="panel__entries">
         <div
           v-for="subscription in subscriptions"
@@ -101,7 +62,17 @@
           </div>
         </div>
       </div>
-    </div>
+    </sv-box>
+    <sv-box>
+      <component
+        fill
+        transparent
+        no-border
+        v-model="item"
+        :is="sidebarComponent"
+        style="border: 0"
+      ></component>
+    </sv-box>
   </div>
 </template>
 
@@ -109,7 +80,7 @@
 import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore, Subscription } from '@savitri/web'
-import { SvIcon } from '../..'
+import { SvBox } from '../..'
 import SvMessages from '../sv-messages/sv-messages.vue'
 import SvSubscribers from './_internals/components/sv-subscribers/sv-subscribers.vue'
 
@@ -123,7 +94,6 @@ const subscriptionStore = useStore('subscription')
 
 onMounted(subscriptionStore.getAll)
 
-const panelVisible = ref(false)
 const sidebarVisible = ref(false)
 const sidebarType = ref('')
 const sidebarComponent = ref({})
@@ -135,7 +105,6 @@ const subscriptions = computed(() => {
 })
 
 const closePanel = () => {
-  panelVisible.value = false
   sidebarVisible.value = false
 }
 
@@ -146,7 +115,7 @@ const closeComponent = async (subscription: Subscription) => {
   closePanel()
 }
 
-const clearComponents = async () => {
+const clearSubscriptions = async () => {
   await subscriptionStore.functions.clear(null, { insert: true })
   subscriptionStore.clearItems()
   closePanel()
@@ -165,7 +134,6 @@ const openSidebar = (type: keyof typeof sidebarComponents, subscription: Subscri
 
 const goToRoute = (route: string) => {
   router.push(route)
-  panelVisible.value = false
 }
 
 watch(() => subscriptionStore.item, (newItem) => {

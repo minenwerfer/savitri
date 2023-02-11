@@ -145,7 +145,7 @@ const actionsAndMutations: Actions & Mutations = {
 
     const data = (await promise)?.data
     if( options?.insert ) {
-      this.insertItem(data)
+      this.insertItem(data.result)
     }
 
     return !options?.fullResponse
@@ -181,7 +181,7 @@ const actionsAndMutations: Actions & Mutations = {
     )
   },
 
-  getAll(_payload)  {
+  getAll(_payload, options?)  {
     const payload = Object.assign({}, _payload)
 
     if( typeof payload.limit !== 'number' ) {
@@ -201,7 +201,7 @@ const actionsAndMutations: Actions & Mutations = {
         })
 
         return result
-      }
+      }, options
     )
   },
 
@@ -213,7 +213,7 @@ const actionsAndMutations: Actions & Mutations = {
     )
   },
 
-  async deepInsert(payload?) {
+  async deepInsert(payload?, options?) {
     const inlineReferences = this.inlineReferences
     const newItem = Object.assign({}, payload?.what || this.diffedItem) as Item
 
@@ -249,32 +249,34 @@ const actionsAndMutations: Actions & Mutations = {
 
     return this.insert({
       what: condenseItem(newItem)
-    })
+    }, options)
   },
 
-  async delete(payload) {
+  async delete(payload, options?) {
     return this.customEffect(
       'delete', {
         filters: {
           _id: payload.filters?._id || payload._id
         }
       },
-      this.removeItem
+      this.removeItem,
+      options
     )
   },
 
-  async deleteAll(payload) {
+  async deleteAll(payload, options?) {
     return this.customEffect(
       'deleteAll', {
         filters: {
           _id: payload.filters?._id || payload._id
         }
       },
-      this.removeItem
+      this.removeItem,
+      options
     )
   },
 
-  filter(props?) {
+  filter(props?, options?) {
     this.activeFilters = props?.filters || this.$filters
 
     return this.getAll({
@@ -284,7 +286,7 @@ const actionsAndMutations: Actions & Mutations = {
       },
       limit: this.pagination.limit,
       ...props||{}
-    })
+    }, options)
   },
 
   updateItems() {
@@ -294,7 +296,9 @@ const actionsAndMutations: Actions & Mutations = {
   clearFilters() {
     const filters = this.filters = deepClone(this.freshFilters)
     this.pagination.offset = 0
-    this.filter()
+    this.filter(undefined, {
+      unproxied: true
+    })
 
     return filters
   },
