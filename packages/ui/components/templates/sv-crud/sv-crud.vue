@@ -109,11 +109,12 @@
     ></sv-insert-widget>
     <sv-report-widget :collection="collection"></sv-report-widget>
 
-    <sv-group
-      :no-border="store.$currentLayout === 'grid'"
-      :preserve-inner-borders="store.$currentLayout === 'grid'"
-    >
-      <sv-box>
+    <!-- <sv-group -->
+    <!--   :no-border="store.$currentLayout === 'grid'" -->
+    <!--   :preserve-inner-borders="store.$currentLayout === 'grid'" -->
+    <!-- > -->
+    <div>
+      <sv-box transparent fill>
         <div class="crud__table-panel">
           <sv-pagination :collection="collection"></sv-pagination>
           <!-- <sv-records-summary :collection="collection"></sv-records-summary> -->
@@ -137,7 +138,8 @@
           ></slot>
         </template>
       </component>
-    </sv-group>
+    </div>
+    <!-- </sv-group> -->
 
   </div>
 </template>

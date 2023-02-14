@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  <div v-if="pagination" class="summary">
+  <div v-if="pagination" class="pagination__summary">
     Mostrando
     {{ pagination.offset }} a
     {{ pagination.offset + pagination.recordsCount }} de
