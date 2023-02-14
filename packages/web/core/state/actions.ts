@@ -352,17 +352,19 @@ const actionsAndMutations: Actions & Mutations = {
       : args.value
 
     if( args.property?.s$isReference ) {
+      const index = args.index || args.property.s$indexes?.[0]
+
       const helperStore = useStore(args.property.s$referencedCollection!)
-      const property = helperStore.description.properties![args.index!]
+      const property = helperStore.description.properties![index!]
 
       if( property?.s$isReference ) {
         return helperStore.formatValue({
           property,
           key: args.key,
-          index: args.index,
+          index,
           value: Array.isArray(args.value)
-            ? args.value.map((value) => value[args.index!])
-            : (args.value as Record<string, any>)[args.index!]
+            ? args.value.map((value) => value[index!])
+            : (args.value as Record<string, any>)?.[index!]
         })
       }
     }
