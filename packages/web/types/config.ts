@@ -6,11 +6,17 @@ export type Module = (config: {
   app: App
   router: Router
   extendRouter: typeof extendRouter
-}) => void
+}) => void;
+
+export type MenuAdvancedChildren = {
+  name: string
+  badgeFunction?: string
+  badgePayload?: any
+}
 
 export type MenuSchema = Record<string, {
   roles?: Array<string>
-  children: Array<string>
+  children: Array<string|MenuAdvancedChildren>
   shrink?: boolean
 }>
 

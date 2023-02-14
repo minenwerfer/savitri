@@ -308,6 +308,20 @@ const getters: GettersFunctions = {
   $currentLayout() {
     return this.currentLayout || (this.description.layout?.name||'tabular') as LayoutName
   },
+  
+  customGetter() {
+    this.customGetters;
+
+    return new Proxy(this, {
+      get: (_, key: string) => (payload: any) => {
+        this[key](payload).then((result: any) => {
+          this.customGetters[key] = result
+        })
+
+        return this.customGetters[key]
+      }
+    })
+  }
 }
 
 export default getters

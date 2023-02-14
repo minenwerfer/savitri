@@ -51,6 +51,7 @@ const state = <T=object>() => {
     activeFilters: {},
     filtersPreset: {},
     preferredTableProperties: [],
+    customGetters: {},
 
     selected: [],
     currentLayout: '',

@@ -173,6 +173,10 @@ const actionsAndMutations: Actions & Mutations = {
     return fn(response)
   },
 
+  count(payload) {
+    return this.custom('count', payload)
+  },
+
   async get(payload, options?) {
     return this.customEffect(
       'get', payload,

@@ -30,6 +30,13 @@
         @click="togglePreset(presetName, preset)"
       >
         {{ preset.name }}
+        <span v-if="preset.badgeFunction">
+          ({{
+            store.customGetter[preset.badgeFunction]({
+              filters: preset.filters
+            })
+          }})
+        </span>
       </div>
     </div>
     <div

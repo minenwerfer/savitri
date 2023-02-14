@@ -3,7 +3,7 @@ import type { Projection } from '@semantic-api/api'
 import type { CollectionStore, CollectionState } from '../../types/state'
 
 type CrudParameters = {
-  filters: any
+  filters: Record<string, any>
   limit: number
   offset: number
   project?: Projection<any>
@@ -33,16 +33,17 @@ type ItemId = Pick<Item, '_id'>
 interface ActionsAux {
   $functions: (...args: any[]) => any
   errorPopup(e: any): Promise<any>|void
-  custom(verb: string|null, payload?: string, options?: ActionOptions): Promise<any>
+  custom(verb: string|null, payload?: any, options?: ActionOptions): Promise<any>
   customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
   $customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
 
+  count(payload?: { filters: Record<string, any> }): Promise<number>
   get(payload: ActionFilter, options?: ActionOptions): Promise<any>
   getAll(payload: ActionFilter, options?: ActionOptions): Promise<any>
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
   deepInsert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
-  delete(payload: { filters?: Item, _id?: ItemId }, options?: ActionOptions): Promise<Item>
-  deleteAll(payload: { filters?: Item, _id?: ItemId }, options?: ActionOptions): Promise<Item>
+  delete(payload: { filters?: Record<string, any>, _id?: ItemId }, options?: ActionOptions): Promise<Item>
+  deleteAll(payload: { filters?: Record<string, any>, _id?: ItemId }, options?: ActionOptions): Promise<Item>
   filter(props?: ActionFilter, options?: ActionOptions): Promise<any>
   updateItems(): Promise<any>
   clearFilters(): CollectionState<any>['freshFilters']
