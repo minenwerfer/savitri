@@ -32,7 +32,7 @@
         {{ preset.name }}
         <span v-if="preset.badgeFunction">
           ({{
-            store.customGetter[preset.badgeFunction]({
+            store.customGetter[preset.badgeFunction](presetName, {
               filters: preset.filters
             })
           }})

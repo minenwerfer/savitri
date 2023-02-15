@@ -63,7 +63,13 @@
             :title="$tc(route.meta.title, 2).capitalize()"
             @click="onEntryClick(route)"
           >
-            {{ $tc(route.meta.title, 2).capitalize() }}
+            <span>{{ $tc(route.meta.title, 2).capitalize() }}</span>
+            <span v-if="route.badgeFunction">
+              ({{
+                useStore(route.badgeFunction.split('@')[0])
+                  .customGetter[route.badgeFunction.split('@')[1]]('menu', route.badgePayload)
+              }})
+            </span>
           </sv-icon>
         </div>
 
@@ -128,7 +134,10 @@ const getSchema = (schema: any, routes: Array<Route>): Array<Route&SchemaNode> =
   return schema.map((s) => {
     return typeof s === 'string'
       ? routes.find((route) => route.name === s)
-      : s
+      : {
+        ...s,
+        ...routes.find((route) => route.name === s.name)
+      }
   })
 }
 

@@ -14,6 +14,8 @@ export type Route = RouteMeta & Omit<RouteRecordRaw, 'children'> & {
   path: string
   children?: Array<Route>
   components?: any
+  badgeFunction?: string
+  badgePayload?: any
 }
 
 export type RouterExtensionNode = Array<Omit<Route, 'name'>>

@@ -1,5 +1,9 @@
 export type Condition = {
-  operator: string
+  operator:
+    'equal'
+    | 'unequal'
+    | 'in'
+    | 'notin'
   term1: string
   term2: string
   else?: any
