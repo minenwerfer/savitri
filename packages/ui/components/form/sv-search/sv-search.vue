@@ -118,7 +118,6 @@ const emit = defineEmits<{
   (e: 'changed'): void
 }>()
 
-provide('iconReactive', true)
 provide('storeId', property.s$referencedCollection!)
 
 const searchOnly = !property.s$inlineEditing || inject<boolean|null>('searchOnly', null)
