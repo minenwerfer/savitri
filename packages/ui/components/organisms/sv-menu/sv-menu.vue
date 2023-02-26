@@ -44,7 +44,6 @@
           {{ $tc(entry.meta?.title, 2).capitalize() }}
         </div>
 
-
         <!-- subroutes -->
         <div :class="`
           menu__routes

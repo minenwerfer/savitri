@@ -31,7 +31,7 @@ export type Item = Record<string, any> & {
 type ItemId = Pick<Item, '_id'>
 
 interface ActionsAux {
-  $functions: (...args: any[]) => any
+  $functions: (payload: any, options?: ActionOptions) => Actions & Record<string, any>
   errorPopup(e: any): Promise<any>|void
   custom(verb: string|null, payload?: any, options?: ActionOptions): Promise<any>
   customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>

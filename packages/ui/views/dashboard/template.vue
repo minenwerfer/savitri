@@ -67,7 +67,9 @@ onMounted(() => {
     }
   })
 
-  useStore('user').functions.ping()
+  useStore('user').functions.ping(null, {
+    skipLoading: true
+  })
 })
 </script>
 

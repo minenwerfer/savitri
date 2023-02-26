@@ -93,7 +93,7 @@ import {
 } from 'vue'
 
 import type { CollectionProperty } from '@semantic-api/types'
-import { useStore, useParentStore, useDebounce } from '../../../../web'
+import { useStore, useDebounce } from '../../../../web'
 import { SvIcon } from '../..'
 
 import SvSearchSelected from './_internals/components/sv-search-selected/sv-search-selected.vue'
@@ -123,12 +123,8 @@ provide('storeId', property.s$referencedCollection!)
 const searchOnly = !property.s$inlineEditing || inject<boolean|null>('searchOnly', null)
 const omitFormHeader = inject('omitFormHeader', false)
 
-const parentStore = useParentStore(props.parentCollection)
 const store = useStore(property.s$referencedCollection!)
-
-const indexes = parentStore.getIndexes({
-  key: props.propertyName
-})
+const indexes = props.property.s$indexes
 
 const expanded = ref(false)
 const matchingItems = ref<Array<Record<string, any> & { _id: string }>>([])

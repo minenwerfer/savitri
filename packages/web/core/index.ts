@@ -10,11 +10,10 @@ import { createPinia } from 'pinia'
 import { arraysIntersects } from '@semantic-api/common'
 import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter, extendRouter } from './router'
-// import { default as webpackVariables } from 'variables'
 
 import type { Module, AppOptions } from '../types'
-import registerDirectives from './directives'
 import { useStore } from './state'
+import registerDirectives from './directives'
 
 
 export const useApp = (config: AppOptions): Promise<{
@@ -52,10 +51,6 @@ export const useApp = (config: AppOptions): Promise<{
     extendRouter(router, routerExtension)
   }
 
-  // if( storeExtension ) {
-  //   extendStore(store, storeExtension)
-  // }
-
   if( config.modules ) {
     config.modules.forEach((module: Module) => {
       module({
@@ -63,13 +58,6 @@ export const useApp = (config: AppOptions): Promise<{
         router,
         extendRouter
       })
-      // if( module.routerExtension ) {
-      //   extendRouter(router, module.routerExtension)
-      // }
-
-      // if( module.storeExtension ) {
-      //   extendStore(store, module.storeExtension)
-      // }
     })
   }
 
@@ -85,7 +73,7 @@ export const useApp = (config: AppOptions): Promise<{
 
   VueUnicon.add([ ...Object.values(Icons) ] as Array<string>)
   app.use(VueUnicon as any)
-  app.use(VueLazyLoad)
+  app.use(VueLazyLoad, {})
 
   app.mixin({
     computed: {
@@ -125,7 +113,6 @@ export const useApp = (config: AppOptions): Promise<{
   Object.assign(window, {
     ROUTER: router,
     QUERY_CACHE: {},
-    // _store: store,
     I18N: i18n
   })
 

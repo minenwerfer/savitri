@@ -8,7 +8,7 @@ import type { Actions, Mutations, Item } from './actions.types'
 import { useStore } from './use'
 import { condenseItem } from './helpers'
 
-const { http, nonProxiedHttp } = useHttp()
+const { http, unproxiedHttp } = useHttp()
 
 const mutations: Mutations = {
   setItem(item) {
@@ -126,7 +126,7 @@ const actionsAndMutations: Actions & Mutations = {
       : this.$id
 
     const httpInstance = options?.unproxied
-      ? nonProxiedHttp
+      ? unproxiedHttp
       : http
 
     const promise = httpInstance[method.toLowerCase()](route, payload)

@@ -5,7 +5,7 @@ import { useStore } from './state'
 export default () => {
   return {
     http: proxiedHttp,
-    nonProxiedHttp: http,
+    unproxiedHttp: http,
     apiUrl: SV_API_URL
   }
 }

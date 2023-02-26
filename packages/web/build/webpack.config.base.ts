@@ -109,11 +109,12 @@ const baseWebpackConfig = (params: BuildParams, mode?: 'production'): Configurat
     },
     externals: {
       // path required by 'bson' module
-      'node:crypto': {}
+      'node:crypto': {},
     }
   }
 
   try {
+    console.log(`${appDir}/../../node_modules`)
     module.paths.push(`${appDir}/../../node_modules`)
     const tailwindAddon: any = require('@savitri/addon-tailwind').default(appDir);
 
