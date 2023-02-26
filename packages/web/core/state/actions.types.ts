@@ -65,7 +65,6 @@ interface ActionsAux {
     }
   ): string
 
-  getIndexes(args: { key: string, form: boolean }): ReadonlyArray<string>
   select(properties: Array<string>, item?: Record<string, any>): Record<string, any>
 }
 

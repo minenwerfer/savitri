@@ -1,4 +1,4 @@
-import { getIndexes, formatValue } from '@semantic-api/common'
+import { formatValue } from '@semantic-api/common'
 import { fromEntries, deepClone } from '@semantic-api/common'
 import type { Description } from '@semantic-api/types'
 
@@ -378,13 +378,6 @@ const actionsAndMutations: Actions & Mutations = {
       args.key,
       args.property,
       args.index
-    )
-  },
-
-  getIndexes(args) {
-    return getIndexes(
-      this.rawDescription as Pick<Description, 'properties'>,
-      args.key
     )
   },
 

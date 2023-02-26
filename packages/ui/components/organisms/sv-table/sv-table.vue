@@ -145,11 +145,11 @@
               </div>
             </div>
             <div v-if="
-              store?.getIndexes({ key: column })?.length > 1
+              property.s$indexes?.length > 1
                 && property.s$referencedCollection !== 'file'
             ">
               <div
-                v-for="(subvalue, index) in store.getIndexes({ key: column }).slice(1, 2)"
+                v-for="(subvalue, index) in property.s$indexes.slice(1, 2)"
                 :key="`subvalue-${index}`"
               >
                 {{
