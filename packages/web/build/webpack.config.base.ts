@@ -110,6 +110,7 @@ const baseWebpackConfig = (params: BuildParams, mode?: 'production'): Configurat
     externals: {
       // path required by 'bson' module
       'node:crypto': {},
+      'crypto': {},
     }
   }
 

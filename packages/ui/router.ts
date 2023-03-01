@@ -79,15 +79,6 @@ const privateRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: 'subscriptions',
-        name: 'dashboard-subscriptions',
-        component: () => import('./views/dashboard/subscriptions/subscriptions.vue'),
-        meta: {
-          title: 'Inscrições',
-          icon: 'user-circle'
-        }
-      },
-      {
         path: 'c/user',
         name: 'dashboard-user',
         component: () => import('./views/dashboard/user/user.vue'),

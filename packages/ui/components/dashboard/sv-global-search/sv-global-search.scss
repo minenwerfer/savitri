@@ -1,3 +1,5 @@
+@import 'style/theming';
+
 @keyframes pop {
   from {
     transform: translate(-50%, -50%) scale(.8);
@@ -21,8 +23,11 @@
   @media screen and (min-width: 600px) {
     width: auto;
     :deep([data-component=box]) {
-      box-shadow: 0 0 20px #888;
       border-radius: 18px;
+
+      @include themed() {
+        box-shadow: 0 0 20px t(shadow-color);
+      }
     }
   }
 }

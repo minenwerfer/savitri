@@ -1,20 +1,5 @@
+@import 'themes/default';
+
 :root {
   --menu-width: 16.8rem;
-  --default-input-padding: .6rem;
-
-  --default-brand-color: #003fb9;
-  --default-border-color: #e9e9e9;
-  --default-button-background-color: #000000ee;
-  --default-button-background-color-alt: #ddddddaa;
-  --default-button-background-color-hover: #dddddd;
-  --default-button-border-color: transparent;
-  --default-switch-background-color: #000;
-  --default-switch-border-color: transparent;
-  --default-foreground-color: #000;
-  --default-foreground-color-alt: #000;
-  --default-background-color: #fff;
-  --default-background-color-alt: #ededed;
-  --default-background-color-hover: #202aff30;
-  --default-topbar-background-color: rgb(255, 255, 255, .92);
-  --default-body-background: #f8f9fa;
 }

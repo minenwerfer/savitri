@@ -75,15 +75,6 @@
             @click="toggleLayout"
           ></sv-icon>
         </sv-info>
-        <sv-button
-          small
-          v-if="store.description.report"
-          icon="export"
-          variant="alt"
-          @clicked="isReportVisible = true"
-        >
-          Exportar
-        </sv-button>
         <sv-filter-widget :key="store.$id"></sv-filter-widget>
       </div>
       <div
@@ -114,7 +105,6 @@
         parentField
       }"
     ></sv-insert-widget>
-    <sv-report-widget :collection="collection"></sv-report-widget>
 
     <!-- <sv-group -->
     <!--   :no-border="store.$currentLayout === 'grid'" -->
@@ -167,7 +157,6 @@ import type { Layout, FiltersPreset } from '@semantic-api/types'
 
 import {
   SvBox,
-  SvGroup,
   SvButton,
   SvPagination,
   SvInfo,
@@ -176,14 +165,12 @@ import {
 } from '../../'
 
 import { getLayout } from './_internals/layouts'
-import SvReportWidget from './_internals/components/sv-report-widget/sv-report-widget.vue'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
 import SvInsertWidget from './_internals/components/sv-insert-widget/sv-insert-widget.vue'
 
 import {
   isInsertVisible,
   isInsertReadonly,
-  isReportVisible,
 
 } from './_internals/store'
 
