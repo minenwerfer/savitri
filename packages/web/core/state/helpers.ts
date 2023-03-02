@@ -18,6 +18,10 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
       }
     }
 
+    if( R.is(Object, value) && R.isEmpty(value) ) {
+      return a
+    }
+
     return {
       ...a,
       [key]: value?._id || value
