@@ -169,7 +169,7 @@ $section-padding: .8rem;
     @include themed() {
       border-top: 1px solid t(border-color);
       &--shadowed {
-        box-shadow: 0 -4px 20px t(border-color);
+        box-shadow: 0 -4px 20px t(shadow-color);
         z-index: 10;
       }
     }

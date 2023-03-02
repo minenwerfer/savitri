@@ -355,6 +355,10 @@ const actionsAndMutations: Actions & Mutations = {
       ? I18N.global.tc(args.value||'')
       : args.value
 
+    if( args.key in this.transformers ) {
+      return this.transformers[args.key](value)
+    }
+
     if( args.property?.s$isReference ) {
       const index = args.index || args.property.s$indexes?.[0]
 

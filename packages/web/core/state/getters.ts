@@ -324,6 +324,10 @@ const getters: GettersFunctions = {
         return this.customGetters[key]
       }
     })
+  },
+
+  transformers() {
+    return {}
   }
 }
 
