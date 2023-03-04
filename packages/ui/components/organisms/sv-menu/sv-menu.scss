@@ -87,7 +87,7 @@
     overflow-y: auto;
     overscroll-behavior: contain;
 
-    padding: 0 1rem;
+    padding-left: 1rem;
     margin-top: 1rem;
   }
 
@@ -99,7 +99,6 @@
     @include themed() {
       &:not(:last-child) {
         padding-bottom: .6rem;
-        border-bottom: 1px solid t(border-color);
       }
     }
   }
@@ -129,31 +128,30 @@
 
   &__route {
     column-gap: .5rem;
-    padding: .3rem .5rem;
+    padding: .55rem;
 
-    border: 1px solid transparent;
-    border-radius: 5px;
+    border: solid transparent;
+    border-width: 0 6px 0 0;
     white-space: nowrap;
 
     @include themed() {
-      &--current {
-        color: t(brand-color);
-        font-weight: bold;
-
-        :deep(svg) {
-          fill: t(brand-color);
-        }
+      &:not(:last-child) {
+        border-bottom: 1px solid t(border-color);
       }
 
       &:hover {
         background: t(background-color-alt);
       }
-    }
-  }
 
-  &__route-title {
-    white-space: nowrap;
-    // opacity: .8;
+      &--current {
+        color: t(brand-color);
+        border-color: t(brand-color);
+
+        :deep(svg) {
+          fill: t(brand-color);
+        }
+      }
+    }
   }
 
   &__bottom {

@@ -1,13 +1,4 @@
-export type Condition = {
-  operator:
-    'equal'
-    | 'unequal'
-    | 'in'
-    | 'notin'
-  term1: string
-  term2: string
-  else?: any
-}
+import type { Condition } from '@semantic-api/types'
 
 export const useCondition = (subject: any, condition: Condition) => {
   const {

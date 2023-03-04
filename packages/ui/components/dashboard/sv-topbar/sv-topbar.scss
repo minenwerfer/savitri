@@ -32,11 +32,10 @@
   &__branding {
     display: none;
     align-self: center;
-    height: 1.8rem;
+    height: 1.6rem;
     cursor: pointer;
 
     width: var(--menu-width);
-    // border-right: 1px solid #dedede;
 
     @media screen and (min-width: 600px) {
       display: flex;
