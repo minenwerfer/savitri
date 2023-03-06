@@ -37,6 +37,11 @@
 
     width: var(--menu-width);
 
+    :deep(img) {
+      width: 8rem;
+      height: 2rem;
+    }
+
     @media screen and (min-width: 600px) {
       display: flex;
     }

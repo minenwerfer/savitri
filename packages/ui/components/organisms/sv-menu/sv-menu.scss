@@ -24,15 +24,16 @@
     background: t(background-color);
 
     :deep(svg) {
-      width: 1.3rem;
+      width: 1.2rem;
       fill: t(foreground-color);
     }
-  }
 
-  &--with-branding {
-    @media screen and (min-width: 600px) {
-      top: 0;
-      height: 100vh;
+    &--with-branding {
+      @media screen and (min-width: 600px) {
+        top: 0;
+        height: 100vh;
+        box-shadow: 0 0 15px t(shadow-color-alt);
+      }
     }
   }
 
@@ -71,6 +72,7 @@
 
   &__branding {
     width: 8rem;
+    height: 2rem;
     align-self: center;
 
     margin: 1rem 0;
@@ -127,12 +129,13 @@
   }
 
   &__route {
-    column-gap: .5rem;
+    column-gap: .4rem;
     padding: .55rem;
 
     border: solid transparent;
     border-width: 0 6px 0 0;
     white-space: nowrap;
+    font-size: .85rem;
 
     @include themed() {
       &:not(:last-child) {

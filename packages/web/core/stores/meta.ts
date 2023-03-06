@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { deepClone, serialize, deserialize } from '@semantic-api/common'
+import { deepClone, deserialize } from '@semantic-api/common'
 import { Description } from '@semantic-api/types'
-// import { default as webpackVariables } from 'variables'
+
 import useHttp from '../http'
 import useCollection from '../state/collection'
 import { useStore, hasStore, registerStore } from '../state/use'
@@ -56,7 +56,7 @@ export default defineStore('meta', {
   actions: {
     async describeAll() {
       this.isLoading = true
-      const { data: response } = await http.get('_/meta/describeAll')
+      const response = (await http('_/meta/describeAll'))?.data
       const deserialized = deserialize(response)
 
       const descriptions: Record<CollectionName, Description> =
@@ -75,8 +75,6 @@ export default defineStore('meta', {
             `collection ${collectionName} has no properties`
           )
         }
-
-        // description.properties = await hydrateQuery(description.properties, false)
 
         if( hasStore(collectionName) ) {
           const store = useStore(collectionName)

@@ -1,67 +1,39 @@
-import { RequestProvider } from '@semantic-api/common'
+import { request } from '@semantic-api/common'
 import { SV_API_URL } from '@semantic-api/types'
 import { useStore } from './state'
 
 export default () => {
   return {
-    http: proxiedHttp,
-    unproxiedHttp: http,
+    http: call(proxiedHttp),
+    unproxiedHttp: call(request),
     apiUrl: SV_API_URL
   }
 }
 
-const http = new RequestProvider({
-  baseURL: SV_API_URL
-})
+const call = (target: typeof proxiedHttp | typeof request) => <Return=any>(...args: Parameters<typeof request<any>>) => {
+  args[0] = `${SV_API_URL}/${args[0]}`;
+  return (target<Return>).apply({}, args)
+}
 
-/**
- * @function
- * Catchs errors then spawns a modal.
- */
-const httpMethodWrapper = (
-  target: RequestProvider,
-  method: any,
-  ...args: any
-) => new Promise((resolve, reject) => {
-  const call = method.apply(target, ...args)
-  if( !(call instanceof Promise) ) {
-    return call
-  }
+const proxiedHttp = async <Return>(...args: Parameters<typeof request<any>>) => {
+  return request<Return>(...args).catch((error: any) => {
+    const metaStore = useStore('meta')
+    const userStore = useStore('user')
 
-  return call
-    .then(resolve)
-    .catch(async (error: any) => {
-      const metaStore = useStore('meta')
+    if( error.logout || ['JsonWebTokenError', 'TokenExpiredError'].includes(error.name) ) {
+      userStore.signout()
+      ROUTER.push({ name: 'user-signin' })
+      return
+    }
 
-      if( error.logout || ['JsonWebTokenError', 'TokenExpiredError'].includes(error.name) ) {
-        sessionStorage.clear()
-        ROUTER.push({ name: 'user-signin' })
-        return
-      }
+    if( !error.silent ) {
+      metaStore.spawnModal({
+        title: 'Error',
+        body: error
+      })
+    }
 
-      if( !error.silent ) {
-        metaStore.spawnModal({
-          title: 'Error',
-          body: error
-        })
-      }
-
-      console.trace(error)
-      reject(error)
-    })
-})
-
-const proxiedHttp = new Proxy(http, {
-  get: (target: any, key: string) => {
-    const method = target[key]
-    const subscribedMethods = [
-      'request',
-      'get',
-      'post'
-    ]
-
-    return subscribedMethods.includes(key)
-      ? (...args: any) => httpMethodWrapper(target, method, [...args])
-      : (typeof method === 'function' ? (...args: any) => method.apply(target, args) : method)
-  }
-})
+    console.trace(error)
+    throw error
+  })
+}

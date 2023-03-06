@@ -1,6 +1,5 @@
 import { formatValue } from '@semantic-api/common'
 import { fromEntries, deepClone } from '@semantic-api/common'
-import type { Description } from '@semantic-api/types'
 
 import useHttp from '../http'
 import useMetaStore from '../stores/meta'
@@ -125,11 +124,16 @@ const actionsAndMutations: Actions & Mutations = {
       ? `${this.$id}/${verb}`
       : this.$id
 
-    const httpInstance = options?.unproxied
+    const requester = options?.unproxied
       ? unproxiedHttp
       : http
 
-    const promise = httpInstance[method.toLowerCase()](route, payload)
+    const promise = requester(route, payload, {
+      method,
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
       .catch((err: any) => {
         if( err.validation ) {
           this.validationErrors = err.validation

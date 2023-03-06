@@ -70,7 +70,6 @@ import { PAGINATION_PER_PAGE_DEFAULTS } from '@semantic-api/types'
 import { useParentStore } from '../../../../web'
 
 import {
-  SvButton,
   SvBareButton,
   SvSelect,
   SvInput,

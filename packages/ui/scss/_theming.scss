@@ -16,7 +16,8 @@ $themed-properties: brand-color
   ,background-color-hover
   ,topbar-background-color
   ,body-background
-  ,shadow-color;
+  ,shadow-color
+  ,shadow-color-alt;
 
 @mixin themed() {
   @each $theme in $themes {

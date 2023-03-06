@@ -1,16 +1,6 @@
-@import 'theming';
-
-* {
-  @include themed() {
-    ::-webkit-scrollbar-track { background: t(background-color); }
-    ::-webkit-scrollbar-thumb { background: t(foreground-color); }
-    ::-webkit-scrollbar-thumb:hover { background: t(foreground-color); }
-
-    a:link, a:visited, a:hover, a:active {
-      color: inherit;
-      text-decoration: none;
-    }
-  }
+a:link, a:visited, a:hover, a:active {
+  color: inherit;
+  text-decoration: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -22,8 +12,4 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
   appearance: textfield;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
 }
