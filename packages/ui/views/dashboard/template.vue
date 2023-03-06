@@ -4,7 +4,6 @@
   <div class="template">
     <sv-topbar>
       <component :is="topbarSlot" v-if="topbarSlot"></component>
-      <sv-utilities></sv-utilities>
     </sv-topbar>
 
     <div class="template__main">
@@ -48,7 +47,6 @@ import { useRoute } from 'vue-router'
 import { useStore } from '../../../web'
 import { SvMenu, SvTopbar } from '../../components'
 
-import SvUtilities from './_internals/components/sv-utilities/sv-utilities.vue'
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
 const route = useRoute()

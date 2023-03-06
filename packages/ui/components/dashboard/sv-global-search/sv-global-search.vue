@@ -60,7 +60,7 @@ const search = async () => {
     return
   }
 
-  results.items = (await http.post('_/searchable/search', {
+  results.items = (await http('_/searchable/search', {
     query: query.value
     .replace(/(\(|\))/g, '')
     .split(',')
