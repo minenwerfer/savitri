@@ -1,6 +1,6 @@
 @import 'style/theming';
 
-.dropdown {
+.contextmenu {
   &__trigger {
     display: flex;
     justify-content: flex-start;
@@ -17,6 +17,7 @@
 
     @include themed() {
       background: t(background-color);
+      box-shadow: 0 2px 8px t(shadow-color);
       border: 1px solid t(border-color);
     }
   }
@@ -24,14 +25,10 @@
   &__item {
     display: flex;
     width: 100%;
-    padding: .4rem 1rem !important;
+    padding: .6rem !important;
 
     @include themed() {
       color: t(foreground-color);
-      &:not(:last-child) {
-        border-bottom: 1px solid t(border-color);
-      }
-
       &--reactive {
         &:hover {
           background: t(background-color-alt);

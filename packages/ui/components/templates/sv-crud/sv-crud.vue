@@ -4,43 +4,7 @@
     class="crud"
   >
     <div
-      v-if="store.description.filtersPresets"
-      class="crud__filter-presets"
-    >
-      <div
-        v-clickable
-        :class="`
-          crud__filter-preset-button
-          ${!route.hash && 'crud__filter-preset-button--active'}
-        `"
-
-        @click="togglePreset('', { filters: {} })"
-      >
-        {{ $t('all') }}
-      </div>
-      <div
-        v-clickable
-        v-for="([presetName, preset]) in Object.entries(store.description.filtersPresets)"
-        :key="`filter-preset-${presetName}`"
-
-        :class="`
-          crud__filter-preset-button
-          ${route.hash === `#${presetName}` && 'crud__filter-preset-button--active'}
-        `"
-        @click="togglePreset(presetName, preset)"
-      >
-        {{ preset.name }}
-        <span v-if="preset.badgeFunction">
-          ({{
-            store.customGetter[preset.badgeFunction](presetName, {
-              filters: preset.filters
-            })
-          }})
-        </span>
-      </div>
-    </div>
-    <div
-      v-if="!noControls"
+      v-if="!noControls && false"
       class="
         no-print
         crud__panel
@@ -77,25 +41,6 @@
         </sv-info>
         <sv-filter-widget :key="store.$id"></sv-filter-widget>
       </div>
-      <div
-        v-if="store.actions || $slots.actions"
-        :key="collection"
-        class="
-          crud__panel-control
-          crud__panel-control--custom
-        "
-      >
-        <sv-button
-          v-for="(actionProps, index) in store.actions"
-          :key="`action-${index}`"
-          :icon="actionProps.icon"
-          :disabled="store.selectedIds.length === 0 && actionProps.selection"
-          @clicked="call(actionProps)({ _id: selectedIds })"
-        >
-          {{ actionProps.name }}
-        </sv-button>
-        <slot v-if="$slots.actions" name="actions"></slot>
-      </div>
     </div>
 
     <sv-insert-widget
@@ -106,16 +51,13 @@
       }"
     ></sv-insert-widget>
 
-    <!-- <sv-group -->
-    <!--   :no-border="store.$currentLayout === 'grid'" -->
-    <!--   :preserve-inner-borders="store.$currentLayout === 'grid'" -->
-    <!-- > -->
     <div>
-      <sv-box transparent fill>
-        <div class="crud__table-panel">
-          <sv-pagination :collection="collection"></sv-pagination>
-          <!-- <sv-records-summary :collection="collection"></sv-records-summary> -->
-        </div>
+      <sv-box
+        transparent
+        fill
+        class="crud__table-panel"
+      >
+        <sv-pagination :collection="collection"></sv-pagination>
       </sv-box>
 
       <component
@@ -136,7 +78,6 @@
         </template>
       </component>
     </div>
-    <!-- </sv-group> -->
 
   </div>
 </template>
@@ -151,13 +92,12 @@ import {
 
 } from 'vue'
 
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore, useParentStore, useAction, CollectionStore } from '../../../../web'
-import type { Layout, FiltersPreset } from '@semantic-api/types'
+import type { Layout } from '@semantic-api/types'
 
 import {
   SvBox,
-  SvButton,
   SvPagination,
   SvInfo,
   SvIcon
@@ -171,6 +111,8 @@ import SvInsertWidget from './_internals/components/sv-insert-widget/sv-insert-w
 import {
   isInsertVisible,
   isInsertReadonly,
+  call,
+  actionEventBus
 
 } from './_internals/store'
 
@@ -204,24 +146,11 @@ parentStore = props.parentField
   ? useParentStore(props.parentCollection)
   : null
 
-const route = useRoute()
-const [call, actionEventBus] = useAction(store, router)
+const action = useAction(store, router)
+call.value = action[0]
+actionEventBus.value = action[1]
 
 const fetchItems = async () => {
-  /*
-  if( props.parentField ) {
-    if( !parentStore.item._id ) {
-      await parentStore.get({
-        filters: {
-          owner: userStore.$currentUser._id
-        }
-      })
-    }
-
-    store.setItems(parentStore.item[props.parentField]||[])
-    return
-  }
-  */
   return store.filter({
     project: [
       ...Object.keys(store.properties),
@@ -234,12 +163,6 @@ onMounted(() => {
   metaStore.view.title = props.collection
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
-
-  if( route.hash && store.description.filtersPresets ) {
-    const presetName = route.hash.slice(1)
-    togglePreset(presetName, store.description.filtersPresets[presetName])
-    return
-  }
 
   if( !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
     fetchItems()
@@ -264,7 +187,7 @@ onUnmounted(() => {
   }
 })
 
-watch(() => actionEventBus, async (event) => {
+watch(() => actionEventBus.value, async (event) => {
   if (
     [
       'spawnEdit',
@@ -340,7 +263,7 @@ watch(() => isInsertVisible, (value) => {
 
 const individualActions = computed(() => {
   return store.individualActions.map((action: any) => ({
-    click: call(action),
+    click: call.value(action),
     ...action
   }))
 })
@@ -349,15 +272,6 @@ const toggleLayout = () => {
   store.currentLayout = store.currentLayout === 'tabular'
     ? store.description.layout!.name
     : 'tabular'
-}
-
-const togglePreset = (presetName: string, preset: FiltersPreset) => {
-  store.filtersPreset = preset.filters
-  store.preferredTableProperties = preset.table || []
-
-  store.pagination.offset = 0
-  store.filter()
-  router.push({ hash: presetName ? `#${presetName}` : '' })
 }
 
 provide('storeId', computed(() => props.collection))

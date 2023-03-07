@@ -28,13 +28,13 @@ $section-padding: .8rem;
   &__content {
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
+    // border-radius: 5px;
     overflow: hidden;
 
     @include themed() {
       color: t(foreground-color);
       background: t(background-color);
-      border: 1px solid t(border-color);
+      // border: 1px solid t(border-color);
     }
 
     &--outer-header {
@@ -61,10 +61,6 @@ $section-padding: .8rem;
       .box__body,
       .box__footer {
         padding: 1.8rem 2.4rem;
-      }
-
-      @include themed() {
-        box-shadow: 0 0 20px t(shadow-color);
       }
     }
 
@@ -169,7 +165,7 @@ $section-padding: .8rem;
     @include themed() {
       border-top: 1px solid t(border-color);
       &--shadowed {
-        box-shadow: 0 -4px 20px t(shadow-color-alt);
+        box-shadow: 0 -4px 20px t(shadow-color);
         z-index: 10;
       }
     }

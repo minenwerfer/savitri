@@ -33,6 +33,7 @@ const overlay: Directive = {
 
       ${!binding.modifiers?.invisible && `
         background: rgba(65, 82, 105, .25);
+        backdrop-filter: blur(2px);
       `}
     `)
 

@@ -11,7 +11,7 @@ export default () => {
 }
 
 const call = (target: typeof proxiedHttp | typeof request) => <Return=any>(...args: Parameters<typeof request<any>>) => {
-  args[0] = `${SV_API_URL}/${args[0]}`;
+  args[0] = `${SV_API_URL}/${args[0]}`
   return (target<Return>).apply({}, args)
 }
 

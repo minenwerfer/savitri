@@ -41,10 +41,7 @@
       {{ metaStore.prompt.body }}
     </sv-prompt>
 
-    <div :class="`
-      main__toasts
-      ${getLayoutOption('noTopbar') || 'main__toasts--topbarPadding'}
-    `">
+    <div class=" main__toasts">
       <sv-toast
         v-for="toast in metaStore.toasts"
         v-bind="toast"

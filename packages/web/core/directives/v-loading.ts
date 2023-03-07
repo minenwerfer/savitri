@@ -21,6 +21,7 @@ const update = (el: HTMLElement, binding: DirectiveBinding) => {
   }
 
   const overlayElem = document.createElement('div')
+
   overlayElem.setAttribute('style', `
     position: absolute;
     top: 0;
@@ -28,13 +29,19 @@ const update = (el: HTMLElement, binding: DirectiveBinding) => {
     width: 100%;
     height: 100%;
 
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 1rem;
 
-    background: rgba(240, 240, 240, .8);
+    backdrop-filter: blur(30px);
   `)
 
-  overlayElem.innerHTML = 'Carregando...'
+  const innerElem = document.createElement('div')
+  innerElem.classList.add('loading')
+  innerElem.appendChild(document.createElement('div'))
+  innerElem.appendChild(document.createElement('div'))
+
+  overlayElem.appendChild(innerElem)
   el.setAttribute('style', `
     position: relative;
     cursor: wait;

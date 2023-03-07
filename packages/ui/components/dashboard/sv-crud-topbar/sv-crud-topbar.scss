@@ -1,0 +1,16 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  flex: 1;
+
+  &__presets {
+    display: flex;
+    gap: .4rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: .4rem;
+    margin-left: auto;
+  }
+}

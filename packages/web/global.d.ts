@@ -3,7 +3,6 @@ declare namespace global {
     themes?: Array<string>
     darkThemes?: Array<string>
     dashboardLayout?: Record<string, {
-      noTopbar?: boolean
     }>
   }
 }

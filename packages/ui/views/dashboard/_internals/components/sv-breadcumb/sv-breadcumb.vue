@@ -3,34 +3,26 @@
     no-print
     breadcumb
   ">
-    <router-link
-      v-for="(route, index) in routes"
-      :key="`route-${index}`"
-      :to="{ name: route.name, params: $route.params }"
-      class="breadcumb__link"
+    <sv-icon
+      small
+      :name="viewIcon"
+      style="
+        display: flex;
+        gap: .6rem;
+        font-weight: bold;
+        opacity: .8;
+      "
     >
-      {{ getTitle(route) || viewTitle }}
-    </router-link>
+      {{ viewTitle }}
+    </sv-icon>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { Route } from '../../../../../../web'
+import { SvIcon } from '../../../../../components'
 
-const getRoute = () => {
-  const route = useRoute()
-  return route.matched || [route]
-}
-
-const routes = computed(getRoute)
-
-const getTitle = (route: Route) => {
-  return route.meta?.title === '%viewTitle%'
-    ? null
-    : route.meta?.title||''
-}
+const route = useRoute()
 </script>
 
 <style scoped src="./sv-breadcumb.scss"></style>

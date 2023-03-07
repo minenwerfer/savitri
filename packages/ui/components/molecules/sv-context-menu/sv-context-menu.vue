@@ -1,29 +1,29 @@
 <template>
   <div
     v-if="actions.length > 0"
-    class="dropdown"
+    class="contextmenu"
   >
     <a
-      class="dropdown__trigger"
-      @click="dropdownVisible = true"
+      class="contextmenu__trigger"
+      @click="contextmenuVisible = true"
     >
       <slot></slot>
     </a>
     <div
-      v-if="dropdownVisible"
+      v-if="contextmenuVisible"
       v-overlay.invisible="{
         click: () => {
-          dropdownVisible = false
+          contextmenuVisible = false
         }
       }"
 
-      class="dropdown__content"
+      class="contextmenu__content"
     >
 
       <div>
         <div
           v-if="$slots.extra"
-          class="dropdown__item"
+          class="contextmenu__item"
         >
           <slot
             v-if="$slots.extra"
@@ -34,8 +34,8 @@
           v-for="(action, aindex) in filterActions(actions)"
           :key="`action-${aindex}`"
           class="
-            dropdown__item
-            dropdown__item--reactive
+            contextmenu__item
+            contextmenu__item--reactive
           "
           @clicked="onClick(action, subject)"
         >
@@ -75,7 +75,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const userStore = useStore('user')
-const dropdownVisible = ref(false)
+const contextmenuVisible = ref(false)
 
 const filterActions = (actions: Array<any>) => {
   return actions.filter((action: any) => {
@@ -91,8 +91,8 @@ const onClick = (action: Action, subject: any) => {
   action.click(subject)
   emit('actionClicked', { action, subject })
 
-  dropdownVisible.value = false
+  contextmenuVisible.value = false
 }
 </script>
 
-<style scoped src="./sv-dropdown.scss"></style>
+<style scoped src="./sv-context-menu.scss"></style>

@@ -17,7 +17,6 @@ export type MenuAdvancedChildren = {
 export type MenuSchema = Record<string, {
   roles?: Array<string>
   children: Array<string|MenuAdvancedChildren>
-  shrink?: boolean
 }>
 
 export type AppOptions = {

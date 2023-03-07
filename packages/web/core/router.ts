@@ -9,7 +9,6 @@ export type RouteMeta = {
   }
 }
 
-
 export type Route = RouteMeta & Omit<RouteRecordRaw, 'children'> & {
   path: string
   children?: Array<Route>

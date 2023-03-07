@@ -13,8 +13,12 @@
   --default-background-color: #fff;
   --default-background-color-alt: #ededed;
   --default-background-color-hover: #202aff30;
-  --default-topbar-background-color: rgb(255, 255, 255, .92);
-  --default-body-background: #f8f9fa;
-  --default-shadow-color: #888;
-  --default-shadow-color-alt: #ccc;
+  --default-body-background: #f9f9f9;
+  --default-shadow-color: #ccc;
+}
+
+.loading {
+  div {
+    border: 4px solid var(--default-brand-color) !important;
+  }
 }

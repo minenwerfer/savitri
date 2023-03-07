@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <sv-dropdown
+    <sv-context-menu
       v-bind="{
         actions: dropdownActions
       }"
@@ -35,14 +35,14 @@
           </option>
         </sv-select>
       </template>
-    </sv-dropdown>
+    </sv-context-menu>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useStore } from '../../../../../../../web'
-import { SvIcon, SvDropdown, SvSelect } from '../../../../../..'
+import { SvIcon, SvContextMenu, SvSelect } from '../../../../../..'
 
 const router = useRouter()
 const metaStore = useStore('meta')

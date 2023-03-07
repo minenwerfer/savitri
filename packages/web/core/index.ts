@@ -68,7 +68,6 @@ export const useApp = (config: AppOptions): Promise<{
   app.provide('i18n', i18n)
 
   app.provide('baseVersion', require('../package.json').version)
-  // app.provide('productVersion', require(`./package.json`).version)
   app.provide('dashboardLayout', global.INSTANCE_VARS.dashboardLayout || {})
 
   VueUnicon.add([ ...Object.values(Icons) ] as Array<string>)
@@ -81,15 +80,21 @@ export const useApp = (config: AppOptions): Promise<{
       currentUser: () => userStore.$currentUser,
       viewTitle: () => {
         const currentRoute = router.currentRoute.value
-        const title = currentRoute.meta?.title
+        const title = currentRoute.meta?.title as string
 
         if( !title ) {
           return
         }
 
-        return title === '%viewTitle%'
-          ? I18N.global.tc(currentRoute.params?.collection, 2).capitalize()
-          : title
+        return title.replace(
+          '%viewTitle%',
+          I18N.global.tc(currentRoute.params?.collection || '', 2).capitalize()
+        )
+      },
+      viewIcon: () => {
+        const currentRoute = router.currentRoute.value
+        return currentRoute.meta.icon
+          || metaStore.descriptions[currentRoute.params?.collection as string]?.icon
       }
     },
     methods: {

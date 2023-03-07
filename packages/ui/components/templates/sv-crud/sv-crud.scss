@@ -32,12 +32,20 @@
   }
 
   &__table-panel {
+    position: sticky;
+    top: 3.6rem;
+
     display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
+    padding: 0 2rem;
 
     justify-content: space-between;
-    padding: 1rem 0;
+    padding: .6rem 1rem;
+    z-index: 20;
+
+    @include themed() {
+      background: t(background-color);
+      border-bottom: 1px solid t(border-color);
+    }
 
     @media screen and (min-width: 600px) {
       flex-direction: row;

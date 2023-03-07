@@ -4,16 +4,7 @@
       menu
       no-print
       ${!visible && 'menu--hidden'}
-      ${getLayoutOption('noTopbar') && 'menu--with-branding'}
   `">
-    <sv-branding
-      v-clickable
-      v-if="getLayoutOption('noTopbar')"
-      :alt="instanceVars.darkThemes?.includes(metaStore.theme)"
-      click="dashboard"
-      class="menu__branding"
-    ></sv-branding>
-
     <sv-menu-header class="menu__header"></sv-menu-header>
 
     <!-- menu entries -->
@@ -23,32 +14,29 @@
         :key="`entry-${index}`"
         class="menu__entry"
       >
-        <sv-icon
-          v-clickable
-          v-if="visible && entry.shrink"
-          name="angle-up"
-          :class="`
-            menu__entry-title
-            ${shrink[index] && 'menu__entry-title--shrinked'}
-          `"
+        <!-- <sv-icon -->
+        <!--   v-clickable -->
+        <!--   v-if="visible && entry.shrink" -->
+        <!--   name="angle-up" -->
+        <!--   :class="` -->
+        <!--     menu__entry-title -->
+        <!--     ${shrink[index] && 'menu__entry-title--shrinked'} -->
+        <!--   `" -->
 
-          @click="shrink[index] = !shrink[index]"
-        >
-          {{ $tc(entry.meta?.title, 2).capitalize() }}
-        </sv-icon>
+        <!--   @click="shrink[index] = !shrink[index]" -->
+        <!-- > -->
+        <!--   {{ $tc(entry.meta?.title, 2).capitalize() }} -->
+        <!-- </sv-icon> -->
 
-        <div
-          v-else
-          class="menu__entry-title"
-        >
-          {{ $tc(entry.meta?.title, 2).capitalize() }}
-        </div>
+        <!-- <div -->
+        <!--   v-else -->
+        <!--   class="menu__entry-title" -->
+        <!-- > -->
+        <!--   {{ $tc(entry.meta?.title, 2).capitalize() }} -->
+        <!-- </div> -->
 
         <!-- subroutes -->
-        <div :class="`
-          menu__routes
-          ${(shrink[index] && visible) && 'menu__routes--shrinked'}
-        `">
+        <div class="menu__routes">
           <sv-icon
             v-clickable
             v-for="route in entry.children"
@@ -106,15 +94,6 @@ const props = defineProps<Props>()
 const metaStore = useStore('meta')
 const userStore = useStore('user')
 const router = useRouter()
-
-const shrink = ref<Record<string, boolean>>(
-  Object.values(props.schema).reduce((a: Record<string, boolean>, route: any, i) => {
-    return {
-      ...a,
-      [i]: !!route.shrink
-    }
-  }, {})
-)
 
 const onEntryClick = (route: Route & { meta: any }) => {
   if( route.name ) {
@@ -185,7 +164,7 @@ const isCurrent = (subroute: any) => {
     : subroute.path === (route.redirectedFrom?.path || route.path)?.split(/\/home$/)[0]
 }
 
-const routes = ref<Array<Route & { shrink?: boolean }>>(getRoutes())
+const routes = ref<Array<Route>>(getRoutes())
 const routesWithChildren = computed(() => (
   routes.value.filter((route) => route.children?.length! > 0)
 ))

@@ -17,7 +17,7 @@
       @add="$event.preventDefault()"
     ></sv-form>
     <template #extra>
-      <sv-dropdown
+      <sv-context-menu
         v-bind="{
           subject: store.item,
           actions: individualActions
@@ -31,7 +31,7 @@
           reactive
           name="ellipsis-h"
         ></sv-icon>
-      </sv-dropdown>
+      </sv-context-menu>
     </template>
     <template #footer>
       <sv-button
@@ -54,12 +54,12 @@
 <script setup lang="ts">
 import { inject, watch } from 'vue'
 import type { CollectionStore } from '../../../../../../../web'
-import { useStore, condenseItem } from '../../../../../../../web'
+import { useStore } from '../../../../../../../web'
 import {
   SvBox,
   SvForm,
   SvButton,
-  SvDropdown,
+  SvContextMenu,
   SvIcon
   
 } from '../../../../..'

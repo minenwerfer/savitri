@@ -73,18 +73,25 @@ const privateRoutes: Array<RouteRecordRaw> = [
       {
         path: 'c/:collection?',
         name: 'dashboard-crud',
-        component: () => import('./views/dashboard/crud-view/crud-view.vue'),
+        components: {
+          default: () => import('./views/dashboard/crud-view/crud-view.vue'),
+          topbar: () => import('./components/dashboard/sv-crud-topbar/sv-crud-topbar.vue')
+        },
         meta: {
-          title: '%viewTitle%'
+          title: '%viewTitle%',
         }
       },
       {
         path: 'c/user',
         name: 'dashboard-user',
-        component: () => import('./views/dashboard/user/user.vue'),
+        components: {
+          default: () => import('./views/dashboard/user/user.vue'),
+          topbar: () => import('./components/dashboard/sv-crud-topbar/sv-crud-topbar.vue')
+        },
         meta: {
           title: 'Usuários',
-          icon: 'user-circle'
+          icon: 'user-circle',
+          collection: 'user'
         }
       },
       {

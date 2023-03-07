@@ -65,15 +65,15 @@ const search = async () => {
     .replace(/(\(|\))/g, '')
     .split(',')
     .map((q: string) => q.trim())
-  })).data.result
+  }))?.data.result
 }
 
 const debounce = useDebounce({
   delay: 800
 })
 
-const [doLazySearch] = debounce(() => {
-  search()
+const [doLazySearch] = debounce(async () => {
+  await search()
   isTyping.value = false
 })
 

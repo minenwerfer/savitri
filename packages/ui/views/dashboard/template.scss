@@ -1,5 +1,7 @@
 @import 'style/theming';
 
+$top-height: 3.6rem;
+
 .template {
   @include themed() {
     color: t(foreground-color-alt);
@@ -10,10 +12,37 @@
     display: flex;
   }
 
-  &__top {
+  &__top,
+  &__view {
+    @include themed() {
+      background: t(background-color);
+    }
+  }
+
+  &__view {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: calc(100vh - $top-height);
+  }
+
+  &__top {
+    position: sticky;
+    top: 0;
+    height: $top-height;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    gap: 1.8rem;
+
+    padding: .4rem 1.6rem;
+
+    @include themed() {
+      opacity: .85;
+      border-bottom: 1px solid t(border-color);
+      backdrop-filter: blur(15px);
+    }
   }
 
   &__content {
@@ -34,26 +63,5 @@
     text-align: center;
     font-size: 11pt;
     font-weight: bold;
-  }
-
-  &__view {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 1rem;
-
-    @media screen and (min-width: 600px) {
-      padding: 2rem;
-    }
-  }
-
-  &__feedback-button {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    z-index: 30;
-    padding: .4rem 1.4rem;
-    border: 1px solid green;
-    background: #9f9;
   }
 }

@@ -8,14 +8,14 @@
     >
       <sv-picture
         :url="firstIfArray(item[layoutOptions.picture!])?.link"
-        style="height: 16rem"
+        style="height: 100%"
       ></sv-picture>
       <template #footer>
         <div class="grid__footer">
           <div>
             {{ item[layoutOptions.title!] }}
           </div>
-          <sv-dropdown
+          <sv-context-menu
             v-if="individualActions.length > 0"
             v-bind="{
               subject: item,
@@ -26,7 +26,7 @@
               reactive
               name="setting"
               ></sv-icon>
-          </sv-dropdown>
+          </sv-context-menu>
         </div>
       </template>
     </sv-box>
@@ -38,7 +38,7 @@ import { LayoutOptions } from '@semantic-api/types'
 import { useParentStore } from '../../../../../../../web'
 import {
   SvBox,
-  SvDropdown,
+  SvContextMenu,
   SvIcon,
   SvPicture
 

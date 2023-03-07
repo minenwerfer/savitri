@@ -18,16 +18,12 @@
   left: 50%;
   width: 100vw;
 
-  animation: pop .35s forwards;
+  animation: pop .25s forwards;
 
   @media screen and (min-width: 600px) {
     width: auto;
     :deep([data-component=box]) {
       border-radius: 18px;
-
-      @include themed() {
-        box-shadow: 0 0 20px t(shadow-color);
-      }
     }
   }
 }

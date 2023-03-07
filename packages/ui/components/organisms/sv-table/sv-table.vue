@@ -181,7 +181,7 @@
             >
               {{ action.name }}
             </sv-button>
-            <sv-dropdown
+            <sv-context-menu
               v-if="dropdownActions.length > 0"
               v-bind="{
                 subject: row,
@@ -192,7 +192,7 @@
                 reactive
                 name="setting"
               ></sv-icon>
-            </sv-dropdown>
+            </sv-context-menu>
           </div>
         </td>
         <div :id="`dropdown-${row._id}`"></div>
@@ -219,7 +219,7 @@ import {
   SvButton,
   SvIcon,
   SvPicture,
-  SvDropdown,
+  SvContextMenu,
   SvSwitch
 
 } from '../..'

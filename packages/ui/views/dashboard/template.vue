@@ -2,10 +2,6 @@
   <component v-if="runonceSlot" :is="runonceSlot"></component>
 
   <div class="template">
-    <sv-topbar>
-      <component :is="topbarSlot" v-if="topbarSlot"></component>
-    </sv-topbar>
-
     <div class="template__main">
       <sv-menu
         v-if="menuSchema"
@@ -23,17 +19,28 @@
           {{ notice }}
         </div>
 
-        <div class="template__view">
-          <div class="template__top">
-            <sv-breadcumb></sv-breadcumb>
+        <div class="template__top">
+          <sv-breadcumb></sv-breadcumb>
+          <router-view name="topbar"></router-view>
+          <div
+            v-if="$slots['dashboard-top']"
+            style="margin-left: auto"
+          >
             <slot name="dashboard-top"></slot>
           </div>
-
-          <h1 v-if="getLayoutOption('noTopbar') && !route.meta?.noTitle">
-            {{ viewTitle }}
-          </h1>
+        </div>
+        <div class="template__view">
           <router-view />
         </div>
+      </div>
+
+      <div style="
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: 15rem;
+      ">
+        <slot v-if="$slots.widgets" name="widgets"></slot>
       </div>
     </div>
   </div>
@@ -43,19 +50,14 @@
 
 <script setup lang="ts">
 import { onMounted, inject } from 'vue'
-import { useRoute } from 'vue-router'
 import { useStore } from '../../../web'
-import { SvMenu, SvTopbar } from '../../components'
+import { SvMenu } from '../../components'
 
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
-const route = useRoute()
 const metaStore = useStore('meta')
 const menuSchema = inject('menuSchema', {})
 const notice = inject('notice', null)
-
-const topbarSlot = inject('topbarSlot', null)
-const runonceSlot = inject('runonceSlot', null)
 
 onMounted(() => {
   metaStore.$patch({

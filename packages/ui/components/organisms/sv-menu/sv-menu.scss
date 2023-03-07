@@ -1,11 +1,44 @@
 @import 'style/theming';
 
+@mixin shrinked {
+  width: 0;
+
+  @media screen and (min-width: 600px) {
+    width: 4rem;
+    row-gap: 0;
+
+    ::-webkit-scrollbar {
+      width: 0 !important;
+    }
+
+    :deep([role=icon]) {
+      justify-content: center;
+    }
+
+    :deep(.header__info),
+    :deep([role=icon-label]) {
+      display: none;
+    }
+
+    :deep(.header__picture) {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    .menu__header,
+    .menu__entries {
+      width: auto;
+      padding: 0 .5rem;
+    }
+  }
+}
+
 .menu {
   position: sticky;
-  top: 3.2rem;
+  top: 0;
   left: 0;
-  width: var(--menu-width);
-  height: calc(100vh - 3.2rem);
+  width: 16rem;
+  height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -18,64 +51,22 @@
   overflow: hidden;
   user-select: none;
 
+  @media screen and (max-width: 1366px) {
+    @include shrinked;
+  }
+
   @include themed() {
     border-right: 1px solid t(border-color);
     color: t(foreground-color);
-    background: t(background-color);
 
     :deep(svg) {
       width: 1.2rem;
       fill: t(foreground-color);
     }
-
-    &--with-branding {
-      @media screen and (min-width: 600px) {
-        top: 0;
-        height: 100vh;
-        box-shadow: 0 0 15px t(shadow-color-alt);
-      }
-    }
   }
 
   &--hidden {
-    width: 0;
-
-    @media screen and (min-width: 600px) {
-      width: 4rem;
-      row-gap: 0;
-
-      ::-webkit-scrollbar {
-        width: 0 !important;
-      }
-
-      :deep([role=icon]) {
-        justify-content: center;
-      }
-
-      :deep(.header__info),
-      :deep([role=icon-label]) {
-        display: none;
-      }
-
-      :deep(.header__picture) {
-        width: 3rem;
-        height: 3rem;
-      }
-
-      .menu__header,
-      .menu__entries {
-        width: auto;
-        padding: 0 .5rem;
-      }
-    }
-  }
-
-  &__branding {
-    width: 8rem;
-    height: 2rem;
-    align-self: center;
-
-    margin: 1rem 0;
+    @include shrinked;
   }
 
   &__entries {
@@ -83,7 +74,7 @@
 
     display: flex;
     flex-direction: column;
-    row-gap: 1rem;
+    // row-gap: 1rem;
 
     overflow-x: hidden;
     overflow-y: auto;
@@ -100,7 +91,7 @@
 
     @include themed() {
       &:not(:last-child) {
-        padding-bottom: .6rem;
+        border-bottom: 1px solid t(border-color);
       }
     }
   }
@@ -114,23 +105,14 @@
     :deep(svg) {
       opacity: .6;
     }
-
-    &--shrinked {
-      :deep(svg) {
-        transform: rotate(180deg);
-      }
-    }
   }
 
   &__routes {
-    &--shrinked {
-      display: none;
-    }
   }
 
   &__route {
     column-gap: .4rem;
-    padding: .55rem;
+    padding: .5rem;
 
     border: solid transparent;
     border-width: 0 6px 0 0;
@@ -138,9 +120,9 @@
     font-size: .85rem;
 
     @include themed() {
-      &:not(:last-child) {
-        border-bottom: 1px solid t(border-color);
-      }
+      // &:not(:last-child) {
+      //   border-bottom: 1px solid t(border-color);
+      // }
 
       &:hover {
         background: t(background-color-alt);
@@ -148,7 +130,7 @@
 
       &--current {
         color: t(brand-color);
-        border-color: t(brand-color);
+        // border-color: t(brand-color);
 
         :deep(svg) {
           fill: t(brand-color);
