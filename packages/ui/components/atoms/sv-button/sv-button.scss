@@ -1,6 +1,17 @@
 @import 'style/theming';
 
+@keyframes progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
 .button {
+  position: relative;
   transition: all .2s;
   padding: .35em 1em;
   text-align: center;
@@ -12,6 +23,19 @@
 
     :deep(svg) {
       height: .95rem;
+    }
+
+    &--loading:before {
+      display: block;
+      position: absolute;
+      left: 0;
+      content: ' ';
+      background: #000;
+      opacity: .4;
+      height: 100%;
+      width: 2rem;
+
+      animation: progress 1s forwards;
     }
 
     &--alt,

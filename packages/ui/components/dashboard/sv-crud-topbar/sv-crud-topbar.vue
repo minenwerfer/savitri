@@ -7,10 +7,15 @@
       <div
         v-clickable
         :class="`
+          sv-weak
           topbar__preset
-          ${!route.hash && 'topbar__preset--active'}
+          ${!route.hash && 'topbar__preset--current'}
         `"
 
+        style="
+          display: flex;
+          align-items: center;
+        "
         @click="togglePreset('', { filters: {} })"
       >
         {{ $t('all') }}
@@ -21,12 +26,20 @@
         :key="`filter-preset-${presetName}`"
 
         :class="`
+          sv-weak
           topbar__preset
-          ${route.hash === `#${presetName}` && 'topbar__preset--active'}
+          ${route.hash === `#${presetName}` && 'topbar__preset--current'}
         `"
         @click="togglePreset(presetName, preset)"
       >
-        {{ preset.name }}
+        <sv-icon
+          v-if="preset.icon"
+          small
+          :name="preset.icon"
+        >
+          {{ preset.name }}
+        </sv-icon>
+        <span v-else>{{ preset.name }}</span>
         <span v-if="preset.badgeFunction">
           ({{
             store.customGetter[preset.badgeFunction](presetName, {
@@ -48,6 +61,7 @@
         small
         :icon="actionProps.icon"
         :disabled="store.selectedIds.length === 0 && actionProps.selection"
+
         @clicked="call(actionProps)({ _id: selectedIds })"
       >
         {{ actionProps.name }}
@@ -63,7 +77,7 @@ import { useRouter, useRoute } from 'vue-router'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
 import { call } from '../../templates/sv-crud/_internals/store'
-import { SvButton } from '../..'
+import { SvButton, SvIcon } from '../..'
 
 const route = useRoute()
 const router = useRouter()

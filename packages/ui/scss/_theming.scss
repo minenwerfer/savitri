@@ -11,9 +11,11 @@ $themed-properties: brand-color
   ,switch-border-color
   ,foreground-color
   ,foreground-color-alt
+  ,foreground-color-weak
   ,background-color
   ,background-color-alt
   ,background-color-hover
+  ,background-color-semitransparent
   ,body-background
   ,shadow-color
   ,shadow-color-alt;
@@ -23,7 +25,6 @@ $themed-properties: brand-color
     .main--#{$theme} & {
       $theme-map: () !global;
       @each $key in $themed-properties{
-        // $value: map-get(map-get($themes, $theme), '#{$key}');
         $value: var(--#{$theme}-#{$key});
         $theme-map: map-merge($theme-map, ($key: $value)) !global;
       }

@@ -39,7 +39,11 @@
       <tr
         v-for="row in rows"
         :key="row._id"
-        :class="`table__row table__row--body`"
+        class="
+          sv-weak
+          table__row
+          table__row--body
+        "
         @click="$emit('itemClick', row)"
       >
         <td

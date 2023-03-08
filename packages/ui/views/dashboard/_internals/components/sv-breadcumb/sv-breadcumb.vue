@@ -9,8 +9,7 @@
       style="
         display: flex;
         gap: .6rem;
-        font-weight: bold;
-        opacity: .8;
+        font-weight: 500;
       "
     >
       {{ viewTitle }}
@@ -19,10 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { SvIcon } from '../../../../../components'
-
-const route = useRoute()
 </script>
 
 <style scoped src="./sv-breadcumb.scss"></style>

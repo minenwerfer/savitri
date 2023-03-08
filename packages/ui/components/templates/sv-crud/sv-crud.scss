@@ -40,6 +40,7 @@
 
     justify-content: space-between;
     padding: .6rem 1rem;
+    backdrop-filter: blur(15px);
     z-index: 20;
 
     @include themed() {

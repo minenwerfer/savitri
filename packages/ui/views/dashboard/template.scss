@@ -12,18 +12,15 @@ $top-height: 3.6rem;
     display: flex;
   }
 
-  &__top,
-  &__view {
-    @include themed() {
-      background: t(background-color);
-    }
-  }
-
   &__view {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     min-height: calc(100vh - $top-height);
+
+    @include themed() {
+      background: t(background-color);
+    }
   }
 
   &__top {
@@ -33,13 +30,12 @@ $top-height: 3.6rem;
     z-index: 20;
 
     display: flex;
-    align-items: center;
     gap: 1.8rem;
 
-    padding: .4rem 1.6rem;
+    padding: 0 .4rem 0 1rem;
 
     @include themed() {
-      opacity: .85;
+      background: t(background-color-semitransparent);
       border-bottom: 1px solid t(border-color);
       backdrop-filter: blur(15px);
     }

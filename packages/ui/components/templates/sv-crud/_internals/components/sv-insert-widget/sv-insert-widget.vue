@@ -43,6 +43,7 @@
       </sv-button>
       <sv-button
         :disabled="!store.insertReady || isInsertReadOnly"
+        :loading="store.isLoading"
         @clicked="insert"
       >
       {{ $t('action.insert') }}

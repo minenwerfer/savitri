@@ -4,6 +4,7 @@
       button
       button--${variant}
       button--${size}
+      ${loading && 'button--loading'}
     `"
     :disabled="disabled"
   >
@@ -48,6 +49,7 @@ type Props = {
   variant?: Variant
   icon?: string
   disabled?: boolean
+  loading?: boolean
 }
 // #endregion props
 

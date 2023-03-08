@@ -1,15 +1,32 @@
+@import 'style/theming';
+
 .topbar {
   display: flex;
-  align-items: center;
   flex: 1;
 
   &__presets {
     display: flex;
-    gap: .4rem;
+  }
+
+  &__preset {
+    display: flex;
+    align-items: center;
+
+    margin-top: 4px;
+    border-bottom: 4px solid transparent;
+    padding: 0 .4rem;
+    font-size: small;
+
+    @include themed() {
+      &--current {
+        border-bottom: 4px solid t(brand-color);
+      }
+    }
   }
 
   &__actions {
     display: flex;
+    align-items: center;
     gap: .4rem;
     margin-left: auto;
   }
