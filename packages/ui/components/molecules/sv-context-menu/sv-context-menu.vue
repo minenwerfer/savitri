@@ -43,7 +43,6 @@
             small
             v-if="action.icon"
             :name="action.icon"
-            style="gap: .8rem"
           >
             {{ action.name }}
           </sv-icon>

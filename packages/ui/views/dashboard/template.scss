@@ -27,12 +27,12 @@ $top-height: 3.6rem;
     position: sticky;
     top: 0;
     height: $top-height;
-    z-index: 20;
+    z-index: 10;
 
     display: flex;
     gap: 1.8rem;
 
-    padding: 0 .4rem 0 1rem;
+    padding: 0 1rem;
 
     @include themed() {
       background: t(background-color-semitransparent);

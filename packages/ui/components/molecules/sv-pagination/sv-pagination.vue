@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination">
+  <div class="pagination sv-weak">
     <div class="pagination__control">
       <sv-select v-model="limit" :property="{}">
         <option

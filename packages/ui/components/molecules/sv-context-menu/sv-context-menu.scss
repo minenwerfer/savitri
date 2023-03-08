@@ -10,6 +10,7 @@
     position: absolute;
     right: 1rem;
 
+    min-width: 10rem;
     border-radius: 4px;
 
     overflow: hidden;
@@ -17,7 +18,7 @@
 
     @include themed() {
       background: t(background-color);
-      box-shadow: 0 2px 8px t(shadow-color);
+      box-shadow: 0 2px 6px t(shadow-color);
       border: 1px solid t(border-color);
     }
   }

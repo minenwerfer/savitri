@@ -1,7 +1,7 @@
 <template>
   <div class="topbar">
     <div
-      v-if="store.description.filtersPresets"
+      v-if="store?.description.filtersPresets"
       class="topbar__presets"
     >
       <div
@@ -16,7 +16,7 @@
           display: flex;
           align-items: center;
         "
-        @click="togglePreset('', { filters: {} })"
+        @click="togglePreset('')"
       >
         {{ $t('all') }}
       </div>
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div
-      v-if="store.actions || $slots.actions"
+      v-if="store?.actions || $slots.actions"
       :key="collection"
       class="topbar__actions"
     >
@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
@@ -81,12 +81,22 @@ import { SvButton, SvIcon } from '../..'
 
 const route = useRoute()
 const router = useRouter()
-const store = computed(() => useParentStore((route.meta?.collection || route.params?.collection) as string))
+const store = computed(() => {
+  try {
+    return useParentStore((route.meta?.collection || route.params?.collection) as string)
+  } catch( e ) {
+    return null
+  }
+})
 
-const togglePreset = (presetName: string, preset: FiltersPreset) => {
+const togglePreset = (presetName: string, preset?: FiltersPreset) => {
+  if( !store.value ) {
+    return
+  }
+
   return (({ value: store }) => {
-    store.filtersPreset = preset.filters
-    store.preferredTableProperties = preset.table || []
+    store.filtersPreset = preset?.filters || {}
+    store.preferredTableProperties = preset?.table || []
 
     store.pagination.offset = 0
     store.filter()
@@ -94,15 +104,23 @@ const togglePreset = (presetName: string, preset: FiltersPreset) => {
   })(store)
 }
 
-onMounted(() => {
+watch(route, () => {
+  if( !store.value ) {
+    return
+  }
+
   return (({ value: store }) => {
-    if( route.hash && store.description.filtersPresets ) {
-      const presetName = route.hash.slice(1)
-      togglePreset(presetName, store.description.filtersPresets[presetName])
-      return
+    if( store.description.filtersPresets ) {
+      if( route.hash ) {
+        const presetName = route.hash.slice(1)
+        togglePreset(presetName, store.description.filtersPresets[presetName])
+        return
+      }
+
+      togglePreset('')
     }
   })(store)
-})
+}, { immediate: true })
 </script>
 
 <style scoped src="./sv-crud-topbar.scss"></style>

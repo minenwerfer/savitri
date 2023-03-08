@@ -12,6 +12,7 @@
       <sv-icon
         v-if="icon"
         :name="icon"
+        :small="size === 'small'"
         class="button__icon"
       >
         <slot></slot>
