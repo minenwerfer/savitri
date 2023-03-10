@@ -12,15 +12,6 @@
   }
 }
 
-.sv-weak {
-  @include themed() {
-    color: t(foreground-color-weak);
-    svg {
-      fill: t(foreground-color-weak);
-    }
-  }
-}
-
 .sv-padded {
   padding: 2rem;
 }

@@ -4,7 +4,7 @@ $top-height: 3.6rem;
 
 .template {
   @include themed() {
-    color: t(foreground-color-alt);
+    color: t(foreground-color);
     background: t(body-background);
   }
 
@@ -35,9 +35,19 @@ $top-height: 3.6rem;
     padding: 0 1rem;
 
     @include themed() {
-      background: t(background-color-semitransparent);
+      background: t(background-color-opaque);
       border-bottom: 1px solid t(border-color);
       backdrop-filter: blur(15px);
+    }
+  }
+
+  &__top-bg {
+    position: absolute;
+    width: 100%;
+    height: $top-height;
+
+    @include themed() {
+      background: t(background-color);
     }
   }
 
@@ -51,13 +61,5 @@ $top-height: 3.6rem;
     @media screen and (min-width: 1024px) {
       width: 0;
     }
-  }
-
-  &__notice {
-    color: #fff;
-    background: blue;
-    text-align: center;
-    font-size: 11pt;
-    font-weight: bold;
   }
 }

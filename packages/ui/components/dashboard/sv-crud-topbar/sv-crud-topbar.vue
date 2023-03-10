@@ -1,21 +1,9 @@
 <template>
   <div class="topbar">
-    <div
-      v-if="store?.description.filtersPresets"
-      class="topbar__presets"
-    >
+    <sv-tabs v-if="store?.description.filtersPresets">
       <div
         v-clickable
-        :class="`
-          sv-weak
-          topbar__preset
-          ${!route.hash && 'topbar__preset--current'}
-        `"
-
-        style="
-          display: flex;
-          align-items: center;
-        "
+        :data-current="!route.hash"
         @click="togglePreset('')"
       >
         {{ $t('all') }}
@@ -25,11 +13,7 @@
         v-for="([presetName, preset]) in Object.entries(store.description.filtersPresets)"
         :key="`filter-preset-${presetName}`"
 
-        :class="`
-          sv-weak
-          topbar__preset
-          ${route.hash === `#${presetName}` && 'topbar__preset--current'}
-        `"
+        :data-current="route.hash === `#${presetName}`"
         @click="togglePreset(presetName, preset)"
       >
         <sv-icon
@@ -48,7 +32,11 @@
           }})
         </span>
       </div>
+    </sv-tabs>
+
+    <div class="topbar__controls">
     </div>
+
     <div
       v-if="store?.actions || $slots.actions"
       :key="collection"
@@ -76,8 +64,8 @@ import { computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
-import { call } from '../../templates/sv-crud/_internals/store'
-import { SvButton, SvIcon } from '../..'
+import { call, isFilterVisible, toggleLayout } from '../../templates/sv-crud/_internals/store'
+import { SvTabs, SvButton, SvInfo, SvIcon } from '../..'
 
 const route = useRoute()
 const router = useRouter()

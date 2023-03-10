@@ -1,40 +1,11 @@
 <template>
-  <div
-    v-if="Object.keys(store.availableFilters).length > 0"
-    class="filter"
-  >
-    <div class="filter__icons">
-      <sv-bare-button
-        @clicked="isFilterVisible = true"
-      >
-        <sv-icon
-          alt
-          reactive
-          name="filter"
-        ></sv-icon>
-      </sv-bare-button>
-      <sv-bare-button
-        :disabled="Object.keys(store.$filters).length === 0"
-        @clicked="store.clearFilters"
-      >
-        <sv-icon
-          alt
-          reactive
-          name="trash"
-        ></sv-icon>
-      </sv-bare-button>
-    </div>
-
-    <sv-filter-bubbles></sv-filter-bubbles>
-  </div>
-
   <sv-box
     close-hint
     fixed-right
-    v-model:visible="isFilterVisible"
     title="Filtrar por"
-    @close="isFilterVisible = false"
-    @overlay-click="isFilterVisible = false"
+
+    @close="$emit('update:visible', false)"
+    @overlay-click="$emit('update:visible', false)"
   >
     <sv-form
       v-bind="{
@@ -63,21 +34,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useParentStore } from '../../../../../../../web'
-import {
-  SvBox,
-  SvBareButton,
-  SvButton,
-  SvForm,
-  SvIcon
-
-} from '../../../../..'
-
-import SvFilterBubbles from '../sv-filter-bubbles/sv-filter-bubbles.vue'
+import { SvBox, SvButton, SvForm, } from '../../../../..'
 
 const store = useParentStore()
-const isFilterVisible = ref(false)
 
 const filter = () => {
   store.pagination.offset = 0

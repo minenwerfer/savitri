@@ -1,6 +1,11 @@
 <template>
-  <div>Mudando a senha de {{ userStore.item.full_name }}</div>
-  <sv-box class="passchange">
+  <sv-box
+    outer-header
+    class="passchange sv-padded"
+  >
+    <template #header>
+      <div>Mudando a senha de {{ userStore.item.full_name }}</div>
+    </template>
     <div class="passchange__content">
       <sv-form
         v-bind="{

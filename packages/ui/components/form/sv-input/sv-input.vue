@@ -19,6 +19,7 @@
         v-focus="rerenderFixture > 0 || property.s$focus"
         ref="input"
         :value="inputValue"
+        data-component="input"
 
         :class="`
           input__input
@@ -29,6 +30,7 @@
 
         @maska="onInput($event, true)"
         @input="onInput"
+        @change="emit('change', $event)"
       />
       <sv-icon 
         v-if="icon"
@@ -105,6 +107,7 @@ const copyToClipboard = useClipboard()
 
 const emit = defineEmits<{
   (e: 'update:modelValue' | 'input', value: InputType): void
+  (e: 'change', value: InputEvent): void
 }>()
 
 const input = ref(null)
@@ -212,7 +215,10 @@ watch(() => props.modelValue, (value, oldValue) => {
     inputValue.value = property.type === 'number'
       ? 0
       : ''
-    rerenderFixture.value += 1
+
+    if( property.s$mask ) {
+      rerenderFixture.value += 1
+    }
   }
 })
 </script>

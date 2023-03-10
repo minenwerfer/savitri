@@ -28,13 +28,18 @@ $section-padding: .8rem;
   &__content {
     display: flex;
     flex-direction: column;
-    // border-radius: 5px;
     overflow: hidden;
 
     @include themed() {
       color: t(foreground-color);
       background: t(background-color);
-      // border: 1px solid t(border-color);
+    }
+
+    &--bordered {
+      @include themed() {
+        border-radius: 5px;
+        border: 1px solid t(border-color);
+      }
     }
 
     &--outer-header {

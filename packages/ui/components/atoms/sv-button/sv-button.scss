@@ -46,21 +46,21 @@
     }
 
     &--alt {
-      color: t(foreground-color-alt);
       background: t(button-background-color-alt);
       border: 1px solid t(button-border-color);
 
-      :deep(svg) {
+      :deep(*) {
+        color: t(foreground-color-alt);
         fill: t(foreground-color-alt);
       }
     }
 
     &--normal, &--brand {
-      color: t(background-color);
       background: t(button-background-color);
       border: 1px solid t(button-border-color);
 
-      :deep(svg) {
+      :deep(*) {
+        color: t(background-color);
         fill: t(background-color);
       }
 

@@ -7,6 +7,9 @@
   `">
     <sv-menu-header class="menu__header"></sv-menu-header>
 
+    <div v-if="$slots['menu-action']" class="menu__action">
+      <slot name="menu-action"></slot>
+    </div>
     <!-- menu entries -->
     <div class="menu__entries">
       <div
@@ -14,52 +17,28 @@
         :key="`entry-${index}`"
         class="menu__entry"
       >
-        <!-- <sv-icon -->
-        <!--   v-clickable -->
-        <!--   v-if="visible && entry.shrink" -->
-        <!--   name="angle-up" -->
-        <!--   :class="` -->
-        <!--     menu__entry-title -->
-        <!--     ${shrink[index] && 'menu__entry-title--shrinked'} -->
-        <!--   `" -->
-
-        <!--   @click="shrink[index] = !shrink[index]" -->
-        <!-- > -->
-        <!--   {{ $tc(entry.meta?.title, 2).capitalize() }} -->
-        <!-- </sv-icon> -->
-
-        <!-- <div -->
-        <!--   v-else -->
-        <!--   class="menu__entry-title" -->
-        <!-- > -->
-        <!--   {{ $tc(entry.meta?.title, 2).capitalize() }} -->
-        <!-- </div> -->
-
         <!-- subroutes -->
-        <div class="menu__routes">
-          <sv-icon
-            v-clickable
-            v-for="route in entry.children"
-            :key="route.name"
-            :class="`
-              menu__route
-              ${isCurrent(route) && 'menu__route--current'}
-            `"
+        <sv-icon
+          v-clickable
+          v-for="route in entry.children"
+          :key="route.name"
+          :class="`
+            menu__route
+            ${isCurrent(route) && 'menu__route--current'}
+          `"
 
-            :name="route.meta?.icon || 'file'"
-            :title="$tc(route.meta.title, 2).capitalize()"
-            @click="onEntryClick(route)"
-          >
-            <span>{{ $tc(route.meta.title, 2).capitalize() }}</span>
-            <span v-if="route.badgeFunction">
-              ({{
-                useStore(route.badgeFunction.split('@')[0])
-                  .customGetter[route.badgeFunction.split('@')[1]]('menu', route.badgePayload)
-              }})
-            </span>
-          </sv-icon>
-        </div>
-
+          :name="route.meta?.icon || 'file'"
+          :title="$tc(route.meta.title, 2).capitalize()"
+          @click="onEntryClick(route)"
+        >
+          <span>{{ $tc(route.meta.title, 2).capitalize() }}</span>
+          <span v-if="route.badgeFunction">
+            ({{
+              useStore(route.badgeFunction.split('@')[0])
+                .customGetter[route.badgeFunction.split('@')[1]]('menu', route.badgePayload)
+            }})
+          </span>
+        </sv-icon>
       </div>
     </div>
 
@@ -159,9 +138,13 @@ const getRoutes = (node?: SchemaNode): Array<Route> => {
 
 const isCurrent = (subroute: any) => {
   const route = useRoute()
-  return typeof subroute.redirect === 'string'
+
+  const pathMatches = typeof subroute.redirect === 'string'
     ? subroute.redirect === route.path
     : subroute.path === (route.redirectedFrom?.path || route.path)?.split(/\/home$/)[0]
+
+  const nameMatches = subroute.name === (route.redirectedFrom?.name || route.name)
+  return pathMatches || nameMatches
 }
 
 const routes = ref<Array<Route>>(getRoutes())

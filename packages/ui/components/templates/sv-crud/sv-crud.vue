@@ -3,45 +3,11 @@
     v-if="store"
     class="crud"
   >
-    <div
-      v-if="!noControls && false"
-      class="
-        no-print
-        crud__panel
-      "
-    >
-      <div class="crud__panel-control">
-        <sv-info v-if="!noRefresh">
-          <template #text>
-            Atualizar
-          </template>
-          <sv-icon
-            v-clickable
-            alt
-            reactive
-            name="refresh"
-            @click="fetchItems"
-          ></sv-icon>
-        </sv-info>
-        <sv-info v-if="
-          !noLayoutToggle
-            && store.description.layout
-            && store.description.layout?.name !== 'tabular'
-        ">
-          <template #text>
-            Alternar layout
-          </template>
-          <sv-icon
-            v-clickable
-            alt
-            reactive
-            name="table"
-            @click="toggleLayout"
-          ></sv-icon>
-        </sv-info>
-        <sv-filter-widget :key="store.$id"></sv-filter-widget>
-      </div>
-    </div>
+    <sv-filter-widget
+      v-if="isFilterVisible"
+      v-model:visible="isFilterVisible"
+      :key="store.$id"
+    ></sv-filter-widget>
 
     <sv-insert-widget
       v-if="isInsertVisible"
@@ -52,13 +18,75 @@
     ></sv-insert-widget>
 
     <div>
-      <sv-box
-        transparent
-        fill
-        class="crud__table-panel"
-      >
+      <div class="crud__table-panel">
+        <div>
+          <sv-info
+            v-if="store && Object.keys(store.availableFilters).length > 0"
+            where="bottom"
+          >
+            <template #text>
+              Filtros
+            </template>
+            <sv-icon
+              v-if="store && Object.keys(store.availableFilters).length > 0"
+              v-clickable
+              small
+              reactive
+              name="filter"
+              @click="isFilterVisible = true"
+            ></sv-icon>
+          </sv-info>
+          <sv-info
+            v-if="store && Object.keys(store.availableFilters).length > 0"
+            where="bottom"
+          >
+            <template #text>
+              Limpar filtros
+            </template>
+            <sv-bare-button :disabled="store.filtersCount === 0">
+              <sv-icon
+                v-if="store && Object.keys(store.availableFilters).length > 0"
+                small
+                reactive
+                name="trash"
+                @click="store.clearFilters"
+              ></sv-icon>
+            </sv-bare-button>
+          </sv-info>
+          <sv-info v-if="!noRefresh" where="bottom">
+            <template #text>
+              Atualizar
+            </template>
+            <sv-icon
+              v-clickable
+              small
+              reactive
+              name="refresh"
+              @click="fetchItems"
+            ></sv-icon>
+          </sv-info>
+          <sv-info
+            v-if="
+              !noLayoutToggle && store
+                && store.description.layout
+                && store.description.layout?.name !== 'tabular'
+            "
+            where="bottom"
+          >
+            <template #text>
+              Alternar layout
+            </template>
+            <sv-icon
+              v-clickable
+              small
+              reactive
+              name="table"
+              @click="toggleLayout(store)"
+            ></sv-icon>
+          </sv-info>
+        </div>
         <sv-pagination :collection="collection"></sv-pagination>
-      </sv-box>
+      </div>
 
       <component
         :is="getLayout(store.$currentLayout)"
@@ -95,14 +123,7 @@ import {
 import { useRouter } from 'vue-router'
 import { useStore, useParentStore, useAction, CollectionStore } from '../../../../web'
 import type { Layout } from '@semantic-api/types'
-
-import {
-  SvBox,
-  SvPagination,
-  SvInfo,
-  SvIcon
-
-} from '../../'
+import { SvPagination, SvInfo, SvBareButton, SvIcon } from '../../'
 
 import { getLayout } from './_internals/layouts'
 import SvFilterWidget from './_internals/components/sv-filter-widget/sv-filter-widget.vue'
@@ -111,6 +132,7 @@ import SvInsertWidget from './_internals/components/sv-insert-widget/sv-insert-w
 import {
   isInsertVisible,
   isInsertReadonly,
+  isFilterVisible,
   call,
   actionEventBus
 
@@ -267,12 +289,6 @@ const individualActions = computed(() => {
     ...action
   }))
 })
-
-const toggleLayout = () => {
-  store.currentLayout = store.currentLayout === 'tabular'
-    ? store.description.layout!.name
-    : 'tabular'
-}
 
 provide('storeId', computed(() => props.collection))
 provide('individualActions', individualActions)

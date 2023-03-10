@@ -7,8 +7,9 @@
   }
 
   &__content {
-    position: absolute;
-    right: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
 
     min-width: 10rem;
     border-radius: 4px;
@@ -17,9 +18,23 @@
     z-index: 40;
 
     @include themed() {
+      :deep(*) {
+        color: t(foreground-color);
+      }
+
       background: t(background-color);
       box-shadow: 0 2px 6px t(shadow-color);
       border: 1px solid t(border-color);
+    }
+  }
+
+  &__section {
+    padding: .6rem;
+
+    &:not(:last-child) {
+      @include themed() {
+        border-bottom: 1px solid t(border-color);
+      }
     }
   }
 
@@ -29,7 +44,6 @@
     padding: .6rem !important;
 
     @include themed() {
-      color: t(foreground-color);
       &--reactive {
         &:hover {
           background: t(background-color-alt);

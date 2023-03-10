@@ -1,35 +1,32 @@
 <template>
   <div class="grid">
-    <sv-box
-      fill
+    <div
       v-for="item in store.items"
       :key="item"
       class="grid__item"
     >
       <sv-picture
         :url="firstIfArray(item[layoutOptions.picture!])?.link"
-        style="height: 100%"
+        style="height: 80%"
       ></sv-picture>
-      <template #footer>
-        <div class="grid__footer">
-          <div>
-            {{ item[layoutOptions.title!] }}
-          </div>
-          <sv-context-menu
-            v-if="individualActions.length > 0"
-            v-bind="{
-              subject: item,
-              actions: individualActions
-          }">
-            <sv-icon
-              v-clickable
-              reactive
-              name="setting"
-              ></sv-icon>
-          </sv-context-menu>
+      <div class="grid__footer">
+        <div>
+          {{ item[layoutOptions.title!] }}
         </div>
-      </template>
-    </sv-box>
+        <sv-context-menu
+          v-if="individualActions.length > 0"
+          v-bind="{
+            subject: item,
+            actions: individualActions
+        }">
+          <sv-icon
+            v-clickable
+            reactive
+            name="setting"
+            ></sv-icon>
+        </sv-context-menu>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -37,7 +34,6 @@
 import { LayoutOptions } from '@semantic-api/types'
 import { useParentStore } from '../../../../../../../web'
 import {
-  SvBox,
   SvContextMenu,
   SvIcon,
   SvPicture

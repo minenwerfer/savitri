@@ -3,6 +3,10 @@
   column-gap: 2rem;
   box-sizing: content-box;
 
+  * {
+    font-size: .8rem !important;
+  }
+
   &__control {
     display: flex;
     align-items: center;
@@ -29,11 +33,12 @@
   }
 
   &__page-input {
-    width: 2.4rem;
-  }
+    display: flex;
+    align-items: center;
+    gap: .6rem;
 
-  &__summary {
-    font-size: .9rem;
-    opacity: .8;
+    :deep([data-component=input]) {
+      width: 2.8rem;
+    }
   }
 }

@@ -17,6 +17,7 @@
       data-component="box"
       :class="`
         box__content
+        ${!(isFloating || fixedRight) && 'box__content--bordered'}
         ${isFloating && 'box__content--floating'}
         ${fixedRight && 'box__content--fixed-right'}
         ${transparent && 'box__content--transparent'}
@@ -105,7 +106,6 @@ type Props = {
   collapsed?: boolean
   collapsable?: boolean
   fullWidth?: boolean
-  classes?: string
   fill?: boolean
   transparent?: boolean
   transparentMobile?: boolean
@@ -120,9 +120,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:visible', value: boolean): void
-  (e: 'update:collapsed', value: boolean): void
-  (e: 'update:closeHint', value: boolean): void
+  (e:
+    'update:visible'
+    | 'update:collapsed'
+    | 'update:closeHint',
+    value: boolean
+  ): void
   (e: 'overlayClick'): void
   (e: 'close'): void
 }>()

@@ -22,7 +22,7 @@
           name,
           fill
         }"
-        role="icon-img"
+        data-component="icon"
       ></unicon>
     </div>
     <div v-if="$slots.default" role="icon-label">
@@ -39,6 +39,7 @@ type Props = {
   fill?: string
   size?: string
   small?: boolean
+  medium?: boolean
   alt?: boolean
   reactive?: boolean|null
   iconRight?: boolean
@@ -48,7 +49,15 @@ const props = withDefaults(defineProps<Props>(), {
   reactive: null
 })
 
-const size = props.size || inject('iconSize', null)
+const size = (() => {
+  switch( true ) {
+    case props.small: return 'small'
+    case props.medium: return 'medium'
+  }
+
+  return inject('iconSize', props.size) || 'medium'
+})()
+
 const reactive = typeof props.reactive === 'boolean'
   ? props.reactive
   : inject('iconReactive', false)

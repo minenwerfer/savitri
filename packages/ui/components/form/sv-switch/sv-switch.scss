@@ -21,9 +21,8 @@ $slider-radius: 1rem;
   width: 3rem;
 
   @include themed() {
-    border: 1px solid t(switch-border-color);
     &--active {
-      background: t(switch-background-color);
+      background: t(brand-color);
     }
   }
 

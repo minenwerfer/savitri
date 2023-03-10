@@ -59,8 +59,8 @@ export const normalizeRoutes = (node: RouterExtensionNode, parentName?: string) 
       }
 
       return `${parentName}-` + child.path
-        .replace(/^\//, '')
-        .replace(/\/:?/, '-')
+        .replace(/(^\/|\?)/g, '')
+        .replace(/\/:?/g, '-')
     })()
 
     if( child.children ) {

@@ -17,7 +17,7 @@
       v-clickable
       class="checkbox__text"
     >
-      <div class="checkbox__description">
+      <div>
         <slot name="description" v-if="$slots.description"></slot>
         <div v-else-if="value" v-html="value"></div>
         <slot v-else></slot>

@@ -11,13 +11,12 @@
         <sv-icon
           v-clickable
           icon-right
-          reactive
           name="angle-down"
           style="justify-content: space-between"
         >
           <div class="header__user-inner">
-            <strong>{{ userStore.$currentUser.full_name }}</strong>
-            <div>{{ userStore.$currentUser.roles?.join(', ') }}</div>
+            <div>{{ userStore.$currentUser.full_name }}</div>
+            <small>{{ userStore.$currentUser.roles?.join(', ') }}</small>
           </div>
         </sv-icon>
       </div>

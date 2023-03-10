@@ -12,7 +12,7 @@ import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter, extendRouter } from './router'
 
 import type { Module, AppOptions } from '../types'
-import { useStore } from './state'
+import { useStore, useParentStore } from './state'
 import registerDirectives from './directives'
 
 
@@ -111,6 +111,9 @@ export const useApp = (config: AppOptions): Promise<{
       },
       hasRoles(roles: string|Array<string>) {
         return arraysIntersects(roles, userStore.$currentUser.roles)
+      },
+      useStore(storeName: string) {
+        return useParentStore(storeName)
       }
     }
   })

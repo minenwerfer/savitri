@@ -53,7 +53,6 @@ $picture-size: 3.6rem;
   }
 
   &__info {
-    opacity: .75;
     overflow: hidden;
     text-overflow: ellipsis;
     // white-space: nowrap;
@@ -69,7 +68,6 @@ $picture-size: 3.6rem;
   &__info-label {
     font-size: .8rem;
     font-weight: bold;
-    opacity: .8;
 
     &:after {
       content: ': ';

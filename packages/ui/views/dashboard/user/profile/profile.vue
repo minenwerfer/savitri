@@ -1,5 +1,5 @@
 <template>
-  <sv-box :key="userStore.fields" class="profile">
+  <sv-box :key="userStore.fields" class="profile sv-padded">
     <sv-form
       v-bind="{
         collection: 'user',

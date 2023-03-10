@@ -39,7 +39,6 @@
           <div
             v-if="property.s$hint"
             v-html="property.s$hint"
-            class="form__field-hint"
           ></div>
         </label>
 

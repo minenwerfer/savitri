@@ -40,7 +40,6 @@
         v-for="row in rows"
         :key="row._id"
         class="
-          sv-weak
           table__row
           table__row--body
         "

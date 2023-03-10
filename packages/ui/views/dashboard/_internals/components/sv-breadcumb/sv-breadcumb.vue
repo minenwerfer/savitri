@@ -4,11 +4,18 @@
     breadcumb
   ">
     <sv-icon
+      v-clickable
+      small
+      name="arrow-left"
+      class="breadcumb__back"
+      @click="$router.back"
+    ></sv-icon>
+    <sv-icon
       small
       :name="viewIcon"
       style="
         display: flex;
-        gap: .6rem;
+        gap: .4rem;
         font-weight: 500;
       "
     >

@@ -1,44 +1,13 @@
 @import 'style/theming';
 
 .crud {
-  display: flex;
-  flex-direction: column;
-  row-gap: 1rem;
-
-  &__panel {
-    display: flex;
-    flex-direction: column;
-    row-gap: .2rem;
-
-    @media screen and (min-width: 600px) {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-
-  &__panel-control {
-    display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: .4rem;
-
-    :deep(svg) {
-      width: 20px;
-    }
-
-    &--custom {
-      align-items: flex-end;
-    }
-  }
-
   &__table-panel {
     position: sticky;
     top: 3.6rem;
 
     display: flex;
-    padding: 0 2rem;
-
     justify-content: space-between;
+
     padding: .6rem 1rem;
     backdrop-filter: blur(15px);
     z-index: 10;
@@ -51,35 +20,6 @@
     @media screen and (min-width: 600px) {
       flex-direction: row;
       align-items: center;
-    }
-  }
-
-  &__filter-presets {
-    display: flex;
-  }
-
-  &__filter-preset-button {
-    padding: 0 .8rem;
-    opacity: .6;
-
-    &:first-child {
-      padding: 0 .8rem 0 0;
-    }
-
-    @include themed() {
-      // background: t(background-color);
-      // border: 1px solid t(border-color);
-      color: t(foreground-color-alt);
-
-      &--active {
-        color: t(brand-color);
-        opacity: 1;
-        font-weight: bold;
-      }
-
-      &:not(:last-child) {
-        border-right: 1px solid t(border-color);
-      }
     }
   }
 }

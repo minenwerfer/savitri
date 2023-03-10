@@ -109,7 +109,8 @@ const privateRoutes: Array<RouteRecordRaw> = [
             name: 'dashboard-user-profile',
             component: () => import('./views/dashboard/user/profile/profile.vue'),
             meta: {
-              title: 'Meu perfil'
+              title: 'Meu perfil',
+              icon: 'user-square'
             }
           },
           {
@@ -117,7 +118,8 @@ const privateRoutes: Array<RouteRecordRaw> = [
             name: 'dashboard-user-changepass',
             component: () => import('./views/dashboard/user/password-change/password-change.vue'),
             meta: {
-              title: 'Mudar senha'
+              title: 'Mudar senha',
+              icon: 'lock'
             }
           }
         ]

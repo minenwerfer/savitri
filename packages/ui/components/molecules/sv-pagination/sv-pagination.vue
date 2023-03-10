@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination sv-weak">
+  <div class="pagination">
     <div class="pagination__control">
       <sv-select v-model="limit" :property="{}">
         <option
@@ -18,6 +18,12 @@
     </div>
 
     <div class="pagination__control">
+      <sv-bare-button @clicked="page = 0">
+        <sv-icon
+          small
+          name="angle-double-left"
+        ></sv-icon>
+      </sv-bare-button>
       <sv-bare-button
         :disabled="store.isLoading || page === 0"
         @clicked="paginate('previous')"
@@ -27,7 +33,6 @@
           name="angle-left"
         ></sv-icon>
       </sv-bare-button>
-
       <div class="pagination__page-input">
         <sv-input
           v-model="pageInput"
@@ -37,15 +42,12 @@
             minimum: 1
           }"
 
-          @change="page = pageInput"
+          @change="page = pageInput === 0 ? 0 : pageInput - 1"
         ></sv-input>
+        <span>{{ $t('of') }} {{ pageCount }}</span>
       </div>
-      <div>
-        / {{ pageCount + 1 }}
-      </div>
-
       <sv-bare-button
-        :disabled="store.isLoading || page === pageCount"
+        :disabled="store.isLoading || page === pageCount - 1"
         @clicked="paginate('next')"
       >
         <sv-icon
@@ -53,15 +55,14 @@
           name="angle-right"
         ></sv-icon>
       </sv-bare-button>
+      <sv-bare-button @clicked="page = pageCount - 1">
+        <sv-icon
+          small
+          name="angle-double-right"
+        ></sv-icon>
+      </sv-bare-button>
     </div>
   </div>
-
-  <!-- <div v-if="pagination" class="pagination__summary"> -->
-  <!--   Mostrando -->
-  <!--   {{ pagination.offset }} a -->
-  <!--   {{ pagination.offset + pagination.recordsCount }} de -->
-  <!--   {{ pagination.recordsTotal }} registros -->
-  <!-- </div> -->
 </template>
 
 <script setup lang="ts">
@@ -82,7 +83,6 @@ type Props = {
 
 const props = defineProps<Props>()
 const store = useParentStore(props.collection)
-const pagination = computed(() => store.pagination)
 
 const page = computed({
   get: () => Math.floor(store.pagination.offset / store.pagination.limit),
@@ -100,7 +100,7 @@ const limit = computed({
 
 const pageInput = ref(page.value ? page.value + 1 : 1)
 const pageCount = computed(
-  () => Math.floor(store.pagination.recordsTotal / store.pagination.limit)
+  () => Math.ceil(store.pagination.recordsTotal / store.pagination.limit)
 )
 
 const paginate = (direction: 'previous'|'next') => {

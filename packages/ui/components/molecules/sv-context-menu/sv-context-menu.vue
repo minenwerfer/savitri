@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="actions.length > 0"
+    ref="contextmenu"
     class="contextmenu"
   >
     <a
@@ -23,37 +24,41 @@
       <div>
         <div
           v-if="$slots.extra"
-          class="contextmenu__item"
+          class="contextmenu__section"
         >
-          <slot
-            v-if="$slots.extra"
-            name="extra"
-          ></slot>
+          <div class="contextmenu__item">
+            <slot
+              v-if="$slots.extra"
+              name="extra"
+            ></slot>
+          </div>
         </div>
-        <sv-bare-button
-          v-for="(action, aindex) in filterActions(actions)"
-          :key="`action-${aindex}`"
-          class="
-            contextmenu__item
-            contextmenu__item--reactive
-          "
-          @clicked="onClick(action, subject)"
-        >
-          <sv-icon
-            small
-            v-if="action.icon"
-            :name="action.icon"
+        <div class="contextmenu__section">
+          <sv-bare-button
+            v-for="(action, aindex) in filterActions(actions)"
+            :key="`action-${aindex}`"
+            class="
+              contextmenu__item
+              contextmenu__item--reactive
+            "
+            @clicked="onClick(action, subject)"
           >
-            {{ action.name }}
-          </sv-icon>
-        </sv-bare-button>
+            <sv-icon
+              small
+              v-if="action.icon"
+              :name="action.icon"
+            >
+              {{ action.name }}
+            </sv-icon>
+          </sv-bare-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from '../../../../web'
 import { SvBareButton, SvIcon } from '../..'
 
@@ -74,6 +79,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const userStore = useStore('user')
+const contextmenu = ref(null)
 const contextmenuVisible = ref(false)
 
 const filterActions = (actions: Array<any>) => {
@@ -92,6 +98,19 @@ const onClick = (action: Action, subject: any) => {
 
   contextmenuVisible.value = false
 }
+
+const position = computed(() => ({
+  x: contextmenu.value?.getBoundingClientRect().left + 'px',
+  y: contextmenu.value?.getBoundingClientRect().top + 'px',
+}))
 </script>
 
 <style scoped src="./sv-context-menu.scss"></style>
+
+<style scoped lang="scss">
+.contextmenu__content {
+  transform:
+    translateX(min(v-bind('position.x'), calc(100vw - 100%)))
+    translateY(min(v-bind('position.y'), calc(100vh - 100%))) !important;
+}
+</style>

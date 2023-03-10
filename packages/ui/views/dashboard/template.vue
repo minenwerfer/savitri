@@ -9,16 +9,16 @@
         entrypoint="dashboard"
         :schema="menuSchema"
       >
+        <template #menu-action v-if="$slots['menu-action']">
+          <slot name="menu-action"></slot>
+        </template>
         <template #menu-bottom v-if="$slots['menu-bottom']">
           <slot name="menu-bottom"></slot>
         </template>
       </sv-menu>
 
       <div class="template__content">
-        <div v-if="notice" class="template__notice">
-          {{ notice }}
-        </div>
-
+        <div class="template__top-bg"></div>
         <div class="template__top">
           <sv-breadcumb></sv-breadcumb>
           <router-view name="topbar"></router-view>
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div v-if="$slots.widgets && false" style="
+      <div v-if="$slots.widgets" style="
         position: sticky;
         top: 0;
         height: 100vh;
@@ -57,7 +57,6 @@ import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
 const metaStore = useStore('meta')
 const menuSchema = inject('menuSchema', {})
-const notice = inject('notice', null)
 
 onMounted(() => {
   metaStore.$patch({
