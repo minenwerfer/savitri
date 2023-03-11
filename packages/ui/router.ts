@@ -10,11 +10,6 @@ const publicRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/external',
-    name: 'external',
-    component: () => import('./components/sv-external/sv-external.vue'),
-  },
-  {
     path: '/user',
     name: 'user',
     component: () => import('./components/sv-auth-wall/sv-auth-wall.vue'),

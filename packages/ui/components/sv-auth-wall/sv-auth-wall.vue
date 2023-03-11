@@ -3,7 +3,11 @@
     v-theme:default
     class="wall"
   >
-    <sv-branding alt class="wall__branding"></sv-branding>
+    <img
+      src="/static/logo-alt.png"
+      class="wall_branding"
+      @click="$router.push({ name: 'dashboard-home' })"
+    />
     <div v-if="$slots['authwall-content']" class="wall__content">
       <slot name="authwall-content"></slot>
     </div>
@@ -18,7 +22,6 @@
 
 <script setup lang="ts">
 import { provide } from 'vue'
-import { SvBranding } from '..'
 
 provide('buttonSize', 'large')
 provide('buttonVariant', 'brand')
