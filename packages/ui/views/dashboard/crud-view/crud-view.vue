@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import SvCrud from '../../../components/templates/sv-crud/sv-crud.vue'
+import SvCrud from '../../../components/sv-crud/sv-crud.vue'
 
 const route = useRoute()
 </script>

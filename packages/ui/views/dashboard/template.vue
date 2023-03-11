@@ -34,13 +34,13 @@
         </div>
       </div>
 
-      <div v-if="$slots.widgets" style="
+      <div v-if="$slots.panels" style="
         position: sticky;
         top: 0;
         height: 100vh;
         width: 15rem;
       ">
-        <slot name="widgets"></slot>
+        <slot name="panels"></slot>
       </div>
     </div>
   </div>

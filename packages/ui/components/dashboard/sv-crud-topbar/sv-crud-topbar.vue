@@ -64,7 +64,7 @@ import { computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
-import { call } from '../../templates/sv-crud/_internals/store'
+import { call } from '../../sv-crud/_internals/store'
 import { SvTabs, SvButton, SvIcon } from '../..'
 
 const route = useRoute()

@@ -172,8 +172,8 @@
 
 <script setup lang="ts">
 import { computed, provide, inject } from 'vue'
-import type { CollectionProperty } from '@semantic-api/types'
-import { useStore, useCondition, Condition } from '../../../../web'
+import type { CollectionProperty, Condition } from '@semantic-api/types'
+import { useStore, useCondition } from '../../../../web'
 import { SvInput, SvIcon, SvButton } from '../..'
 
 import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'

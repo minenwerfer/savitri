@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { ref, watch, provide } from 'vue'
 import { useHttp, useDebounce } from '../../../../web'
-import { SvBox, SvInput } from '../../..'
+import { SvBox, SvInput } from '../..'
 import { results, isTyping } from './_internals/store'
 import SvSearchResults from './_internals/components/sv-search-results/sv-search-results.vue'
 
