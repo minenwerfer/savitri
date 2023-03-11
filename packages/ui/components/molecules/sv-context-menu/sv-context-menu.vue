@@ -20,7 +20,6 @@
 
       class="contextmenu__content"
     >
-
       <div>
         <div
           v-if="$slots.extra"
@@ -79,7 +78,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const userStore = useStore('user')
-const contextmenu = ref(null)
+const contextmenu = ref<HTMLDivElement|null>(null)
 const contextmenuVisible = ref(false)
 
 const filterActions = (actions: Array<any>) => {
@@ -100,8 +99,9 @@ const onClick = (action: Action, subject: any) => {
 }
 
 const position = computed(() => ({
-  x: contextmenu.value?.getBoundingClientRect().left + 'px',
-  y: contextmenu.value?.getBoundingClientRect().top + 'px',
+  _: contextmenuVisible.value,
+  x: Math.floor(contextmenu.value?.getBoundingClientRect().left||0 - window.scrollX) + 'px',
+  y: Math.floor(contextmenu.value?.getBoundingClientRect().top||0 - window.scrollY) + 'px',
 }))
 </script>
 

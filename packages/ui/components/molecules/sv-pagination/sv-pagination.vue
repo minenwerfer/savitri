@@ -47,7 +47,7 @@
         <span>{{ $t('of') }} {{ pageCount }}</span>
       </div>
       <sv-bare-button
-        :disabled="store.isLoading || page === pageCount - 1"
+        :disabled="store.isLoading || page >= pageCount - 1"
         @clicked="paginate('next')"
       >
         <sv-icon

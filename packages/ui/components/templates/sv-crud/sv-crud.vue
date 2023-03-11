@@ -191,6 +191,12 @@ onMounted(() => {
   }
 })
 
+const toggleLayout = (store: any) => {
+  store.currentLayout = store.currentLayout === 'tabular'
+    ? store.description.layout!.name
+    : 'tabular'
+}
+
 onUnmounted(() => {
   const getFilters = () => store.filters
   const oldFilters = getFilters()
