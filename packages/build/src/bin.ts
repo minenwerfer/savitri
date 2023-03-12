@@ -9,19 +9,23 @@ const gatherIcons = async () => {
   const icons = new Set<string>()
   const regex = /icon:\s?['|"]([^'"]+)['|"]/mg
 
-  for( const collection of collections ) {
-    const descriptionFilename = (await readdir(`${targetDir}/${collection}`))
-      .find((filename) => /\.description\.([a-z]+)$/.test(filename))
-
-    const description = await readFile(`${targetDir}/${collection}/${descriptionFilename}`) as unknown
-
+  const scrapIcons = (content: string) => {
     let match: Array<string>|null
-    while( match = regex.exec(description as string) ) {
+    while( match = regex.exec(content) ) {
       const iconName = match[1]
       if( !icons.has(iconName) ) {
         icons.add(iconName)
       }
     }
+  }
+
+  for( const collection of collections ) {
+    const descriptionFilename = (await readdir(`${targetDir}/${collection}`))
+      .find((filename) => /\.description\.([a-z]+)$/.test(filename))
+
+    const description = await readFile(`${targetDir}/${collection}/${descriptionFilename}`) as unknown
+    scrapIcons(description as string)
+
   }
 
   instance.icons ??= []
