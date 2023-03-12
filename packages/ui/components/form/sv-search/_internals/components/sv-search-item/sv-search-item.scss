@@ -1,5 +1,3 @@
-@import 'style/theming';
-
 .item {
   display: flex;
   align-items: center;
@@ -17,7 +15,7 @@
   }
 
 
-  :deep(svg) {
+  :deep([data-component=icon]) {
     width: 1.2rem;
   }
 

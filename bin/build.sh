@@ -9,11 +9,9 @@ PACKAGES=(
 )
 
 function do_pack() {
-cp -r {\
-tsconfig.json\
-,packages/web/global.d.ts\
-,packages/web/static\
-} dist/web
+  cp tsconfig.json dist/web
+  cp packages/web/global.d.ts dist/web
+  cp -r packages/build/static dist/build
 
   for package in ${PACKAGES[*]}; do
     cp "packages/${package}/package.json" "dist/${package}/package.json"

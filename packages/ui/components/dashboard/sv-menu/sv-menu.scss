@@ -1,5 +1,3 @@
-@import 'style/theming';
-
 @mixin shrinked {
   width: 0;
 
@@ -18,7 +16,7 @@
 
     .menu__route,
     .menu__action {
-      :deep([role=icon-label]) {
+      :deep([data-component=icon-label]) {
         display: none;
       }
     }

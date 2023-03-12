@@ -8,7 +8,7 @@ $icon-size: 1.2rem;
     display: flex;
     padding: .4rem;
 
-    :deep(svg) {
+    :deep([data-component=icon]) {
       width: $icon-size;
       height: $icon-size;
     }

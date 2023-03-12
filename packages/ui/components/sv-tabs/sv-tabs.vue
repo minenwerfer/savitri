@@ -7,8 +7,6 @@
 <style scoped src="./sv-tabs.scss"></style>
 
 <style scoped lang="scss">
-@import 'style/theming';
-
 :slotted(div) {
   display: flex;
   align-items: center;

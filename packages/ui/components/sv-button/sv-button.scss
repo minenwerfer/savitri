@@ -1,5 +1,3 @@
-@import 'style/theming';
-
 @keyframes progress {
   from {
     width: 0;
@@ -21,7 +19,7 @@
   @include themed() {
     color: t(foreground-color);
 
-    :deep(svg) {
+    :deep([data-component=icon]) {
       height: .95rem;
     }
 

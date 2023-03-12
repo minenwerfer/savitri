@@ -2,7 +2,7 @@
   <div class="picture">
     <img
       v-if="url"
-      v-lazy="url"
+      :src="url"
       :class="`
         picture__image
         ${contain && 'picture__image--contain'}

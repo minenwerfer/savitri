@@ -5,7 +5,7 @@
   >
     <img
       src="/static/logo-alt.png"
-      class="wall_branding"
+      class="wall__branding"
       @click="$router.push({ name: 'dashboard-home' })"
     />
     <div v-if="$slots['authwall-content']" class="wall__content">

@@ -1,4 +1,3 @@
-@import 'style/theming';
 $section-padding: .8rem;
 
 @keyframes fixed-fadein {
@@ -127,7 +126,7 @@ $section-padding: .8rem;
 
     min-height: 3rem;
 
-    :deep(svg) {
+    :deep([data-component=icon]) {
       width: 1.2rem;
     }
 

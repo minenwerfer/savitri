@@ -17,15 +17,23 @@
           : 'icon__icon--medium'
       }
     `">
-      <unicon
-        v-bind="{
-          name,
-          fill
-        }"
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
         data-component="icon"
-      ></unicon>
+      >
+        <use :href="`/static/icons/${variant}/${name}.svg#root`"></use>
+      </svg>
+      <!-- <unicon -->
+      <!--   v-bind="{ -->
+      <!--     name, -->
+      <!--     fill -->
+      <!--   }" -->
+      <!--   data-component="icon" -->
+      <!-- ></unicon> -->
     </div>
-    <div v-if="$slots.default" role="icon-label">
+    <div v-if="$slots.default" data-component="icon-label">
       <slot></slot>
     </div>
   </a>
@@ -36,7 +44,7 @@ import { inject } from 'vue'
 
 type Props = {
   name: string
-  fill?: string
+  variant?: string
   size?: string
   small?: boolean
   medium?: boolean
@@ -46,6 +54,7 @@ type Props = {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  variant: 'line',
   reactive: null
 })
 
