@@ -18,7 +18,7 @@ type Props = {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'clicked', event: any): void
+  (e: 'click', event: any): void
 }>()
 
 const onClick = (event: any) => {
@@ -26,7 +26,7 @@ const onClick = (event: any) => {
   event.preventDefault()
 
   if( !props.disabled ) {
-    emit('clicked', event)
+    emit('click', event)
   }
 }
 </script>

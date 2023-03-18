@@ -14,14 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-import { useStore } from '../../../web'
+import { useStore } from '@savitri/web'
+import SvBox from '../sv-box/sv-box.vue'
 
-const SvBox = defineAsyncComponent(() => import('../sv-box/sv-box.vue'))
+type Props = {
+  closeHint?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  closeHint: true
+})
+
 const metaStore = useStore('meta')
-
-const props = withDefaults(
-  defineProps<{ closeHint?: boolean }>(),
-  { closeHint: true }
-)
 </script>

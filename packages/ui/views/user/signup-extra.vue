@@ -56,7 +56,7 @@
 
   <sv-button
     :disabled="!!passwordError || !tosAccepted"
-    @clicked="insert"
+    @click="insert"
   >
     Criar conta
   </sv-button>
@@ -65,15 +65,12 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { hasStore, useStore, usePasswordPolicy } from '../../../web'
+import { hasStore, useStore, usePasswordPolicy } from '@savitri/web'
 
-import {
-  SvForm,
-  SvIcon,
-  SvCheckbox,
-  SvButton,
-
-} from '../..'
+import SvForm from '../../components/form/sv-form/sv-form.vue'
+import SvCheckbox from '../../components/form/sv-checkbox/sv-checkbox.vue'
+import SvIcon from '../../components/sv-icon/sv-icon.vue'
+import SvButton from '../../components/sv-button/sv-button.vue'
 
 const router = useRouter()
 

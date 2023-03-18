@@ -24,10 +24,10 @@
         v-if="preview"
         class="file__buttons"
       >
-        <sv-button @clicked="insert">
+        <sv-button @click="insert">
           Enviar
         </sv-button>
-        <sv-button @clicked="clearPreview">
+        <sv-button @click="clearPreview">
           Limpar
         </sv-button>
       </div>
@@ -35,7 +35,7 @@
         v-else-if="modelValue?._id"
         class="file__buttons"
       >
-        <sv-button @clicked="remove">
+        <sv-button @click="remove">
           Remover
         </sv-button>
       </div>
@@ -46,8 +46,9 @@
 <script setup lang="ts">
 import { provide, ref, computed } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
-import { useParentStore } from '../../../../web'
-import { SvPicture, SvButton } from '../..'
+import { useParentStore } from '@savitri/web'
+import SvPicture from '../../sv-picture/sv-picture.vue'
+import SvButton from '../../sv-button/sv-button.vue'
 
 type Props = {
   modelValue: any

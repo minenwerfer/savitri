@@ -62,9 +62,10 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, useAction } from '../../../../../../../web'
+import { useStore, useAction } from '@savitri/web'
+import SvPicture from '../../../../../sv-picture/sv-picture.vue'
+import SvButton from '../../../../../sv-button/sv-button.vue'
 
-import { SvPicture, SvButton } from '../../../../..'
 import { results } from '../../store'
 
 type Emits = {

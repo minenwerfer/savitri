@@ -91,12 +91,12 @@
 
 <script setup lang="ts">
 import { watch, computed, ref } from 'vue'
-import { SvIcon } from '..'
+import SvIcon from '../sv-icon/sv-icon.vue'
 
 // #region props
 type Props = {
   closeHint?: boolean
-  visible?: boolean
+  visible?: boolean|string
   title?: string
   float?: boolean
   fixedRight?: boolean

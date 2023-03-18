@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "nodenext",
-    "resolveJsonModule": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true
   },

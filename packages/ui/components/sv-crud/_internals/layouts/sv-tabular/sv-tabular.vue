@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { inject } from 'vue'
 import { LayoutOptions } from '@semantic-api/types'
-import { useParentStore } from '../../../../../../web'
-import { SvTable } from '../../../..'
+import { useParentStore } from '@savitri/web'
+import SvTable from '../../../../sv-table/sv-table.vue'
 
 type Props = {
   individualActions: any

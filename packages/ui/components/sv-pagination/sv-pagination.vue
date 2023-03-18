@@ -18,7 +18,7 @@
     </div>
 
     <div class="pagination__control">
-      <sv-bare-button @clicked="page = 0">
+      <sv-bare-button @click="page = 0">
         <sv-icon
           small
           name="angle-double-left"
@@ -26,7 +26,7 @@
       </sv-bare-button>
       <sv-bare-button
         :disabled="store.isLoading || page === 0"
-        @clicked="paginate('previous')"
+        @click="paginate('previous')"
       >
         <sv-icon
           small
@@ -48,14 +48,14 @@
       </div>
       <sv-bare-button
         :disabled="store.isLoading || page >= pageCount - 1"
-        @clicked="paginate('next')"
+        @click="paginate('next')"
       >
         <sv-icon
           small
           name="angle-right"
         ></sv-icon>
       </sv-bare-button>
-      <sv-bare-button @clicked="page = pageCount - 1">
+      <sv-bare-button @click="page = pageCount - 1">
         <sv-icon
           small
           name="angle-double-right"
@@ -68,14 +68,12 @@
 <script setup lang="ts">
 import { ref, computed, watch, } from 'vue'
 import { PAGINATION_PER_PAGE_DEFAULTS } from '@semantic-api/types'
-import { useParentStore } from '../../../web'
+import { useParentStore } from '@savitri/web'
 
-import {
-  SvBareButton,
-  SvSelect,
-  SvInput,
-  SvIcon
-} from '..'
+import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
+import SvInput from '../form/sv-input/sv-input.vue'
+import SvSelect from '../form/sv-select/sv-select.vue'
 
 type Props = {
   collection: string

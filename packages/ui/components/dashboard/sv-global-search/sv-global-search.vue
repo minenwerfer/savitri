@@ -5,6 +5,17 @@
     @overlay-click="emit('close')"
   >
     <div class="global">
+      <sv-icon
+        v-clickable
+        small
+        reactive
+        icon-right
+        name="times"
+        style="align-self: flex-end"
+        @click="emit('close')"
+      >
+        {{ $t('close') }}
+      </sv-icon>
       <div class="global__searchbar">
         <sv-input
           v-model.lazy="query"
@@ -31,8 +42,11 @@
 
 <script setup lang="ts">
 import { ref, watch, provide } from 'vue'
-import { useHttp, useDebounce } from '../../../../web'
-import { SvBox, SvInput } from '../..'
+import { useHttp, useDebounce } from '@savitri/web'
+import SvBox from '../../sv-box/sv-box.vue'
+import SvIcon from '../../sv-icon/sv-icon.vue'
+import SvInput from '../../form/sv-input/sv-input.vue'
+
 import { results, isTyping } from './_internals/store'
 import SvSearchResults from './_internals/components/sv-search-results/sv-search-results.vue'
 

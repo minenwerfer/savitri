@@ -1,5 +1,3 @@
-import '@semantic-api/common/polyfill'
-
 import { createApp, App } from 'vue'
 import type { Router } from 'vue-router'
 
@@ -64,8 +62,8 @@ export const useApp = (config: AppOptions): Promise<{
   app.provide('menuSchema', menuSchema)
   app.provide('i18n', i18n)
 
-  app.provide('baseVersion', require('../package.json').version)
-  app.provide('dashboardLayout', global.INSTANCE_VARS.dashboardLayout || {})
+  // app.provide('baseVersion', require('../package.json').version)
+  app.provide('dashboardLayout', window.INSTANCE_VARS?.dashboardLayout || {})
 
   app.mixin({
     computed: {
@@ -105,7 +103,7 @@ export const useApp = (config: AppOptions): Promise<{
       hasRoles(roles: string|Array<string>) {
         return arraysIntersects(roles, userStore.$currentUser.roles)
       },
-      useStore(storeName: string) {
+      useStore(storeName?: string) {
         return useParentStore(storeName)
       }
     }

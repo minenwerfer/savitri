@@ -1,21 +1,27 @@
 <template>
   <div
+    :key="mobileVisible"
+    v-overlay="{
+      condition: mobileVisible,
+      click: () => emit('update:mobileVisible', false)
+    }"
     :class="`
-      menu
+      navbar
       no-print
-      ${!visible && 'menu--hidden'}
+      ${!visible && 'navbar--hidden'}
+      ${mobileVisible && 'navbar--mobile-visible'}
   `">
-    <sv-menu-header class="menu__header"></sv-menu-header>
+    <sv-navbar-header class="navbar__header"></sv-navbar-header>
 
-    <div v-if="$slots['menu-action']" class="menu__action">
-      <slot name="menu-action"></slot>
+    <div v-if="$slots['navbar-action']" class="navbar__action">
+      <slot name="navbar-action"></slot>
     </div>
-    <!-- menu entries -->
-    <div class="menu__entries">
+    <!-- navbar entries -->
+    <div class="navbar__entries">
       <div
         v-for="(entry, index) in routesWithChildren"
         :key="`entry-${index}`"
-        class="menu__entry"
+        class="navbar__entry"
       >
         <!-- subroutes -->
         <sv-icon
@@ -23,8 +29,8 @@
           v-for="route in entry.children"
           :key="route.name"
           :class="`
-            menu__route
-            ${isCurrent(route) && 'menu__route--current'}
+            navbar__route
+            ${isCurrent(route) && 'navbar__route--current'}
           `"
 
           :name="route.meta?.icon || 'file'"
@@ -35,15 +41,15 @@
           <span v-if="route.badgeFunction">
             ({{
               useStore(route.badgeFunction.split('@')[0])
-                .customGetter[route.badgeFunction.split('@')[1]]('menu', route.badgePayload)
+                .customGetter[route.badgeFunction.split('@')[1]]('navbar', route.badgePayload)
             }})
           </span>
         </sv-icon>
       </div>
     </div>
 
-    <div v-if="$slots['menu-bottom']" class="menu__bottom">
-      <slot name="menu-bottom"></slot>
+    <div v-if="$slots['navbar-bottom']" class="navbar__bottom">
+      <slot name="navbar-bottom"></slot>
     </div>
   </div>
 </template>
@@ -52,14 +58,14 @@
 import { ref, computed, watch, } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { arraysIntersects } from '@semantic-api/common'
-import { useStore, Route, MenuSchema } from '../../../../web'
-import { SvIcon } from '../..'
-
-import SvMenuHeader from './_internals/components/sv-menu-header/sv-menu-header.vue'
+import { useStore, Route, MenuSchema } from '@savitri/web'
+import SvIcon from '../../sv-icon/sv-icon.vue'
+import SvNavbarHeader from './_internals/components/sv-navbar-header/sv-navbar-header.vue'
 
 type Props = {
   entrypoint?: string
   visible: boolean
+  mobileVisible?: boolean
   schema: MenuSchema
 }
 
@@ -68,7 +74,12 @@ type SchemaNode = {
   children?: Route
 }
 
+type Emit = {
+  (e: 'update:visible' | 'update:mobileVisible', value: string|boolean): void
+}
+
 const props = defineProps<Props>()
+const emit = defineEmits<Emit>()
 
 const metaStore = useStore('meta')
 const userStore = useStore('user')
@@ -80,6 +91,10 @@ const onEntryClick = (route: Route & { meta: any }) => {
   }
   if( route.meta?.action ) {
     route.meta.action()
+  }
+
+  if( props.mobileVisible ) {
+    emit('update:mobileVisible', false)
   }
 }
 
@@ -157,4 +172,4 @@ watch(() => metaStore.descriptions, () => {
 })
 </script>
 
-<style scoped src="./sv-menu.scss"></style>
+<style scoped src="./sv-navbar.scss"></style>

@@ -17,11 +17,9 @@
         info__arrow--${where}
       `"></div>
     </div>
-    <div class="info__trigger">
-      <div @mouseover="visible = true">
-        <slot v-if="$slots.default" name="default"></slot>
-        <slot v-else></slot>
-      </div>
+    <div @mouseover="visible = true">
+      <slot v-if="$slots.default" name="default"></slot>
+      <slot v-else></slot>
     </div>
   </div>
 </template>

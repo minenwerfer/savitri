@@ -57,10 +57,7 @@
           :key="`matching-${item._id}`"
           @click="select(item, +index)"
         >
-          <sv-icon
-            name="plus"
-            fill="gray"
-          ></sv-icon>
+          <sv-icon name="plus"></sv-icon>
         </sv-search-item>
       </sv-search-container>
 
@@ -88,19 +85,17 @@ import {
   computed,
   ref,
   reactive,
-  defineAsyncComponent,
 
 } from 'vue'
 
 import type { CollectionProperty } from '@semantic-api/types'
-import { useStore, useDebounce } from '../../../../web'
-import { SvIcon } from '../..'
+import { useStore, useDebounce } from '@savitri/web'
+import SvIcon from '../../sv-icon/sv-icon.vue'
+import SvForm from '../sv-form/sv-form.vue'
 
 import SvSearchSelected from './_internals/components/sv-search-selected/sv-search-selected.vue'
 import SvSearchContainer from './_internals/components/sv-search-container/sv-search-container.vue'
 import SvSearchItem from './_internals/components/sv-search-item/sv-search-item.vue'
-
-const SvForm = defineAsyncComponent(() => import('../sv-form/sv-form.vue'))
 
 type Props = {
   modelValue: any

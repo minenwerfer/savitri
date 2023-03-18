@@ -6,11 +6,6 @@
   }
 
   &__item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 20rem;
-  
     @include themed() {
       background: t(background-color);
       outline: 1px solid t(border-color);

@@ -50,9 +50,13 @@
         :icon="actionProps.icon"
         :disabled="store.selectedIds.length === 0 && actionProps.selection"
 
-        @clicked="call(actionProps)({ _id: selectedIds })"
+        @click="call(actionProps)({ _id: selectedIds })"
       >
-        {{ actionProps.name }}
+        {{
+          actionProps.translate
+            ? $t(actionProps.name)
+            : actionProps.name
+        }}
       </sv-button>
       <slot v-if="$slots.actions" name="actions"></slot>
     </div>
@@ -65,7 +69,9 @@ import { useRouter, useRoute } from 'vue-router'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
 import { call } from '../../sv-crud/_internals/store'
-import { SvTabs, SvButton, SvIcon } from '../..'
+import SvTabs from '../../sv-tabs/sv-tabs.vue'
+import SvButton from '../../sv-button/sv-button.vue'
+import SvIcon from '../../sv-icon/sv-icon.vue'
 
 const route = useRoute()
 const router = useRouter()

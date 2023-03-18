@@ -13,7 +13,7 @@
         v-bind="action"
         :key="`action-${index}`"
 
-        @clicked="onClick(action)"
+        @click="onClick(action)"
       >
         {{ action.title }}
       </sv-button>
@@ -22,12 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-import { useStore } from '../../../web'
-import { SvButton } from '..'
+import { useStore } from '@savitri/web'
+import SvModal from '../sv-modal/sv-modal.vue'
+import SvButton from '../sv-button/sv-button.vue'
 
-const SvModal = defineAsyncComponent(() => import('../sv-modal/sv-modal.vue'))
-const metaStore = useStore('meta')
 
 type Props = {
   title?: string
@@ -35,6 +33,7 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+const metaStore = useStore('meta')
 
 const onClick = (answer: any) => {
   metaStore.fulfillPrompt(answer)

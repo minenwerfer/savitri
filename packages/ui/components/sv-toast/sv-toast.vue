@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from '../../../web'
-import { SvIcon } from '../'
+import { useStore } from '@savitri/web'
+import SvIcon from '../sv-icon/sv-icon.vue'
 
 const props = defineProps<{
   idx: number

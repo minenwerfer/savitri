@@ -40,8 +40,10 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useStore } from '../../../../../../../web'
-import { SvIcon, SvContextMenu, SvSelect } from '../../../../..'
+import { useStore } from '@savitri/web'
+import SvIcon from '../../../../../sv-icon/sv-icon.vue'
+import SvContextMenu from '../../../../../sv-context-menu/sv-context-menu.vue'
+import SvSelect from '../../../../../form/sv-select/sv-select.vue'
 
 const router = useRouter()
 const metaStore = useStore('meta')
@@ -71,4 +73,4 @@ const dropdownActions = [
 ]
 </script>
 
-<style scoped src="./sv-menu-header.scss"></style>
+<style scoped src="./sv-navbar-header.scss"></style>

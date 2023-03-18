@@ -1,16 +1,13 @@
 import { CollectionProperty } from '@semantic-api/types'
 import { deepClone } from '@semantic-api/common'
-import { useStore } from '../../../../../web'
-import {
-  SvInput,
-  SvOptions,
-  SvSwitch,
-  SvSelect,
-  SvFile,
-  SvSearch
+import { useStore } from '@savitri/web'
 
-} from '../..'
-
+import SvInput from '../../sv-input/sv-input.vue'
+import SvOptions from '../../sv-options/sv-options.vue'
+import SvSwitch from '../../sv-switch/sv-switch.vue'
+import SvSelect from '../../sv-select/sv-select.vue'
+import SvFile from '../../sv-file/sv-file.vue'
+import SvSearch from '../../sv-search/sv-search.vue'
 
 export const getComponent = (property: CollectionProperty, customComponents: Record<string, any>) => {
   const propType = property.type === 'array'

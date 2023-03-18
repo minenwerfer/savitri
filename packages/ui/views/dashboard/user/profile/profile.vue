@@ -1,5 +1,38 @@
 <template>
-  <sv-box :key="userStore.fields" class="profile sv-padded">
+  <div class="sv-centered">
+    <sv-picture
+      bordered
+      :url="userStore.item.picture?.link"
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        width: 14rem;
+        height: 14rem;
+      "
+    >
+      <template #caption>
+        <sv-icon
+          v-clickable
+          small
+          icon-right
+          name="edit"
+          @click="editPanel = true"
+        >
+          <h2>{{ userStore.item.full_name }}</h2>
+        </sv-icon>
+      </template>
+    </sv-picture>
+  </div>
+
+  <sv-box
+    float
+    close-hint
+    title="Editar perfil"
+    v-model:visible="editPanel"
+    @overlay-click="editPanel = false"
+  >
     <sv-form
       v-bind="{
         collection: 'user',
@@ -16,15 +49,8 @@
 
     <template #footer>
       <sv-button
-        small
-        variant="transparent"
-        @clicked="router.push({ name: 'dashboard-user-changepass' })"
-      >
-        Mudar senha
-      </sv-button>
-      <sv-button
-        :disabled="userStore.isLoading"
-        @clicked="insert"
+        :loading="userStore.isLoading"
+        @click="insert"
       >
         Salvar
       </sv-button>
@@ -33,18 +59,19 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { useStore } from '../../../../../web'
-import {
-  SvBox,
-  SvForm,
-  SvButton
+import { ref } from 'vue'
+import { useStore } from '@savitri/web'
 
-} from '../../../../components'
+import SvBox from '../../../../components/sv-box/sv-box.vue'
+import SvForm from '../../../../components/form/sv-form/sv-form.vue'
+import SvButton from '../../../../components/sv-button/sv-button.vue'
+import SvPicture from '../../../../components/sv-picture/sv-picture.vue'
+import SvIcon from '../../../../components/sv-icon/sv-icon.vue'
 
-const router = useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
+
+const editPanel = ref(false)
 
 userStore.setItem(userStore.$currentUser)
 

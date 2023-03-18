@@ -23,11 +23,11 @@
       <sv-button
         small
         variant="transparent"
-        @clicked="extraPanel = false"
+        @click="extraPanel = false"
       >
         Cancelar
       </sv-button>
-      <sv-button @clicked="insertExtra">
+      <sv-button @click="insertExtra">
         Salvar
       </sv-button>
     </template>
@@ -36,14 +36,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { hasStore, useStore } from '../../../../web'
-import {
-  SvCrud,
-  SvBox,
-  SvForm,
-  SvButton
+import { hasStore, useStore } from '@savitri/web'
 
-} from '../../..'
+import SvCrud from '../../../components/sv-crud/sv-crud.vue'
+import SvBox from '../../../components/sv-box/sv-box.vue'
+import SvForm from '../../../components/form/sv-form/sv-form.vue'
+import SvButton from '../../../components/sv-button/sv-button.vue'
 
 const userStore = useStore('user')
 const userExtraStore = hasStore('userExtra')

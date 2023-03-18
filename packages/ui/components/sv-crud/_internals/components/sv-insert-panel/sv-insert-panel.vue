@@ -2,9 +2,24 @@
   <sv-box
     fixed-right
     v-model:visible="isInsertVisible"
-    :title="`${isInsertReadOnly ? 'Examinar' : 'Modificar'} ${$t(metaStore.view.collection)}`"
     @overlay-click="cancel"
   >
+    <template #header>
+      <span>{{
+        (() => {
+          switch( isInsertVisible ) {
+            case 'add':
+              return $t('action.add')
+            case 'duplicate':
+              return $t('action.duplicate')
+            case 'edit':
+            default:
+              return $t('action.edit')
+          }
+        })() }}
+      </span>
+      <span>&nbsp;{{ $t(metaStore.view.collection) }}</span>
+    </template>
     <sv-form
       v-bind="{
         collection: metaStore.view.collection,
@@ -23,7 +38,7 @@
           actions: individualActions
             .filter(({ action }) => action !== 'ui/spawnEdit')
         }"
-        @action-clicked="isInsertVisible = false"
+        @action-click="isInsertVisible = false"
       >
         <sv-icon
           v-clickable
@@ -37,14 +52,14 @@
       <sv-button
         small
         variant="transparent"
-        @clicked="cancel"
+        @click="cancel"
       >
         {{ $t('action.cancel') }}
       </sv-button>
       <sv-button
         :disabled="!store.insertReady || isInsertReadOnly"
         :loading="store.isLoading"
-        @clicked="insert"
+        @click="insert"
       >
       {{ $t('action.insert') }}
       </sv-button>
@@ -54,15 +69,13 @@
 
 <script setup lang="ts">
 import { inject, watch } from 'vue'
-import { useStore, CollectionStore } from '../../../../../../web'
-import {
-  SvBox,
-  SvForm,
-  SvButton,
-  SvContextMenu,
-  SvIcon
-  
-} from '../../../..'
+import { useStore, CollectionStore } from '@savitri/web'
+
+import SvBox from '../../../../sv-box/sv-box.vue'
+import SvForm from '../../../../form/sv-form/sv-form.vue'
+import SvButton from '../../../../sv-button/sv-button.vue'
+import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
+import SvIcon from '../../../../sv-icon/sv-icon.vue'
 
 import { isInsertVisible } from '../../store'
 

@@ -40,14 +40,18 @@
               contextmenu__item
               contextmenu__item--reactive
             "
-            @clicked="onClick(action, subject)"
+            @click="onClick(action, subject)"
           >
             <sv-icon
               small
               v-if="action.icon"
               :name="action.icon"
             >
-              {{ action.name }}
+              {{
+                action.translate
+                  ? $t(action.name)
+                  : action.name
+              }}
             </sv-icon>
           </sv-bare-button>
         </div>
@@ -58,8 +62,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useStore } from '../../../web'
-import { SvBareButton, SvIcon } from '..'
+import { useStore } from '@savitri/web'
+import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
 
 type Props = {
   actions?: any

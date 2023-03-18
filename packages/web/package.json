@@ -1,6 +1,7 @@
 {
   "name": "@savitri/web",
-  "version": "1.1.270",
+  "type": "module",
+  "version": "1.1.271",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node ../../dist/web/build/compile.js library"
@@ -18,7 +19,6 @@
     "@semantic-api/types": "latest",
     "@types/ramda": "^0.28.15",
     "maska": "^1.4.6",
-    "mini-css-extract-plugin": "^2.7.2",
     "pinia": "^2.0.16",
     "ramda": "^0.28.0",
     "sass": "^1.55.0",

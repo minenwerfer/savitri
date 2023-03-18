@@ -25,11 +25,8 @@
 
 <script setup lang="ts">
 import { inject } from 'vue'
-import {
-  SvBareButton,
-  SvIcon
-
-} from '..'
+import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
 
 // #region props
 type Size = 

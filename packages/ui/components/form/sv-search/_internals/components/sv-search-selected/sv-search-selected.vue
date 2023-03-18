@@ -9,11 +9,7 @@
       :key="item._id"
       @click="unselect(item, false)"
     >
-      <sv-icon
-        v-clickable
-        name="check-circle"
-        fill="green"
-      ></sv-icon>
+      <sv-icon v-clickable name="check-circle"></sv-icon>
     </sv-search-item>
   </sv-search-container>
 </template>
@@ -21,8 +17,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
-import { useParentStore } from '../../../../../../../web'
-import { SvIcon } from '../../../../..'
+import { useParentStore } from '@savitri/web'
+import SvIcon from '../../../../../sv-icon/sv-icon.vue'
 import SvSearchContainer from '../sv-search-container/sv-search-container.vue'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
@@ -77,3 +73,9 @@ const unselect = async (item: any, purge=true) => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+:deep([data-component=icon]) {
+  fill: green;
+}
+</style>

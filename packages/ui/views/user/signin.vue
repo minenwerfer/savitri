@@ -50,7 +50,7 @@
       :disabled="
         !userStore.credentials.email
         || !userStore.credentials.password"
-      @clicked="authenticate"
+      @click="authenticate"
     >
       Entrar
     </sv-button>
@@ -58,7 +58,7 @@
     <sv-button
       v-if="userStore.$currentUser._id && !metaStore.isLoading"
       :disabled="userStore.isLoading || metaStore.isLoading"
-      @clicked="router.push({ name: 'dashboard-home' })"
+      @click="router.push({ name: 'dashboard-home' })"
     >
       Continuar como {{ userStore.$currentUser.first_name }}
     </sv-button>
@@ -67,8 +67,9 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useStore } from '../../../web'
-import { SvForm, SvButton } from '../../components'
+import { useStore } from '@savitri/web'
+import SvForm from '../../components/form/sv-form/sv-form.vue'
+import SvButton from '../../components/sv-button/sv-button.vue'
 
 const router = useRouter()
 const userStore = useStore('user')

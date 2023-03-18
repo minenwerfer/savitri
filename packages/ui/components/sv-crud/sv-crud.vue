@@ -19,7 +19,10 @@
 
     <div>
       <div class="crud__table-panel">
-        <div>
+        <div style="
+          display: flex;
+          align-items: center;
+        ">
           <sv-info
             v-if="store && Object.keys(store.availableFilters).length > 0"
             where="bottom"
@@ -121,9 +124,13 @@ import {
 } from 'vue'
 
 import { useRouter } from 'vue-router'
-import { useStore, useParentStore, useAction, CollectionStore } from '../../../web'
+import { useStore, useParentStore, useAction, CollectionStore } from '@savitri/web'
 import type { Layout } from '@semantic-api/types'
-import { SvPagination, SvInfo, SvBareButton, SvIcon } from '..'
+
+import SvPagination from '../sv-pagination/sv-pagination.vue'
+import SvInfo from '../sv-info/sv-info.vue'
+import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
 
 import { getLayout } from './_internals/layouts'
 import SvFilterPanel from './_internals/components/sv-filter-panel/sv-filter-panel.vue'
@@ -232,16 +239,16 @@ watch(() => actionEventBus.value, async (event) => {
 
   if( event.name === 'spawnAdd' ) {
     store.clearItem()
-    isInsertVisible.value = true
+    isInsertVisible.value = 'add'
   }
 
   else if( event.name === 'spawnEdit' ) {
-    isInsertVisible.value = true
+    isInsertVisible.value = 'edit'
   }
 
   else if( event.name === 'spawnView' ) {
     isInsertReadonly.value = true
-    isInsertVisible.value = true
+    isInsertVisible.value = 'view'
   }
 
   else if( event.name === 'duplicate' ) {
@@ -272,7 +279,7 @@ watch(() => actionEventBus.value, async (event) => {
     })
 
     store.referenceItem = {}
-    isInsertVisible.value = true
+    isInsertVisible.value = 'duplicate'
   }
 
   else {

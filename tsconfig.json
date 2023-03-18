@@ -2,18 +2,18 @@
   "compilerOptions": {
     "outDir": "dist",
     "target": "esnext",
-    "module": "commonjs",
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "lib": [
-      "dom"
+      "dom",
+      "esnext"
     ]
   },
   "include": [
-    "packages/web/**/*",
-    "packages/ui/**/*",
-    "packages/build/**/*"
+    "packages/web/**/*"
   ]
 }

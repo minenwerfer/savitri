@@ -7,6 +7,10 @@
     font-size: .8rem !important;
   }
 
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+
   &__control {
     display: flex;
     align-items: center;

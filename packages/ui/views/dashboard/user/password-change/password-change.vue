@@ -22,8 +22,8 @@
     <template #footer>
       <sv-button
         class="passchange__save-button"
-        :disabled="passwordError"
-        @clicked="insert"
+        :disabled="!!passwordError"
+        @click="insert"
       >
         Salvar
       </sv-button>
@@ -34,8 +34,11 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore, usePasswordPolicy } from '../../../../../web'
-import { SvBox, SvForm, SvButton } from '../../../../components'
+import { useStore, usePasswordPolicy } from '@savitri/web'
+
+import SvBox from '../../../../components/sv-box/sv-box.vue'
+import SvForm from '../../../../components/form/sv-form/sv-form.vue'
+import SvButton from '../../../../components/sv-button/sv-button.vue'
 
 const router = useRouter()
 const userStore = useStore('user')

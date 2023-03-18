@@ -35,6 +35,13 @@ $top-height: 3.6rem;
       border-bottom: 1px solid t(border-color);
       backdrop-filter: blur(15px);
     }
+
+    @media screen and (max-width: 600px) {
+      justify-content: center;
+      &>:not(:nth-child(1)) {
+        display: none;
+      }
+    }
   }
 
   &__top-bg {

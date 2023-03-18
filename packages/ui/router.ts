@@ -100,16 +100,19 @@ const privateRoutes: Array<RouteRecordRaw> = [
         },
         children: [
           {
-            path: 'user-profile',
+            path: 'profile',
             name: 'dashboard-user-profile',
-            component: () => import('./views/dashboard/user/profile/profile.vue'),
+            components: {
+              default: () => import('./views/dashboard/user/profile/profile.vue'),
+              topbar: () => import('./views/dashboard/user/_internals/components/sv-profile-topbar.vue'),
+            },
             meta: {
               title: 'Meu perfil',
               icon: 'user-square'
             }
           },
           {
-            path: 'user-changepass',
+            path: 'changepass',
             name: 'dashboard-user-changepass',
             component: () => import('./views/dashboard/user/password-change/password-change.vue'),
             meta: {

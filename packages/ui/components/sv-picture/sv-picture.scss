@@ -1,11 +1,25 @@
 .picture {
+  margin: 0;
+
   &__image {
-    object-fit: cover;
     width: 100%;
     height: 100%;
 
-    &--contain {
-      object-fit: contain;
+    
+    &--bordered {
+      @include themed() {
+        border: 1px solid t(border-color);
+      }
+    }
+  }
+
+  &__background {
+    width: 100%;
+    height: 100%;
+    @include themed() {
+      &>* {
+        stroke: t(border-color);
+      }
     }
   }
 }

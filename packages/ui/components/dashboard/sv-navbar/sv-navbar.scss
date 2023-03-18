@@ -1,35 +1,35 @@
 @mixin shrinked {
   width: 0;
 
+  @media screen and (max-width: 600px) {
+    position: fixed;
+  }
+
   @media screen and (min-width: 600px) {
-    width: 4rem;
+    width: 4rem !important;
     row-gap: .6rem;
 
-    ::-webkit-scrollbar {
-      width: 0 !important;
-    }
-
-    .menu__route {
+    .navbar__route {
       justify-content: center;
       border-radius: 8px;
     }
 
-    .menu__route,
-    .menu__action {
+    .navbar__route,
+    .navbar__action {
       :deep([data-component=icon-label]) {
         display: none;
       }
     }
 
-    .menu__header {
+    .navbar__header {
       :deep(.header__user-inner) {
         display: none;
       }
     }
 
-    .menu__header,
-    .menu__entries,
-    .menu__action {
+    .navbar__header,
+    .navbar__entries,
+    .navbar__action {
       width: auto;
       margin: 0;
       padding: 0;
@@ -38,7 +38,7 @@
   }
 }
 
-.menu {
+.navbar {
   position: sticky;
   top: 0;
   left: 0;
@@ -60,6 +60,7 @@
   }
 
   @include themed() {
+    background: t(body-background);
     border-right: 1px solid t(border-color);
     color: t(foreground-color);
 
@@ -72,8 +73,12 @@
     @include shrinked;
   }
 
+  &--mobile-visible {
+    width: 20rem;
+  }
+
   &__entries {
-    width: var(--menu-width);
+    width: var(--navbar-width);
 
     display: flex;
     flex-direction: column;

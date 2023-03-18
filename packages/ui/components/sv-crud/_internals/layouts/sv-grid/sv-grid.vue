@@ -7,7 +7,7 @@
     >
       <sv-picture
         :url="firstIfArray(item[layoutOptions.picture!])?.link"
-        style="height: 80%"
+        style="width: 100%; height: 20rem"
       ></sv-picture>
       <div class="grid__footer">
         <div>
@@ -33,13 +33,11 @@
 
 <script setup lang="ts">
 import { LayoutOptions } from '@semantic-api/types'
-import { useParentStore } from '../../../../../../web'
-import {
-  SvContextMenu,
-  SvIcon,
-  SvPicture
+import { useParentStore } from '@savitri/web'
 
-} from '../../../..'
+import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
+import SvIcon from '../../../../sv-icon/sv-icon.vue'
+import SvPicture from '../../../../sv-picture/sv-picture.vue'
 
 type Props = {
   individualActions: any

@@ -81,8 +81,9 @@ export default {
 import { ref, inject, watch } from 'vue'
 import { maska as vMaska } from 'maska'
 import type { CollectionProperty } from '@semantic-api/types'
-import { useClipboard } from '../../../../web'
-import { SvInfo, SvIcon } from '../..'
+import { useClipboard } from '@savitri/web'
+import SvInfo from '../../sv-info/sv-info.vue'
+import SvIcon from '../../sv-icon/sv-icon.vue'
 
 type InputType = string|number|Date
 

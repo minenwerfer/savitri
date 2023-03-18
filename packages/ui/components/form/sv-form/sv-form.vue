@@ -129,7 +129,7 @@
                       && !formData[key]?.[formData[key]?.length-1]?._id
                   )
               "
-              @clicked="pushToArray(formData[key], property)"
+              @click="pushToArray(formData[key], property)"
             >
               Adicionar
             </sv-button>
@@ -173,8 +173,11 @@
 <script setup lang="ts">
 import { computed, provide, inject } from 'vue'
 import type { CollectionProperty, Condition } from '@semantic-api/types'
-import { useStore, useCondition } from '../../../../web'
-import { SvInput, SvIcon, SvButton } from '../..'
+import { useStore, useCondition } from '@savitri/web'
+
+import SvIcon from '../../sv-icon/sv-icon.vue'
+import SvButton from '../../sv-button/sv-button.vue'
+import SvInput from '../sv-input/sv-input.vue'
 
 import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
 

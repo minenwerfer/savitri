@@ -1,21 +1,20 @@
 <template>
-  <component v-if="runonceSlot" :is="runonceSlot"></component>
-
   <div class="template">
     <div class="template__main">
-      <sv-menu
+      <sv-navbar
         v-if="menuSchema"
         v-model:visible="metaStore.menu.isVisible"
+        v-model:mobile-visible="metaStore.menu.isMobileVisible"
         entrypoint="dashboard"
         :schema="menuSchema"
       >
-        <template #menu-action v-if="$slots['menu-action']">
-          <slot name="menu-action"></slot>
+        <template #navbar-action v-if="$slots['navbar-action']">
+          <slot name="navbar-action"></slot>
         </template>
-        <template #menu-bottom v-if="$slots['menu-bottom']">
-          <slot name="menu-bottom"></slot>
+        <template #navbar-bottom v-if="$slots['navbar-bottom']">
+          <slot name="navbar-bottom"></slot>
         </template>
-      </sv-menu>
+      </sv-navbar>
 
       <div class="template__content">
         <div class="template__top-bg"></div>
@@ -43,6 +42,8 @@
         <slot name="panels"></slot>
       </div>
     </div>
+
+    <sv-bottom-navbar></sv-bottom-navbar>
   </div>
 
   <slot name="dashboard-outer"></slot>
@@ -50,8 +51,9 @@
 
 <script setup lang="ts">
 import { onMounted, inject } from 'vue'
-import { useStore } from '../../../web'
-import { SvMenu } from '../../components'
+import { useStore } from '@savitri/web'
+import SvNavbar from '../../components/dashboard/sv-navbar/sv-navbar.vue'
+import SvBottomNavbar from '../../components/dashboard/sv-bottom-navbar/sv-bottom-navbar.vue'
 
 import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
 
@@ -62,7 +64,6 @@ onMounted(() => {
   metaStore.$patch({
     menu: {
       isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
-      isMobileVisible: localStorage.getItem('meta:menu:isMobileVisible') !== 'false',
     }
   })
 

@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import type { useAction } from '../../../../web'
+import type { useAction } from '@savitri/web'
 
-export const isInsertVisible = ref<boolean>(false)
+export const isInsertVisible = ref<boolean|string>(false)
 export const isInsertReadonly = ref<boolean>(false)
 export const isFilterVisible = ref<boolean>(false)
 

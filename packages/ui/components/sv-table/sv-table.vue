@@ -78,91 +78,83 @@
           </slot>
           <div
             v-else
-            class="table__cell-grid"
           >
-            <!-- responsivity on mobile -->
-            <div style="display: none">
+            <div class="table__cell-mobile-label">
               {{ property.description }}
             </div>
 
-            <!-- dormant -->
-            <!-- <div v-if="property.type === 'image'"> -->
-            <!--   <img -->
-            <!--     :src="row[column].src" -->
-            <!--     v-if="row[column]?.src" -->
-            <!--   /> -->
-            <!-- </div> -->
-
-            <div v-if="property.type === 'boolean'">
-              <sv-switch
-                v-if="!property.readOnly"
-                v-bind="{
-                   property 
-                }"
-                v-model="row[column]"
-                @update:model-value="toggle($event, row._id, column)"
-              ></sv-switch>
-              <sv-icon
-                v-else
-                small
-                :name="row[column] ? 'check' : 'times'"
-                :fill="row[column] ? 'green' : 'red'"
-              >
-                {{ $t(row[column] ? 'yes' : 'no') }}
-              </sv-icon>
-            </div>
-
-            <div v-else>
-              <div v-if="property.$ref === 'file' && row[column]">
-                <sv-picture
-                  v-if="/^image/.test(row[column].mime)" 
-                  v-model="row[column].link"
-                  class="table__picture"
-                ></sv-picture>
-                <a
-                  v-else-if="row[column].link"
-                  :href="row[column].link"
-                  style="font-size: 10pt"
+            <div class="table__cell-grid">
+              <div v-if="property.type === 'boolean'">
+                <sv-switch
+                  v-if="!property.readOnly"
+                  v-bind="{
+                     property 
+                  }"
+                  v-model="row[column]"
+                  @update:model-value="toggle($event, row._id, column)"
+                ></sv-switch>
+                <sv-icon
+                  v-else
+                  small
+                  :name="row[column] ? 'check' : 'times'"
+                  :fill="row[column] ? 'green' : 'red'"
                 >
-                  {{ row[column].filename }}
-                </a>
+                  {{ $t(row[column] ? 'yes' : 'no') }}
+                </sv-icon>
+              </div>
+
+              <div v-else>
+                <div v-if="property.$ref === 'file' && row[column]">
+                  <sv-picture
+                    v-if="/^image/.test(row[column].mime)" 
+                    v-model="row[column].link"
+                    class="table__picture"
+                  ></sv-picture>
+                  <a
+                    v-else-if="row[column].link"
+                    :href="row[column].link"
+                    style="font-size: 10pt"
+                  >
+                    {{ row[column].filename }}
+                  </a>
+                  <div v-else>
+                    -
+                  </div>
+                </div>
+                <div v-else-if="store">
+                  {{
+                    store.formatValue({
+                      value: row[column],
+                      key: column,
+                      property
+                    })
+                  }}
+                </div>
                 <div v-else>
-                  -
+                  {{
+                    Array.isArray(row[column])
+                      ? row[column].filter(_ => !!_).join(', ')
+                      : (row[column] || '-')
+                  }}
                 </div>
               </div>
-              <div v-else-if="store">
-                {{
-                  store.formatValue({
-                    value: row[column],
-                    key: column,
-                    property
-                  })
-                }}
-              </div>
-              <div v-else>
-                {{
-                  Array.isArray(row[column])
-                    ? row[column].filter(_ => !!_).join(', ')
-                    : (row[column] || '-')
-                }}
-              </div>
-            </div>
-            <div v-if="
-              property.s$indexes?.length > 1
-                && property.s$referencedCollection !== 'file'
-            ">
-              <div
-                v-for="(subvalue, index) in property.s$indexes.slice(1, 2)"
-                :key="`subvalue-${index}`"
-              >
-                {{
-                  store.formatValue({
-                    value: row[column],
-                    key: column,
-                    property,
-                    index: subvalue
-                  })
-                }}
+              <div v-if="
+                property.s$indexes?.length > 1
+                  && property.s$referencedCollection !== 'file'
+              ">
+                <div
+                  v-for="(subvalue, index) in property.s$indexes.slice(1, 2)"
+                  :key="`subvalue-${index}`"
+                >
+                  {{
+                    store.formatValue({
+                      value: row[column],
+                      key: column,
+                      property,
+                      index: subvalue
+                    })
+                  }}
+                </div>
               </div>
             </div>
           </div>
@@ -180,7 +172,7 @@
               :icon="action.icon"
 
               :style="buttonStyle(row, action)"
-              @clicked="action.click(row)"
+              @click="action.click(row)"
             >
               {{ action.name }}
             </sv-button>
@@ -216,17 +208,14 @@
 
 <script setup lang="ts">
 import { inject, computed } from 'vue'
-import { useStore, useCondition } from '../../../web'
+import { useStore, useCondition } from '@savitri/web'
 import type { CollectionProperty } from '@semantic-api/types'
 
-import {
-  SvButton,
-  SvIcon,
-  SvPicture,
-  SvContextMenu,
-  SvSwitch
-
-} from '..'
+import SvButton from '../sv-button/sv-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
+import SvPicture from '../sv-picture/sv-picture.vue'
+import SvContextMenu from '../sv-context-menu/sv-context-menu.vue'
+import SvSwitch from '../form/sv-switch/sv-switch.vue'
 
 type Props = {
   columns: Record<string, CollectionProperty>
