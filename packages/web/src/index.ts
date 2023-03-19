@@ -67,7 +67,7 @@ export const useApp = (config: AppOptions): Promise<{
 
   app.mixin({
     computed: {
-      instanceVars: () => global.INSTANCE_VARS,
+      instanceVars: () => window.INSTANCE_VARS || {},
       currentUser: () => userStore.$currentUser,
       viewTitle: () => {
         const currentRoute = router.currentRoute.value

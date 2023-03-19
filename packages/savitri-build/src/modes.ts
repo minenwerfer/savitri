@@ -1,10 +1,10 @@
 import { fileURLToPath } from 'url'
-import { createServer, build } from 'vite'
+import { createServer, build as viteBuild } from 'vite'
 
 const projectRoot = process.cwd()
 const buildRoot = fileURLToPath(new URL('.', import.meta.url))
 
-const serve = async () => {
+export const serve = async () => {
   const server = await createServer({
     configFile: `${buildRoot}/vite.js`,
     root: projectRoot,
@@ -17,10 +17,8 @@ const serve = async () => {
   server.printUrls()
 }
 
-const productionBuild = async () => {
+export const build = async () => {
   const { default: content } = await import(`${buildRoot}/vite.js`)
-  return build(content)
+  return viteBuild(content)
 
 }
-
-productionBuild()
