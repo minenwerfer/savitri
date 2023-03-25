@@ -79,7 +79,7 @@ export const useApp = (config: AppOptions): Promise<{
 
         return title.replace(
           '%viewTitle%',
-          I18N.global.tc(currentRoute.params?.collection || '', 2).capitalize()
+          I18N.global.tc(currentRoute.params?.collection || '', 2)
         )
       },
       viewIcon: () => {

@@ -12,7 +12,7 @@
       }"
     >
       <template #header v-if="!omitFormHeader">
-        {{ $t(property.$ref||'').capitalize() }}
+        {{ $t(property.$ref||'') }}
       </template>
     </sv-form>
 
@@ -28,7 +28,7 @@
       @input="lazySearch"
     >
       <template #header v-if="!omitFormHeader">
-        {{ $t(property.$ref||'').capitalize() }}
+        {{ $t(property.$ref||'') }}
       </template>
     </sv-form>
 

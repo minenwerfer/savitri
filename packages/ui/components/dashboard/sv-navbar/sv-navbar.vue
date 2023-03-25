@@ -34,10 +34,10 @@
           `"
 
           :name="route.meta?.icon || 'file'"
-          :title="$tc(route.meta.title, 2).capitalize()"
+          :title="$tc(route.meta.title, 2)"
           @click="onEntryClick(route)"
         >
-          <span>{{ $tc(route.meta.title, 2).capitalize() }}</span>
+          <span>{{ $tc(route.meta.title, 2) }}</span>
           <span v-if="route.badgeFunction">
             ({{
               useStore(route.badgeFunction.split('@')[0])

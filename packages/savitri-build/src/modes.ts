@@ -1,8 +1,7 @@
-import { fileURLToPath } from 'url'
 import { createServer, build as viteBuild } from 'vite'
 
 const projectRoot = process.cwd()
-const buildRoot = fileURLToPath(new URL('.', import.meta.url))
+const buildRoot = __dirname
 
 export const serve = async () => {
   const server = await createServer({

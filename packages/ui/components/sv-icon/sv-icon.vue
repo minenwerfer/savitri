@@ -25,13 +25,6 @@
       >
         <use :href="`/static/icons/${variant}/${name}.svg#root`"></use>
       </svg>
-      <!-- <unicon -->
-      <!--   v-bind="{ -->
-      <!--     name, -->
-      <!--     fill -->
-      <!--   }" -->
-      <!--   data-component="icon" -->
-      <!-- ></unicon> -->
     </div>
     <div v-if="$slots.default" data-component="icon-label">
       <slot></slot>

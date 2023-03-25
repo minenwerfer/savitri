@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import type { Router } from 'vue-router'
 import type { CollectionAction, StoreEffect } from '@semantic-api/types'
-import type { ActionEvent } from '..//types'
+import type { ActionEvent } from '../types'
 import { deepClone } from '@semantic-api/common'
 import { STORE_EFFECTS } from '@semantic-api/types'
 
