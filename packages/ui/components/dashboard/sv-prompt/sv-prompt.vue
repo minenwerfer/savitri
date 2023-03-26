@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
 import SvModal from '../sv-modal/sv-modal.vue'
-import SvButton from '../sv-button/sv-button.vue'
+import SvButton from '../../sv-button/sv-button.vue'
 
 
 type Props = {

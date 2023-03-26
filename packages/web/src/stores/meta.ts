@@ -110,6 +110,7 @@ export default defineStore('meta', {
         })
 
         registerStore(store)
+        store()
       }
 
       this.isLoading = false

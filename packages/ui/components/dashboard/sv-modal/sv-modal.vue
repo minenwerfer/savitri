@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
-import SvBox from '../sv-box/sv-box.vue'
+import SvBox from '../../sv-box/sv-box.vue'
 
 type Props = {
   closeHint?: boolean

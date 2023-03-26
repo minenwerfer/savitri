@@ -12,7 +12,7 @@ const publicRoutes: Array<RouteRecordRaw> = [
   {
     path: '/user',
     name: 'user',
-    component: () => import('./components/sv-auth-wall/sv-auth-wall.vue'),
+    component: () => import('./components/dashboard/sv-auth-wall/sv-auth-wall.vue'),
     children: [
       {
         path: 'signin',
