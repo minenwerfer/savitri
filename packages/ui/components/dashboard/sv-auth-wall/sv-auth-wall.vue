@@ -4,7 +4,7 @@
     class="wall"
   >
     <img
-      src="/static/logo-alt.png"
+      src="/static/logo-authwall.png"
       class="wall__branding"
       @click="$router.push({ name: 'dashboard-home' })"
     />

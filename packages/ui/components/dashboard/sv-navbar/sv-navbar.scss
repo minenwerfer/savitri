@@ -115,7 +115,7 @@
 
     @include themed() {
       &:hover {
-        background: t(background-color-alt);
+        background: t(background-color-hover);
       }
 
       &--current {

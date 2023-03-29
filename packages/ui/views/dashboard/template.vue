@@ -17,8 +17,8 @@
       </sv-navbar>
 
       <div class="template__content">
-        <div class="template__top-bg"></div>
-        <div class="template__top">
+        <div v-if="!$route.meta?.noTopbar" class="template__top-bg"></div>
+        <div v-if="!$route.meta?.noTopbar" class="template__top">
           <sv-breadcumb style="margin-right: 1.8rem"></sv-breadcumb>
           <router-view name="topbar"></router-view>
           <div

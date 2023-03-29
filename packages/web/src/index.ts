@@ -115,7 +115,9 @@ export const useApp = (config: AppOptions): Promise<{
     I18N: i18n
   })
 
-  await metaStore.describeAll()
+  if( userStore.$currentUser._id ) {
+    await metaStore.describeAll()
+  }
 
   resolve({
     app,

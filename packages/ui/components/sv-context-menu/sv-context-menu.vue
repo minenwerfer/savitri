@@ -76,7 +76,7 @@ type Action = {
 }
 
 type Emits = {
-  (e: 'actionClicked', event: { action: Action, subject: any }): void
+  (e: 'actionClick', event: { action: Action, subject: any }): void
 }
 
 const props = defineProps<Props>()
@@ -98,7 +98,7 @@ const filterActions = (actions: Array<any>) => {
 
 const onClick = (action: Action, subject: any) => {
   action.click(subject)
-  emit('actionClicked', { action, subject })
+  emit('actionClick', { action, subject })
 
   contextmenuVisible.value = false
 }

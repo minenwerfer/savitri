@@ -21,7 +21,6 @@
           :key="`header-${index}`"
           :class="`
             table__header
-            table__header--description
             ${border && 'table__header--border'}
         `">
           {{ property.description || propertyName }}
@@ -168,7 +167,7 @@
               small
               v-for="action in buttonActions"
               :key="`action-${action.action}`"
-              variant="alt"
+              variant="transparent"
               :icon="action.icon"
 
               :style="buttonStyle(row, action)"

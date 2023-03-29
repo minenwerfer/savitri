@@ -1,6 +1,5 @@
 import * as R from 'ramda'
 import type { CollectionActions, Description } from '@semantic-api/types'
-import { fromEntries } from '@semantic-api/common'
 
 const isObject = (property: any) =>
   property.$ref
@@ -33,7 +32,7 @@ export const removeEmpty = (item: any) => {
   const entries = Object.entries(item)
     .filter(([_, value]: [unknown, any]) => value)
 
-  return fromEntries(entries)
+  return Object.fromEntries(entries)
 }
 
 

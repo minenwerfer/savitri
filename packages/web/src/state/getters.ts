@@ -1,6 +1,6 @@
 import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
 import type { CollectionStore, CollectionState } from '..//types/state'
-import { fromEntries, deepClone, deepMerge } from '@semantic-api/common'
+import { deepClone, deepMerge } from '@semantic-api/common'
 import { deepDiff } from './helpers'
 import { useStore } from './use'
 
@@ -263,7 +263,7 @@ const getters: GettersFunctions = {
     }, [])
 
 
-    return fromEntries(entries)
+    return Object.fromEntries(entries)
   },
 
   /**

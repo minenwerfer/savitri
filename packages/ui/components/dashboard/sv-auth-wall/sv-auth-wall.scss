@@ -12,6 +12,8 @@
     )
   );
 
+  color: var(--authwall-foreground-color, #000);
+
   &__branding {
     position: absolute;
     top: 1rem;
@@ -45,7 +47,7 @@
     width: 100vw;
 
     padding: 0 2rem;
-    background: #fff;
+    background: var(--authwall-solid-background, #fff);
 
     @media screen and (min-width: 1000px) {
       width: 65%;
@@ -59,7 +61,6 @@
 
     gap: 2rem;
     overflow-y: auto;
-    color: #000;
     min-width: 80vw;
 
     @media screen and (min-width: 600px) {

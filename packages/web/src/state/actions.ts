@@ -1,4 +1,4 @@
-import { formatValue, fromEntries, deepClone } from '@semantic-api/common'
+import { formatValue, deepClone } from '@semantic-api/common'
 
 import useHttp from '../http'
 import type { Actions, Mutations, Item } from './actions.types'
@@ -340,7 +340,7 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   usePropertiesExcept(properties) {
-    return fromEntries(Object.entries(this.properties)
+    return Object.fromEntries(Object.entries(this.properties)
       .filter(([key]: [string, unknown]) => !properties.includes(key)))
   },
 
