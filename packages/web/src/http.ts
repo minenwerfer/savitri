@@ -2,7 +2,7 @@ import { request } from '@semantic-api/common'
 import { SV_API_URL } from '@semantic-api/types'
 import { useStore } from './state/use'
 
-export default () => {
+export const useHttp = () => {
   return {
     http: call(proxiedHttp),
     unproxiedHttp: call(request),

@@ -1,7 +1,6 @@
 import { inject } from 'vue'
 
-const stores: typeof STORES = {}
-Object.assign(window, { STORES: stores })
+Object.assign(window, { STORES: {} })
 
 export const useStore = (storeId: string) => {
   if( !(storeId in STORES) ) {
@@ -30,7 +29,7 @@ export const useParentStore = (fallback?: string) => {
 }
 
 export const hasStore = (storeId: string) => {
-  return storeId in stores
+  return storeId in STORES
 }
 
 export const registerStore = async <

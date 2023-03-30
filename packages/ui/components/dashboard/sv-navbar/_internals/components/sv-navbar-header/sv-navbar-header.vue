@@ -39,13 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { useStore } from '@savitri/web'
+import { useStore, useRouter } from '@savitri/web'
 import SvIcon from '../../../../../sv-icon/sv-icon.vue'
 import SvContextMenu from '../../../../../sv-context-menu/sv-context-menu.vue'
 import SvSelect from '../../../../../form/sv-select/sv-select.vue'
 
-const router = useRouter()
+const router = await useRouter()
 const metaStore = useStore('meta')
 const userStore = useStore('user')
 

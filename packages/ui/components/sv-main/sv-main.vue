@@ -6,16 +6,21 @@
       main--${metaStore.$theme}
       ${metaStore.$theme === 'dark' && 'tw-dark'}
   `">
-    <router-view v-slot="{ Component }">
-      <component :is="Component">
-      <template
-        v-for="slotName in Object.keys($slots)"
-        v-slot:[slotName]
-      >
-        <slot :name="slotName"></slot>
+    <Suspense>
+      <router-view v-slot="{ Component }">
+        <component :is="Component">
+        <template
+          v-for="slotName in Object.keys($slots)"
+          v-slot:[slotName]
+        >
+          <slot :name="slotName"></slot>
+        </template>
+        </component>
+      </router-view>
+      <template #fallback>
+        Loading...
       </template>
-      </component>
-    </router-view>
+    </Suspense>
     <slot></slot>
 
     <sv-modal

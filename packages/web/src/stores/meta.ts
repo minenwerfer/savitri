@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { deepClone, deserialize } from '@semantic-api/common'
 import { Description } from '@semantic-api/types'
 
-import useHttp from '../http'
+import { useHttp } from '../http'
 import { useCollection } from '../state/collection'
 import { useStore, hasStore, registerStore } from '../state/use'
 import { freshItem, freshFilters } from '../state/helpers'

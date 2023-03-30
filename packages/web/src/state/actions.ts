@@ -1,6 +1,6 @@
 import { formatValue, deepClone } from '@semantic-api/common'
 
-import useHttp from '../http'
+import { useHttp } from '../http'
 import type { Actions, Mutations, Item } from './actions.types'
 import { useStore } from './use'
 import { condenseItem } from './helpers'

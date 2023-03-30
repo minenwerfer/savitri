@@ -56,9 +56,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { arraysIntersects } from '@semantic-api/common'
-import { useStore, Route, MenuSchema } from '@savitri/web'
+import { useStore, useRouter, Route, MenuSchema } from '@savitri/web'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 import SvNavbarHeader from './_internals/components/sv-navbar-header/sv-navbar-header.vue'
 
@@ -83,7 +82,7 @@ const emit = defineEmits<Emit>()
 
 const metaStore = useStore('meta')
 const userStore = useStore('user')
-const router = useRouter()
+const router = await useRouter()
 
 const onEntryClick = (route: Route & { meta: any }) => {
   if( route.name ) {
@@ -152,7 +151,7 @@ const getRoutes = (node?: SchemaNode): Array<Route> => {
 }
 
 const isCurrent = (subroute: any) => {
-  const route = useRoute()
+  const route = router.currentRoute.value
 
   const pathMatches = typeof subroute.redirect === 'string'
     ? subroute.redirect === route.path
@@ -168,7 +167,7 @@ const routesWithChildren = computed(() => (
 ))
 
 watch(() => metaStore.descriptions, () => {
-  routes.value = getRoutes() as any
+  routes.value = getRoutes()
 })
 </script>
 

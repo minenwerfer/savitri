@@ -18,13 +18,14 @@ export default defineConfig({
       }
     }
   ],
-  optimizeDeps: {
-    include: [
-      'bson'
-    ]
-  },
+  // optimizeDeps: {
+  //   include: [
+  //     'bson'
+  //   ]
+  // },
   build: {
-    target: 'esnext'
+    target: 'esnext',
+    sourcemap: 'inline'
   },
   // build: {
   //   rollupOptions: {
