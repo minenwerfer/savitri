@@ -22,7 +22,7 @@ export default defineStore('meta', {
 
     theme: '',
     themeOverride: '',
-    availableThemes: window.INSTANCE_VARS?.themes || [],
+    availableThemes: INSTANCE_VARS?.themes || [],
     
     view: {
       title: '',

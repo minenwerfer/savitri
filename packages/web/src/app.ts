@@ -1,5 +1,5 @@
 import { createApp, App } from 'vue'
-import { Router, useRouter } from 'vue-router'
+import { Router } from 'vue-router'
 
 import { createPinia } from 'pinia'
 import { arraysIntersects } from '@semantic-api/common'
@@ -26,7 +26,8 @@ export const useApp = (config: AppOptions): Promise<{
   const app = createApp(component)
   registerDirectives(app)
 
-  const pinia = createPinia()
+  const pinia = window.PINIA = createPinia()
+  console.log('vamos de app.use(pinia) ne papai')
   app.use(pinia)
 
   const router = createRouter(config.routes||[])
@@ -114,7 +115,7 @@ export const useApp = (config: AppOptions): Promise<{
     I18N: i18n
   })
 
-  if( userStore.$currentUser._id ) {
+  if( userStore.signedIn ) {
     await metaStore.describeAll()
   }
 

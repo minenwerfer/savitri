@@ -6,41 +6,45 @@ import ejs from 'ejs'
 import sassData from './sassData.js'
 import { getInstanceConfig } from './instance'
 
-export default defineConfig({
-  plugins: [
-    vue(),
-    braun(),
-    {
-      name: 'transform-index-html',
-      async transformIndexHtml(html) {
-        const instanceConfig = await getInstanceConfig()
-        return ejs.render(html, { instanceConfig })
+export default defineConfig(async () => {
+  const instanceConfig = await getInstanceConfig()
+  return {
+    plugins: [
+      vue(),
+      braun({
+        tag: 'sv-icon',
+        ensureList: instanceConfig.icons
+      }),
+      {
+        name: 'transform-index-html',
+        transformIndexHtml(html) {
+          return ejs.render(html, { instanceConfig })
+        }
       }
-    }
-  ],
-  // optimizeDeps: {
-  //   include: [
-  //     'bson'
-  //   ]
-  // },
-  build: {
-    target: 'esnext',
-    sourcemap: 'inline'
-  },
-  // build: {
-  //   rollupOptions: {
-  //     external: [
-  //       'bson'
-  //     ],
-  //     plugins: [
-  //       nodeResolve()
-  //     ]
-  //   }
-  // },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: sassData({})
+    ],
+    // optimizeDeps: {
+    //   include: [
+    //     'bson'
+    //   ]
+    // },
+    build: {
+      target: 'esnext',
+    },
+    // build: {
+    //   rollupOptions: {
+    //     external: [
+    //       'bson'
+    //     ],
+    //     plugins: [
+    //       nodeResolve()
+    //     ]
+    //   }
+    // },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: sassData({})
+        }
       }
     }
   }

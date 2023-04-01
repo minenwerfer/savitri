@@ -1,6 +1,5 @@
 <template>
   <a
-    role="icon"
     :class="`
       icon
       ${reactive && 'icon--reactive'}

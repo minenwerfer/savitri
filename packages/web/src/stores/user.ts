@@ -73,7 +73,6 @@ const collection = useCollection({
 
       return properties
     },
-
     $currentUser(): User {
       if( !this.currentUser?._id ) {
         this.token = sessionStorage.getItem('auth:token')
@@ -81,6 +80,9 @@ const collection = useCollection({
       }
 
       return this.currentUser
+    },
+    signedIn() {
+      return !!this.$currentUser.roles
     }
   }
 })

@@ -123,8 +123,15 @@ import {
 
 } from 'vue'
 
-import { useRouter } from 'vue-router'
-import { useStore, useParentStore, useAction, CollectionStore } from '@savitri/web'
+import {
+  useStore,
+  useParentStore,
+  useRouter,
+  useAction,
+  CollectionStore
+
+} from '@savitri/web'
+
 import type { Layout } from '@semantic-api/types'
 
 import SvPagination from '../sv-pagination/sv-pagination.vue'
@@ -162,7 +169,7 @@ type Emits = {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
-const router = useRouter()
+const router = await useRouter()
 
 let
   store: CollectionStore,

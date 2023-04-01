@@ -65,16 +65,16 @@
 
 <script setup lang="ts">
 import { computed, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 import type { FiltersPreset } from '@semantic-api/types'
-import { useParentStore } from '@savitri/web'
+import { useRouter, useParentStore } from '@savitri/web'
 import { call } from '../../sv-crud/_internals/store'
 import SvTabs from '../../sv-tabs/sv-tabs.vue'
 import SvButton from '../../sv-button/sv-button.vue'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 
-const route = useRoute()
-const router = useRouter()
+const router = await useRouter()
+const route = router.currentRoute.value
+
 const store = computed(() => {
   try {
     return useParentStore((route.meta?.collection || route.params?.collection) as string)

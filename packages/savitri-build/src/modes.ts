@@ -17,7 +17,7 @@ export const serve = async () => {
 }
 
 export const build = async () => {
-  const { default: content } = await import(`${buildRoot}/vite.js`)
-  return viteBuild(content)
+  const { default: config } = await import(`${buildRoot}/vite.js`)
+  return viteBuild(await config())
 
 }

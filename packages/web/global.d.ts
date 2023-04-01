@@ -1,3 +1,5 @@
+// import type { createPinia } from 'pinia'
+
 declare module '@savitri/ui' {
   export { default as routes } from '../ui/router'
 }
@@ -16,3 +18,5 @@ var INSTANCE_VARS: {
   dashboardLayout?: Record<string, {
   }>
 }
+
+var PINIA: any

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../dist/web",
+    "outDir": "./dist/web",
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -11,6 +11,29 @@
     "lib": [
       "dom",
       "esnext"
-    ]
+    ],
+    "paths": {
+      "@semantic-api/api": [
+        "./node_modules/@semantic-api/api/cjs"
+      ],
+      "@semantic-api/api/*": [
+        "./node_modules/@semantic-api/api/cjs/core/*"
+      ],
+      "@semantic-api/api/server": [
+        "./node_modules/@semantic-api/api/cjs/server"
+      ],
+      "@semantic-api/api/database": [
+        "./node_modules/@semantic-api/api/cjs/database"
+      ],
+      "@semantic-api/common": [
+        "./node_modules/@semantic-api/common/cjs"
+      ],
+      "@semantic-api/types": [
+        "./node_modules/@semantic-api/types/cjs"
+      ],
+      "@semantic-api/system/resources/*": [
+        "./node_modules/@semantic-api/system/cjs/resources/*"
+      ]
+    }
   }
 }

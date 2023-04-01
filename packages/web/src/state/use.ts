@@ -1,4 +1,5 @@
 import { inject } from 'vue'
+import { getActivePinia, setActivePinia, defineStore as piniaDefineStore } from 'pinia'
 
 Object.assign(window, { STORES: {} })
 
@@ -30,6 +31,13 @@ export const useParentStore = (fallback?: string) => {
 
 export const hasStore = (storeId: string) => {
   return storeId in STORES
+}
+
+export const defineStore = (...args: Parameters<typeof piniaDefineStore>) => {
+  if( !getActivePinia() ) {
+    setActivePinia(PINIA)
+  }
+  return piniaDefineStore(...args)
 }
 
 export const registerStore = async <
