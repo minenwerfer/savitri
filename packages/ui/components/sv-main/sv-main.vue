@@ -17,9 +17,6 @@
         </template>
         </component>
       </router-view>
-      <template #fallback>
-        Loading...
-      </template>
     </Suspense>
     <slot></slot>
 

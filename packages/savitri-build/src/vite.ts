@@ -9,12 +9,20 @@ import { getInstanceConfig } from './instance'
 export default defineConfig(async () => {
   const instanceConfig = await getInstanceConfig()
   return {
+    resolve: {
+      alias: {
+        'bson': require.resolve('bson')
+      }
+    },
     plugins: [
-      vue(),
       braun({
         tag: 'sv-icon',
-        ensureList: instanceConfig.icons
+        ensureList: instanceConfig.icons,
+        libraries: [
+          '@savitri/ui'
+        ]
       }),
+      vue(),
       {
         name: 'transform-index-html',
         transformIndexHtml(html) {
@@ -22,11 +30,11 @@ export default defineConfig(async () => {
         }
       }
     ],
-    // optimizeDeps: {
-    //   include: [
-    //     'bson'
-    //   ]
-    // },
+    optimizeDeps: {
+      include: [
+        'bson'
+      ]
+    },
     build: {
       target: 'esnext',
     },

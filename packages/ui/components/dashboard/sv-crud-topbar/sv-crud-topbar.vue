@@ -73,11 +73,11 @@ import SvButton from '../../sv-button/sv-button.vue'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 
 const router = await useRouter()
-const route = router.currentRoute.value
+const route = router.currentRoute
 
 const store = computed(() => {
   try {
-    return useParentStore((route.meta?.collection || route.params?.collection) as string)
+    return useParentStore((route.value.meta?.collection || route.value.params?.collection) as string)
   } catch( e ) {
     return null
   }
@@ -105,8 +105,8 @@ watch(route, () => {
 
   return (({ value: store }) => {
     if( store.description.filtersPresets ) {
-      if( route.hash ) {
-        const presetName = route.hash.slice(1)
+      if( route.value.hash ) {
+        const presetName = route.value.hash.slice(1)
         togglePreset(presetName, store.description.filtersPresets[presetName])
         return
       }
