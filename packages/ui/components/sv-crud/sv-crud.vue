@@ -18,7 +18,10 @@
     ></sv-insert-panel>
 
     <div>
-      <div class="crud__table-panel">
+      <div
+        v-if="!noControls"
+        class="crud__controls"
+      >
         <div style="
           display: flex;
           align-items: center;
