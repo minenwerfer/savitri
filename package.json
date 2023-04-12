@@ -4,5 +4,6 @@
     "package": "./bin/build.sh pack",
     "watch": "tsc --watch",
     "publish": "./bin/publish.sh"
-  }
+  },
+  "version": "0.0.1"
 }
