@@ -8,7 +8,7 @@ import { getInstanceConfig } from './instance'
 
 export default defineConfig(async () => {
   const instanceConfig = await getInstanceConfig()
-  return {
+  const config: ReturnType<typeof defineConfig> = {
     resolve: {
       alias: {
         'bson': require.resolve('bson')
@@ -37,17 +37,10 @@ export default defineConfig(async () => {
     },
     build: {
       target: 'esnext',
+      rollupOptions: {
+        preserveSymlinks: true
+      }
     },
-    // build: {
-    //   rollupOptions: {
-    //     external: [
-    //       'bson'
-    //     ],
-    //     plugins: [
-    //       nodeResolve()
-    //     ]
-    //   }
-    // },
     css: {
       preprocessorOptions: {
         scss: {
@@ -56,4 +49,6 @@ export default defineConfig(async () => {
       }
     }
   }
+
+  return config
 })
