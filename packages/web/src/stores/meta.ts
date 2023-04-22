@@ -29,9 +29,8 @@ export default defineStore('meta', {
       layout: 'tabular',
       collection: ''
     },
-    wizard: {
-      current: '',
-      step: 1
+    panel: {
+      isVisible: true
     },
     menu: {
       isVisible: true,
@@ -119,6 +118,10 @@ export default defineStore('meta', {
     swapMenu() {
       this.menu.isVisible = !this.menu.isVisible
       localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
+    },
+    swapPanel() {
+      this.panel.isVisible = !this.panel.isVisible
+      localStorage.setItem('meta:panel:isVisible', String(this.panel.isVisible))
     },
 
     spawnPrompt(props: {

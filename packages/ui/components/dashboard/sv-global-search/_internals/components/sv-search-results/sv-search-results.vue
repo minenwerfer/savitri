@@ -5,7 +5,7 @@
         v-for="([collectionName, results]) in resultsByModule"
         :key="`results-${collectionName}`"
       >
-        <h2>{{ $t(collectionName).capitalize() }}</h2>
+        <h2>{{ $t(collectionName) }}</h2>
         <div>
           <div
             v-clickable
@@ -61,8 +61,7 @@
 
 <script setup lang="ts">
 import { computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore, useAction } from '@savitri/web'
+import { useStore, useRouter, useAction } from '@savitri/web'
 import SvPicture from '../../../../../sv-picture/sv-picture.vue'
 import SvButton from '../../../../../sv-button/sv-button.vue'
 
@@ -73,7 +72,7 @@ type Emits = {
 }
 
 const emit = defineEmits<Emits>()
-const router = useRouter()
+const router = await useRouter()
 const collectionsActions: Record<string, {
   call: any
   eventBus: any

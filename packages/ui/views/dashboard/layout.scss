@@ -1,6 +1,6 @@
 $top-height: 3.6rem;
 
-.template {
+.layout {
   @include themed() {
     color: t(foreground-color);
     background: t(body-background);
@@ -64,5 +64,13 @@ $top-height: 3.6rem;
     @media screen and (min-width: 1024px) {
       width: 0;
     }
+  }
+
+  &__panel {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
   }
 }

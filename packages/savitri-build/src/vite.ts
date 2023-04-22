@@ -17,7 +17,10 @@ export default defineConfig(async () => {
     plugins: [
       braun({
         tag: 'sv-icon',
-        ensureList: instanceConfig.icons,
+        ensureList: [
+          ...instanceConfig.icons,
+          'search-alt'
+        ],
         libraries: [
           '@savitri/ui'
         ]
@@ -37,9 +40,6 @@ export default defineConfig(async () => {
     },
     build: {
       target: 'esnext',
-      rollupOptions: {
-        preserveSymlinks: true
-      }
     },
     css: {
       preprocessorOptions: {

@@ -6,6 +6,13 @@
   }
 }
 
+.sv-surface {
+  @include themed() {
+    background: t(background-color);
+    color: t(foreground-color);
+  }
+}
+
 .sv-branded-text {
   @include themed() {
     color: t(brand-color);

@@ -1,6 +1,6 @@
 <template>
-  <div class="template">
-    <div class="template__main">
+  <div class="layout">
+    <div class="layout__main">
       <sv-navbar
         v-if="menuSchema"
         v-model:visible="metaStore.menu.isVisible"
@@ -16,9 +16,9 @@
         </template>
       </sv-navbar>
 
-      <div class="template__content">
-        <div v-if="!$route.meta?.noTopbar" class="template__top-bg"></div>
-        <div v-if="!$route.meta?.noTopbar" class="template__top">
+      <div class="layout__content">
+        <div v-if="!$route.meta?.noTopbar" class="layout__top-bg"></div>
+        <div v-if="!$route.meta?.noTopbar" class="layout__top">
           <sv-breadcumb style="margin-right: 1.8rem"></sv-breadcumb>
           <router-view name="topbar"></router-view>
           <div
@@ -27,18 +27,33 @@
           >
             <slot name="dashboard-top"></slot>
           </div>
+
+          <sv-icon
+            v-clickable
+            v-if="$slots.panels"
+            small
+            name="web-section"
+            style="
+              align-self: center;
+              justify-self: flex-end;
+              padding-left: 1rem;
+            "
+            @click="metaStore.swapPanel"
+          ></sv-icon>
         </div>
-        <div class="template__view">
+        <div class="layout__view">
           <router-view />
         </div>
       </div>
 
-      <div v-if="$slots.panels" style="
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        width: 15rem;
-      ">
+      <div
+        v-if="
+          $slots.panels
+          && metaStore.panel.isVisible
+          && !$route.meta?.noTopbar
+        "
+        class="layout__panel"
+      >
         <slot name="panels"></slot>
       </div>
     </div>
@@ -52,6 +67,7 @@
 <script setup lang="ts">
 import { onMounted, inject } from 'vue'
 import { useStore } from '@savitri/web'
+import SvIcon from '../../components/sv-icon/sv-icon.vue'
 import SvNavbar from '../../components/dashboard/sv-navbar/sv-navbar.vue'
 import SvBottomNavbar from '../../components/dashboard/sv-bottom-navbar/sv-bottom-navbar.vue'
 
@@ -62,6 +78,9 @@ const menuSchema = inject('menuSchema', {})
 
 onMounted(() => {
   metaStore.$patch({
+    panel: {
+      isVisible: localStorage.getItem("meta:panel:isVisible") !== 'false'
+    },
     menu: {
       isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
     }
@@ -73,4 +92,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped src="./template.scss"></style>
+<style scoped src="./layout.scss"></style>

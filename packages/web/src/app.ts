@@ -27,7 +27,6 @@ export const useApp = (config: AppOptions): Promise<{
   registerDirectives(app)
 
   const pinia = window.PINIA = createPinia()
-  console.log('vamos de app.use(pinia) ne papai')
   app.use(pinia)
 
   const router = createRouter(config.routes||[])

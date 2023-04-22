@@ -30,12 +30,17 @@
         ></sv-input>
       </div>
 
-      <sv-search-results
-        v-loading="isTyping"
+      <Suspense>
+        <sv-search-results
+          v-loading="isTyping"
 
-        class="global__results"
-        @action-click="emit('close')"
-      ></sv-search-results>
+          class="global__results"
+          @action-click="emit('close')"
+        ></sv-search-results>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
     </div>
   </sv-box>
 </template>

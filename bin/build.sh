@@ -5,7 +5,6 @@ BUILD_COMPONENTS=1
 
 PACKAGES=(
   ui
-  web
 )
 
 function do_pack() {

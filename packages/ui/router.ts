@@ -59,7 +59,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('./views/dashboard/template.vue'),
+    component: () => import('./views/dashboard/layout.vue'),
     redirect: { name: 'dashboard-home' },
     meta: {
       title: 'Dashboard'

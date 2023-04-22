@@ -1,6 +1,6 @@
 {
   "name": "savitri-build",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "braun": "latest",
+    "bson": "^5.2.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "ejs": "^3.1.9",

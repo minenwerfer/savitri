@@ -72,12 +72,21 @@ import SvTabs from '../../sv-tabs/sv-tabs.vue'
 import SvButton from '../../sv-button/sv-button.vue'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 
+type Props = {
+  collection?: string
+}
+
+const props = defineProps<Props>()
 const router = await useRouter()
 const route = router.currentRoute
 
 const store = computed(() => {
   try {
-    return useParentStore((route.value.meta?.collection || route.value.params?.collection) as string)
+    const collection = props.collection
+      ? props.collection
+      : (route.value.meta?.collection || route.value.params?.collection) as string
+
+    return useParentStore(collection)
   } catch( e ) {
     return null
   }

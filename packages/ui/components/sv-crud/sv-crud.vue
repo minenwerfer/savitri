@@ -266,15 +266,17 @@ watch(() => actionEventBus.value, async (event) => {
       const property = store.properties[key]||{}
       const unbound = (value: any) => {
         if( property.s$isFile ) {
-          value = {}
+          return {}
         }
         if( property.s$inline ) {
-          delete value._id
+          const { _id, ...rest } = value
+          return rest
         }
+        return value
       }
 
-      property.type === 'array'
-        ? value.forEach(unbound)
+      value = property.type === 'array'
+        ? value.map(unbound)
         : unbound(value)
 
       return {
