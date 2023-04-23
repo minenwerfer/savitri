@@ -30,21 +30,21 @@ export default defineStore('meta', {
       collection: ''
     },
     panel: {
-      isVisible: true
+      visible: true
     },
     menu: {
-      isVisible: true,
+      visible: true,
       isMobileVisible: false
     },
     modal: {
-      isVisible: false,
+      visible: false,
       title: '',
       body: '',
       component: '',
       details: {}
     },
     prompt: {
-      isVisible: false,
+      visible: false,
       title: '',
       body: '',
       actions: [],
@@ -116,12 +116,12 @@ export default defineStore('meta', {
     },
 
     swapMenu() {
-      this.menu.isVisible = !this.menu.isVisible
-      localStorage.setItem('meta:menu:isVisible', String(this.menu.isVisible))
+      this.menu.visible = !this.menu.visible
+      localStorage.setItem('meta:menu:visible', String(this.menu.visible))
     },
     swapPanel() {
-      this.panel.isVisible = !this.panel.isVisible
-      localStorage.setItem('meta:panel:isVisible', String(this.panel.isVisible))
+      this.panel.visible = !this.panel.visible
+      localStorage.setItem('meta:panel:visible', String(this.panel.visible))
     },
 
     spawnPrompt(props: {
@@ -137,14 +137,14 @@ export default defineStore('meta', {
       this.$patch({
         prompt: {
           ...props,
-          isVisible: true
+          visible: true
         } as any
       })
 
       return new Promise((resolve) => {
         const event = ({ detail }: any) => {
           window.removeEventListener('__prompt', event)
-          this.prompt.isVisible = false
+          this.prompt.visible = false
           resolve(detail.option)
         }
 
@@ -158,11 +158,11 @@ export default defineStore('meta', {
       }))
     },
 
-    spawnModal(props: Partial<Omit<typeof this['modal'], 'isVisible'>>) {
+    spawnModal(props: Partial<Omit<typeof this['modal'], 'visible'>>) {
       this.$patch({
         modal: {
           ...props,
-          isVisible: true
+          visible: true
         }
       })
     },

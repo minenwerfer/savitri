@@ -1,11 +1,9 @@
 <template>
+  <div style="flex: 1"></div>
   <sv-button
     small
     @click="$router.push({ name: 'dashboard-user-changepass' })"
-    style="
-      margin-left: auto;
-      align-self: center;
-    "
+    style="align-self: center;"
   >
     Mudar senha
   </sv-button>

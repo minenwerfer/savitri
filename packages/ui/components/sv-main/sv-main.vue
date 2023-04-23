@@ -21,7 +21,7 @@
     <slot></slot>
 
     <sv-modal
-      v-model:visible="metaStore.modal.isVisible"
+      v-model:visible="metaStore.modal.visible"
       v-bind="metaStore.modal"
     >
       <div
@@ -37,7 +37,7 @@
     </sv-modal>
 
     <sv-prompt
-      v-if="metaStore.prompt.isVisible"
+      v-if="metaStore.prompt.visible"
       v-bind="metaStore.prompt"
     >
       {{ metaStore.prompt.body }}

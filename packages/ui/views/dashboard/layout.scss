@@ -32,7 +32,7 @@ $top-height: 3.6rem;
 
     @include themed() {
       background: t(background-color-opaque);
-      border-bottom: 1px solid t(border-color);
+      border-bottom: 1px solid #dddddd80;
       backdrop-filter: blur(15px);
     }
 

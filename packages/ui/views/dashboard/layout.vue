@@ -3,7 +3,7 @@
     <div class="layout__main">
       <sv-navbar
         v-if="menuSchema"
-        v-model:visible="metaStore.menu.isVisible"
+        v-model:visible="metaStore.menu.visible"
         v-model:mobile-visible="metaStore.menu.isMobileVisible"
         entrypoint="dashboard"
         :schema="menuSchema"
@@ -35,8 +35,8 @@
             name="web-section"
             style="
               align-self: center;
-              justify-self: flex-end;
               padding-left: 1rem;
+              margin-left: auto;
             "
             @click="metaStore.swapPanel"
           ></sv-icon>
@@ -49,7 +49,7 @@
       <div
         v-if="
           $slots.panels
-          && metaStore.panel.isVisible
+          && metaStore.panel.visible
           && !$route.meta?.noTopbar
         "
         class="layout__panel"
@@ -79,10 +79,10 @@ const menuSchema = inject('menuSchema', {})
 onMounted(() => {
   metaStore.$patch({
     panel: {
-      isVisible: localStorage.getItem("meta:panel:isVisible") !== 'false'
+      visible: localStorage.getItem("meta:panel:visible") !== 'false'
     },
     menu: {
-      isVisible: localStorage.getItem('meta:menu:isVisible') !== 'false',
+      visible: localStorage.getItem('meta:menu:visible') !== 'false',
     }
   })
 
