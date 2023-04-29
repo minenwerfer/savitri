@@ -1,82 +1,3 @@
-<template>
-  <label :key="rerenderFixture" class="input">
-    <strong class="input__label">
-      <slot v-if="$slots.default"></slot>
-      <slot v-else name="description"></slot>
-    </strong>
-    <div v-if="$slots.hint" class="input__hint">
-      <slot name="hint"></slot>
-    </div>
-    <div
-      v-if="property.s$element !== 'textarea'"
-      :class="`
-        input__container
-        input__container--${variant}`
-    ">
-      <input
-        v-maska="mask"
-        v-bind="inputBind"
-        v-focus="rerenderFixture > 0 || property.s$focus"
-        ref="input"
-        :value="inputValue"
-        data-component="input"
-
-        :class="`
-          input__input
-          input__input--${variant}
-          ${icon && 'input__input--icon'}
-          ${readOnly && 'input__input--readOnly'}
-        `"
-
-        @maska="onInput($event, true)"
-        @input="onInput"
-        @change="emit('change', $event)"
-      />
-      <sv-icon 
-        v-if="icon"
-        :name="icon"
-        :class="`
-          input__icon
-          input__icon--${variant}
-      `"></sv-icon>
-
-      <div
-        v-if="readOnly"
-        class="input__clipboard"
-      >
-        <sv-info>
-          <template #text>Copiar</template>
-          <sv-icon
-            v-clickable
-            name="clipboard"
-            @click="copyToCipboard(modelValue)"
-          ></sv-icon>
-        </sv-info>
-      </div>
-    </div>
-
-    <textarea
-      v-else
-      v-focus="rerenderFixture > 0 || property.s$focus"
-      :placeholder="inputBind.placeholder"
-      :readonly="readOnly"
-
-      :class="`
-        input__textarea
-        input__input--${variant}
-      `"
-
-      @input="onInput"
-    >{{ modelValue }}</textarea>
-  </label>
-</template>
-
-<script lang="ts">
-export default {
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { ref, inject, watch } from 'vue'
 import { maska as vMaska } from 'maska'
@@ -222,6 +143,85 @@ watch(() => props.modelValue, (value, oldValue) => {
     }
   }
 })
+</script>
+
+<template>
+  <label :key="rerenderFixture" class="input">
+    <strong class="input__label">
+      <slot v-if="$slots.default"></slot>
+      <slot v-else name="description"></slot>
+    </strong>
+    <div v-if="$slots.hint" class="input__hint">
+      <slot name="hint"></slot>
+    </div>
+    <div
+      v-if="property.s$element !== 'textarea'"
+      :class="`
+        input__container
+        input__container--${variant}`
+    ">
+      <input
+        v-maska="mask"
+        v-bind="inputBind"
+        v-focus="rerenderFixture > 0 || property.s$focus"
+        ref="input"
+        :value="inputValue"
+        data-component="input"
+
+        :class="`
+          input__input
+          input__input--${variant}
+          ${icon && 'input__input--icon'}
+          ${readOnly && 'input__input--readOnly'}
+        `"
+
+        @maska="onInput($event, true)"
+        @input="onInput"
+        @change="emit('change', $event)"
+      />
+      <sv-icon 
+        v-if="icon"
+        :name="icon"
+        :class="`
+          input__icon
+          input__icon--${variant}
+      `"></sv-icon>
+
+      <div
+        v-if="readOnly"
+        class="input__clipboard"
+      >
+        <sv-info>
+          <template #text>Copiar</template>
+          <sv-icon
+            v-clickable
+            name="clipboard"
+            @click="copyToCipboard(modelValue)"
+          ></sv-icon>
+        </sv-info>
+      </div>
+    </div>
+
+    <textarea
+      v-else
+      v-focus="rerenderFixture > 0 || property.s$focus"
+      :placeholder="inputBind.placeholder"
+      :readonly="readOnly"
+
+      :class="`
+        input__textarea
+        input__input--${variant}
+      `"
+
+      @input="onInput"
+    >{{ modelValue }}</textarea>
+  </label>
+</template>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
 </script>
 
 <style scoped src="./sv-input.scss"></style>

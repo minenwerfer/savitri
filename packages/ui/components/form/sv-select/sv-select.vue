@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import type { CollectionProperty } from '@semantic-api/types'
+
+type Props = {
+  modelValue: any
+  property?: CollectionProperty
+  propertyName?: string
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'update:modelValue'|'change', value: any): void
+}>()
+
+const property = props.property||{}
+
+const update = (value: any) => {
+  emit('update:modelValue', value)
+  emit('change', value)
+}
+</script>
+
 <template>
   <select
     ref="select"
@@ -23,28 +45,6 @@
 <script lang="ts">
 export default {
   inheritAttrs: false
-}
-</script>
-
-<script setup lang="ts">
-import type { CollectionProperty } from '@semantic-api/types'
-
-type Props = {
-  modelValue: any
-  property?: CollectionProperty
-  propertyName?: string
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'update:modelValue'|'change', value: any): void
-}>()
-
-const property = props.property||{}
-
-const update = (value: any) => {
-  emit('update:modelValue', value)
-  emit('change', value)
 }
 </script>
 

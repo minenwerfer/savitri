@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import SvButton from '../../../../../components/sv-button/sv-button.vue'
+</script>
+
 <template>
   <div style="flex: 1"></div>
   <sv-button
@@ -8,7 +12,3 @@
     Mudar senha
   </sv-button>
 </template>
-
-<script setup lang="ts">
-import SvButton from '../../../../../components/sv-button/sv-button.vue'
-</script>

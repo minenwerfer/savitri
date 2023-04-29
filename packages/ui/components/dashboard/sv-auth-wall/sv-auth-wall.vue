@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { provide } from 'vue'
+
+provide('buttonSize', 'large')
+provide('buttonVariant', 'brand')
+provide('inputVariant', 'bold')
+</script>
+
+<style scoped src="./sv-auth-wall.scss"></style>
 <template>
   <div
     v-theme:default
@@ -19,13 +28,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { provide } from 'vue'
-
-provide('buttonSize', 'large')
-provide('buttonVariant', 'brand')
-provide('inputVariant', 'bold')
-</script>
-
-<style scoped src="./sv-auth-wall.scss"></style>

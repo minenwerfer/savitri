@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+type Props = {
+  where?: string
+}
+
+const props = defineProps<Props>()
+
+const visible = ref(false)
+const where = props.where || 'top'
+</script>
+
 <template>
   <div
     class="info"
@@ -23,18 +36,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-
-type Props = {
-  where?: string
-}
-
-const props = defineProps<Props>()
-
-const visible = ref(false)
-const where = props.where || 'top'
-</script>
 
 <style scoped src="./sv-info.scss"></style>

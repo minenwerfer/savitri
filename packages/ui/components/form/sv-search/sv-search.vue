@@ -1,82 +1,3 @@
-<template>
-  <div class="search">
-    <sv-form
-      v-if="isExpanded"
-      v-bind="{
-        collection: property.$ref,
-        form: property.s$form
-          ? store.useProperties(property.s$form)
-          : store.properties,
-        formData: modelValue,
-        layout: store.formLayout
-      }"
-    >
-      <template #header v-if="!omitFormHeader">
-        {{ $t(property.$ref||'') }}
-      </template>
-    </sv-form>
-
-    <sv-form
-      v-else
-      v-bind="{
-        collection: property.$ref,
-        form: store.useProperties(indexes),
-        formData: inputValue,
-        layout: store.formLayout,
-        searchOnly: true
-      }"
-      @input="lazySearch"
-    >
-      <template #header v-if="!omitFormHeader">
-        {{ $t(property.$ref||'') }}
-      </template>
-    </sv-form>
-
-    <sv-search-selected
-      v-if="!isExpanded"
-      v-bind="{
-        searchOnly,
-        indexes,
-        property,
-        modelValue
-      }"
-
-      @update:model-value="emit('update:modelValue', $event)"
-      @push-back="pushBack"
-    ></sv-search-selected>
-
-    <div v-if="!isExpanded">
-      <sv-search-container v-if="matchingItems.length">
-        <sv-search-item
-          v-for="(item, index) in matchingItems"
-          v-bind="{
-            item,
-            indexes
-          }"
-
-          :key="`matching-${item._id}`"
-          @click="select(item, +index)"
-        >
-          <sv-icon name="plus"></sv-icon>
-        </sv-search-item>
-      </sv-search-container>
-
-      <div v-else>
-        <div v-if="isTyping">
-          Pesquisando...
-        </div>
-        <div v-else-if="
-          !store.isLoading
-            && Object.values(inputValue).filter((v) => !!v).length > 0
-            && !((property.type === 'array' && modelValue?.length) || modelValue?._id)
-        ">
-          Não há resultados
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import {
   onMounted,
@@ -198,5 +119,84 @@ const lazySearch = () => {
   doLazySearch()
 }
 </script>
+
+<template>
+  <div class="search">
+    <sv-form
+      v-if="isExpanded"
+      v-bind="{
+        collection: property.$ref,
+        form: property.s$form
+          ? store.useProperties(property.s$form)
+          : store.properties,
+        formData: modelValue,
+        layout: store.formLayout
+      }"
+    >
+      <template #header v-if="!omitFormHeader">
+        {{ $t(property.$ref||'') }}
+      </template>
+    </sv-form>
+
+    <sv-form
+      v-else
+      v-bind="{
+        collection: property.$ref,
+        form: store.useProperties(indexes),
+        formData: inputValue,
+        layout: store.formLayout,
+        searchOnly: true
+      }"
+      @input="lazySearch"
+    >
+      <template #header v-if="!omitFormHeader">
+        {{ $t(property.$ref||'') }}
+      </template>
+    </sv-form>
+
+    <sv-search-selected
+      v-if="!isExpanded"
+      v-bind="{
+        searchOnly,
+        indexes,
+        property,
+        modelValue
+      }"
+
+      @update:model-value="emit('update:modelValue', $event)"
+      @push-back="pushBack"
+    ></sv-search-selected>
+
+    <div v-if="!isExpanded">
+      <sv-search-container v-if="matchingItems.length">
+        <sv-search-item
+          v-for="(item, index) in matchingItems"
+          v-bind="{
+            item,
+            indexes
+          }"
+
+          :key="`matching-${item._id}`"
+          @click="select(item, +index)"
+        >
+          <sv-icon name="plus"></sv-icon>
+        </sv-search-item>
+      </sv-search-container>
+
+      <div v-else>
+        <div v-if="isTyping">
+          Pesquisando...
+        </div>
+        <div v-else-if="
+          !store.isLoading
+            && Object.values(inputValue).filter((v) => !!v).length > 0
+            && !((property.type === 'array' && modelValue?.length) || modelValue?._id)
+        ">
+          Não há resultados
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped src="./sv-search.scss"></style>

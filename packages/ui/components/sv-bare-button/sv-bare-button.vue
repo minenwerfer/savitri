@@ -1,15 +1,3 @@
-<template>
-  <button
-    :class="`
-      barebutton
-      barebutton--${disabled ? 'disabled' : 'enabled'}
-    `"
-    @click="onClick"
-  >
-    <slot></slot>
-  </button>
-</template>
-
 <script setup lang="ts">
 type Props = {
   disabled?: boolean
@@ -30,5 +18,17 @@ const onClick = (event: any) => {
   }
 }
 </script>
+
+<template>
+  <button
+    :class="`
+      barebutton
+      barebutton--${disabled ? 'disabled' : 'enabled'}
+    `"
+    @click="onClick"
+  >
+    <slot></slot>
+  </button>
+</template>
 
 <style scoped src="./sv-bare-button.scss"></style>

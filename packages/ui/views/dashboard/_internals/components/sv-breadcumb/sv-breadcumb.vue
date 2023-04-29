@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import SvIcon from '../../../../../components/sv-icon/sv-icon.vue'
+</script>
+
 <template>
   <div class="
     no-print
@@ -16,9 +20,5 @@
     </sv-icon>
   </div>
 </template>
-
-<script setup lang="ts">
-import SvIcon from '../../../../../components/sv-icon/sv-icon.vue'
-</script>
 
 <style scoped src="./sv-breadcumb.scss"></style>

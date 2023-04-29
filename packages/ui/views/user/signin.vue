@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import { useStore, useRouter } from '@savitri/web'
+import SvForm from '../../components/form/sv-form/sv-form.vue'
+import SvButton from '../../components/sv-button/sv-button.vue'
+
+const router = await useRouter()
+const userStore = useStore('user')
+const metaStore = useStore('meta')
+
+const authenticate = async () => {
+  await userStore.authenticate(userStore.credentials)
+  router.push({ name: 'dashboard-home' })
+}
+</script>
+
 <template>
   <div style="text-align: center">
     <h1
@@ -64,19 +79,3 @@
     </sv-button>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useStore, useRouter } from '@savitri/web'
-import SvForm from '../../components/form/sv-form/sv-form.vue'
-import SvButton from '../../components/sv-button/sv-button.vue'
-
-const router = await useRouter()
-const userStore = useStore('user')
-const metaStore = useStore('meta')
-
-const authenticate = async () => {
-  await userStore.authenticate(userStore.credentials)
-  router.push({ name: 'dashboard-home' })
-}
-
-</script>

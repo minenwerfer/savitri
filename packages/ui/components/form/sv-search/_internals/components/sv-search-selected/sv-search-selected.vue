@@ -1,19 +1,3 @@
-<template>
-  <sv-search-container v-if="selected?.length > 0">
-    <sv-search-item
-      v-for="item in selected"
-      v-bind="{
-        item,
-        indexes
-      }"
-      :key="item._id"
-      @click="unselect(item, false)"
-    >
-      <sv-icon v-clickable name="check-circle"></sv-icon>
-    </sv-search-item>
-  </sv-search-container>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
@@ -73,6 +57,22 @@ const unselect = async (item: any, purge=true) => {
   }
 }
 </script>
+
+<template>
+  <sv-search-container v-if="selected?.length > 0">
+    <sv-search-item
+      v-for="item in selected"
+      v-bind="{
+        item,
+        indexes
+      }"
+      :key="item._id"
+      @click="unselect(item, false)"
+    >
+      <sv-icon v-clickable name="check-circle"></sv-icon>
+    </sv-search-item>
+  </sv-search-container>
+</template>
 
 <style scoped lang="scss">
 :deep([data-component=icon]) {

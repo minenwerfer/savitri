@@ -72,5 +72,9 @@ $top-height: 3.6rem;
     display: flex;
     flex-direction: column;
     height: 100vh;
+
+    @include themed() {
+      border-left: 1px solid t(border-color);
+    }
   }
 }

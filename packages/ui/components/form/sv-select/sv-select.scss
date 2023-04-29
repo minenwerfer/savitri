@@ -9,6 +9,7 @@
   @include themed() {
     background: transparent;
     border: 1px solid t(border-color);
+    color: t(foreground-color);
   }
 
   &:focus {

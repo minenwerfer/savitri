@@ -1,3 +1,173 @@
+<script setup lang="ts">
+import { computed, provide, inject } from 'vue'
+import type { CollectionProperty, Condition } from '@semantic-api/types'
+import { useStore, useCondition } from '@savitri/web'
+
+import SvIcon from '../../sv-icon/sv-icon.vue'
+import SvButton from '../../sv-button/sv-button.vue'
+import SvInput from '../sv-input/sv-input.vue'
+
+import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
+
+type LayoutConfig = {
+  span?: string
+  verticalSpacing?: string
+  optionsColumns?: number
+  if?: Condition
+  component?: {
+    name: string
+    props?: object
+  }
+}
+
+type Props = {
+  form: Record<string, CollectionProperty>
+  formData: Record<string, any>
+  collection?: string
+  isReadOnly?: boolean
+  searchOnly?: boolean
+  layout?: Record<string, LayoutConfig>
+  strict?: boolean
+  formComponents?: Record<string, any>
+  propertyComponents?: Record<string, any>
+  omitFormHeader?: boolean
+  omitInputLabels?: boolean
+  validationErrors?: Record<string, any>|null
+  highlightRequired?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isReadOnly: false,
+  searchony: false,
+  strict: true,
+  validationErrors: null,
+  highlightRequired: true
+})
+
+const emit = defineEmits<{
+  (e: 'update:formData' | 'input', value: any): void
+  (e: 'change'): void
+}>()
+
+const collectionName = props.collection || inject('storeId', null)
+const store = collectionName
+  ? useStore(collectionName.value||collectionName)
+  : null
+
+if( !collectionName && process.env.NODE_ENV !== 'production' ) {
+  console.warn(
+    `sv-form was used without providing storeId or specifying
+    collection prop, some features may not work as intended`
+  )
+}
+
+const passAhead = <T extends keyof Props, P extends Props[T]>(propName: T): P => {
+  const value = inject<P>(propName, props[propName] as P)
+  if( props[propName] ) {
+    provide(propName, props[propName])
+  }
+
+  return value
+}
+
+const validationErrors = computed(() => props.validationErrors !== null
+  ? props.validationErrors
+  : store?.validationErrors)
+
+const formComponents = passAhead('formComponents')||{}
+const propertyComponents = passAhead('propertyComponents')||{}
+const omitFormHeader = passAhead('omitFormHeader')
+const omitInputLabels = passAhead('omitInputLabels')
+
+provide('storeId', collectionName)
+provide('searchOnly', props.searchOnly||false)
+
+const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]> => 
+  Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
+    if(
+      !(property
+        && (!(property.s$noForm  || property.s$meta) || props.searchOnly)
+        && (!condition || condition([key, property]))
+      )) {
+      return a
+    }
+
+    return [
+      ...a,
+      [
+        key,
+        {
+          ...property,
+          hidden: undefined
+        }
+      ]
+    ]
+  }, [])
+
+
+const has = (propertyName: string) => {
+  if(
+    props.searchOnly
+    || !props.strict
+    || !collectionName
+  ) {
+    return true
+  }
+
+  const formProperties = store.description?.form
+  return !formProperties || formProperties.includes(propertyName)
+}
+
+const properties = filterProperties(([key, f]: [string, any]) => {
+  return (!f.readOnly || props.searchOnly)
+    && !f.meta
+    && has(key)
+})
+
+const fieldStyle = (key:string, property: any) => {
+  const style = []
+  const layout = props.layout?.[key] || props.layout?.$default
+
+  if( !property ) {
+    return
+  }
+
+  if( layout?.if ) {
+    const result = useCondition(
+      props.formData,
+      layout.if
+    )
+
+    if( !result.satisfied ) {
+      style.push(`display: none;`)
+    }
+  }
+
+  style.push(`
+    --field-span: ${layout?.span || 6};
+    grid-column: span var(--field-span) / span var(--field-span);
+  `)
+
+  if( !layout ) {
+    return style.join('')
+  }
+
+  if( layout.verticalSpacing ) {
+    style.push(`
+      --vertical-spacing: ${layout.verticalSpacing};
+      padding: var(--vertical-spacing) 0;
+    `)
+  }
+
+  return style.join('')
+}
+
+const unfilled = (value: any) => {
+  return value === null
+    || (value instanceof Object && !Object.keys(value).length)
+}
+</script>
+
 <template>
   <form
     class="form"
@@ -169,175 +339,5 @@
     </div>
   </form>
 </template>
-
-<script setup lang="ts">
-import { computed, provide, inject } from 'vue'
-import type { CollectionProperty, Condition } from '@semantic-api/types'
-import { useStore, useCondition } from '@savitri/web'
-
-import SvIcon from '../../sv-icon/sv-icon.vue'
-import SvButton from '../../sv-button/sv-button.vue'
-import SvInput from '../sv-input/sv-input.vue'
-
-import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
-
-type LayoutConfig = {
-  span?: string
-  verticalSpacing?: string
-  optionsColumns?: number
-  if?: Condition
-  component?: {
-    name: string
-    props?: object
-  }
-}
-
-type Props = {
-  form: Record<string, CollectionProperty>
-  formData: Record<string, any>
-  collection?: string
-  isReadOnly?: boolean
-  searchOnly?: boolean
-  layout?: Record<string, LayoutConfig>
-  strict?: boolean
-  formComponents?: Record<string, any>
-  propertyComponents?: Record<string, any>
-  omitFormHeader?: boolean
-  omitInputLabels?: boolean
-  validationErrors?: Record<string, any>|null
-  highlightRequired?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  isReadOnly: false,
-  searchony: false,
-  strict: true,
-  validationErrors: null,
-  highlightRequired: true
-})
-
-const emit = defineEmits<{
-  (e: 'update:formData' | 'input', value: any): void
-  (e: 'change'): void
-}>()
-
-const collectionName = props.collection || inject('storeId', null)
-const store = collectionName
-  ? useStore(collectionName.value||collectionName)
-  : null
-
-if( !collectionName && process.env.NODE_ENV !== 'production' ) {
-  console.warn(
-    `sv-form was used without providing storeId or specifying
-    collection prop, some features may not work as intended`
-  )
-}
-
-const passAhead = <T extends keyof Props, P extends Props[T]>(propName: T): P => {
-  const value = inject<P>(propName, props[propName] as P)
-  if( props[propName] ) {
-    provide(propName, props[propName])
-  }
-
-  return value
-}
-
-const validationErrors = computed(() => props.validationErrors !== null
-  ? props.validationErrors
-  : store?.validationErrors)
-
-const formComponents = passAhead('formComponents')||{}
-const propertyComponents = passAhead('propertyComponents')||{}
-const omitFormHeader = passAhead('omitFormHeader')
-const omitInputLabels = passAhead('omitInputLabels')
-
-provide('storeId', collectionName)
-provide('searchOnly', props.searchOnly||false)
-
-const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]> => 
-  Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
-    if(
-      !(property
-        && (!(property.s$noForm  || property.s$meta) || props.searchOnly)
-        && (!condition || condition([key, property]))
-      )) {
-      return a
-    }
-
-    return [
-      ...a,
-      [
-        key,
-        {
-          ...property,
-          hidden: undefined
-        }
-      ]
-    ]
-  }, [])
-
-
-const has = (propertyName: string) => {
-  if(
-    props.searchOnly
-    || !props.strict
-    || !collectionName
-  ) {
-    return true
-  }
-
-  const formProperties = store.description?.form
-  return !formProperties || formProperties.includes(propertyName)
-}
-
-const properties = filterProperties(([key, f]: [string, any]) => {
-  return (!f.readOnly || props.searchOnly)
-    && !f.meta
-    && has(key)
-})
-
-const fieldStyle = (key:string, property: any) => {
-  const style = []
-  const layout = props.layout?.[key] || props.layout?.$default
-
-  if( !property ) {
-    return
-  }
-
-  if( layout?.if ) {
-    const result = useCondition(
-      props.formData,
-      layout.if
-    )
-
-    if( !result.satisfied ) {
-      style.push(`display: none;`)
-    }
-  }
-
-  style.push(`
-    --field-span: ${layout?.span || 6};
-    grid-column: span var(--field-span) / span var(--field-span);
-  `)
-
-  if( !layout ) {
-    return style.join('')
-  }
-
-  if( layout.verticalSpacing ) {
-    style.push(`
-      --vertical-spacing: ${layout.verticalSpacing};
-      padding: var(--vertical-spacing) 0;
-    `)
-  }
-
-  return style.join('')
-}
-
-const unfilled = (value: any) => {
-  return value === null
-    || (value instanceof Object && !Object.keys(value).length)
-}
-</script>
 
 <style scoped src="./sv-form.scss"></style>

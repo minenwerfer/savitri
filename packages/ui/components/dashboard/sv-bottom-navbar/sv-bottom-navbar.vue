@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useStore } from '@savitri/web'
+import SvIcon from '../../sv-icon/sv-icon.vue'
+
+const metaStore = useStore('meta')
+</script>
+
 <template>
   <div class="navbar">
     <sv-icon
@@ -22,12 +29,5 @@
     ></sv-icon>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useStore } from '@savitri/web'
-import SvIcon from '../../sv-icon/sv-icon.vue'
-
-const metaStore = useStore('meta')
-</script>
 
 <style scoped src="./sv-bottom-navbar.scss"></style>

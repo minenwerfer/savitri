@@ -1,3 +1,83 @@
+<script setup lang="ts">
+import { inject, computed } from 'vue'
+import { useStore, useCondition } from '@savitri/web'
+import type { CollectionProperty } from '@semantic-api/types'
+
+import SvButton from '../sv-button/sv-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
+import SvPicture from '../sv-picture/sv-picture.vue'
+import SvContextMenu from '../sv-context-menu/sv-context-menu.vue'
+import SvSwitch from '../form/sv-switch/sv-switch.vue'
+
+type Props = {
+  columns: Record<string, CollectionProperty>
+  rows: any
+  collection?: string
+  checkbox?: boolean
+  border?: boolean
+  headers?: boolean
+  actions?: Array<CollectionAction & {
+    action: string
+    click: (...args: any[]) => void
+  }>
+  layout?: any
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  border: true,
+  headers: true
+})
+
+const collectionName = props.collection || inject('storeId', null)
+const store = collectionName
+  ? useStore(collectionName.value||collectionName)
+  : null
+
+const selected = computed({
+  get: () => store.selected,
+  set: (items: Array<any>) => store.selectMany({ items, value: true })
+})
+
+const buttonActions = computed(() => (
+  props.actions?.filter((action) => props.layout?.actions?.[action.action]?.button) || []
+))
+
+const dropdownActions = computed(() => (
+  props.actions?.filter((action) => !props.layout?.actions?.[action.action]?.button) || []
+))
+
+const toggle = (value: boolean, rowId: string, key: string) => {
+  if( store ) {
+    store.insert({
+      what: {
+        _id: rowId,
+        [key]: value
+      }
+    }, {
+      skipLoading: true
+    })
+  }
+}
+
+const buttonStyle = (subject: any, action: any) => {
+  const style = []
+  const layout = props.layout?.actions?.[action.action]
+
+  if( layout?.if ) {
+    const result = useCondition(
+      subject,
+      layout.if
+    )
+
+    if( !result.satisfied ) {
+      style.push(`display: none;`)
+    }
+  }
+
+  return style.join('')
+}
+</script>
+
 <template>
   <table v-if="Object.keys(columns).length > 0" class="table">
     <tbody>
@@ -204,85 +284,5 @@
     </tfoot>
   </table>
 </template>
-
-<script setup lang="ts">
-import { inject, computed } from 'vue'
-import { useStore, useCondition } from '@savitri/web'
-import type { CollectionProperty } from '@semantic-api/types'
-
-import SvButton from '../sv-button/sv-button.vue'
-import SvIcon from '../sv-icon/sv-icon.vue'
-import SvPicture from '../sv-picture/sv-picture.vue'
-import SvContextMenu from '../sv-context-menu/sv-context-menu.vue'
-import SvSwitch from '../form/sv-switch/sv-switch.vue'
-
-type Props = {
-  columns: Record<string, CollectionProperty>
-  rows: any
-  collection?: string
-  checkbox?: boolean
-  border?: boolean
-  headers?: boolean
-  actions?: Array<CollectionAction & {
-    action: string
-    click: (...args: any[]) => void
-  }>
-  layout?: any
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  border: true,
-  headers: true
-})
-
-const collectionName = props.collection || inject('storeId', null)
-const store = collectionName
-  ? useStore(collectionName.value||collectionName)
-  : null
-
-const selected = computed({
-  get: () => store.selected,
-  set: (items: Array<any>) => store.selectMany({ items, value: true })
-})
-
-const buttonActions = computed(() => (
-  props.actions?.filter((action) => props.layout?.actions?.[action.action]?.button) || []
-))
-
-const dropdownActions = computed(() => (
-  props.actions?.filter((action) => !props.layout?.actions?.[action.action]?.button) || []
-))
-
-const toggle = (value: boolean, rowId: string, key: string) => {
-  if( store ) {
-    store.insert({
-      what: {
-        _id: rowId,
-        [key]: value
-      }
-    }, {
-      skipLoading: true
-    })
-  }
-}
-
-const buttonStyle = (subject: any, action: any) => {
-  const style = []
-  const layout = props.layout?.actions?.[action.action]
-
-  if( layout?.if ) {
-    const result = useCondition(
-      subject,
-      layout.if
-    )
-
-    if( !result.satisfied ) {
-      style.push(`display: none;`)
-    }
-  }
-
-  return style.join('')
-}
-</script>
 
 <style scoped src="./sv-table.scss"></style>

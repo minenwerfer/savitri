@@ -1,3 +1,38 @@
+<script setup lang="ts">
+import { useStore, useRouter } from '@savitri/web'
+import SvPicture from '../../../../../sv-picture/sv-picture.vue'
+import SvIcon from '../../../../../sv-icon/sv-icon.vue'
+import SvContextMenu from '../../../../../sv-context-menu/sv-context-menu.vue'
+import SvSelect from '../../../../../form/sv-select/sv-select.vue'
+
+const router = await useRouter()
+const metaStore = useStore('meta')
+const userStore = useStore('user')
+
+const editProfile = () => {
+  userStore.setItem(userStore.currentUser)
+  router.push({ name: 'dashboard-user-profile' })
+}
+
+const dropdownActions = [
+  {
+    name: 'user profile',
+    icon: 'house-user',
+    click: () => {
+      editProfile()
+    }
+  },
+  {
+    name: 'signout',
+    icon: 'signout',
+    click: () => {
+      userStore.signout()
+      router.push({ name: 'user-signin' })
+    }
+  }
+]
+</script>
+
 <template>
   <div class="header">
     <sv-context-menu
@@ -41,40 +76,5 @@
     </sv-context-menu>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useStore, useRouter } from '@savitri/web'
-import SvPicture from '../../../../../sv-picture/sv-picture.vue'
-import SvIcon from '../../../../../sv-icon/sv-icon.vue'
-import SvContextMenu from '../../../../../sv-context-menu/sv-context-menu.vue'
-import SvSelect from '../../../../../form/sv-select/sv-select.vue'
-
-const router = await useRouter()
-const metaStore = useStore('meta')
-const userStore = useStore('user')
-
-const editProfile = () => {
-  userStore.setItem(userStore.currentUser)
-  router.push({ name: 'dashboard-user-profile' })
-}
-
-const dropdownActions = [
-  {
-    name: 'user profile',
-    icon: 'house-user',
-    click: () => {
-      editProfile()
-    }
-  },
-  {
-    name: 'signout',
-    icon: 'signout',
-    click: () => {
-      userStore.signout()
-      router.push({ name: 'user-signin' })
-    }
-  }
-]
-</script>
 
 <style scoped src="./sv-navbar-header.scss"></style>

@@ -1,3 +1,31 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { CollectionProperty } from '@semantic-api/types'
+import SvCheckbox from '../sv-checkbox/sv-checkbox.vue'
+
+type Props = {
+  modelValue: any
+  property: CollectionProperty
+  propertyName?: string
+  columns?: number
+}
+
+type Emits = {
+  (e: 'update:modelValue', value: any): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  columns: 1
+})
+
+const emit = defineEmits<Emits>()
+const modelValue = computed(() => props.modelValue)
+
+const updateValue = (value: any) => {
+  emit('update:modelValue', value)
+}
+</script>
+
 <template>
   <div
     class="options"
@@ -30,34 +58,6 @@
 <script lang="ts">
 export default {
   inheritAttrs: false
-}
-</script>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import type { CollectionProperty } from '@semantic-api/types'
-import SvCheckbox from '../sv-checkbox/sv-checkbox.vue'
-
-type Props = {
-  modelValue: any
-  property: CollectionProperty
-  propertyName?: string
-  columns?: number
-}
-
-type Emits = {
-  (e: 'update:modelValue', value: any): void
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  columns: 1
-})
-
-const emit = defineEmits<Emits>()
-const modelValue = computed(() => props.modelValue)
-
-const updateValue = (value: any) => {
-  emit('update:modelValue', value)
 }
 </script>
 

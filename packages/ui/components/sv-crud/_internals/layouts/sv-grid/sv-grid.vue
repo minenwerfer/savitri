@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { LayoutOptions } from '@semantic-api/types'
+import { useParentStore } from '@savitri/web'
+
+import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
+import SvIcon from '../../../../sv-icon/sv-icon.vue'
+import SvPicture from '../../../../sv-picture/sv-picture.vue'
+
+type Props = {
+  individualActions: any
+  hasSelectionActions: boolean
+  layoutOptions: LayoutOptions
+}
+
+const props = defineProps<Props>()
+const layoutOptions = props.layoutOptions
+
+const store = useParentStore()
+
+const firstIfArray = (what: any) => {
+  return Array.isArray(what)
+    ? what[0]
+    : what
+}
+</script>
+
 <template>
   <div class="grid">
     <div
@@ -30,31 +56,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { LayoutOptions } from '@semantic-api/types'
-import { useParentStore } from '@savitri/web'
-
-import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
-import SvIcon from '../../../../sv-icon/sv-icon.vue'
-import SvPicture from '../../../../sv-picture/sv-picture.vue'
-
-type Props = {
-  individualActions: any
-  hasSelectionActions: boolean
-  layoutOptions: LayoutOptions
-}
-
-const props = defineProps<Props>()
-const layoutOptions = props.layoutOptions
-
-const store = useParentStore()
-
-const firstIfArray = (what: any) => {
-  return Array.isArray(what)
-    ? what[0]
-    : what
-}
-</script>
 
 <style scoped src="./sv-grid.scss"></style>

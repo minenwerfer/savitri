@@ -1,18 +1,3 @@
-<template>
-  <sv-box
-    float
-    v-bind="props"
-    @close="metaStore.modal.isVisible = false"
-    @overlay-click="metaStore.modal.isVisible = false"
-  >
-    <slot name="body" v-if="$slots.body"></slot>
-    <slot v-else></slot>
-    <template #footer v-if="$slots.footer">
-      <slot name="footer"></slot>
-    </template>
-  </sv-box>
-</template>
-
 <script setup lang="ts">
 import { useStore } from '@savitri/web'
 import SvBox from '../../sv-box/sv-box.vue'
@@ -27,3 +12,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 const metaStore = useStore('meta')
 </script>
+
+<template>
+  <sv-box
+    float
+    v-bind="props"
+    @close="metaStore.modal.isVisible = false"
+    @overlay-click="metaStore.modal.isVisible = false"
+  >
+    <slot name="body" v-if="$slots.body"></slot>
+    <slot v-else></slot>
+    <template #footer v-if="$slots.footer">
+      <slot name="footer"></slot>
+    </template>
+  </sv-box>
+</template>

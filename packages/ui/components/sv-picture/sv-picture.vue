@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+type Props = {
+  url?: string
+  modelValue?: string
+  objectFit?: string
+  bordered?: boolean
+}
+
+const props = defineProps<Props>()
+const url = computed(() => props.url || props.modelValue)
+</script>
+
 <template>
   <figure class="picture">
     <img
@@ -28,19 +42,5 @@
     </figcaption>
   </figure>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-
-type Props = {
-  url?: string
-  modelValue?: string
-  objectFit?: string
-  bordered?: boolean
-}
-
-const props = defineProps<Props>()
-const url = computed(() => props.url || props.modelValue)
-</script>
 
 <style scoped src="./sv-picture.scss"></style>

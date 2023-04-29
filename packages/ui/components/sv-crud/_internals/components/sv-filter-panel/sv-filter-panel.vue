@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { useParentStore } from '@savitri/web'
+import SvBox from '../../../../sv-box/sv-box.vue'
+import SvForm from '../../../../form/sv-form/sv-form.vue'
+import SvButton from '../../../../sv-button/sv-button.vue'
+
+type Emits = {
+  (e: 'update:visible', value: boolean): void
+}
+
+const emit = defineEmits<Emits>()
+const store = useParentStore()
+
+const filter = () => {
+  store.pagination.offset = 0
+  store.filter()
+  emit('update:visible', false)
+}
+</script>
+
 <template>
   <sv-box
     close-hint
@@ -32,25 +52,5 @@
     </template>
   </sv-box>
 </template>
-
-<script setup lang="ts">
-import { useParentStore } from '@savitri/web'
-import SvBox from '../../../../sv-box/sv-box.vue'
-import SvForm from '../../../../form/sv-form/sv-form.vue'
-import SvButton from '../../../../sv-button/sv-button.vue'
-
-type Emits = {
-  (e: 'update:visible', value: boolean): void
-}
-
-const emit = defineEmits<Emits>()
-const store = useParentStore()
-
-const filter = () => {
-  store.pagination.offset = 0
-  store.filter()
-  emit('update:visible', false)
-}
-</script>
 
 <style scoped src="./sv-filter-panel.scss"></style>

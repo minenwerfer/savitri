@@ -1,65 +1,3 @@
-<template>
-  <div
-    v-if="actions.length > 0"
-    ref="contextmenu"
-    class="contextmenu"
-  >
-    <a
-      class="contextmenu__trigger"
-      @click="contextmenuVisible = true"
-    >
-      <slot></slot>
-    </a>
-    <div
-      v-if="contextmenuVisible"
-      v-overlay.invisible="{
-        click: () => {
-          contextmenuVisible = false
-        }
-      }"
-
-      class="contextmenu__content"
-    >
-      <div>
-        <div
-          v-if="$slots.extra"
-          class="contextmenu__section"
-        >
-          <div class="contextmenu__item">
-            <slot
-              v-if="$slots.extra"
-              name="extra"
-            ></slot>
-          </div>
-        </div>
-        <div class="contextmenu__section">
-          <sv-bare-button
-            v-for="(action, aindex) in filterActions(actions)"
-            :key="`action-${aindex}`"
-            class="
-              contextmenu__item
-              contextmenu__item--reactive
-            "
-            @click="onClick(action, subject)"
-          >
-            <sv-icon
-              small
-              v-if="action.icon"
-              :name="action.icon"
-            >
-              {{
-                action.translate
-                  ? $t(action.name)
-                  : action.name
-              }}
-            </sv-icon>
-          </sv-bare-button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useStore } from '@savitri/web'
@@ -109,6 +47,70 @@ const position = computed(() => ({
   y: Math.floor(contextmenu.value?.getBoundingClientRect().top||0 - window.scrollY) + 'px',
 }))
 </script>
+
+<template>
+  <div
+    v-if="actions.length > 0"
+    ref="contextmenu"
+    class="contextmenu"
+  >
+    <a
+      class="contextmenu__trigger"
+      @click="contextmenuVisible = true"
+    >
+      <slot></slot>
+    </a>
+    <teleport to="#main">
+      <div
+        v-if="contextmenuVisible"
+        v-overlay.invisible="{
+          click: () => {
+            contextmenuVisible = false
+          }
+        }"
+
+        class="contextmenu__content"
+      >
+        <div>
+          <div
+            v-if="$slots.extra"
+            class="contextmenu__section"
+          >
+            <div class="contextmenu__item">
+              <slot
+                v-if="$slots.extra"
+                name="extra"
+              ></slot>
+            </div>
+          </div>
+          <div class="contextmenu__section">
+            <sv-bare-button
+              v-for="(action, aindex) in filterActions(actions)"
+              :key="`action-${aindex}`"
+              class="
+                contextmenu__item
+                contextmenu__item--reactive
+              "
+              @click="onClick(action, subject)"
+            >
+              <sv-icon
+                small
+                v-if="action.icon"
+                :name="action.icon"
+              >
+                {{
+                  action.translate
+                    ? $t(action.name)
+                    : action.name
+                }}
+              </sv-icon>
+            </sv-bare-button>
+          </div>
+        </div>
+      </div>
+    </teleport>
+  </div>
+</template>
 
 <style scoped src="./sv-context-menu.scss"></style>
 

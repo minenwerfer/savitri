@@ -1,39 +1,3 @@
-<template>
-  <sv-crud
-    collection="user"
-    @ui-event="handleUiEvent"
-  ></sv-crud>
-
-  <sv-box
-    close-hint
-    fixed-right
-    title="Detalhes"
-    v-model:visible="extraPanel"
-    @overlay-click="extraPanel = false"
-  >
-    <sv-form
-      v-bind="{
-        collection: 'userExtra',
-        form: userExtraStore.properties,
-        formData: userExtraStore.item
-      }"
-    ></sv-form>
-
-    <template #footer>
-      <sv-button
-        small
-        variant="transparent"
-        @click="extraPanel = false"
-      >
-        Cancelar
-      </sv-button>
-      <sv-button @click="insertExtra">
-        Salvar
-      </sv-button>
-    </template>
-  </sv-box>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { hasStore, useStore } from '@savitri/web'
@@ -75,3 +39,40 @@ const insertExtra = async () => {
   extraPanel.value = false
 }
 </script>
+
+<template>
+  <sv-crud
+    collection="user"
+    @ui-event="handleUiEvent"
+  ></sv-crud>
+
+  <sv-box
+    close-hint
+    fixed-right
+    title="Detalhes"
+    v-model:visible="extraPanel"
+    @overlay-click="extraPanel = false"
+  >
+    <sv-form
+      v-bind="{
+        collection: 'userExtra',
+        form: userExtraStore.properties,
+        formData: userExtraStore.item
+      }"
+    ></sv-form>
+
+    <template #footer>
+      <sv-button
+        small
+        variant="transparent"
+        @click="extraPanel = false"
+      >
+        Cancelar
+      </sv-button>
+      <sv-button @click="insertExtra">
+        Salvar
+      </sv-button>
+    </template>
+  </sv-box>
+</template>
+

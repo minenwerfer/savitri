@@ -1,3 +1,57 @@
+<script setup lang="ts">
+import { ref, computed, watch, } from 'vue'
+import { PAGINATION_PER_PAGE_DEFAULTS } from '@semantic-api/types'
+import { useParentStore } from '@savitri/web'
+
+import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
+import SvInput from '../form/sv-input/sv-input.vue'
+import SvSelect from '../form/sv-select/sv-select.vue'
+
+type Props = {
+  collection: string
+}
+
+const props = defineProps<Props>()
+const store = useParentStore(props.collection)
+
+const page = computed({
+  get: () => Math.floor(store.pagination.offset / store.pagination.limit),
+  set: (page: number) => {
+    store.pagination.offset = page * store.pagination.limit
+  }
+})
+
+const limit = computed({
+  get: () => String(store.pagination.limit),
+  set: (value) => {
+    store.pagination.limit = Number(value)
+  }
+})
+
+const pageInput = ref(page.value ? page.value + 1 : 1)
+const pageCount = computed(
+  () => Math.ceil(store.pagination.recordsTotal / store.pagination.limit)
+)
+
+const paginate = (direction: 'previous'|'next') => {
+  window.scrollTo(0, 0)
+  page.value = direction === 'previous'
+    ? page.value - 1
+    : page.value + 1
+}
+
+watch(() => page.value, (newVal: number) => {
+  pageInput.value = newVal + 1
+  store.filter({
+    project: [
+      ...Object.keys(store.properties),
+      ...store.tableMeta
+    ]
+  })
+})
+</script>
+
 <template>
   <div class="pagination">
     <div class="pagination__control">
@@ -64,59 +118,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, watch, } from 'vue'
-import { PAGINATION_PER_PAGE_DEFAULTS } from '@semantic-api/types'
-import { useParentStore } from '@savitri/web'
-
-import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
-import SvIcon from '../sv-icon/sv-icon.vue'
-import SvInput from '../form/sv-input/sv-input.vue'
-import SvSelect from '../form/sv-select/sv-select.vue'
-
-type Props = {
-  collection: string
-}
-
-const props = defineProps<Props>()
-const store = useParentStore(props.collection)
-
-const page = computed({
-  get: () => Math.floor(store.pagination.offset / store.pagination.limit),
-  set: (page: number) => {
-    store.pagination.offset = page * store.pagination.limit
-  }
-})
-
-const limit = computed({
-  get: () => String(store.pagination.limit),
-  set: (value) => {
-    store.pagination.limit = Number(value)
-  }
-})
-
-const pageInput = ref(page.value ? page.value + 1 : 1)
-const pageCount = computed(
-  () => Math.ceil(store.pagination.recordsTotal / store.pagination.limit)
-)
-
-const paginate = (direction: 'previous'|'next') => {
-  window.scrollTo(0, 0)
-  page.value = direction === 'previous'
-    ? page.value - 1
-    : page.value + 1
-}
-
-watch(() => page.value, (newVal: number) => {
-  pageInput.value = newVal + 1
-  store.filter({
-    project: [
-      ...Object.keys(store.properties),
-      ...store.tableMeta
-    ]
-  })
-})
-</script>
 
 <style scoped src="./sv-pagination.scss"></style>

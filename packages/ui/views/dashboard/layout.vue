@@ -1,3 +1,31 @@
+<script setup lang="ts">
+import { onMounted, inject } from 'vue'
+import { useStore } from '@savitri/web'
+import SvIcon from '../../components/sv-icon/sv-icon.vue'
+import SvNavbar from '../../components/dashboard/sv-navbar/sv-navbar.vue'
+import SvBottomNavbar from '../../components/dashboard/sv-bottom-navbar/sv-bottom-navbar.vue'
+
+import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
+
+const metaStore = useStore('meta')
+const menuSchema = inject('menuSchema', {})
+
+onMounted(() => {
+  metaStore.$patch({
+    panel: {
+      visible: localStorage.getItem("meta:panel:visible") !== 'false'
+    },
+    menu: {
+      visible: localStorage.getItem('meta:menu:visible') !== 'false',
+    }
+  })
+
+  useStore('user').functions.ping(null, {
+    skipLoading: true
+  })
+})
+</script>
+
 <template>
   <div class="layout">
     <div class="layout__main">
@@ -63,33 +91,5 @@
 
   <slot name="dashboard-outer"></slot>
 </template>
-
-<script setup lang="ts">
-import { onMounted, inject } from 'vue'
-import { useStore } from '@savitri/web'
-import SvIcon from '../../components/sv-icon/sv-icon.vue'
-import SvNavbar from '../../components/dashboard/sv-navbar/sv-navbar.vue'
-import SvBottomNavbar from '../../components/dashboard/sv-bottom-navbar/sv-bottom-navbar.vue'
-
-import SvBreadcumb from './_internals/components/sv-breadcumb/sv-breadcumb.vue'
-
-const metaStore = useStore('meta')
-const menuSchema = inject('menuSchema', {})
-
-onMounted(() => {
-  metaStore.$patch({
-    panel: {
-      visible: localStorage.getItem("meta:panel:visible") !== 'false'
-    },
-    menu: {
-      visible: localStorage.getItem('meta:menu:visible') !== 'false',
-    }
-  })
-
-  useStore('user').functions.ping(null, {
-    skipLoading: true
-  })
-})
-</script>
 
 <style scoped src="./layout.scss"></style>

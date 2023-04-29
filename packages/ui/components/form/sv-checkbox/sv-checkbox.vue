@@ -1,35 +1,3 @@
-<template>
-  <label :class="`
-    checkbox
-    ${property.readOnly && 'checkbox--readOnly'}
-  `">
-    <input
-      v-model="bindVal"
-      ref="checkbox"
-      v-bind="{
-        type,
-        readOnly: property.readOnly,
-        checked: bindVal
-      }"
-      class="checkbox__input"
-    />
-    <div
-      v-clickable
-      class="checkbox__text"
-    >
-      <div>
-        <slot name="description" v-if="$slots.description"></slot>
-        <div v-else-if="value" v-html="value"></div>
-        <slot v-else></slot>
-      </div>
-      <div class="checkbox__hint">
-        <slot name="hint" v-if="$slots.hint"></slot>
-        <div v-else-if="property.s$hint" v-html="property.s$hint"></div>
-      </div>
-    </div>
-  </label>
-</template>
-
 <script lang="ts">
 export default {
   inheritAttrs: false
@@ -104,5 +72,37 @@ const bindVal = computed({
   }
 })
 </script>
+
+<template>
+  <label :class="`
+    checkbox
+    ${property.readOnly && 'checkbox--readOnly'}
+  `">
+    <input
+      v-model="bindVal"
+      ref="checkbox"
+      v-bind="{
+        type,
+        readOnly: property.readOnly,
+        checked: bindVal
+      }"
+      class="checkbox__input"
+    />
+    <div
+      v-clickable
+      class="checkbox__text"
+    >
+      <div>
+        <slot name="description" v-if="$slots.description"></slot>
+        <div v-else-if="value" v-html="value"></div>
+        <slot v-else></slot>
+      </div>
+      <div class="checkbox__hint">
+        <slot name="hint" v-if="$slots.hint"></slot>
+        <div v-else-if="property.s$hint" v-html="property.s$hint"></div>
+      </div>
+    </div>
+  </label>
+</template>
 
 <style scoped src="./sv-checkbox.scss"></style>

@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { useStore } from '@savitri/web'
+import SvIcon from '../../sv-icon/sv-icon.vue'
+
+const props = defineProps<{
+  idx: number
+  itr: number
+  date: Date
+  icon?: string
+}>()
+
+const metaStore = useStore('meta')
+</script>
+
 <template>
   <div
     v-clickable
@@ -25,19 +39,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useStore } from '@savitri/web'
-import SvIcon from '../../sv-icon/sv-icon.vue'
-
-const props = defineProps<{
-  idx: number
-  itr: number
-  date: Date
-  icon?: string
-}>()
-
-const metaStore = useStore('meta')
-</script>
 
 <style scoped src="./sv-toast.scss"></style>

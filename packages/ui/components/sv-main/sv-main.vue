@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { useStore, bootstrapRoutes } from '@savitri/web'
+import SvModal from '../dashboard/sv-modal/sv-modal.vue'
+import SvPrompt from '../dashboard/sv-prompt/sv-prompt.vue'
+import SvToast from '../dashboard/sv-toast/sv-toast.vue'
+import '../../scss/main.scss'
+
+const metaStore = useStore('meta')
+bootstrapRoutes()
+</script>
+
 <template>
   <div
     id="main"
@@ -58,16 +69,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useStore, bootstrapRoutes } from '@savitri/web'
-import SvModal from '../dashboard/sv-modal/sv-modal.vue'
-import SvPrompt from '../dashboard/sv-prompt/sv-prompt.vue'
-import SvToast from '../dashboard/sv-toast/sv-toast.vue'
-import '../../scss/main.scss'
-
-const metaStore = useStore('meta')
-bootstrapRoutes()
-</script>
 
 <style scoped src="./sv-main.scss"></style>

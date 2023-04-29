@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import { computed, watch } from 'vue'
+import type { FiltersPreset } from '@semantic-api/types'
+import { useRouter, useParentStore } from '@savitri/web'
+import { call } from '../../sv-crud/_internals/store'
+import SvTabs from '../../sv-tabs/sv-tabs.vue'
+import SvButton from '../../sv-button/sv-button.vue'
+import SvIcon from '../../sv-icon/sv-icon.vue'
+
+type Props = {
+  collection?: string
+}
+
+const props = defineProps<Props>()
+const router = await useRouter()
+const route = router.currentRoute
+
+const store = computed(() => {
+  try {
+    const collection = props.collection
+      ? props.collection
+      : (route.value.meta?.collection || route.value.params?.collection) as string
+
+    return useParentStore(collection)
+  } catch( e ) {
+    return null
+  }
+})
+
+const togglePreset = (presetName: string, preset?: FiltersPreset) => {
+  if( !store.value ) {
+    return
+  }
+
+  return (({ value: store }) => {
+    store.filtersPreset = preset?.filters || {}
+    store.preferredTableProperties = preset?.table || []
+
+    store.pagination.offset = 0
+    store.filter()
+    router.push({ hash: presetName ? `#${presetName}` : '' })
+  })(store)
+}
+
+watch(route, () => {
+  if( !store.value ) {
+    return
+  }
+
+  return (({ value: store }) => {
+    if( store.description.filtersPresets ) {
+      if( route.value.hash ) {
+        const presetName = route.value.hash.slice(1)
+        togglePreset(presetName, store.description.filtersPresets[presetName])
+        return
+      }
+
+      togglePreset('')
+    }
+  })(store)
+}, { immediate: true })
+</script>
+
 <template>
   <div class="topbar">
     <sv-tabs v-if="store?.description.filtersPresets">
@@ -62,68 +125,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed, watch } from 'vue'
-import type { FiltersPreset } from '@semantic-api/types'
-import { useRouter, useParentStore } from '@savitri/web'
-import { call } from '../../sv-crud/_internals/store'
-import SvTabs from '../../sv-tabs/sv-tabs.vue'
-import SvButton from '../../sv-button/sv-button.vue'
-import SvIcon from '../../sv-icon/sv-icon.vue'
-
-type Props = {
-  collection?: string
-}
-
-const props = defineProps<Props>()
-const router = await useRouter()
-const route = router.currentRoute
-
-const store = computed(() => {
-  try {
-    const collection = props.collection
-      ? props.collection
-      : (route.value.meta?.collection || route.value.params?.collection) as string
-
-    return useParentStore(collection)
-  } catch( e ) {
-    return null
-  }
-})
-
-const togglePreset = (presetName: string, preset?: FiltersPreset) => {
-  if( !store.value ) {
-    return
-  }
-
-  return (({ value: store }) => {
-    store.filtersPreset = preset?.filters || {}
-    store.preferredTableProperties = preset?.table || []
-
-    store.pagination.offset = 0
-    store.filter()
-    router.push({ hash: presetName ? `#${presetName}` : '' })
-  })(store)
-}
-
-watch(route, () => {
-  if( !store.value ) {
-    return
-  }
-
-  return (({ value: store }) => {
-    if( store.description.filtersPresets ) {
-      if( route.value.hash ) {
-        const presetName = route.value.hash.slice(1)
-        togglePreset(presetName, store.description.filtersPresets[presetName])
-        return
-      }
-
-      togglePreset('')
-    }
-  })(store)
-}, { immediate: true })
-</script>
 
 <style scoped src="./sv-crud-topbar.scss"></style>

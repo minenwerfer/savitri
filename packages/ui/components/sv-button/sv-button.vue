@@ -1,28 +1,3 @@
-<template>
-  <sv-bare-button
-    :class="`
-      button
-      button--${variant}
-      button--${size}
-      ${loading && 'button--loading'}
-    `"
-    :disabled="disabled"
-  >
-    <div style="width: 100%">
-      <sv-icon
-        v-if="icon"
-        :name="icon"
-        :small="size === 'small'"
-        class="button__icon"
-      >
-        <slot></slot>
-      </sv-icon>
-
-      <slot v-else></slot>
-    </div>
-  </sv-bare-button>
-</template>
-
 <script setup lang="ts">
 import { inject } from 'vue'
 import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
@@ -63,5 +38,30 @@ const size = (() => {
   return inject('buttonSize', props.size) || 'medium'
 })()
 </script>
+
+<template>
+  <sv-bare-button
+    :class="`
+      button
+      button--${variant}
+      button--${size}
+      ${loading && 'button--loading'}
+    `"
+    :disabled="disabled"
+  >
+    <div style="width: 100%">
+      <sv-icon
+        v-if="icon"
+        :name="icon"
+        :small="size === 'small'"
+        class="button__icon"
+      >
+        <slot></slot>
+      </sv-icon>
+
+      <slot v-else></slot>
+    </div>
+  </sv-bare-button>
+</template>
 
 <style scoped src="./sv-button.scss"></style>

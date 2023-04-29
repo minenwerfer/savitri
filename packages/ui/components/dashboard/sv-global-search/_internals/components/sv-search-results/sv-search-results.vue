@@ -1,64 +1,3 @@
-<template>
-  <div class="results">
-    <div class="results__collections">
-      <div
-        v-for="([collectionName, results]) in resultsByModule"
-        :key="`results-${collectionName}`"
-      >
-        <h2>{{ $t(collectionName) }}</h2>
-        <div>
-          <div
-            v-clickable
-            v-for="result in results"
-            :key="`result-${result._id}`"
-            class="results__result"
-
-            @click="callAction(
-              collectionName,
-              getActions(collectionName)[0],
-              { _id: result._id }
-            )"
-          >
-            <div
-              v-if="result._picture"
-              class="results__picture"
-            >
-              <sv-picture :file="result._picture">
-                <div class="results__picture-fallback"></div>
-              </sv-picture>
-            </div>
-            <div class="results__info">
-              <div
-                v-for="({ key, property, value }, iindex) in getEntries(collectionName, result)"
-                :key="`info-${result._id}-${iindex}`"
-              >
-                <span class="results__info-label">{{ property.description || key }}</span>
-                <span>{{ value }}</span>
-              </div>
-            </div>
-
-            <div class="results__actions">
-              <sv-button
-                v-for="actionProps in getActions(collectionName).slice(1)"
-                v-bind="{
-                  icon: actionProps.icon,
-                  size: 'small',
-                  variant: 'alt'
-                }"
-
-                :key="`action-${actionProps.action}`"
-                @click="callAction(collectionName, actionProps, { _id: result._id })"
-              >
-                {{ actionProps.name }}
-              </sv-button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useStore, useRouter, useAction } from '@savitri/web'
@@ -129,5 +68,66 @@ watch(() => results.items, (items) => {
   })
 }, { immediate: true })
 </script>
+
+<template>
+  <div class="results">
+    <div class="results__collections">
+      <div
+        v-for="([collectionName, results]) in resultsByModule"
+        :key="`results-${collectionName}`"
+      >
+        <h2>{{ $t(collectionName) }}</h2>
+        <div>
+          <div
+            v-clickable
+            v-for="result in results"
+            :key="`result-${result._id}`"
+            class="results__result"
+
+            @click="callAction(
+              collectionName,
+              getActions(collectionName)[0],
+              { _id: result._id }
+            )"
+          >
+            <div
+              v-if="result._picture"
+              class="results__picture"
+            >
+              <sv-picture :file="result._picture">
+                <div class="results__picture-fallback"></div>
+              </sv-picture>
+            </div>
+            <div class="results__info">
+              <div
+                v-for="({ key, property, value }, iindex) in getEntries(collectionName, result)"
+                :key="`info-${result._id}-${iindex}`"
+              >
+                <span class="results__info-label">{{ property.description || key }}</span>
+                <span>{{ value }}</span>
+              </div>
+            </div>
+
+            <div class="results__actions">
+              <sv-button
+                v-for="actionProps in getActions(collectionName).slice(1)"
+                v-bind="{
+                  icon: actionProps.icon,
+                  size: 'small',
+                  variant: 'alt'
+                }"
+
+                :key="`action-${actionProps.action}`"
+                @click="callAction(collectionName, actionProps, { _id: result._id })"
+              >
+                {{ actionProps.name }}
+              </sv-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped src="./sv-search-results.scss"></style>

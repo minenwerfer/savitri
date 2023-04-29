@@ -1,50 +1,3 @@
-<template>
-  <sv-box
-    overlay
-    class="global-container"
-    @overlay-click="emit('close')"
-  >
-    <div class="global">
-      <sv-icon
-        v-clickable
-        small
-        reactive
-        icon-right
-        name="times"
-        style="align-self: flex-end"
-        @click="emit('close')"
-      >
-        {{ $t('close') }}
-      </sv-icon>
-      <div class="global__searchbar">
-        <sv-input
-          v-model.lazy="query"
-          variant="bold"
-          :property="{
-            type: 'string',
-            s$placeholder: placeholder,
-            s$icon: 'search',
-            s$inputType: 'search',
-            s$focus: true
-          }"
-        ></sv-input>
-      </div>
-
-      <Suspense>
-        <sv-search-results
-          v-loading="isTyping"
-
-          class="global__results"
-          @action-click="emit('close')"
-        ></sv-search-results>
-        <template #fallback>
-          Loading...
-        </template>
-      </Suspense>
-    </div>
-  </sv-box>
-</template>
-
 <script setup lang="ts">
 import { ref, watch, provide } from 'vue'
 import { useHttp, useDebounce } from '@savitri/web'
@@ -101,5 +54,52 @@ watch(() => query.value, () => {
   doLazySearch()
 })
 </script>
+
+<template>
+  <sv-box
+    overlay
+    class="global-container"
+    @overlay-click="emit('close')"
+  >
+    <div class="global">
+      <sv-icon
+        v-clickable
+        small
+        reactive
+        icon-right
+        name="times"
+        style="align-self: flex-end"
+        @click="emit('close')"
+      >
+        {{ $t('close') }}
+      </sv-icon>
+      <div class="global__searchbar">
+        <sv-input
+          v-model.lazy="query"
+          variant="bold"
+          :property="{
+            type: 'string',
+            s$placeholder: placeholder,
+            s$icon: 'search',
+            s$inputType: 'search',
+            s$focus: true
+          }"
+        ></sv-input>
+      </div>
+
+      <Suspense>
+        <sv-search-results
+          v-loading="isTyping"
+
+          class="global__results"
+          @action-click="emit('close')"
+        ></sv-search-results>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
+    </div>
+  </sv-box>
+</template>
 
 <style scoped src="./sv-global-search.scss"></style>

@@ -1,59 +1,3 @@
-<template>
-  <div
-    :key="mobileVisible"
-    v-overlay="{
-      condition: mobileVisible,
-      click: () => emit('update:mobileVisible', false)
-    }"
-    :class="`
-      navbar
-      no-print
-      ${!visible && 'navbar--hidden'}
-      ${mobileVisible && 'navbar--mobile-visible'}
-  `">
-    <sv-navbar-header class="navbar__header"></sv-navbar-header>
-
-    <div v-if="$slots['navbar-action']" class="navbar__action">
-      <slot name="navbar-action"></slot>
-    </div>
-    <!-- navbar entries -->
-    <div class="navbar__entries">
-      <div
-        v-for="(entry, index) in routesWithChildren"
-        :key="`entry-${index}`"
-        class="navbar__entry"
-      >
-        <!-- subroutes -->
-        <sv-icon
-          v-clickable
-          v-for="route in entry.children"
-          :key="route.name"
-          :class="`
-            navbar__route
-            ${isCurrent(route) && 'navbar__route--current'}
-          `"
-
-          :name="route.meta?.icon || 'file'"
-          :title="$tc(route.meta.title, 2)"
-          @click="onEntryClick(route)"
-        >
-          <span>{{ $tc(route.meta.title, 2) }}</span>
-          <span v-if="route.badgeFunction">
-            ({{
-              useStore(route.badgeFunction.split('@')[0])
-                .customGetter[route.badgeFunction.split('@')[1]]('navbar', route.badgePayload)
-            }})
-          </span>
-        </sv-icon>
-      </div>
-    </div>
-
-    <div v-if="$slots['navbar-bottom']" class="navbar__bottom">
-      <slot name="navbar-bottom"></slot>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, watch, } from 'vue'
 import { arraysIntersects } from '@semantic-api/common'
@@ -170,5 +114,61 @@ watch(() => metaStore.descriptions, () => {
   routes.value = getRoutes()
 })
 </script>
+
+<template>
+  <div
+    :key="mobileVisible"
+    v-overlay="{
+      condition: mobileVisible,
+      click: () => emit('update:mobileVisible', false)
+    }"
+    :class="`
+      navbar
+      no-print
+      ${!visible && 'navbar--hidden'}
+      ${mobileVisible && 'navbar--mobile-visible'}
+  `">
+    <sv-navbar-header class="navbar__header"></sv-navbar-header>
+
+    <div v-if="$slots['navbar-action']" class="navbar__action">
+      <slot name="navbar-action"></slot>
+    </div>
+    <!-- navbar entries -->
+    <div class="navbar__entries">
+      <div
+        v-for="(entry, index) in routesWithChildren"
+        :key="`entry-${index}`"
+        class="navbar__entry"
+      >
+        <!-- subroutes -->
+        <sv-icon
+          v-clickable
+          v-for="route in entry.children"
+          :key="route.name"
+          :class="`
+            navbar__route
+            ${isCurrent(route) && 'navbar__route--current'}
+          `"
+
+          :name="route.meta?.icon || 'file'"
+          :title="$tc(route.meta.title, 2)"
+          @click="onEntryClick(route)"
+        >
+          <span>{{ $tc(route.meta.title, 2) }}</span>
+          <span v-if="route.badgeFunction">
+            ({{
+              useStore(route.badgeFunction.split('@')[0])
+                .customGetter[route.badgeFunction.split('@')[1]]('navbar', route.badgePayload)
+            }})
+          </span>
+        </sv-icon>
+      </div>
+    </div>
+
+    <div v-if="$slots['navbar-bottom']" class="navbar__bottom">
+      <slot name="navbar-bottom"></slot>
+    </div>
+  </div>
+</template>
 
 <style scoped src="./sv-navbar.scss"></style>

@@ -1,3 +1,80 @@
+<script setup lang="ts">
+import { watch, computed, ref } from 'vue'
+import SvIcon from '../sv-icon/sv-icon.vue'
+
+// #region props
+type Props = {
+  closeHint?: boolean
+  visible?: boolean|string
+  title?: string
+  float?: boolean
+  fixedRight?: boolean
+  floating?: boolean
+  overlay?: boolean
+  invisibleOverlay?: boolean
+  collapsed?: boolean
+  collapsable?: boolean
+  fullWidth?: boolean
+  fill?: boolean
+  transparent?: boolean
+  transparentMobile?: boolean
+  outerHeader?: boolean
+}
+// #endregion props
+
+const props = withDefaults(defineProps<Props>(), {
+  collapsable: false,
+  closeHint: false,
+  visible: true,
+})
+
+const emit = defineEmits<{
+  (e:
+    'update:visible'
+    | 'update:collapsed'
+    | 'update:closeHint',
+    value: boolean
+  ): void
+  (e: 'overlayClick'): void
+  (e: 'close'): void
+}>()
+
+const isFloating = computed(() => props.floating || props.float)
+const isCollapsed = ref(props.collapsed)
+
+const body = ref<Element & { offsetHeight: number }>()
+
+const reachedEnd = ref(true)
+
+const updateScroll = () => {
+  const { value: bodyElem } = body
+  reachedEnd.value = bodyElem
+    ? bodyElem.scrollTop + bodyElem.offsetHeight! >= bodyElem.scrollHeight
+    : true
+}
+
+watch(() => body.value, (bodyElem) => {
+  if( bodyElem ) {
+    const ob = new ResizeObserver(updateScroll)
+    ob.observe(bodyElem)
+  }
+})
+
+const close = () => {
+  emit('update:visible', false)
+  emit('close')
+}
+
+const overlayClick = () => {
+  emit('overlayClick')
+}
+
+const toggleCollapsed = (value: boolean) => {
+  emit('update:collapsed', value)
+  isCollapsed.value = value
+}
+</script>
+
 <template>
   <div
     v-if="visible"
@@ -88,82 +165,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { watch, computed, ref } from 'vue'
-import SvIcon from '../sv-icon/sv-icon.vue'
-
-// #region props
-type Props = {
-  closeHint?: boolean
-  visible?: boolean|string
-  title?: string
-  float?: boolean
-  fixedRight?: boolean
-  floating?: boolean
-  overlay?: boolean
-  invisibleOverlay?: boolean
-  collapsed?: boolean
-  collapsable?: boolean
-  fullWidth?: boolean
-  fill?: boolean
-  transparent?: boolean
-  transparentMobile?: boolean
-  outerHeader?: boolean
-}
-// #endregion props
-
-const props = withDefaults(defineProps<Props>(), {
-  collapsable: false,
-  closeHint: false,
-  visible: true,
-})
-
-const emit = defineEmits<{
-  (e:
-    'update:visible'
-    | 'update:collapsed'
-    | 'update:closeHint',
-    value: boolean
-  ): void
-  (e: 'overlayClick'): void
-  (e: 'close'): void
-}>()
-
-const isFloating = computed(() => props.floating || props.float)
-const isCollapsed = ref(props.collapsed)
-
-const body = ref<Element & { offsetHeight: number }>()
-
-const reachedEnd = ref(true)
-
-const updateScroll = () => {
-  const { value: bodyElem } = body
-  reachedEnd.value = bodyElem
-    ? bodyElem.scrollTop + bodyElem.offsetHeight! >= bodyElem.scrollHeight
-    : true
-}
-
-watch(() => body.value, (bodyElem) => {
-  if( bodyElem ) {
-    const ob = new ResizeObserver(updateScroll)
-    ob.observe(bodyElem)
-  }
-})
-
-const close = () => {
-  emit('update:visible', false)
-  emit('close')
-}
-
-const overlayClick = () => {
-  emit('overlayClick')
-}
-
-const toggleCollapsed = (value: boolean) => {
-  emit('update:collapsed', value)
-  isCollapsed.value = value
-}
-</script>
 
 <style scoped src="./sv-box.scss"></style>

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueRouter from 'unplugin-vue-router/vite'
 import braun from 'braun/vite'
 import ejs from 'ejs'
 
@@ -24,6 +25,9 @@ export default defineConfig(async () => {
         libraries: [
           '@savitri/ui'
         ]
+      }),
+      vueRouter({
+        routesFolder: process.cwd() + '/pages'
       }),
       vue(),
       {

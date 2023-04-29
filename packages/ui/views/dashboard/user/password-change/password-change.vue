@@ -1,36 +1,3 @@
-<template>
-  <sv-box
-    outer-header
-    class="passchange sv-padded"
-  >
-    <template #header>
-      <div>Mudando a senha de {{ userStore.item.full_name }}</div>
-    </template>
-    <div class="passchange__content">
-      <sv-form
-        v-bind="{
-          form: passwordForm,
-          formData: password
-        }"
-      ></sv-form>
-
-      <div>
-        {{ passwordError || 'Senhas conferem' }}
-      </div>
-    </div>
-
-    <template #footer>
-      <sv-button
-        class="passchange__save-button"
-        :disabled="!!passwordError"
-        @click="insert"
-      >
-        Salvar
-      </sv-button>
-    </template>
-  </sv-box>
-</template>
-
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -87,5 +54,38 @@ const passwordError = computed(() => {
   )
 })
 </script>
+
+<template>
+  <sv-box
+    outer-header
+    class="passchange sv-padded"
+  >
+    <template #header>
+      <div>Mudando a senha de {{ userStore.item.full_name }}</div>
+    </template>
+    <div class="passchange__content">
+      <sv-form
+        v-bind="{
+          form: passwordForm,
+          formData: password
+        }"
+      ></sv-form>
+
+      <div>
+        {{ passwordError || 'Senhas conferem' }}
+      </div>
+    </div>
+
+    <template #footer>
+      <sv-button
+        class="passchange__save-button"
+        :disabled="!!passwordError"
+        @click="insert"
+      >
+        Salvar
+      </sv-button>
+    </template>
+  </sv-box>
+</template>
 
 <style scoped src="./password-change.scss"></style>

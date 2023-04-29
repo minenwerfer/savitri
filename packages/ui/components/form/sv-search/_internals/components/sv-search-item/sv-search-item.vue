@@ -1,3 +1,12 @@
+<script setup lang="ts">
+type Props = {
+  item: any
+  indexes: Array<string>
+}
+
+const props = defineProps<Props>()
+</script>
+
 <template>
   <div
     v-clickable
@@ -17,14 +26,5 @@
 
   </div>
 </template>
-
-<script setup lang="ts">
-type Props = {
-  item: any
-  indexes: Array<string>
-}
-
-const props = defineProps<Props>()
-</script>
 
 <style scoped src="./sv-search-item.scss"></style>

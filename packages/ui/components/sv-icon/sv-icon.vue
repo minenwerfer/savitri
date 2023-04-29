@@ -1,36 +1,3 @@
-<template>
-  <a
-    :class="`
-      icon
-      ${reactive && 'icon--reactive'}
-      ${alt && 'icon--alt'}
-      ${$slots.default && 'icon--centered'}
-  `">
-    <div :class="`
-      icon__icon
-      ${ size && `icon__icon--${size}` }
-      ${ iconRight && 'icon__icon--right' }
-      ${
-        small
-          ? 'icon__icon--small'
-          : 'icon__icon--medium'
-      }
-    `">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        data-component="icon"
-      >
-        <use :href="`/static/icons/${variant}/${name}.svg#root`"></use>
-      </svg>
-    </div>
-    <div v-if="$slots.default" data-component="icon-label">
-      <slot></slot>
-    </div>
-  </a>
-</template>
-
 <script setup lang="ts">
 import { inject } from 'vue'
 
@@ -63,5 +30,38 @@ const reactive = typeof props.reactive === 'boolean'
   ? props.reactive
   : inject('iconReactive', false)
 </script>
+
+<template>
+  <a
+    :class="`
+      icon
+      ${reactive && 'icon--reactive'}
+      ${alt && 'icon--alt'}
+      ${$slots.default && 'icon--centered'}
+  `">
+    <div :class="`
+      icon__icon
+      ${ size && `icon__icon--${size}` }
+      ${ iconRight && 'icon__icon--right' }
+      ${
+        small
+          ? 'icon__icon--small'
+          : 'icon__icon--medium'
+      }
+    `">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        data-component="icon"
+      >
+        <use :href="`/static/icons/${variant}/${name}.svg#root`"></use>
+      </svg>
+    </div>
+    <div v-if="$slots.default" data-component="icon-label">
+      <slot></slot>
+    </div>
+  </a>
+</template>
 
 <style scoped src="./sv-icon.scss"></style>

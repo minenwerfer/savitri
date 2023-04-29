@@ -1,48 +1,3 @@
-<template>
-  <div class="file">
-    <div v-if="preview || modelValue?._id">
-      <sv-picture
-        v-if="isImage"
-        v-model="previewFile"
-        class="file__image"
-      ></sv-picture>
-      <a
-        v-if="modelValue?._id"
-        :href="modelValue.download_link"
-      >
-        {{ modelValue.filename }}
-      </a>
-    </div>
-    <div class="file__actions">
-      <input
-        type="file"
-        ref="file"
-        :accept="property.s$accept?.join(',')"
-        @change="changePreview"
-      />
-      <div
-        v-if="preview"
-        class="file__buttons"
-      >
-        <sv-button @click="insert">
-          Enviar
-        </sv-button>
-        <sv-button @click="clearPreview">
-          Limpar
-        </sv-button>
-      </div>
-      <div
-        v-else-if="modelValue?._id"
-        class="file__buttons"
-      >
-        <sv-button @click="remove">
-          Remover
-        </sv-button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { provide, ref, computed } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
@@ -127,5 +82,50 @@ const remove = async () => {
   emit('update:modelValue', {})
 }
 </script>
+
+<template>
+  <div class="file">
+    <div v-if="preview || modelValue?._id">
+      <sv-picture
+        v-if="isImage"
+        v-model="previewFile"
+        class="file__image"
+      ></sv-picture>
+      <a
+        v-if="modelValue?._id"
+        :href="modelValue.download_link"
+      >
+        {{ modelValue.filename }}
+      </a>
+    </div>
+    <div class="file__actions">
+      <input
+        type="file"
+        ref="file"
+        :accept="property.s$accept?.join(',')"
+        @change="changePreview"
+      />
+      <div
+        v-if="preview"
+        class="file__buttons"
+      >
+        <sv-button @click="insert">
+          Enviar
+        </sv-button>
+        <sv-button @click="clearPreview">
+          Limpar
+        </sv-button>
+      </div>
+      <div
+        v-else-if="modelValue?._id"
+        class="file__buttons"
+      >
+        <sv-button @click="remove">
+          Remover
+        </sv-button>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped src="./sv-file.scss"></style>

@@ -1,121 +1,3 @@
-<template>
-  <div
-    v-if="store"
-    class="crud"
-  >
-    <sv-filter-panel
-      v-if="isFilterVisible"
-      v-model:visible="isFilterVisible"
-      :key="store.$id"
-    ></sv-filter-panel>
-
-    <sv-insert-panel
-      v-if="isInsertVisible"
-      v-bind="{
-        parentCollection,
-        parentField
-      }"
-    ></sv-insert-panel>
-
-    <div>
-      <div
-        v-if="!noControls"
-        class="crud__controls"
-      >
-        <div style="
-          display: flex;
-          align-items: center;
-        ">
-          <sv-info
-            v-if="store && Object.keys(store.availableFilters).length > 0"
-            where="bottom"
-          >
-            <template #text>
-              Filtros
-            </template>
-            <sv-icon
-              v-if="store && Object.keys(store.availableFilters).length > 0"
-              v-clickable
-              small
-              reactive
-              name="filter"
-              @click="isFilterVisible = true"
-            ></sv-icon>
-          </sv-info>
-          <sv-info
-            v-if="store && Object.keys(store.availableFilters).length > 0"
-            where="bottom"
-          >
-            <template #text>
-              Limpar filtros
-            </template>
-            <sv-bare-button :disabled="store.filtersCount === 0">
-              <sv-icon
-                v-if="store && Object.keys(store.availableFilters).length > 0"
-                small
-                reactive
-                name="trash"
-                @click="store.clearFilters"
-              ></sv-icon>
-            </sv-bare-button>
-          </sv-info>
-          <sv-info v-if="!noRefresh" where="bottom">
-            <template #text>
-              Atualizar
-            </template>
-            <sv-icon
-              v-clickable
-              small
-              reactive
-              name="refresh"
-              @click="fetchItems"
-            ></sv-icon>
-          </sv-info>
-          <sv-info
-            v-if="
-              !noLayoutToggle && store
-                && store.description.layout
-                && store.description.layout?.name !== 'tabular'
-            "
-            where="bottom"
-          >
-            <template #text>
-              Alternar layout
-            </template>
-            <sv-icon
-              v-clickable
-              small
-              reactive
-              name="table"
-              @click="toggleLayout(store)"
-            ></sv-icon>
-          </sv-info>
-        </div>
-        <sv-pagination :collection="collection"></sv-pagination>
-      </div>
-
-      <component
-        :is="getLayout(store.$currentLayout)"
-        v-bind="{
-          individualActions,
-          layoutOptions: layout?.options || store?.layout.options
-        }"
-      >
-        <template
-          v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"
-          v-slot:[slotName]="slotProps"
-        >
-          <slot
-            v-bind="slotProps"
-            :name="slotName"
-          ></slot>
-        </template>
-      </component>
-    </div>
-
-  </div>
-</template>
-
 <script setup lang="ts">
 import {
   onMounted,
@@ -319,5 +201,123 @@ provide('storeId', computed(() => props.collection))
 provide('individualActions', individualActions)
 provide('parentStore', parentStore)
 </script>
+
+<template>
+  <div
+    v-if="store"
+    class="crud"
+  >
+    <sv-filter-panel
+      v-if="isFilterVisible"
+      v-model:visible="isFilterVisible"
+      :key="store.$id"
+    ></sv-filter-panel>
+
+    <sv-insert-panel
+      v-if="isInsertVisible"
+      v-bind="{
+        parentCollection,
+        parentField
+      }"
+    ></sv-insert-panel>
+
+    <div>
+      <div
+        v-if="!noControls"
+        class="crud__controls"
+      >
+        <div style="
+          display: flex;
+          align-items: center;
+        ">
+          <sv-info
+            v-if="store && Object.keys(store.availableFilters).length > 0"
+            where="bottom"
+          >
+            <template #text>
+              Filtros
+            </template>
+            <sv-icon
+              v-if="store && Object.keys(store.availableFilters).length > 0"
+              v-clickable
+              small
+              reactive
+              name="filter"
+              @click="isFilterVisible = true"
+            ></sv-icon>
+          </sv-info>
+          <sv-info
+            v-if="store && Object.keys(store.availableFilters).length > 0"
+            where="bottom"
+          >
+            <template #text>
+              Limpar filtros
+            </template>
+            <sv-bare-button :disabled="store.filtersCount === 0">
+              <sv-icon
+                v-if="store && Object.keys(store.availableFilters).length > 0"
+                small
+                reactive
+                name="trash"
+                @click="store.clearFilters"
+              ></sv-icon>
+            </sv-bare-button>
+          </sv-info>
+          <sv-info v-if="!noRefresh" where="bottom">
+            <template #text>
+              Atualizar
+            </template>
+            <sv-icon
+              v-clickable
+              small
+              reactive
+              name="refresh"
+              @click="fetchItems"
+            ></sv-icon>
+          </sv-info>
+          <sv-info
+            v-if="
+              !noLayoutToggle && store
+                && store.description.layout
+                && store.description.layout?.name !== 'tabular'
+            "
+            where="bottom"
+          >
+            <template #text>
+              Alternar layout
+            </template>
+            <sv-icon
+              v-clickable
+              small
+              reactive
+              name="table"
+              @click="toggleLayout(store)"
+            ></sv-icon>
+          </sv-info>
+        </div>
+        <sv-pagination :collection="collection"></sv-pagination>
+      </div>
+
+      <component
+        :is="getLayout(store.$currentLayout)"
+        v-bind="{
+          individualActions,
+          layoutOptions: layout?.options || store?.layout.options
+        }"
+      >
+        <template
+          v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"
+          v-slot:[slotName]="slotProps"
+        >
+          <slot
+            v-bind="slotProps"
+            :name="slotName"
+          ></slot>
+        </template>
+      </component>
+    </div>
+
+  </div>
+</template>
 
 <style scoped src="./sv-crud.scss"></style>

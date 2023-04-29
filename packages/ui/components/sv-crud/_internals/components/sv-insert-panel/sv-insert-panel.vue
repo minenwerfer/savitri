@@ -1,3 +1,67 @@
+<script setup lang="ts">
+import { inject, watch } from 'vue'
+import { useStore, CollectionStore } from '@savitri/web'
+
+import SvBox from '../../../../sv-box/sv-box.vue'
+import SvForm from '../../../../form/sv-form/sv-form.vue'
+import SvButton from '../../../../sv-button/sv-button.vue'
+import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
+import SvIcon from '../../../../sv-icon/sv-icon.vue'
+
+import { isInsertVisible } from '../../store'
+
+const props = defineProps<{
+  parentCollection?: string
+  parentField?: string
+}>()
+
+const metaStore = useStore('meta')
+const store = useStore(metaStore.view.collection)
+const individualActions = inject('individualActions', [])
+
+// unused
+const isInsertReadOnly = false
+
+const parentStore = inject<CollectionStore<any>>('parentStore')
+
+const insert = async () => {
+  const result = await store.deepInsert()
+
+  if( props.parentField ) {
+    const newSet = parentStore!.item[props.parentField] ||= []
+    if( newSet.findIndex(({ _id }:{ _id: string }) => _id === result._id) === -1 ) {
+      newSet.push(result._id)
+    }
+
+    await parentStore!.insert({
+      what: {
+        _id: parentStore!.item._id,
+        [props.parentField]: newSet
+      }
+    })
+  }
+
+  isInsertVisible.value = false
+}
+
+const cancel = () => {
+  store.ask({
+    action: () => {
+      store.clearItem()
+      store.validationErrors = {}
+      isInsertVisible.value = false
+    },
+    body: I18N.global.tc('prompt.close_panel')
+  })
+}
+
+watch(() => store.item._id, (_id) => {
+  if( _id === null ) {
+    isInsertVisible.value = false
+  }
+})
+</script>
+
 <template>
   <sv-box
     fixed-right
@@ -67,66 +131,3 @@
   </sv-box>
 </template>
 
-<script setup lang="ts">
-import { inject, watch } from 'vue'
-import { useStore, CollectionStore } from '@savitri/web'
-
-import SvBox from '../../../../sv-box/sv-box.vue'
-import SvForm from '../../../../form/sv-form/sv-form.vue'
-import SvButton from '../../../../sv-button/sv-button.vue'
-import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
-import SvIcon from '../../../../sv-icon/sv-icon.vue'
-
-import { isInsertVisible } from '../../store'
-
-const props = defineProps<{
-  parentCollection?: string
-  parentField?: string
-}>()
-
-const metaStore = useStore('meta')
-const store = useStore(metaStore.view.collection)
-const individualActions = inject('individualActions', [])
-
-// unused
-const isInsertReadOnly = false
-
-const parentStore = inject<CollectionStore<any>>('parentStore')
-
-const insert = async () => {
-  const result = await store.deepInsert()
-
-  if( props.parentField ) {
-    const newSet = parentStore!.item[props.parentField] ||= []
-    if( newSet.findIndex(({ _id }:{ _id: string }) => _id === result._id) === -1 ) {
-      newSet.push(result._id)
-    }
-
-    await parentStore!.insert({
-      what: {
-        _id: parentStore!.item._id,
-        [props.parentField]: newSet
-      }
-    })
-  }
-
-  isInsertVisible.value = false
-}
-
-const cancel = () => {
-  store.ask({
-    action: () => {
-      store.clearItem()
-      store.validationErrors = {}
-      isInsertVisible.value = false
-    },
-    body: I18N.global.tc('prompt.close_panel')
-  })
-}
-
-watch(() => store.item._id, (_id) => {
-  if( _id === null ) {
-    isInsertVisible.value = false
-  }
-})
-</script>
