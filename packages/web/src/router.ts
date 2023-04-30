@@ -42,7 +42,7 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
     }
 
     if( to.meta?.isPrivate && !userStore.token ) {
-      next({ name: 'signin' })
+      next('/user/signin')
     }
 
     else next()
@@ -56,36 +56,36 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   return router
 }
 
-// export const normalizeRoutes = (node: RouterExtensionNode, parentName?: string) => {
-//   return node.map((child) => {
-//     const normalizedName = (() => {
-//       if( !child.path ) {
-//         return parentName
-//       }
+export const normalizeRoutes = (node: RouterExtensionNode, parentName?: string) => {
+  return node.map((child) => {
+    const normalizedName = (() => {
+      if( !child.path ) {
+        return parentName
+      }
 
-//       return `${parentName}-` + child.path
-//         .replace(/(^\/|\?)/g, '')
-//         .replace(/\/:?/g, '-')
-//     })()
+      return `${parentName}-` + child.path
+        .replace(/(^\/|\?)/g, '')
+        .replace(/\/:?/g, '-')
+    })()
 
-//     if( child.children ) {
-//       child.children = normalizeRoutes(child.children, normalizedName)
-//     }
+    if( child.children ) {
+      child.children = normalizeRoutes(child.children, normalizedName)
+    }
 
-//     return {
-//       name: normalizedName,
-//       ...child
-//     }
-//   })
-// }
+    return {
+      name: normalizedName,
+      ...child
+    }
+  })
+}
 
-// export const extendRouter = (router: any, routerExtension: RouterExtension) => {
-//   Object.entries(routerExtension).forEach(([key, routes]) => {
-//     const parentName = key === 'public'
-//       ? ''
-//       : key
+export const extendRouter = (router: any, routerExtension: RouterExtension) => {
+  Object.entries(routerExtension).forEach(([key, routes]) => {
+    const parentName = key === 'public'
+      ? ''
+      : key
 
-//     const normalized = normalizeRoutes(routes, key)
-//     normalized.forEach((route) => router.addRoute(parentName, route))
-//   })
-// }
+    const normalized = normalizeRoutes(routes, key)
+    normalized.forEach((route) => router.addRoute(parentName, route))
+  })
+}

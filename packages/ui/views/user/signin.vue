@@ -9,7 +9,7 @@ const metaStore = useStore('meta')
 
 const authenticate = async () => {
   await userStore.authenticate(userStore.credentials)
-  router.push({ name: 'dashboard-home' })
+  router.push('/dashboard/home')
 }
 </script>
 
@@ -27,7 +27,7 @@ const authenticate = async () => {
       <span 
         v-clickable
         style="color: #2d96fa"
-        @click="router.push({ name: 'user-signup' })"
+        @click="router.push('/user/signup')"
       >
         Criar uma conta
       </span>
@@ -73,7 +73,7 @@ const authenticate = async () => {
     <sv-button
       v-if="userStore.$currentUser._id && !metaStore.isLoading"
       :disabled="userStore.isLoading || metaStore.isLoading"
-      @click="router.push({ name: 'dashboard-home' })"
+      @click="router.push('/dashboard/home')"
     >
       Continuar como {{ userStore.$currentUser.first_name }}
     </sv-button>

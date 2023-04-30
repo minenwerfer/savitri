@@ -4,6 +4,19 @@ declare module '@savitri/ui' {
   export { default as routes } from '../ui/router'
 }
 
+declare module 'vue-router/auto' {
+  import { createRouter as cr, createWebHistory, Router, RouteRecordRaw } from 'vue-router'
+  export const createRouter: (config: Omit<Parameters<typeof cr>[0], 'routes'> & {
+    extendRoutes: (routes: Array<RouteRecordRaw>) => Array<RouteRecordRaw>
+  }) => Router
+
+  export {
+    Router,
+    RouteRecordRaw,
+    createWebHistory
+  }
+}
+
 var ROUTER: any
 var I18N: any
 var STORES: Record<string, any>

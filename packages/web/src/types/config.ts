@@ -1,5 +1,5 @@
 import type { App } from 'vue'
-import type { Router } from 'vue-router'
+import type { Router, RouteRecordRaw } from 'vue-router'
 
 export type Module = (config: {
   app: App
@@ -22,4 +22,5 @@ export type AppOptions = {
   i18n?: any
   menuSchema?: MenuSchema
   modules?: Array<Module>
+  routes?: Array<RouteRecordRaw>
 }

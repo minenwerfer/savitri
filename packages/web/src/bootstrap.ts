@@ -19,7 +19,7 @@ export const bootstrapRoutes = () => {
         return
       }
 
-      const routeName = `dashboard-${description.$id}`
+      const routeName = `/dashboard/${description.$id}`
       if( router.hasRoute(routeName) ) {
         return
       }

@@ -59,7 +59,7 @@ const getSchema = (schema: any, routes: Array<Route>): Array<Route&SchemaNode> =
 const getRoutes = (node?: SchemaNode): Array<Route> => {
   const children = node?.children
   const routes: unknown = children || typeof props.entrypoint === 'string'
-    ? router.getRoutes().filter((route) => (route.name as string ||'').startsWith(`${props.entrypoint}-`))
+    ? router.getRoutes().filter((route) => (route.name as string ||'').startsWith(`/${props.entrypoint}/`))
     : router.getRoutes() 
 
   const schema = getSchema(children || props.schema, routes as Array<Route>)
@@ -151,10 +151,10 @@ watch(() => metaStore.descriptions, () => {
           `"
 
           :name="route.meta?.icon || 'file'"
-          :title="$tc(route.meta.title, 2)"
+          :title="$tc(route.meta.title || 'untitled', 2)"
           @click="onEntryClick(route)"
         >
-          <span>{{ $tc(route.meta.title, 2) }}</span>
+          <span>{{ $tc(route.meta.title || 'untitled', 2) }}</span>
           <span v-if="route.badgeFunction">
             ({{
               useStore(route.badgeFunction.split('@')[0])

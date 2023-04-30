@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueRouter from 'unplugin-vue-router/vite'
+import vueComponents from 'unplugin-vue-components/vite'
+import autoImport from 'unplugin-auto-import/vite'
 import braun from 'braun/vite'
 import ejs from 'ejs'
 
@@ -20,14 +22,38 @@ export default defineConfig(async () => {
         tag: 'sv-icon',
         ensureList: [
           ...instanceConfig.icons,
-          'search-alt'
         ],
         libraries: [
           '@savitri/ui'
         ]
       }),
+      autoImport({
+        include: [
+          /\.vue$/,
+          /\.vue?vue/
+        ],
+        imports: [
+          'vue'
+        ]
+      }),
       vueRouter({
-        routesFolder: process.cwd() + '/pages'
+        routesFolder: process.cwd() + '/pages',
+        exclude: [
+          '**/_*'
+        ],
+        dts: false
+      }),
+      vueComponents({
+        resolvers: [
+          (componentName) => {
+            if( componentName.startsWith('Sv') ) {
+              return {
+                name: componentName,
+                from: '@savitri/ui'
+              }
+            }
+          }
+        ]
       }),
       vue(),
       {

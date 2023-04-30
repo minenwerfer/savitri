@@ -19,6 +19,7 @@ export const useApp = (config: AppOptions): Promise<{
     component,
     i18n: i18nConfig,
     menuSchema,
+    routes
 
   }: AppOptions = config
 
@@ -28,7 +29,7 @@ export const useApp = (config: AppOptions): Promise<{
   const pinia = window.PINIA = createPinia()
   app.use(pinia)
 
-  const router = createRouter([])
+  const router = createRouter(routes || [])
   const i18n = createI18n(i18nConfig)
 
   pinia.use(() => ({
