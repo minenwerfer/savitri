@@ -2,21 +2,13 @@ import { RouteRecordRaw } from 'vue-router'
 
 const publicRoutes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'landing',
-    redirect: '/user/signin',
-    meta: {
-      title: 'Página inicial'
-    }
-  },
-  {
     path: '/user',
-    name: 'user',
+    name: '/user',
     component: () => import('./components/dashboard/sv-auth-wall/sv-auth-wall.vue'),
     children: [
       {
         path: 'signin',
-        name: 'user-signin',
+        name: '/user/signin',
         component: () => import('./views/user/signin.vue'),
         meta: {
           title: 'Autenticação'
@@ -24,7 +16,7 @@ const publicRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: 'signup',
-        name: 'user-signup',
+        name: '/user/signup',
         component: () => import('./views/user/signup.vue'),
         meta: {
           title: 'Registro'
@@ -32,7 +24,7 @@ const publicRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: 'signup-extra',
-        name: 'user-signup-extra',
+        name: '/user/signup-extra',
         component: () => import('./views/user/signup-extra.vue'),
         meta: {
           title: 'Registro'
@@ -42,7 +34,7 @@ const publicRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: '/not-found',
-    name: 'not-found',
+    name: '/not-found',
     component: () => import('./views/not-found/not-found.vue'),
     meta: {
       title: 'Not found'
@@ -78,7 +70,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: 'c/user',
-        name: 'dashboard-user',
+        name: '/dashboard/user',
         components: {
           default: () => import('./views/dashboard/user/user.vue'),
           topbar: () => import('./components/dashboard/sv-crud-topbar/sv-crud-topbar.vue')
@@ -100,7 +92,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
         },
         children: [
           {
-            path: 'profile',
+            path: '/dashboard/user/profile',
             name: 'dashboard-user-profile',
             components: {
               default: () => import('./views/dashboard/user/profile/profile.vue'),
@@ -112,7 +104,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
             }
           },
           {
-            path: 'changepass',
+            path: '/dashboard/user/changepass',
             name: 'dashboard-user-changepass',
             component: () => import('./views/dashboard/user/password-change/password-change.vue'),
             meta: {
