@@ -6,6 +6,9 @@ import autoImport from 'unplugin-auto-import/vite'
 import braun from 'braun/vite'
 import ejs from 'ejs'
 
+import { scrapper } from 'braun/common'
+import { readdir, readFile } from 'fs/promises'
+
 import sassData from './sassData.js'
 import { getInstanceConfig } from './instance'
 
@@ -20,12 +23,28 @@ export default defineConfig(async () => {
     plugins: [
       braun({
         tag: 'sv-icon',
-        ensureList: [
-          ...instanceConfig.icons,
-        ],
         libraries: [
           '@savitri/ui'
-        ]
+        ],
+        async preEmit() {
+          const paths = [
+            process.cwd() + '/../api/resources/collections',
+            process.cwd() + '/../api/node_modules/@semantic-api/system/cjs/resources/collections'
+          ]
+
+          const scrap = scrapper({}, () => null, () => null)
+
+          for( const path of paths ) {
+            const dirs = await readdir(path)
+            for( const dir of dirs ) {
+              try {
+                const content = await readFile(`${path}/${dir}/${dir}.description.ts`)
+                scrap(content)
+              } catch( e ) {
+              }
+            }
+          }
+        }
       }),
       autoImport({
         include: [
