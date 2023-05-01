@@ -22,7 +22,7 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
 
   const fn = (actionProps: CollectionAction & { action: string }): (filters: F) => void => {
     const { action: actionName, effect: actionEffect } = actionProps
-    const [scopeName, scopedAction] = actionName.split('/')
+    const [scopeName, scopedAction] = actionName.split(':')
 
     if( scopedAction ) {
       if( scopeName === 'route' ) {
@@ -40,7 +40,7 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
           }
 
           router.push({
-            name: actionName.split('/')[1],
+            name: actionName.split(':')[1],
             params: {
               id: filters._id
             }

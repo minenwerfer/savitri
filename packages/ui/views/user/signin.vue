@@ -60,7 +60,7 @@ const authenticate = async () => {
     gap: 1rem;
   ">
     <sv-button
-      :loading="userStore.isLoading"
+      :loading="userStore.loading.authenticate"
 
       :disabled="
         !userStore.credentials.email
@@ -72,7 +72,7 @@ const authenticate = async () => {
 
     <sv-button
       v-if="userStore.$currentUser._id && !metaStore.isLoading"
-      :disabled="userStore.isLoading || metaStore.isLoading"
+      :disabled="userStore.loading.authenticate || metaStore.isLoading"
       @click="router.push('/dashboard/home')"
     >
       Continuar como {{ userStore.$currentUser.first_name }}

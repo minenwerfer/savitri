@@ -77,7 +77,7 @@ const insert = async () => {
 
     <template #footer>
       <sv-button
-        :loading="userStore.isLoading"
+        :loading="userStore.loading.insert"
         @click="insert"
       >
         Salvar

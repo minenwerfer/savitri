@@ -274,7 +274,7 @@ const buttonStyle = (subject: any, action: any) => {
       </tr>
     </tbody>
     <tfoot>
-      <tr v-if="!rows?.length && !store?.isLoading">
+      <tr v-if="!rows?.length && !store?.loading.getAll">
         <td :colspan="Object.keys(columns).length">
           <div class="table__empty">
             Não foram encontrados resultados.

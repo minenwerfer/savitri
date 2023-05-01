@@ -12,8 +12,8 @@ const menuSchema = inject('menuSchema', {})
 
 onMounted(() => {
   metaStore.$patch({
-    panel: {
-      visible: localStorage.getItem("meta:panel:visible") !== 'false'
+    sidepanel: {
+      visible: localStorage.getItem("meta:sidepanel:visible") !== 'false'
     },
     menu: {
       visible: localStorage.getItem('meta:menu:visible') !== 'false',
@@ -58,7 +58,7 @@ onMounted(() => {
 
           <sv-icon
             v-clickable
-            v-if="$slots.panels"
+            v-if="$slots.sidepanel || $route.matched.slice(-1)[0].components.sidepanel"
             small
             name="web-section"
             style="
@@ -66,7 +66,7 @@ onMounted(() => {
               padding-left: 1rem;
               margin-left: auto;
             "
-            @click="metaStore.swapPanel"
+            @click="metaStore.swapSidepanel"
           ></sv-icon>
         </div>
         <div class="layout__view">
@@ -76,13 +76,21 @@ onMounted(() => {
 
       <div
         v-if="
-          $slots.panels
-          && metaStore.panel.visible
+          ($slots.sidepanel || $route.matched.slice(-1)[0].components.sidepanel)
+          && metaStore.sidepanel.visible
           && !$route.meta?.noTopbar
         "
-        class="layout__panel"
+        class="layout__sidepanel"
       >
-        <slot name="panels"></slot>
+        <router-view
+          v-if="$route.matched.slice(-1)[0].components.sidepanel"
+          name="sidepanel"
+        ></router-view>
+
+        <slot
+          v-else-if="$slots.sidepanel"
+          name="sidepanel"
+        ></slot>
       </div>
     </div>
 

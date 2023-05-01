@@ -80,7 +80,7 @@ const search = async () => {
     return
   }
 
-  if( store.isLoading ) {
+  if( store.loading.getAll ) {
     return
   }
 
@@ -188,7 +188,7 @@ const lazySearch = () => {
           Pesquisando...
         </div>
         <div v-else-if="
-          !store.isLoading
+          !store.loading.getAll
             && Object.values(inputValue).filter((v) => !!v).length > 0
             && !((property.type === 'array' && modelValue?.length) || modelValue?._id)
         ">

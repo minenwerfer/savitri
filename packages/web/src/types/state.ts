@@ -41,7 +41,7 @@ export type CollectionState<Item> = PiniaState & {
 
   validationErrors: ValidationErrors
 
-  isLoading: boolean
+  loading: Record<string, boolean>
   halt: boolean
 
   pagination: Pagination

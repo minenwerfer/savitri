@@ -62,7 +62,7 @@ const state = <T=object>() => {
 
     validationErrors: {},
 
-    isLoading: false,
+    loading: {},
     halt: false,
 
     pagination: {

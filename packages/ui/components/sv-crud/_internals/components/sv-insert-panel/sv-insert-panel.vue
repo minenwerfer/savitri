@@ -122,7 +122,7 @@ watch(() => store.item._id, (_id) => {
       </sv-button>
       <sv-button
         :disabled="!store.insertReady || isInsertReadOnly"
-        :loading="store.isLoading"
+        :loading="store.loading.insert"
         @click="insert"
       >
       {{ $t('action.insert') }}

@@ -107,7 +107,7 @@ const actionsAndMutations: Actions & Mutations = {
   async custom(verb,  payload?, options?) {
     this.validationErrors = {}
     if( !options?.skipLoading ) {
-      this.isLoading = true
+      this.loading[verb || ''] = true
     }
 
     const method = options?.method || 'POST'
@@ -134,7 +134,7 @@ const actionsAndMutations: Actions & Mutations = {
       })
       .finally(() => {
         if( !options?.skipLoading ) {
-          this.isLoading = false
+        this.loading[verb || ''] = false
         }
       })
 

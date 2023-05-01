@@ -79,7 +79,7 @@ watch(() => page.value, (newVal: number) => {
         ></sv-icon>
       </sv-bare-button>
       <sv-bare-button
-        :disabled="store.isLoading || page === 0"
+        :disabled="store.loading.getAll || page === 0"
         @click="paginate('previous')"
       >
         <sv-icon
@@ -101,7 +101,7 @@ watch(() => page.value, (newVal: number) => {
         <span>{{ $t('of') }} {{ pageCount }}</span>
       </div>
       <sv-bare-button
-        :disabled="store.isLoading || page >= pageCount - 1"
+        :disabled="store.loading.getAll || page >= pageCount - 1"
         @click="paginate('next')"
       >
         <sv-icon

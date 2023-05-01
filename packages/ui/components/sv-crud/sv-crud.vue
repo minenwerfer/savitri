@@ -46,6 +46,7 @@ type Props = {
   parentCollection?: string
   parentField?: string
   layout?: Layout
+  action?: any
 }
 
 type Emits = {
@@ -67,7 +68,10 @@ parentStore = props.parentField
   ? useParentStore(props.parentCollection)
   : null
 
-const action = useAction(store, router)
+const action = props.action
+  ? props.action.value || props.action
+  : useAction(store, router)
+
 call.value = action[0]
 actionEventBus.value = action[1]
 

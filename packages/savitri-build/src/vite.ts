@@ -33,7 +33,17 @@ export default defineConfig(async () => {
           /\.vue?vue/
         ],
         imports: [
-          'vue'
+          'vue',
+          {
+            '@savitri/web': [
+              'useHttp',
+              'useStore',
+              'useRouter',
+              'useClipboard',
+              'useAction',
+              'useCondition'
+            ]
+          }
         ]
       }),
       vueRouter({

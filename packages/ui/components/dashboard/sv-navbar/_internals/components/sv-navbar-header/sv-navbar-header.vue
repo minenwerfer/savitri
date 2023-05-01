@@ -27,7 +27,7 @@ const dropdownActions = [
     icon: 'signout',
     click: () => {
       userStore.signout()
-      router.push({ name: 'user-signin' })
+      router.push('/user/signin')
     }
   }
 ]

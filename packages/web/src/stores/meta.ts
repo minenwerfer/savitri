@@ -29,7 +29,7 @@ export default defineStore('meta', {
       layout: 'tabular',
       collection: ''
     },
-    panel: {
+    sidepanel: {
       visible: true
     },
     menu: {
@@ -119,9 +119,9 @@ export default defineStore('meta', {
       this.menu.visible = !this.menu.visible
       localStorage.setItem('meta:menu:visible', String(this.menu.visible))
     },
-    swapPanel() {
-      this.panel.visible = !this.panel.visible
-      localStorage.setItem('meta:panel:visible', String(this.panel.visible))
+    swapSidepanel() {
+      this.sidepanel.visible = !this.sidepanel.visible
+      localStorage.setItem('meta:sidepanel:visible', String(this.sidepanel.visible))
     },
 
     spawnPrompt(props: {
