@@ -38,6 +38,10 @@ export const useApp = (config: AppOptions): Promise<{
     store: useStore
   }))
 
+  if( config.setup ) {
+    config.setup()
+  }
+
   const metaStore = useStore('meta')
   const userStore = useStore('user')
 

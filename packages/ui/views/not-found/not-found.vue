@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from '@savitri/web'
 
-const router = useRouter()
+const router = await useRouter()
 const goBack = () => {
   if( router.options.history.state.back ) {
     router.back()

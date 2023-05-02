@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { useStore } from '@savitri/web'
+import { useRouter, useStore } from '@savitri/web'
 import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvIcon from '../../components/sv-icon/sv-icon.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
 
-const router = useRouter()
+const router = await useRouter()
 const userStore = useStore('user')
 </script>
 

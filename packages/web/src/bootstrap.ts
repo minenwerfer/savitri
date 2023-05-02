@@ -1,5 +1,4 @@
 import { watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { arraysIntersects } from '@semantic-api/common'
 import type { Description } from '@semantic-api/types'
 import { useStore } from './state/use'
@@ -7,7 +6,6 @@ import { useStore } from './state/use'
 export const bootstrapRoutes = () => {
   const metaStore = useStore('meta')
   const userStore = useStore('user')
-  const router = useRouter()
 
   watch(() => metaStore.descriptions, (descriptions: Record<string, Description>) => {
     Object.values(descriptions).forEach((description) => {
@@ -20,7 +18,7 @@ export const bootstrapRoutes = () => {
       }
 
       const routeName = `/dashboard/${description.$id}`
-      if( router.hasRoute(routeName) ) {
+      if( ROUTER.hasRoute(routeName) ) {
         return
       }
 
@@ -34,7 +32,7 @@ export const bootstrapRoutes = () => {
         }
       }
 
-      router.addRoute('dashboard', route)
+      ROUTER.addRoute('dashboard', route)
     })
 
   }, { immediate: true })

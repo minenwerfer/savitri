@@ -47,9 +47,10 @@ export default defineConfig(async () => {
         }
       }),
       autoImport({
-        include: [
-          /\.vue$/,
-          /\.vue?vue/
+        exclude: [
+          /\/node_modules\//,
+          /\.git\//,
+          /\/@?savitri\//,
         ],
         imports: [
           'vue',
@@ -99,6 +100,7 @@ export default defineConfig(async () => {
     },
     build: {
       target: 'esnext',
+      sourcemap: true
     },
     css: {
       preprocessorOptions: {

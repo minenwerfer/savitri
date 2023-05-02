@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { hasStore, useStore, usePasswordPolicy } from '@savitri/web'
+import { useRouter, useStore, hasStore, usePasswordPolicy } from '@savitri/web'
 
 import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvCheckbox from '../../components/form/sv-checkbox/sv-checkbox.vue'
 import SvIcon from '../../components/sv-icon/sv-icon.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
 
-const router = useRouter()
+const router = await useRouter()
 
 const metaStore = useStore('meta')
 const userStore = useStore('user')

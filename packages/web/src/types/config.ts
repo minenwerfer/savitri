@@ -23,4 +23,5 @@ export type AppOptions = {
   menuSchema?: MenuSchema
   modules?: Array<Module>
   routes?: Array<RouteRecordRaw>
+  setup?: () => void
 }

@@ -55,7 +55,7 @@ const reactive = typeof props.reactive === 'boolean'
         viewBox="0 0 24 24"
         data-component="icon"
       >
-        <use :href="`/static/icons/${variant}/${name}.svg#root`"></use>
+        <use :href="`/assets/icons.svg#${variant}:${name}`"></use>
       </svg>
     </div>
     <div v-if="$slots.default" data-component="icon-label">
