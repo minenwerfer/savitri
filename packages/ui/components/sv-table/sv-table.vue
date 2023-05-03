@@ -35,7 +35,7 @@ const store = collectionName
 
 const selected = computed({
   get: () => store.selected,
-  set: (items: Array<any>) => store.selectMany({ items, value: true })
+  set: (items: Array<any>) => store.selectManyItems(items, true)
 })
 
 const buttonActions = computed(() => (
@@ -93,7 +93,7 @@ const buttonStyle = (subject: any, action: any) => {
         >
           <input
             type="checkbox"
-            @change="store.selectAll($event.target.checked)"
+            @change="store.selectAllItems($event.target.checked)"
           />
         </th>
         <th
@@ -133,7 +133,7 @@ const buttonStyle = (subject: any, action: any) => {
           <input
             type="checkbox"
             v-model="selected"
-            :value="{ _id: row._id }"
+            :value="row._id"
           />
         </td>
         <td

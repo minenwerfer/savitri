@@ -29,7 +29,8 @@ export default defineConfig(async () => {
         async preEmit() {
           const paths = [
             process.cwd() + '/../api/resources/collections',
-            process.cwd() + '/../api/node_modules/@semantic-api/system/cjs/resources/collections'
+            process.cwd() + '/../api/node_modules/@semantic-api/system/cjs/resources/collections',
+            // process.cwd() + '/../api/node_modules/@semantic-api/api/cjs/presets',
           ]
 
           const scrap = scrapper({}, () => null, () => null)
@@ -99,8 +100,7 @@ export default defineConfig(async () => {
       ]
     },
     build: {
-      target: 'esnext',
-      sourcemap: true
+      target: 'esnext'
     },
     css: {
       preprocessorOptions: {

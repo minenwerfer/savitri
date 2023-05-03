@@ -66,6 +66,8 @@ interface ActionsAux {
   ): string
 
   select(properties: Array<string>, item?: Record<string, any>): Record<string, any>
+  selectManyItems(items: Array<Item>, value?: boolean): Array<Item>
+  selectAllItems(value?: boolean): Array<Item>
 }
 
 interface MutationsAux {

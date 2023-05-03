@@ -390,6 +390,22 @@ const actionsAndMutations: Actions & Mutations = {
         [key]: value
       }
     }, {})
+  },
+
+  selectManyItems(items, value) {
+    if( value ) {
+      this.selected = items
+    }
+
+    return items
+  },
+
+  selectAllItems(value) {
+    this.selected = value
+      ? this.items.map((item) => item._id)
+      : []
+    
+    return this.items
   }
 }
 
