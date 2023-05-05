@@ -40,7 +40,7 @@ export default defineConfig(async () => {
             for( const dir of dirs ) {
               try {
                 const content = await readFile(`${path}/${dir}/${dir}.description.ts`)
-                scrap(content)
+                scrap(content.toString())
               } catch( e ) {
               }
             }
@@ -59,6 +59,7 @@ export default defineConfig(async () => {
             '@savitri/web': [
               'useHttp',
               'useStore',
+              'useParentStore',
               'useRouter',
               'useClipboard',
               'useAction',
@@ -97,6 +98,9 @@ export default defineConfig(async () => {
     optimizeDeps: {
       include: [
         'bson'
+      ],
+      exclude: [
+        'vue-router'
       ]
     },
     build: {
@@ -108,7 +112,7 @@ export default defineConfig(async () => {
           additionalData: sassData({})
         }
       }
-    }
+    },
   }
 
   return config

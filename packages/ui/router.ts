@@ -32,19 +32,6 @@ const publicRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: '/not-found',
-    name: '/not-found',
-    component: () => import('./views/not-found/not-found.vue'),
-    meta: {
-      title: 'Not found'
-    }
-  },
-  {
-    path: '/:catchAll(.*)',
-    name: 'catchAll',
-    redirect: '/not-found'
-  }
 ]
 
 const privateRoutes: Array<RouteRecordRaw> = [

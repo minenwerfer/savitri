@@ -93,6 +93,7 @@ const buttonStyle = (subject: any, action: any) => {
         >
           <input
             type="checkbox"
+            :checked="!!store.selected.length"
             @change="store.selectAllItems($event.target.checked)"
           />
         </th>
