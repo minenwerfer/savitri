@@ -132,7 +132,6 @@ const getters: GettersFunctions = {
 
         return !(k in this.properties)
           || (this.description.form && !formIncludes(k))
-          || property.s$noForm
           || property.type === 'boolean'
           || (
             !!this.item[k]

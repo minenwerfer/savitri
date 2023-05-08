@@ -15,8 +15,8 @@ const emit = defineEmits<{
 const property = props.property||{}
 
 const update = (value: any) => {
-  emit('update:modelValue', value)
-  emit('change', value)
+  emit('update:modelValue', value?._id || value)
+  emit('change', value?._id || value)
 }
 </script>
 
@@ -25,8 +25,8 @@ const update = (value: any) => {
     ref="select"
     class="select"
 
-    :key="modelValue"
-    :value="modelValue"
+    :key="modelValue?._id || modelValue"
+    :value="modelValue?._id || modelValue"
     @click.stop="void"
     @change="update(($event.target as any).value)"
   >

@@ -86,7 +86,7 @@ const filterProperties = (condition: (f: any) => boolean): Array<[string, Collec
   Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
     if(
       !(property
-        && (!(property.s$noForm  || property.s$meta) || props.searchOnly)
+        && (!property.s$meta || props.searchOnly)
         && (!condition || condition([key, property]))
       )) {
       return a

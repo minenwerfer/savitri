@@ -1,7 +1,9 @@
 import { inject } from 'vue'
 import { getActivePinia, setActivePinia, defineStore as piniaDefineStore } from 'pinia'
 
-Object.assign(window, { STORES: {} })
+if( !window.STORES ) {
+  Object.assign(window, { STORES: {} })
+}
 
 export const useStore = (storeId: string) => {
   if( !(storeId in STORES) ) {

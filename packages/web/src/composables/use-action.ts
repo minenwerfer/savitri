@@ -40,10 +40,9 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
           }
 
           router.push({
-            name: actionName.split(':')[1],
-            params: {
-              id: filters._id
-            }
+            name: actionName.split('route:')[1],
+            params: Object.assign({ id: filters._id }, actionProps.params || {}),
+            query: actionProps.query || {}
           })
         }
       }
