@@ -299,7 +299,7 @@ const unfilled = (value: any) => {
                       && !formData[key]?.[formData[key]?.length-1]?._id
                   )
               "
-              @click="pushToArray(formData[key], property)"
+              @click="if(!formData[key]) formData[key] = []; pushToArray(formData[key], property)"
             >
               Adicionar
             </sv-button>
