@@ -4,6 +4,7 @@ import {
   onUnmounted,
   computed,
   provide,
+  inject,
   watch
 
 } from 'vue'
@@ -201,6 +202,8 @@ const individualActions = computed(() => {
   }))
 })
 
+const stickyCrudControls = inject('stickyCrudControls', false)
+
 provide('storeId', computed(() => props.collection))
 provide('individualActions', individualActions)
 provide('parentStore', parentStore)
@@ -228,7 +231,10 @@ provide('parentStore', parentStore)
     <div>
       <div
         v-if="!noControls"
-        class="crud__controls"
+        :class="`
+          crud__controls
+          ${stickyCrudControls && 'crud__controls--sticky'}
+        `"
       >
         <div style="
           display: flex;

@@ -38,7 +38,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('./views/dashboard/layout.vue'),
+    component: () => ROUTER.getRoutes().find(route => route.name === '/dashboard').components.default(),
     redirect: { name: 'dashboard-home' },
     meta: {
       title: 'Dashboard'
