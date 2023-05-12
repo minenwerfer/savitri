@@ -63,7 +63,8 @@ export default defineConfig(async () => {
               'useRouter',
               'useClipboard',
               'useAction',
-              'useCondition'
+              'useCondition',
+              'useNavbar'
             ]
           }
         ]

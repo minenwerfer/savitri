@@ -13,6 +13,11 @@ type Props = {
 }
 
 export const useNavbar = async (props: Props) => {
+  const {
+    entrypoint = 'dashboard',
+    schema: menuSchema
+  } = props
+
   const metaStore = useStore('meta')
   const userStore = useStore('user')
   const router = await useRouter()
@@ -34,11 +39,11 @@ export const useNavbar = async (props: Props) => {
 
   const getRoutes = (node?: SchemaNode): Array<Route> => {
     const children = node?.children
-    const routes: unknown = children || typeof props.entrypoint === 'string'
-      ? router.getRoutes().filter((route: Route) => (route.name as string ||'').startsWith(`/${props.entrypoint}/`))
+    const routes: unknown = children || typeof entrypoint === 'string'
+      ? router.getRoutes().filter((route: Route) => (route.name as string ||'').startsWith(`/${entrypoint}/`))
       : router.getRoutes() 
 
-    const schema = getSchema(children || props.schema, routes as Array<Route>)
+    const schema = getSchema(children || menuSchema, routes as Array<Route>)
     const entries: Record<string, Route> = {}
 
     Object.entries(schema).forEach(([key, node]) => {
