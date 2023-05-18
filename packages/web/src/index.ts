@@ -13,3 +13,5 @@ import userStore from './stores/user'
 
 STORES.meta = metaStore
 STORES.user = userStore
+
+window.userStorage = localStorage

@@ -85,6 +85,10 @@ export const freshItem = (description: Description) => {
     }
   }, {})
 
+  if( description.freshItem ) {
+    Object.assign(item, description.freshItem)
+  }
+
   return item
 }
 

@@ -295,9 +295,6 @@ const actionsAndMutations: Actions & Mutations = {
   clearFilters() {
     const filters = this.filters = deepClone(this.freshFilters)
     this.pagination.offset = 0
-    this.filter(undefined, {
-      unproxied: true
-    })
 
     return filters
   },

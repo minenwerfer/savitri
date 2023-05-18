@@ -5,8 +5,6 @@
     align-items: flex-start;
 
     padding: .6rem 1rem;
-    backdrop-filter: blur(15px);
-    z-index: 10;
 
     @include themed() {
       background: t(background-color);
@@ -21,6 +19,8 @@
     &--sticky {
       position: sticky;
       top: 3.6rem;
+      z-index: 10;
+      backdrop-filter: blur(15px);
     }
   }
 }

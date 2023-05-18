@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, inject } from 'vue'
+import { onBeforeMount, computed, provide, inject } from 'vue'
 import type { CollectionProperty, Condition } from '@semantic-api/types'
 import { useStore, useCondition } from '@savitri/web'
 
@@ -48,6 +48,12 @@ const emit = defineEmits<{
   (e: 'update:formData' | 'input', value: any): void
   (e: 'change'): void
 }>()
+
+onBeforeMount(() => {
+  if( !props.formData ) {
+    emit('update:formData', {})
+  }
+})
 
 const collectionName = props.collection || inject('storeId', null)
 const store = collectionName
@@ -170,6 +176,7 @@ const unfilled = (value: any) => {
 
 <template>
   <form
+    v-if="formData"
     class="form"
     :style="`row-gap: ${omitFormHeader ? '.8rem' : '2rem'};`"
   >

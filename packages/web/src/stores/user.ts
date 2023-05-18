@@ -47,8 +47,8 @@ const collection = useCollection({
               token
             } = _token
 
-            sessionStorage.setItem('auth:token', token)
-            sessionStorage.setItem('auth:currentUser', JSON.stringify(this.currentUser))
+            userStorage.setItem('auth:token', token)
+            userStorage.setItem('auth:currentUser', JSON.stringify(this.currentUser))
 
             const metaStore = useMetaStore()
             await metaStore.describeAll()
@@ -61,7 +61,7 @@ const collection = useCollection({
     },
 
     signout() {
-      sessionStorage.clear()
+      userStorage.clear()
       this.currentUser = {}
     }
   },
@@ -75,8 +75,8 @@ const collection = useCollection({
     },
     $currentUser(): User {
       if( !this.currentUser?._id ) {
-        this.token = sessionStorage.getItem('auth:token')
-        this.currentUser = JSON.parse(sessionStorage.getItem('auth:currentUser')||'{}')
+        this.token = userStorage.getItem('auth:token')
+        this.currentUser = JSON.parse(userStorage.getItem('auth:currentUser')||'{}')
       }
 
       return this.currentUser

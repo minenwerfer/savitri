@@ -42,15 +42,17 @@ const togglePreset = (presetName: string, preset?: FiltersPreset) => {
   })(store)
 }
 
-watch(route, () => {
-  if( !store.value ) {
+watch(route, (currRoute, prevRoute) => {
+  if( !store.value || prevRoute ) {
     return
   }
 
+  const { hash: newHash } = currRoute
+
   return (({ value: store }) => {
     if( store.description.filtersPresets ) {
-      if( route.value.hash ) {
-        const presetName = route.value.hash.slice(1)
+      if( newHash ) {
+        const presetName = newHash.slice(1)
         togglePreset(presetName, store.description.filtersPresets[presetName])
         return
       }

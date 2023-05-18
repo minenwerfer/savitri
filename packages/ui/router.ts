@@ -34,11 +34,20 @@ const publicRoutes: Array<RouteRecordRaw> = [
   },
 ]
 
+const dashboardComponent = async () => {
+  const target = ROUTER.getRoutes().find(route => route.name === '/dashboard').components.default
+  const component = typeof target === 'function'
+    ? await target()
+    : target
+
+  return component
+}
+
 const privateRoutes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => ROUTER.getRoutes().find(route => route.name === '/dashboard').components.default(),
+    component: () => dashboardComponent(),
     redirect: { name: 'dashboard-home' },
     meta: {
       title: 'Dashboard'

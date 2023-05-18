@@ -12,6 +12,9 @@
       "dom",
       "esnext"
     ],
+    "types": [
+      "vite/client"
+    ],
     "paths": {
       "@semantic-api/api": [
         "./node_modules/@semantic-api/api/cjs"

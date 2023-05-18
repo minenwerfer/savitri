@@ -136,6 +136,7 @@ watch(() => actionEventBus.value, async (event) => {
 
   if( event.name === 'spawnAdd' ) {
     store.clearItem()
+    store.setItem(Object.assign(Object.assign({}, store.item), event.params || {}))
     isInsertVisible.value = 'add'
   }
 
@@ -269,7 +270,7 @@ provide('parentStore', parentStore)
                 small
                 reactive
                 name="trash"
-                @click="store.clearFilters"
+                @click="() => (store.clearFilters() && store.filter(undefined, { unproxied: true }))"
               ></sv-icon>
             </sv-bare-button>
           </sv-info>
