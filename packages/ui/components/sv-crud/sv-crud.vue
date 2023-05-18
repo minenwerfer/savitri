@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  onMounted,
   onUnmounted,
   computed,
   provide,
@@ -85,7 +84,7 @@ const fetchItems = async () => {
   })
 }
 
-onMounted(() => {
+watch(router.currentRoute, () => {
   metaStore.view.title = props.collection
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
@@ -93,7 +92,7 @@ onMounted(() => {
   if( !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
     fetchItems()
   }
-})
+}, { immediate: true })
 
 const toggleLayout = (store: any) => {
   store.currentLayout = store.currentLayout === 'tabular'

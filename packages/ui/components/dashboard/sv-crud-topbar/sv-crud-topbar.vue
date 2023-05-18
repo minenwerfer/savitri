@@ -35,9 +35,7 @@ const togglePreset = (presetName: string, preset?: FiltersPreset) => {
   return (({ value: store }) => {
     store.filtersPreset = preset?.filters || {}
     store.preferredTableProperties = preset?.table || []
-
     store.pagination.offset = 0
-    store.filter()
     router.push({ hash: presetName ? `#${presetName}` : '' })
   })(store)
 }
