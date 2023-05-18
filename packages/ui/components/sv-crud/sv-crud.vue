@@ -92,7 +92,10 @@ watch(router.currentRoute, () => {
   if( !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
     fetchItems()
   }
-}, { immediate: true })
+}, {
+  immediate: true,
+  flush: 'post'
+})
 
 const toggleLayout = (store: any) => {
   store.currentLayout = store.currentLayout === 'tabular'
