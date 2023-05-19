@@ -213,11 +213,7 @@ const unfilled = (value: any) => {
                 && !searchOnly
                 && (store?.description.strict || store?.description.required?.includes(key))
           }">
-            {{
-              property.s$translate
-                ? $t(property.description || key)
-                : property.description || key
-            }}
+            {{ property.description || $t(key) }}
           </strong>
           <div
             v-if="property.s$hint"
