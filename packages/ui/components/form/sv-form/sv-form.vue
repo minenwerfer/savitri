@@ -138,7 +138,7 @@ const fieldStyle = (key:string, property: any) => {
     return
   }
 
-  if( layout?.if ) {
+  if( layout?.if && !props.searchOnly ) {
     const result = useCondition(
       props.formData,
       layout.if
