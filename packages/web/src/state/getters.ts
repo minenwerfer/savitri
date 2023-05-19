@@ -312,10 +312,10 @@ const getters: GettersFunctions = {
     this.customGetters;
 
     return new Proxy(this, {
-      get: (_, functionName: string) => (keySuffix: string, payload: any) => {
+      get: (_, functionName: string) => (keySuffix: string, ...args: any[]) => {
         const key = `${functionName}_${keySuffix}`
         if( !this.customGetters[key] ) {
-          this[functionName](payload).then((result: any) => {
+          this[functionName](...args).then((result: any) => {
             this.customGetters[key] = result
           })
         }

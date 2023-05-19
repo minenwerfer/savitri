@@ -104,7 +104,7 @@ const buttonStyle = (subject: any, action: any) => {
             table__header
             ${border && 'table__header--border'}
         `">
-          {{ property.description || propertyName }}
+          {{ property.description || $t(propertyName) }}
         </th>
         <th
           v-if="actions"
@@ -214,7 +214,9 @@ const buttonStyle = (subject: any, action: any) => {
                   {{
                     Array.isArray(row[column])
                       ? row[column].filter(_ => !!_).join(', ')
-                      : (row[column] || '-')
+                      : ![undefined, null].includes(row[column])
+                        ? row[column]
+                        : '-'
                   }}
                 </div>
               </div>

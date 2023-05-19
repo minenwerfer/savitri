@@ -145,6 +145,12 @@ const fieldStyle = (key:string, property: any) => {
     )
 
     if( !result.satisfied ) {
+      props.formData[key] = store
+        ? store.$freshItem[key]
+        : ![undefined, null].includes(props.formData[key])
+          ? props.formData[key].constructor()
+          : null
+
       style.push(`display: none;`)
     }
   }

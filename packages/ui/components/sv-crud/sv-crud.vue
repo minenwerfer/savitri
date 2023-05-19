@@ -138,7 +138,12 @@ watch(() => actionEventBus.value, async (event) => {
 
   if( event.name === 'spawnAdd' ) {
     store.clearItem()
-    store.setItem(Object.assign(Object.assign({}, store.item), event.params || {}))
+    if( event.params?.item ) {
+      store.setItem(event.params.item)
+      Object.keys(event.params.item).forEach((key) => {
+        delete store.referenceItem[key]
+      })
+    }
     isInsertVisible.value = 'add'
   }
 

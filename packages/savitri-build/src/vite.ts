@@ -4,13 +4,15 @@ import vueRouter from 'unplugin-vue-router/vite'
 import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
 import braun from 'braun/vite'
-import ejs from 'ejs'
 
 import { scrapper } from 'braun/common'
 import { readdir, readFile } from 'fs/promises'
 
 import sassData from './sassData.js'
 import { getInstanceConfig } from './instance'
+
+import transformIndexHtml from './plugins/transform-index-html'
+import loadYaml from './plugins/load-yaml'
 
 export default defineConfig(async () => {
   const instanceConfig = await getInstanceConfig()
@@ -89,12 +91,8 @@ export default defineConfig(async () => {
         ]
       }),
       vue(),
-      {
-        name: 'transform-index-html',
-        transformIndexHtml(html) {
-          return ejs.render(html, { instanceConfig })
-        }
-      }
+      transformIndexHtml(instanceConfig),
+      loadYaml()
     ],
     optimizeDeps: {
       include: [

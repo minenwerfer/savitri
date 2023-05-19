@@ -17,7 +17,7 @@ userStore.setItem(userStore.$currentUser)
 
 const insert = async () => {
   await userStore.insert({ what: userStore.item })
-  sessionStorage.setItem('auth:currentUser', JSON.stringify(userStore.item))
+  userStorage.setItem('auth:currentUser', JSON.stringify(userStore.item))
 
   metaStore.spawnModal({
     title: 'Feito!',
