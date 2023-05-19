@@ -25,7 +25,6 @@ const proxiedHttp = async <Return>(...args: Parameters<typeof request<any>>) => 
     if( error.logout || ['JsonWebTokenError', 'TokenExpiredError'].includes(error.name) ) {
       userStore.signout()
       ROUTER.push({ name: '/user/signin' })
-      return
     }
 
     if( !error.silent ) {
