@@ -3,10 +3,6 @@
   flex-direction: column;
   width: 100%;
 
-  &__header {
-    margin-bottom: -1rem;
-  }
-
   &__footer {
     display: flex;
     align-items: center;
@@ -24,6 +20,12 @@
     border: none;
     padding: 0;
     margin: 0;
+  }
+
+  &__field-label {
+    font-size: 10.2pt;
+    font-weight: 500;
+    line-height: 1.8rem;
   }
 
   &__field-hint {

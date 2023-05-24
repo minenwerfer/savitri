@@ -1,5 +1,5 @@
 $horizontal-padding: .8rem;
-$picture-size: 3.6rem;
+$picture-size: 2rem;
 
 .table {
   width: 100%;
@@ -24,7 +24,6 @@ $picture-size: 3.6rem;
 
     &--body {
       padding: .6rem;
-      line-height: 2.25rem;
 
       @include themed() {
         &:not(:last-child) {
@@ -68,8 +67,8 @@ $picture-size: 3.6rem;
 
   &__cell {
     padding: 0 $horizontal-padding;
-    line-height: 1.3rem;
-    font-size: 14px;
+    line-height: 1.1rem;
+    font-size: 10pt;
 
     &--padded {
       padding: $horizontal-padding;

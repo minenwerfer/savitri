@@ -6,6 +6,7 @@ import { useStore } from './use'
 
 import  {
   condenseItem,
+  isNull,
   removeEmpty,
   normalizeFilters,
   normalizeActions
@@ -213,7 +214,7 @@ const getters: GettersFunctions = {
       const property = this.description.properties?.[key]
       const getValue = (value: any) => {
         if( !property ) {
-          return
+          return value
         }
 
         if( property.type === 'string' && !property.format ) {
@@ -245,13 +246,13 @@ const getters: GettersFunctions = {
 
       if( filter && typeof filter === 'object' && !Array.isArray(filter) ) {
         Object.keys(filter).forEach((key) => {
-          if( !filter[key] || Object.values(filter[key]).every((_) => !_) ) {
+          if( isNull(filter[key]) || Object.values(filter[key]).every((_) => isNull(_)) ) {
             delete filter[key]
           }
         })
       }
 
-      if( !filter || (typeof filter === 'object' && Object.keys(filter).length === 0) ) {
+      if( isNull(filter) || (typeof filter === 'object' && Object.keys(filter).length === 0) ) {
         return a
       }
 

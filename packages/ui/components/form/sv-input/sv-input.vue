@@ -23,6 +23,7 @@ const props = defineProps<Props>()
 const property = props.property||{} as CollectionProperty
 
 const searchOnly = inject('searchOnly', false)
+const innerInputLabel = inject('innerInputLabel', false)
 const readOnly = !searchOnly && property.readOnly
 
 const copyToClipboard = useClipboard()
@@ -58,7 +59,9 @@ const inputBind: {
 
     return property.s$inputType || 'text'
   })(),
-  placeholder: property.s$placeholder,
+  placeholder: innerInputLabel
+    ? property.description || props.propertyName
+    : property.s$placeholder,
   min: property.minimum || property.exclusiveMinimum,
   max: property.maximum || property.exclusiveMaximum,
 }
@@ -147,7 +150,7 @@ watch(() => props.modelValue, (value, oldValue) => {
 
 <template>
   <label :key="rerenderFixture" class="input">
-    <strong class="input__label">
+    <strong class="input__label" v-if="!innerInputLabel">
       <slot v-if="$slots.default"></slot>
       <slot v-else name="description"></slot>
     </strong>

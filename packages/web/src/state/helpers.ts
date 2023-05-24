@@ -28,9 +28,11 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
   }, {})
 }
 
+export const isNull = (value: any) => [undefined, null].includes(value)
+
 export const removeEmpty = (item: any) => {
   const entries = Object.entries(item)
-    .filter(([_, value]: [unknown, any]) => value)
+    .filter(([_, value]: [unknown, any]) => !isNull(value))
 
   return Object.fromEntries(entries)
 }
@@ -72,7 +74,6 @@ export const freshItem = (description: Description) => {
       }
 
       switch( property.type ) {
-        case 'boolean': return false
         case 'array': return []
         case 'object': return {}
         default: return null

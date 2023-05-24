@@ -35,6 +35,8 @@ const emit = defineEmits<{
 }>()
 
 provide('storeId', property.s$referencedCollection!)
+provide('innerInputLabel', true)
+provide('omitInputLabels', true)
 
 const searchOnly = !property.s$inlineEditing || inject<boolean|null>('searchOnly', null)
 const omitFormHeader = inject('omitFormHeader', false)
@@ -132,11 +134,7 @@ const lazySearch = () => {
         formData: modelValue,
         layout: store.formLayout
       }"
-    >
-      <template #header v-if="!omitFormHeader">
-        {{ $t(property.$ref||'') }}
-      </template>
-    </sv-form>
+    ></sv-form>
 
     <sv-form
       v-else
@@ -148,11 +146,7 @@ const lazySearch = () => {
         searchOnly: true
       }"
       @input="lazySearch"
-    >
-      <template #header v-if="!omitFormHeader">
-        {{ $t(property.$ref||'') }}
-      </template>
-    </sv-form>
+    ></sv-form>
 
     <sv-search-selected
       v-if="!isExpanded"

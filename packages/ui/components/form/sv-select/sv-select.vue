@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { CollectionProperty } from '@semantic-api/types'
+import { ref, computed } from 'vue'
 
 type Props = {
   modelValue: any
   property?: CollectionProperty
   propertyName?: string
+  booleanRef?: boolean
 }
 
 const props = defineProps<Props>()
@@ -13,8 +15,28 @@ const emit = defineEmits<{
 }>()
 
 const property = props.property||{}
+const modelValue = !props.booleanRef
+  ? props.modelValue
+  : (() => {
+    const value = ref(props.modelValue)
+    const comp = computed({
+      get: () => value.value === 'true'
+        ? true : value.value === 'false'
+        ? false : null,
+      set: (newVal) => {
+        value.value = newVal
+      }
+    })
+
+    return comp
+  })()
+
 
 const update = (value: any) => {
+  if( props.booleanRef ) {
+    modelValue.value = value
+  }
+
   emit('update:modelValue', value?._id || value)
   emit('change', value?._id || value)
 }

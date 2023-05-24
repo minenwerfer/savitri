@@ -5,6 +5,7 @@ import { useStore, useCondition } from '@savitri/web'
 
 import SvIcon from '../../sv-icon/sv-icon.vue'
 import SvButton from '../../sv-button/sv-button.vue'
+import SvSelect from '../sv-select/sv-select.vue'
 import SvInput from '../sv-input/sv-input.vue'
 
 import { getComponent, pushToArray, spliceFromArray } from './_internals/helpers'
@@ -202,19 +203,19 @@ const unfilled = (value: any) => {
         @input="emit('input', key)"
       >
         <label v-if="
-          property.type !== 'boolean'
+          (property.type !== 'boolean' || searchOnly)
             && !property.s$noLabel
-            && (!property.$ref || property.$ref === 'file')
             && !omitInputLabels
         ">
-          <strong :class="{
+          <div :class="{
+            'form__field-label': true,
             'form__field-required-hint':
               highlightRequired
                 && !searchOnly
                 && (store?.description.strict || store?.description.required?.includes(key))
           }">
             {{ property.description || $t(key) }}
-          </strong>
+          </div>
           <div
             v-if="property.s$hint"
             v-html="property.s$hint"
@@ -254,6 +255,24 @@ const unfilled = (value: any) => {
               propertyName: key
             }"
           ></sv-input>
+        </div>
+
+        <div v-else-if="property.type === 'boolean' && searchOnly">
+          <sv-select
+            v-bind="{
+              property,
+              propertyName: key
+            }"
+            boolean-ref
+            :model-value="formData[key]"
+            @update:model-value="(value) => {
+              formData[key] = value == 'true'
+                ? true : value == 'false'
+                ? false : null
+          }">
+            <option value="true">{{ $t('yes') }}</option>
+            <option value="false">{{ $t('no') }}</option>
+          </sv-select>
         </div>
 
         <div

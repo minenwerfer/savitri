@@ -15,7 +15,7 @@ provide('inputVariant', 'bold')
     <img
       src="/static/logo-authwall.png"
       class="wall__branding"
-      @click="$router.push({ name: 'dashboard-home' })"
+      @click="$router.push('/dashboard')"
     />
     <div v-if="$slots['authwall-content']" class="wall__content">
       <slot name="authwall-content"></slot>

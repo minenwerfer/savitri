@@ -48,7 +48,9 @@ const privateRoutes: Array<RouteRecordRaw> = [
     path: '/dashboard',
     name: 'dashboard',
     component: () => dashboardComponent(),
-    redirect: { name: 'dashboard-home' },
+    redirect: {
+      name: '/dashboard/'
+    },
     meta: {
       title: 'Dashboard'
     },

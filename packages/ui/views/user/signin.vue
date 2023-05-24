@@ -9,7 +9,7 @@ const metaStore = useStore('meta')
 
 const authenticate = async () => {
   await userStore.authenticate(userStore.credentials)
-  router.push('/dashboard/home')
+  router.push('/dashboard')
 }
 </script>
 
@@ -73,7 +73,7 @@ const authenticate = async () => {
     <sv-button
       v-if="userStore.$currentUser._id && !metaStore.isLoading"
       :disabled="userStore.loading.authenticate || metaStore.isLoading"
-      @click="router.push('/dashboard/home')"
+      @click="router.push('/dashboard')"
     >
       Continuar como {{ userStore.$currentUser.first_name }}
     </sv-button>
