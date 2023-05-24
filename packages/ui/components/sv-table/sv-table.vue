@@ -268,7 +268,7 @@ const buttonStyle = (subject: any, action: any) => {
                 v-clickable
                 small
                 reactive
-                name="ellipsis-h"
+                name="ellipsis-v"
               ></sv-icon>
             </sv-context-menu>
           </div>

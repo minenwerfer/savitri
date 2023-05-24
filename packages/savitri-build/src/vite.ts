@@ -25,6 +25,7 @@ export default defineConfig(async () => {
     plugins: [
       braun({
         tag: 'sv-icon',
+        hash: true,
         libraries: [
           '@savitri/ui'
         ],

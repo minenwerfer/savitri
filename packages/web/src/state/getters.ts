@@ -217,6 +217,12 @@ const getters: GettersFunctions = {
           return value
         }
 
+        if( property.type === 'boolean' && value === false ) {
+          return {
+            $ne: true
+          }
+        }
+
         if( property.type === 'string' && !property.format ) {
           return {
             $regex: value,
