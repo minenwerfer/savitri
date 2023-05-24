@@ -28,7 +28,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
   }, {})
 }
 
-export const isNull = (value: any) => [undefined, null].includes(value)
+export const isNull = (value: any) => [undefined, null, ''].includes(value)
 
 export const removeEmpty = (item: any) => {
   const entries = Object.entries(item)

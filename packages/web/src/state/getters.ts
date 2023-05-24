@@ -230,7 +230,7 @@ const getters: GettersFunctions = {
           }
         }
 
-        return value._id||value
+        return value?._id||value
       }
 
       if( Array.isArray(value) ) {

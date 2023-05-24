@@ -15,8 +15,20 @@ const emit = defineEmits<{
 }>()
 
 const property = props.property||{}
+const update = (value: any) => {
+  if( props.booleanRef ) {
+    modelValue.value = value
+  }
+
+  emit('update:modelValue', value?._id || value)
+  emit('change', value?._id || value)
+}
+
 const modelValue = !props.booleanRef
-  ? props.modelValue
+  ? computed({
+    get: () => props.modelValue,
+    set: update
+  })
   : (() => {
     const value = ref(props.modelValue)
     const comp = computed({
@@ -30,16 +42,6 @@ const modelValue = !props.booleanRef
 
     return comp
   })()
-
-
-const update = (value: any) => {
-  if( props.booleanRef ) {
-    modelValue.value = value
-  }
-
-  emit('update:modelValue', value?._id || value)
-  emit('change', value?._id || value)
-}
 </script>
 
 <template>
