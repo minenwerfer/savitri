@@ -14,7 +14,6 @@ $picture-size: 2rem;
 
       @include themed() {
         background: t(background-color-alt);
-        border-bottom: 1px solid t(border-color);
       }
 
       @media screen and (max-width: 600px) {

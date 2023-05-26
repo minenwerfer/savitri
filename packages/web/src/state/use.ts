@@ -6,6 +6,10 @@ if( !window.STORES ) {
 }
 
 export const useStore = (storeId: string) => {
+  if( !getActivePinia() ) {
+    setActivePinia(PINIA)
+  }
+
   if( !(storeId in STORES) ) {
     throw new Error(`tried to invoke unregistered store "${storeId}"`)
   }

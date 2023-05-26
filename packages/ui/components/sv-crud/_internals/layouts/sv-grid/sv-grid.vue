@@ -49,7 +49,7 @@ const firstIfArray = (what: any) => {
             v-clickable
             reactive
             small
-            name="ellipsis-h"
+            name="ellipsis-v"
             ></sv-icon>
         </sv-context-menu>
       </div>

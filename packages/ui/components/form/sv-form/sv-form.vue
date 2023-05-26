@@ -198,9 +198,7 @@ const unfilled = (value: any) => {
         v-for="([key, property], index) in properties"
         :key="`field-${index}`"
         :style="fieldStyle(key, property)"
-
         class="form__field"
-        @input="emit('input', key)"
       >
         <label v-if="
           (property.type !== 'boolean' || searchOnly)
@@ -231,6 +229,9 @@ const unfilled = (value: any) => {
             propertyName: key,
             ...layout[key].component!.props||{},
           }"
+
+          @input="emit('input', key)"
+          @change="emit('change')"
         />
 
         <div
@@ -240,6 +241,8 @@ const unfilled = (value: any) => {
             grid-template-columns: repeat(2, 1fr);
             column-gap: 1rem;
           "
+          @input="emit('input', key)"
+          @change="emit('change')"
         >
           <sv-input
             v-model="formData[key].$gte"
@@ -265,6 +268,8 @@ const unfilled = (value: any) => {
             }"
             boolean-ref
             :model-value="formData[key]"
+
+            @change="emit('change')"
             @update:model-value="(value) => {
               formData[key] = value == 'true'
                 ? true : value == 'false'
@@ -302,6 +307,9 @@ const unfilled = (value: any) => {
                   columns: layout?.[key]?.optionsColumns
                     || layout?.$default?.optionsColumns
                 }"
+
+                @input="emit('input', key)"
+                @change="emit('change')"
               ></component>
             </div>
 
@@ -349,6 +357,9 @@ const unfilled = (value: any) => {
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns
           }"
+
+          @input="emit('input', key)"
+          @change="emit('change')"
         ></component>
 
         <div v-if="validationErrors?.[key]" class="form__validation-error">
