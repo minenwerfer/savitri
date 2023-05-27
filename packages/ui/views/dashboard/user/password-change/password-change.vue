@@ -57,7 +57,7 @@ const passwordError = computed(() => {
 <template>
   <sv-box
     outer-header
-    class="passchange sv-padded"
+    class="passchange"
   >
     <template #header>
       <div>Mudando a senha de {{ userStore.item.full_name }}</div>

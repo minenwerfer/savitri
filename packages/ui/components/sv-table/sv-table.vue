@@ -144,37 +144,33 @@ const buttonStyle = (subject: any, action: any) => {
             table__cell
             table__cell--padded
         `">
-          <slot
+          <div
             v-if="`row-${column}` in $slots"
-            v-bind="{
-              store,
-              column,
-              property,
-              row
-            }"
-
-            :name="`row-${column}`"
+            class="table__cell-container"
           >
-          </slot>
+            <slot
+              v-bind="{
+                store,
+                column,
+                property,
+                row
+              }"
+
+              :name="`row-${column}`"
+            >
+            </slot>
+          </div>
           <div
             v-else
+            class="table__cell-container"
           >
             <div class="table__cell-mobile-label">
-              {{ property.description }}
+              {{ property.description || $t(column) }}
             </div>
 
             <div class="table__cell-grid">
               <div v-if="property.type === 'boolean'">
-                <sv-switch
-                  v-if="!property.readOnly"
-                  v-bind="{
-                     property 
-                  }"
-                  v-model="row[column]"
-                  @update:model-value="toggle($event, row._id, column)"
-                ></sv-switch>
                 <sv-icon
-                  v-else
                   small
                   :name="row[column] ? 'check' : 'times'"
                   :fill="row[column] ? 'green' : 'red'"
@@ -201,7 +197,7 @@ const buttonStyle = (subject: any, action: any) => {
                     -
                   </div>
                 </div>
-                <div v-else-if="store">
+                <span v-else-if="store">
                   {{
                     store.formatValue({
                       value: row[column],
@@ -209,8 +205,8 @@ const buttonStyle = (subject: any, action: any) => {
                       property
                     })
                   }}
-                </div>
-                <div v-else>
+                </span>
+                <span v-else>
                   {{
                     Array.isArray(row[column])
                       ? row[column].filter(_ => !!_).join(', ')
@@ -218,7 +214,7 @@ const buttonStyle = (subject: any, action: any) => {
                         ? row[column]
                         : '-'
                   }}
-                </div>
+                </span>
               </div>
               <div v-if="
                 property.s$indexes?.length > 1
@@ -240,6 +236,7 @@ const buttonStyle = (subject: any, action: any) => {
               </div>
             </div>
           </div>
+
         </td>
         <td
           v-if="actions?.length"

@@ -3,10 +3,6 @@
   column-gap: 2rem;
   box-sizing: content-box;
 
-  * {
-    font-size: .8rem !important;
-  }
-
   @media screen and (max-width: 600px) {
     display: none;
   }
@@ -14,7 +10,6 @@
   &__control {
     display: flex;
     align-items: center;
-    column-gap: .6rem;
 
     &>:not(button) {
       padding: 0 !important;

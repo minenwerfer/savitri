@@ -27,7 +27,7 @@ const insert = async () => {
 </script>
 
 <template>
-  <div class="sv-centered">
+  <div>
     <sv-picture
       bordered
       :url="userStore.item.picture?.link"

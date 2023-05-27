@@ -33,7 +33,7 @@ const firstIfArray = (what: any) => {
     >
       <sv-picture
         :url="firstIfArray(item[layoutOptions.picture!])?.link"
-        style="width: 100%; height: 20rem"
+        class="grid__picture"
       ></sv-picture>
       <div class="grid__footer">
         <div>

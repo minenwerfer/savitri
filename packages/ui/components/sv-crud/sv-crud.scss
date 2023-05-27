@@ -1,26 +1,12 @@
 .crud {
   &__controls {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-
-    padding: .6rem 1rem;
-
-    @include themed() {
-      background: t(background-color);
-      border-bottom: 1px solid t(border-color);
-    }
+    gap: .8rem;
 
     @media screen and (min-width: 600px) {
       flex-direction: row;
       align-items: center;
-    }
-
-    &--sticky {
-      position: sticky;
-      top: 3.6rem;
-      z-index: 10;
-      backdrop-filter: blur(15px);
     }
   }
 }

@@ -18,16 +18,3 @@
     color: t(brand-color);
   }
 }
-
-.sv-padded,
-.sv-centered {
-  padding: 2rem 1rem;
-  @media screen and (min-width: 600px) {
-    padding: 2rem;
-  }
-}
-
-.sv-centered {
-  align-self: center;
-  padding: 2rem;
-}

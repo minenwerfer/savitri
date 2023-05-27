@@ -20,7 +20,6 @@ const storeId = inject('storeId', '')
   <slot v-if="$slots.inner" name="inner"></slot>
   <sv-table
     v-if="store.properties"
-    v-loading="store.loading.getAll"
     :key="store.$id"
 
     v-bind="{

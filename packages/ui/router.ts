@@ -7,6 +7,17 @@ const publicRoutes: Array<RouteRecordRaw> = [
     component: () => import('./components/dashboard/sv-auth-wall/sv-auth-wall.vue'),
     children: [
       {
+        path: 'invite/:id',
+        redirect: (to) => {
+          return {
+            path: '/user/signup',
+            params: {
+              inviteId: to.params.id
+            }
+          }
+        }
+      },
+      {
         path: 'signin',
         name: '/user/signin',
         component: () => import('./views/user/signin.vue'),

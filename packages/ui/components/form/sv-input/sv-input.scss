@@ -2,7 +2,9 @@
   .input {
     @include themed() {
       &__container {
-        border: 1px solid t(brand-color);
+        &--normal, &--bold {
+          border: 1px solid t(brand-color);
+        }
       }
 
       &__icon {
@@ -60,13 +62,13 @@
     }
 
     &--bold {
-      padding: .9rem;
+      padding: .6rem;
       font-size: 11.5pt;
     }
 
     &--light {
+      padding: .6rem;
       background: transparent;
-      border-bottom: 1px solid #dedede;
     }
 
     &--icon {
@@ -97,16 +99,16 @@
       fill: #bbb;
     }
 
-    &--normal, &--bold {
-      top: 50%;
-      left: .6em;
-      transform: translateY(-50%);
+    &--bold {
+      :deep([data-component=icon]) {
+        width: 1.4rem;
+        height: 1.4rem;
+      }
     }
 
-    &--light {
-      top: 0;
-      left: 0;
-    }
+    top: 50%;
+    left: .6em;
+    transform: translateY(-50%);
   }
 
   &__clipboard {

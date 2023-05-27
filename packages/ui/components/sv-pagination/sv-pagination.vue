@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { PAGINATION_PER_PAGE_DEFAULTS } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
 
@@ -15,15 +15,15 @@ type Props = {
 const props = defineProps<Props>()
 const store = useParentStore(props.collection)
 
-const page = computed({
+const page = computed<number>({
   get: () => Math.floor(store.pagination.offset / store.pagination.limit),
   set: (page: number) => {
     store.pagination.offset = page * store.pagination.limit
   }
 })
 
-const limit = computed({
-  get: () => String(store.pagination.limit),
+const limit = computed<number>({
+  get: () => store.pagination.limit,
   set: (value) => {
     store.pagination.limit = Number(value)
   }
@@ -41,14 +41,19 @@ const paginate = (direction: 'previous'|'next') => {
     : page.value + 1
 }
 
-watch(() => page.value, (newVal: number) => {
-  pageInput.value = newVal + 1
-  store.filter({
+const update = () => {
+  return store.filter({
     project: [
       ...Object.keys(store.properties),
       ...store.tableMeta
     ]
   })
+}
+
+watch([page, limit], ([newPage, newLimit]: [number, number]) => {
+  pageInput.value = newPage + 1
+  update()
+  
 })
 </script>
 
@@ -65,7 +70,6 @@ watch(() => page.value, (newVal: number) => {
         </option>
       </sv-select>
       <sv-icon
-        small
         name="list-ul"
         fill="gray"
       ></sv-icon>
@@ -74,7 +78,7 @@ watch(() => page.value, (newVal: number) => {
     <div class="pagination__control">
       <sv-bare-button @click="page = 0">
         <sv-icon
-          small
+          reactive
           name="angle-double-left"
         ></sv-icon>
       </sv-bare-button>
@@ -83,7 +87,7 @@ watch(() => page.value, (newVal: number) => {
         @click="paginate('previous')"
       >
         <sv-icon
-          small
+          reactive
           name="angle-left"
         ></sv-icon>
       </sv-bare-button>
@@ -105,13 +109,13 @@ watch(() => page.value, (newVal: number) => {
         @click="paginate('next')"
       >
         <sv-icon
-          small
+          reactive
           name="angle-right"
         ></sv-icon>
       </sv-bare-button>
       <sv-bare-button @click="page = pageCount - 1">
         <sv-icon
-          small
+          reactive
           name="angle-double-right"
         ></sv-icon>
       </sv-bare-button>

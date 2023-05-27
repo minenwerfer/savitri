@@ -11,6 +11,7 @@ type InputType = string|number|Date
 type InputVariant =
   'normal'
   | 'bold'
+  | 'light'
 
 type Props = {
   modelValue: InputType

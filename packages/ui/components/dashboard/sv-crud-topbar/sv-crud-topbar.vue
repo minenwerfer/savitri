@@ -62,7 +62,13 @@ watch(route, (currRoute, prevRoute) => {
 </script>
 
 <template>
-  <div class="topbar">
+  <div
+    v-if="
+      store?.description.filtersPresets
+      || (store?.actions.length || $slots.actions)
+    "
+    class="topbar"
+  >
     <sv-tabs v-if="store?.description.filtersPresets">
       <div
         v-clickable
@@ -97,9 +103,6 @@ watch(route, (currRoute, prevRoute) => {
       </div>
     </sv-tabs>
 
-    <div class="topbar__controls">
-    </div>
-
     <div
       v-if="store?.actions || $slots.actions"
       :key="collection"
@@ -109,7 +112,6 @@ watch(route, (currRoute, prevRoute) => {
         v-for="(actionProps, index) in store.actions"
         :key="`action-${index}`"
 
-        small
         :icon="actionProps.icon"
         :disabled="store.selectedIds.length === 0 && actionProps.selection"
 

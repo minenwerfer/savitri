@@ -114,7 +114,11 @@ export const useApp = (config: AppOptions): Promise<{
   })
 
   if( userStore.signedIn ) {
-    await metaStore.describeAll()
+    try {
+      await metaStore.describeAll()
+    } catch( e ) {
+      location.reload()
+    }
   }
 
   resolve({
