@@ -14,6 +14,7 @@ import {
   useParentStore,
   useRouter,
   useAction,
+  useDebounce,
   CollectionStore
 
 } from '@savitri/web'
@@ -59,6 +60,10 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const router = await useRouter()
 
+const debounce = useDebounce({
+  delay: 600
+})
+
 const queryString = ref('')
 
 let
@@ -99,6 +104,26 @@ watch(router.currentRoute, () => {
 }, {
   immediate: true,
   flush: 'post'
+})
+
+const [performLazySearch] = debounce((value: string) => {
+  if( !value ) {
+    store.filters = store.$freshFilters
+    return fetchItems()
+  }
+
+  store.filters = Object.assign(store.$freshFilters, {
+    $text: {
+      $search: value,
+      $caseSensitive: false
+    }
+  })
+
+  return fetchItems()
+})
+
+watch(queryString, (value) => {
+  performLazySearch(value)
 })
 
 const toggleLayout = (store: any) => {
@@ -237,7 +262,7 @@ provide('parentStore', parentStore)
 
 
   <div class="crud__controls">
-    <div style="width: 100%">
+    <div v-if="store.description.search?.active" style="width: 100%">
       <sv-input
         v-model="queryString"
         v-bind="{

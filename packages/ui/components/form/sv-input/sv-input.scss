@@ -62,8 +62,12 @@
     }
 
     &--bold {
-      padding: .6rem;
-      font-size: 11.5pt;
+      padding: .8rem;
+      font-size: 12pt;
+
+      &::placeholder {
+        font-weight: 600;
+      }
     }
 
     &--light {

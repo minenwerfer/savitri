@@ -2,6 +2,7 @@
   &__controls {
     display: flex;
     align-items: flex-start;
+    justify-content: flex-end;
     gap: .8rem;
 
     @media screen and (min-width: 600px) {

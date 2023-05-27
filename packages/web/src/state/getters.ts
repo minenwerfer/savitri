@@ -56,10 +56,6 @@ const getters: GettersFunctions = {
     return normalizeActions(this.description.individualActions!)
   },
 
-  searchableActions() {
-    return normalizeActions(this.description.searchable?.actions||{})
-  },
-
   hasSelectionActions(this: any) {
     return this.actions
       .some((action: any) => !!action.selection)
@@ -179,6 +175,10 @@ const getters: GettersFunctions = {
     }
 
     return recurse(this)
+  },
+  
+  $freshFilters() {
+    return deepClone(this.freshFilters)
   },
 
   itemsCount() {

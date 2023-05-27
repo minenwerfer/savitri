@@ -171,11 +171,20 @@ const buttonStyle = (subject: any, action: any) => {
             <div class="table__cell-grid">
               <div v-if="property.type === 'boolean'">
                 <sv-icon
+                  v-if="row[column]"
                   small
-                  :name="row[column] ? 'check' : 'times'"
-                  :fill="row[column] ? 'green' : 'red'"
+                  name="check"
+                  fill="green"
                 >
-                  {{ $t(row[column] ? 'yes' : 'no') }}
+                  {{ $t('yes') }}
+                </sv-icon>
+                <sv-icon
+                  v-else
+                  small
+                  name="times"
+                  fill="red"
+                >
+                  {{ $t('no') }}
                 </sv-icon>
               </div>
 
