@@ -16,7 +16,7 @@ await useStore('meta').describeAll()
     <sv-icon
       v-clickable
       name="arrow-left"
-      @click="router.push({ name: 'user-signin' })"
+      @click="router.push({ name: '/user/signin' })"
     >
       Efetuar login
     </sv-icon>

@@ -84,7 +84,7 @@ const insert = async () => {
     <sv-icon
       v-clickable
       name="arrow-left"
-      @click="router.push({ name: 'user-signup' })"
+      @click="router.push({ name: '/user/signup' })"
     >
       Voltar
     </sv-icon>
