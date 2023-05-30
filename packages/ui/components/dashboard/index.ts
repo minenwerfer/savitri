@@ -1,7 +1,5 @@
 export { default as SvModal } from './sv-modal/sv-modal.vue'
 export { default as SvPrompt } from './sv-prompt/sv-prompt.vue'
 export { default as SvToast } from './sv-toast/sv-toast.vue'
-export { default as SvNavbar } from './sv-navbar/sv-navbar.vue'
-export { default as SvBottomNavbar } from './sv-bottom-navbar/sv-bottom-navbar.vue'
 export { default as SvCrudTopbar } from './sv-crud-topbar/sv-crud-topbar.vue'
 export { default as SvAuthWall } from './sv-auth-wall/sv-auth-wall.vue'
