@@ -1,5 +1,9 @@
-// .profile {
-//   @media screen and (min-width: 600px) {
-//     width: 40rem;
-//   }
-// }
+.profile {
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    margin-top: 2rem;
+    padding: 0;
+  }
+}

@@ -80,6 +80,9 @@ export default defineConfig(async () => {
         dts: false
       }),
       vueComponents({
+        dirs: [
+          process.cwd() + '/components'
+        ],
         resolvers: [
           (componentName) => {
             if( componentName.startsWith('Sv') ) {

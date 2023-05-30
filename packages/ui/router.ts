@@ -103,10 +103,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
           {
             path: '/dashboard/user/profile',
             name: 'dashboard-user-profile',
-            components: {
-              default: () => import('./views/dashboard/user/profile/profile.vue'),
-              topbar: () => import('./views/dashboard/user/_internals/components/sv-profile-topbar.vue'),
-            },
+            component: () => import('./views/dashboard/user/profile/profile.vue'),
             meta: {
               title: 'Meu perfil',
               icon: 'user-square'

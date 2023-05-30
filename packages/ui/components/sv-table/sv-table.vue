@@ -191,6 +191,7 @@ const buttonStyle = (subject: any, action: any) => {
               <div v-else>
                 <div v-if="property.$ref === 'file' && row[column]">
                   <sv-picture
+                    expandable
                     v-if="/^image/.test(row[column].mime)" 
                     v-model="row[column].link"
                     class="table__picture"
@@ -272,9 +273,8 @@ const buttonStyle = (subject: any, action: any) => {
             }">
               <sv-icon
                 v-clickable
-                small
                 reactive
-                name="ellipsis-v"
+                name="ellipsis-h"
               ></sv-icon>
             </sv-context-menu>
           </div>

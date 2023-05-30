@@ -177,10 +177,6 @@ const getters: GettersFunctions = {
     return recurse(this)
   },
   
-  $freshFilters() {
-    return deepClone(this.freshFilters)
-  },
-
   itemsCount() {
     return this.items.length
   },

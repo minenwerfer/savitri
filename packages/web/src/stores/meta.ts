@@ -202,7 +202,7 @@ export default defineStore('meta', {
       const theme = this.themeOverride || this.theme
       if( !theme ) {
         const defaultTheme = 'default'
-        this.theme = localStorage.getItem('meta:theme') || defaultTheme
+        this.theme = localStorage.getItem('meta:theme__') || defaultTheme
         return this.theme
       }
 

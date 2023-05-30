@@ -29,15 +29,17 @@ const insert = async () => {
 <template>
   <div>
     <sv-picture
+      v-bind="{
+        width: '14rem',
+        height: '14rem'
+      }"
+
       bordered
       :url="userStore.item.picture?.link"
       style="
         display: flex;
         flex-direction: column;
         align-items: center;
-
-        width: 14rem;
-        height: 14rem;
       "
     >
       <template #caption>
@@ -50,8 +52,25 @@ const insert = async () => {
         >
           <h2>{{ userStore.item.full_name }}</h2>
         </sv-icon>
+
+        <menu class="profile__menu">
+          <sv-icon
+            v-clickable
+            name="key-skeleton"
+            @click="$router.push('/dashboard/user/changepass')"
+          >
+            Mudar senha
+          </sv-icon>
+          <sv-icon
+            v-clickable
+            name="signout"
+          >
+            Sair
+          </sv-icon>
+        </menu>
       </template>
     </sv-picture>
+
   </div>
 
   <sv-box

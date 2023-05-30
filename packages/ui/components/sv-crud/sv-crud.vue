@@ -20,6 +20,7 @@ import {
 } from '@savitri/web'
 
 import type { Layout } from '@semantic-api/types'
+import { deepClone } from '@semantic-api/common'
 
 import SvPagination from '../sv-pagination/sv-pagination.vue'
 import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
@@ -108,13 +109,13 @@ watch(router.currentRoute, () => {
 
 const [performLazySearch] = debounce((value: string) => {
   if( !value ) {
-    store.filters = store.$freshFilters
+    store.filters = deepClone(store.freshFilters)
     return fetchItems()
   }
 
-  store.filters = Object.assign(store.$freshFilters, {
+  store.filters = Object.assign(deepClone(store.freshFilters), {
     $text: {
-      $search: value,
+      $search: `"${value}"`,
       $caseSensitive: false
     }
   })
@@ -270,7 +271,8 @@ provide('parentStore', parentStore)
           property: {
             type: 'text',
             s$icon: 'search-alt',
-            s$placeholder: 'Pesquise aqui'
+            s$placeholder: store.description.search.placeholder || 'Pesquise aqui',
+            s$inputType: 'search'
           }
         }"
       ></sv-input>
@@ -288,23 +290,16 @@ provide('parentStore', parentStore)
       ></sv-icon>
     </sv-info>
 
-    <sv-info
+    <sv-icon
       v-if="store && Object.keys(store.availableFilters).length > 0"
-      where="bottom"
+      v-clickable
+      reactive
+      name="filter"
+      @click="isFilterVisible = true"
     >
-      <template #text>
-        Filtros
-      </template>
-      <sv-icon
-        v-if="store && Object.keys(store.availableFilters).length > 0"
-        v-clickable
-        reactive
-        name="filter"
-        @click="isFilterVisible = true"
-      >
-        Filtros
-      </sv-icon>
-    </sv-info>
+      Filtros
+    </sv-icon>
+
     <sv-info
       v-if="store && Object.keys(store.availableFilters).length > 0"
       where="bottom"
