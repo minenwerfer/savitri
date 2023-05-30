@@ -6,6 +6,8 @@ import SvButton from '../../components/sv-button/sv-button.vue'
 
 const router = await useRouter()
 const userStore = useStore('user')
+
+await useStore('meta').describeAll()
 </script>
 
 <template>

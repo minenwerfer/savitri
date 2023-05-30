@@ -4,6 +4,7 @@ import { useParentStore } from '@savitri/web'
 
 import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
 import SvIcon from '../../../../sv-icon/sv-icon.vue'
+import SvCard from '../../../../sv-card/sv-card.vue'
 import SvPicture from '../../../../sv-picture/sv-picture.vue'
 
 type Props = {
@@ -26,16 +27,13 @@ const firstIfArray = (what: any) => {
 
 <template>
   <div class="grid">
-    <div
+    <sv-card
       v-for="item in store.items"
       :key="item"
-      class="grid__item"
     >
-      <sv-picture
-        :url="firstIfArray(item[layoutOptions.picture!])?.link"
-        class="grid__picture"
-      ></sv-picture>
-      <div class="grid__footer">
+      <sv-picture expandable :url="firstIfArray(item[layoutOptions.picture!])?.link"></sv-picture>
+
+      <template #footer>
         <div>
           {{ item[layoutOptions.title!] }}
         </div>
@@ -51,8 +49,9 @@ const firstIfArray = (what: any) => {
             name="ellipsis-h"
             ></sv-icon>
         </sv-context-menu>
-      </div>
-    </div>
+      </template>
+    </sv-card>
+
   </div>
 </template>
 

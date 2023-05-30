@@ -33,7 +33,7 @@ const expand = ref(false)
           position: absolute;
           top: 50%;
           left: 50%;
-          max-height: 50vh;
+          max-height: 60vh;
           transform: translate(-50%, -50%);
           object-fit: contain;
         `"
