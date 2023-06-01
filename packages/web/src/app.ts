@@ -3,6 +3,9 @@ import { Router } from 'vue-router'
 
 import { createPinia } from 'pinia'
 import { arraysIntersects } from '@semantic-api/common'
+import { capitalize, formatDateTime } from '@semantic-api/common/string'
+import { formatToString, daysAgo, getRelativeTimeFromNow } from '@semantic-api/common/date'
+
 import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter } from './router'
 
@@ -103,7 +106,16 @@ export const useApp = (config: AppOptions): Promise<{
       },
       useStore(storeName?: string) {
         return useParentStore(storeName)
-      }
+      },
+
+      // string
+      capitalize,
+      formatDateTime,
+
+      // date
+      formatToString,
+      daysAgo,
+      getRelativeTimeFromNow
     }
   })
 
