@@ -51,6 +51,7 @@ type Props = {
   parentField?: string
   layout?: Layout
   action?: any
+  componentProps?: Record<string, any>
 }
 
 type Emits = {
@@ -193,7 +194,7 @@ watch(() => actionEventBus.value, async (event) => {
         if( property.s$isFile ) {
           return {}
         }
-        if( property.s$inline ) {
+        if( property.s$inline && value ) {
           const { _id, ...rest } = value
           return rest
         }
@@ -338,10 +339,11 @@ provide('parentStore', parentStore)
 
   <div v-loading="store.loading.getAll">
     <component
-      :is="getLayout(store.$currentLayout)"
+      :is="getLayout(layout?.name || store.$currentLayout)"
       v-bind="{
         individualActions,
-        layoutOptions: layout?.options || store?.layout.options
+        layoutOptions: layout?.options || store?.layout.options,
+        componentProps
       }"
     >
       <template

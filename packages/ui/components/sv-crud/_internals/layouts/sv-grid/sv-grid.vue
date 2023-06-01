@@ -5,6 +5,7 @@ import { useParentStore } from '@savitri/web'
 import SvContextMenu from '../../../../sv-context-menu/sv-context-menu.vue'
 import SvIcon from '../../../../sv-icon/sv-icon.vue'
 import SvCard from '../../../../sv-card/sv-card.vue'
+import SvGrid from '../../../../sv-grid/sv-grid.vue'
 import SvPicture from '../../../../sv-picture/sv-picture.vue'
 
 type Props = {
@@ -26,7 +27,7 @@ const firstIfArray = (what: any) => {
 </script>
 
 <template>
-  <div class="grid">
+  <sv-grid>
     <sv-card
       v-for="item in store.items"
       :key="item"
@@ -52,7 +53,5 @@ const firstIfArray = (what: any) => {
       </template>
     </sv-card>
 
-  </div>
+  </sv-grid>
 </template>
-
-<style scoped src="./sv-grid.scss"></style>

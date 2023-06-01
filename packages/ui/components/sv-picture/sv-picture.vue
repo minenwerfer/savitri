@@ -30,7 +30,7 @@ const expand = ref(false)
 
         :src="url"
         :style="`
-          position: absolute;
+          position: fixed;
           top: 50%;
           left: 50%;
           max-height: 60vh;

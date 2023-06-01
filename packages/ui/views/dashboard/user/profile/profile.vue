@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStore } from '@savitri/web'
+import { useStore, useRouter } from '@savitri/web'
 
 import SvBox from '../../../../components/sv-box/sv-box.vue'
 import SvForm from '../../../../components/form/sv-form/sv-form.vue'
@@ -23,6 +23,12 @@ const insert = async () => {
     title: 'Feito!',
     body: 'Suas informações foram salvas'
   })
+}
+
+const signout = async () => {
+  await userStore.signout()
+  const router = await useRouter()
+  router.push('/user/signin')
 }
 </script>
 
@@ -64,6 +70,7 @@ const insert = async () => {
           <sv-icon
             v-clickable
             name="signout"
+            @click="signout"
           >
             Sair
           </sv-icon>

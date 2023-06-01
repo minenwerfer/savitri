@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, computed } from 'vue'
 import { LayoutOptions } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
 import SvTable from '../../../../sv-table/sv-table.vue'
@@ -8,28 +8,33 @@ type Props = {
   individualActions: any
   hasSelectionActions: boolean
   layoutOptions: LayoutOptions
+  componentProps?: Record<string, any>
 }
 
 const props = defineProps<Props>()
 const store = useParentStore()
 
 const storeId = inject('storeId', '')
+const componentProps = computed(() => {
+  const original = {
+    collection: storeId,
+    checkbox: store.hasSelectionActions,
+    columns: store.tableProperties,
+    rows: store.items,
+    actions: props.individualActions,
+    layout: store.tableLayout
+  }
+
+  return Object.assign(original, props.componentProps)
+})
 </script>
 
 <template>
   <slot v-if="$slots.inner" name="inner"></slot>
   <sv-table
     v-if="store.properties"
+    v-bind="componentProps"
     :key="store.$id"
-
-    v-bind="{
-      collection: storeId,
-      checkbox: store.hasSelectionActions,
-      columns: store.tableProperties,
-      rows: store.items,
-      actions: individualActions,
-      layout: store.tableLayout
-    }"
   >
     <template
       v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"

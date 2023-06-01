@@ -3,9 +3,13 @@ import SvCrud from '../../../components/sv-crud/sv-crud.vue'
 </script>
 
 <template>
-  <sv-crud
-    v-if="$route.params.collection"
-    :collection="$route.params.collection as string"
-    :key="$route.params.collection as string"
-  ></sv-crud>
+  <div class="crud-view">
+    <sv-crud
+      v-if="$route.params.collection"
+      :collection="$route.params.collection as string"
+      :key="$route.params.collection as string"
+    ></sv-crud>
+  </div>
 </template>
+
+<style scoped src="./crud-view.scss"></style>

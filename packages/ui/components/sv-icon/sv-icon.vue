@@ -10,6 +10,7 @@ type Props = {
   alt?: boolean
   reactive?: boolean|null
   iconRight?: boolean
+  fill?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -54,6 +55,9 @@ const reactive = typeof props.reactive === 'boolean'
         height="24"
         viewBox="0 0 24 24"
         data-component="icon"
+        v-bind="{
+          ...(fill ? { fill } : {})
+        }"
       >
         <use :href="`/assets/icons.svg#${variant}:${name}`"></use>
       </svg>

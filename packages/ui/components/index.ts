@@ -11,6 +11,7 @@ export { default as SvPagination } from './sv-pagination/sv-pagination.vue'
 export { default as SvPicture } from './sv-picture/sv-picture.vue'
 export { default as SvTable } from './sv-table/sv-table.vue'
 export { default as SvTabs } from './sv-tabs/sv-tabs.vue'
+export { default as SvGrid } from './sv-grid/sv-grid.vue'
 
 export * from './form'
 export * from './dashboard'

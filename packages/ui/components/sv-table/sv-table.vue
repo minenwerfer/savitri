@@ -46,19 +46,6 @@ const dropdownActions = computed(() => (
   props.actions?.filter((action) => !props.layout?.actions?.[action.action]?.button) || []
 ))
 
-const toggle = (value: boolean, rowId: string, key: string) => {
-  if( store ) {
-    store.insert({
-      what: {
-        _id: rowId,
-        [key]: value
-      }
-    }, {
-      skipLoading: true
-    })
-  }
-}
-
 const buttonStyle = (subject: any, action: any) => {
   const style = []
   const layout = props.layout?.actions?.[action.action]
