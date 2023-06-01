@@ -2,7 +2,7 @@
   .input {
     @include themed() {
       &__container {
-        &--normal, &--bold {
+        &--bordered {
           border: 1px solid t(brand-color);
         }
       }
@@ -32,11 +32,14 @@
     display: flex;
     height: 100%;
 
-    &--normal, &--bold {
-      border-radius: 3px;
+    &--bordered {
       @include themed() {
         border: 1px solid t(border-color);
       }
+    }
+
+    &--normal, &--bold {
+      border-radius: 3px;
     }
 
     &--light {

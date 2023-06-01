@@ -18,10 +18,12 @@ type Props = {
   property: CollectionProperty
   propertyName?: string
   variant?: InputVariant
+  bordered?: boolean
 }
 
 const props = defineProps<Props>()
 const property = props.property||{} as CollectionProperty
+const bordered = props.bordered || inject('inputBordered', false)
 
 const searchOnly = inject('searchOnly', false)
 const innerInputLabel = inject('innerInputLabel', false)
@@ -162,8 +164,9 @@ watch(() => props.modelValue, (value, oldValue) => {
       v-if="property.s$element !== 'textarea'"
       :class="`
         input__container
-        input__container--${variant}`
-    ">
+        input__container--${variant}
+        ${bordered && 'input__container--bordered'}
+    `">
       <input
         v-maska="mask"
         v-bind="inputBind"

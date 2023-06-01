@@ -7,20 +7,19 @@
 <style scoped src="./sv-tabs.scss"></style>
 
 <style scoped lang="scss">
-:slotted(div) {
+:slotted([data-current]) {
   display: flex;
   align-items: center;
 
   margin-top: 4px;
-  border-bottom: 4px solid transparent;
   padding: 0 .4rem;
-  font-size: small;
 
 }
 
 :slotted([data-current=true]) {
   @include themed() {
-    border-bottom: 4px solid t(brand-color);
+    color: #5090fa;
+    font-weight: 500;
   }
 }
 </style>

@@ -72,6 +72,7 @@ watch([page, limit], ([newPage, newLimit]: [number, number]) => {
       <sv-icon
         name="list-ul"
         fill="gray"
+        style="margin-left: .8rem"
       ></sv-icon>
     </div>
 
