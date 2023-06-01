@@ -88,7 +88,7 @@ const omitInputLabels = passAhead('omitInputLabels')
 
 provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
-provide('inputBordered', true)
+provide('inputBordered', inject('inputBordered', true))
 
 const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]> => 
   Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
