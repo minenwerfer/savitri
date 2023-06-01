@@ -10,8 +10,8 @@ import SvContextMenu from '../sv-context-menu/sv-context-menu.vue'
 import SvSwitch from '../form/sv-switch/sv-switch.vue'
 
 type Props = {
-  columns: Record<string, CollectionProperty>
-  rows: any
+  columns?: Record<string, CollectionProperty>
+  rows?: any
   collection?: string
   checkbox?: boolean
   border?: boolean
@@ -66,18 +66,17 @@ const buttonStyle = (subject: any, action: any) => {
 </script>
 
 <template>
-  <table v-if="Object.keys(columns).length > 0" class="table">
-    <tbody>
-      <tr
-        v-if="headers"
-        class="
-          table__row
-          table__row--header
-      ">
-        <th
-          v-if="checkbox && store"
-          class="table__header"
-        >
+  <table
+    v-if="(columns && Object.keys(columns).length > 0) || $slots.thead"
+    class="table"
+  >
+    <thead v-if=$slots.thead>
+      <slot name="thead"></slot>
+    </thead>
+
+    <thead v-else-if="headers">
+      <tr v-if="headers">
+        <th v-if="checkbox && store">
           <input
             type="checkbox"
             :checked="store.selected.length > 0 && store.selected.length === store.itemsCount"
@@ -96,28 +95,21 @@ const buttonStyle = (subject: any, action: any) => {
         <th
           v-if="actions"
           style="text-align: right;"
-          :class="`
-            table__header
-            table__header--description
-            ${border && 'table__header--border'}
-        `"></th>
+         ></th>
       </tr>
+    </thead>
 
+    <tbody v-if="$slots.tbody">
+      <slot name="tbody"></slot>
+    </tbody>
+
+    <tbody v-else>
       <tr
         v-for="row in rows"
         :key="row._id"
-        class="
-          table__row
-          table__row--body
-        "
         @click="$emit('itemClick', row)"
       >
-        <td
-          v-if="store && checkbox"
-          :class="`
-            table__cell
-            table__cell--padded
-        `">
+        <td v-if="store && checkbox">
           <input
             type="checkbox"
             v-model="selected"
@@ -127,10 +119,7 @@ const buttonStyle = (subject: any, action: any) => {
         <td
           v-for="([column, property], cindex) in Object.entries(columns)"
           :key="`column-${row._id}-${cindex}`"
-          :class="`
-            table__cell
-            table__cell--padded
-        `">
+        >
           <div
             v-if="`row-${column}` in $slots"
             class="table__cell-container"
@@ -250,7 +239,7 @@ const buttonStyle = (subject: any, action: any) => {
               :style="buttonStyle(row, action)"
               @click="action.click(row)"
             >
-              {{ action.name }}
+              {{ $t(action.name) }}
             </sv-button>
             <sv-context-menu
               v-if="dropdownActions.length > 0"
@@ -270,7 +259,12 @@ const buttonStyle = (subject: any, action: any) => {
       </tr>
     </tbody>
     <tfoot>
-      <tr v-if="!rows?.length && !store?.loading.getAll">
+      <slot
+        name="tfoot"
+        v-if="$slots.tfoot"
+      ></slot>
+
+      <tr v-else-if="columns && !rows?.length && !store?.loading.getAll">
         <td :colspan="Object.keys(columns).length">
           <div class="table__empty">
             Não foram encontrados resultados.

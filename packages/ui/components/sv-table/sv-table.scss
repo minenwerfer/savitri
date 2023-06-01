@@ -5,75 +5,68 @@ $picture-size: 2rem;
   width: 100%;
   border-collapse: collapse;
 
-  &__row {
-    &--header {
-      font-size: 8.5pt;
-      text-transform: uppercase;
-      text-align: left;
+  :deep(thead) > tr {
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    text-align: left;
 
-      @include themed() {
+    @include themed() {
+      background: t(background-color-alt);
+    }
+
+    @media screen and (max-width: 600px) {
+      display: none;
+    }
+
+    &>th {
+      padding: 1rem $cell-padding;
+      font-weight: 500;
+
+      @media screen and (max-width: 600px) {
+        display: hidden;
+      }
+    }
+  }
+
+  :deep(tbody) > tr {
+    height: 3rem;
+
+    @include themed() {
+      // &:not(:last-child) {
+      //   border-bottom: 1px solid t(border-color);
+      // }
+
+      &:hover {
         background: t(background-color-alt);
       }
-
-      @media screen and (max-width: 600px) {
-        display: none;
-      }
     }
 
-    &--body {
-      height: 3rem;
+    @media screen and (max-width: 600px) {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
 
       @include themed() {
-        // &:not(:last-child) {
-        //   border-bottom: 1px solid t(border-color);
-        // }
-
-        &:hover {
-          background: t(background-color-alt);
+        background: t(background-color);
+        &:not(:last-child) {
+          border-bottom: 1px solid t(border-color);
         }
+      }
+    }
+
+    &>td {
+      padding: 0 $cell-padding;
+      line-height: 1.1rem;
+      font-size: 10pt;
+
+      &--padded {
+        padding: $cell-padding;
       }
 
       @media screen and (max-width: 600px) {
-        display: flex;
-        flex-direction: column;
-        gap: .6rem;
-
-        @include themed() {
-          background: t(background-color);
-          &:not(:last-child) {
-            border-bottom: 1px solid t(border-color);
-          }
-        }
+        padding: 0;
       }
     }
-
-  }
-
-  &__header {
-    padding: 1rem $cell-padding;
-    font-weight: 500;
-
-    @media screen and (max-width: 600px) {
-      display: hidden;
-    }
-  }
-
-  &__cell {
-    padding: 0 $cell-padding;
-    line-height: 1.1rem;
-    font-size: 10pt;
-
-    &--padded {
-      padding: $cell-padding;
-    }
-
-    @media screen and (max-width: 600px) {
-      padding: 0;
-    }
-  }
-
-  &__cell-container {
-    //
   }
 
   &__cell-grid {
