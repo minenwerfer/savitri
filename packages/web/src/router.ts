@@ -48,11 +48,6 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
     else next()
   })
 
-
-  router.afterEach(() => {
-    window.scrollTo(0, 0)
-  })
-
   return router
 }
 

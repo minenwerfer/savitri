@@ -29,11 +29,6 @@ $section-padding: .8rem;
     flex-direction: column;
     overflow: hidden;
 
-    @include themed() {
-      color: t(foreground-color);
-      background: t(background-color);
-    }
-
     &--bordered {
       @include themed() {
         border-radius: 5px;

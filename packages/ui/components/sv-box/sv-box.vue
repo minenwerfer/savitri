@@ -93,6 +93,7 @@ const toggleCollapsed = (value: boolean) => {
     <div
       data-component="box"
       :class="`
+        sv-surface
         box__content
         ${!(isFloating || fixedRight) && 'box__content--bordered'}
         ${isFloating && 'box__content--floating'}

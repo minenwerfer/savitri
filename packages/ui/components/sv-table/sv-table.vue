@@ -68,7 +68,10 @@ const buttonStyle = (subject: any, action: any) => {
 <template>
   <table
     v-if="(columns && Object.keys(columns).length > 0) || $slots.thead"
-    class="table"
+    class="
+      sv-surface
+      table
+    "
   >
     <thead v-if=$slots.thead>
       <slot name="thead"></slot>
