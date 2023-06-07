@@ -117,11 +117,7 @@ watch(route, (currRoute, prevRoute) => {
 
         @click="call(actionProps)({ _id: selectedIds })"
       >
-        {{
-          actionProps.translate
-            ? $t(actionProps.name)
-            : actionProps.name
-        }}
+        {{ $t(actionProps.name) }}
       </sv-button>
       <slot v-if="$slots.actions" name="actions"></slot>
     </div>

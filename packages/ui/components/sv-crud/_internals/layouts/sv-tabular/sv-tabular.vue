@@ -37,7 +37,7 @@ const componentProps = computed(() => {
     :key="store.$id"
   >
     <template
-      v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"
+      v-for="slotName in Object.keys($slots).filter(key => !['inner'].includes(key))"
       v-slot:[slotName]="slotProps"
     >
       <slot

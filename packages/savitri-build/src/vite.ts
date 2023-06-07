@@ -31,7 +31,7 @@ export default defineConfig(async () => {
         ],
         async preEmit() {
           const paths = [
-            process.cwd() + '/../api/resources/collections',
+            process.cwd() + '/../api/dist/resources/collections',
             process.cwd() + '/../api/node_modules/@semantic-api/system/cjs/resources/collections',
             // process.cwd() + '/../api/node_modules/@semantic-api/api/cjs/presets',
           ]
@@ -42,7 +42,7 @@ export default defineConfig(async () => {
             const dirs = await readdir(path)
             for( const dir of dirs ) {
               try {
-                const content = await readFile(`${path}/${dir}/${dir}.description.ts`)
+                const content = await readFile(`${path}/${dir}/${dir}.description.js`)
                 scrap(content.toString())
               } catch( e ) {
               }

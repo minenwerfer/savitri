@@ -153,10 +153,10 @@ watch(() => props.modelValue, (value, oldValue) => {
 
 <template>
   <label :key="rerenderFixture" class="input">
-    <strong class="input__label" v-if="!innerInputLabel">
+    <div class="input__label" v-if="!innerInputLabel">
       <slot v-if="$slots.default"></slot>
       <slot v-else name="description"></slot>
-    </strong>
+    </div>
     <div v-if="$slots.hint" class="input__hint">
       <slot name="hint"></slot>
     </div>
@@ -203,7 +203,7 @@ watch(() => props.modelValue, (value, oldValue) => {
           <sv-icon
             v-clickable
             name="clipboard"
-            @click="copyToCipboard(modelValue)"
+            @click="copyToClipboard(modelValue)"
           ></sv-icon>
         </sv-info>
       </div>

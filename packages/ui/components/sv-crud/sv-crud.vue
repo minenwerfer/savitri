@@ -264,7 +264,10 @@ provide('parentStore', parentStore)
 
 
   <div class="crud__main">
-    <div class="crud__controls">
+    <div
+      v-if="store.itemsCount > 0"
+      class="crud__controls"
+    >
       <div v-if="store.description.search?.active" style="width: 100%">
         <sv-input
           v-model="queryString"
@@ -339,13 +342,17 @@ provide('parentStore', parentStore)
     </div>
 
     <div v-loading="store.loading.getAll">
+      <div v-if="store.itemsCount === 0 && $slots.empty">
+        <slot name="empty"></slot>
+      </div>
       <component
-        :is="getLayout(layout?.name || store.$currentLayout)"
+        v-else
         v-bind="{
           individualActions,
           layoutOptions: layout?.options || store?.layout.options,
           componentProps
         }"
+        :is="getLayout(layout?.name || store.$currentLayout)"
       >
         <template
           v-for="slotName in Object.keys($slots).filter(key => key.startsWith('row-'))"
@@ -356,13 +363,17 @@ provide('parentStore', parentStore)
             :name="slotName"
           ></slot>
         </template>
+
+        <template #tfoot v-if="$slots.tfoot">
+          <slot name="tfoot"></slot>
+        </template>
       </component>
 
     </div>
   </div>
 
   <div
-    v-if="!noControls && !store.loading.getAll"
+    v-if="!noControls && !store.loading.getAll && store.itemsCount > 0"
     class="crud__controls"
   >
     <sv-pagination :collection="collection"></sv-pagination>
