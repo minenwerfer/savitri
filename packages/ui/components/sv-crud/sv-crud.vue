@@ -89,7 +89,7 @@ actionEventBus.value = action[1]
 const fetchItems = async () => {
   return store.filter({
     project: [
-      ...Object.keys(store.properties),
+      ...(store.description.table || Object.keys(store.properties)),
       ...store.tableMeta
     ]
   })
@@ -345,6 +345,15 @@ provide('parentStore', parentStore)
       <div v-if="store.itemsCount === 0 && $slots.empty">
         <slot name="empty"></slot>
       </div>
+
+      <slot
+        v-else-if="$slots.component"
+        v-bind="{
+          store
+        }"
+        name="component"
+      ></slot>
+
       <component
         v-else
         v-bind="{

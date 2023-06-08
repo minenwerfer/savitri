@@ -90,9 +90,9 @@ watch(route, (currRoute, prevRoute) => {
           small
           :name="preset.icon"
         >
-          {{ preset.name }}
+          {{ preset.name || $tc(presetName, 2) }}
         </sv-icon>
-        <span v-else>{{ preset.name }}</span>
+        <span v-else>{{ preset.name || $tc(presetName, 2) }}</span>
         <span v-if="preset.badgeFunction">
           ({{
             store.customGetter[preset.badgeFunction](presetName, {
