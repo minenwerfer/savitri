@@ -342,7 +342,7 @@ provide('parentStore', parentStore)
     </div>
 
     <div v-loading="store.loading.getAll">
-      <div v-if="store.itemsCount === 0 && $slots.empty">
+      <div v-if="store.itemsCount === 0 && !store.loading.getAll && $slots.empty">
         <slot name="empty"></slot>
       </div>
 

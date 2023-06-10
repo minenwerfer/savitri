@@ -172,7 +172,11 @@ const actionsAndMutations: Actions & Mutations = {
     return this.custom('count', payload)
   },
 
-  async get(payload, options?) {
+  async get(payloadSource, options?) {
+    const payload = typeof payloadSource === 'string'
+      ? { filters: { _id: payloadSource } }
+      : payloadSource
+
     return this.customEffect(
       'get', payload,
       this.setItem,

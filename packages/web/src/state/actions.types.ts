@@ -38,7 +38,7 @@ interface ActionsAux {
   $customEffect(verb: string|null, payload: any, fn: (payload: any) => any, options?: ActionOptions): Promise<any>
 
   count(payload?: { filters: Record<string, any> }): Promise<number>
-  get(payload: ActionFilter, options?: ActionOptions): Promise<any>
+  get(payload: ActionFilter|string, options?: ActionOptions): Promise<any>
   getAll(payload: ActionFilter, options?: ActionOptions): Promise<any>
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
   deepInsert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
