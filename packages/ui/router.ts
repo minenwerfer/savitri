@@ -69,6 +69,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
       {
         path: 'c/:collection?',
         name: 'dashboard-crud',
+        props: true,
         components: {
           default: () => import('./views/dashboard/crud-view/crud-view.vue'),
           topbar: () => import('./components/dashboard/sv-crud-topbar/sv-crud-topbar.vue')

@@ -20,12 +20,12 @@ bootstrapRoutes()
     <Suspense>
       <router-view v-slot="{ Component }">
         <component :is="Component">
-        <template
-          v-for="slotName in Object.keys($slots)"
-          v-slot:[slotName]
-        >
-          <slot :name="slotName"></slot>
-        </template>
+          <template
+            v-for="slotName in Object.keys($slots)"
+            v-slot:[slotName]
+          >
+            <slot :name="slotName"></slot>
+          </template>
         </component>
       </router-view>
     </Suspense>
@@ -54,7 +54,7 @@ bootstrapRoutes()
       {{ metaStore.prompt.body }}
     </sv-prompt>
 
-    <div class=" main__toasts">
+    <div class="main__toasts">
       <sv-toast
         v-for="toast in metaStore.toasts"
         v-bind="toast"

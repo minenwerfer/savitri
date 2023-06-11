@@ -77,7 +77,7 @@ const buttonStyle = (subject: any, action: any) => {
       <slot name="thead"></slot>
     </thead>
 
-    <thead v-else-if="headers">
+    <thead v-else-if="headers && (!store || store.loading.getAll || store.itemsCount > 0)">
       <tr v-if="headers">
         <th v-if="checkbox && store">
           <input

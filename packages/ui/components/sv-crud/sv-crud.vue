@@ -58,7 +58,10 @@ type Emits = {
   (e: 'uiEvent', event: any): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  noRefresh: true
+})
+
 const emit = defineEmits<Emits>()
 const router = await useRouter()
 
@@ -265,7 +268,14 @@ provide('parentStore', parentStore)
 
   <div class="crud__main">
     <div
-      v-if="store.itemsCount > 0"
+      v-if="store.description.search?.active
+        || !noRefresh
+        || (store && Object.keys(store.availableFilters).length > 0)
+        || (
+          !noLayoutToggle && store
+          && store.description.layout
+          && store.description.layout?.name !== 'tabular'
+      )"
       class="crud__controls"
     >
       <div v-if="store.description.search?.active" style="width: 100%">
