@@ -6,10 +6,11 @@ export default {
 
 <script setup lang="ts">
 import type { CollectionProperty } from '@semantic-api/types'
+import { computed } from 'vue'
 
 type Props = {
   modelValue: any
-  property: CollectionProperty
+  property?: CollectionProperty
   propertyName?: string
 }
 
@@ -20,7 +21,7 @@ type Emits = {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-const property = props.property
+const property = computed(() => props.property || {})
 
 const toggle = () => {
   if( !props.property.readOnly ) {

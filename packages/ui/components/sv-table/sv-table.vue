@@ -173,6 +173,7 @@ const buttonStyle = (subject: any, action: any) => {
                     expandable
                     v-if="/^image/.test(row[column].mime)" 
                     v-model="row[column].link"
+                    :meta="row[column]"
                     class="table__picture"
                   ></sv-picture>
                   <a

@@ -2,7 +2,6 @@
 import { computed, watch } from 'vue'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useRouter, useParentStore } from '@savitri/web'
-import { call } from '../../sv-crud/_internals/store'
 import SvTabs from '../../sv-tabs/sv-tabs.vue'
 import SvButton from '../../sv-button/sv-button.vue'
 import SvIcon from '../../sv-icon/sv-icon.vue'
@@ -63,10 +62,7 @@ watch(route, (currRoute, prevRoute) => {
 
 <template>
   <div
-    v-if="
-      store?.description.filtersPresets
-      || (store?.actions.length || $slots.actions)
-    "
+    v-if="store?.description.filtersPresets"
     class="topbar"
   >
     <sv-tabs v-if="store?.description.filtersPresets">
@@ -102,25 +98,6 @@ watch(route, (currRoute, prevRoute) => {
         </span>
       </div>
     </sv-tabs>
-
-    <div
-      v-if="store?.actions || $slots.actions"
-      :key="collection"
-      class="topbar__actions"
-    >
-      <sv-button
-        v-for="(actionProps, index) in store.actions"
-        :key="`action-${index}`"
-
-        :icon="actionProps.icon"
-        :disabled="store.selectedIds.length === 0 && actionProps.selection"
-
-        @click="call(actionProps)({ _id: selectedIds })"
-      >
-        {{ $t(actionProps.name) }}
-      </sv-button>
-      <slot v-if="$slots.actions" name="actions"></slot>
-    </div>
   </div>
 </template>
 

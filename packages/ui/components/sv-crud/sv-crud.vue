@@ -24,6 +24,7 @@ import { deepClone } from '@semantic-api/common'
 
 import SvPagination from '../sv-pagination/sv-pagination.vue'
 import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
+import SvButton from '../sv-button/sv-button.vue'
 import SvInfo from '../sv-info/sv-info.vue'
 import SvIcon from '../sv-icon/sv-icon.vue'
 import SvInput from '../form/sv-input/sv-input.vue'
@@ -349,6 +350,25 @@ provide('parentStore', parentStore)
           @click="toggleLayout(store)"
         ></sv-icon>
       </sv-info>
+
+      <div
+        v-if="store?.actions || $slots.actions"
+        :key="collection"
+        class="crud__actions"
+      >
+        <sv-button
+          v-for="(actionProps, index) in store.actions"
+          :key="`action-${index}`"
+
+          :icon="actionProps.icon"
+          :disabled="store.selectedIds.length === 0 && actionProps.selection"
+
+          @click="call(actionProps)({ _id: selectedIds })"
+        >
+          {{ $t(actionProps.name) }}
+        </sv-button>
+        <slot v-if="$slots.actions" name="actions"></slot>
+      </div>
     </div>
 
     <div v-loading="store.loading.getAll">

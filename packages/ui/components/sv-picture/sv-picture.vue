@@ -9,6 +9,13 @@ type Props = {
   width?: string
   height?: string
   expandable?: boolean
+  meta?: {
+    created_at: string
+    updated_at: string
+    owner: {
+      full_name: string
+    }
+  }
 }
 
 const props = defineProps<Props>()
@@ -20,26 +27,34 @@ const expand = ref(false)
 <template>
   <figure class="picture">
     <teleport to="#app">
-      <img
+      <div
         v-if="expand"
         v-overlay="{
           click: () => {
             expand = false
           }
         }"
-
-        :src="url"
-        :style="`
+        style="
           position: fixed;
           top: 50%;
           left: 50%;
-          max-height: 60vh;
           transform: translate(-50%, -50%);
-          object-fit: contain;
-        `"
+        "
+      >
+        <img
+          :src="url"
+          :style="`
+            max-height: 60vh;
+            object-fit: contain;
+          `"
 
-        @click="expand = true"
-      />
+          @click="expand = true"
+        />
+
+        <div v-if="meta" class="picture__meta">
+          Criado por {{ meta.owner.full_name }} em {{ formatDateTime(meta.created_at, true) }}
+        </div>
+      </div>
     </teleport>
 
     <img

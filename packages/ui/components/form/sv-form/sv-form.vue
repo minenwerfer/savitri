@@ -46,8 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:formData' | 'input', value: any): void
-  (e: 'change'): void
+  (e: 'update:formData' | 'input' | 'change', value: any): void
 }>()
 
 onBeforeMount(() => {
@@ -232,7 +231,7 @@ const unfilled = (value: any) => {
           }"
 
           @input="emit('input', key)"
-          @change="emit('change')"
+          @change="emit('change', $event)"
         />
 
         <div
@@ -243,7 +242,7 @@ const unfilled = (value: any) => {
             column-gap: 1rem;
           "
           @input="emit('input', key)"
-          @change="emit('change')"
+          @change="emit('change', $event)"
         >
           <sv-input
             v-model="formData[key].$gte"
@@ -270,7 +269,7 @@ const unfilled = (value: any) => {
             boolean-ref
             :model-value="formData[key]"
 
-            @change="emit('change')"
+            @change="emit('change', $event)"
             @update:model-value="(value) => {
               formData[key] = value == 'true'
                 ? true : value == 'false'
@@ -306,11 +305,12 @@ const unfilled = (value: any) => {
                   propertyName: key,
                   parentCollection: collectionName,
                   columns: layout?.[key]?.optionsColumns
-                    || layout?.$default?.optionsColumns
+                    || layout?.$default?.optionsColumns,
+                  ...(property.s$componentProps || {})
                 }"
 
                 @input="emit('input', key)"
-                @change="emit('change')"
+              @change="emit('change', $event)"
               ></component>
             </div>
 
@@ -356,11 +356,12 @@ const unfilled = (value: any) => {
             propertyName: key,
             parentCollection: collectionName,
             columns: layout?.[key]?.optionsColumns
-              || layout?.$default?.optionsColumns
+              || layout?.$default?.optionsColumns,
+            ...(property.s$componentProps || {})
           }"
 
           @input="emit('input', key)"
-          @change="emit('change')"
+          @change="emit('change', $event)"
         ></component>
 
         <div v-if="validationErrors?.[key]" class="form__validation-error">

@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import type { CollectionProperty } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
 import SvIcon from '../../../../../sv-icon/sv-icon.vue'
-import SvSearchContainer from '../sv-search-container/sv-search-container.vue'
 import SvSearchItem from '../sv-search-item/sv-search-item.vue'
 
 type Props = {
@@ -59,23 +58,15 @@ const unselect = async (item: any, purge=true) => {
 </script>
 
 <template>
-  <sv-search-container v-if="selected?.length > 0">
-    <sv-search-item
-      v-for="item in selected"
-      v-bind="{
-        item,
-        indexes
-      }"
-      :key="item._id"
-      @click="unselect(item, false)"
-    >
-      <sv-icon v-clickable name="check-circle"></sv-icon>
-    </sv-search-item>
-  </sv-search-container>
+  <sv-search-item
+    v-for="item in selected"
+    v-bind="{
+      item,
+      indexes
+    }"
+    :key="item._id"
+    @click="unselect(item, false)"
+  >
+    <sv-icon v-clickable name="check-circle"></sv-icon>
+  </sv-search-item>
 </template>
-
-<style scoped lang="scss">
-:deep([data-component=icon]) {
-  fill: green;
-}
-</style>

@@ -1,6 +1,7 @@
 .item {
   display: flex;
   align-items: center;
+  gap: .6rem;
 
   // border: 1px solid #dedede;
   //
@@ -11,27 +12,21 @@
     }
 
     color: t(foreground-color);
-    background: t(background-color);
   }
 
-
-  :deep([data-component=icon]) {
-    width: 1.2rem;
-  }
 
   &__values {
     display: flex;
     flex-direction: column;
     row-gap: .4rem;
-    padding: .6rem;
   }
 
   &__value {
     display: flex;
-    font-size: .9rem;
+    font-size: 10pt;
 
-    &:first-child {
-      font-weight: bold;
-    }
+    // &:first-child {
+    //   font-weight: bold;
+    // }
   }
 }

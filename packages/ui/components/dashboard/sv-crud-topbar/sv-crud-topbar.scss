@@ -4,14 +4,9 @@
   gap: 1rem;
 
 
-  &__actions,
   &__controls {
     display: flex;
     align-items: center;
     gap: .4rem;
-  }
-
-  &__actions {
-    margin-left: auto;
   }
 }

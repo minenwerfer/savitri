@@ -9,12 +9,13 @@ type Props = {
   modelValue: any
   property: CollectionProperty
   propertyName?: string
+  meta?: Record<string, any>
 }
 
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: any): void
+  (e: 'update:modelValue' | 'change', value: any): void
 }>()
 
 const store = useParentStore()
@@ -63,11 +64,13 @@ const insert = async () => {
     what: {
       _id: props.modelValue?._id,
       ...file
-    }
+    },
+    meta: props.meta
   })
 
   clearPreview()
   emit('update:modelValue', result)
+  emit('change', result)
 }
 
 const remove = async () => {

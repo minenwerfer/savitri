@@ -15,7 +15,6 @@ import SvIcon from '../../sv-icon/sv-icon.vue'
 import SvForm from '../sv-form/sv-form.vue'
 
 import SvSearchSelected from './_internals/components/sv-search-selected/sv-search-selected.vue'
-import SvSearchContainer from './_internals/components/sv-search-container/sv-search-container.vue'
 import SvSearchItem from './_internals/components/sv-search-item/sv-search-item.vue'
 
 type Props = {
@@ -30,8 +29,7 @@ const props = defineProps<Props>()
 const property = props.property
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', event: any): void
-  (e: 'changed'): void
+  (e: 'update:modelValue' | 'change', event: any): void
 }>()
 
 provide('storeId', property.s$referencedCollection!)
@@ -45,7 +43,14 @@ const store = useStore(property.s$referencedCollection!)
 const indexes = props.property.s$indexes
 
 const expanded = ref(false)
-const matchingItems = ref<Array<Record<string, any> & { _id: string }>>([])
+
+const searchResponse = ref<any>({
+  result: []
+})
+
+const matchingItems = computed<Array<Record<string, any> & { _id: string }>>(() => searchResponse.value.result || [])
+const pagination = computed(() => searchResponse.value.pagination)
+
 const isExpanded = computed(() => expanded.value || property.s$inline)
 
 const isTyping = ref(false)
@@ -66,17 +71,17 @@ const select = (item: any, itemIndex: number) => {
     : item
   )
 
-  emit('changed')
+  emit('change', item)
 }
 
 const pushBack = (item: any) => {
-  matchingItems.value.push(item)
+  searchResponse.value.result.push(item)
 }
 
 const search = async () => {
   if( Object.values(inputValue).every((v) => !(String(v).length > 0)) ) {
-    matchingItems.value = property.s$prefetch
-      ? await store.custom('getAll')
+    searchResponse.value = property.s$prefetch
+      ? await store.custom('getAll', {}, { fullResponse: true })
       : []
 
     return
@@ -86,7 +91,7 @@ const search = async () => {
     return
   }
 
-  matchingItems.value = await store.custom('getAll', {
+  searchResponse.value = await store.custom('getAll', {
     limit: 5,
     filters: {
       $or: indexes
@@ -98,12 +103,12 @@ const search = async () => {
         }
       }))
     }
-  })
+  }, { fullResponse: true })
 }
 
 onMounted(async () => {
   if( property.s$prefetch ) {
-    matchingItems.value = await store.custom('getAll')
+    searchResponse.value = await store.custom('getAll', {}, { fullResponse: true })
   }
 })
 
@@ -148,21 +153,34 @@ const lazySearch = () => {
       @input="lazySearch"
     ></sv-form>
 
-    <sv-search-selected
+    <div
       v-if="!isExpanded"
-      v-bind="{
-        searchOnly,
-        indexes,
-        property,
-        modelValue
-      }"
+      class="
+        search__container
+        search__container--selected
+      "
+    >
+      <sv-search-selected
+        v-bind="{
+          searchOnly,
+          indexes,
+          property,
+          modelValue
+        }"
 
-      @update:model-value="emit('update:modelValue', $event)"
-      @push-back="pushBack"
-    ></sv-search-selected>
+        @update:model-value="emit('update:modelValue', $event)"
+        @push-back="pushBack"
+      ></sv-search-selected>
+    </div>
 
     <div v-if="!isExpanded">
-      <sv-search-container v-if="matchingItems.length">
+      <div
+        v-if="matchingItems.length"
+        class="
+          search__container
+          search__container--results
+        "
+      >
         <sv-search-item
           v-for="(item, index) in matchingItems"
           v-bind="{
@@ -175,7 +193,11 @@ const lazySearch = () => {
         >
           <sv-icon name="plus"></sv-icon>
         </sv-search-item>
-      </sv-search-container>
+
+        <div v-if="pagination.recordsTotal > pagination.recordsCount">
+          +{{ pagination.recordsTotal - pagination.recordsCount }} resultados
+        </div>
+      </div>
 
       <div v-else>
         <div v-if="isTyping">
