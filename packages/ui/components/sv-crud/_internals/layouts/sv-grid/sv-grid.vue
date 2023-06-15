@@ -32,7 +32,11 @@ const firstIfArray = (what: any) => {
       v-for="item in store.items"
       :key="item"
     >
-      <sv-picture expandable :url="firstIfArray(item[layoutOptions.picture!])?.link"></sv-picture>
+      <sv-picture
+        expandable
+        :url="firstIfArray(item[layoutOptions.picture])?.link"
+        :meta="firstIfArray(item[layoutOptions.picture])"
+      ></sv-picture>
 
       <template #footer>
         <div>

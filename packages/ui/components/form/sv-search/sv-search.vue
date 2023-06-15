@@ -19,7 +19,10 @@ import SvSearchItem from './_internals/components/sv-search-item/sv-search-item.
 
 type Props = {
   modelValue: any
-  property: CollectionProperty
+  property: CollectionProperty & NonNullable<{
+    s$isReference: CollectionProperty['s$isReference']
+    s$referencedCollection: CollectionProperty['s$referencedCollection']
+  }>
   propertyName?: string
   parentCollection?: string
   searchOnly?: boolean

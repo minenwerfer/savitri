@@ -24,7 +24,7 @@ const emit = defineEmits<Emits>()
 const property = computed(() => props.property || {})
 
 const toggle = () => {
-  if( !props.property.readOnly ) {
+  if( !property.value.readOnly ) {
     emit('change', !props.modelValue)
     emit('update:modelValue', !props.modelValue)
   }
@@ -52,7 +52,9 @@ const toggle = () => {
       `"></div>
     </a>
 
-    <div>
+    <slot v-if="$slots.default"></slot>
+
+    <div v-else>
       {{ property.description || propertyName }}
     </div>
   </div>

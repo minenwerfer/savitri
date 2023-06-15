@@ -272,6 +272,7 @@ provide('parentStore', parentStore)
       v-if="store.description.search?.active
         || !noRefresh
         || (store && Object.keys(store.availableFilters).length > 0)
+        || (store?.actions.length > 0 || $slots.actions)
         || (
           !noLayoutToggle && store
           && store.description.layout
@@ -352,7 +353,7 @@ provide('parentStore', parentStore)
       </sv-info>
 
       <div
-        v-if="store?.actions || $slots.actions"
+        v-if="store?.actions.length > 0 || $slots.actions"
         :key="collection"
         class="crud__actions"
       >
