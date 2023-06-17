@@ -99,6 +99,8 @@ const fetchItems = async () => {
   })
 }
 
+const emptyComponent = inject('emptyComponent')
+
 watch(router.currentRoute, () => {
   metaStore.view.title = props.collection
   metaStore.view.collection = props.collection
@@ -373,8 +375,27 @@ provide('parentStore', parentStore)
     </div>
 
     <div v-loading="store.loading.getAll">
-      <div v-if="store.itemsCount === 0 && !store.loading.getAll && $slots.empty">
-        <slot name="empty"></slot>
+      <div v-if="
+        store.itemsCount === 0
+        && !store.loading.getAll
+        && (emptyComponent || $slots.empty)
+      ">
+        <component
+          v-if="emptyComponent"
+          :is="emptyComponent"
+          v-bind="{
+            collection: store.$id
+          }"
+        >
+        </component>
+
+        <slot
+          v-else
+          v-bind="{
+            collection: store.$id
+          }"
+          name="empty"
+        ></slot>
       </div>
 
       <slot

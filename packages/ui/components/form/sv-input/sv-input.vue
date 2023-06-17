@@ -33,7 +33,7 @@ const copyToClipboard = useClipboard()
 
 const emit = defineEmits<{
   (e: 'update:modelValue' | 'input', value: InputType): void
-  (e: 'change', value: InputEvent): void
+  (e: 'change', value: any): void
 }>()
 
 const input = ref(null)
@@ -111,14 +111,14 @@ const updateValue = (value: InputType) => {
 }
 
 const onInput = (
-  event: Event & {
+  event: (Event & { target: any }) | (Event & {
     target: {
       value: string,
       dataset?: {
         maskRawValue: string
       }
     }
-  },
+  }),
   masked?: boolean
 ) => {
   if( !masked && event.target.dataset?.maskRawValue ) {

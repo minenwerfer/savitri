@@ -310,7 +310,7 @@ const unfilled = (value: any) => {
                 }"
 
                 @input="emit('input', key)"
-              @change="emit('change', $event)"
+                @change="emit('change', $event)"
               ></component>
             </div>
 

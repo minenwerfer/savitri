@@ -62,7 +62,7 @@ watch(route, (currRoute, prevRoute) => {
 
 <template>
   <div
-    v-if="store?.description.filtersPresets"
+    v-if="store && Object.keys(store.description.filtersPresets||{}).length > 0"
     class="topbar"
   >
     <sv-tabs v-if="store?.description.filtersPresets">

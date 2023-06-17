@@ -1,10 +1,8 @@
 @mixin focus {
   .input {
     @include themed() {
-      &__container {
-        &--bordered {
-          border: 1px solid t(brand-color);
-        }
+      &__container--bordered:after {
+        width: 100%;
       }
 
       &__icon {
@@ -35,7 +33,18 @@
 
     &--bordered {
       @include themed() {
-        border: 1px solid t(border-color);
+        border: 2px solid t(border-color);
+
+        &:after {
+          content: '';
+          transition: width .1s ease;
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          height: 3px;
+          width: 0;
+          background: t(brand-color);
+        }
       }
     }
 
@@ -66,7 +75,7 @@
     }
 
     &--bold {
-      padding: .8rem;
+      padding: 1.2rem .8rem;
       font-size: 12pt;
 
       &::placeholder {
@@ -109,8 +118,8 @@
 
     &--bold {
       :deep([data-component=icon]) {
-        width: 1.4rem;
-        height: 1.4rem;
+        width: 1.2rem;
+        height: 1.2rem;
       }
     }
 
