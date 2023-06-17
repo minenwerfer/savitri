@@ -6,6 +6,7 @@ import {
   computed,
   ref,
   reactive,
+  nextTick
 
 } from 'vue'
 
@@ -58,6 +59,7 @@ const pagination = computed(() => searchResponse.value.pagination)
 const isExpanded = computed(() => expanded.value || property.s$inline)
 
 const isTyping = ref(false)
+const focus = ref<'in'|'out'|null>(null)
 const inputValue = reactive<Record<string, any>>({})
 
 const select = (item: any, itemIndex: number) => {
@@ -76,7 +78,12 @@ const select = (item: any, itemIndex: number) => {
   )
 
   emit('change', item)
-  selectClick.value = true
+  selectClick.value = false
+
+  // necessary: we want to trigger a rerender everytime
+  nextTick(() => {
+    selectClick.value = true
+  })
 }
 
 const pushBack = (item: any) => {
@@ -85,8 +92,8 @@ const pushBack = (item: any) => {
 
 const search = async (empty?: boolean) => {
   if( Object.values(inputValue).every((v) => !(String(v).length > 0)) ) {
-    if( empty ) {
-      searchResponse.value = await store.custom('getAll', {}, { fullResponse: true })
+    if( empty && matchingItems.value.length === 0 ) {
+      searchResponse.value = await store.custom('getAll', { limit: 100 }, { fullResponse: true })
     }
 
     return
@@ -97,7 +104,7 @@ const search = async (empty?: boolean) => {
   }
 
   searchResponse.value = await store.custom('getAll', {
-    limit: 5,
+    limit: 100,
     filters: {
       $or: indexes
       .filter((i: string) => inputValue[i]?.length > 0)
@@ -127,19 +134,27 @@ const lazySearch = () => {
   doLazySearch()
 }
 
+let cancelClearResponse: () => void
 const clearResponse = () => {
-  if( props.modelValue && (props.modelValue.length || props.modelValue._id) ) {
-    selectClick.value = false
-    return
-  }
-
   selectClick.value = false
   searchResponse.value = {
     result: []
   }
 }
 
-const [lazyClearResponse] = useDebounce({ delay: 800 })(clearResponse)
+const handleFocusin = () => {
+  cancelClearResponse()
+  search(true)
+  focus.value = 'in'
+}
+
+const handleFocusout = () => {
+  lazyClearResponse()
+  focus.value = 'out'
+}
+
+const [lazyClearResponse, cancel_] = useDebounce({ delay: 200 })(clearResponse)
+cancelClearResponse = cancel_
 </script>
 
 <template>
@@ -168,8 +183,8 @@ const [lazyClearResponse] = useDebounce({ delay: 800 })(clearResponse)
 
       :focus="selectClick"
 
-      @focusin="search(true)"
-      @focusout="lazyClearResponse"
+      @focusin="handleFocusin"
+      @focusout="handleFocusout"
       @input="lazySearch"
     ></sv-form>
 
@@ -225,6 +240,7 @@ const [lazyClearResponse] = useDebounce({ delay: 800 })(clearResponse)
         </div>
         <div v-else-if="
           !store.loading.getAll
+            && focus === 'in'
             && Object.values(inputValue).filter((v) => !!v).length > 0
             && !((property.type === 'array' && modelValue?.length) || modelValue?._id)
         ">
