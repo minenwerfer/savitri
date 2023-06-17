@@ -94,7 +94,17 @@ watch(() => store.item._id, (_id) => {
       }"
 
       @add="$event.preventDefault()"
-    ></sv-form>
+    >
+      <template
+        v-for="slotName in Object.keys($slots).filter(key => key.startsWith('field-'))"
+        v-slot:[slotName]="slotProps"
+      >
+        <slot
+          v-bind="slotProps"
+          :name="slotName"
+        ></slot>
+      </template>
+    </sv-form>
     <template #extra>
       <sv-context-menu
         v-bind="{

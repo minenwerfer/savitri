@@ -22,8 +22,8 @@ type LayoutConfig = {
 }
 
 type Props = {
-  form: Record<string, CollectionProperty>
-  formData: Record<string, any>
+  form?: Record<string, CollectionProperty>
+  formData?: Record<string, any>
   collection?: string
   isReadOnly?: boolean
   searchOnly?: boolean
@@ -90,8 +90,12 @@ provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
 provide('inputBordered', inject('inputBordered', true))
 
-const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]> => 
-  Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
+const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]>|null => {
+  if( !props.form ) {
+    return
+  }
+
+  return Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
     if(
       !(property
         && (!property.s$meta || props.searchOnly)
@@ -111,6 +115,7 @@ const filterProperties = (condition: (f: any) => boolean): Array<[string, Collec
       ]
     ]
   }, [])
+}
 
 
 const has = (propertyName: string) => {
@@ -192,9 +197,10 @@ const unfilled = (value: any) => {
       <slot name="header"></slot>
     </header>
     <fieldset
-      v-if="!isReadOnly && Object.keys(properties).length > 0"
+      v-if="!isReadOnly"
       class="form__fieldset"
     >
+      <slot></slot>
       <div
         v-for="([key, property], index) in properties"
         :key="`field-${index}`"
@@ -221,8 +227,18 @@ const unfilled = (value: any) => {
           ></div>
         </label>
 
+        <slot
+          v-if="$slots[`field-${key}`]"
+          v-bind="{
+            property,
+            formData,
+            key
+          }"
+          :name="`field-${key}`"
+        ></slot>
+
         <component
-          v-if="layout?.[key]?.component && propertyComponents[layout[key].component!.name]"
+          v-else-if="layout?.[key]?.component && propertyComponents[layout[key].component!.name]"
           :is="propertyComponents[layout[key].component!.name]"
           v-model="formData[key]"
           v-bind="{

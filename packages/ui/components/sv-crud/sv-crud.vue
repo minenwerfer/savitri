@@ -266,7 +266,17 @@ provide('parentStore', parentStore)
       parentCollection,
       parentField
     }"
-  ></sv-insert-panel>
+  >
+    <template
+      v-for="slotName in Object.keys($slots).filter(key => key.startsWith('field-'))"
+      v-slot:[slotName]="slotProps"
+    >
+      <slot
+        v-bind="slotProps"
+        :name="slotName"
+      ></slot>
+    </template>
+  </sv-insert-panel>
 
 
   <div class="crud__main">
