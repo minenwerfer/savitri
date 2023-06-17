@@ -209,19 +209,26 @@ watch(() => props.modelValue, (value, oldValue) => {
       </div>
     </div>
 
-    <textarea
+    <div
       v-else
-      v-focus="rerenderFixture > 0 || property.s$focus"
-      :placeholder="inputBind.placeholder"
-      :readonly="readOnly"
-
       :class="`
-        input__textarea
-        input__input--${variant}
-      `"
+        input__container
+        input__container--${variant}
+        ${bordered && 'input__container--bordered'}
+    `">
+      <textarea
+        v-focus="rerenderFixture > 0 || property.s$focus"
+        :placeholder="inputBind.placeholder"
+        :readonly="readOnly"
 
-      @input="onInput"
-    >{{ modelValue }}</textarea>
+        :class="`
+          input__textarea
+          input__input--${variant}
+        `"
+
+        @input="onInput"
+      >{{ modelValue }}</textarea>
+    </div>
   </label>
 </template>
 
