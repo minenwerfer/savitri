@@ -33,7 +33,9 @@
 
     &--bordered {
       @include themed() {
-        border: 2px solid t(border-color);
+        &>.input__input {
+          background: #f8f8f8;
+        }
 
         &:after {
           content: '';
