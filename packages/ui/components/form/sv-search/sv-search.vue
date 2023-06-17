@@ -46,6 +46,7 @@ const store = useStore(property.s$referencedCollection!)
 const indexes = props.property.s$indexes
 
 const expanded = ref(false)
+const selectClick = ref(false)
 
 const searchResponse = ref<any>({
   result: []
@@ -75,17 +76,18 @@ const select = (item: any, itemIndex: number) => {
   )
 
   emit('change', item)
+  selectClick.value = true
 }
 
 const pushBack = (item: any) => {
   searchResponse.value.result.push(item)
 }
 
-const search = async () => {
+const search = async (empty?: boolean) => {
   if( Object.values(inputValue).every((v) => !(String(v).length > 0)) ) {
-    searchResponse.value = property.s$prefetch
-      ? await store.custom('getAll', {}, { fullResponse: true })
-      : []
+    if( empty ) {
+      searchResponse.value = await store.custom('getAll', {}, { fullResponse: true })
+    }
 
     return
   }
@@ -115,11 +117,7 @@ onMounted(async () => {
   }
 })
 
-const debounce = useDebounce({
-  delay: 800,
-})
-
-const [doLazySearch] = debounce(() => {
+const [doLazySearch] = useDebounce({ delay: 800 })(() => {
   search()
   isTyping.value = false
 })
@@ -128,6 +126,20 @@ const lazySearch = () => {
   isTyping.value = true
   doLazySearch()
 }
+
+const clearResponse = () => {
+  if( props.modelValue && (props.modelValue.length || props.modelValue._id) ) {
+    selectClick.value = false
+    return
+  }
+
+  selectClick.value = false
+  searchResponse.value = {
+    result: []
+  }
+}
+
+const [lazyClearResponse] = useDebounce({ delay: 800 })(clearResponse)
 </script>
 
 <template>
@@ -153,6 +165,11 @@ const lazySearch = () => {
         layout: store.formLayout,
         searchOnly: true
       }"
+
+      :focus="selectClick"
+
+      @focusin="search(true)"
+      @focusout="lazyClearResponse"
       @input="lazySearch"
     ></sv-form>
 

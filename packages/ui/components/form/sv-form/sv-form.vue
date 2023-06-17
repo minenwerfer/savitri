@@ -35,6 +35,7 @@ type Props = {
   omitInputLabels?: boolean
   validationErrors?: Record<string, any>|null
   highlightRequired?: boolean
+  focus?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -359,6 +360,9 @@ const unfilled = (value: any) => {
               || layout?.$default?.optionsColumns,
             ...(property.s$componentProps || {})
           }"
+
+          v-focus="index === 0 && focus"
+          :key="focus"
 
           @input="emit('input', key)"
           @change="emit('change', $event)"

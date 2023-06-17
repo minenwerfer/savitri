@@ -1,10 +1,8 @@
 import { Directive } from 'vue'
 
-const focus: Directive = {
-  mounted(el, binding) {
-    if( binding.value ) {
-      el.focus()
-    }
+const focus: Directive = (el, binding) => {
+  if( binding.value ) {
+    el.focus()
   }
 }
 
