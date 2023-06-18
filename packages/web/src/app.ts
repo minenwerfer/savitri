@@ -129,9 +129,13 @@ export const useApp = (config: AppOptions): Promise<{
     try {
       await metaStore.describeAll()
     } catch( e ) {
-      setTimeout(() => {
+      if( e instanceof TypeError ) {
+        setTimeout(() => {
+          location.reload()
+        }, 10000)
+      } else {
         location.reload()
-      }, 10000)
+      }
     }
   }
 
