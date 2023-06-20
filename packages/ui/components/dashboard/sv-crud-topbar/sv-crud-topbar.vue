@@ -3,7 +3,6 @@ import { computed, watch } from 'vue'
 import type { FiltersPreset } from '@semantic-api/types'
 import { useRouter, useParentStore } from '@savitri/web'
 import SvTabs from '../../sv-tabs/sv-tabs.vue'
-import SvButton from '../../sv-button/sv-button.vue'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 
 type Props = {

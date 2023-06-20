@@ -23,6 +23,7 @@ type LayoutConfig = {
 
 type Props = {
   form?: Record<string, CollectionProperty>
+  property?: CollectionProperty
   formData?: Record<string, any>
   collection?: string
   isReadOnly?: boolean
@@ -56,7 +57,10 @@ onBeforeMount(() => {
   }
 })
 
-const collectionName = props.collection || inject('storeId', null)
+const collectionName = !props.property
+  ? props.collection || inject('storeId', null)
+  : null
+
 const store = collectionName
   ? useStore(collectionName.value||collectionName)
   : null
@@ -67,6 +71,8 @@ if( !collectionName && process.env.NODE_ENV !== 'production' ) {
     collection prop, some features may not work as intended`
   )
 }
+
+const form = computed<Props['form']>(() => props.property?.properties || props.form)
 
 const passAhead = <T extends keyof Props, P extends Props[T]>(propName: T): P => {
   const value = inject<P>(propName, props[propName] as P)
@@ -91,11 +97,11 @@ provide('searchOnly', props.searchOnly||false)
 provide('inputBordered', inject('inputBordered', true))
 
 const filterProperties = (condition: (f: any) => boolean): Array<[string, CollectionProperty]>|null => {
-  if( !props.form ) {
+  if( !form.value ) {
     return
   }
 
-  return Object.entries(props.form).reduce((a: Array<any>, [key, property]) => {
+  return Object.entries(form.value).reduce((a: Array<any>, [key, property]) => {
     if(
       !(property
         && (!property.s$meta || props.searchOnly)
@@ -189,7 +195,6 @@ const unfilled = (value: any) => {
 
 <template>
   <form
-    v-if="formData"
     class="form"
     :style="`row-gap: ${omitFormHeader ? '.8rem' : '2rem'};`"
   >
@@ -319,6 +324,7 @@ const unfilled = (value: any) => {
                     ...property.items
                   },
                   value: value,
+                  formData: formData[key][listIndex],
                   propertyName: key,
                   parentCollection: collectionName,
                   columns: layout?.[key]?.optionsColumns
@@ -374,7 +380,8 @@ const unfilled = (value: any) => {
             parentCollection: collectionName,
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns,
-            ...(property.s$componentProps || {})
+            ...(property.s$componentProps || {}),
+            formData: formData[key],
           }"
 
           v-focus="index === 0 && focus"

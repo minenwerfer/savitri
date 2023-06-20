@@ -94,6 +94,7 @@ watch([page, limit], ([newPage, newLimit]: [number, number]) => {
       </sv-bare-button>
       <div class="pagination__page-input">
         <sv-input
+          bordered
           v-model="pageInput"
           :key="page"
           :property="{

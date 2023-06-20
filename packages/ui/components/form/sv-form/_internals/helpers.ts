@@ -8,11 +8,12 @@ import SvSwitch from '../../sv-switch/sv-switch.vue'
 import SvSelect from '../../sv-select/sv-select.vue'
 import SvFile from '../../sv-file/sv-file.vue'
 import SvSearch from '../../sv-search/sv-search.vue'
+import SvForm from '../../sv-form/sv-form.vue'
 
 export const getComponent = (property: CollectionProperty, customComponents: Record<string, any>) => {
-  const propType = property.type === 'array'
-    ? property.items?.type
-    : property.type
+  const nestedProp = property.type === 'array'
+    ? property.items
+    : property
 
   // strangely enough this won't work if placed outside function
   const defaultComponents = {
@@ -21,23 +22,26 @@ export const getComponent = (property: CollectionProperty, customComponents: Rec
     switch: SvSwitch,
     file: SvFile,
     search: SvSearch,
-    input: SvInput
+    input: SvInput,
+    form: SvForm
   }
 
   const mappedComponentType = (() => {
     switch( true ) {
       case ['checkbox', 'radio'].includes(property.s$element!):
         return 'options'
-      case property.s$element === 'select':
+      case nestedProp.s$element === 'select':
         return 'select'
-      case propType === 'boolean':
+      case nestedProp.type === 'boolean':
         return 'switch'
       case property.s$referencedCollection === 'file':
         return 'file'
       case property.s$isReference:
         return 'search'
-      case !!property.enum:
+      case !!nestedProp.enum:
         return 'select'
+      case nestedProp.type === 'object':
+        return 'form'
 
       default:
         return 'input'
@@ -53,13 +57,18 @@ export const getComponent = (property: CollectionProperty, customComponents: Rec
 
 export const pushToArray = (modelValue: Array<any>, property: CollectionProperty) => {
   modelValue ??= []
+  const propType = property.items?.type || property.type
   if( property.s$isReference ) {
     const helperStore = useStore(property.s$referencedCollection!)
     const newVal = deepClone(helperStore.$freshItem)
     return modelValue.push(newVal)
   }
 
-  modelValue.push(null)
+  if( propType === 'object' ) {
+    return modelValue.push({})
+  }
+
+  return modelValue.push(null)
 }
 
 export const spliceFromArray = (modelValue: Array<any>, index: number) => {
