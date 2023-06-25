@@ -292,7 +292,7 @@ provide('parentStore', parentStore)
       )"
       class="crud__controls"
     >
-      <div v-if="store.description.search?.active" style="width: 100%">
+      <div v-if="store.description.search?.active" style="flex: 1;">
         <sv-input
           v-model="queryString"
           v-bind="{
