@@ -5,7 +5,7 @@ import SvIcon from '../sv-icon/sv-icon.vue'
 // #region props
 type Props = {
   closeHint?: boolean
-  visible?: boolean|string
+  visible?: any
   title?: string
   float?: boolean
   fixedRight?: boolean
