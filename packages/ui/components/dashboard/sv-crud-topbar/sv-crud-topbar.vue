@@ -34,7 +34,6 @@ const togglePreset = (presetName: string, preset?: FiltersPreset) => {
     store.filtersPreset = preset?.filters || {}
     store.preferredTableProperties = preset?.table || []
     store.pagination.offset = 0
-    router.push({ hash: presetName ? `#${presetName}` : '' })
   })(store)
 }
 
@@ -43,13 +42,12 @@ watch(route, (currRoute, prevRoute) => {
     return
   }
 
-  const { hash: newHash } = currRoute
+  const { query: { preset: currPreset } } = currRoute
 
   return (({ value: store }) => {
     if( store.description.filtersPresets ) {
-      if( newHash ) {
-        const presetName = newHash.slice(1)
-        togglePreset(presetName, store.description.filtersPresets[presetName])
+      if( currPreset ) {
+        togglePreset(currPreset, store.description.filtersPresets[currPreset])
         return
       }
 
@@ -64,38 +62,37 @@ watch(route, (currRoute, prevRoute) => {
     v-if="store && Object.keys(store.description.filtersPresets||{}).length > 0"
     class="topbar"
   >
-    <sv-tabs v-if="store?.description.filtersPresets">
-      <div
-        v-clickable
-        :data-current="!route.hash"
-        @click="togglePreset('')"
-      >
-        {{ $t('all') }}
-      </div>
-      <div
-        v-clickable
+    <sv-tabs
+      v-if="store?.description.filtersPresets"
+      query="section"
+    >
+      <template #all>
+        <div @click="togglePreset('')">
+          {{ $t('all') }}
+        </div>
+      </template>
+      <template
         v-for="([presetName, preset]) in Object.entries(store.description.filtersPresets)"
-        :key="`filter-preset-${presetName}`"
-
-        :data-current="route.hash === `#${presetName}`"
-        @click="togglePreset(presetName, preset)"
+        v-slot:[presetName]
       >
-        <sv-icon
-          v-if="preset.icon"
-          small
-          :name="preset.icon"
-        >
-          {{ preset.name || $tc(presetName, 2) }}
-        </sv-icon>
-        <span v-else>{{ preset.name || $tc(presetName, 2) }}</span>
-        <span v-if="preset.badgeFunction">
-          ({{
-            store.customGetter[preset.badgeFunction](presetName, {
-              filters: preset.filters
-            })
-          }})
-        </span>
-      </div>
+        <div @click="togglePreset(presetName, preset)">
+          <sv-icon
+            small
+            v-if="preset.icon"
+            :name="preset.icon"
+          >
+            {{ preset.name || $tc(presetName, 2) }}
+          </sv-icon>
+          <span v-else>{{ preset.name || $tc(presetName, 2) }}</span>
+          <span v-if="preset.badgeFunction">
+            ({{
+              store.customGetter[preset.badgeFunction](presetName, {
+                filters: preset.filters
+              })
+            }})
+          </span>
+        </div>
+      </template>
     </sv-tabs>
   </div>
 </template>
