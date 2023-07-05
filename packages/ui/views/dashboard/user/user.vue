@@ -50,7 +50,7 @@ const insertExtra = async () => {
     close-hint
     fixed-right
     title="Detalhes"
-    v-model:visible="extraPanel"
+    v-model="extraPanel"
     @overlay-click="extraPanel = false"
   >
     <sv-form

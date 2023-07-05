@@ -5,14 +5,10 @@ export default {
 </script>
 
 <script setup lang="ts">
-import type { CollectionProperty } from '@semantic-api/types'
+import type { FormFieldProps } from '../types'
 import { computed } from 'vue'
 
-type Props = {
-  modelValue: any
-  property?: CollectionProperty
-  propertyName?: string
-}
+type Props = FormFieldProps<any>
 
 type Emits = {
   (e: 'update:modelValue' | 'change', value: boolean): void
@@ -61,3 +57,13 @@ const toggle = () => {
 </template>
 
 <style scoped src="./sv-switch.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-switch></sv-switch>
+</template>
+```
+</docs>

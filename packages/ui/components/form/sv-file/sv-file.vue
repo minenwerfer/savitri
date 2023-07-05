@@ -1,14 +1,11 @@
 <script setup lang="ts">
+import type { FormFieldProps } from '../types'
 import { provide, ref, computed } from 'vue'
-import type { CollectionProperty } from '@semantic-api/types'
 import { useParentStore } from '@savitri/web'
 import SvPicture from '../../sv-picture/sv-picture.vue'
 import SvButton from '../../sv-button/sv-button.vue'
 
-type Props = {
-  modelValue: any
-  property: CollectionProperty
-  propertyName?: string
+type Props = FormFieldProps<any> & {
   meta?: Record<string, any>
 }
 
@@ -132,3 +129,13 @@ const remove = async () => {
 </template>
 
 <style scoped src="./sv-file.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-file></sv-file>
+</template>
+```
+</docs>

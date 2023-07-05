@@ -5,7 +5,7 @@ import SvIcon from '../sv-icon/sv-icon.vue'
 // #region props
 type Props = {
   closeHint?: boolean
-  visible?: any
+  modelValue?: any
   title?: string
   float?: boolean
   fixedRight?: boolean
@@ -25,12 +25,12 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
   collapsable: false,
   closeHint: false,
-  visible: true,
+  modelValue: true,
 })
 
 const emit = defineEmits<{
   (e:
-    'update:visible'
+    'update:modelValue'
     | 'update:collapsed'
     | 'update:closeHint',
     value: boolean
@@ -61,7 +61,7 @@ watch(() => body.value, (bodyElem) => {
 })
 
 const close = () => {
-  emit('update:visible', false)
+  emit('update:modelValue', false)
   emit('close')
 }
 
@@ -77,7 +77,7 @@ const toggleCollapsed = (value: boolean) => {
 
 <template>
   <div
-    v-if="visible"
+    v-if="modelValue"
     v-overlay="{
       condition: overlay || fixedRight || isFloating,
       invisible: invisibleOverlay,
@@ -168,3 +168,24 @@ const toggleCollapsed = (value: boolean) => {
 </template>
 
 <style scoped src="./sv-box.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<script setup lang="ts">
+const panelVisible = ref(false)
+</script>
+
+<template>
+  <sv-box
+    float
+    close-hint
+    title="Example"
+    v-model="panelVisible"
+  >
+    This is an example
+  </sv-box>
+</template>
+```
+</docs>

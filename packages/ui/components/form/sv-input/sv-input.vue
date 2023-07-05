@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { FormFieldProps } from '../types'
 import { ref, inject, watch } from 'vue'
 import { maska as vMaska } from 'maska'
-import type { CollectionProperty } from '@semantic-api/types'
 import { useClipboard } from '@savitri/web'
+
 import SvInfo from '../../sv-info/sv-info.vue'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 
@@ -13,16 +14,13 @@ type InputVariant =
   | 'bold'
   | 'light'
 
-type Props = {
-  modelValue: InputType
-  property: CollectionProperty
-  propertyName?: string
+type Props = FormFieldProps<InputType> & {
   variant?: InputVariant
   bordered?: boolean
 }
 
 const props = defineProps<Props>()
-const property = props.property||{} as CollectionProperty
+const property = props.property||{} as Props['property']
 const bordered = props.bordered || inject('inputBordered', false)
 
 const searchOnly = inject('searchOnly', false)
@@ -239,3 +237,13 @@ export default {
 </script>
 
 <style scoped src="./sv-input.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-input></sv-input>
+</template>
+```
+</docs>

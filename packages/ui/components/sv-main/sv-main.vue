@@ -32,7 +32,7 @@ bootstrapRoutes()
     <slot></slot>
 
     <sv-modal
-      v-model:visible="metaStore.modal.visible"
+      v-model="metaStore.modal.visible"
       v-bind="metaStore.modal"
     >
       <div
@@ -71,3 +71,13 @@ bootstrapRoutes()
 </template>
 
 <style scoped src="./sv-main.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-main></sv-main>
+</template>
+```
+</docs>

@@ -50,7 +50,7 @@ const update = () => {
   })
 }
 
-watch([page, limit], ([newPage, newLimit]: [number, number]) => {
+watch([page, limit], ([newPage]: [number, number]) => {
   pageInput.value = newPage + 1
   update()
   

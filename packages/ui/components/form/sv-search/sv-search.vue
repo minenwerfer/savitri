@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CollectionProperty } from '@semantic-api/types'
+import type { FormFieldProps } from '../types'
 import {
   onMounted,
   provide,
@@ -10,7 +12,6 @@ import {
 
 } from 'vue'
 
-import type { CollectionProperty } from '@semantic-api/types'
 import { useStore, useDebounce } from '@savitri/web'
 import SvIcon from '../../sv-icon/sv-icon.vue'
 import SvForm from '../sv-form/sv-form.vue'
@@ -18,14 +19,11 @@ import SvForm from '../sv-form/sv-form.vue'
 import SvSearchSelected from './_internals/components/sv-search-selected/sv-search-selected.vue'
 import SvSearchItem from './_internals/components/sv-search-item/sv-search-item.vue'
 
-type Props = {
-  modelValue: any
+type Props = Omit<FormFieldProps<any>, 'property'> & {
   property: CollectionProperty & NonNullable<{
     s$isReference: CollectionProperty['s$isReference']
     s$referencedCollection: CollectionProperty['s$referencedCollection']
   }>
-  propertyName?: string
-  parentCollection?: string
   searchOnly?: boolean
 }
 
@@ -252,3 +250,13 @@ cancelClearResponse = cancel_
 </template>
 
 <style scoped src="./sv-search.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-search></sv-search>
+</template>
+```
+</docs>

@@ -84,7 +84,7 @@ const signout = async () => {
     float
     close-hint
     title="Editar perfil"
-    v-model:visible="editPanel"
+    v-model="editPanel"
     @overlay-click="editPanel = false"
   >
     <sv-form

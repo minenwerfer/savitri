@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import type { CollectionProperty } from '@semantic-api/types'
+import type { FormFieldProps } from '../types'
 import { ref, computed } from 'vue'
 
-type Props = {
-  modelValue: any
-  property?: CollectionProperty
-  propertyName?: string
+type Props = FormFieldProps<any> & {
   booleanRef?: boolean
 }
 
@@ -73,3 +70,13 @@ export default {
 </script>
 
 <style scoped src="./sv-select.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-select></sv-select>
+</template>
+```
+</docs>

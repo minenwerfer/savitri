@@ -65,7 +65,7 @@ watch(() => store.item._id, (_id) => {
 <template>
   <sv-box
     fixed-right
-    v-model:visible="isInsertVisible"
+    v-model="isInsertVisible"
     @overlay-click="cancel"
   >
     <template #header>

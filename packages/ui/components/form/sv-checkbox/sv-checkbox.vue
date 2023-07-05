@@ -5,14 +5,11 @@ export default {
 </script>
 
 <script setup lang="ts">
+import type { FormFieldProps } from '../types'
 import { computed, ref } from 'vue'
-import type { CollectionProperty } from '@semantic-api/types'
 
-type Props = {
+type Props = FormFieldProps<any> & {
   value?: any
-  modelValue: any
-  property: CollectionProperty
-  propertyName?: string
   variant?: string
 }
 
@@ -106,3 +103,13 @@ const bindVal = computed({
 </template>
 
 <style scoped src="./sv-checkbox.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-checkbox></sv-checkbox>
+</template>
+```
+</docs>

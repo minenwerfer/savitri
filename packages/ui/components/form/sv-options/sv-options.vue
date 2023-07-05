@@ -1,12 +1,9 @@
 <script setup lang="ts">
+import type { FormFieldProps } from '../types'
 import { computed } from 'vue'
-import type { CollectionProperty } from '@semantic-api/types'
 import SvCheckbox from '../sv-checkbox/sv-checkbox.vue'
 
-type Props = {
-  modelValue: any
-  property: CollectionProperty
-  propertyName?: string
+type Props = FormFieldProps<any> & {
   columns?: number
 }
 
@@ -62,3 +59,13 @@ export default {
 </script>
 
 <style scoped src="./sv-options.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-options></sv-options>
+</template>
+```
+</docs>

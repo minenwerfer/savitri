@@ -256,7 +256,7 @@ provide('parentStore', parentStore)
 <template>
   <sv-filter-panel
     v-if="isFilterVisible"
-    v-model:visible="isFilterVisible"
+    v-model="isFilterVisible"
     :key="store.$id"
   ></sv-filter-panel>
 
@@ -452,3 +452,13 @@ provide('parentStore', parentStore)
 </template>
 
 <style scoped src="./sv-crud.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-crud collection="user"></sv-crud>
+</template>
+```
+</docs>

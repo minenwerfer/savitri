@@ -106,3 +106,13 @@ const expand = ref(false)
 </template>
 
 <style scoped src="./sv-picture.scss"></style>
+
+<docs>
+## Example
+
+```vue
+<template>
+  <sv-picture expandable url="/static/image.svg"></sv-picture>
+</template>
+```
+</docs>
