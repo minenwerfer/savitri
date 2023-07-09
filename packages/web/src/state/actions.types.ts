@@ -1,12 +1,11 @@
 import type { CollectionProperty } from '@semantic-api/types'
-import type { Projection } from '@semantic-api/api'
 import type { CollectionStore, CollectionState } from '..//types/state'
 
 type CrudParameters = {
   filters: Record<string, any>
   limit: number
   offset: number
-  project?: Projection<any>
+  project?: string[]|Record<string, 1|-1>
 }
 
 type ActionFilter = Partial<CrudParameters>

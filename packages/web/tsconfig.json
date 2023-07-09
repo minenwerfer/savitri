@@ -16,9 +16,6 @@
       "vite/client"
     ],
     "paths": {
-      "@semantic-api/api": [
-        "./node_modules/@semantic-api/api/cjs"
-      ],
       "@semantic-api/common": [
         "./node_modules/@semantic-api/common/cjs"
       ],

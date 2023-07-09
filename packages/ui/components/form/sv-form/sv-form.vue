@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onBeforeMount, computed, provide, inject } from 'vue'
 import type { CollectionProperty, Condition } from '@semantic-api/types'
+import type { FormFieldProps } from '../types'
+import { onBeforeMount, computed, provide, inject } from 'vue'
 import { useStore, useCondition } from '@savitri/web'
 
 import SvIcon from '../../sv-icon/sv-icon.vue'
@@ -21,9 +22,8 @@ type LayoutConfig = {
   }
 }
 
-type Props = {
+type Props = FormFieldProps<any> & {
   form?: Record<string, CollectionProperty>
-  property?: CollectionProperty
   formData?: Record<string, any>
   collection?: string
   isReadOnly?: boolean
