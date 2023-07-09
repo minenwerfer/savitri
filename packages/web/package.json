@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -p tsconfig.json --watch",
     "prepublishOnly": "npm run build",
-    "postinstall": "node dist/esm/install.js"
+    "postinstall": "node dist/esm/__scripts__/postinstall.js"
   },
   "repository": {
     "type": "git",
