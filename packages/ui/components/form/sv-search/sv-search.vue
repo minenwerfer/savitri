@@ -250,13 +250,3 @@ cancelClearResponse = cancel_
 </template>
 
 <style scoped src="./sv-search.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-search></sv-search>
-</template>
-```
-</docs>

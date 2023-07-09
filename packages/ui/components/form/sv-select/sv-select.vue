@@ -70,13 +70,3 @@ export default {
 </script>
 
 <style scoped src="./sv-select.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-select></sv-select>
-</template>
-```
-</docs>

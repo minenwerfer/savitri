@@ -237,13 +237,3 @@ export default {
 </script>
 
 <style scoped src="./sv-input.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-input></sv-input>
-</template>
-```
-</docs>

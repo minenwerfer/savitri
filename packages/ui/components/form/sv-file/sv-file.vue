@@ -129,13 +129,3 @@ const remove = async () => {
 </template>
 
 <style scoped src="./sv-file.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-file></sv-file>
-</template>
-```
-</docs>

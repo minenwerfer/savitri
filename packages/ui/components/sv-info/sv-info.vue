@@ -38,19 +38,3 @@ const where = props.where || 'top'
 </template>
 
 <style scoped src="./sv-info.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-info>
-    <template #text>
-      This text will show when you hover
-    </template>
-
-    <div>Hover to see more info</div>
-  </sv-info>
-</template>
-```
-</docs>

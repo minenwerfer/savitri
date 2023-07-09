@@ -57,13 +57,3 @@ const toggle = () => {
 </template>
 
 <style scoped src="./sv-switch.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-switch></sv-switch>
-</template>
-```
-</docs>

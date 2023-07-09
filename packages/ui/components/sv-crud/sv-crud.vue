@@ -452,13 +452,3 @@ provide('parentStore', parentStore)
 </template>
 
 <style scoped src="./sv-crud.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-crud collection="user"></sv-crud>
-</template>
-```
-</docs>

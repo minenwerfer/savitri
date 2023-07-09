@@ -59,13 +59,3 @@ export default {
 </script>
 
 <style scoped src="./sv-options.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-options></sv-options>
-</template>
-```
-</docs>

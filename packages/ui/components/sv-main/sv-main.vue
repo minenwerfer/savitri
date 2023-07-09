@@ -71,13 +71,3 @@ bootstrapRoutes()
 </template>
 
 <style scoped src="./sv-main.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-main></sv-main>
-</template>
-```
-</docs>

@@ -69,13 +69,3 @@ const reactive = typeof props.reactive === 'boolean'
 </template>
 
 <style scoped src="./sv-icon.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-icon reactive name="user-circle"></sv-icon>
-</template>
-```
-</docs>

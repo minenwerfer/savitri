@@ -32,22 +32,3 @@ const onClick = (event: any) => {
 </template>
 
 <style scoped src="./sv-bare-button.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<script setup lang="ts">
-const count = ref(0)
-</script>
-
-<template>
-  <sv-bare-button
-    disabled
-    @click="count += 1"
-  >
-    {{ count }}
-  </sv-bare-button>
-</template>
-```
-</docs>

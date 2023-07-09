@@ -103,13 +103,3 @@ const bindVal = computed({
 </template>
 
 <style scoped src="./sv-checkbox.scss"></style>
-
-<docs>
-## Example
-
-```vue
-<template>
-  <sv-checkbox></sv-checkbox>
-</template>
-```
-</docs>
