@@ -17,16 +17,19 @@
     ],
     "paths": {
       "@semantic-api/common": [
-        "./node_modules/@semantic-api/common/cjs"
+        "./node_modules/@semantic-api/common/dist"
       ],
       "@semantic-api/common/*": [
-        "./node_modules/@semantic-api/common/cjs/*"
+        "./node_modules/@semantic-api/common/dist/*"
       ],
       "@semantic-api/types": [
-        "./node_modules/@semantic-api/types/cjs"
+        "./node_modules/@semantic-api/types/dist"
       ],
-      "@semantic-api/system/resources/*": [
-        "./node_modules/@semantic-api/system/cjs/resources/*"
+      "@semantic-api/types/*": [
+        "./node_modules/@semantic-api/types/dist/*"
+      ],
+      "@semantic-api/system": [
+        "./node_modules/@semantic-api/system/dist"
       ]
     }
   }

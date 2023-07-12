@@ -53,8 +53,8 @@ export const normalizeActions = (actions: CollectionActions) => Object.entries(a
   ]
 }, [])
 
-export const normalizeFilters = (filters: Array<any>) => {
-  return filters.reduce((a, b) => {
+export const normalizeFilters = (filters: Description['filters']) => {
+  return filters?.reduce((a, b) => {
     const filter = typeof b !== 'string'
       ? { [b.property]: b.default||'' }
       : { [b]: '' }
@@ -63,7 +63,7 @@ export const normalizeFilters = (filters: Array<any>) => {
         ...a,
         ...filter
       }
-  }, {})
+  }, {}) || {}
 }
 
 export const freshItem = (description: Description) => {

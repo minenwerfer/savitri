@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { PAGINATION_PER_PAGE_DEFAULTS } from '@semantic-api/types'
-import { useParentStore } from '@savitri/web'
+import { useParentStore, PAGINATION_PER_PAGE_DEFAULTS } from '@savitri/web'
 
 import SvBareButton from '../sv-bare-button/sv-bare-button.vue'
 import SvIcon from '../sv-icon/sv-icon.vue'

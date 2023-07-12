@@ -1,5 +1,5 @@
 import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
-import type { CollectionStore, CollectionState } from '..//types/state'
+import type { CollectionStore, CollectionState } from '../types/state'
 import { deepClone, deepMerge } from '@semantic-api/common'
 import { deepDiff } from './helpers'
 import { useStore } from './use'

@@ -32,7 +32,7 @@ export default defineConfig(async () => {
         async preEmit() {
           const paths = [
             process.cwd() + '/../api/dist/resources/collections',
-            process.cwd() + '/../api/node_modules/@semantic-api/system/cjs/resources/collections',
+            process.cwd() + '/../api/node_modules/@semantic-api/system/dist/collections',
             // process.cwd() + '/../api/node_modules/@semantic-api/api/cjs/presets',
           ]
 
@@ -100,7 +100,9 @@ export default defineConfig(async () => {
     ],
     optimizeDeps: {
       include: [
-        'bson'
+        'bson',
+        '@semantic-api/types',
+        '@semantic-api/common'
       ],
       exclude: [
         'vue-router'
