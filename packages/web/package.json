@@ -1,11 +1,11 @@
 {
   "name": "@savitri/web",
   "type": "module",
-  "version": "1.2.45",
+  "version": "1.2.46",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p tsconfig.json",
-    "watch": "tsc -p tsconfig.json --watch",
+    "build": "tsc",
+    "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
     "postinstall": "node dist/esm/__scripts__/postinstall.js"
   },

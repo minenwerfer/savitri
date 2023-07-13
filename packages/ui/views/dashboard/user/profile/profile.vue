@@ -60,6 +60,11 @@ const signout = async () => {
         </sv-icon>
 
         <menu class="profile__menu">
+          <slot
+            v-if="$slots['user-profile-menu']"
+            name="user-profile-menu"
+          ></slot>
+
           <sv-icon
             v-clickable
             name="key-skeleton"
@@ -77,8 +82,12 @@ const signout = async () => {
         </menu>
       </template>
     </sv-picture>
-
   </div>
+
+  <slot
+    v-if="$slots['user-profile']"
+    name="user-profile"
+  ></slot>
 
   <sv-box
     float

@@ -45,6 +45,7 @@ import {
 type Props = {
   collection: string
   noControls?: boolean
+  noActions?: boolean
   noFetch?: boolean
   noRefresh?: boolean
   noLayoutToggle?: boolean
@@ -281,7 +282,8 @@ provide('parentStore', parentStore)
 
   <div class="crud__main">
     <div
-      v-if="store.description.search?.active
+      v-if="!noActions && (
+        store.description.search?.active
         || !noRefresh
         || (store && Object.keys(store.availableFilters).length > 0)
         || (store?.actions.length > 0 || $slots.actions)
@@ -289,6 +291,7 @@ provide('parentStore', parentStore)
           !noLayoutToggle && store
           && store.description.layout
           && store.description.layout?.name !== 'tabular'
+      )
       )"
       class="crud__controls"
     >
@@ -380,7 +383,11 @@ provide('parentStore', parentStore)
         >
           {{ $t(actionProps.name) }}
         </sv-button>
-        <slot v-if="$slots.actions" name="actions"></slot>
+
+        <slot
+          v-if="$slots.actions"
+          name="actions"
+        ></slot>
       </div>
     </div>
 

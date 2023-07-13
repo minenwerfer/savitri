@@ -84,6 +84,7 @@ watch(() => store.item._id, (_id) => {
       </span>
       <span>&nbsp;{{ $t(metaStore.view.collection) }}</span>
     </template>
+
     <sv-form
       v-bind="{
         collection: metaStore.view.collection,
