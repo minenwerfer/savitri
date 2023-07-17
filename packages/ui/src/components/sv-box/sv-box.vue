@@ -13,7 +13,7 @@ type Props = {
   overlay?: boolean
   invisibleOverlay?: boolean
   collapsed?: boolean
-  collapsable?: boolean
+  collapsible?: boolean
   fullWidth?: boolean
   fill?: boolean
   transparent?: boolean
@@ -23,7 +23,7 @@ type Props = {
 // #endregion props
 
 const props = withDefaults(defineProps<Props>(), {
-  collapsable: false,
+  collapsible: false,
   closeHint: false,
   modelValue: true,
 })
@@ -125,7 +125,7 @@ const toggleCollapsed = (value: boolean) => {
 
         <sv-icon
           v-clickable
-          v-if="collapsable"
+          v-if="collapsible"
           reactive
           :name="!isCollapsed ? 'minus' : 'plus'"
           @click="toggleCollapsed(!isCollapsed)"

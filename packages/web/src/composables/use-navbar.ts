@@ -2,11 +2,6 @@ import { ref, computed, watch, } from 'vue'
 import { arraysIntersects } from '@semantic-api/common'
 import { useStore, useRouter, Route, MenuSchema } from '..'
 
-type SchemaNode = {
-  roles?: Array<string>
-  children?: Route
-}
-
 type Props = {
   entrypoint?: string
   schema: MenuSchema
@@ -22,7 +17,7 @@ export const useNavbar = async (props: Props) => {
   const userStore = useStore('user')
   const router = await useRouter()
 
-  const getSchema = (schema: any, routes: Array<Route>): Array<Route&SchemaNode> => {
+  const getSchema = (schema: MenuSchema | MenuSchema[string], routes: Array<Route>) => {
     if( !Array.isArray(schema) ) {
       return schema
     }
@@ -37,7 +32,7 @@ export const useNavbar = async (props: Props) => {
     })
   }
 
-  const getRoutes = (node?: SchemaNode): Array<Route> => {
+  const getRoutes = async (node?: MenuSchema): Promise<Array<Route>> => {
     const children = node?.children
     const routes: unknown = children || typeof entrypoint === 'string'
       ? router.getRoutes().filter((route: Route) => (route.name as string ||'').startsWith(`/${entrypoint}/`))
@@ -46,7 +41,7 @@ export const useNavbar = async (props: Props) => {
     const schema = getSchema(children || menuSchema, routes as Array<Route>)
     const entries: Record<string, Route> = {}
 
-    Object.entries(schema).forEach(([key, node]) => {
+    await Promise.all(Object.entries(schema).map(async ([key, node]) => {
       if( !node ) {
         return
       }
@@ -58,8 +53,16 @@ export const useNavbar = async (props: Props) => {
       } = node
 
       const roles = route?.meta?.roles || node.roles
-      if( roles && !arraysIntersects(userStore.$currentUser.roles, roles) ) {
-        return
+      if( roles ) {
+        if( typeof roles === 'function' ) {
+          if( !await roles(userStore.$currentUser.roles) ) {
+            return
+          }
+
+        }
+        else if( !arraysIntersects(userStore.$currentUser.roles, roles) ) {
+          return
+        }
       }
 
       entries[key] = route
@@ -68,9 +71,9 @@ export const useNavbar = async (props: Props) => {
       }
 
       if( children ) {
-        entries[key].children = getRoutes(node)
+        entries[key].children = await getRoutes(node)
       }
-    })
+    }))
 
     return Object.values(entries) as Array<Route>
   }
@@ -86,13 +89,13 @@ export const useNavbar = async (props: Props) => {
     return pathMatches || nameMatches
   }
 
-  const routes = ref<Array<Route>>(getRoutes())
+  const routes = ref<Array<Route>>(await getRoutes())
   const routesWithChildren = computed(() => (
     routes.value.filter((route) => route.children?.length! > 0)
   ))
 
-  watch(() => metaStore.descriptions, () => {
-    routes.value = getRoutes()
+  watch(() => metaStore.descriptions, async () => {
+    routes.value = await getRoutes()
   })
 
   return {

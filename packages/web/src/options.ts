@@ -1,10 +1,4 @@
-import type { App } from 'vue'
-import type { Router, RouteRecordRaw } from 'vue-router'
-
-export type Module = (config: {
-  app: App
-  router: Router
-}) => void;
+import type { RouteRecordRaw } from 'vue-router'
 
 export type MenuAdvancedChildren = {
   name: string
@@ -13,15 +7,17 @@ export type MenuAdvancedChildren = {
 }
 
 export type MenuSchema = Record<string, {
-  roles?: Array<string>
+  roles?: Array<string>|((role: Array<string>) => boolean|Promise<boolean>)
   children: Array<string|MenuAdvancedChildren>
 }>
+
 
 export type AppOptions = {
   component: any
   i18n?: any
   menuSchema?: MenuSchema
-  modules?: Array<Module>
   routes?: Array<RouteRecordRaw>
-  setup?: () => void
+  setup?: () => void|Promise<void>
 }
+
+export const defineOptions = <TAppOptions extends AppOptions>(options: TAppOptions) => options

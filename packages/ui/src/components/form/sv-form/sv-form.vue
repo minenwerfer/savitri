@@ -28,7 +28,9 @@ type Props = FormFieldProps<any> & {
   collection?: string
   isReadOnly?: boolean
   searchOnly?: boolean
-  layout?: Record<string, LayoutConfig>
+  layout?: {
+    fields: Record<string, LayoutConfig>
+  }
   strict?: boolean
   formComponents?: Record<string, any>
   propertyComponents?: Record<string, any>
@@ -145,7 +147,7 @@ const properties = filterProperties(([key, f]: [string, any]) => {
 
 const fieldStyle = (key:string, property: any) => {
   const style = []
-  const layout = props.layout?.[key] || props.layout?.$default
+  const layout = props.layout?.fields[key] || props.layout?.fields.$default
 
   if( !property ) {
     return

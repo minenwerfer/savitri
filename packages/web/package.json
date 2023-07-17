@@ -1,7 +1,7 @@
 {
   "name": "@savitri/web",
   "type": "module",
-  "version": "1.2.46",
+  "version": "1.2.49",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -25,12 +25,12 @@
     "@semantic-api/types": "latest",
     "@types/ramda": "^0.28.15",
     "maska": "^1.4.6",
-    "pinia": "^2.0.16",
+    "pinia": "^2.1.4",
     "ramda": "^0.28.0",
     "sass": "^1.55.0",
     "typescript": "^5.1.6",
     "unplugin-vue-router": "^0.5.5",
-    "vue": "^3.2.20",
+    "vue": "^3.3.4",
     "vue-demi": "^0.13.6",
     "vue-i18n": "^9.2.0-beta.16",
     "vue-inline-svg": "^3.1.0",

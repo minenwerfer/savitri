@@ -9,11 +9,11 @@ import { formatToString, daysAgo, getRelativeTimeFromNow } from '@semantic-api/c
 import { createI18n } from 'vue-i18n'
 import { routerInstance as createRouter } from './router'
 
-import type { Module, AppOptions } from './types'
+import type { AppOptions } from './options'
 import { useStore, useParentStore } from './state/use'
 import registerDirectives from './directives'
 
-export const useApp = (config: AppOptions): Promise<{
+export const useApp = (options: AppOptions): Promise<{
   app: App
   router: Router
   mount: () => any
@@ -24,7 +24,7 @@ export const useApp = (config: AppOptions): Promise<{
     menuSchema,
     routes
 
-  }: AppOptions = config
+  }: AppOptions = options
 
   const app = createApp(component)
   registerDirectives(app)
@@ -41,21 +41,12 @@ export const useApp = (config: AppOptions): Promise<{
     store: useStore
   }))
 
-  if( config.setup ) {
-    config.setup()
+  if( options.setup ) {
+    await options.setup()
   }
 
   const metaStore = useStore('meta')
   const userStore = useStore('user')
-
-  if( config.modules ) {
-    config.modules.forEach((module: Module) => {
-      module({
-        app,
-        router,
-      })
-    })
-  }
 
   app.use(router)
   app.use(i18n)

@@ -69,6 +69,16 @@ export default defineConfig(async () => {
               'useCondition',
               'useNavbar'
             ]
+          },
+          {
+            '@semantic-api/common': [
+              'error',
+              'ok',
+              'isError',
+              'isOk',
+              'unpack',
+              'unsafe'
+            ]
           }
         ]
       }),
