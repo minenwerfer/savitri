@@ -28,19 +28,15 @@ const collection = useCollection({
       try {
         return this.customEffect(
           'authenticate', payload,
-          async ({ user, extra, token: _token }: {
+          async ({ user, token: _token }: {
             user: User
-            extra: Record<string, any>
             token: { 
               type: 'Bearer'
               token: string
             }
           }) => {
             this.credentials = {}
-            this.currentUser = {
-              ...user,
-              extra
-            }
+            this.currentUser = user
 
             const {
               type: _tokenType,

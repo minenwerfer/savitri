@@ -11,9 +11,6 @@ const router = await useRouter()
 
 const metaStore = useStore('meta')
 const userStore = useStore('user')
-const userExtraStore = hasStore('userExtra')
-  ? useStore('userExtra')
-  : null
 
 const passwordPolicy = usePasswordPolicy()
 
@@ -43,10 +40,6 @@ const passwordError = computed(() => {
 
 const insert = async () => {
   userStore.item.password = password.password
-  if( userExtraStore ) {
-    userStore.item.extra = userExtraStore.item
-  }
-
   const user = await userStore.insert().catch(async (e) => {
     await userStore.errorPopup(e)
     router.back()
@@ -62,11 +55,6 @@ const insert = async () => {
 //      email,
 //      password: password.password
 //    })
-//  }
-
-//  if( userExtraStore ) {
-//    userExtraStore.item.owner = userId
-//    await userExtraStore.deepInsert()
 //  }
 
   await metaStore.spawnModal({
@@ -91,13 +79,11 @@ const insert = async () => {
   </div>
 
   <sv-form
-    v-if="userExtraStore && instanceVars.signupExtraProperties?.length !== 0"
+    v-if="instanceVars.signupExtraProperties?.length !== 0"
     v-bind="{
-      collection: 'userExtra',
-      formData: userExtraStore.item,
-      form: instanceVars.signupExtraProperties
-        ? userExtraStore.useProperties(instanceVars.signupExtraProperties)
-        : userExtraStore.usePropertiesExcept(['owner']),
+      collection: 'user',
+      formData: userStore.item,
+      form: userStore.useProperties(instanceVars.signupExtraProperties)
       validationErrors: userStore.validationErrors
     }"
   ></sv-form>

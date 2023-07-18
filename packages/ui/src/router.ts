@@ -79,19 +79,6 @@ const privateRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: 'c/user',
-        name: '/dashboard/user',
-        components: {
-          default: () => import('./views/dashboard/user/user.vue'),
-          topbar: () => import('./components/dashboard/sv-crud-topbar/sv-crud-topbar.vue')
-        },
-        meta: {
-          title: 'Usuários',
-          icon: 'user-circle',
-          collection: 'user'
-        }
-      },
-      {
         path: 'user',
         name: 'dashboard-user-group',
         meta: {
