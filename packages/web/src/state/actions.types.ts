@@ -41,8 +41,8 @@ interface ActionsAux {
   getAll(payload: ActionFilter, options?: ActionOptions): Promise<any>
   insert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
   deepInsert(payload?: { what: Item }, options?: ActionOptions): Promise<Item>
-  delete(payload: { filters?: Record<string, any>, _id?: ItemId }, options?: ActionOptions): Promise<Item>
-  deleteAll(payload: { filters?: Record<string, any>, _id?: ItemId }, options?: ActionOptions): Promise<Item>
+  remove(payload: { filters?: Record<string, any>, _id?: ItemId }, options?: ActionOptions): Promise<Item>
+  removeAll(payload: { filters?: Record<string, any>, _id?: ItemId }, options?: ActionOptions): Promise<Item>
   filter(props?: ActionFilter, options?: ActionOptions): Promise<any>
   updateItems(): Promise<any>
   clearFilters(): CollectionState<any>['freshFilters']

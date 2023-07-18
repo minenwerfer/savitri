@@ -255,9 +255,9 @@ const actionsAndMutations: Actions & Mutations = {
     }, options)
   },
 
-  async delete(payload, options?) {
+  async remove(payload, options?) {
     return this.customEffect(
-      'delete', {
+      'remove', {
         filters: {
           _id: payload.filters?._id || payload._id
         }
@@ -267,9 +267,9 @@ const actionsAndMutations: Actions & Mutations = {
     )
   },
 
-  async deleteAll(payload, options?) {
+  async removeAll(payload, options?) {
     return this.customEffect(
-      'deleteAll', {
+      'removeAll', {
         filters: {
           _id: payload.filters?._id || payload._id
         }
