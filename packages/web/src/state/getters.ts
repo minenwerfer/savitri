@@ -33,11 +33,11 @@ const getters: GettersFunctions = {
 
       userStore.$currentUser.roles.forEach((role: string) => {
         if( role in this._description.preferred! ) {
-          deepMerge(toMerge, this._description.preferred![role])
+          Object.assign(toMerge, deepMerge(toMerge, this._description.preferred![role]))
         }
       })
 
-      deepMerge(description, toMerge, { arrays: false })
+      Object.assign(description, deepMerge(description, toMerge, { arrays: false }))
       return description
     }
 
@@ -113,13 +113,7 @@ const getters: GettersFunctions = {
     }
 
     const ensureFulfillment = () => {
-      const keys = this.description.strict
-        ? Object.keys(this.properties)
-        : this.description.required
-
-      if( !keys ) {
-        return true
-      }
+      const keys = this.description.required || Object.keys(this.properties)
 
       return keys.every((k) => {
         const property = this.description.properties?.[k]!

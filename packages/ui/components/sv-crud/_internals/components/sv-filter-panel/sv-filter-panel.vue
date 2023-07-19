@@ -5,7 +5,7 @@ import SvForm from '../../../../form/sv-form/sv-form.vue'
 import SvButton from '../../../../sv-button/sv-button.vue'
 
 type Emits = {
-  (e: 'update:visible', value: boolean): void
+  (e: 'update:modelValue', value: boolean): void
 }
 
 const emit = defineEmits<Emits>()
@@ -14,7 +14,7 @@ const store = useParentStore()
 const filter = () => {
   store.pagination.offset = 0
   store.filter()
-  emit('update:visible', false)
+  emit('update:modelValue', false)
 }
 </script>
 
@@ -24,8 +24,8 @@ const filter = () => {
     fixed-right
     title="Filtrar por"
 
-    @close="emit('update:visible', false)"
-    @overlay-click="emit('update:visible', false)"
+    @close="emit('update:modelValue', false)"
+    @overlay-click="emit('update:modelValue', false)"
   >
     <sv-form
       v-bind="{

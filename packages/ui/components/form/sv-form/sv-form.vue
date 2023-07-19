@@ -147,7 +147,7 @@ const properties = filterProperties(([key, f]: [string, any]) => {
 
 const fieldStyle = (key:string, property: any) => {
   const style = []
-  const layout = props.layout?.fields[key] || props.layout?.fields.$default
+  const layout = props.layout?.fields?.[key] || props.layout?.fields?.$default
 
   if( !property ) {
     return

@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import type { RouteMeta } from './router'
 
 export type MenuAdvancedChildren = {
   name: string
@@ -6,7 +7,7 @@ export type MenuAdvancedChildren = {
   badgePayload?: any
 }
 
-export type MenuSchema = Record<string, {
+export type MenuSchema = Record<string, RouteMeta & {
   roles?: Array<string>|((role: Array<string>) => boolean|Promise<boolean>)
   children: Array<string|MenuAdvancedChildren>
 }>

@@ -102,13 +102,13 @@ const fetchItems = async () => {
 
 const emptyComponent = inject('emptyComponent')
 
-watch(router.currentRoute, () => {
+watch(router.currentRoute, async () => {
   metaStore.view.title = props.collection
   metaStore.view.collection = props.collection
   isInsertReadonly.value = false
 
   if( !props.noFetch /*&& (props.parentField || store.itemsCount === 0)*/ ) {
-    fetchItems()
+    await fetchItems()
   }
 }, {
   immediate: true,
