@@ -24,7 +24,7 @@ const collection = useCollection({
     }
   }),
   actions: {
-    authenticate(payload: Credentials) {
+    authenticate(payload: Credentials | { revalidate: true }) {
       try {
         return this.customEffect(
           'authenticate', payload,

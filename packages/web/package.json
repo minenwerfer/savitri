@@ -1,7 +1,7 @@
 {
   "name": "@savitri/web",
   "type": "module",
-  "version": "1.2.51",
+  "version": "1.2.52",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -14,7 +14,8 @@
     "url": ""
   },
   "exports": {
-    ".": "./dist/esm/index.js"
+    ".": "./dist/esm/index.js",
+    "./types": "./dist/esm/types/index.js"
   },
   "keywords": [],
   "author": "",

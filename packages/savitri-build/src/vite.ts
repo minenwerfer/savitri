@@ -4,9 +4,7 @@ import vueRouter from 'unplugin-vue-router/vite'
 import vueComponents from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
 import braun from 'braun/vite'
-
-import { scrapper } from 'braun/common'
-import { readdir, readFile } from 'fs/promises'
+import { icons } from 'braun/common'
 
 import sassData from './sassData.js'
 import { getInstanceConfig } from './instance'
@@ -30,22 +28,20 @@ export default defineConfig(async () => {
           '@savitri/ui'
         ],
         async preEmit() {
-          const paths = [
-            process.cwd() + '/../api/dist/resources/collections',
-            process.cwd() + '/../api/node_modules/@semantic-api/system/dist/collections',
-            // process.cwd() + '/../api/node_modules/@semantic-api/api/cjs/presets',
-          ]
+          process.env.SEMANTIC_API_SHALLOW_IMPORT = '1'
 
-          const scrap = scrapper({}, () => null, () => null)
+          const { collections: userCollections } = require(process.cwd() + '/../api/dist/collections')
+          const systemCollections = require(process.cwd() + '/../api/node_modules/@semantic-api/system/dist/collections')
 
-          for( const path of paths ) {
-            const dirs = await readdir(path)
-            for( const dir of dirs ) {
-              try {
-                const content = await readFile(`${path}/${dir}/${dir}.description.js`)
-                scrap(content.toString())
-              } catch( e ) {
-              }
+          const collections = {
+            ...systemCollections,
+            ...userCollections
+          }
+
+          for( const collectionName in collections ) {
+            const { icon } = await collections[collectionName]()
+            if( icon ) {
+              icons.add(icon)
             }
           }
         }

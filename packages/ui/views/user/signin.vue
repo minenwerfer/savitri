@@ -38,17 +38,11 @@ const authenticate = async () => {
     :form="{
       email: {
         type: 'string',
-        s$placeholder: 'E-mail',
         s$icon: 'user',
-        s$inputType: 'email',
-        s$noLabel: true
       },
       password: {
         type: 'string',
-        s$placeholder: 'Senha',
         s$icon: 'key-skeleton',
-        s$inputType: 'password',
-        s$noLabel: true
       }
     }"
   ></sv-form>

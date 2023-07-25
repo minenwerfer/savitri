@@ -83,7 +83,7 @@ const insert = async () => {
     v-bind="{
       collection: 'user',
       formData: userStore.item,
-      form: userStore.useProperties(instanceVars.signupExtraProperties)
+      form: userStore.useProperties(instanceVars.signupExtraProperties),
       validationErrors: userStore.validationErrors
     }"
   ></sv-form>

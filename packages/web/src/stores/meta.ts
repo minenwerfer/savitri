@@ -53,9 +53,9 @@ export default defineStore('meta', {
   }),
 
   actions: {
-    async describeAll() {
+    async describe(props: Parameters<ReturnType<typeof import('@semantic-api/system').algorithms.meta>['functions']['describe']>) {
       this.isLoading = true
-      const response = (await http('_/meta/describeAll'))?.data
+      const response = (await http('_/meta/describe', props))?.data
       const deserialized = deserialize(response)
 
       const descriptions: Record<CollectionName, Description> =

@@ -93,6 +93,7 @@ const formComponents = passAhead('formComponents')||{}
 const propertyComponents = passAhead('propertyComponents')||{}
 const omitFormHeader = passAhead('omitFormHeader')
 const omitInputLabels = passAhead('omitInputLabels')
+const innerInputLabel = passAhead('innerInputLabel')
 
 provide('storeId', collectionName)
 provide('searchOnly', props.searchOnly||false)
@@ -218,6 +219,7 @@ const unfilled = (value: any) => {
           (property.type !== 'boolean' || searchOnly)
             && !property.s$noLabel
             && !omitInputLabels
+            && !innerInputLabel
         ">
           <div :class="{
             'form__field-label': true,
