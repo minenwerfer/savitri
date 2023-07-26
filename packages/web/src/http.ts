@@ -1,8 +1,11 @@
 import { request } from '@semantic-api/common'
-import { SV_API_URL } from '@semantic-api/types'
 import { useStore } from './state/use'
 
-const API_URL = import.meta.env.VITE_SAVITRI_API_URL || SV_API_URL
+export const SV_API_URL = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:3000/api'
+  : '/api'
+
+export const API_URL = import.meta.env.VITE_SAVITRI_API_URL || SV_API_URL
 
 export const useHttp = () => {
   return {

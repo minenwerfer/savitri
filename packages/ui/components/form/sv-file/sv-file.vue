@@ -55,7 +55,7 @@ const clearPreview = () => {
 
 const insert = async () => {
   const file = await readFile(preview.value)
-  const result = await store.functions.upload({
+  const { result } = await store.functions.upload({
     parentId: store.item._id,
     propertyName: props.propertyName,
     what: {

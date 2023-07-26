@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import type { CollectionActions, Description } from '@semantic-api/types'
 
 const isObject = (property: any) =>
@@ -17,7 +16,7 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
       }
     }
 
-    if( R.is(Object, value) && R.isEmpty(value) ) {
+    if( value instanceof Object && !Object.keys(value).length ) {
       return a
     }
 
@@ -117,67 +116,3 @@ export const freshFilters = (description: Description) => {
     }, {})
 }
 
-
-export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, preserveIds?: boolean) => {
-  const changes = (target: T, origin: T): any => {
-    const diff = Object.entries(target).reduce((a: any, [key, value]) => {
-      const isUnequal = (() => {
-        if( Array.isArray(value) && Array.isArray(origin[key]) ) {
-          return !value.every((v, i) => (v === null && i !== value.length-1) || R.equals(origin[key][i], v))
-            || value.length < origin[key].length
-        }
-
-        return value !== origin[key]
-          && (
-            (typeof value !== 'number' && (value || origin[key]))
-              || typeof value === 'number'
-          )
-      })()
-
-      if( isUnequal ) {
-        if( R.is(Object, value) && R.is(Object, origin[key]) ) {
-          if( !value._id ) {
-            return {
-              ...a,
-              [key]: value
-            }
-          }
-
-          const res = changes(value, origin[key])
-
-          if( Array.isArray(value) ) {
-            a[key] = value.length < origin[key].length
-              ? value
-              : value.map((v, index) => res[+index] || v)
-
-            return a
-          }
-
-          if( !Object.keys(res).length ) {
-            return a
-          }
-
-          return {
-            ...a,
-            [key]: res
-          }
-        }
-
-        return {
-          ...a,
-          [key]: value
-        }
-      }
-
-      return a
-    }, {})
-
-    if( preserveIds && target._id && Object.keys(diff).length > 0 ) {
-      diff._id = target._id
-    }
-
-    return diff
-  }
-
-  return changes(target, origin)
-}

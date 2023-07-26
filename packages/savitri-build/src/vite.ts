@@ -63,7 +63,8 @@ export default defineConfig(async () => {
               'useClipboard',
               'useAction',
               'useCondition',
-              'useNavbar'
+              'useNavbar',
+              'collections'
             ]
           },
           {

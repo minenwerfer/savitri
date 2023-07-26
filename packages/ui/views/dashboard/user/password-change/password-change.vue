@@ -64,10 +64,8 @@ const passwordError = computed(() => {
     </template>
     <div class="passchange__content">
       <sv-form
-        v-bind="{
-          form: passwordForm,
-          formData: password
-        }"
+        v-model="password"
+        :form="passwordForm"
       ></sv-form>
 
       <div>

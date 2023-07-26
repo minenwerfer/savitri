@@ -97,6 +97,7 @@ const signout = async () => {
     @overlay-click="editPanel = false"
   >
     <sv-form
+      v-model="userStore.item"
       v-bind="{
         collection: 'user',
         form: userStore.useProperties([
@@ -105,7 +106,6 @@ const signout = async () => {
           'phone',
           'picture'
         ]),
-        formData: userStore.item,
         layout: userStore.formLayout
       }"
     ></sv-form>

@@ -11,7 +11,8 @@ const metaStore = useStore('meta')
 
 if( !metaStore.descriptions.user ) {
   await metaStore.describe({
-    collections: ['user']
+    collections: ['user'],
+    roles: true
   })
 }
 

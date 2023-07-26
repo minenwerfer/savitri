@@ -1,7 +1,7 @@
 import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types'
 import type { CollectionStore, CollectionState } from '../types/state'
 import { deepClone, deepMerge } from '@semantic-api/common'
-import { deepDiff } from './helpers'
+import { deepDiff } from './deepDiff'
 import { useStore } from './use'
 
 import  {
@@ -102,41 +102,6 @@ const getters: GettersFunctions = {
 
   hasDiff() {
     return Object.keys(this.diffedItem).length
-  },
-
-  insertReady() {
-    const formIncludes = (key: string) => {
-      const form = this.description.form!
-      return Array.isArray(form)
-        ? form.includes(key)
-        : key in form
-    }
-
-    const ensureFulfillment = () => {
-      const keys = this.description.required as Array<Lowercase<string>> || Object.keys(this.properties)
-
-      return keys.every((k) => {
-        const property = this.description.properties?.[k]!
-        if( property.s$meta ) {
-          return true
-        }
-
-        return !(k in this.properties)
-          || (this.description.form && !formIncludes(k))
-          || property.type === 'boolean'
-          || (
-            !!this.item[k]
-              && (
-                !property.s$isReference
-                || property.type === 'array'
-                || this.item[k]._id
-              )
-          )
-      })
-    }
-    
-    return this.hasDiff
-      && ensureFulfillment()
   },
 
   $freshItem() {

@@ -9,6 +9,7 @@ export * from './state/helpers'
 export * from './state/collection'
 export * from './types'
 export * from './http'
+export * from './mixins'
 
 import metaStore from './stores/meta'
 import userStore from './stores/user'

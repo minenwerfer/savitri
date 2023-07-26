@@ -123,7 +123,7 @@ watch(() => store.item._id, (_id) => {
         ></sv-icon>
       </sv-context-menu>
     </template>
-    <template #footer>
+    <template #footer="{ isInsertReady }">
       <sv-button
         small
         variant="transparent"
@@ -132,7 +132,7 @@ watch(() => store.item._id, (_id) => {
         {{ $t('action.cancel') }}
       </sv-button>
       <sv-button
-        :disabled="!store.insertReady || isInsertReadOnly"
+        :disabled="!isInsertReady || isInsertReadOnly"
         :loading="store.loading.insert"
         @click="insert"
       >

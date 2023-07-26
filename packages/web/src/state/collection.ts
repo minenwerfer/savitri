@@ -1,6 +1,6 @@
 import type { Description } from '@semantic-api/types'
 import type { CollectionState } from '../types/state'
-import * as R from 'ramda'
+import { deepMerge } from '@semantic-api/common'
 import { PAGINATION_PER_PAGE_DEFAULT } from '../constants'
 import actions from './actions'
 import getters from './getters'
@@ -21,23 +21,19 @@ export const useCollection = (
     getters
   }
 
-  const fn = (key:string, l:any, r:any) => {
-    if( key === 'state' ) {
-      const res = typeof r === 'function' ? r() : r
-      return () => R.mergeAll([l(), res])
-    }
+  const merge = (right: NonNullable<typeof newer>) => {
+    const merged = deepMerge(initial, right)
+    const rState = right.state instanceof Function
+      ? right.state()
+      : right.state
 
-    if( R.is(Function, r) ) {
-      return r
-    }
+    merged.state = () => Object.assign(initial.state(), rState)
 
-    return R.is(Object, l) && R.is(Object, r)
-      ? R.concat(l, r)
-      : r
+    return merged
   }
 
   return newer
-    ? R.mergeDeepWithKey(fn, initial, newer)
+    ? merge(newer)
     : initial
 }
 
