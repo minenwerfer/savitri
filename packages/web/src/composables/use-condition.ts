@@ -1,6 +1,6 @@
-import type { Condition } from '@semantic-api/types'
+import type { Condition, Description } from '@semantic-api/types'
 
-export const useCondition = (subject: any, condition: Condition) => {
+export const useCondition = <TDescription extends Description=any>(subject: any, condition: Condition<TDescription>) => {
   const {
     operator,
     term2

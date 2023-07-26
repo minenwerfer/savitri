@@ -86,10 +86,10 @@ watch(() => store.item._id, (_id) => {
     </template>
 
     <sv-form
+      v-model="store.item"
       v-bind="{
         collection: metaStore.view.collection,
         form: store.properties,
-        formData: store.item,
         isReadOnly: isInsertReadOnly,
         layout: store.formLayout
       }"

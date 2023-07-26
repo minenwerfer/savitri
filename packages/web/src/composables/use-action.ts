@@ -1,9 +1,14 @@
 import { reactive } from 'vue'
 import type { Router } from 'vue-router'
 import type { CollectionAction, StoreEffect } from '@semantic-api/types'
-import type { ActionEvent } from '../types'
 import { deepClone } from '@semantic-api/common'
 import { STORE_EFFECTS } from '@semantic-api/types'
+
+export type ActionEvent<T={ _id: string }> = {
+  id: number
+  name: string
+  params?: T|object
+}
 
 const getEffect = (store: any, effectName: StoreEffect) => {
   const effect = STORE_EFFECTS[effectName]
@@ -20,7 +25,7 @@ export const useAction = <T extends { $id: string }, F extends { _id: string }>(
     params: {}
   })
 
-  const fn = (actionProps: CollectionAction & { action: string }): (filters: F) => void => {
+  const fn = (actionProps: CollectionAction<any> & { action: string }): (filters: F) => void => {
     const { action: actionName, effect: actionEffect } = actionProps
     const [scopeName, scopedAction] = actionName.split(':')
 

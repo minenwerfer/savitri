@@ -1,29 +1,28 @@
 {
   "name": "@savitri/web",
   "type": "module",
-  "version": "1.2.52",
+  "version": "1.2.53",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "postinstall": "node dist/esm/__scripts__/postinstall.js"
+    "postinstall": "node dist/__scripts__/postinstall.js"
   },
   "repository": {
     "type": "git",
     "url": ""
   },
   "exports": {
-    ".": "./dist/esm/index.js",
-    "./types": "./dist/esm/types/index.js"
+    ".": "./dist/index.js",
+    "./types": "./dist/types/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semantic-api/common": "latest",
-    "@semantic-api/system": "latest",
-    "@semantic-api/types": "latest",
     "@types/ramda": "^0.28.15",
     "maska": "^1.4.6",
     "pinia": "^2.1.4",
@@ -37,5 +36,10 @@
     "vue-inline-svg": "^3.1.0",
     "vue-resizable": "^2.1.7",
     "vue-router": "^4.2.1"
+  },
+  "peerDependencies": {
+    "@semantic-api/common": "latest",
+    "@semantic-api/system": "latest",
+    "@semantic-api/types": "latest"
   }
 }

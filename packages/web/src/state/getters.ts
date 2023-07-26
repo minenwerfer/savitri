@@ -113,7 +113,7 @@ const getters: GettersFunctions = {
     }
 
     const ensureFulfillment = () => {
-      const keys = this.description.required || Object.keys(this.properties)
+      const keys = this.description.required as Array<Lowercase<string>> || Object.keys(this.properties)
 
       return keys.every((k) => {
         const property = this.description.properties?.[k]!
@@ -198,9 +198,9 @@ const getters: GettersFunctions = {
    * @see SvCrud
    */
   $filters() {
-    const filters = removeEmpty(deepClone(this.filters||{}))
+    const filters = removeEmpty(deepClone(this.filters||{})) as Record<Lowercase<string>, any>
 
-    const expr = (key: string, value: any) => {
+    const expr = (key: Lowercase<string>, value: any) => {
       const property = this.description.properties?.[key]
       const getValue = (value: any) => {
         if( !property ) {
@@ -232,7 +232,7 @@ const getters: GettersFunctions = {
       return getValue(value)
     }
 
-    const entries = Object.entries(filters).reduce((a: Array<any>, [key, filter]: [string, any]) => {
+    const entries = Object.entries(filters).reduce((a: Array<any>, [key, filter]) => {
       if( key.startsWith('$') ) {
         return [
           ...a,
@@ -254,7 +254,7 @@ const getters: GettersFunctions = {
 
       return [
         ...a,
-        [key, expr(key, filter)]
+        [key, expr(key as Lowercase<string>, filter)]
       ]
     }, [])
 
@@ -312,7 +312,7 @@ const getters: GettersFunctions = {
       get: (_, functionName: string) => (keySuffix: string, ...args: any[]) => {
         const key = `${functionName}_${keySuffix}`
         if( !this.customGetters[key] ) {
-          this[functionName](...args).then((result: any) => {
+          this[functionName](...args).then(({ result }: any) => {
             this.customGetters[key] = result
           })
         }

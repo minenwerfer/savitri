@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormFieldProps } from '../types'
-import { ref, inject, watch } from 'vue'
+import { ref, inject, watch, computed } from 'vue'
 import { maska as vMaska } from 'maska'
 import { useClipboard } from '@savitri/web'
 
@@ -58,7 +58,15 @@ const inputBind: {
       return 'number'
     }
 
-    return property.s$inputType || 'text'
+    if( property.s$inputType ) {
+      return property.s$inputType
+    }
+
+    switch( typeof props.modelValue ) {
+      case 'string': return 'text'
+      case 'number': return 'number'
+      default: return 'text'
+    }
   })(),
   placeholder: innerInputLabel
     ? property.description || props.propertyName
@@ -92,7 +100,7 @@ const inputValue = ref(
 
 const updateValue = (value: InputType) => {
   const newVal = (() => {
-    if( property.type === 'number' ) {
+    if( inputBind.type === 'number' ) {
       return Number(value)
     }
 

@@ -33,14 +33,6 @@ const publicRoutes: Array<RouteRecordRaw> = [
           title: 'Registro'
         }
       },
-      {
-        path: 'signup-extra',
-        name: '/user/signup-extra',
-        component: () => import('./views/user/signup-extra.vue'),
-        meta: {
-          title: 'Registro'
-        }
-      }
     ]
   },
 ]

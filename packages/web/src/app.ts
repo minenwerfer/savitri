@@ -118,7 +118,9 @@ export const useApp = (options: AppOptions): Promise<{
 
   if( userStore.signedIn ) {
     try {
-      await metaStore.describeAll()
+      await metaStore.describe({
+        roles: true
+      })
     } catch( e ) {
       if( e instanceof TypeError ) {
         setTimeout(() => {

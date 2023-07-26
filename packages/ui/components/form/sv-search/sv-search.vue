@@ -161,25 +161,26 @@ cancelClearResponse = cancel_
       v-if="isExpanded"
       v-bind="{
         collection: property.$ref,
+        modelValue,
         form: property.s$form
           ? store.useProperties(property.s$form)
           : store.properties,
-        formData: modelValue,
         layout: store.formLayout
       }"
+
+      @update:model-value="emit('update:modelValue', $event)"
     ></sv-form>
 
     <sv-form
       v-else
+      v-model="inputValue"
       v-bind="{
         collection: property.$ref,
         form: store.useProperties(indexes),
-        formData: inputValue,
         layout: store.formLayout,
-        searchOnly: true
+        searchOnly: true,
+        focus: selectClick
       }"
-
-      :focus="selectClick"
 
       @focusin="handleFocusin"
       @focusout="handleFocusout"

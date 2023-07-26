@@ -15,7 +15,7 @@ type LayoutConfig = {
   span?: string
   verticalSpacing?: string
   optionsColumns?: number
-  if?: Condition
+  if?: Condition<any>
   component?: {
     name: string
     props?: object
@@ -24,7 +24,7 @@ type LayoutConfig = {
 
 type Props = FormFieldProps<any> & {
   form?: Record<string, CollectionProperty>
-  formData?: Record<string, any>
+  modelValue: Record<string, any>
   collection?: string
   isReadOnly?: boolean
   searchOnly?: boolean
@@ -36,6 +36,7 @@ type Props = FormFieldProps<any> & {
   propertyComponents?: Record<string, any>
   omitFormHeader?: boolean
   omitInputLabels?: boolean
+  innerInputLabel?: boolean
   validationErrors?: Record<string, any>|null
   highlightRequired?: boolean
   focus?: boolean
@@ -50,12 +51,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:formData' | 'input' | 'change', value: any): void
+  (e: 'update:modelValue' | 'input' | 'change', value: any): void
 }>()
 
 onBeforeMount(() => {
-  if( !props.formData ) {
-    emit('update:formData', {})
+  if( !props.modelValue ) {
+    emit('update:modelValue', {})
   }
 })
 
@@ -156,15 +157,15 @@ const fieldStyle = (key:string, property: any) => {
 
   if( layout?.if && !props.searchOnly ) {
     const result = useCondition(
-      props.formData,
+      props.modelValue,
       layout.if
     )
 
     if( !result.satisfied ) {
-      props.formData[key] = store
+      props.modelValue[key] = store
         ? store.$freshItem[key]
-        : ![undefined, null].includes(props.formData[key])
-          ? props.formData[key].constructor()
+        : ![undefined, null].includes(props.modelValue[key])
+          ? props.modelValue[key].constructor()
           : null
 
       style.push(`display: none;`)
@@ -204,11 +205,13 @@ const unfilled = (value: any) => {
     <header v-if="$slots.header && !omitFormHeader" class="form__header">
       <slot name="header"></slot>
     </header>
+
+    <slot></slot>
+
     <fieldset
       v-if="!isReadOnly"
       class="form__fieldset"
     >
-      <slot></slot>
       <div
         v-for="([key, property], index) in properties"
         :key="`field-${index}`"
@@ -226,7 +229,7 @@ const unfilled = (value: any) => {
             'form__field-required-hint':
               highlightRequired
                 && !searchOnly
-                && (store?.description.strict || store?.description.required?.includes(key))
+                && (!store?.description.required || store?.description.required?.includes(key))
           }">
             {{ property.description || $t(key) }}
           </div>
@@ -240,7 +243,7 @@ const unfilled = (value: any) => {
           v-if="$slots[`field-${key}`]"
           v-bind="{
             property,
-            formData,
+            modelValue,
             key
           }"
           :name="`field-${key}`"
@@ -249,7 +252,7 @@ const unfilled = (value: any) => {
         <component
           v-else-if="layout?.[key]?.component && propertyComponents[layout[key].component!.name]"
           :is="propertyComponents[layout[key].component!.name]"
-          v-model="formData[key]"
+          v-model="modelValue[key]"
           v-bind="{
             property,
             propertyName: key,
@@ -271,14 +274,14 @@ const unfilled = (value: any) => {
           @change="emit('change', $event)"
         >
           <sv-input
-            v-model="formData[key].$gte"
+            v-model="modelValue[key].$gte"
             v-bind="{
               property,
               propertyName: key
             }"
           ></sv-input>
           <sv-input
-            v-model="formData[key].$lte"
+            v-model="modelValue[key].$lte"
             v-bind="{
               property,
               propertyName: key
@@ -293,11 +296,11 @@ const unfilled = (value: any) => {
               propertyName: key
             }"
             boolean-ref
-            :model-value="formData[key]"
+            :model-value="modelValue[key]"
 
             @change="emit('change', $event)"
             @update:model-value="(value) => {
-              formData[key] = value == 'true'
+              modelValue[key] = value == 'true'
                 ? true : value == 'false'
                 ? false : null
           }">
@@ -314,21 +317,21 @@ const unfilled = (value: any) => {
           style="display: grid; row-gap: .4rem"
         >
           <div
-            v-for="(value, listIndex) in formData[key]"
+            v-for="(value, listIndex) in modelValue[key]"
             :key="`rep-${key}-${listIndex}`"
             style="display: flex; column-gap: .6rem; align-items: center"
           >
             <div style="flex-grow: 1">
               <component
                 :is="getComponent(property, formComponents)"
-                v-model="formData[key][listIndex]"
+                v-model="modelValue[key][listIndex]"
                 v-bind="{
                   property: {
                     ...property,
                     ...property.items
                   },
                   value: value,
-                  formData: formData[key][listIndex],
+                  modelValue: modelValue[key][listIndex],
                   propertyName: key,
                   parentCollection: collectionName,
                   columns: layout?.[key]?.optionsColumns
@@ -345,7 +348,7 @@ const unfilled = (value: any) => {
               v-clickable
               reactive
               name="trash"
-              @click="spliceFromArray(formData[key], listIndex)"
+              @click="spliceFromArray(modelValue[key], listIndex)"
             ></sv-icon>
           </div>
 
@@ -355,15 +358,15 @@ const unfilled = (value: any) => {
               variant="alt"
               icon="plus"
               :disabled="
-                formData[key]?.length >= property.maxItems!
-                  || unfilled(formData[key]?.[formData[key]?.length-1])
+                modelValue[key]?.length >= property.maxItems!
+                  || unfilled(modelValue[key]?.[modelValue[key]?.length-1])
                   || (
                     property.s$isFile
-                      && formData[key]?.length > 0
-                      && !formData[key]?.[formData[key]?.length-1]?._id
+                      && modelValue[key]?.length > 0
+                      && !modelValue[key]?.[modelValue[key]?.length-1]?._id
                   )
               "
-              @click="if(!formData[key]) formData[key] = []; pushToArray(formData[key], property)"
+              @click="if(!modelValue[key]) modelValue[key] = []; pushToArray(modelValue[key], property)"
             >
               Adicionar
             </sv-button>
@@ -371,13 +374,13 @@ const unfilled = (value: any) => {
         </div>
 
         <pre v-else-if="property.type === 'object'">{{
-          formData[key]
+          modelValue[key]
         }}</pre>
 
         <component
           v-else
           :is="getComponent(property, formComponents)"
-          v-model="formData[key]"
+          v-model="modelValue[key]"
           v-bind="{
             property,
             propertyName: key,
@@ -385,7 +388,7 @@ const unfilled = (value: any) => {
             columns: layout?.[key]?.optionsColumns
               || layout?.$default?.optionsColumns,
             ...(property.s$componentProps || {}),
-            formData: formData[key],
+            modelValue: modelValue[key],
           }"
 
           v-focus="index === 0 && focus"

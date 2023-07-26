@@ -1,6 +1,7 @@
+import type { Description } from '@semantic-api/types'
+import type { CollectionState } from '../types/state'
 import * as R from 'ramda'
 import { PAGINATION_PER_PAGE_DEFAULT } from '../constants'
-import type { CollectionState } from '../types/state'
 import actions from './actions'
 import getters from './getters'
 
@@ -57,7 +58,7 @@ const state = <T=object>() => {
     currentLayout: '',
 
     queryCache: {},
-    _description: {},
+    _description: {} as Description,
     rawDescription: {},
 
     validationErrors: {},

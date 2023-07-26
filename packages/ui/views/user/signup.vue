@@ -10,7 +10,7 @@ const userStore = useStore('user')
 const metaStore = useStore('meta')
 
 if( !metaStore.descriptions.user ) {
-  await metaStore.describeAll({
+  await metaStore.describe({
     collections: ['user']
   })
 }
@@ -82,9 +82,9 @@ const insert = async () => {
   </div>
 
   <sv-form
+    v-model="userStore.item"
     v-bind="{
       collection: 'user',
-      formData: userStore.item,
       form: userStore.useProperties([
         'full_name',
         'email',

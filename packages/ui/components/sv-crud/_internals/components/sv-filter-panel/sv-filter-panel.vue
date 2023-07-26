@@ -28,9 +28,9 @@ const filter = () => {
     @overlay-click="emit('update:modelValue', false)"
   >
     <sv-form
+      v-model="store.filters"
       v-bind="{
         form: store.availableFilters,
-        formData: store.filters,
         searchOnly: true,
         layout: store.formLayout
       }"

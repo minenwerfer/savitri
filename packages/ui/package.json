@@ -1,6 +1,6 @@
 {
   "name": "@savitri/ui",
-  "version": "0.1.195",
+  "version": "0.1.196",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
     "@savitri/web": "latest",
     "@semantic-api/common": "latest",
     "@semantic-api/system": "latest",

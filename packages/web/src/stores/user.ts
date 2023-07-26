@@ -47,7 +47,7 @@ const collection = useCollection({
             userStorage.setItem('auth:currentUser', JSON.stringify(this.currentUser))
 
             const metaStore = useMetaStore()
-            await metaStore.describeAll()
+            await metaStore.describe()
           }
         )
       } catch( err ) {

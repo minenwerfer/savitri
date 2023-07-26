@@ -38,7 +38,7 @@ export const removeEmpty = (item: any) => {
 }
 
 
-export const normalizeActions = (actions: CollectionActions) => Object.entries(actions||{})
+export const normalizeActions = (actions: CollectionActions<any>) => Object.entries(actions||{})
   .reduce((a: Array<object>, [key, value]) => {
     if( !value || key.startsWith('_') ) {
       return a
@@ -55,7 +55,7 @@ export const normalizeActions = (actions: CollectionActions) => Object.entries(a
 
 export const normalizeFilters = (filters: Description['filters']) => {
   return filters?.reduce((a, b) => {
-    const filter = typeof b !== 'string'
+    const filter = typeof b === 'object'
       ? { [b.property]: b.default||'' }
       : { [b]: '' }
 

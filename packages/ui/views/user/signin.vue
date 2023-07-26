@@ -34,7 +34,7 @@ const authenticate = async () => {
     </div>
   </div>
   <sv-form
-    :form-data="userStore.credentials"
+    v-model="userStore.credentials"
     :form="{
       email: {
         type: 'string',
@@ -43,6 +43,7 @@ const authenticate = async () => {
       password: {
         type: 'string',
         s$icon: 'key-skeleton',
+        s$inputType: 'password'
       }
     }"
   ></sv-form>

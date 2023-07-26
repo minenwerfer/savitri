@@ -143,13 +143,11 @@ const actionsAndMutations: Actions & Mutations = {
       this.insertItem(data.result)
     }
 
-    return !options?.fullResponse
-      ? data.result
-      : data
+    return data
   },
 
   async customEffect(verb, payload, fn, options?) {
-    const response = await this.custom(verb, payload, options)
+    const { result: response } = await this.custom(verb, payload, options)
     if( options?.skipEffect ) {
       return response
     }
@@ -160,10 +158,7 @@ const actionsAndMutations: Actions & Mutations = {
   },
 
   async $customEffect(verb, payload, fn, options?) {
-    const response = await this.custom(verb, payload, {
-      ...options,
-      fullResponse: true
-    })
+    const response = await this.custom(verb, payload, options)
 
     return fn(response)
   },
