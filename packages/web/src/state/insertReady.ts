@@ -6,7 +6,7 @@ export const insertReady = <
 >(
   item: TItem,
   properties: TProperties,
-  required: Array<keyof TProperties>,
+  required?: Array<keyof TProperties>,
   description?: Description
 
 ) => {

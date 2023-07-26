@@ -2,7 +2,7 @@
 import type { CollectionProperty, Condition } from '@semantic-api/types'
 import type { FormFieldProps } from '../types'
 import { onBeforeMount, computed, provide, inject } from 'vue'
-import { useStore, useCondition } from '@savitri/web'
+import { useStore, useCondition, insertReady } from '@savitri/web'
 
 import SvIcon from '../../sv-icon/sv-icon.vue'
 import SvButton from '../../sv-button/sv-button.vue'
@@ -32,6 +32,7 @@ type Props = FormFieldProps<any> & {
     fields: Record<string, LayoutConfig>
   }
   strict?: boolean
+  required?: Array<string>
   formComponents?: Record<string, any>
   propertyComponents?: Record<string, any>
   omitFormHeader?: boolean
@@ -195,6 +196,17 @@ const unfilled = (value: any) => {
   return value === null
     || (value instanceof Object && !Object.keys(value).length)
 }
+
+const required = computed(() => props.required || store?.description.required)
+
+const isInsertReady = computed(() => {
+  return insertReady(
+    props.modelValue,
+    props.form,
+    required.value,
+    store?.description
+  )
+})
 </script>
 
 <template>
@@ -229,7 +241,7 @@ const unfilled = (value: any) => {
             'form__field-required-hint':
               highlightRequired
                 && !searchOnly
-                && (!store?.description.required || store?.description.required?.includes(key))
+                && (!required || required.includes(key))
           }">
             {{ property.description || $t(key) }}
           </div>
@@ -410,7 +422,14 @@ const unfilled = (value: any) => {
     </fieldset>
 
     <div v-if="$slots.footer" class="form__footer">
-      <slot name="footer"></slot>
+      <pre>toma ai fdp: {{ isInsertReady }}</pre>
+      <pre>{{ required }}</pre>
+      <slot
+        name="footer"
+        v-bind="{
+          isInsertReady
+        }"
+      ></slot>
     </div>
   </form>
 </template>

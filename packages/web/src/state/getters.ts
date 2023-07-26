@@ -2,6 +2,7 @@ import type { CollectionProperty, Layout, LayoutName } from '@semantic-api/types
 import type { CollectionStore, CollectionState } from '../types/state'
 import { deepClone, deepMerge } from '@semantic-api/common'
 import { deepDiff } from './deepDiff'
+import { insertReady } from './insertReady'
 import { useStore } from './use'
 
 import  {
@@ -102,6 +103,15 @@ const getters: GettersFunctions = {
 
   hasDiff() {
     return Object.keys(this.diffedItem).length
+  },
+
+  isInsertReady() {
+    return insertReady(
+      this.item,
+      this.properties,
+      this.description.required as Array<string>,
+      this.description as Required<typeof this.description>
+    )
   },
 
   $freshItem() {
