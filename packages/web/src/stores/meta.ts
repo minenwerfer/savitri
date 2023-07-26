@@ -53,7 +53,7 @@ export default defineStore('meta', {
   }),
 
   actions: {
-    async describe(props?: Parameters<ReturnType<typeof import('@semantic-api/system').algorithms.meta>['functions']['describe']>) {
+    async describe(props?: Parameters<ReturnType<typeof import('@semantic-api/system').algorithms.meta>['functions']['describe']>[0]) {
       this.isLoading = true
       const response = (await http('_/meta/describe', props))?.data
       const deserialized = deserialize(response)
@@ -61,7 +61,9 @@ export default defineStore('meta', {
       const descriptions: Record<CollectionName, Description> =
         this.descriptions = deserialized.descriptions
 
-      this.roles = deserialized.roles
+      if( deserialized.roles ) {
+        this.roles = deserialized.roles
+      }
 
       // monkeypatchs '@savitri/web/stores' object
       for ( const [collectionName, description] of Object.entries(descriptions) ) {

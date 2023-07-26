@@ -7,7 +7,6 @@ export * from './router'
 export * from './state'
 export * from './types'
 export * from './http'
-export * from './mixins'
 
 import metaStore from './stores/meta'
 import userStore from './stores/user'

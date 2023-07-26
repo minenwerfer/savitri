@@ -47,7 +47,9 @@ const collection = useCollection({
             userStorage.setItem('auth:currentUser', JSON.stringify(this.currentUser))
 
             const metaStore = useMetaStore()
-            await metaStore.describe()
+            await metaStore.describe({
+              roles: true
+            })
           }
         )
       } catch( err ) {

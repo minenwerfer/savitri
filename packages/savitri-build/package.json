@@ -1,6 +1,6 @@
 {
   "name": "savitri-build",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -18,7 +18,6 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "braun": "latest",
-    "bson": "^5.2.0",
     "ejs": "^3.1.9",
     "js-yaml": "^4.1.0",
     "mini-css-extract-plugin": "^2.7.3",
@@ -31,5 +30,8 @@
   "devDependencies": {
     "@types/ejs": "^3.1.2",
     "@types/js-yaml": "^4.0.5"
+  },
+  "peerDependencies": {
+    "bson": "latest"
   }
 }
