@@ -15,6 +15,7 @@ import loadYaml from './plugins/load-yaml'
 export default defineConfig(async () => {
   const instanceConfig = await getInstanceConfig()
   const config: ReturnType<typeof defineConfig> = {
+    publicDir: 'static',
     resolve: {
       alias: {
         'bson': require.resolve('bson')

@@ -29,7 +29,20 @@ declare module '@savitri/web' {
 //`
 
 const install = async () => {
-  await writeFile(path.join('..', '..', '..', DTS_FILENAME), dts)
+  const base = path.join(process.cwd(), '..', '..', '..')
+
+  try {
+    // prevent the script from installing the dts on @savitri/* packages
+    const { name } = require(path.join(base, 'package.json'))
+    if( name.startsWith('@savitri/') ) {
+      return
+    }
+
+  } catch( e ) {
+    //
+  }
+
+  await writeFile(path.join(base, DTS_FILENAME), dts)
 }
 
 install()
