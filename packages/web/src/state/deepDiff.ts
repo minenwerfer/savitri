@@ -1,6 +1,6 @@
 export const deepDiff = <T extends Record<string, any>>(origin: T, target: T, preserveIds?: boolean) => {
   const equals = (left: any, right: any) => {
-    const toStr = (obj: any) => JSON.stringify(obj, Object.keys(obj).sort())
+    const toStr = (obj: any) => JSON.stringify(obj, typeof obj === 'object' && obj ? Object.keys(obj).sort() : null)
     return toStr(left) === toStr(right)
   }
   const changes = (target: T, origin: T): any => {
