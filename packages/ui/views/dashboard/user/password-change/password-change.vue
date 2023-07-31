@@ -17,7 +17,7 @@ const password = reactive({
   confirmation: ''
 })
 
-const passwordForm = {
+const passwordForm = <const>{
   password: {
     description: 'Senha',
     type: 'string',

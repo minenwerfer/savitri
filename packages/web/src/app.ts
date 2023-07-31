@@ -122,13 +122,9 @@ export const useApp = (options: AppOptions): Promise<{
         roles: true
       })
     } catch( e ) {
-      if( e instanceof TypeError ) {
-        setTimeout(() => {
-          location.reload()
-        }, 10000)
-      } else {
+      setTimeout(() => {
         location.reload()
-      }
+      }, 10000)
     }
   }
 

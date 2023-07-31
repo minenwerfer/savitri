@@ -40,7 +40,7 @@ export default defineConfig(async () => {
           }
 
           for( const collectionName in collections ) {
-            const { icon } = await collections[collectionName]()
+            const icon = await collections[collectionName]().description?.icon
             if( icon ) {
               icons.add(icon)
             }
