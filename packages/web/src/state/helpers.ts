@@ -16,7 +16,11 @@ export const condenseItem = (item: Record<string, any>): Record<string, Exclude<
       }
     }
 
-    if( value instanceof Object && !Object.keys(value).length ) {
+    if(
+      value instanceof Object
+        && !(value instanceof Date)
+        && !Object.keys(value).length
+    ) {
       return a
     }
 

@@ -7,7 +7,7 @@ export type MenuAdvancedChildren = {
   badgePayload?: any
 }
 
-export type MenuSchema = Record<string, RouteMeta & {
+export type MenuSchema = Record<string, Partial<RouteMeta> & {
   roles?: Array<string>|((role: Array<string>) => boolean|Promise<boolean>)
   children: Array<string|MenuAdvancedChildren>
 }>

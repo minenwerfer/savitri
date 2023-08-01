@@ -28,6 +28,7 @@ type Props = FormFieldProps<any> & {
   collection?: string
   isReadOnly?: boolean
   searchOnly?: boolean
+  strict?: boolean
   layout?: {
     fields: Record<string, LayoutConfig>
   }
@@ -45,6 +46,7 @@ type Props = FormFieldProps<any> & {
 const props = withDefaults(defineProps<Props>(), {
   isReadOnly: false,
   searchony: false,
+  strict: true,
   validationErrors: null,
   highlightRequired: true
 })
@@ -130,6 +132,7 @@ const filterProperties = (condition: (f: any) => boolean): Array<[string, Collec
 const has = (propertyName: string) => {
   if(
     props.searchOnly
+    || !props.strict
     || !collectionName
   ) {
     return true
@@ -419,7 +422,6 @@ const isInsertReady = computed(() => {
     </fieldset>
 
     <div v-if="$slots.footer" class="form__footer">
-      <pre>toma ai fdp: {{ isInsertReady }}</pre>
       <pre>{{ required }}</pre>
       <slot
         name="footer"

@@ -40,9 +40,36 @@ export default defineConfig(async () => {
           }
 
           for( const collectionName in collections ) {
-            const icon = await collections[collectionName]().description?.icon
+            const { description } = await collections[collectionName]()
+            if( !description ) {
+              return
+            }
+
+            const {
+              icon,
+              actions,
+              individualActions
+
+            } = description
+
             if( icon ) {
               icons.add(icon)
+            }
+
+            if( actions ) {
+              Object.values(actions).forEach((action: any) => {
+                if( action?.icon ) {
+                  icons.add(action.icon)
+                }
+              })
+            }
+
+            if( individualActions ) {
+              Object.values(individualActions).forEach((action: any) => {
+                if( action?.icon ) {
+                  icons.add(action.icon)
+                }
+              })
             }
           }
         }

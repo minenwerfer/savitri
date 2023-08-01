@@ -89,11 +89,15 @@ if( inputBind.type === 'text' && searchOnly ) {
 }
 
 const getDatetimeString = () => {
-   return (props.modelValue as Date).toISOString().split('T').shift()
+  try {
+     return new Date(props.modelValue).toISOString().split('T').shift()
+  } catch( e ) {
+    return ''
+  }
 }
 
 const inputValue = ref(
-  props.modelValue instanceof Date
+  ['date', 'date-time'].includes(inputBind.type)
     ? getDatetimeString()
     : props.modelValue || ''
 )
