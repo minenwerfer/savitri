@@ -5,6 +5,7 @@ import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvIcon from '../../components/sv-icon/sv-icon.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
 import SvCheckbox from '../../components/form/sv-checkbox/sv-checkbox.vue'
+import SvPasswordForm from '../../components/dashboard/sv-password-form/sv-password-form.vue'
 
 const router = await useRouter()
 const userStore = useStore('user')
@@ -94,30 +95,35 @@ const insert = async () => {
       ])
     }"
   >
+    <template #after>
+      <sv-password-form v-model="password" v-slot="{ passwordError }">
+        <div style="
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          gap: 2rem
+        ">
+          <sv-checkbox
+            v-model="tosAccepted"
+            :property="{
+              type: 'boolean',
+              s$element: 'checkbox'
+            }"
+          >
+            Declaro que li e aceito os termos de uso
+          </sv-checkbox>
+
+        </div>
+
+        <sv-button
+          :disabled="!!passwordError || !tosAccepted"
+          @click="insert"
+        >
+          Criar conta
+        </sv-button>
+      </sv-password-form>
+    </template>
   </sv-form>
 
-  <div style="
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 2rem
-  ">
-    <sv-checkbox
-      v-model="tosAccepted"
-      :property="{
-        type: 'boolean',
-        s$element: 'checkbox'
-      }"
-    >
-      Declaro que li e aceito os termos de uso
-    </sv-checkbox>
 
-  </div>
-
-  <sv-button
-    :disabled="!!passwordError || !tosAccepted"
-    @click="insert"
-  >
-    Criar conta
-  </sv-button>
 </template>

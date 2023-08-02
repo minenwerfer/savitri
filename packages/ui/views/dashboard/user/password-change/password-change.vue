@@ -1,34 +1,18 @@
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
-import { useRouter, useStore, usePasswordPolicy } from '@savitri/web'
+import { reactive } from 'vue'
+import { useRouter, useStore } from '@savitri/web'
 
-import SvBox from '../../../../components/sv-box/sv-box.vue'
-import SvForm from '../../../../components/form/sv-form/sv-form.vue'
 import SvButton from '../../../../components/sv-button/sv-button.vue'
+import SvPasswordForm from '../../../../components/dashboard/sv-password-form/sv-password-form.vue'
 
 const router = await useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
 
-const passwordPolicy = usePasswordPolicy()
-
 const password = reactive({
   password: '',
   confirmation: ''
 })
-
-const passwordForm = <const>{
-  password: {
-    description: 'Senha',
-    type: 'string',
-    s$inputType: 'password'
-  },
-  confirmation: {
-    description: 'Confirmação da senha',
-    type: 'string',
-    s$inputType: 'password'
-  }
-}
 
 const insert = async () => {
   await userStore.insert({
@@ -45,35 +29,16 @@ const insert = async () => {
 
   router.back()
 }
-
-const passwordError = computed(() => {
-  return passwordPolicy(
-    password.password,
-    password.confirmation,
-  )
-})
 </script>
 
 <template>
-  <sv-box
-    outer-header
-    class="passchange"
-  >
-    <template #header>
-      <div>Mudando a senha de {{ userStore.item.full_name }}</div>
-    </template>
-    <div class="passchange__content">
-      <sv-form
-        v-model="password"
-        :form="passwordForm"
-      ></sv-form>
-
-      <div>
-        {{ passwordError || 'Senhas conferem' }}
-      </div>
-    </div>
-
-    <template #footer>
+  <div style="
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    max-width: 30rem;
+  ">
+    <sv-password-form v-model="password" v-slot="{ passwordError }">
       <sv-button
         class="passchange__save-button"
         :disabled="!!passwordError"
@@ -81,8 +46,6 @@ const passwordError = computed(() => {
       >
         Salvar
       </sv-button>
-    </template>
-  </sv-box>
+    </sv-password-form>
+  </div>
 </template>
-
-<style scoped src="./password-change.scss"></style>

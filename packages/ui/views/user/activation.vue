@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useRouter, useStore, usePasswordPolicy } from '@savitri/web'
+import { useRouter, useStore } from '@savitri/web'
 import { unsafe } from '@semantic-api/common'
-import { reactive, computed } from 'vue'
-import SvForm from '../../components/form/sv-form/sv-form.vue'
+import { reactive } from 'vue'
+
 import SvButton from '../../components/sv-button/sv-button.vue'
+import SvPasswordForm from '../../components/dashboard/sv-password-form/sv-password-form.vue'
 
 type Step = 
   | 'success'
@@ -12,7 +13,6 @@ type Step =
 const router = await useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
-const passwordPolicy = usePasswordPolicy()
 
 const step: Step = router.currentRoute.value.query.step || 'success'
 const userId = router.currentRoute.value.query.u
@@ -28,13 +28,6 @@ const password = reactive({
   email: userInfo.email,
   password: '',
   confirmation: ''
-})
-
-const passwordError = computed(() => {
-  return passwordPolicy(
-    password.password,
-    password.confirmation,
-  )
 })
 
 const confirm = async () => {
@@ -67,29 +60,17 @@ const confirm = async () => {
           type: 'string',
           readOnly: true
         },
-        password: {
-          type: 'string',
-          s$icon: 'key-skeleton',
-          s$inputType: 'password'
-        },
-        confirmation: {
-          type: 'string',
-          s$icon: 'key-skeleton',
-          s$inputType: 'password'
-        }
       }"
     ></sv-form>
 
-    <div>
-      {{ passwordError || 'Senhas conferem' }}
-    </div>
-
-    <sv-button
-      :disabled="!!passwordError"
-      @click="confirm"
-    >
-      Cadastrar senha
-    </sv-button>
+    <sv-password-form v-model="password" v-slot="{ passwordError }">
+      <sv-button
+        :disabled="!!passwordError"
+        @click="confirm"
+      >
+        Cadastrar senha papai
+      </sv-button>
+    </sv-password-form>
   </div>
 
   <div v-else style="display: grid; gap: 1rem;">

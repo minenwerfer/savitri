@@ -344,8 +344,8 @@ const isInsertReady = computed(() => {
                   modelValue: modelValue[key][listIndex],
                   propertyName: key,
                   parentCollection: collectionName,
-                  columns: layout?.[key]?.optionsColumns
-                    || layout?.$default?.optionsColumns,
+                  columns: layout?.fields?.[key]?.optionsColumns
+                    || layout?.fields?.$default?.optionsColumns,
                   ...(property.s$componentProps || {})
                 }"
 
@@ -418,6 +418,8 @@ const isInsertReady = computed(() => {
         </div>
       </div>
     </fieldset>
+
+    <slot v-if="$slots.after" name="after"></slot>
 
     <div v-if="$slots.footer" class="form__footer">
       <pre>{{ required }}</pre>
