@@ -33,6 +33,14 @@ const publicRoutes: Array<RouteRecordRaw> = [
           title: 'Registro'
         }
       },
+      {
+        path: 'activation',
+        name: '/user/activation',
+        component: () => import('./views/user/activation.vue'),
+        meta: {
+          title: 'Ativação'
+        }
+      },
     ]
   },
 ]

@@ -4,6 +4,7 @@ import { useRouter, useStore, hasStore, usePasswordPolicy } from '@savitri/web'
 import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvIcon from '../../components/sv-icon/sv-icon.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
+import SvCheckbox from '../../components/form/sv-checkbox/sv-checkbox.vue'
 
 const router = await useRouter()
 const userStore = useStore('user')

@@ -143,9 +143,7 @@ const has = (propertyName: string) => {
 }
 
 const properties = filterProperties(([key, f]: [string, any]) => {
-  return (!f.readOnly || props.searchOnly)
-    && !f.meta
-    && has(key)
+  return !f.meta && has(key)
 })
 
 const fieldStyle = (key:string, property: any) => {
