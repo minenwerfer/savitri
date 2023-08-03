@@ -1,3 +1,5 @@
+import type { Router } from 'vue-router'
+
 declare module '@savitri/ui' {
   export { default as routes } from '../ui/router'
 }
@@ -15,20 +17,22 @@ declare module 'vue-router/auto' {
   }
 }
 
-declare var userStorage: typeof localStorage | typeof sessionStorage
-declare var ROUTER: any
-declare var I18N: any
-declare var STORES: Record<string, any>
-declare var QUERY_CACHE: Record<string, {
-  items: Array<any>
-  satisfied: boolean
-}>
-
-declare var INSTANCE_VARS: {
-  themes?: Array<string>
-  darkThemes?: Array<string>
-  dashboardLayout?: Record<string, {
+declare global {
+  var userStorage: typeof localStorage | typeof sessionStorage
+  var ROUTER: Router
+  var I18N: any
+  var STORES: Record<string, any>
+  var QUERY_CACHE: Record<string, {
+    items: Array<any>
+    satisfied: boolean
   }>
-}
 
-declare var PINIA: any
+  var INSTANCE_VARS: {
+    themes?: Array<string>
+    darkThemes?: Array<string>
+    dashboardLayout?: Record<string, {
+    }>
+  }
+
+  var PINIA: any
+}

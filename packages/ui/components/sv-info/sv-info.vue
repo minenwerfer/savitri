@@ -2,7 +2,12 @@
 import { ref } from 'vue'
 
 type Props = {
-  where?: string
+  where?:
+    'top'
+    | 'topleft'
+    | 'left'
+    | 'bottom'
+    | 'right'
 }
 
 const props = defineProps<Props>()
@@ -25,10 +30,6 @@ const where = props.where || 'top'
       <div class="info__content">
         <slot name="text"></slot>
       </div>
-      <div :class="`
-        info__arrow
-        info__arrow--${where}
-      `"></div>
     </div>
     <div @mouseover="visible = true">
       <slot v-if="$slots.default" name="default"></slot>

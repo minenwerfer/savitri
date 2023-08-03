@@ -6,25 +6,22 @@ $picture-size: 2rem;
   border-collapse: collapse;
 
   :deep(thead) > tr {
-    font-size: 8.5pt;
-    text-transform: uppercase;
-    text-align: left;
+    display: none;
 
-    @include themed() {
-      background: t(background-color-alt);
-    }
+    @media screen and (min-width: 600px) {
+      display: table-row;
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      text-align: left;
 
-    @media screen and (max-width: 600px) {
-      display: none;
+      @include themed() {
+        background: t(background-color-alt);
+      }
     }
 
     &>th {
       padding: 1rem $cell-padding;
       font-weight: 500;
-
-      @media screen and (max-width: 600px) {
-        display: hidden;
-      }
     }
   }
 
@@ -45,6 +42,7 @@ $picture-size: 2rem;
       display: flex;
       flex-direction: column;
       gap: .6rem;
+      height: auto;
 
       @include themed() {
         background: t(background-color);

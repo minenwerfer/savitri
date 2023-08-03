@@ -41,7 +41,7 @@ const signout = async () => {
       }"
 
       bordered
-      :url="userStore.item.picture?.link"
+      :file-id="userStore.item.picture?._id || userStore.item.picture"
       style="
         display: flex;
         flex-direction: column;

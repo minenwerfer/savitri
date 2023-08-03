@@ -1,10 +1,19 @@
 import { RouteRecordRaw } from 'vue-router'
 
+const getUserComponent = async (name: `/${string}`) => {
+  const target = ROUTER.getRoutes().find(route => route.name === name)?.components?.default
+  const component = target instanceof Function
+    ? await (<Function>target)()
+    : target
+
+  return component
+}
+
 const publicRoutes: Array<RouteRecordRaw> = [
   {
     path: '/user',
     name: '/user',
-    component: () => import('./components/dashboard/sv-auth-wall/sv-auth-wall.vue'),
+    component: () => getUserComponent('/auth-wall'),
     children: [
       {
         path: 'invite/:id',
@@ -45,20 +54,11 @@ const publicRoutes: Array<RouteRecordRaw> = [
   },
 ]
 
-const dashboardComponent = async () => {
-  const target = ROUTER.getRoutes().find(route => route.name === '/dashboard').components.default
-  const component = typeof target === 'function'
-    ? await target()
-    : target
-
-  return component
-}
-
 const privateRoutes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => dashboardComponent(),
+    component: () => getUserComponent('/dashboard'),
     redirect: {
       name: '/dashboard/'
     },

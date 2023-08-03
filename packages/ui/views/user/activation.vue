@@ -3,6 +3,7 @@ import { useRouter, useStore } from '@savitri/web'
 import { unsafe } from '@semantic-api/common'
 import { reactive } from 'vue'
 
+import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
 import SvPasswordForm from '../../components/dashboard/sv-password-form/sv-password-form.vue'
 
@@ -68,7 +69,7 @@ const confirm = async () => {
         :disabled="!!passwordError"
         @click="confirm"
       >
-        Cadastrar senha papai
+        Cadastrar senha
       </sv-button>
     </sv-password-form>
   </div>

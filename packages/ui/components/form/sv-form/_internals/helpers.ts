@@ -27,10 +27,14 @@ export const getComponent = (property: CollectionProperty, customComponents: Rec
   }
 
   const mappedComponentType = (() => {
+    if( !nestedProp ) {
+      return 'input'
+    }
+
     switch( true ) {
       case ['checkbox', 'radio'].includes(property.s$element!):
         return 'options'
-      case nestedProp.s$element === 'select':
+      case property.s$element === 'select':
         return 'select'
       case nestedProp.type === 'boolean':
         return 'switch'

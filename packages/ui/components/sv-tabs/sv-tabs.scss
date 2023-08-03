@@ -16,4 +16,20 @@
       }
     }
   }
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+
+    &__tab {
+      &:first-child {
+        @include themed() {
+          border: 1px solid t(border-color);
+        }
+      }
+
+      &:not(:first-child) {
+        display: none;
+      }
+    }
+  }
 }

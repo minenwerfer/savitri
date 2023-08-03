@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { SV_API_URL } from '@savitri/web'
 
 type Props = {
   url?: string
+  fileId?: string
   modelValue?: string
   objectFit?: string
   bordered?: boolean
@@ -19,7 +21,13 @@ type Props = {
 }
 
 const props = defineProps<Props>()
-const url = computed(() => props.url || props.modelValue)
+const url = computed(() => {
+  if( props.fileId ) {
+    return `${SV_API_URL}/file/${props.fileId}/picture`
+  }
+
+  return props.url || props.modelValue
+})
 
 const expand = ref(false)
 </script>

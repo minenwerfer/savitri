@@ -7,7 +7,6 @@ provide('inputVariant', 'bold')
 provide('innerInputLabel', true)
 </script>
 
-<style scoped src="./sv-auth-wall.scss"></style>
 <template>
   <div
     v-theme:default
@@ -29,3 +28,5 @@ provide('innerInputLabel', true)
     </div>
   </div>
 </template>
+
+<style scoped src="./sv-auth-wall.scss"></style>
