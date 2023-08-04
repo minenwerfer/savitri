@@ -35,7 +35,7 @@ export const useNavbar = async (props: Props) => {
   const getRoutes = async (node?: MenuSchema): Promise<Array<Route>> => {
     const children = node?.children
     const routes: unknown = children || typeof entrypoint === 'string'
-      ? router.getRoutes().filter((route: Route) => (route.name as string ||'').startsWith(`/${entrypoint}/`))
+      ? router.getRoutes().filter((route) => route.name?.toString().startsWith(`/${entrypoint}/`))
       : router.getRoutes() 
 
     const schema = getSchema(children || menuSchema, routes as Array<Route>)
