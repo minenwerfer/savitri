@@ -34,8 +34,6 @@
     "vue-inline-svg": "^3.1.0",
     "vue-resizable": "^2.1.7",
     "vue-router": "^4.2.1"
-  },
-  "peerDependencies": {
     "@semantic-api/common": "latest",
     "@semantic-api/system": "latest",
     "@semantic-api/types": "latest"
