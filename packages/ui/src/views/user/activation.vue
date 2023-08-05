@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter, useStore } from '@savitri/web'
 import { unsafe } from '@semantic-api/common'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 
 import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
@@ -24,7 +24,7 @@ const userInfo: any = unsafe(await userStore.functions.getInfo({
   token
 }))
 
-const password = reactive({
+const password = ref({
   full_name: userInfo.full_name,
   email: userInfo.email,
   password: '',
@@ -33,10 +33,10 @@ const password = reactive({
 
 const confirm = async () => {
   await userStore.custom(`activate?u=${userId}&t=${token}`, {
-    password: password.password
+    password: password.value.password
   })
 
-  userStore.credentials.email = password.email
+  userStore.credentials.email = password.value.email
 
   await metaStore.spawnModal({
     title: 'Sucesso!',

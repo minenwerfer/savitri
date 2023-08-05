@@ -6,11 +6,16 @@ const DEFAULT_THEMES = [
   'contrast'
 ]
 
-export default (config: InstanceConfig) => {
-  const lines = [];
-  const themes = config.themes || DEFAULT_THEMES
+export const sassData = (config: InstanceConfig) => {
+  const {
+    themes = DEFAULT_THEMES,
+    scssRoot = 'node_modules/@savitri/ui/dist/scss'
 
-  lines.push("@import '@savitri/ui/scss/theming'")
+  } = config
+
+  const lines = []
+
+  lines.push(`@import '${scssRoot}/_theming.scss'`)
   lines.push(`$themes: ${themes.join(',')}`)
   return lines.join('\n;') + ';'
 }

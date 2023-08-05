@@ -3,11 +3,17 @@
   "version": "0.1.204",
   "description": "",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
+  },
+  "exports": {
+    ".": "./dist/ui.mjs",
+    "./*": "./dist/*"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +27,9 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
     "rollup-plugin-typescript2": "^0.35.0",
-    "vite": "^4.4.4",
-    "vite-plugin-dts": "^3.3.0"
+    "savitri-build": "file:../savitri-build",
+    "vite": "^4.4.8",
+    "vite-plugin-dts": "^3.3.0",
+    "vite-plugin-static-copy": "^0.17.0"
   }
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { useRouter, useStore, hasStore, usePasswordPolicy } from '@savitri/web'
+import { ref, computed } from 'vue'
+import { useRouter, useStore, hasStore } from '@savitri/web'
 import SvForm from '../../components/form/sv-form/sv-form.vue'
 import SvIcon from '../../components/sv-icon/sv-icon.vue'
 import SvButton from '../../components/sv-button/sv-button.vue'
@@ -18,34 +18,14 @@ if( !metaStore.descriptions.user ) {
   })
 }
 
-const passwordPolicy = usePasswordPolicy()
-
 const tosAccepted = ref(false)
-const password = reactive({
+const password = ref({
   password: '',
   confirmation: ''
 })
 
-const passwordForm = {
-  password: {
-    type: 'string',
-    s$inputType: 'password'
-  },
-  confirmation: {
-    type: 'string',
-    s$inputType: 'password'
-  }
-}
-
-const passwordError = computed(() => {
-  return passwordPolicy(
-    password.password,
-    password.confirmation,
-  )
-})
-
 const insert = async () => {
-  userStore.item.password = password.password
+  userStore.item.password = password.value.password
   const user = await userStore.insert().catch(async (e) => {
     await userStore.errorPopup(e)
     router.back()

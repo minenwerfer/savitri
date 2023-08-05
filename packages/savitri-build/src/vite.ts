@@ -6,7 +6,7 @@ import autoImport from 'unplugin-auto-import/vite'
 import braun from 'braun/vite'
 import { icons } from 'braun/common'
 
-import sassData from './sassData.js'
+import { sassData } from './sassData.js'
 import { getInstanceConfig } from './instance'
 
 import transformIndexHtml from './plugins/transform-index-html'

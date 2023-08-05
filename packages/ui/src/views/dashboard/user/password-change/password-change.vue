@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useRouter, useStore } from '@savitri/web'
 
 import SvButton from '../../../../components/sv-button/sv-button.vue'
@@ -9,7 +9,7 @@ const router = await useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
 
-const password = reactive({
+const password = ref({
   password: '',
   confirmation: ''
 })
@@ -18,7 +18,7 @@ const insert = async () => {
   await userStore.insert({
     what: {
       _id: userStore.item._id,
-      password: password.password
+      password: password.value.password
     }
   })
 

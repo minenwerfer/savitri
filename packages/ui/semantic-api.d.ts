@@ -1,24 +1,25 @@
 // this file will be overwritten
-import type { AssetType, ResourceErrors, Context as Context_ } from '@semantic-api/api'
+import type { AssetType, ResourceErrors, Schema, Context as Context_ } from '@semantic-api/api'
 import type { Description } from '@semantic-api/types'
+import type { Model } from 'mongoose'
 import { Either } from '@semantic-api/common'
 
 declare global {
-  type UserCollections = typeof import('.').collections
   type SystemCollections = typeof import('@semantic-api/system/collections')
+  type UserCollections = typeof import('./src').collections
 
-  type UserAlgorithms = typeof import('.').algorithms
   type SystemAlgorithms = typeof import('@semantic-api/system/algorithms')
+  type UserAlgorithms = typeof import('./src').algorithms
 
   type Collections = {
-    [K in keyof (UserCollections & SystemCollections)]: Awaited<ReturnType<(UserCollections & SystemCollections)[K]>>
+    [K in keyof (SystemCollections & UserCollections)]: Awaited<ReturnType<(SystemCollections & UserCollections)[K]>>
   }
 
   type Algorithms = {
-    [K in keyof (UserAlgorithms & SystemAlgorithms)]: Awaited<ReturnType<(UserAlgorithms & SystemAlgorithms)[K]>>
+    [K in keyof (SystemAlgorithms & UserAlgorithms)]: Awaited<ReturnType<(SystemAlgorithms & UserAlgorithms)[K]>>
   }
 
-  type Context<TDescription extends Description>
+  type Context<TDescription extends Description=any>
     = Context_<TDescription, Collections, Algorithms>
 
   type UserAccessControl = typeof accessControl
@@ -31,10 +32,12 @@ declare global {
 declare module '@semantic-api/api' {
   export async function getResourceAsset<
     const ResourceName extends keyof Collections,
-    const AssetName extends keyof Collections[ResourceName] & AssetType,
+    const AssetName extends (keyof Collections[ResourceName] & AssetType) | 'model',
     ReturnedAsset=ResourceName extends keyof Collections
-        ? AssetName extends keyof Collections[ResourceName]
-          ? Collections[ResourceName][AssetName]
+        ? AssetName extends keyof Collections[ResourceName] | 'model'
+          ? AssetName extends 'model'
+            ? Model<Schema<Collections[ResourceName]['description']>>
+            : Collections[ResourceName][AssetName]
           : never
           : never
   >(
@@ -47,8 +50,9 @@ declare module '@semantic-api/api' {
     >
   >
 
+
   export const get = getResourceAsset
-  
+
   export async function getFunction<
     ResourceName extends keyof Collections,
     FunctionName extends keyof Collections[ResourceName]['functions'],
@@ -68,4 +72,4 @@ declare module '@semantic-api/api' {
     >
   >
 }
-// 
+//

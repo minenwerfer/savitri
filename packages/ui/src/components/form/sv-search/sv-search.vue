@@ -58,7 +58,7 @@ const isExpanded = computed(() => expanded.value || property.s$inline)
 
 const isTyping = ref(false)
 const focus = ref<'in'|'out'|null>(null)
-const inputValue = reactive<Record<string, any>>({})
+const inputValue = ref<Record<string, any>>({})
 
 const select = (item: any, itemIndex: number) => {
   const filterEmpties = (array: Array<any>) => array.filter(e => typeof e !== 'object' || Object.keys(e||{}).length > 0)
@@ -89,7 +89,7 @@ const pushBack = (item: any) => {
 }
 
 const search = async (empty?: boolean) => {
-  if( Object.values(inputValue).every((v) => !(String(v).length > 0)) ) {
+  if( Object.values(inputValue.value).every((v) => !(String(v).length > 0)) ) {
     if( empty && matchingItems.value.length === 0 ) {
       searchResponse.value = await store.custom('getAll', { limit: 100 }, { fullResponse: true })
     }
@@ -104,11 +104,10 @@ const search = async (empty?: boolean) => {
   searchResponse.value = await store.custom('getAll', {
     limit: 100,
     filters: {
-      $or: indexes
-      .filter((i: string) => inputValue[i]?.length > 0)
+      $or: indexes?.filter((i: string) => inputValue.value[i]?.length > 0)
       .map((i: string) => ({
         [i]: {
-          $regex: inputValue[i].trim(),
+          $regex: inputValue.value[i].trim(),
           $options: 'i'
         }
       }))

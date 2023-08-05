@@ -7,6 +7,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "declaration": true,
     "paths": {
       "braun/*": [
         "./node_modules/braun/dist/*"
