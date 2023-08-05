@@ -23,6 +23,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@semantic-api/common": "latest",
+    "@semantic-api/system": "latest",
+    "@semantic-api/types": "latest",
     "maska": "^1.4.6",
     "pinia": "^2.1.4",
     "sass": "^1.55.0",
@@ -33,9 +36,9 @@
     "vue-i18n": "^9.2.0-beta.16",
     "vue-inline-svg": "^3.1.0",
     "vue-resizable": "^2.1.7",
-    "vue-router": "^4.2.1",
-    "@semantic-api/common": "latest",
-    "@semantic-api/system": "latest",
-    "@semantic-api/types": "latest"
+    "vue-router": "^4.2.1"
+  },
+  "devDependencies": {
+    "vite": "^4.4.8"
   }
 }
