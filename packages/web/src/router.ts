@@ -34,14 +34,13 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   const metaStore = useStore('meta')
   const userStore = useStore('user')
 
-  // eslint-disable-next-line
   router.beforeEach(async (to, _from, next) => {
     metaStore.view.title = to.meta?.title
     if( process.env.NODE_ENV === 'development' ) {
       return next()
     }
 
-    if( to.meta?.isPrivate && !userStore.token ) {
+    if( to.fullPath.startsWith('/dashboard') && !userStore.token ) {
       next('/user/signin')
     }
 
