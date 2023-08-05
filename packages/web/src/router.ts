@@ -40,9 +40,9 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
       return next()
     }
 
-    if( to.fullPath.startsWith('/dashboard') && !userStore.$currentUser._id ) {
-      next('/user/signin')
-    }
+    // if( to.fullPath.startsWith('/dashboard') && !userStore.$currentUser._id ) {
+    //   next('/user/signin')
+    // }
 
     else next()
   })
