@@ -122,10 +122,12 @@ export const useApp = (options: AppOptions): Promise<{
         roles: true
       })
     } catch( e ) {
-      localStorage.clear()
-      setTimeout(() => {
-        location.reload()
-      }, 10000)
+      console.trace(e)
+
+      // localStorage.clear()
+      // setTimeout(() => {
+      //   location.reload()
+      // }, 10000)
     }
   }
 
