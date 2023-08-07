@@ -1,13 +1,13 @@
 declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<{
+    name: {
+        type: import("vue").PropType<string>;
+        required: true;
+    };
     fill: {
         type: import("vue").PropType<string>;
     };
     small: {
         type: import("vue").PropType<boolean>;
-    };
-    name: {
-        type: import("vue").PropType<string>;
-        required: true;
     };
     variant: {
         type: import("vue").PropType<string>;
@@ -30,15 +30,15 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<{
         type: import("vue").PropType<boolean>;
     };
 }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    name: {
+        type: import("vue").PropType<string>;
+        required: true;
+    };
     fill: {
         type: import("vue").PropType<string>;
     };
     small: {
         type: import("vue").PropType<boolean>;
-    };
-    name: {
-        type: import("vue").PropType<string>;
-        required: true;
     };
     variant: {
         type: import("vue").PropType<string>;

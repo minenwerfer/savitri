@@ -7,6 +7,8 @@ const router = await useRouter()
 const userStore = useStore('user')
 const metaStore = useStore('meta')
 
+userStorage.clear()
+
 const authenticate = async () => {
   await userStore.authenticate(userStore.credentials)
   router.push('/dashboard')

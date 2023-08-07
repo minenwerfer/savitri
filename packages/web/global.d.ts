@@ -15,7 +15,7 @@ declare module 'vue-router/auto' {
   }
 }
 
-var userStorage: typeof localStorage | typeof sessionStorage
+var userStorage: typeof localStorage & typeof sessionStorage
 var ROUTER: import('vue-router').Router
 var I18N: any
 var STORES: Record<string, any>

@@ -46,7 +46,8 @@ export default defineConfig({
       external: [
         'vue',
         'vue-router',
-        /@savitri\/web/
+        /@savitri\/web/,
+        /@semantic-api\//,
       ]
     }
   },
