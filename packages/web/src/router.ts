@@ -32,7 +32,7 @@ export const routerInstance = (routes: Array<RouteRecordRaw>) => {
   })
 
   const metaStore = useStore('meta')
-  const userStore = useStore('user')
+  // const userStore = useStore('user')
 
   router.beforeEach(async (to, _from, next) => {
     metaStore.view.title = to.meta?.title
