@@ -5,6 +5,12 @@
     gap: 1rem;
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+  }
+
   &__controls {
     display: flex;
     align-items: flex-start;
@@ -15,11 +21,5 @@
       flex-direction: row;
       align-items: center;
     }
-  }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
   }
 }

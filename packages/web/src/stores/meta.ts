@@ -69,6 +69,7 @@ export default defineStore('meta', {
       for ( const [collectionName, description] of Object.entries(descriptions) ) {
         const rawDescription = Object.assign({}, description)
         const item = freshItem(description)
+
         const filters = freshFilters(description)
 
         if( !description.properties ) {
